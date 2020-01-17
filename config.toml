@@ -1,7 +1,14 @@
 baseurl = "/"
 languageCode = "en-us"
 theme = "hugo-theme-hello-friend"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+enableEmoji = true
 paginate = 5
+
+custom_css = ["static/css/font-awesome.min.css"]
+custom_js  = []
 
 [params]
   # dir name of your blog content (default is `content/posts`)
@@ -12,6 +19,7 @@ paginate = 5
   showMenuItems = 2
   # Enable to show reading time in minutes for posts
   showReadingTime = false
+  
 
 [languages]
   [languages.en]
