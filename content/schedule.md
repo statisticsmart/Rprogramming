@@ -9,13 +9,13 @@ Here's your roadmap for the semester!
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
 
-## Lecture 0: Introduction
+#### Week 1: Introduction and Basics of R programming
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-## Lecture 1: Basics of R programming
+#### Week 2: Handling data
 
-- slides
-
-- reading
-
-- tutorial
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
