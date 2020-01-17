@@ -19,3 +19,68 @@ Here's your roadmap for the semester!
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 3: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 4: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 5: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 6: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 7: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 8: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 9: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 10: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 11: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 12: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 13: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 14: Handling data
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### Week 15: Recap
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
