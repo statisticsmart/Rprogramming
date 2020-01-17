@@ -1,18 +1,11 @@
 ---
-title: Home
+title: STA 326 2.0 Programming and Data Analysis with R
 ---
 
+## Couse information
 
 
-:smile:
-
-<i class="fas fa-camera"></i> Free
-
-<i class="ai ai-mendeley"></i>
 
 
-|   |   |   |   |   |
-|---|---|---|---|---|
-|:smile:   |   |   |   |   |
-|   |   |   |   |   |
-|   |   |   |   |   |
+
+## Green classroom

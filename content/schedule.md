@@ -11,6 +11,8 @@ Here's your roadmap for the semester!
 
 #### Week 1: Introduction and Basics of R programming
 
+Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
+
 |Slides    	|  Reading  	|  [Cheat sheet](https://rstudio.com/wp-content/uploads/2016/05/base-r.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
