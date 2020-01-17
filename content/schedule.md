@@ -11,7 +11,7 @@ Here's your roadmap for the semester!
 
 #### Week 1: Introduction and Basics of R programming
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|Slides    	|  Reading  	|  [Cheat sheet](https://rstudio.com/wp-content/uploads/2016/05/base-r.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
