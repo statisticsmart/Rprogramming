@@ -27,13 +27,414 @@
 class: center, middle, inverse, title-slide
 
 # STA 326 2.0 Programming and Data Analysis with R
-## Lesson 1
+## Lesson 1: Introduction to R
 ### Thiyanga Talagala, PhD
 ### 2020-01-23
 
 ---
 
 
+
+# R 
+
+## Command lines
+
+## functions
+- 
+
+## features
+
+- for, if ,"[["
+
+---
+# Getting help with functions and features
+
+- R has inbuilt help facility
+
+
+### Method 1
+
+```r
+help(rnorm)
+```
+
+- For a feature specified by special characters
+
+```r
+help("[[")
+```
+
+- Search the help files for a word or phrase.
+
+```r
+help.search(‘weighted mean’) 
+```
+
+### Method 2
+
+```r
+?rnorm
+```
+
+```r
+??rnorm
+```
+
+---
+
+# Objects in R
+
+- The entities that R creates and manipulates are known as **objects**.
+
+- There are 6 types of objects
+
+---
+
+# Data permanency
+
+- `ls()` can be used to display the names of the objects which are currently stored within R.
+
+- The collection of objects currently stored is called the **workspace**
+
+- To remove objects the function `rm` is available
+
+    - remove all objects
+    
+    ```r
+    rm()
+    ```
+    
+    - remove specific objects
+    
+    ```r
+    rm(x, y, z)
+    ```
+    
+Note: 
+
+All objects created during an R session can be stored permanently in a file for use in future R sessions. At the end of each R session you are given the opportunity to save all the currently available objects. If you indicate that you want to do this, the objects are written to a file called .RData in the current directory, and the command lines used in the session are saved to a file called .Rhistory.
+
+When R is started at later time from the same directory it reloads the workspace from this file. At the same time the associated commands history is reloaded.
+
+---
+class: inverse, center, middle
+
+# Data objects
+
+---
+class: duke-green, center, middle
+
+# 1. Vectors
+
+---
+# Vectors
+
+## Vector assignment
+
+```r
+x &lt;- c(5, 6, 3, 1 , 100)
+```
+
+- assignment operator ('&lt;-'), '=' can be used as an alternative.
+
+- `c()` function
+
+Question: What is the output?
+
+```r
+y &lt;- c(x, 500, 600)
+```
+
+---
+# Generating regular sequences
+
+Integer sequence
+
+
+```r
+2:6
+```
+
+```
+## [1] 2 3 4 5 6
+```
+
+
+```r
+seq(2, 3, by=0.5)
+```
+
+```
+## [1] 2.0 2.5 3.0
+```
+
+Repeat a vector
+
+
+```r
+rep(1:2, times=3)
+```
+
+```
+## [1] 1 2 1 2 1 2
+```
+
+Repeat elements of a vector
+
+
+```r
+rep(1:2, each=3)
+```
+
+```
+## [1] 1 1 1 2 2 2
+```
+
+---
+## Vector arithmetic
+
+
+
+
+```r
+y+2
+```
+
+```
+## [1]   7   8   5   3 102 502 602
+```
+
+---
+
+The operations are performed element by element
+
+Question: What is the output
+
+```r
+first &lt;- c(1, 2, 3, 4)
+second &lt;- c(10, 100)
+first * second
+```
+---
+
+
+```r
+first &lt;- c(1, 2, 3, 4)
+second &lt;- c(10, 100)
+first * second
+```
+
+```
+## [1]  10 200  30 400
+```
+
+---
+
+# Other vector operations
+
+- Please see the [cheatsheet](/pdf/baser.pdf) and course materials STA Data Analysis II
+
+---
+class: inverse, center, middle
+# Your turn
+
+```r
+ausdec2019 &lt;- c()
+ausdec2018 &lt;- c(, NA)
+```
+---
+
+# How to create this type of beautiful graphs? Let's discuss this at 
+
+
+
+---
+
+# Types
+
+Integers or floating point numbers
+
+
+```r
+vec1 &lt;- c(1.2, 1.5, 1.6)
+class(vec1)
+```
+
+```
+## [1] "numeric"
+```
+
+Boolean values (TRUE or FALSE)
+
+
+```r
+vec2 &lt;- c(TRUE, TRUE, FALSE)
+class(vec2)
+```
+
+```
+## [1] "logical"
+```
+
+Character strings
+
+
+```r
+vec3 &lt;- c("male", "male", "female")
+class(vec3)
+```
+
+```
+## [1] "character"
+```
+
+---
+class: duke-orange, center, middle
+
+# 2. Matrices
+---
+# Matrix operations
+
+Create a matrix
+
+
+```r
+x &lt;- matrix(1:6, ncol=3); x
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    3    5
+## [2,]    2    4    6
+```
+
+Select a row/column
+
+
+```r
+x[1, ] # select the 1st row
+```
+
+```
+## [1] 1 3 5
+```
+
+
+
+```r
+x[, 1] # select the 1st column
+```
+
+```
+## [1] 1 2
+```
+
+Select an element
+
+
+```r
+x[2, 3]
+```
+
+```
+## [1] 6
+```
+---
+
+# Matrix operations (cont.)
+
+Transpose
+
+
+```r
+t(x)
+```
+
+```
+##      [,1] [,2]
+## [1,]    1    2
+## [2,]    3    4
+## [3,]    5    6
+```
+
+Matrix multiplication
+
+
+```r
+y &lt;- matrix(seq(10, 60, by=10), nrow=3)
+z &lt;- x %*% y
+z
+```
+
+```
+##      [,1] [,2]
+## [1,]  220  490
+## [2,]  280  640
+```
+
+Find x in: m*x=n
+
+```r
+solve(m, n)
+```
+---
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+class: duke-softblue, center, middle
+
+# 3. Data Frames
+
+---
+
+# Create a data frame
+
+### Create your own dataframe
+
+
+```r
+sta &lt;- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
+sta
+```
+
+```
+##    id marks grade
+## 1 101    90    A+
+## 2 102    80     A
+## 3 103    60     C
+```
+
+### Built-in dataframes
+
+
+```r
+data(iris)
+```
+
+
+.full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
+
+---
+
+# `iris` dataset
+
+---
+class: duke-softblue, center, middle
+
+# Your turn
+
+class: duke-orange, center, middle
+
+---
+class: duke-purple, center, middle
+
+# 4. Lists
+---
+
+---
 class: center, middle
 
 # xaringan -- dukeslides
@@ -768,8 +1169,8 @@ DT::datatable(
 ##     Please upgrade via install.packages('htmlwidgets').
 ```
 
-<div id="htmlwidget-c39fbbf4269aa4912cf0" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c39fbbf4269aa4912cf0">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-d55244364755e0ae0963" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d55244364755e0ae0963">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -926,7 +1327,7 @@ C bn
 [CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
