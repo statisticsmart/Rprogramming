@@ -1,10 +1,11 @@
 ---
 title: "STA 326 2.0 Programming and Data Analysis with R"
-subtitle: "Lesson 1"
+subtitle: "Lesson 1: Introduction to R"
 author: "Thiyanga Talagala, PhD"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     lib_dir: libs
     css: 
       - default
@@ -21,6 +22,320 @@ output:
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
+
+# R 
+
+## Command lines
+
+## functions
+- 
+
+## features
+
+- for, if ,"[["
+
+---
+# Getting help with functions and features
+
+- R has inbuilt help facility
+
+
+### Method 1
+
+```r
+help(rnorm)
+```
+
+- For a feature specified by special characters
+
+```r
+help("[[")
+```
+
+- Search the help files for a word or phrase.
+
+```r
+help.search(‘weighted mean’) 
+```
+
+### Method 2
+
+```r
+?rnorm
+```
+
+```r
+??rnorm
+```
+
+---
+
+# Objects in R
+
+- The entities that R creates and manipulates are known as **objects**.
+
+- There are 6 types of objects
+
+---
+
+# Data permanency
+
+- `ls()` can be used to display the names of the objects which are currently stored within R.
+
+- The collection of objects currently stored is called the **workspace**
+
+- To remove objects the function `rm` is available
+
+    - remove all objects
+    
+    ```r
+    rm()
+    ```
+    
+    - remove specific objects
+    
+    ```r
+    rm(x, y, z)
+    ```
+    
+Note: 
+
+All objects created during an R session can be stored permanently in a file for use in future R sessions. At the end of each R session you are given the opportunity to save all the currently available objects. If you indicate that you want to do this, the objects are written to a file called .RData in the current directory, and the command lines used in the session are saved to a file called .Rhistory.
+
+When R is started at later time from the same directory it reloads the workspace from this file. At the same time the associated commands history is reloaded.
+
+---
+class: inverse, center, middle
+
+# Data objects
+
+---
+class: duke-green, center, middle
+
+# 1. Vectors
+
+---
+# Vectors
+
+## Vector assignment
+
+```r
+x <- c(5, 6, 3, 1 , 100)
+```
+
+- assignment operator ('<-'), '=' can be used as an alternative.
+
+- `c()` function
+
+Question: What is the output?
+
+```r
+y <- c(x, 500, 600)
+```
+
+---
+# Generating regular sequences
+
+Integer sequence
+
+```{r}
+2:6
+```
+
+```{r}
+seq(2, 3, by=0.5)
+```
+
+Repeat a vector
+
+```{r}
+rep(1:2, times=3)
+```
+
+Repeat elements of a vector
+
+```{r}
+rep(1:2, each=3)
+```
+
+---
+## Vector arithmetic
+
+```{r, echo=FALSE}
+x <- c(5, 6, 3, 1 , 100)
+y <- c(x, 500, 600)
+
+```
+
+```{r}
+y+2
+```
+
+---
+
+The operations are performed element by element
+
+Question: What is the output
+
+```r
+first <- c(1, 2, 3, 4)
+second <- c(10, 100)
+first * second
+```
+---
+
+```{r, echo=TRUE}
+first <- c(1, 2, 3, 4)
+second <- c(10, 100)
+first * second
+```
+
+---
+
+# Other vector operations
+
+- Please see the [cheatsheet](/pdf/baser.pdf) and course materials STA Data Analysis II
+
+---
+class: inverse, center, middle
+# Your turn
+
+```r
+ausdec2019 <- c()
+ausdec2018 <- c(, NA)
+```
+---
+
+# How to create this type of beautiful graphs? Let's discuss this at 
+
+
+
+---
+
+# Types
+
+Integers or floating point numbers
+
+```{r}
+vec1 <- c(1.2, 1.5, 1.6)
+class(vec1)
+```
+
+Boolean values (TRUE or FALSE)
+
+```{r}
+vec2 <- c(TRUE, TRUE, FALSE)
+class(vec2)
+```
+
+Character strings
+
+```{r}
+vec3 <- c("male", "male", "female")
+class(vec3)
+```
+
+---
+class: duke-orange, center, middle
+
+# 2. Matrices
+---
+# Matrix operations
+
+Create a matrix
+
+```{r}
+x <- matrix(1:6, ncol=3); x
+```
+
+Select a row/column
+
+```{r}
+x[1, ] # select the 1st row
+```
+
+
+```{r}
+x[, 1] # select the 1st column
+```
+
+Select an element
+
+```{r}
+x[2, 3]
+```
+---
+
+# Matrix operations (cont.)
+
+Transpose
+
+```{r}
+t(x)
+```
+
+Matrix multiplication
+
+```{r}
+y <- matrix(seq(10, 60, by=10), nrow=3)
+z <- x %*% y
+z
+```
+
+Find x in: m*x=n
+
+```r
+solve(m, n)
+```
+---
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+class: duke-softblue, center, middle
+
+# 3. Data Frames
+
+---
+
+# Create a data frame
+
+### Create your own dataframe
+
+```{r}
+sta <- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
+sta
+```
+
+### Built-in dataframes
+
+```{r}
+data(iris)
+```
+
+
+.full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
+
+---
+
+# `iris` dataset
+
+---
+class: duke-softblue, center, middle
+
+# Your turn
+
+class: duke-orange, center, middle
+
+---
+class: duke-purple, center, middle
+
+# 4. Lists
+---
+
+---
 class: center, middle
 
 # xaringan -- dukeslides
