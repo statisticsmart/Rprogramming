@@ -1,7 +1,7 @@
 ---
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Lesson 1: Introduction to R"
-author: "Thiyanga Talagala, PhD"
+author: "Dr Thiyanga Talagala"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -28,6 +28,7 @@ options(htmltools.dir.version = FALSE)
 
 - R is a software environment for statistical computing and graphics.
 
+
 ---
 
 # Why R?
@@ -36,12 +37,42 @@ options(htmltools.dir.version = FALSE)
 
 - Powerful
 
-# R programming environment
+---
+
+background-image: url('renv.png')
+background-position: center
+background-size: contain
+
+## R environment
+---
+
+background-image: url('rstudio1.png')
+background-position: center
+background-size: contain
+
+## RStudio
+---
+
+background-image: url('rstudio2.png')
+background-position: center
+background-size: contain
+
+## RStudio
+
+.footer-note[.tiny[.green[Image Credit: ][Clastic Detritus ](https://clasticdetritus.com/2013/01/10/creating-data-plots-with-r/)]]
+---
 
 
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
 
+## Data structures
+
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
 
 ---
+
 ## Command lines
 
 ## functions

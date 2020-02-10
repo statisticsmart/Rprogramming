@@ -2,7 +2,7 @@
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Lesson 1: Introduction to R"
 author: "Dr Thiyanga Talagala"
-date: "`r Sys.Date()`"
+date: "2020-02-11"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -23,11 +23,17 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
-
 # What is R? 
 
-- R is a software environment for statistical computing and graphics.
+- R is a software environment for statistical computing and graphics
 
+- Language designers: **R**oss Ihaka and **R**obert Gentleman at the University of Auckland, New Zealand
+
+- Parent language: S
+
+- The latest R version 3.6.2 has been released on 2019-12-12
+
+![description of the image](RobertandRoss.jpg)
 
 ---
 
@@ -50,14 +56,38 @@ background-image: url('rstudio1.png')
 background-position: center
 background-size: contain
 
-## RStudio
+## The RStudio IDE
 ---
 
 background-image: url('rstudio2.png')
 background-position: center
 background-size: contain
 
-## RStudio
+## The RStudio IDE
+
+.footer-note[.tiny[.green[Image Credit: ][Clastic Detritus ](https://clasticdetritus.com/2013/01/10/creating-data-plots-with-r/)]]
+---
+
+background-image: url('airport.jpg')
+background-position: center
+background-size: cover
+
+.content-box-yellow[
+## R and RStudio
+]
+
+.footer-note[.tiny[.green[Image Credit: ][Clastic Detritus ](https://clasticdetritus.com/2013/01/10/creating-data-plots-with-r/)]]
+---
+
+
+background-image: url('airport.jpg')
+background-position: center
+background-size: cover
+
+.content-box-yellow[
+## R and RStudio
+
+"If R were **an airplane**, RStudio would be **the airport**, providing many, many supporting services that If R were an airplane, RStudio would be the airport, providing many, many supporting services that make it easier for you, the pilot, to take off and go to awesome places. Sure, you can fly an airplane without an airport, but having those runways and supporting infrastructure is a game-changer." --- Julie Lowndes ---]
 
 .footer-note[.tiny[.green[Image Credit: ][Clastic Detritus ](https://clasticdetritus.com/2013/01/10/creating-data-plots-with-r/)]]
 ---
