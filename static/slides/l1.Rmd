@@ -431,7 +431,7 @@ Vectors must be homogeneous. When you attempt to combine different types they wi
 
 Order from least to most flexible
 
-`logical` --> `integer` --> `double` --> `charactor`
+`logical` --> `integer` --> `double` --> `character`
 
 ```{r, comment=NA}
 a <- c(3.1, 2L, 3, 4, "GPA") 
