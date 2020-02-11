@@ -8,6 +8,4 @@ title: STA 326 2.0 Programming and Data Analysis with R
 
 
 
-
-
-
+Begin your journey to learn R!!!
