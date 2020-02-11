@@ -737,8 +737,7 @@ iii) Write R codes to answer the following questions.
 background-image: url('report1.png')
 background-position: center
 background-size: cover
-.content-box-yellow[ 1.	Table 2 reports the confirmed 2019-nCoV cases and deaths in China, Singapore, Republic of Korea, Japan, Malaysia, Australia, Viet Nam, Philippines, Cambodia, Thailand, India, Nepal, Sri Lanka, Region of the Americas United States of America,
-Canada, Germany, France, The United Kingdom, Italy, Russian Federation, Spain , Belgium, Finland, Sweden, UAE as
+.content-box-yellow[ 1.	Table 2 reports the confirmed 2019-nCoV cases and deaths in China, Singapore, Republic of Korea, Japan, Malaysia, Australia, Viet Nam, Philippines, Cambodia, Thailand, India, Nepal, Sri Lanka, United States of America, Canada, Germany, France, The United Kingdom, Italy, Russian Federation, Spain , Belgium, Finland, Sweden, UAE as
 
 a <- c(40235, 43, 27, 26, 18, 15, 14, 3, 1, 32, 3, 1, 1, 12, 7, 14, 11, 4, 3, 2, 2, 1, 1, 100, 7)
 
@@ -748,7 +747,7 @@ a <- c(40235, 43, 27, 26, 18, 15, 14, 3, 1, 32, 3, 1, 1, 12, 7, 14, 11, 4, 3, 2,
 
 3. Mistakenly 100 cases were recorded to Sweden, correct it.
 
-4. Add the record for the `other` category into your vector.
+4. Add the record for `other` category into your vector.
 
 5. Create a new vector to enter WHO regions
 
