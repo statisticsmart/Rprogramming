@@ -119,8 +119,8 @@ rnorm(10)
 ```
 
 ```
- [1] -0.6138451 -0.3664221 -0.2452891  0.8052295 -2.4814550  1.6602032
- [7] -0.6993798  1.4646260 -1.2353880 -1.3160048
+ [1]  1.16506314 -0.36788465  0.04257254 -1.11217351 -0.81783992  0.73707139
+ [7]  1.69415936  0.59182534 -1.30911060  1.22456583
 ```
 
 --
@@ -134,8 +134,8 @@ a
 ```
 
 ```
- [1]  0.752134108  0.615923110  0.692630484 -0.847246969 -0.967681996
- [6] -1.984021139 -3.040565828 -0.005879055 -0.602771523 -1.355060297
+ [1]  0.5014231 -0.7580130  0.5340708  1.0702860 -0.5126610  0.8536738
+ [7] -0.8832315  0.6177311 -1.0345238  0.1536820
 ```
 
 --
@@ -147,8 +147,8 @@ b
 ```
 
 ```
- [1]   75.2134108   61.5923110   69.2630484  -84.7246969  -96.7681996
- [6] -198.4021139 -304.0565828   -0.5879055  -60.2771523 -135.5060297
+ [1]   50.14231  -75.80130   53.40708  107.02860  -51.26610   85.36738
+ [7]  -88.32315   61.77311 -103.45238   15.36820
 ```
 
 ---
@@ -243,8 +243,8 @@ rnorm(10) # This is a comment
 ```
 
 ```
- [1]  1.100552176  0.227191597  0.025601952 -1.044762084 -0.007729632
- [6] -0.195412928 -0.500627890 -0.904579701  2.797250888  0.824936684
+ [1] -0.2024675  0.4179024  1.0744250 -0.9298142  0.1919204  0.3468441
+ [7] -1.2182359  1.4503729  0.1305904 -1.3580570
 ```
 
 ```r
@@ -1084,211 +1084,6 @@ background-image: url('table2.png')
 background-position: center
 background-size: cover
 
----
-
-class: duke-orange, center, middle
-
-# 2. Matrices
----
-
-
-Matrix is a 2-dimentional and a homogeneous data structure
-
-**Syntax to create a matrix**
-
-```r
-matrix_name &lt;- matrix(vector_of_elements, 
-                      nrow=number_of_rows,
-                      ncol=number_of_columns,
-                      byrow=logical_value, # If byrow=TRUE, then the matrix is filled in by row.
-                      dimnames=list(rnames, cnames)) # To assign row names and columns
-
-```
-
-**Example**
-
-
-```r
-values &lt;- c(10, 20, 30, 40)
-matrix1 &lt;- matrix(values, nrow=2) # Matrix filled by columns (default option)
-matrix1
-```
-
-```
-     [,1] [,2]
-[1,]   10   30
-[2,]   20   40
-```
-
-```r
-matrix2 &lt;- matrix(values, nrow=2, byrow=TRUE) # Matrix filled by rows
-matrix2
-```
-
-```
-     [,1] [,2]
-[1,]   10   20
-[2,]   30   40
-```
-
----
-
-# Naming matrix rows and columns
-
-
-```r
-rnames &lt;- c("R1", "R2")
-cnames &lt;- c("C1", "C2")
-matrix_with_names &lt;- matrix(values, nrow=2, dimnames=list(rnames, cnames))
-matrix_with_names
-```
-
-```
-   C1 C2
-R1 10 30
-R2 20 40
-```
-
----
-
-### Matrix subscript
-
-`matraix_name[i, ]` gives the ith row of a matrix
-
-
-```r
-matrix1[1, ]
-```
-
-```
-[1] 10 30
-```
-
-`matraix_name[, j]` gives the jth column of a matrix
-
-
-```r
-matrix1[, 2]
-```
-
-```
-[1] 30 40
-```
-
-`matraix_name[i, j]` gives the ith row and jth column element
-
-
-```r
-matrix1[1, 2]
-```
-
-```
-[1] 30
-```
-
-
-```r
-matrix1[1, c(1, 2)] 
-```
-
-```
-[1] 10 30
-```
-
----
-
-# `cbind` and `rbind`
-
-Matrices can be created by column-binding and row-binding with `cbind()` and `rbind()`
-
-
-```r
-x &lt;- 1:3
-y &lt;- c(10, 100, 1000)
-
-cbind(x, y) # binds matrices horizontally
-```
-
-```
-     x    y
-[1,] 1   10
-[2,] 2  100
-[3,] 3 1000
-```
-
-```r
-rbind(x, y) #binds matrices vertically
-```
-
-```
-  [,1] [,2] [,3]
-x    1    2    3
-y   10  100 1000
-```
-
----
-# Matrix operations
-
-Transpose
-
-
-```r
-t(x)
-```
-
-```
-##      [,1] [,2] [,3]
-## [1,]    1    2    3
-```
-
-Matrix multiplication
-
-
-```r
-y &lt;- matrix(seq(10, 60, by=10), nrow=3)
-z &lt;- x %*% y
-z
-```
-
-```
-##      [,1] [,2]
-## [1,]  140  320
-```
-
-Find x in: m*x=n
-
-```r
-solve(m, n)
-```
----
-class: duke-orange, center, middle
-
-# Your turn
-
----
-
-background-image: url('china.png')
-background-position: center
-background-size: contain
-
----
-
-background-image: url('china.png')
-background-position: center
-background-size: contain
-
-.content-box-yellow[Calculate distance between Hubei and surrounding cities on map  using the [distance calculator](https://www.distancecalculator.net/) and enter it to a vector. Name the vector as distance_to_hubei.
-
-We want to look at the relationship between the number of confirmed cases and distance to other cities/regions/province from Hubei.
-]
-
-Help: \(\hat{\beta}=(X^TX)^{-1}X^TY\)
-
----
-
-background-image: url('slr.png')
-background-position: center
-background-size: contain
 
 ---
 class: center, middle
