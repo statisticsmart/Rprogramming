@@ -9,8 +9,8 @@
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
     <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
-    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+    <link rel="stylesheet" href="libs\cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs\figure-captions.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -119,8 +119,8 @@ rnorm(10)
 ```
 
 ```
- [1] -0.79537770  1.17300159 -2.61501244 -1.04987032 -0.59934792 -1.52236219
- [7]  0.45290359  0.14777822  1.09825739  0.07205394
+ [1] -0.6138451 -0.3664221 -0.2452891  0.8052295 -2.4814550  1.6602032
+ [7] -0.6993798  1.4646260 -1.2353880 -1.3160048
 ```
 
 --
@@ -134,8 +134,8 @@ a
 ```
 
 ```
- [1]  0.88910437  0.19151066  0.95250560 -0.08808388  0.64686661  1.00113962
- [7]  0.62934091  0.89653683 -0.67986880 -0.10588083
+ [1]  0.752134108  0.615923110  0.692630484 -0.847246969 -0.967681996
+ [6] -1.984021139 -3.040565828 -0.005879055 -0.602771523 -1.355060297
 ```
 
 --
@@ -147,8 +147,8 @@ b
 ```
 
 ```
- [1]  88.910437  19.151066  95.250560  -8.808388  64.686661 100.113962
- [7]  62.934091  89.653683 -67.986880 -10.588083
+ [1]   75.2134108   61.5923110   69.2630484  -84.7246969  -96.7681996
+ [6] -198.4021139 -304.0565828   -0.5879055  -60.2771523 -135.5060297
 ```
 
 ---
@@ -243,8 +243,8 @@ rnorm(10) # This is a comment
 ```
 
 ```
- [1]  0.42149072 -0.52922769 -1.42960068  1.87453126  0.73531860 -1.52046150
- [7]  0.59191823 -0.32205563  0.06675715 -0.60365178
+ [1]  1.100552176  0.227191597  0.025601952 -1.044762084 -0.007729632
+ [6] -0.195412928 -0.500627890 -0.904579701  2.797250888  0.824936684
 ```
 
 ```r
@@ -676,12 +676,13 @@ x1
 
 ```r
 x2 &lt;- c(1, 5, 10)
-names(x) &lt;- c("a", "b", "b")
+names(x2) &lt;- c("a", "b", "b")
 x2
 ```
 
 ```
-## [1]  1  5 10
+##  a  b  b 
+##  1  5 10
 ```
 
 Note that the names do not have to be unique. 
@@ -1288,46 +1289,6 @@ Help: \(\hat{\beta}=(X^TX)^{-1}X^TY\)
 background-image: url('slr.png')
 background-position: center
 background-size: contain
-
----
-
-class: duke-softblue, center, middle
-
-# 3. Data Frames
-
----
-
-# Create a data frame
-
-### Create your own dataframe
-
-
-```r
-sta &lt;- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
-sta
-```
-
-```
-##    id marks grade
-## 1 101    90    A+
-## 2 102    80     A
-## 3 103    60     C
-```
-
-### Built-in dataframes
-
-
-```r
-data(iris)
-```
-
-
-.full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
-
----
-
-# `iris` dataset
-
 
 ---
 class: center, middle

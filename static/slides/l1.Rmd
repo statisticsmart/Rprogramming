@@ -509,7 +509,7 @@ x1
 
 ```{r}
 x2 <- c(1, 5, 10)
-names(x) <- c("a", "b", "b")
+names(x2) <- c("a", "b", "b")
 x2
 ```
 
@@ -900,37 +900,6 @@ Help: \(\hat{\beta}=(X^TX)^{-1}X^TY\)
 background-image: url('slr.png')
 background-position: center
 background-size: contain
-
----
-
-class: duke-softblue, center, middle
-
-# 3. Data Frames
-
----
-
-# Create a data frame
-
-### Create your own dataframe
-
-```{r}
-sta <- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
-sta
-```
-
-### Built-in dataframes
-
-```{r}
-data(iris)
-```
-
-
-.full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
-
----
-
-# `iris` dataset
-
 
 ---
 class: center, middle
