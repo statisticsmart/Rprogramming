@@ -1,7 +1,7 @@
 ---
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Introduction"
-author: "Thiyanga Talagala, PhD"
+author: "Dr Thiyanga Talagala"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -22,73 +22,43 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
-
-# What is R?
-
-- A language and environment for statistical computing and graphics
-
+background-image: url('me.png')
+background-position: center
+background-size: cover
 ---
 
-Developed rapidly, and has been extended by a large collection of packages
-
+background-image: url('courseweb.png')
+background-position: center
+background-size: cover
 ---
-# Differences in philosophy between R and Minitab/SPSS/SAS
 
-.pull-left[
-
-R
-
-- gives minimal output and store the results in a fit object for subsequent interrogation by further R functions
-
-- Example regression output
-
-]
-
-.pull-right[
-
-Minitab/SPSS
-
-- give copious output 
-
-- Example regression output
-
-]
+background-image: url('book.png')
+background-position: center
+background-size: contain
 
 
 ---
-# Import
+background-image: url('RLadies.jpg')
+background-position: center
+background-size: cover
 
 ---
-# Tidy
 
+background-image: url('rl1.png')
+background-position: center
+background-size: cover
+
+## @RLadiesColombo
 ---
-# Visualize
 
+background-image: url('rl2.png')
+background-position: center
+background-size: cover
 
-
+## @RLadiesColombo
 ---
-class: center, middle
-# xaringan -- dukeslides
 
-### /ʃæ.'riŋ.ɡæn/
-
-.justify-left[
-This [`dukeslides`](https://johnlittle.info/dukeslides/) example slide deck extends the excellent collaborative work of the xaringan and Remark.js slide tools.  With this template, slide authors can compose xaringan slides via [R Markdown](https://rmarkdown.rstudio.com/) and present with [Duke University branding](https://styleguide.duke.edu/color-palette/).
-
-[Yihui Xie](https://yihui.name/) provides wonderful [technical documentation](https://slides.yihui.name/xaringan/) and a [wiki](https://github.com/yihui/xaringan/wiki) for the [xaringan package](https://github.com/yihui/xaringan). Some of his documentation is repeated here.  
-
-**My goal** is to present **example slides** with example **R Markdown** and xaringan **syntax** to demonstrate presentation styles. 
-]
-
-
+background-image: url('horse.png')
+background-position: center
+background-size: cover
 ---
-class: middle
-
-# NOTE
-
-Many of the *cheat sheet* examples are displayed in the slide itself.  Some of the example code will be found in the presenter notes.  
-
-Access **presenter notes** by pressing the keyboard shortcut .red[**`p`**].  (Or, `?` for other shortcuts)
-
-Full detailed R Markdown can always be displayed by opening the rendered HTML slides in your **web browser via `View Source`**.  
-
