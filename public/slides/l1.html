@@ -119,8 +119,8 @@ rnorm(10)
 ```
 
 ```
- [1] -0.79537770  1.17300159 -2.61501244 -1.04987032 -0.59934792 -1.52236219
- [7]  0.45290359  0.14777822  1.09825739  0.07205394
+ [1]  0.92336171  1.10844756 -0.42958824  0.83154907  0.48787570  2.25885746
+ [7]  0.09535064  0.09108573 -1.83802872 -0.34424509
 ```
 
 --
@@ -134,8 +134,8 @@ a
 ```
 
 ```
- [1]  0.88910437  0.19151066  0.95250560 -0.08808388  0.64686661  1.00113962
- [7]  0.62934091  0.89653683 -0.67986880 -0.10588083
+ [1]  0.7422548  0.6387891 -0.7543944  1.7015042 -2.0441113 -1.1844310
+ [7]  0.4804146 -0.3582770 -0.6358337  0.7304941
 ```
 
 --
@@ -147,8 +147,8 @@ b
 ```
 
 ```
- [1]  88.910437  19.151066  95.250560  -8.808388  64.686661 100.113962
- [7]  62.934091  89.653683 -67.986880 -10.588083
+ [1]   74.22548   63.87891  -75.43944  170.15042 -204.41113 -118.44310
+ [7]   48.04146  -35.82770  -63.58337   73.04941
 ```
 
 ---
@@ -243,8 +243,8 @@ rnorm(10) # This is a comment
 ```
 
 ```
- [1]  0.42149072 -0.52922769 -1.42960068  1.87453126  0.73531860 -1.52046150
- [7]  0.59191823 -0.32205563  0.06675715 -0.60365178
+ [1]  1.6176305 -0.6400447 -0.3505476 -0.4186556 -0.3042122  1.4380035
+ [7] -0.9537117 -0.1016583  0.9127983  0.1734012
 ```
 
 ```r
@@ -676,12 +676,13 @@ x1
 
 ```r
 x2 &lt;- c(1, 5, 10)
-names(x) &lt;- c("a", "b", "b")
+names(x2) &lt;- c("a", "b", "b")
 x2
 ```
 
 ```
-## [1]  1  5 10
+##  a  b  b 
+##  1  5 10
 ```
 
 Note that the names do not have to be unique. 
@@ -1075,258 +1076,13 @@ a &lt;- c(40235, 43, 27, 26, 18, 15, 14, 3, 1, 32, 3, 1, 1, 12, 7, 14, 11, 4, 3,
 
 5. Create a new vector to enter WHO regions
 
-6. China, Singapore, Malaysia, The United Kingdom, Spain have been reported new cases. Create a new vector to code this countries as TRUE and the rest as FALSE
+6. China, Singapore, Malaysia, The United Kingdom, Spain have been reported new cases. Create a new vector to code these countries as TRUE and the rest as FALSE
 ]
 
 ---
 background-image: url('table2.png')
 background-position: center
 background-size: cover
-
----
-
-class: duke-orange, center, middle
-
-# 2. Matrices
----
-
-
-Matrix is a 2-dimentional and a homogeneous data structure
-
-**Syntax to create a matrix**
-
-```r
-matrix_name &lt;- matrix(vector_of_elements, 
-                      nrow=number_of_rows,
-                      ncol=number_of_columns,
-                      byrow=logical_value, # If byrow=TRUE, then the matrix is filled in by row.
-                      dimnames=list(rnames, cnames)) # To assign row names and columns
-
-```
-
-**Example**
-
-
-```r
-values &lt;- c(10, 20, 30, 40)
-matrix1 &lt;- matrix(values, nrow=2) # Matrix filled by columns (default option)
-matrix1
-```
-
-```
-     [,1] [,2]
-[1,]   10   30
-[2,]   20   40
-```
-
-```r
-matrix2 &lt;- matrix(values, nrow=2, byrow=TRUE) # Matrix filled by rows
-matrix2
-```
-
-```
-     [,1] [,2]
-[1,]   10   20
-[2,]   30   40
-```
-
----
-
-# Naming matrix rows and columns
-
-
-```r
-rnames &lt;- c("R1", "R2")
-cnames &lt;- c("C1", "C2")
-matrix_with_names &lt;- matrix(values, nrow=2, dimnames=list(rnames, cnames))
-matrix_with_names
-```
-
-```
-   C1 C2
-R1 10 30
-R2 20 40
-```
-
----
-
-### Matrix subscript
-
-`matraix_name[i, ]` gives the ith row of a matrix
-
-
-```r
-matrix1[1, ]
-```
-
-```
-[1] 10 30
-```
-
-`matraix_name[, j]` gives the jth column of a matrix
-
-
-```r
-matrix1[, 2]
-```
-
-```
-[1] 30 40
-```
-
-`matraix_name[i, j]` gives the ith row and jth column element
-
-
-```r
-matrix1[1, 2]
-```
-
-```
-[1] 30
-```
-
-
-```r
-matrix1[1, c(1, 2)] 
-```
-
-```
-[1] 10 30
-```
-
----
-
-# `cbind` and `rbind`
-
-Matrices can be created by column-binding and row-binding with `cbind()` and `rbind()`
-
-
-```r
-x &lt;- 1:3
-y &lt;- c(10, 100, 1000)
-
-cbind(x, y) # binds matrices horizontally
-```
-
-```
-     x    y
-[1,] 1   10
-[2,] 2  100
-[3,] 3 1000
-```
-
-```r
-rbind(x, y) #binds matrices vertically
-```
-
-```
-  [,1] [,2] [,3]
-x    1    2    3
-y   10  100 1000
-```
-
----
-# Matrix operations
-
-Transpose
-
-
-```r
-t(x)
-```
-
-```
-##      [,1] [,2] [,3]
-## [1,]    1    2    3
-```
-
-Matrix multiplication
-
-
-```r
-y &lt;- matrix(seq(10, 60, by=10), nrow=3)
-z &lt;- x %*% y
-z
-```
-
-```
-##      [,1] [,2]
-## [1,]  140  320
-```
-
-Find x in: m*x=n
-
-```r
-solve(m, n)
-```
----
-class: duke-orange, center, middle
-
-# Your turn
-
----
-
-background-image: url('china.png')
-background-position: center
-background-size: contain
-
----
-
-background-image: url('china.png')
-background-position: center
-background-size: contain
-
-.content-box-yellow[Calculate distance between Hubei and surrounding cities on map  using the [distance calculator](https://www.distancecalculator.net/) and enter it to a vector. Name the vector as distance_to_hubei.
-
-We want to look at the relationship between the number of confirmed cases and distance to other cities/regions/province from Hubei.
-]
-
-Help: \(\hat{\beta}=(X^TX)^{-1}X^TY\)
-
----
-
-background-image: url('slr.png')
-background-position: center
-background-size: contain
-
----
-
-class: duke-softblue, center, middle
-
-# 3. Data Frames
-
----
-
-# Create a data frame
-
-### Create your own dataframe
-
-
-```r
-sta &lt;- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
-sta
-```
-
-```
-##    id marks grade
-## 1 101    90    A+
-## 2 102    80     A
-## 3 103    60     C
-```
-
-### Built-in dataframes
-
-
-```r
-data(iris)
-```
-
-
-.full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
-
----
-
-# `iris` dataset
 
 
 ---
