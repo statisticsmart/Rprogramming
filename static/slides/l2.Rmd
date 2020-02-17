@@ -136,6 +136,160 @@ myvec[myvec %in% b]
 ```
 
 ---
+background-image: url('horse.png')
+background-position: center
+background-size: cover
+
+
+---
+
+class: duke-orange, center, middle
+
+# 2. Matrices
+---
+# Matrix operations
+
+Create a matrix
+
+
+```r
+x <- matrix(1:6, ncol=3); x
+```
+
+```
+##      [,1] [,2] [,3]
+## [1,]    1    3    5
+## [2,]    2    4    6
+```
+
+Select a row/column
+
+
+```r
+x[1, ] # select the 1st row
+```
+
+```
+## [1] 1 3 5
+```
+
+
+
+```r
+x[, 1] # select the 1st column
+```
+
+```
+## [1] 1 2
+```
+
+Select an element
+
+
+```r
+x[2, 3]
+```
+
+```
+## [1] 6
+```
+---
+
+# Matrix operations (cont.)
+
+Transpose
+
+
+```r
+t(x)
+```
+
+```
+##      [,1] [,2]
+## [1,]    1    2
+## [2,]    3    4
+## [3,]    5    6
+```
+
+Matrix multiplication
+
+
+```r
+y <- matrix(seq(10, 60, by=10), nrow=3)
+z <- x %*% y
+z
+```
+
+```
+##      [,1] [,2]
+## [1,]  220  490
+## [2,]  280  640
+```
+
+Find x in: m*x=n
+
+```r
+solve(m, n)
+```
+---
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+class: duke-softblue, center, middle
+
+# 3. Data Frames
+
+---
+
+# Create a data frame
+
+### Create your own dataframe
+
+
+```r
+sta <- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
+sta
+```
+
+```
+##    id marks grade
+## 1 101    90    A+
+## 2 102    80     A
+## 3 103    60     C
+```
+
+### Built-in dataframes
+
+
+```r
+data(iris)
+```
+
+
+.full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
+
+---
+
+# `iris` dataset
+
+---
+class: duke-softblue, center, middle
+
+# Your turn
+
+class: duke-orange, center, middle
+
+---
+class: duke-purple, center, middle
+
+# 4. Lists
+---
+
+---
+
 class: center, middle
 
 Slides available at: hellor.netlify.com
