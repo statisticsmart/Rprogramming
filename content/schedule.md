@@ -20,7 +20,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 3: Data structures (Matrices, Arrays, List, Data Frame, Factors) and Introduction to built-in functions 
 
-|Slides    	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices) [5.3 - 5.8]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  Problems 	| Answers |
+|[Slides](/slides/l2.html) 	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices) [5.3 - 5.8]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 4: 
