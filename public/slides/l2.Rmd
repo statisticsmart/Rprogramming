@@ -41,6 +41,100 @@ background-size: contain
 # Recap
 
 .footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
+---
+# Recap
+
+```{r, echo=FALSE, comment=NA}
+c(1:5, 5:1)
+```
+
+--
+
+- Method 1
+
+```r
+c(1, 2, 3, 4, 5, 5, 4, 3, 2, 1)
+
+```
+--
+
+- Method 2
+
+```r
+c(1:5, 5:1)
+```
+
+--
+
+- Name elements 
+
+```{r}
+a <- c(1:5, 5:1)
+a
+names(a) <- c("a1", "a2", "a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5")
+a
+```
+
+---
+
+## Operations between vectors 
+
+```{r}
+a 
+a * c(10, 100)
+```
+
+- Types of vectors
+
+
+---
+## Vectors: Subsetting
+
+```{r, comment=NA}
+myvec <- 1:20; myvec
+```
+
+--
+
+```{r, comment=NA}
+myvec[1]
+```
+
+--
+```{r, comment=NA}
+myvec[5:10]
+```
+
+--
+```{r, comment=NA}
+myvec[-1]
+```
+--
+
+```{r, comment=NA}
+myvec[myvec > 3]
+```
+
+---
+
+## Vectors: Subsetting
+
+Extract elements present in vector `a`
+
+```{r, comment=NA}
+a
+myvec
+myvec %in% a
+myvec[myvec %in% a]
+```
+--
+
+```{r}
+b <- 100:105
+myvec[myvec %in% b]
+```
+
 ---
 class: center, middle
 

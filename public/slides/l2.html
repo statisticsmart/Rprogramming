@@ -32,6 +32,8 @@ background-size: contain
 
 # Recap
 
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
 ---
 
 background-image: url('vectors.jpg')
@@ -39,6 +41,188 @@ background-position: center
 background-size: contain
 
 # Recap
+
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
+---
+# Recap
+
+
+```
+ [1] 1 2 3 4 5 5 4 3 2 1
+```
+
+--
+
+- Method 1
+
+```r
+c(1, 2, 3, 4, 5, 5, 4, 3, 2, 1)
+
+```
+--
+
+- Method 2
+
+```r
+c(1:5, 5:1)
+```
+
+--
+
+- Name elements 
+
+
+```r
+a &lt;- c(1:5, 5:1)
+a
+```
+
+```
+##  [1] 1 2 3 4 5 5 4 3 2 1
+```
+
+```r
+names(a) &lt;- c("a1", "a2", "a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5")
+a
+```
+
+```
+## a1 a2 a3 a4 a5 b1 b2 b3 b4 b5 
+##  1  2  3  4  5  5  4  3  2  1
+```
+
+---
+
+## Operations between vectors 
+
+
+```r
+a 
+```
+
+```
+## a1 a2 a3 a4 a5 b1 b2 b3 b4 b5 
+##  1  2  3  4  5  5  4  3  2  1
+```
+
+```r
+a * c(10, 100)
+```
+
+```
+##  a1  a2  a3  a4  a5  b1  b2  b3  b4  b5 
+##  10 200  30 400  50 500  40 300  20 100
+```
+
+- Types of vectors
+
+
+---
+## Vectors: Subsetting
+
+
+```r
+myvec &lt;- 1:20; myvec
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+```
+
+--
+
+
+```r
+myvec[1]
+```
+
+```
+[1] 1
+```
+
+--
+
+```r
+myvec[5:10]
+```
+
+```
+[1]  5  6  7  8  9 10
+```
+
+--
+
+```r
+myvec[-1]
+```
+
+```
+ [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+```
+--
+
+
+```r
+myvec[myvec &gt; 3]
+```
+
+```
+ [1]  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+```
+
+---
+
+## Vectors: Subsetting
+
+Extract elements present in vector `a`
+
+
+```r
+a
+```
+
+```
+a1 a2 a3 a4 a5 b1 b2 b3 b4 b5 
+ 1  2  3  4  5  5  4  3  2  1 
+```
+
+```r
+myvec
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+```
+
+```r
+myvec %in% a
+```
+
+```
+ [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+```r
+myvec[myvec %in% a]
+```
+
+```
+[1] 1 2 3 4 5
+```
+--
+
+
+```r
+b &lt;- 100:105
+myvec[myvec %in% b]
+```
+
+```
+## integer(0)
+```
+
 ---
 class: center, middle
 
