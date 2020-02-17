@@ -1,29 +1,27 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-  <head>
-    <title>STA 326 2.0 Programming and Data Analysis with R</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Dr Thiyanga Talagala" />
-    <meta name="date" content="2020-02-11" />
-    <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
-    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
-    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
-    <link rel="stylesheet" href="libs\cc-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="libs\figure-captions.css" type="text/css" />
-  </head>
-  <body>
-    <textarea id="source">
-class: center, middle, inverse, title-slide
-
-# STA 326 2.0 Programming and Data Analysis with R
-## Lesson 1: Introduction to R
-### Dr Thiyanga Talagala
-### 2020-02-11
-
 ---
-
-
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Lesson 1: Introduction to R"
+author: "Dr Thiyanga Talagala"
+date: "2020-02-11"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
 
 # What is R? 
 
@@ -100,90 +98,34 @@ background-size: cover
 .footer-note[.tiny[.green[Image Credit: ][Clastic Detritus ](https://clasticdetritus.com/2013/01/10/creating-data-plots-with-r/)]]
 ---
 
-class: inverse, center, middle
-
-# Create a new project
-
----
-background-image: url('project1.png')
-background-position: center
-background-size: cover
----
-
-background-image: url('project2.png')
-background-position: center
-background-size: cover
----
-
-background-image: url('project3.png')
-background-position: center
-background-size: cover
----
-
-background-image: url('project4.png')
-background-position: center
-background-size: cover
----
-
-background-image: url('project5.png')
-background-position: center
-background-size: cover
----
-background-image: url('project6.png')
-background-position: center
-background-size: cover
----
----
-
 ## R Console
 
-
-```r
+```{r, comment=NA}
 7+1
-```
 
 ```
-[1] 8
-```
 
 
 
-
-```r
+```{r, comment=NA}
 rnorm(10) 
-```
 
-```
- [1]  0.98674121 -0.75453891  0.69110891 -0.19386274  0.99394876  0.95776461
- [7]  0.09825848  0.43032947 -0.71735052 -1.88333972
 ```
 
 --
 
 ## Variable assignment
 
-
-```r
-a &lt;- rnorm(10)
+```{r, comment=NA}
+a <- rnorm(10)
 a
-```
-
-```
- [1]  1.0929135 -0.5494166 -0.2431990 -0.1342931 -0.6667093  0.9351272
- [7]  1.0688800  0.8024154 -0.1681742  0.6943929
 ```
 
 --
 
-
-```r
-b &lt;- a*100
+```{r, comment=NA}
+b <- a*100
 b
-```
-
-```
- [1] 109.29135 -54.94166 -24.31990 -13.42931 -66.67093  93.51272 106.88800
- [8]  80.24154 -16.81742  69.43929
 ```
 
 ---
@@ -196,13 +138,9 @@ b
 
 - The collection of objects currently stored is called the **workspace**
 
-
-```r
+```{r, comment=NA}
 ls()
-```
 
-```
-[1] "a" "b"
 ```
 
 --
@@ -213,24 +151,14 @@ ls()
     - remove specific objects `rm(x, y, z)`
     
     
-
-```r
+```{r, comment=NA}
 rm(a)
 ls()
 ```
 
-```
-[1] "b"
-```
-
-
-```r
+```{r, comment=NA}
 rm(list=ls())
 ls()
-```
-
-```
-character(0)
 ```
 
 ---
@@ -272,22 +200,9 @@ background-size: cover
 
 - Each line of a comment should begin with the comment symbol and a single space: # . 
 
-
-```r
+```{r, comment=NA}
 rnorm(10) # This is a comment 
-```
-
-```
- [1]  0.3543882 -1.6759579 -0.2549151 -1.9066325  1.2940350  0.3405779
- [7] -1.7369626  0.9342146  0.2503853 -0.1975729
-```
-
-```r
 sum(1:10) # 1+2
-```
-
-```
-[1] 55
 ```
 
 ---
@@ -296,21 +211,10 @@ sum(1:10) # 1+2
 
 - Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.  -- Hadley Wickham
 
-
-```r
+```{r, comment=NA}
 sum(1:10)#Bad commenting style
-```
-
-```
-[1] 55
-```
-
-```r
 sum(1:10) # Good commenting style
-```
 
-```
-[1] 55
 ```
 
 - Also, use commented lines of - and = to break up your file into easily readable sub-sections.
@@ -340,7 +244,7 @@ Let's take a look of some common types of objects.
 
 1. .red[Data structures] are the ways of arranging data.
 
-    - You can create objects, using the left pointing arrow &lt;-
+    - You can create objects, using the left pointing arrow <-
 --
 1. .red[Functions] tell R to do something.
 
@@ -350,14 +254,10 @@ Let's take a look of some common types of objects.
 
     - All function calls need to be followed by parentheses.
 
-
-```r
-a &lt;- 1:20 # data structure
+```{r, comment=NA}
+a <- 1:20 # data structure
 sum(a) # sum is a function applied on a
-```
 
-```
-[1] 210
 ```
 
 ```r
@@ -453,22 +353,22 @@ class: duke-green, center, middle
 **Syntax**
 
 ```r
-vector_name &lt;- c(element1, element2, element3)
+vector_name <- c(element1, element2, element3)
 
 ```
 
 ```r
-x &lt;- c(5, 6, 3, 1 , 100)
+x <- c(5, 6, 3, 1 , 100)
 ```
 
-- assignment operator ('&lt;-'), '=' can be used as an alternative.
+- assignment operator ('<-'), '=' can be used as an alternative.
 
 - `c()` function
 
 .red[What will be the output of the following code?]
 
 ```r
-y &lt;- c(x, 500, 600)
+y <- c(x, 500, 600)
 ```
 
 ---
@@ -476,12 +376,11 @@ y &lt;- c(x, 500, 600)
 # Types and tests with vectors
 
 
-
-```r
-first_vec &lt;- c(10, 20, 50, 70)
-second_vec &lt;- c("Jan", "Feb", "March", "April")
-third_vec &lt;- c(TRUE, FALSE, TRUE, TRUE)
-fourth_vec &lt;- c(10L, 20L, 50L, 70L)
+```{r, eval=TRUE}
+first_vec <- c(10, 20, 50, 70)
+second_vec <- c("Jan", "Feb", "March", "April")
+third_vec <- c(TRUE, FALSE, TRUE, TRUE)
+fourth_vec <- c(10L, 20L, 50L, 70L)
 ```
 
 
@@ -489,70 +388,40 @@ To check if it is a
 
 - vector: `is.vector()`
 
-
-```r
+```{r, comment=NA}
 is.vector(first_vec)
-```
-
-```
-[1] TRUE
 ```
 
 
 - charactor vector: `is.charactor()`
 
-
-```r
+```{r, comment=NA}
 is.character(first_vec)
-```
-
-```
-[1] FALSE
 ```
 ---
 - double: `is.double()`
 
-
-```r
+```{r, comment=NA}
 is.double(first_vec)
-```
-
-```
-[1] TRUE
 ```
 
 
 - integer: `is.integer()`
 
-
-```r
+```{r, comment=NA}
 is.integer(first_vec)
-```
-
-```
-[1] FALSE
 ```
 
 - logical: `is.logical()`
 
-
-```r
+```{r, comment=NA}
 is.logical(first_vec)
-```
-
-```
-[1] FALSE
 ```
 
 - length
 
-
-```r
+```{r, comment=NA}
 length(first_vec)
-```
-
-```
-[1] 4
 ```
 ---
 
@@ -562,26 +431,16 @@ Vectors must be homogeneous. When you attempt to combine different types they wi
 
 Order from least to most flexible
 
-`logical` --&gt; `integer` --&gt; `double` --&gt; `character`
+`logical` --> `integer` --> `double` --> `character`
 
-
-```r
-a &lt;- c(3.1, 2L, 3, 4, "GPA") 
+```{r, comment=NA}
+a <- c(3.1, 2L, 3, 4, "GPA") 
 typeof(a) 
 ```
 
-```
-[1] "character"
-```
-
-
-```r
-anew &lt;- c(3.1, 2L, 3, 4)
+```{r, comment=NA}
+anew <- c(3.1, 2L, 3, 4)
 typeof(anew) 
-```
-
-```
-[1] "double"
 ```
 
 ---
@@ -590,102 +449,48 @@ typeof(anew)
 
 Vectors can be explicitly coerced from one class to another using the `as.*` functions, if available. For example, `as.charactor`, `as.numeric`, `as.integer`, and `as.logical`.
 
-
-```r
-vec1 &lt;- c(TRUE, FALSE, TRUE, TRUE)
+```{r, comment=NA}
+vec1 <- c(TRUE, FALSE, TRUE, TRUE)
 typeof(vec1)
-```
 
-```
-[1] "logical"
-```
-
-```r
-vec2 &lt;- as.integer(vec1)
+vec2 <- as.integer(vec1)
 typeof(vec2)
-```
-
-```
-[1] "integer"
-```
-
-```r
 vec2
-```
-
-```
-[1] 1 0 1 1
 ```
 
 .red[Why does the below output NAs?]
 
-
-```r
-x &lt;- c("a", "b", "c")
+```{r, comment=NA}
+x <- c("a", "b", "c")
 as.numeric(x)
-```
-
-```
-Warning: NAs introduced by coercion
-```
-
-```
-[1] NA NA NA
 ```
 
 ---
 
 
-
-```r
-x1 &lt;- 1:3
-x2 &lt;- c(10, 20, 30)
-combinedx1x2 &lt;- c(x1, x2)
+```{r, comment=NA}
+x1 <- 1:3
+x2 <- c(10, 20, 30)
+combinedx1x2 <- c(x1, x2)
 combinedx1x2 
-```
-
-```
-[1]  1  2  3 10 20 30
 ```
 
 --
 
-
-```r
+```{r, comment=NA}
 class(x1)
-```
-
-```
-[1] "integer"
-```
-
-```r
 class(x2)
-```
-
-```
-[1] "numeric"
-```
-
-```r
 class(combinedx1x2)
-```
 
-```
-[1] "numeric"
 ```
 --
 - If you combine a numeric vector and a character vector 
 
-
-```r
-y1 &lt;- c(1, 2, 3)
-y2 &lt;- c("a", "b", "c")
+```{r, comment=NA}
+y1 <- c(1, 2, 3)
+y2 <- c("a", "b", "c")
 c(y1, y2)
-```
 
-```
-[1] "1" "2" "3" "a" "b" "c"
 ```
 ---
 
@@ -695,29 +500,17 @@ You can name elements in a vector in different ways. We will learn two of them.
 
 1. When creating it
 
-
-```r
-x1 &lt;- c(a=1991, b=1992, c=1993)
+```{r}
+x1 <- c(a=1991, b=1992, c=1993)
 x1
-```
-
-```
-##    a    b    c 
-## 1991 1992 1993
 ```
 
 2. Modifying the names of an existing vector
 
-
-```r
-x2 &lt;- c(1, 5, 10)
-names(x2) &lt;- c("a", "b", "b")
+```{r}
+x2 <- c(1, 5, 10)
+names(x2) <- c("a", "b", "b")
 x2
-```
-
-```
-##  a  b  b 
-##  1  5 10
 ```
 
 Note that the names do not have to be unique. 
@@ -727,36 +520,21 @@ Note that the names do not have to be unique.
 
 Method 1
 
-
-```r
+```{r, comment=NA}
 unname(x1); x1
-```
-
-```
-[1] 1991 1992 1993
-```
-
-```
-   a    b    c 
-1991 1992 1993 
 ```
 
 Method 2
 
-
-```r
-names(x2) &lt;- NULL; x2
-```
-
-```
-[1]  1  5 10
+```{r, comment=NA}
+names(x2) <- NULL; x2
 ```
 
 .red[What will be the output of the following code?]
 
 ```r
-v &lt;- c(1, 2, 3)
-names(v) &lt;- c("a")
+v <- c(1, 2, 3)
+names(v) <- c("a")
 v
 ```
 ---
@@ -765,208 +543,93 @@ v
 
 - colon `:` produce regular spaced ascending or descending sequences.
 
-
-```r
+```{r, comment=NA}
  10:16
-```
 
-```
-[1] 10 11 12 13 14 15 16
-```
-
-```r
 -0.5:8.5
-```
 
-```
- [1] -0.5  0.5  1.5  2.5  3.5  4.5  5.5  6.5  7.5  8.5
 ```
 --
 - sequence: `seq(initial_value, final_value, increment)`
 
-
-```r
+```{r, comment=NA}
 seq(1,11)
-```
 
-```
- [1]  1  2  3  4  5  6  7  8  9 10 11
-```
-
-```r
 seq(1, 11, length.out=5)
-```
 
-```
-[1]  1.0  3.5  6.0  8.5 11.0
-```
-
-```r
 seq(0, 11, by=2)
-```
-
-```
-[1]  0  2  4  6  8 10
 ```
 
 ---
 
 - repeats `rep()` 
 
-
-```r
+```{r, comment=NA}
 rep(9, 5)
-```
 
-```
-[1] 9 9 9 9 9
-```
-
-```r
 rep(1:4, 2)
-```
 
-```
-[1] 1 2 3 4 1 2 3 4
-```
-
-```r
 rep(1:4, each=2) # each element is repeated twice
-```
 
-```
-[1] 1 1 2 2 3 3 4 4
-```
-
-```r
 rep(1:4, times=2) # whole sequence is repeated twice
-```
 
-```
-[1] 1 2 3 4 1 2 3 4
-```
-
-```r
 rep(1:4, each=2, times=3)
-```
 
-```
- [1] 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4
-```
-
-```r
 rep(1:4, 1:4)
-```
 
-```
- [1] 1 2 2 3 3 3 4 4 4 4
-```
-
-```r
 rep(1:4, c(4, 1, 4, 2))
-```
 
-```
- [1] 1 1 1 1 2 3 3 3 3 4 4
 ```
 
 ---
 
 ## Logical operators
 
-
-```r
+```{r, comment=NA}
 c(1, 2, 3) == c(10, 20, 3)
 ```
 
-```
-[1] FALSE FALSE  TRUE
-```
-
-
-```r
+```{r, comment=NA}
 c(1, 2, 3) != c(10, 20, 3)
 ```
 
-```
-[1]  TRUE  TRUE FALSE
-```
-
-
-```r
-1:5 &gt; 3
+```{r, comment=NA}
+1:5 > 3
 ```
 
-```
-[1] FALSE FALSE FALSE  TRUE  TRUE
-```
-
-
-```r
-1:5 &lt; 3
+```{r, comment=NA}
+1:5 < 3
 ```
 
-```
-[1]  TRUE  TRUE FALSE FALSE FALSE
-```
+- `<=` less than or equal to
 
-- `&lt;=` less than or equal to
-
-- `&gt;=` greater than or equal to
+- `>=` greater than or equal to
 
 - `|` or
 
-- `&amp;` and
+- `&` and
 
 ---
 
 # Operators: `%in%` - in the set
 
-
-```r
-a &lt;- c(1, 2, 3)
-b &lt;- c(1, 10, 3)
+```{r, comment=NA}
+a <- c(1, 2, 3)
+b <- c(1, 10, 3)
 a%in%b
 ```
 
-```
-[1]  TRUE FALSE  TRUE
-```
-
-
-```r
-x &lt;- 1:10
-y &lt;- 1:3
+```{r, comment=NA}
+x <- 1:10
+y <- 1:3
 x
-```
-
-```
- [1]  1  2  3  4  5  6  7  8  9 10
-```
-
-```r
 y
-```
-
-```
-[1] 1 2 3
-```
-
-```r
 x %in% y
-```
 
 ```
- [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-```
 
-
-```r
+```{r, comment=NA}
 y %in% x
-```
-
-```
-[1] TRUE TRUE TRUE
 ```
 ---
 ## Vector arithmetic
@@ -974,45 +637,31 @@ y %in% x
 
 - operations are perfored element by element. 
 
-
-```r
+```{r, comment=NA}
 c(10, 100, 100) + 2 # two is added to every element in the vector
-```
-
-```
-[1]  12 102 102
 ```
 --
 - operations between two vectors
 
-
-```r
-v1 &lt;- c(1, 2, 3); v2 &lt;- c(10, 100, 1000)
+```{r, comment=NA}
+v1 <- c(1, 2, 3); v2 <- c(10, 100, 1000)
 v1 + v2
-```
-
-```
-[1]   11  102 1003
 ```
 --
 Add two vectors of unequal length
 
-
-```r
-longvec &lt;- seq(10, 100, length=10); shortvec &lt;- c(1, 2, 3, 4, 5)
+```{r, comment=NA}
+longvec <- seq(10, 100, length=10); shortvec <- c(1, 2, 3, 4, 5)
 
 shortvec + longvec
-```
 
-```
- [1]  11  22  33  44  55  61  72  83  94 105
 ```
 
 
 .red[What will be the output of the following code?]
 
 ```r
-first &lt;- c(1, 2, 3, 4); second &lt;- c(10, 100)
+first <- c(1, 2, 3, 4); second <- c(10, 100)
 first * second
 ```
 ---
@@ -1027,14 +676,9 @@ first * second
 
 Use `NA` or `NaN` to place a missing value in a vector.
 
-
-```r
-z &lt;- c(10, 101, 2, 3, NA)
+```{r, comment=NA}
+z <- c(10, 101, 2, 3, NA)
 is.na(z)
-```
-
-```
-[1] FALSE FALSE FALSE FALSE  TRUE
 ```
 
 
@@ -1099,7 +743,7 @@ background-position: center
 background-size: cover
 .content-box-yellow[ 1.	Table 2 reports the confirmed 2019-nCoV cases and deaths in China, Singapore, Republic of Korea, Japan, Malaysia, Australia, Viet Nam, Philippines, Cambodia, Thailand, India, Nepal, Sri Lanka, United States of America, Canada, Germany, France, The United Kingdom, Italy, Russian Federation, Spain , Belgium, Finland, Sweden, UAE as
 
-a &lt;- c(40235, 43, 27, 26, 18, 15, 14, 3, 1, 32, 3, 1, 1, 12, 7, 14, 11, 4, 3, 2, 2, 1, 1, 100, 7)
+a <- c(40235, 43, 27, 26, 18, 15, 14, 3, 1, 32, 3, 1, 1, 12, 7, 14, 11, 4, 3, 2, 2, 1, 1, 100, 7)
 
 1. rename the vector `a` as `confirmed_cases_countries`
 
@@ -1126,111 +770,5 @@ class: center, middle
 Slides available at: hellor.netlify.com
 
 [CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
-    </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="libs/remark-latest.min.js"></script>
-<script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
-});
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
-  window.dispatchEvent(new Event('resize'));
-});
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
-  if (!r) return;
-  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
-  d.head.appendChild(s);
-})(document);
 
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
-})();
-// adds .remark-code-has-line-highlighted class to <pre> parent elements
-// of code chunks containing highlighted lines with class .remark-code-line-highlighted
-(function(d) {
-  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
-  const preParents = [];
-  const findPreParent = function(line, p = 0) {
-    if (p > 1) return null; // traverse up no further than grandparent
-    const el = line.parentElement;
-    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
-  };
 
-  for (let line of hlines) {
-    let pre = findPreParent(line);
-    if (pre && !preParents.includes(pre)) preParents.push(pre);
-  }
-  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
-})(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
-
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
-      }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
-</script>
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-(function () {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
-  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
-    script.src  = script.src.replace(/^https?:/, '');
-  document.getElementsByTagName('head')[0].appendChild(script);
-})();
-</script>
-  </body>
-</html>
