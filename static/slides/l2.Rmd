@@ -308,6 +308,27 @@ a
 
 ---
 
+background-image: url('array.png')
+background-position: center
+background-size: contain
+
+## Array
+---
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+1. Create the following matrix using the `array` function
+
+```{r, comment=NA}
+
+matrix(1:20, ncol=5)
+```
+
+---
+
 class: duke-softblue, center, middle
 
 # 3. Data Frames
