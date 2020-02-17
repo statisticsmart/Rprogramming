@@ -14,7 +14,7 @@ Here's your roadmap for the semester!
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
-|[Slides](/slides/l1.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  Problems 	| Answers |
+|[Slides](/slides/l1.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](https://hellor.netlify.com/slides/l1.html#53) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
