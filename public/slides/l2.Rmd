@@ -80,7 +80,7 @@ a
 
 ## Operations between vectors 
 
-```{r}
+```{r, comment=NA}
 a 
 a * c(10, 100)
 ```
@@ -147,83 +147,107 @@ class: duke-orange, center, middle
 
 # 2. Matrices
 ---
-# Matrix operations
-
-Create a matrix
 
 
-```r
-x <- matrix(1:6, ncol=3); x
-```
+Matrix is a 2-dimentional and a homogeneous data structure
 
-```
-##      [,1] [,2] [,3]
-## [1,]    1    3    5
-## [2,]    2    4    6
-```
-
-Select a row/column
-
+**Syntax to create a matrix**
 
 ```r
-x[1, ] # select the 1st row
+matrix_name <- matrix(vector_of_elements, 
+                      nrow=number_of_rows,
+                      ncol=number_of_columns,
+                      byrow=logical_value, # If byrow=TRUE, then the matrix is filled in by row.
+                      dimnames=list(rnames, cnames)) # To assign row names and columns
 ```
 
-```
-## [1] 1 3 5
+**Example**
+
+
+```{r, comment=NA}
+matrix(1:6, nrow=2, ncol=3)
+matrix(1:6, nrow=2)
+matrix(1:6, ncol=3)
+
 ```
 
 
-
-```r
-x[, 1] # select the 1st column
-```
-
-```
-## [1] 1 2
-```
-
-Select an element
-
-
-```r
-x[2, 3]
-```
-
-```
-## [1] 6
-```
 ---
 
-# Matrix operations (cont.)
+# Matrix fill by rows/ columns
+
+```{r, comment=NA}
+values <- c(10, 20, 30, 40)
+matrix1 <- matrix(values, nrow=2) # Matrix filled by columns (default option)
+matrix1
+matrix2 <- matrix(values, nrow=2, byrow=TRUE) # Matrix filled by rows
+matrix2
+```
+
+---
+
+# Naming matrix rows and columns
+
+```{r, comment=NA}
+rnames <- c("R1", "R2")
+cnames <- c("C1", "C2")
+matrix_with_names <- matrix(values, nrow=2, dimnames=list(rnames, cnames))
+matrix_with_names
+```
+
+---
+# Matrix subscript
+
+`matraix_name[i, ]` gives the ith row of a matrix
+
+```{r, comment=NA}
+matrix1[1, ]
+```
+
+`matraix_name[, j]` gives the jth column of a matrix
+
+```{r, comment=NA}
+matrix1[, 2]
+```
+
+`matraix_name[i, j]` gives the ith row and jth column element
+
+```{r, comment=NA}
+matrix1[1, 2]
+```
+
+```{r, comment=NA}
+matrix1[1, c(1, 2)] 
+```
+
+---
+
+# `cbind` and `rbind`
+
+Matrices can be created by column-binding and row-binding with `cbind()` and `rbind()`
+
+```{r, comment=NA}
+x <- 1:3
+y <- c(10, 100, 1000)
+cbind(x, y) # binds matrices horizontally
+rbind(x, y) #binds matrices vertically
+```
+
+---
+# Matrix operations
 
 Transpose
 
-
-```r
+```{r, comment=NA}
 t(x)
-```
-
-```
-##      [,1] [,2]
-## [1,]    1    2
-## [2,]    3    4
-## [3,]    5    6
 ```
 
 Matrix multiplication
 
-
-```r
+```{r, comment=NA}
 y <- matrix(seq(10, 60, by=10), nrow=3)
 z <- x %*% y
 z
-```
-
-```
-##      [,1] [,2]
-## [1,]  220  490
-## [2,]  280  640
 ```
 
 Find x in: m*x=n
@@ -238,6 +262,52 @@ class: duke-orange, center, middle
 
 ---
 
+background-image: url('china.png')
+background-position: center
+background-size: contain
+
+---
+
+background-image: url('china.png')
+background-position: center
+background-size: contain
+
+.content-box-yellow[Calculate distance between Hubei and surrounding cities on map  using the [distance calculator](https://www.distancecalculator.net/) and enter it to a vector. Name the vector as distance_to_hubei.
+
+We want to look at the relationship between the number of confirmed cases and distance to other cities/regions/province from Hubei.
+]
+
+Help: \(\hat{\beta}=(X^TX)^{-1}X^TY\)
+
+---
+
+background-image: url('slr.png')
+background-position: center
+background-size: contain
+
+---
+
+class: duke-orange, center, middle
+
+# 3. Arrays
+
+---
+
+## Array
+
+- data structures for storing **higher** dimensional data.
+
+- a **homogeneous** data structure.
+
+- a special case of the array is the matrix.
+
+```{r, comment=NA}
+a <-  array(c(10, 20, 30, 40, 50, 60), c(1, 2, 3))
+a
+```
+
+---
+
 class: duke-softblue, center, middle
 
 # 3. Data Frames
@@ -248,23 +318,14 @@ class: duke-softblue, center, middle
 
 ### Create your own dataframe
 
-
-```r
+```{r}
 sta <- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
 sta
 ```
 
-```
-##    id marks grade
-## 1 101    90    A+
-## 2 102    80     A
-## 3 103    60     C
-```
-
 ### Built-in dataframes
 
-
-```r
+```{r}
 data(iris)
 ```
 
@@ -274,19 +335,6 @@ data(iris)
 ---
 
 # `iris` dataset
-
----
-class: duke-softblue, center, middle
-
-# Your turn
-
-class: duke-orange, center, middle
-
----
-class: duke-purple, center, middle
-
-# 4. Lists
----
 
 ---
 
