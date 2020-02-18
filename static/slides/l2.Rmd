@@ -581,7 +581,31 @@ head(iris)
 
 - Introduced by Sir Ronald A. Fisher, 1936
 
+---
 
+Use	the	R	dataset	“iris”	to	answer	the	following	questions:
+
+1. How many rows and columns does iris have?
+
+2. Select the first 4 rows.
+
+3. Select the last 6 rows.
+
+4. Select rows 10 to 20, with all columns in the iris dataset.
+
+5. Select rows 10 to 20 with only the Species, Petal.Width and Petal.Length.
+
+6. Create a single vector (a new object) called ‘width’ that is the Sepal.Width column of iris.
+
+7.  What are the column names and data types of the different columns in iris?
+
+8. How many rows in the iris dataset have `Petal.Length` larger than 5 and `Sepal.Width` smaller than 3?
+
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
 ---
 
 class: duke-orange, center, middle
@@ -646,6 +670,23 @@ str(first_list_with_names)
 first_list_with_names$a
 first_list_with_names$c$Species
 ```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+---
+
+```{r, comment=NA}
+c("Jan","Feb","Mar")
+matrix(c(3,9,5,1,-2,8), nrow = 2)
+list("green",12.3)
+```
+
+1. Create a list containing the above vector, matrix and the list.
+
+2. Name the elements as `first`, `second` and `third`.
 
 ---
 class: center, middle

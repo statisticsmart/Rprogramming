@@ -477,7 +477,7 @@ background-image: url('slr.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_5e4b9400" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e4b9d45" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -599,7 +599,7 @@ matrix(1:20, ncol=5)
 [4,]    4    8   12   16   20
 ```
 
-<div class="countdown" id="timer_5e4b92b5" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e4ba025" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -948,7 +948,7 @@ background-image: url('datafr.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_5e4b92d2" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e4b9e64" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1037,7 +1037,30 @@ head(iris)
 
 - Introduced by Sir Ronald A. Fisher, 1936
 
+---
 
+Use	the	R	dataset	“iris”	to	answer	the	following	questions:
+
+1. How many rows and columns does iris have?
+
+2. Select the first 4 rows.
+
+3. Select the last 6 rows.
+
+4. Select rows 10 to 20, with all columns in the iris dataset.
+
+5. Select rows 10 to 20 with only the Species, Petal.Width and Petal.Length.
+
+6. Create a single vector (a new object) called ‘width’ that is the Sepal.Width column of iris.
+
+7.  What are the column names and data types of the different columns in iris?
+
+8. How many rows in the iris dataset have `Petal.Length` larger than 5 and `Sepal.Width` smaller than 3?
+
+
+<div class="countdown" id="timer_5e4b9df6" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 ---
 
 class: duke-orange, center, middle
@@ -1530,6 +1553,48 @@ first_list_with_names$c$Species
 [145] virginica  virginica  virginica  virginica  virginica  virginica 
 Levels: setosa versicolor virginica
 ```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+---
+
+
+```r
+c("Jan","Feb","Mar")
+```
+
+```
+[1] "Jan" "Feb" "Mar"
+```
+
+```r
+matrix(c(3,9,5,1,-2,8), nrow = 2)
+```
+
+```
+     [,1] [,2] [,3]
+[1,]    3    5   -2
+[2,]    9    1    8
+```
+
+```r
+list("green",12.3)
+```
+
+```
+[[1]]
+[1] "green"
+
+[[2]]
+[1] 12.3
+```
+
+1. Create a list containing the above vector, matrix and the list.
+
+2. Name the elements as `first`, `second` and `third`.
 
 ---
 class: center, middle
