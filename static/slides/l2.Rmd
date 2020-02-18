@@ -612,7 +612,7 @@ first_list[[3]]$Species
 
 ---
 
-# name entries in a list
+# Name entries in a list
 
 ```{r, comment=NA}
 first_list_with_names <-list(a=1:3, b=matrix(1:6, nrow=2), c=iris)
