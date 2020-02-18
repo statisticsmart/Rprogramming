@@ -322,6 +322,22 @@ countdown(minutes = 5L, seconds = 00)
 
 ---
 
+```{r}
+count_corona <- c(29631, 1151, 1104, 1073, 879, 830, 771,
+           492, 468, 459, 405, 337, 331, 295, 261, 218, 213, 210, 141, 136, 119, 109, 107, 91, 85, 80, 58, 49, 49, 36, 18, 18, 10, 1)
+
+
+distance_to_hubei <- c(0, 929.05, 807, 7680, 426, 482, 564, 679, 571, 837, 896, 1044, 2338, 872, 827, 992, 609,
+                       923, 1215, 1354, 722, 725, 1424, 993, 1252, 1886, 1581, 896, 2709, 1005, 1560, 1132, 1005, 1133)
+#plot(distance_to_hubei, count_corona)
+
+count_corona <- count_corona[c(-1, -4)]
+distance_to_hubei <- distance_to_hubei[c(-1, -4)]
+#plot(distance_to_hubei, count_corona)
+```
+
+---
+
 class: duke-orange, center, middle
 
 # 3. Arrays
