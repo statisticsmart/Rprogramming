@@ -2,7 +2,7 @@
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Lesson 2: Data Structures and Introduction to in-built functions in R"
 author: "Dr Thiyanga Talagala"
-date: "2020-02-17"
+date: "2020-02-18"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -291,6 +291,11 @@ background-image: url('slr.png')
 background-position: center
 background-size: contain
 
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
 ---
 
 class: duke-orange, center, middle
@@ -351,6 +356,11 @@ class: duke-orange, center, middle
 ```{r, comment=NA}
 
 matrix(1:20, ncol=5)
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
 ```
 
 ---
@@ -515,6 +525,11 @@ background-image: url('datafr.png')
 background-position: center
 background-size: contain
 
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 3L, seconds = 00)
+```
+
 ---
 background-image: url('iris.jpg')
 background-position: center
@@ -562,7 +577,7 @@ head(iris)
 head(iris)
 ```
 
-<img src="images.jpeg" width="250"><img src="iris_petal_sepal.png" height="300"> <img src="Fisher.jpeg" height="300">
+<img src="images.jpeg" width="200"><img src="iris_petal_sepal.png" height="300"> <img src="Fisher.jpeg" height="300">
 
 - Introduced by Sir Ronald A. Fisher, 1936
 
@@ -612,7 +627,7 @@ first_list[[3]]$Species
 
 ---
 
-# name entries in a list
+# Name entries in a list
 
 ```{r, comment=NA}
 first_list_with_names <-list(a=1:3, b=matrix(1:6, nrow=2), c=iris)

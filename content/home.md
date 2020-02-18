@@ -10,7 +10,7 @@ Course webpage: hellor.netlify.com
 
 Course meeting time: Tuesday, 4.00pm - 6.00pm
 
-Location: LC1, New Faculty Complex, Faculty of Applied Sciences, USJ
+Location: LCS1, New Faculty Complex, Faculty of Applied Sciences, USJ
 
 This is a computer-heavy course and each class session will require computer use. 
 
