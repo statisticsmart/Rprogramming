@@ -184,6 +184,12 @@ matrix2 <- matrix(values, nrow=2, byrow=TRUE) # Matrix filled by rows
 matrix2
 ```
 
+- byrow=TRUE: matrix is filled in by row
+
+- byrow=FALSE: matrix is filled in by column
+
+- Default is by column
+
 ---
 
 # Naming matrix rows and columns
@@ -301,6 +307,10 @@ class: duke-orange, center, middle
 
 - a special case of the array is the matrix.
 
+```r
+array(vector, dimensions, dimnames) #dimnames-as a list
+```
+
 ```{r, comment=NA}
 a <-  array(c(10, 20, 30, 40, 50, 60), c(1, 2, 3))
 a
@@ -313,6 +323,22 @@ background-position: center
 background-size: contain
 
 ## Array
+---
+
+## Subsetting arrays
+
+```{r, comment=NA}
+a
+```
+
+```{r, comment=NA}
+a[, , 1] # Extract first entry
+```
+
+```{r, comment=NA}
+a[1, ,] # All rows in each entry
+```
+
 ---
 class: duke-orange, center, middle
 
@@ -329,22 +355,177 @@ matrix(1:20, ncol=5)
 
 ---
 
-class: duke-softblue, center, middle
+## Array with dimnames
 
-# 3. Data Frames
+```{r, comment=NA}
+dim1 <- c("A1", "A2"); dim2 <- c("B1", "B2", "B3"); dim3 <- c("c1", "c2", "c3", "c4")
+z <- array(1:24, c(2, 3, 4), dimnames = list(dim1, dim2, dim3))
+z
+```
 
 ---
 
+class: duke-orange, center, middle
+
+# 4. Data Frames
+
+---
+
+# Data frames
+
+- Rectangular arrangement of data with rows corresponding to observational units and columns corresponding to variables.
+
+- More general than a matrix in that different columns can contain different modes of data.
+
+- It’s similar to the datasets you’d typically see in SPSS and MINITAB.
+
+- Data frames are the most common data structure you’ll deal with in R.
+
+![Figure 1: Components of a dataframe.](tidy-1.png)
+
+---
 # Create a data frame
 
-### Create your own dataframe
+**Syntax**
 
-```{r}
-sta <- data.frame(id=101:103, marks = c(90, 80, 60), grade=c("A+", "A", "C"))
-sta
+```r
+name_of_the_dataframe <- data.frame(
+                          var1_name=vector of values of the first variable,
+                          var2_names=vector of values of the second variable)
+
 ```
 
-### Built-in dataframes
+**Example**
+
+```{r, comment=NA}
+corona <- data.frame(ID=c("C001", "C002", "C003", "C004"),
+                     Location=c("Beijing", "Wuhan", "Shanghai", "Beijing"),
+                     Test_Results=c(FALSE, TRUE, FALSE, FALSE))
+corona
+```
+
+
+To check if it is a datafrme
+
+```{r, comment=NA}
+is.data.frame(corona)
+
+```
+
+---
+
+# Some useful functions with dataframes
+
+```{r, comment=NA}
+colnames(corona)
+```
+
+```{r, comment=NA}
+length(corona)
+dim(corona)
+nrow(corona)
+ncol(corona)
+```
+---
+
+# Some useful functions with dataframes (cont.)
+
+```{r, comment=NA}
+summary(corona)
+```
+
+```{r, comment=NA}
+str(corona)
+```
+
+
+---
+
+## Convert a matrix to a dataframe
+  
+```{r, comment=NA}
+mat <- matrix(1:16, ncol=4)
+mat
+mat_df <- as.data.frame(mat)
+mat_df
+```
+
+---
+
+## Subsetting data frames 
+
+**Select rows**
+
+```{r, comment=NA}
+head(mat_df) # default it shows 5 rows
+
+head(mat_df, 3) # To extract only the first three rows 
+```
+
+```{r, comment=NA}
+tail(mat_df)
+```
+
+---
+
+## Subsetting data frames 
+
+```{r, comment=NA}
+mat_df
+```
+
+**To select some specific rows**
+
+```{r, comment=NA}
+mat_df[4, ]
+index <- c(1, 3)
+mat_df[index, ]
+
+```
+
+---
+## Subsetting data frames
+```{r, comment=NA}
+mat_df
+```
+
+**Select columns**
+
+1. Select column(s) by variable names
+
+```{r, comment=NA}
+mat_df$V1 # Method 1
+
+mat_df[, "V1"] # Method 2
+```
+
+2. Select column(s) by index
+
+```{r, comment=NA}
+mat_df[, 2]
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+---
+background-image: url('datafr.png')
+background-position: center
+background-size: contain
+
+---
+background-image: url('iris.jpg')
+background-position: center
+background-size: cover
+
+.content-box-yellow[
+Built-in dataframes
+]
+
+---
+# Built-in dataframes
 
 ```{r}
 data(iris)
@@ -354,11 +535,104 @@ data(iris)
 .full-width[.content-box-blue[Use `help` function to find more about the iris dataset.]]
 
 ---
+background-image: url('helpiris.png')
+background-position: center
+background-size: contain
 
+---
 # `iris` dataset
+
+```{r, comment=NA}
+head(iris)
+```
+
+<img src="images.jpeg" width="800">
+---
+# `iris` dataset
+
+```{r, comment=NA}
+head(iris)
+```
+
+<img src="images.jpeg" width="400"><img src="iris_petal_sepal.png" height="300">
+---
+# `iris` dataset
+
+```{r, comment=NA}
+head(iris)
+```
+
+<img src="images.jpeg" width="250"><img src="iris_petal_sepal.png" height="300"> <img src="Fisher.jpeg" height="300">
+
+- Introduced by Sir Ronald A. Fisher, 1936
+
 
 ---
 
+class: duke-orange, center, middle
+
+# 5. List
+
+---
+
+# List
+
+- Lists are heterogeneous
+
+**Syntax**
+
+```r
+list_name <- list(entry1, entry2, entry3, ...)
+
+```
+
+**Example**
+
+```{r, comment=NA}
+first_list <-list(1:3, matrix(1:6, nrow=2), iris)
+first_list
+```
+
+
+---
+
+## Structure of a list
+
+```{r, comment=NA}
+str(first_list)
+```
+
+--
+## Extract elements
+
+```{r, comment=NA}
+first_list[[1]]
+first_list[[3]]$Species
+```
+
+---
+
+# name entries in a list
+
+```{r, comment=NA}
+first_list_with_names <-list(a=1:3, b=matrix(1:6, nrow=2), c=iris)
+first_list_with_names
+```
+---
+
+## Extract elements using names
+
+```{r, comment=NA}
+str(first_list_with_names)
+```
+
+
+```{r, comment=NA}
+first_list_with_names$a
+first_list_with_names$c$Species
+```
+
+---
 class: center, middle
 
 Slides available at: hellor.netlify.com
