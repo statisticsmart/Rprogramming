@@ -291,6 +291,11 @@ background-image: url('slr.png')
 background-position: center
 background-size: contain
 
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
 ---
 
 class: duke-orange, center, middle
@@ -351,6 +356,11 @@ class: duke-orange, center, middle
 ```{r, comment=NA}
 
 matrix(1:20, ncol=5)
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
 ```
 
 ---
@@ -514,6 +524,11 @@ class: duke-orange, center, middle
 background-image: url('datafr.png')
 background-position: center
 background-size: contain
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 3L, seconds = 00)
+```
 
 ---
 background-image: url('iris.jpg')
