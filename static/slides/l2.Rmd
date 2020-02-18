@@ -148,6 +148,11 @@ class: duke-orange, center, middle
 # 2. Matrices
 ---
 
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
+---
 
 Matrix is a 2-dimentional and a homogeneous data structure
 
@@ -303,6 +308,12 @@ class: duke-orange, center, middle
 # 3. Arrays
 
 ---
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
+
+---
 
 ## Array
 
@@ -381,6 +392,11 @@ class: duke-orange, center, middle
 
 ---
 
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
+---
 # Data frames
 
 - Rectangular arrangement of data with rows corresponding to observational units and columns corresponding to variables.
@@ -392,6 +408,8 @@ class: duke-orange, center, middle
 - Data frames are the most common data structure you’ll deal with in R.
 
 ![Figure 1: Components of a dataframe.](tidy-1.png)
+
+.footer-note[.tiny[.green[Image Credit: ][Hadley Wickham and Garrett Grolemund](https://r4ds.had.co.nz/tidy-data.html)]]
 
 ---
 # Create a data frame
@@ -611,6 +629,13 @@ countdown(minutes = 5L, seconds = 00)
 class: duke-orange, center, middle
 
 # 5. List
+
+---
+
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
 
 ---
 
