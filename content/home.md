@@ -19,7 +19,7 @@ This is a computer-heavy course and each class session will require computer use
 
 ### Lecturer-in-charge: 
 
-[Dr Thiyanga S Talagala](thiyanga.netlify.com)
+[Dr Thiyanga S Talagala](https://thiyanga.netlify.com/)
 
 Email: ttalagala@sjp.ac.lk
 
