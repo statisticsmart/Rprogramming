@@ -345,6 +345,8 @@ distance_to_hubei <- c(0, 929.05, 807, 7680, 426, 482, 564, 679, 571, 837, 896, 
 plot(distance_to_hubei, count_corona)
 ```
 
+---
+
 ```{r}
 count_corona <- count_corona[c(-1, -4)]
 distance_to_hubei <- distance_to_hubei[c(-1, -4)]
