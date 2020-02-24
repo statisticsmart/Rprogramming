@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4762.117
+[1] 4761.58
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4762.117
+[1] 4761.58
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4762.117
+[1] 4761.58
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.3257573
+[1] -0.2362411
 ```
 
 ---
@@ -460,6 +460,10 @@ class: duke-orange, center, middle
 
 # Probability distribution functions
 
+- Each probability distribution in R is associated with four functions.
+
+- Function naming convention: For each There is a root name, for example, the **root name** for the normal distribution is `norm`. This root is prefixed by one of the letters
+
 
 - **d** prefix for the **distribution** function
 
@@ -476,18 +480,28 @@ class: duke-orange, center, middle
 The general formula for the probability density function of the normal distribution with mean `\(\mu\)` and variance `\(\sigma\)` is given by
 
 
-\[
+$$
 f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}
-\]
+$$
 
 If we let the mean `\(\mu=0\)` and the standard deviation `\(\sigma=1\)`, we get the probability density function for the standard normal distribution.
 
-\[
+$$
 f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
-\]
+$$
+
+---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
 
 
 
+![Standard normal probability density function: dnorm(0)](l3_files/figure-html/unnamed-chunk-14-1.png)
 
 
 ```r
@@ -497,9 +511,6 @@ dnorm(0)
 ```
 [1] 0.3989423
 ```
-
-![Standard normal probability density function: dnorm(0)](l3_files/figure-html/unnamed-chunk-15-1.png)
-
 
 ---
 class: center, middle

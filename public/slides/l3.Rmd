@@ -457,6 +457,10 @@ class: duke-orange, center, middle
 
 # Probability distribution functions
 
+- Each probability distribution in R is associated with four functions.
+
+- Function naming convention: For each There is a root name, for example, the **root name** for the normal distribution is `norm`. This root is prefixed by one of the letters
+
 
 - **d** prefix for the **distribution** function
 
@@ -473,24 +477,28 @@ class: duke-orange, center, middle
 The general formula for the probability density function of the normal distribution with mean $\mu$ and variance $\sigma$ is given by
 
 
-\[
+$$
 f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}
-\]
+$$
 
 If we let the mean $\mu=0$ and the standard deviation $\sigma=1$, we get the probability density function for the standard normal distribution.
 
-\[
+$$
 f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
-\]
+$$
+
+---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
 
 
 
-
-```{r, comment=NA}
-dnorm(0)
-```
-
-```{r, echo=FALSE, fig.cap="Standard normal probability density function: dnorm(0)", collapse=NA}
+```{r, echo=FALSE, fig.height=5, fig.cap="Standard normal probability density function: dnorm(0)", collapse=NA}
 library(ggplot2)
 x <- seq(-4, 4, length=200)
 y <- 1/sqrt(2*pi)*exp(-x^2/2)
@@ -503,6 +511,10 @@ ggplot(data = dat, mapping = aes(x = x, y = y)) +
     
 ```
 
+```{r, comment=NA}
+
+dnorm(0)
+```
 
 ---
 class: center, middle
