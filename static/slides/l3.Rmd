@@ -35,7 +35,7 @@ options(htmltools.dir.version = FALSE)
 
 --
 
-👉🏻 In R functions are **objects** of **class** *function*.
+👉 In R, functions are **objects** of **class** *function*.
 
 ```{r, comment=NA}
 class(length)
@@ -85,15 +85,18 @@ a <- x^2
 b <- x^3
 out <- c(a, b)
 names(out) <- c("squared", "cubed")
-return(out)
+out # or return(out)
 
 }
 ```
 
+## Evaluation
+
+```{r, comment=NA}
+calSqrt(2)
+```
+
 ]
-
-
-
 
 
 
