@@ -17,7 +17,6 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
-      highlightSpans: true
       countIncrementalSlides: false
 ---
 ```{r setup, include=FALSE}
@@ -429,9 +428,93 @@ class: duke-orange, center, middle
 1. Calculate the mean of 1, 2, 3, 8, 10, 20, 56, NA.
 
 
+---
+
+# Basic maths functions
+
+|  Operator | Description  |
+|---|---|
+|  abs(x) | absolute value of x   |
+| log(x, base = y)  |  logarithm of x with base y; if base is not specified, returns the natural logarithm |
+|exp(x)| exponential of x|
+|sqrt(x)|square root of x|
+|factorial(x)| factorial of x|
+
+---
+# Basic statistic functions
+
+|  Operator | Description  |
+|---|---|
+|  mean(x) | mean of x   |
+| median(x)  |  median of x |
+|mode(x)| mode of x|
+|var(x)|variance of x|
+|scale(x)| z-score of x|
+|quantile(x)| quantiles of x|
+|summary(x)|summary of x: mean, minimum, maximum, etc.|
 
 ---
 
+# Probability distribution functions
+
+- Each probability distribution in R is associated with four functions.
+
+- Function naming convention: For each There is a root name, for example, the **root name** for the normal distribution is `norm`. This root is prefixed by one of the letters
+
+
+- **d** prefix for the **distribution** function
+
+- **p** prefix for the **cummulative probability**
+
+- **q** prefix for the **quantile**
+
+- **r** prefix for the **random** number generator
+
+---
+
+## Illustration with Standard normal distribution
+
+The general formula for the probability density function of the normal distribution with mean $\mu$ and variance $\sigma$ is given by
+
+
+$$
+f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}
+$$
+
+If we let the mean $\mu=0$ and the standard deviation $\sigma=1$, we get the probability density function for the standard normal distribution.
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+
+
+```{r, echo=FALSE, fig.height=5, fig.cap="Standard normal probability density function: dnorm(0)", collapse=NA}
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "dnorm(0)")+
+    geom_segment(aes(x = 0, y = 0, xend = 0, yend = 0.398), size=1, color="red")+
+    geom_segment(aes(x = 0, y = 0.398, xend = -4, yend = 0.398), arrow = arrow(length = unit(0.5, "cm")), size=1, color="red")
+    
+```
+
+```{r, comment=NA}
+
+dnorm(0)
+```
 
 ---
 class: center, middle

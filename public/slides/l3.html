@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4761.621
+[1] 4762.117
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4761.621
+[1] 4762.117
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4761.621
+[1] 4762.117
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] -0.1847405
+[1] 0.3257573
 ```
 
 ---
@@ -431,8 +431,74 @@ class: duke-orange, center, middle
 1. Calculate the mean of 1, 2, 3, 8, 10, 20, 56, NA.
 
 
+---
+
+# Basic maths functions
+
+|  Operator | Description  |
+|---|---|
+|  abs(x) | absolute value of x   |
+| log(x, base = y)  |  logarithm of x with base y; if base is not specified, returns the natural logarithm |
+|exp(x)| exponential of x|
+|sqrt(x)|square root of x|
+|factorial(x)| factorial of x|
 
 ---
+# Basic statistic functions
+
+|  Operator | Description  |
+|---|---|
+|  mean(x) | mean of x   |
+| median(x)  |  median of x |
+|mode(x)| mode of x|
+|var(x)|variance of x|
+|scale(x)| z-score of x|
+|quantile(x)| quantiles of x|
+|summary(x)|summary of x: mean, minimum, maximum, etc.|
+
+---
+
+# Probability distribution functions
+
+
+- **d** prefix for the **distribution** function
+
+- **p** prefix for the **cummulative probability**
+
+- **q** prefix for the **quantile**
+
+- **r** prefix for the **random** number generator
+
+---
+
+## Illustration with Standard normal distribution
+
+The general formula for the probability density function of the normal distribution with mean `\(\mu\)` and variance `\(\sigma\)` is given by
+
+
+\[
+f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}
+\]
+
+If we let the mean `\(\mu=0\)` and the standard deviation `\(\sigma=1\)`, we get the probability density function for the standard normal distribution.
+
+\[
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+\]
+
+
+
+
+
+```r
+dnorm(0)
+```
+
+```
+[1] 0.3989423
+```
+
+![Standard normal probability density function: dnorm(0)](l3_files/figure-html/unnamed-chunk-15-1.png)
 
 
 ---
@@ -447,7 +513,6 @@ Slides available at: hellor.netlify.com
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
-"highlightSpans": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
