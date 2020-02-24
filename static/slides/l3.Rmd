@@ -1,0 +1,70 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Lesson 3: Functions in R"
+author: "Dr Thiyanga Talagala"
+date: "2020-02-24"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+## Functions in R
+
+👉🏻 Perform a specific task according to a set of instructions.
+
+--
+👉🏻  Some functions we have discussed so far,
+
+`c`, `matrix`, `array`, `list`, `data.frame`, `str`, `ndim`, `length`, `nrow`, `plot`
+
+--
+
+👉🏻 In R, a function are **objects** of **class** *function*.
+
+```{r, comment=NA}
+class(length)
+```
+
+--
+
+👉🏻 There are basically two types of functions:
+
+    
+        💻 Built in functions 
+        
+            Already created or defined in the programming framework 
+            to make our work easier.
+
+        👨 User defined functions
+           
+           Sometimes we need to create our own functions for a specific purpose.
+
+
+
+
+---
+
+It is possible to see the source code of a function by running the name of the function itself in the console.
+---
+class: center, middle
+
+Slides available at: hellor.netlify.com
+
+[CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+
+
