@@ -507,7 +507,7 @@ dat <- data.frame(x=x, y=y)
 ggplot(data = dat, mapping = aes(x = x, y = y)) +
     geom_line()+labs(y = "density", title = "dnorm(0)")+
     geom_segment(aes(x = 0, y = 0, xend = 0, yend = 0.398), size=1, color="red")+
-    geom_segment(aes(x = 0, y = 0.398, xend = -4, yend = 0.398), arrow = arrow(length = unit(0.5, "cm")), size=1, color="red")
+    geom_segment(aes(x = 0, y = 0.398, xend = -4, yend = 0.398), arrow = arrow(length = unit(0.5, "cm")), size=1, color="red") 
     
 ```
 
@@ -587,7 +587,7 @@ y <- 1/sqrt(2*pi)*exp(-x^2/2)
 #plot(x, y, type="l", lwd=2, col="red")
 dat <- data.frame(x=x, y=y)
 ggplot(data = dat, mapping = aes(x = x, y = y)) +
-    geom_line()+labs(y = "density", title = "pnorm(0)")+
+    geom_line()+labs(y = "density", title = "qnorm(0)")+
     geom_area(stat = "function", fun = dnorm, fill = "blue", xlim = c(-4, 0))+
    geom_segment(aes(x = 0, y = 0.398, xend = 0, yend = 0), size=1, color="red", arrow = arrow(length = unit(0.5, "cm")),)
     
@@ -613,6 +613,59 @@ highlight <- data.frame(y=rep(0, 10), x=random_numbers)
 ggplot(data = dat, mapping = aes(x = x, y = y)) +
     geom_line() + labs(y = "density", title = "rnorm(10)") + geom_point(data=highlight, aes(x=x, y=y), colour="red", size=2)
 ```
+
+---
+
+## Other distributions in R
+
+.pull-left[
+
+- **`beta`**: beta distribution
+
+- **`binom`**: binomial distribution
+
+- **`cauchy`**: Cauchy distribution
+
+- **`chisq`**: chi-squared distribution
+
+- **`exp`**: exponential distribution
+
+- **`f`**: F distribution
+
+- **`gamma`**: gamma distribution
+
+- **`geom`**: geometric distribution
+
+- **`hyper`**: hypergeometric distribution
+
+
+]
+
+
+.pull-right[
+
+
+
+- **`lnorm`**: log-normal distribution
+
+- **`multinom`**: multinomial distribution
+
+- **`nbinom`**: negative binomial distribution
+
+- **`norm`**: normal distribution
+
+- **`pois`**: Poisson distribution
+
+- **`t`**: Student's t distribution
+
+- **`unif`**: uniform distribution
+
+- **`weibull`**: Weibull distribution
+
+]
+
+--
+>  🙋 Getting help with R:  **`?Distributions`**
 
 
 ---

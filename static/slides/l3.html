@@ -9,8 +9,8 @@
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
     <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
-    <link rel="stylesheet" href="libs\cc-fonts.css" type="text/css" />
-    <link rel="stylesheet" href="libs\figure-captions.css" type="text/css" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4761.988
+[1] 4761.644
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4761.988
+[1] 4761.644
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4761.988
+[1] 4761.644
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.1566226
+[1] -0.1695678
 ```
 
 ---
@@ -600,6 +600,59 @@ sort(random_numbers) ## sort the numbers then it is easy to map with the graph
 
 
 ![](l3_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+
+## Other distributions in R
+
+.pull-left[
+
+- **`beta`**: beta distribution
+
+- **`binom`**: binomial distribution
+
+- **`cauchy`**: Cauchy distribution
+
+- **`chisq`**: chi-squared distribution
+
+- **`exp`**: exponential distribution
+
+- **`f`**: F distribution
+
+- **`gamma`**: gamma distribution
+
+- **`geom`**: geometric distribution
+
+- **`hyper`**: hypergeometric distribution
+
+
+]
+
+
+.pull-right[
+
+
+
+- **`lnorm`**: log-normal distribution
+
+- **`multinom`**: multinomial distribution
+
+- **`nbinom`**: negative binomial distribution
+
+- **`norm`**: normal distribution
+
+- **`pois`**: Poisson distribution
+
+- **`t`**: Student's t distribution
+
+- **`unif`**: uniform distribution
+
+- **`weibull`**: Weibull distribution
+
+]
+
+--
+&gt;  🙋 Getting help with R:  **`?Distributions`**
 
 
 ---
