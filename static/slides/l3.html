@@ -36,7 +36,7 @@ class: center, middle, inverse, title-slide
 
 --
 
-👉 In R, functions are **objects** of **class** *function*.
+👉🏻 In R, functions are **objects** of **class** *function*.
 
 
 ```r
@@ -78,7 +78,10 @@ return(value)
 }
 
 ```
+
+
 ]
+
 
 .pull-right[
 
@@ -86,7 +89,7 @@ return(value)
 
 
 ```r
-calSqrt &lt;- function(x){
+cal_sqrt &lt;- function(x){
 
 a &lt;- x^2
 b &lt;- x^3
@@ -101,7 +104,7 @@ out # or return(out)
 
 
 ```r
-calSqrt(2)
+cal_sqrt(2)
 ```
 
 ```
@@ -110,8 +113,237 @@ squared   cubed
 ```
 
 ]
+--
+
+👉 Functions are created using the `function()`.
+---
+
+## Basic components of a function
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
 
 
+]
+
+.pull-right[
+
+### Example
+
+
+```r
+*cal_sqrt &lt;- function(x){
+
+a &lt;- x^2
+b &lt;- x^3
+out &lt;- c(a, b)
+names(out) &lt;- c("squared", "cubed")
+out # or return(out)
+
+}
+```
+
+
+
+
+]
+
+
+.content-box-yellow[Function name: **`calSqrt`**]
+
+ - use verbs, where possible.
+ 
+ - should be meaningful.
+ 
+ - Use an underscore (_) to separate words.
+ 
+ - avoid names of built-in functions.
+ 
+ - start with lower case letters. Note that R is a case sensitive language.
+
+
+
+---
+
+
+## Basic components of a function
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+
+```r
+*cal_sqrt &lt;- function(x){
+
+ a &lt;- x^2
+ b &lt;- x^3
+ out &lt;- c(a, b)
+ names(out) &lt;- c("squared", "cubed")
+ out # or return(out)
+
+}
+```
+
+
+
+
+]
+
+
+.content-box-yellow[Function arguments: **`x`**]
+
+
+
+
+---
+
+## Basic components of a function
+
+.pull-left[
+
+### Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+
+
+]
+
+.pull-right[
+
+### Example
+
+
+```r
+cal_sqrt &lt;- function(x){
+
+* a &lt;- x^2
+* b &lt;- x^3
+* out &lt;- c(a, b)
+* names(out) &lt;- c("squared", "cubed")
+* out # or return(out)
+
+}
+```
+
+
+
+
+]
+
+
+.content-box-yellow[Function body]
+
+---
+
+### Function body (Cont.)
+
+- Place spaces around all operators such as =, +, -, &lt;-, etc. 
+
+- Exception: Do not place spaces around the operators :, :: and ::: 
+
+```r
+1+2 # bad
+1 + 2 # good 
+```
+--
+
+- Place a space before left parentheses except evaluating the function (function call)
+
+```r
+if (a &gt; 2) # good
+if(a&gt;2) # bad
+
+# Function call ----
+rnorm(2) # good
+rnorm (2) # bad
+```
+
+- Use extra spacing to align multiple lines with &lt;- or =
+
+```r
+# Bad ------
+a = sum(c(1, 5, 8, 10))/2
+sd = sd(c(1, 5, 8, 10))
+
+# Good ------
+a  = sum(c(1, 5, 8, 10))/2
+sd = sd(c(1, 5, 8, 10))
+```
+
+---
+
+### Function body (Cont.)
+
+- Spacing inside parentheses or square brackets 
+
+```r
+# Good ---
+a[1, 2]
+a[1, ]
+if(x &lt; 2)
+
+# Bad ---
+a[1,2]
+a[1,]
+if(x&lt;2)
+if( x&lt;2 )
+
+```
+
+- {} do not go in one single line, always two lines
+
+```r
+# Good ---
+if(y == 2){
+print("even")
+}
+
+# Bad ---
+if(y == 2){ print("even")}
+```
 
 ---
 
