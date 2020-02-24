@@ -231,7 +231,7 @@ out # or return(out)
 .content-box-yellow[Function arguments: **`x`**]
 
 
-
+- value passed to the function to obtain the function's result.
 
 ---
 
@@ -357,6 +357,56 @@ print("even")
 
 # Bad ---
 if(y == 2){ print("even")}
+```
+
+---
+
+## Built-in Functions
+
+### How to call a buil-in function in R
+
+```r
+function_name(arg1 = 1, arg2 = 3)
+
+```
+
+### Example
+
+```{r, echo=FALSE}
+mydata <- c(rnorm(20), 100000)
+```
+
+The following calls to `mean` are all equivalent
+
+```r
+mydata <- c(rnorm(20), 100000)
+mean(mydata) # matched by position
+mean(x = mydata) # matched by name
+mean(mydata, na.rm = FALSE)
+mean(x = mydata, na.rm = FALSE) 
+mean(na.rm = FALSE, x = mydata) 
+mean(na.rm = FALSE, mydata)
+```
+
+```{r, echo=FALSE, comment=NA}
+mean(mydata)
+```
+
+⚠️ Even though it works, do not change the order of the arguments too much.
+
+---
+
+## Built-in Functions (cont.)
+
+- some arguments have default values
+
+```{r, comment=NA}
+mean(mydata, trim=0)
+mean(mydata) # Default value for trim is 0
+```
+
+```{r, comment=NA}
+mean(mydata, trim=0.1)
 ```
 
 ---
