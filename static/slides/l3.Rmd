@@ -17,6 +17,7 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 ```{r setup, include=FALSE}
@@ -34,7 +35,7 @@ options(htmltools.dir.version = FALSE)
 
 --
 
-👉🏻 In R, a function are **objects** of **class** *function*.
+👉🏻 In R functions are **objects** of **class** *function*.
 
 ```{r, comment=NA}
 class(length)
@@ -53,6 +54,46 @@ class(length)
       Sometimes we need to create our own functions for a specific purpose.
 
 ---
+
+## Basic components of a function
+
+.pull-left[
+
+## Syntax
+
+```r
+
+name <- function(arg1, aug2, ...){
+
+<FUNCTION BODY>
+
+return(value)
+
+}
+
+```
+]
+
+.pull-right[
+
+## Example
+
+```{r}
+calSqrt <- function(x){
+
+a <- x^2
+b <- x^3
+out <- c(a, b)
+names(out) <- c("squared", "cubed")
+return(out)
+
+}
+```
+
+]
+
+
+
 
 
 

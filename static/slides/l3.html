@@ -36,7 +36,7 @@ class: center, middle, inverse, title-slide
 
 --
 
-👉🏻 In R, a function are **objects** of **class** *function*.
+👉🏻 In R functions are **objects** of **class** *function*.
 
 
 ```r
@@ -61,6 +61,47 @@ class(length)
 
 ---
 
+## Basic components of a function
+
+.pull-left[
+
+## Syntax
+
+```r
+
+name &lt;- function(arg1, aug2, ...){
+
+&lt;FUNCTION BODY&gt;
+
+return(value)
+
+}
+
+```
+]
+
+.pull-right[
+
+## Example
+
+
+```r
+calSqrt &lt;- function(x){
+
+a &lt;- x^2
+b &lt;- x^3
+out &lt;- c(a, b)
+names(out) &lt;- c("squared", "cubed")
+return(out)
+
+}
+```
+
+]
+
+
+
+
 
 
 ---
@@ -78,6 +119,7 @@ Slides available at: hellor.netlify.com
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
