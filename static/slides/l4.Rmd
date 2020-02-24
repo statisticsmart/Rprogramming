@@ -23,6 +23,21 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
+# R Apply family
+
+- **`apply()`** function
+
+```{r, comment=NA}
+marks <- data.frame(maths=c(10, 20, 30), chemistry=c(100, 20, 60))
+marks
+apply(marks, 1, mean)
+apply(marks, 2, mean)
+```
+
+Follow: DataCamp course
+---
+
+---
 ## Functions in R
 
 👉🏻 Perform a specific task according to a set of instructions.
@@ -511,11 +526,6 @@ c(rnorm(5), NA, rnorm(4), rep(NA, 2), rnorm(5), rep(NA, 10), rnorm(20))
 
 ```
 
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 4L, seconds = 00)
-```
-
 ---
 
 # Probability distribution functions
@@ -741,74 +751,6 @@ class: duke-orange, center, middle
 ---
 
 
----
-
-# Control structures
-
-
-
-
----
-# R Apply family and its variants
-
-- **`apply()`** function
-
-```{r, comment=NA}
-marks <- data.frame(maths=c(10, 20, 30), chemistry=c(100, 20, 60))
-marks
-apply(marks, 1, mean)
-apply(marks, 2, mean)
-```
-
----
-
-class: duke-orange, center, middle
-
-# Your turn
-
----
-
-Calculate the row and column wise standard deviation of the following matrix
-
-```{r, echo=FALSE, comment=NA}
-matrix(1:20, ncol=4)
-
-```
-
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 3L, seconds = 00)
-```
----
-
-class: duke-green, center, middle
-
-# Your turn
-
----
-## Assignment 1: Individual
-
-Find about the following variants of apply family functions in R **`lapply()`**, **`sapply()`**, **`vapply()`**, **`mapply()`**, **`rapply()`**, and **`tapply()`** functions.
-
-Resourses: You can follow the DataCamp tutorial [here](https://www.datacamp.com/community/tutorials/r-tutorial-apply-family?utm_source=adwords_ppc&utm_campaignid=1658343524&utm_adgroupid=63833882055&utm_device=c&utm_keyword=%2Bapply%20%2Br&utm_matchtype=b&utm_network=g&utm_adpostion=&utm_creative=319558765408&utm_targetid=aud-299261629574:kwd-309818754193&utm_loc_interest_ms=&utm_loc_physical_ms=1009919&gclid=EAIaIQobChMImfeQkOTq5wIVVQwrCh1BngrmEAAYASAAEgLEa_D_BwE).
-
-- You should clearly explain,
-
-    - syntax for each function
-
-    - function inputs
-    
-    - how each function works?/ The task of the function.
-    
-    - output of the function.
-    
-    - differences between the functions (apply vs lapply, apply vs sapply, etc.)
-
-- Provide your own example for each function. 
-
-Use only 1 A4 sheet, you may use both sides.
-
-Assignment due date: 3 March 2020
 
 ---
 class: center, middle
