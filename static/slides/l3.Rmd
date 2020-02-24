@@ -517,6 +517,105 @@ dnorm(0)
 ```
 
 ---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+```{r, comment=NA}
+pnorm(0)
+```
+
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: dnorm(0)", collapse=NA, fig.height=5}
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "pnorm(0)")+
+    geom_area(stat = "function", fun = dnorm, fill = "red", xlim = c(-4, 0))
+    
+```
+
+---
+
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+```{r, comment=NA}
+pnorm(0)
+```
+
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: dnorm(0)", collapse=NA, fig.height=5}
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "pnorm(0)")+
+    geom_area(stat = "function", fun = dnorm, fill = "red", xlim = c(-4, 0))
+    
+```
+
+---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+```{r, comment=NA}
+qnorm(0.5)
+```
+
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: dnorm(0)", collapse=NA, fig.height=5}
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "pnorm(0)")+
+    geom_area(stat = "function", fun = dnorm, fill = "blue", xlim = c(-4, 0))+
+   geom_segment(aes(x = 0, y = 0.398, xend = 0, yend = 0), size=1, color="red", arrow = arrow(length = unit(0.5, "cm")),)
+    
+```
+
+---
+
+### Standard Normal Distribution: rnorm
+
+```{r, comment=NA}
+set.seed(262020)
+random_numbers <- rnorm(10)
+random_numbers
+sort(random_numbers) ## sort the numbers then it is easy to map with the graph
+```
+
+
+```{r, echo=FALSE, fig.height=4}
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+dat <- data.frame(x=x, y=y)
+highlight <- data.frame(y=rep(0, 10), x=random_numbers)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line() + labs(y = "density", title = "rnorm(10)") + geom_point(data=highlight, aes(x=x, y=y), colour="red", size=2)
+```
+
+
+---
 class: center, middle
 
 Slides available at: hellor.netlify.com

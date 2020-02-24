@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4761.58
+[1] 4761.988
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4761.58
+[1] 4761.988
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4761.58
+[1] 4761.988
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] -0.2362411
+[1] 0.1566226
 ```
 
 ---
@@ -511,6 +511,96 @@ dnorm(0)
 ```
 [1] 0.3989423
 ```
+
+---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+
+```r
+pnorm(0)
+```
+
+```
+[1] 0.5
+```
+
+![Standard normal probability density function: dnorm(0)](l3_files/figure-html/unnamed-chunk-17-1.png)
+
+---
+
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+
+```r
+pnorm(0)
+```
+
+```
+[1] 0.5
+```
+
+![Standard normal probability density function: dnorm(0)](l3_files/figure-html/unnamed-chunk-19-1.png)
+
+---
+
+## Standard Normal Distribution
+
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+
+```r
+qnorm(0.5)
+```
+
+```
+[1] 0
+```
+
+![Standard normal probability density function: dnorm(0)](l3_files/figure-html/unnamed-chunk-21-1.png)
+
+---
+
+### Standard Normal Distribution: rnorm
+
+
+```r
+set.seed(262020)
+random_numbers &lt;- rnorm(10)
+random_numbers
+```
+
+```
+ [1]  0.20078181  0.95873346  1.18369056  1.49513750  1.18109222 -0.57789570
+ [7]  0.01790671  0.81185245  0.39488199 -0.44337927
+```
+
+```r
+sort(random_numbers) ## sort the numbers then it is easy to map with the graph
+```
+
+```
+ [1] -0.57789570 -0.44337927  0.01790671  0.20078181  0.39488199  0.81185245
+ [7]  0.95873346  1.18109222  1.18369056  1.49513750
+```
+
+
+![](l3_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
 
 ---
 class: center, middle
