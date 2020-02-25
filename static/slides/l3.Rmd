@@ -1016,8 +1016,6 @@ qplot(Colombo, Gampaha, data=mozzie, geom="path")
 ]
 
 ---
-
-
 ## Data Visualization with `qplot`
 
 .pull-left[
@@ -1032,6 +1030,74 @@ qplot(Colombo, Gampaha, data=mozzie, geom=c("line", "point"))
 qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
 ```
 ]
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+boxplot(Colombo~Year, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
+```
+]
+
+---
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="point")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point")) # geom="point"-default
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point", "boxplot")) # geom="point"-default
+```
+]
+
 ---
 class: center, middle
 

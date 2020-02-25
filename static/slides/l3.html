@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4762.098
+[1] 4761.69
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4762.098
+[1] 4761.69
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4762.098
+[1] 4761.69
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.3062398
+[1] -0.1071082
 ```
 
 
@@ -417,7 +417,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] 0.3062398
+[1] -0.1071082
 ```
 ---
 
@@ -1152,8 +1152,6 @@ qplot(Colombo, Gampaha, data=mozzie, geom="path")
 ]
 
 ---
-
-
 ## Data Visualization with `qplot`
 
 .pull-left[
@@ -1174,6 +1172,98 @@ qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
 
 ![](l3_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
 ]
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+boxplot(Colombo~Year, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+
+![](l3_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+
+![](l3_files/figure-html/unnamed-chunk-53-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
+```
+
+![](l3_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
+]
+
+---
+## Data Visualization with `qplot`
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom="point")
+```
+
+![](l3_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point")) # geom="point"-default
+```
+
+![](l3_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point"))
+```
+
+![](l3_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point", "boxplot")) # geom="point"-default
+```
+
+![](l3_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
+]
+
 ---
 class: center, middle
 
