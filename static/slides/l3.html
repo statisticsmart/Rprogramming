@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4762.167
+[1] 4761.804
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4762.167
+[1] 4761.804
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4762.167
+[1] 4761.804
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.4040748
+[1] 0.03847735
 ```
 
 
@@ -417,7 +417,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] 0.4040748
+[1] 0.03847735
 ```
 ---
 
@@ -777,7 +777,7 @@ class: duke-orange, center, middle
 
     - `\(P(-.38 \leq Z \leq 1.25)\)`.
     
-2. Find the following percentiles for the standard normal distribution.
+1. Find the following percentiles for the standard normal distribution.
 
      - 90th, 
      
@@ -785,7 +785,7 @@ class: duke-orange, center, middle
      
      - 97.5th,
      
-3. Determine the `\(Z_\alpha\)` for the following
+1. Determine the `\(Z_\alpha\)` for the following
 
       - `\(\alpha = 0.1\)`
       
@@ -794,13 +794,26 @@ class: duke-orange, center, middle
 
 ---
 
-4. Suppose `\(X \sim N(15, 9)\)`. Calculate the following probabilities
+1. Suppose `\(X \sim N(15, 9)\)`. Calculate the following probabilities
 
   - `\(P(X \leq 15)\)`,
   
   - `\(P(X &lt; 15)\)`,
   
   - `\(P(X \geq 10)\)`.
+  
+1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. Waht is the probability that 
+
+    - At most 8 of the messages involve a text message?
+    
+    - Exactly 8 of the messages involve a text message.
+    
+1. Generate 5 random values from a Poisson distribution with mean 10.
+
+---
+
+
+ 
 ---
 # R Apply family and its variants
 
@@ -808,14 +821,14 @@ class: duke-orange, center, middle
 
 
 ```r
-marks &lt;- data.frame(maths=c(10, 20, 30), chemistry=c(100, 20, 60))
+marks &lt;- data.frame(maths=c(10, 20, 30), chemistry=c(100, NA, 60))
 marks
 ```
 
 ```
   maths chemistry
 1    10       100
-2    20        20
+2    20        NA
 3    30        60
 ```
 
@@ -824,7 +837,7 @@ apply(marks, 1, mean)
 ```
 
 ```
-[1] 55 20 45
+[1] 55 NA 45
 ```
 
 ```r
@@ -833,7 +846,18 @@ apply(marks, 2, mean)
 
 ```
     maths chemistry 
-       20        60 
+       20        NA 
+```
+
+--
+
+
+```r
+apply(marks, 1, mean, na.rm=TRUE)
+```
+
+```
+[1] 55 20 45
 ```
 
 ---
@@ -886,6 +910,14 @@ Resourses: You can follow the DataCamp tutorial [here](https://www.datacamp.com/
 Use only 1 A4 sheet, you may use both sides.
 
 Assignment due date: 3 March 2020
+
+---
+
+## Data Visualization: qplot()
+
+?qplot
+
+
 
 ---
 class: center, middle

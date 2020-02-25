@@ -740,7 +740,7 @@ class: duke-orange, center, middle
 
     - $P(-.38 \leq Z \leq 1.25)$.
     
-2. Find the following percentiles for the standard normal distribution.
+1. Find the following percentiles for the standard normal distribution.
 
      - 90th, 
      
@@ -748,7 +748,7 @@ class: duke-orange, center, middle
      
      - 97.5th,
      
-3. Determine the $Z_\alpha$ for the following
+1. Determine the $Z_\alpha$ for the following
 
       - $\alpha = 0.1$
       
@@ -757,23 +757,43 @@ class: duke-orange, center, middle
 
 ---
 
-4. Suppose $X \sim N(15, 9)$. Calculate the following probabilities
+1. Suppose $X \sim N(15, 9)$. Calculate the following probabilities
 
   - $P(X \leq 15)$,
   
   - $P(X < 15)$,
   
   - $P(X \geq 10)$.
+  
+1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. Waht is the probability that 
+
+    - At most 8 of the messages involve a text message?
+    
+    - Exactly 8 of the messages involve a text message.
+    
+1. Generate 5 random values from a Poisson distribution with mean 10.
+
+---
+
+
+ 
 ---
 # R Apply family and its variants
 
 - **`apply()`** function
 
 ```{r, comment=NA}
-marks <- data.frame(maths=c(10, 20, 30), chemistry=c(100, 20, 60))
+marks <- data.frame(maths=c(10, 20, 30), chemistry=c(100, NA, 60))
 marks
 apply(marks, 1, mean)
 apply(marks, 2, mean)
+```
+
+--
+
+```{r, comment=NA}
+apply(marks, 1, mean, na.rm=TRUE)
+
 ```
 
 ---
@@ -821,6 +841,14 @@ Resourses: You can follow the DataCamp tutorial [here](https://www.datacamp.com/
 Use only 1 A4 sheet, you may use both sides.
 
 Assignment due date: 3 March 2020
+
+---
+
+## Data Visualization: qplot()
+
+?qplot
+
+
 
 ---
 class: center, middle
