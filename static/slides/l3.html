@@ -4,7 +4,7 @@
     <title>STA 326 2.0 Programming and Data Analysis with R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Thiyanga Talagala" />
-    <meta name="date" content="2020-02-24" />
+    <meta name="date" content="2020-02-25" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 # STA 326 2.0 Programming and Data Analysis with R
 ## Lesson 3: Functions in R
 ### Dr Thiyanga Talagala
-### 2020-02-24
+### 2020-02-25
 
 ---
 
@@ -32,7 +32,7 @@ class: center, middle, inverse, title-slide
 --
 👉🏻  Some functions we have discussed so far,
 
-&gt; `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `ndim`, `length`, `nrow`, `plot`
+&gt; `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `dim`, `length`, `nrow`, `plot`
 
 --
 
@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4761.804
+[1] 4761.812
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4761.804
+[1] 4761.812
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4761.804
+[1] 4761.812
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.03847735
+[1] 0.0158836
 ```
 
 
@@ -417,7 +417,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] 0.03847735
+[1] 0.0158836
 ```
 ---
 
@@ -808,11 +808,56 @@ class: duke-orange, center, middle
     
     - Exactly 8 of the messages involve a text message.
     
-1. Generate 5 random values from a Poisson distribution with mean 10.
+1. Generate 20 random values from a Poisson distribution with mean 10 and calculate the mean. Compare your answer with your friend's answer.
 
 ---
 
+# Reproducibility of scientific results
 
+
+```r
+rnorm(10) # first attempt
+```
+
+```
+ [1]  1.4701904 -0.2375662  0.1765985 -0.5257483 -1.3674764 -1.4422500
+ [7]  0.7576607  0.6475122 -1.1543034  0.9066248
+```
+
+
+
+```r
+rnorm(10) # second attempt
+```
+
+```
+ [1] -1.7603264 -0.3402939 -1.0335807  1.0645014 -0.3874459  0.5975271
+ [7] -2.1535707  0.6602928  1.1581404  0.6133446
+```
+
+As you can see above you will get different results 
+
+
+```r
+set.seed(1)
+rnorm(10) # First attempt with set.seed
+```
+
+```
+ [1] -0.6264538  0.1836433 -0.8356286  1.5952808  0.3295078 -0.8204684
+ [7]  0.4874291  0.7383247  0.5757814 -0.3053884
+```
+
+
+```r
+set.seed(1)
+rnorm(10) # Second attempt with set.seed
+```
+
+```
+ [1] -0.6264538  0.1836433 -0.8356286  1.5952808  0.3295078 -0.8204684
+ [7]  0.4874291  0.7383247  0.5757814 -0.3053884
+```
  
 ---
 # R Apply family and its variants

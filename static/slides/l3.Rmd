@@ -2,7 +2,7 @@
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Lesson 3: Functions in R"
 author: "Dr Thiyanga Talagala"
-date: "2020-02-24"
+date: "2020-02-25"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -30,7 +30,7 @@ options(htmltools.dir.version = FALSE)
 --
 👉🏻  Some functions we have discussed so far,
 
-> `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `ndim`, `length`, `nrow`, `plot`
+> `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `dim`, `length`, `nrow`, `plot`
 
 --
 
@@ -771,11 +771,32 @@ class: duke-orange, center, middle
     
     - Exactly 8 of the messages involve a text message.
     
-1. Generate 5 random values from a Poisson distribution with mean 10.
+1. Generate 20 random values from a Poisson distribution with mean 10 and calculate the mean. Compare your answer with your friend's answer.
 
 ---
 
+# Reproducibility of scientific results
 
+```{r, comment=NA}
+rnorm(10) # first attempt
+```
+
+
+```{r, comment=NA}
+rnorm(10) # second attempt
+```
+
+As you can see above you will get different results 
+
+```{r, comment=NA}
+set.seed(1)
+rnorm(10) # First attempt with set.seed
+```
+
+```{r, comment=NA}
+set.seed(1)
+rnorm(10) # Second attempt with set.seed
+```
  
 ---
 # R Apply family and its variants
