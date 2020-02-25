@@ -886,7 +886,152 @@ install.packages("ggplot2")
 
 ---
 
+## Load package 
+
+```r
+library(ggplot2)
+```
+
+Now search `?qplot`
+
+Note: You shouldn't have to re-install packages each time you open R. However, you do need to load the packages you want to use in that session via `library`.
+
+---
+
+## mozzie dataset
+
+```{r}
+library(mozzie)
+data(mozzie)
+```
+
+---
 ## Data Visualization with `qplot`
+
+## plot vs qplot
+
+.pull-left[
+```{r, comment=NA}
+plot(mozzie$Colombo, mozzie$Gampaha)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, colour=Year)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, size=Year)
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="point")
+```
+]
+
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie, geom="line")
+```
+]
+
+---
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie, geom="path")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="line")
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="path")
+```
+]
+
+---
+
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom=c("line", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
+```
+]
 ---
 class: center, middle
 

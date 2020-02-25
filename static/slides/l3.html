@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4762.143
+[1] 4762.098
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4762.143
+[1] 4762.098
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4762.143
+[1] 4762.098
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.3730073
+[1] 0.3062398
 ```
 
 
@@ -417,7 +417,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] 0.3730073
+[1] 0.3062398
 ```
 ---
 
@@ -979,7 +979,201 @@ install.packages("ggplot2")
 
 ---
 
+## Load package 
+
+```r
+library(ggplot2)
+```
+
+Now search `?qplot`
+
+Note: You shouldn't have to re-install packages each time you open R. However, you do need to load the packages you want to use in that session via `library`.
+
+---
+
+## mozzie dataset
+
+
+```r
+library(mozzie)
+data(mozzie)
+```
+
+---
 ## Data Visualization with `qplot`
+
+## plot vs qplot
+
+.pull-left[
+
+```r
+plot(mozzie$Colombo, mozzie$Gampaha)
+```
+
+![](l3_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, colour=Year)
+```
+
+![](l3_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, size=Year)
+```
+
+![](l3_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom="point")
+```
+
+![](l3_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+]
+
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(ID, Gampaha, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(ID, Gampaha, data=mozzie, geom="line")
+```
+
+![](l3_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+]
+
+---
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(ID, Gampaha, data=mozzie)
+```
+
+![](l3_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(ID, Gampaha, data=mozzie, geom="path")
+```
+
+![](l3_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom="line")
+```
+
+![](l3_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom="path")
+```
+
+![](l3_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom=c("line", "point"))
+```
+
+![](l3_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
+```
+
+![](l3_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+]
 ---
 class: center, middle
 
