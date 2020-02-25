@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4761.727
+[1] 4762.135
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4761.727
+[1] 4762.135
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4761.727
+[1] 4762.135
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] -0.05436484
+[1] 0.3337169
 ```
 
 
@@ -417,7 +417,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] -0.05436484
+[1] 0.3337169
 ```
 ---
 
@@ -1107,8 +1107,6 @@ qplot(ID, Gampaha, data=mozzie, geom="line")
 ]
 
 ---
-
----
 ## Data Visualization with `qplot`
 
 .pull-left[
@@ -1292,13 +1290,41 @@ qplot(Colombo, data=mozzie, geom="density")
 ![](l3_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
 ]
 
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Explore `iris` dataset with suitable graphics.
+
+
+```r
+head(iris)
+```
+
+```
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+```
+
+&lt;img src="iris_flower_dataset.png" width="800"&gt;
+
 ---
 
 class: center, middle
 
 Slides available at: hellor.netlify.com
 
-[CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+All rights reserved by [Thiyanga S. Talagala](thiyanga.netlify.com)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

@@ -983,8 +983,6 @@ qplot(ID, Gampaha, data=mozzie, geom="line")
 ]
 
 ---
-
----
 ## Data Visualization with `qplot`
 
 .pull-left[
@@ -1116,13 +1114,29 @@ qplot(Colombo, data=mozzie, geom="density")
 ```
 ]
 
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Explore `iris` dataset with suitable graphics.
+
+```{r, comment=NA}
+head(iris)
+```
+
+<img src="iris_flower_dataset.png" width="800">
+
 ---
 
 class: center, middle
 
 Slides available at: hellor.netlify.com
 
-[CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
-
+All rights reserved by [Thiyanga S. Talagala](thiyanga.netlify.com)
 
 
