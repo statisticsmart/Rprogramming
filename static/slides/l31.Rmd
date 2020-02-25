@@ -1,0 +1,47 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Lesson 3: Functions in R"
+author: "Dr Thiyanga Talagala"
+date: "2020-02-24"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+class: center, middle
+
+```{r, echo=FALSE}
+library(countdown)
+library(emo)
+countdown(minutes = 0, seconds = 15)
+
+```
+
+---
+
+## Functions in R
+
+ `r emo::ji("smile")` Perform a specific task according to a set of instructions.
+
+```{r, echo=FALSE}
+library(countdown)
+
+countdown(minutes = 0, seconds = 15)
+
+```
+
+---

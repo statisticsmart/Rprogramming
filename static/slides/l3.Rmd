@@ -430,10 +430,6 @@ class: duke-orange, center, middle
 
 1. Calculate the mean of 1, 2, 3, 8, 10, 20, 56, NA.
 
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 2L, seconds = 00)
-```
 
 ---
 
@@ -510,12 +506,6 @@ set.seed(24022020)
 c(rnorm(5), NA, rnorm(4), rep(NA, 2), rnorm(5), rep(NA, 10), rnorm(20))
 
 ```
-
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 4L, seconds = 00)
-```
-
 ---
 
 # Probability distribution functions
@@ -740,14 +730,40 @@ class: duke-orange, center, middle
 
 ---
 
+1. Suppose $Z \sim  N(0,1)$. Calculate the following standard normal probabilities.
+
+    - $P(Z \le 1.25)$,
+
+    - $P(Z > 1.25)$,
+
+    - $P(Z \leq -1.25)$,
+
+    - $P(-.38 \leq Z \leq 1.25)$.
+    
+2. Find the following percentiles for the standard normal distribution.
+
+     - 90th, 
+     
+     - 95th,
+     
+     - 97.5th,
+     
+3. Determine the $Z_\alpha$ for the following
+
+      - $\alpha = 0.1$
+      
+      - $\alpha = 0.95$
+
 
 ---
 
-# Control structures
+4. Suppose $X \sim N(15, 9)$. Calculate the following probabilities
 
-
-
-
+  - $P(X \leq 15)$,
+  
+  - $P(X < 15)$,
+  
+  - $P(X \geq 10)$.
 ---
 # R Apply family and its variants
 
@@ -775,10 +791,6 @@ matrix(1:20, ncol=4)
 
 ```
 
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 3L, seconds = 00)
-```
 ---
 
 class: duke-green, center, middle
@@ -816,5 +828,6 @@ class: center, middle
 Slides available at: hellor.netlify.com
 
 [CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+
 
 
