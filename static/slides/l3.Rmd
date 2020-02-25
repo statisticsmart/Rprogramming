@@ -1099,6 +1099,25 @@ qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point", "boxplot")) 
 ]
 
 ---
+
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(Colombo, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(Colombo, data=mozzie, geom="density") 
+```
+]
+
+---
+
 class: center, middle
 
 Slides available at: hellor.netlify.com
