@@ -55,7 +55,7 @@ class(length)
  &gt; 💻 Built-in functions 
   
       Already created or defined in the programming framework to make our work easier.
-&gt; 👨 User defined functions
+&gt; 👨 User-defined functions
            
       Sometimes we need to create our own functions for a specific purpose.
 
@@ -374,7 +374,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4762.135
+[1] 4761.822
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -391,7 +391,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4762.135
+[1] 4761.822
 ```
 
 ```r
@@ -399,7 +399,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4762.135
+[1] 4761.822
 ```
 
 
@@ -408,7 +408,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] 0.3337169
+[1] 0.05032226
 ```
 
 
@@ -417,7 +417,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] 0.3337169
+[1] 0.05032226
 ```
 ---
 
@@ -460,6 +460,7 @@ class: duke-orange, center, middle
 | median(x)  |  median of x |
 |mode(x)| mode of x|
 |var(x)|variance of x|
+|sd(x)|standard deviation of x|
 |scale(x)| z-score of x|
 |quantile(x)| quantiles of x|
 |summary(x)|summary of x: mean, minimum, maximum, etc.|
@@ -571,7 +572,7 @@ Remove missing values in the following vector
     
   - **d** prefix for the **distribution** function
 
-  - **p** prefix for the **cummulative probability**
+  - **p** prefix for the **cumulative probability**
 
   - **q** prefix for the **quantile**
 
@@ -728,7 +729,7 @@ sort(random_numbers) ## sort the numbers then it is easy to map with the graph
 
 - **`geom`**: geometric distribution
 
-- **`hyper`**: hypergeometric distribution
+- **`hyper`**: hyper-geometric distribution
 
 
 ]
@@ -802,7 +803,7 @@ class: duke-orange, center, middle
   
   - `\(P(X \geq 10)\)`.
   
-1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. Waht is the probability that 
+1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. What is the probability that 
 
     - At most 8 of the messages involve a text message?
     

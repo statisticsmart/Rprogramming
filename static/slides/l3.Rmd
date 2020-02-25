@@ -48,7 +48,7 @@ class(length)
  > 💻 Built-in functions 
   
       Already created or defined in the programming framework to make our work easier.
-> 👨 User defined functions
+> 👨 User-defined functions
            
       Sometimes we need to create our own functions for a specific purpose.
 
@@ -452,6 +452,7 @@ class: duke-orange, center, middle
 | median(x)  |  median of x |
 |mode(x)| mode of x|
 |var(x)|variance of x|
+|sd(x)|standard deviation of x|
 |scale(x)| z-score of x|
 |quantile(x)| quantiles of x|
 |summary(x)|summary of x: mean, minimum, maximum, etc.|
@@ -518,7 +519,7 @@ c(rnorm(5), NA, rnorm(4), rep(NA, 2), rnorm(5), rep(NA, 10), rnorm(20))
     
   - **d** prefix for the **distribution** function
 
-  - **p** prefix for the **cummulative probability**
+  - **p** prefix for the **cumulative probability**
 
   - **q** prefix for the **quantile**
 
@@ -691,7 +692,7 @@ ggplot(data = dat, mapping = aes(x = x, y = y)) +
 
 - **`geom`**: geometric distribution
 
-- **`hyper`**: hypergeometric distribution
+- **`hyper`**: hyper-geometric distribution
 
 
 ]
@@ -765,7 +766,7 @@ class: duke-orange, center, middle
   
   - $P(X \geq 10)$.
   
-1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. Waht is the probability that 
+1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. What is the probability that 
 
     - At most 8 of the messages involve a text message?
     
