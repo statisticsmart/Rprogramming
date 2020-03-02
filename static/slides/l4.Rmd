@@ -453,7 +453,7 @@ test_even_odd_v2(c(1,6))
 
 ```{r, comment=FALSE}
 test_even_odd <- function(x){
-  if (x %% 2 == 0){
+  if (x %% 2 == 0) {
     print("even number")
   } else {
     print("odd number")
@@ -470,7 +470,7 @@ test_even_odd(c(1,6))
 .pull-right[
 ```{r, comment=FALSE}
 test_even_odd_v2 <- function(x){
-  ifelse(x %% 2 == 0, "even number", "odd number")
+  ifelse (x %% 2 == 0, "even number", "odd number")
 }
 
 test_even_odd_v2(5)
@@ -480,6 +480,29 @@ test_even_odd_v2(c(1,6))
 
 ]
 
+---
+
+# Nested if-else
+
+- Multiple conditions
+
+
+```{r, comment=NA}
+grade_marks <- function(marks){
+  
+  if (marks < 20) {
+    "D"
+  } else if (marks <= 50) {
+    "C"
+  } else if (marks <= 60) {
+    "B"
+  } else {
+    "A"
+  }
+}
+
+grade_marks(75)
+```
 ---
 
 
