@@ -279,6 +279,63 @@ new.data.col <- c(400, 500, 350, 250, 60, 70, Inf)
 rescale_minmax(new.data.col)
 ```
 ---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Rewrite `rescale_minmax` so that `-Inf` is set to 0, and `Inf` is mapped to 1.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 4L, seconds = 00)
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+R for Data Science - Exercise 19.2.1, Question 3
+
+```{r, echo=FALSE}
+knitr::include_url('https://r4ds.had.co.nz/functions.html')
+
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 4L, seconds = 00)
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+R for Data Science - Exercise 19.2.1, Question 4
+
+```{r, echo=FALSE}
+knitr::include_url('https://r4ds.had.co.nz/functions.html')
+
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+---
+
+---
 class: center, middle
 
 Slides available at: hellor.netlify.com
