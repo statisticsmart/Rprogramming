@@ -2,7 +2,7 @@
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Lesson 3: Functions in R"
 author: "Dr Thiyanga Talagala"
-date: "2020-02-24"
+date: "2020-02-25"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -30,7 +30,7 @@ options(htmltools.dir.version = FALSE)
 --
 👉🏻  Some functions we have discussed so far,
 
-> `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `ndim`, `length`, `nrow`, `plot`
+> `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `dim`, `length`, `nrow`, `plot`
 
 --
 
@@ -45,10 +45,10 @@ class(length)
 👉🏻 There are basically two types of functions:
 
     
- > 💻 Built in functions 
+ > 💻 Built-in functions 
   
       Already created or defined in the programming framework to make our work easier.
-> 👨 User defined functions
+> 👨 User-defined functions
            
       Sometimes we need to create our own functions for a specific purpose.
 
@@ -157,7 +157,7 @@ out # or return(out)
 ]
 
 
-.content-box-yellow[Function name: **`calSqrt`**]
+.content-box-yellow[Function name: **`cal_sqrt`**]
 
  - use verbs, where possible.
  
@@ -362,14 +362,14 @@ if(y == 2){ print("even")}
 
 ## Built-in Functions
 
-### How to call a buil-in function in R
+### How to call a built-in function in R
 
 ```r
 function_name(arg1 = 1, arg2 = 3)
 
 ```
 
-### Example
+### Argument matching
 
 ```{r, echo=FALSE}
 mydata <- c(rnorm(20), 100000)
@@ -395,7 +395,7 @@ mean(mydata)
 
 ---
 
-## Built-in Functions (cont.)
+## Argument matching (cont.)
 
 - some arguments have default values
 
@@ -408,6 +408,9 @@ mean(mydata) # Default value for trim is 0
 mean(mydata, trim=0.1)
 ```
 
+```{r, comment=NA}
+mean(mydata, tr=0.1) # Partial Matching
+```
 ---
 
 background-image: url('helpmean.png')
@@ -449,27 +452,80 @@ class: duke-orange, center, middle
 | median(x)  |  median of x |
 |mode(x)| mode of x|
 |var(x)|variance of x|
+|sd(x)|standard deviation of x|
 |scale(x)| z-score of x|
 |quantile(x)| quantiles of x|
 |summary(x)|summary of x: mean, minimum, maximum, etc.|
 
 ---
 
+.pull-left[
+
+## Type conversion functions
+
+|  Test | Convert  |
+|---|---|
+|  is.numeric() | as.numeric()   |
+| is.character()  |  as.character() |
+|is.vector()| as.vector()|
+|is.matrix()|as.matrix()|
+|is.data.frame()| as.data.frame()|
+|is.factor()| as.factor()|
+|is.logical()|as.logical()|
+|is.na()||
+]
+
+--
+
+.pull-right[
+
+## Example
+
+```{r, comment=NA}
+a <- c(1, 2, 3); a
+is.numeric(a)
+is.vector(a)
+
+b <- as.character(a); b
+is.vector(b)
+is.character(b)
+```
+]
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Remove missing values in the following vector 
+
+```{r, echo=FALSE, comment=NA}
+set.seed(24022020)
+c(rnorm(5), NA, rnorm(4), rep(NA, 2), rnorm(5), rep(NA, 10), rnorm(20))
+
+```
+---
+
 # Probability distribution functions
 
 - Each probability distribution in R is associated with four functions.
 
-- Function naming convention: For each There is a root name, for example, the **root name** for the normal distribution is `norm`. This root is prefixed by one of the letters
+- Naming convention for the four functions:
 
+    For each function there is a root name. For example, the **root name** for the normal distribution is `norm`. This root is prefixed by one of the letters `d`, `p`, `q`, `r`.
+    
+  - **d** prefix for the **distribution** function
 
-- **d** prefix for the **distribution** function
+  - **p** prefix for the **cumulative probability**
 
-- **p** prefix for the **cummulative probability**
+  - **q** prefix for the **quantile**
 
-- **q** prefix for the **quantile**
+  - **r** prefix for the **random** number generator
 
-- **r** prefix for the **random** number generator
-
+- Example: `dnorm`, `pnorm`, `qnorm`, `rnorm`
 ---
 
 ## Illustration with Standard normal distribution
@@ -507,7 +563,7 @@ dat <- data.frame(x=x, y=y)
 ggplot(data = dat, mapping = aes(x = x, y = y)) +
     geom_line()+labs(y = "density", title = "dnorm(0)")+
     geom_segment(aes(x = 0, y = 0, xend = 0, yend = 0.398), size=1, color="red")+
-    geom_segment(aes(x = 0, y = 0.398, xend = -4, yend = 0.398), arrow = arrow(length = unit(0.5, "cm")), size=1, color="red")
+    geom_segment(aes(x = 0, y = 0.398, xend = -4, yend = 0.398), arrow = arrow(length = unit(0.5, "cm")), size=1, color="red") 
     
 ```
 
@@ -587,7 +643,7 @@ y <- 1/sqrt(2*pi)*exp(-x^2/2)
 #plot(x, y, type="l", lwd=2, col="red")
 dat <- data.frame(x=x, y=y)
 ggplot(data = dat, mapping = aes(x = x, y = y)) +
-    geom_line()+labs(y = "density", title = "pnorm(0)")+
+    geom_line()+labs(y = "density", title = "qnorm(0)")+
     geom_area(stat = "function", fun = dnorm, fill = "blue", xlim = c(-4, 0))+
    geom_segment(aes(x = 0, y = 0.398, xend = 0, yend = 0), size=1, color="red", arrow = arrow(length = unit(0.5, "cm")),)
     
@@ -614,12 +670,474 @@ ggplot(data = dat, mapping = aes(x = x, y = y)) +
     geom_line() + labs(y = "density", title = "rnorm(10)") + geom_point(data=highlight, aes(x=x, y=y), colour="red", size=2)
 ```
 
+---
+
+## Other distributions in R
+
+.pull-left[
+
+- **`beta`**: beta distribution
+
+- **`binom`**: binomial distribution
+
+- **`cauchy`**: Cauchy distribution
+
+- **`chisq`**: chi-squared distribution
+
+- **`exp`**: exponential distribution
+
+- **`f`**: F distribution
+
+- **`gamma`**: gamma distribution
+
+- **`geom`**: geometric distribution
+
+- **`hyper`**: hyper-geometric distribution
+
+
+]
+
+
+.pull-right[
+
+
+
+- **`lnorm`**: log-normal distribution
+
+- **`multinom`**: multinomial distribution
+
+- **`nbinom`**: negative binomial distribution
+
+- **`norm`**: normal distribution
+
+- **`pois`**: Poisson distribution
+
+- **`t`**: Student's t distribution
+
+- **`unif`**: uniform distribution
+
+- **`weibull`**: Weibull distribution
+
+]
+
+--
+>  🙋 Getting help with R:  **`?Distributions`**
 
 ---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+1. Suppose $Z \sim  N(0,1)$. Calculate the following standard normal probabilities.
+
+    - $P(Z \le 1.25)$,
+
+    - $P(Z > 1.25)$,
+
+    - $P(Z \leq -1.25)$,
+
+    - $P(-.38 \leq Z \leq 1.25)$.
+    
+1. Find the following percentiles for the standard normal distribution.
+
+     - 90th, 
+     
+     - 95th,
+     
+     - 97.5th,
+     
+1. Determine the $Z_\alpha$ for the following
+
+      - $\alpha = 0.1$
+      
+      - $\alpha = 0.95$
+
+
+---
+
+1. Suppose $X \sim N(15, 9)$. Calculate the following probabilities
+
+  - $P(X \leq 15)$,
+  
+  - $P(X < 15)$,
+  
+  - $P(X \geq 10)$.
+  
+1. A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. What is the probability that 
+
+    - At most 8 of the messages involve a text message?
+    
+    - Exactly 8 of the messages involve a text message.
+    
+1. Generate 20 random values from a Poisson distribution with mean 10 and calculate the mean. Compare your answer with your friend's answer.
+
+---
+
+# Reproducibility of scientific results
+
+```{r, comment=NA}
+rnorm(10) # first attempt
+```
+
+
+```{r, comment=NA}
+rnorm(10) # second attempt
+```
+
+As you can see above you will get different results 
+
+```{r, comment=NA}
+set.seed(1)
+rnorm(10) # First attempt with set.seed
+```
+
+```{r, comment=NA}
+set.seed(1)
+rnorm(10) # Second attempt with set.seed
+```
+ 
+---
+# R Apply family and its variants
+
+- **`apply()`** function
+
+```{r, comment=NA}
+marks <- data.frame(maths=c(10, 20, 30), chemistry=c(100, NA, 60))
+marks
+apply(marks, 1, mean)
+apply(marks, 2, mean)
+```
+
+--
+
+```{r, comment=NA}
+apply(marks, 1, mean, na.rm=TRUE)
+
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Calculate the row and column wise standard deviation of the following matrix
+
+```{r, echo=FALSE, comment=NA}
+matrix(1:20, ncol=4)
+
+```
+
+---
+
+class: duke-green, center, middle
+
+# Your turn
+
+---
+## Assignment 1: Individual
+
+Find about the following variants of apply family functions in R **`lapply()`**, **`sapply()`**, **`vapply()`**, **`mapply()`**, **`rapply()`**, and **`tapply()`** functions.
+
+Resourses: You can follow the DataCamp tutorial [here](https://www.datacamp.com/community/tutorials/r-tutorial-apply-family?utm_source=adwords_ppc&utm_campaignid=1658343524&utm_adgroupid=63833882055&utm_device=c&utm_keyword=%2Bapply%20%2Br&utm_matchtype=b&utm_network=g&utm_adpostion=&utm_creative=319558765408&utm_targetid=aud-299261629574:kwd-309818754193&utm_loc_interest_ms=&utm_loc_physical_ms=1009919&gclid=EAIaIQobChMImfeQkOTq5wIVVQwrCh1BngrmEAAYASAAEgLEa_D_BwE).
+
+- You should clearly explain,
+
+    - syntax for each function
+
+    - function inputs
+    
+    - how each function works?/ The task of the function.
+    
+    - output of the function.
+    
+    - differences between the functions (apply vs lapply, apply vs sapply, etc.)
+
+- Provide your own example for each function. 
+
+Use only 1 A4 sheet, you may use both sides.
+
+Assignment due date: 3 March 2020
+
+---
+
+## Data Visualization: qplot()
+
+?qplot
+--
+![](emoji.png)
+
+---
+# Installing R Packages
+
+## Method 1
+
+![](inst.png)
+
+## Method 2
+
+```r
+install.packages("ggplot2")
+```
+
+---
+
+## Load package 
+
+```r
+library(ggplot2)
+```
+
+Now search `?qplot`
+
+Note: You shouldn't have to re-install packages each time you open R. However, you do need to load the packages you want to use in that session via `library`.
+
+---
+
+## mozzie dataset
+
+```{r}
+library(mozzie)
+data(mozzie)
+```
+
+---
+## Data Visualization with `qplot`
+
+## plot vs qplot
+
+.pull-left[
+```{r, comment=NA}
+plot(mozzie$Colombo, mozzie$Gampaha)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, colour=Year)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, size=Year)
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="point")
+```
+]
+
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie, geom="line")
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(ID, Gampaha, data=mozzie, geom="path")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="line")
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom="path")
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom=c("line", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(Colombo, Gampaha, data=mozzie, geom=c("path", "point"))
+```
+]
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA}
+boxplot(Colombo~Year, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="boxplot")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
+```
+]
+
+---
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom="point")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point")) # geom="point"-default
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(factor(Year), Colombo, data=mozzie, geom=c("jitter", "point", "boxplot")) # geom="point"-default
+```
+]
+
+---
+
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA}
+qplot(Colombo, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qplot(Colombo, data=mozzie, geom="density") 
+```
+]
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Explore `iris` dataset with suitable graphics.
+
+```{r, comment=NA}
+head(iris)
+```
+
+<img src="iris_flower_dataset.png" width="800">
+
+---
+
 class: center, middle
 
 Slides available at: hellor.netlify.com
 
-[CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
 
 
