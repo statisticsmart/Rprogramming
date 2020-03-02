@@ -335,6 +335,177 @@ countdown(minutes = 10L, seconds = 00)
 
 ---
 
+background-image: url('laptop.jpg')
+background-position: center
+background-size: cover
+
+.content-box-yellow[
+# Functions are for humans and computers
+
+- Descriptive names for variables.
+
+- Comment your code.
+]
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write your own function to calculate parameter estimates of simple linear regression model.
+
+```{r, echo=FALSE}
+knitr::include_url('https://hellor.netlify.com/slides/l2.html#28')
+
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
+---
+
+# Conditional executions
+
+- Control the flow of the execution.
+
+- Common ones include:
+
+    - if, else
+    
+    - for
+    
+    - while
+    
+    - repeat
+    
+    - break
+    
+    - next
+    
+    - switch
+
+---
+
+# If
+
+
+```r
+if (condition) {
+    # do something
+} else {
+    # do something else
+}
+
+```
+
+Example
+
+```{r, comment=FALSE}
+test_even_odd <- function(x){
+  if (x %% 2 == 0){
+    print("even number")
+  } else {
+    print("odd number")
+  }
+}
+
+```
+
+
+```{r, comment=NA}
+test_even_odd(5)
+test_even_odd(6)
+```
+
+---
+
+# ifelse: vectorization with ifelse
+
+```r
+ifelse(condition, if TRUE the output, if FALSE the output)
+
+```
+
+Example
+
+```{r, comment=FALSE}
+test_even_odd_v2 <- function(x){
+  ifelse(x %% 2 == 0, "even number", "odd number")
+}
+
+test_even_odd_v2(5)
+test_even_odd_v2(c(1,6))
+
+```
+
+
+---
+
+# Difference between `if, else` and `ifelse`
+
+.pull-left[
+
+```{r, comment=FALSE}
+test_even_odd <- function(x){
+  if (x %% 2 == 0){
+    print("even number")
+  } else {
+    print("odd number")
+  }
+}
+
+test_even_odd(5)
+test_even_odd(c(1,6))
+
+```
+
+]
+
+.pull-right[
+```{r, comment=FALSE}
+test_even_odd_v2 <- function(x){
+  ifelse(x %% 2 == 0, "even number", "odd number")
+}
+
+test_even_odd_v2(5)
+test_even_odd_v2(c(1,6))
+
+```
+
+]
+
+---
+
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+R for Data Science-Exercises 9.4.4 - Q2
+
+```{r, echo=FALSE}
+knitr::include_url('https://r4ds.had.co.nz/functions.html')
+```
+
+Help:
+
+`lubridate::now()` and `lubridate::hour()`
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+
+
 ---
 class: center, middle
 
