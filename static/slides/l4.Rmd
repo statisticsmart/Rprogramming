@@ -39,6 +39,8 @@ head(mozzie, 2)
 
 ```
 
+--
+
 > Use Min-Max transformation to rescale all the districts variables onto 0-1 range.
 
 > Min-Max transformation is $\frac{x_i-min(x)}{min(x)-max(x)}$ where $x=(x_1, x_2, ...x_n)$.
