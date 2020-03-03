@@ -527,13 +527,144 @@ library(countdown)
 countdown(minutes = 10L, seconds = 00)
 ```
 
+---
 
+# `for` loop
+
+- execute a block of code a specific number of times or until the end of a sequence.
+
+```{r, comment=NA}
+for (i in 1:5) {
+  print(i*100)
+}
+
+```
+
+
+---
+```{r, comment=NA, eval=FALSE}
+
+continents <- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
+
+for (i in continents) {
+  print(continents[i])
+}
+
+for (i in 1:4) {
+  print(continents[i])
+}
+
+for (i in seq(continents)) {
+  print(continents[i])
+}
+
+for (i in 1:4)  print(continents[i])
+
+```
+
+```{r, echo=FALSE}
+continents <- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
+for (i in seq(continents)) {
+  print(continents[i])
+}
+
+```
+
+---
+
+# Nested loops
+
+```{r, comment=NA}
+mat <- matrix(1:6, ncol=2)
+mat
+
+for (i in 1:3) {
+  for (j in 1:2) {
+    print(mat[i, j])
+  }
+}
+
+```
+
+---
+
+# While
+
+```{r, comment=NA}
+i <- 1 # initial value
+while (i < 10) {
+  print(i)
+  i <- i + 1 # increment
+}
+
+
+```
+
+---
+
+# Repeat and break
+
+- Iterate over a block of code multiple number of times. 
+
+-  No condition check in repeat loop to exit the loop. 
+
+- The only way to exit a repeat loop is to call break. 
+
+.pull-left[
+
+Example 1
+
+```{r, comment=NA}
+x <- 5
+
+repeat {
+  print(x)
+  x = x+1
+  if (x == 10){
+    break
+  }
+}
+
+```
+]
+
+--
+.pull-right[
+
+Example 2
+
+```{r, comment=NA}
+set.seed(1)
+
+repeat {
+ x<-runif(1, 5, 10)
+ print(x)
+ if(x < 6.1){
+   break
+ }
+}
+
+```
+]
+---
+# Next
+
+```{r, comment=NA}
+for(i in 1:10) {
+  if(i <= 5) {
+  next # Skip the first 5 iterations
+  }
+print(i)
+}
+
+```
 
 ---
 class: center, middle
 
 Slides available at: hellor.netlify.com
 
-[CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
 
 
