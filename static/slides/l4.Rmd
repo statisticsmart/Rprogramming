@@ -364,11 +364,7 @@ Help:
 $$\hat{\beta}=(X^TX)^{-1}X^TY$$
 
 
-
-```{r, echo=FALSE}
-knitr::include_url('https://hellor.netlify.com/slides/l2.html#28')
-
-```
+![](slr2.png)
 
 ```{r, echo=FALSE}
 library(countdown)
@@ -636,6 +632,22 @@ for (i in 1:3) {
 
 ---
 
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write a function to count the number of even numbers in a vector.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 8L, seconds = 00)
+```
+
+
+---
+
 # While
 
 ```{r, comment=NA}
@@ -647,6 +659,21 @@ while (i < 10) {
 
 
 ```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+---
+
+## Fibonacci Sequence
+
+Print the first `n` numbers of the  Fibonacci Sequence.
+
+0, 1, 1, 2, 3, 5, 8....
 
 ---
 
