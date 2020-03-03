@@ -360,6 +360,11 @@ class: duke-orange, center, middle
 
 Write your own function to calculate parameter estimates of simple linear regression model.
 
+Help:
+$$\hat{\beta}=(X^TX)^{-1}X^TY$$
+
+
+
 ```{r, echo=FALSE}
 knitr::include_url('https://hellor.netlify.com/slides/l2.html#28')
 
@@ -370,6 +375,47 @@ library(countdown)
 countdown(minutes = 5L, seconds = 00)
 ```
 
+---
+
+Write a function to calculate confidence intervals for mean.
+$$\bar{x} \pm t_{\alpha/2, (n-1)}\frac{s}{\sqrt(n)}$$
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+---
+## Function arguments
+
+```{r, comment=NA}
+cal_mean_ci <- function(x, conf){
+  len.x <- length(x)
+  se <- sd(x) / sqrt(len.x)
+  alpha <- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+data <- c(165, 170, 175, 180, 185)
+cal_mean_ci(data, 0.95)
+```
+
+--
+## Function with default values
+
+```{r, comment=NA}
+cal_mean_ci <- function(x, conf = 0.95){
+  len.x <- length(x)
+  se <- sd(x) / sqrt(len.x)
+  alpha <- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+cal_mean_ci(data)
+cal_mean_ci(data, 0.99)
+```
 ---
 
 # Conditional executions

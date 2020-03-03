@@ -337,7 +337,7 @@ class: duke-orange, center, middle
 
 Rewrite `rescale_minmax` so that `-Inf` is set to 0, and `Inf` is mapped to 1.
 
-<div class="countdown" id="timer_5e5ddd71" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5e0632" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -353,7 +353,7 @@ R for Data Science - Exercise 19.2.1, Question 3
 
 &lt;iframe src="https://r4ds.had.co.nz/functions.html" width="100%" height="400px"&gt;&lt;/iframe&gt;
 
-<div class="countdown" id="timer_5e5de05d" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5e084e" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -369,7 +369,7 @@ R for Data Science - Exercise 19.2.1, Question 4
 
 &lt;iframe src="https://r4ds.had.co.nz/functions.html" width="100%" height="400px"&gt;&lt;/iframe&gt;
 
-<div class="countdown" id="timer_5e5dde04" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5e073d" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -398,12 +398,74 @@ class: duke-orange, center, middle
 
 Write your own function to calculate parameter estimates of simple linear regression model.
 
+Help:
+`$$\hat{\beta}=(X^TX)^{-1}X^TY$$`
+
+
+
 &lt;iframe src="https://hellor.netlify.com/slides/l2.html#28" width="100%" height="400px"&gt;&lt;/iframe&gt;
 
-<div class="countdown" id="timer_5e5de10c" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5e0509" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
+---
+
+Write a function to calculate confidence intervals for mean.
+`$$\bar{x} \pm t_{\alpha/2, (n-1)}\frac{s}{\sqrt(n)}$$`
+
+<div class="countdown" id="timer_5e5e0877" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+## Function arguments
+
+
+```r
+cal_mean_ci &lt;- function(x, conf){
+  len.x &lt;- length(x)
+  se &lt;- sd(x) / sqrt(len.x)
+  alpha &lt;- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+data &lt;- c(165, 170, 175, 180, 185)
+cal_mean_ci(data, 0.95)
+```
+
+```
+[1] 165.1838 184.8162
+```
+
+--
+## Function with default values
+
+
+```r
+cal_mean_ci &lt;- function(x, conf = 0.95){
+  len.x &lt;- length(x)
+  se &lt;- sd(x) / sqrt(len.x)
+  alpha &lt;- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+cal_mean_ci(data)
+```
+
+```
+[1] 165.1838 184.8162
+```
+
+```r
+cal_mean_ci(data, 0.99)
+```
+
+```
+[1] 158.7221 191.2779
+```
 ---
 
 # Conditional executions
@@ -611,7 +673,7 @@ Help:
 
 `lubridate::now()` and `lubridate::hour()`
 
-<div class="countdown" id="timer_5e5de0b6" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5e0565" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
