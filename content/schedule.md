@@ -84,3 +84,4 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
+[l5a](/slides/l5ans.pdf)
