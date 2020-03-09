@@ -29,9 +29,17 @@ E-mail is the best way to get in contact with me—I will respond to all course-
 
 ### Teaching Associates: 
 
-- Ms. Pabasari Amarasinghe [Until 29 February 2020] 
+- Ms. Asha Dilrukshi [01 March 2020 - present]
 
-- Ms. Nishanthena Rajanayagam [Until 29 February 2020] 
+- Ms. Dovini Jayasinghe [01 March 2020 - present]
+
+- Ms. Kalpani Perera [01 March 2020 - present]
+
+- Ms. Vihanga Gunadasa [01 March 2020 - present]
+
+~~Ms. Pabasari Amarasinghe [Until 29 February 2020]~~ 
+
+~~Ms. Nishanthena Rajanayagam [Until 29 February 2020]~~ 
 
 Office hours:
 
@@ -41,5 +49,4 @@ Tuesday  1.00 pm - 2.00 pm
 
 Wednesday 9.00 am - 10.00 am
 
-
-
+Friday 9.00 am - 10.00 am

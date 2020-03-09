@@ -39,6 +39,8 @@ head(mozzie, 2)
 
 ```
 
+--
+
 > Use Min-Max transformation to rescale all the districts variables onto 0-1 range.
 
 > Min-Max transformation is $\frac{x_i-min(x)}{min(x)-max(x)}$ where $x=(x_1, x_2, ...x_n)$.
@@ -279,10 +281,465 @@ new.data.col <- c(400, 500, 350, 250, 60, 70, Inf)
 rescale_minmax(new.data.col)
 ```
 ---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Rewrite `rescale_minmax` so that `-Inf` is set to 0, and `Inf` is mapped to 1.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 4L, seconds = 00)
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+R for Data Science - Exercise 19.2.1, Question 3
+
+```{r, echo=FALSE}
+knitr::include_url('https://r4ds.had.co.nz/functions.html')
+
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 4L, seconds = 00)
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+R for Data Science - Exercise 19.2.1, Question 4
+
+```{r, echo=FALSE}
+knitr::include_url('https://r4ds.had.co.nz/functions.html')
+
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+---
+
+background-image: url('laptop.jpg')
+background-position: center
+background-size: cover
+
+.content-box-yellow[
+# Functions are for humans and computers
+
+- Descriptive names for variables.
+
+- Comment your code.
+]
+
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write your own function to calculate parameter estimates of simple linear regression model.
+
+Help:
+$$\hat{\beta}=(X^TX)^{-1}X^TY$$
+
+
+![](slr2.png)
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
+---
+
+Write a function to calculate confidence intervals for mean.
+$$\bar{x} \pm t_{\alpha/2, (n-1)}\frac{s}{\sqrt(n)}$$
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+---
+## Function arguments
+
+```{r, comment=NA}
+cal_mean_ci <- function(x, conf){
+  len.x <- length(x)
+  se <- sd(x) / sqrt(len.x)
+  alpha <- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+data <- c(165, 170, 175, 180, 185)
+cal_mean_ci(data, 0.95)
+```
+
+--
+## Function with default values
+
+```{r, comment=NA}
+cal_mean_ci <- function(x, conf = 0.95){
+  len.x <- length(x)
+  se <- sd(x) / sqrt(len.x)
+  alpha <- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+cal_mean_ci(data)
+cal_mean_ci(data, 0.99)
+```
+---
+
+# Conditional executions
+
+- Control the flow of the execution.
+
+- Common ones include:
+
+    - if, else
+    
+    - for
+    
+    - while
+    
+    - repeat
+    
+    - break
+    
+    - next
+    
+    - switch
+
+---
+
+# If
+
+
+```r
+if (condition) {
+    # do something
+} else {
+    # do something else
+}
+
+```
+
+Example
+
+```{r, comment=FALSE}
+test_even_odd <- function(x){
+  if (x %% 2 == 0){
+    print("even number")
+  } else {
+    print("odd number")
+  }
+}
+
+```
+
+
+```{r, comment=NA}
+test_even_odd(5)
+test_even_odd(6)
+```
+
+---
+
+# ifelse: vectorization with ifelse
+
+```r
+ifelse(condition, if TRUE the output, if FALSE the output)
+
+```
+
+Example
+
+```{r, comment=FALSE}
+test_even_odd_v2 <- function(x){
+  ifelse(x %% 2 == 0, "even number", "odd number")
+}
+
+test_even_odd_v2(5)
+test_even_odd_v2(c(1,6))
+
+```
+
+
+---
+
+# Difference between `if, else` and `ifelse`
+
+.pull-left[
+
+```{r, comment=FALSE}
+test_even_odd <- function(x){
+  if (x %% 2 == 0) {
+    print("even number")
+  } else {
+    print("odd number")
+  }
+}
+
+test_even_odd(5)
+test_even_odd(c(1,6))
+
+```
+
+]
+
+.pull-right[
+```{r, comment=FALSE}
+test_even_odd_v2 <- function(x){
+  ifelse (x %% 2 == 0, "even number", "odd number")
+}
+
+test_even_odd_v2(5)
+test_even_odd_v2(c(1,6))
+
+```
+
+]
+
+---
+
+# Nested if-else
+
+- Multiple conditions
+
+
+```{r, comment=NA}
+grade_marks <- function(marks){
+  
+  if (marks < 20) {
+    "D"
+  } else if (marks <= 50) {
+    "C"
+  } else if (marks <= 60) {
+    "B"
+  } else {
+    "A"
+  }
+}
+
+grade_marks(75)
+```
+---
+
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+R for Data Science-Exercises 9.4.4 - Q2
+
+```{r, echo=FALSE}
+knitr::include_url('https://r4ds.had.co.nz/functions.html')
+```
+
+Help:
+
+`lubridate::now()` and `lubridate::hour()`
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+---
+
+# `for` loop
+
+- execute a block of code a specific number of times or until the end of a sequence.
+
+```{r, comment=NA}
+for (i in 1:5) {
+  print(i*100)
+}
+
+```
+
+
+---
+```{r, comment=NA, eval=FALSE}
+
+continents <- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
+
+for (i in continents) {
+  print(continents[i])
+}
+
+for (i in 1:4) {
+  print(continents[i])
+}
+
+for (i in seq(continents)) {
+  print(continents[i])
+}
+
+for (i in 1:4)  print(continents[i])
+
+```
+
+```{r, echo=FALSE}
+continents <- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
+for (i in seq(continents)) {
+  print(continents[i])
+}
+
+```
+
+---
+
+# Nested loops
+
+```{r, comment=NA}
+mat <- matrix(1:6, ncol=2)
+mat
+
+for (i in 1:3) {
+  for (j in 1:2) {
+    print(mat[i, j])
+  }
+}
+
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write a function to count the number of even numbers in a vector.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 8L, seconds = 00)
+```
+
+
+---
+
+# While
+
+```{r, comment=NA}
+i <- 1 # initial value
+while (i < 10) {
+  print(i)
+  i <- i + 1 # increment
+}
+
+
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+---
+
+## Fibonacci Sequence
+
+Print the first `n` numbers of the  Fibonacci Sequence.
+
+0, 1, 1, 2, 3, 5, 8....
+
+---
+
+# Repeat and break
+
+- Iterate over a block of code multiple number of times. 
+
+-  No condition check in repeat loop to exit the loop. 
+
+- The only way to exit a repeat loop is to call break. 
+
+.pull-left[
+
+Example 1
+
+```{r, comment=NA}
+x <- 5
+
+repeat {
+  print(x)
+  x = x+1
+  if (x == 10){
+    break
+  }
+}
+
+```
+]
+
+--
+.pull-right[
+
+Example 2
+
+```{r, comment=NA}
+set.seed(1)
+
+repeat {
+ x<-runif(1, 5, 10)
+ print(x)
+ if(x < 6.1){
+   break
+ }
+}
+
+```
+]
+---
+# Next
+
+```{r, comment=NA}
+for(i in 1:10) {
+  if(i <= 5) {
+  next # Skip the first 5 iterations
+  }
+print(i)
+}
+
+```
+
+---
 class: center, middle
 
 Slides available at: hellor.netlify.com
 
-[CC BY-NC license](https://creativecommons.org/licenses/by-nc/4.0/)
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
 
 

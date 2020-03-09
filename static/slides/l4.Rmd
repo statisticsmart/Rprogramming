@@ -39,9 +39,11 @@ head(mozzie, 2)
 
 ```
 
+--
+
 > Use Min-Max transformation to rescale all the districts variables onto 0-1 range.
 
-> Min-Max transformation is $\frac{x_i-min(x)}{min(x)-max(x)}$ where $x=(x_1, x_2, ...x_n)$.
+> Min-Max transformation is $\frac{x_i-min(x)}{max(x)-min(x)}$ where $x=(x_1, x_2, ...x_n)$.
 
 ---
 
@@ -358,16 +360,58 @@ class: duke-orange, center, middle
 
 Write your own function to calculate parameter estimates of simple linear regression model.
 
-```{r, echo=FALSE}
-knitr::include_url('https://hellor.netlify.com/slides/l2.html#28')
+Help:
+$$\hat{\beta}=(X^TX)^{-1}X^TY$$
 
-```
+
+![](slr2.png)
 
 ```{r, echo=FALSE}
 library(countdown)
 countdown(minutes = 5L, seconds = 00)
 ```
 
+---
+
+Write a function to calculate confidence intervals for mean.
+$$\bar{x} \pm t_{\alpha/2, (n-1)}\frac{s}{\sqrt(n)}$$
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 10L, seconds = 00)
+```
+
+---
+## Function arguments
+
+```{r, comment=NA}
+cal_mean_ci <- function(x, conf){
+  len.x <- length(x)
+  se <- sd(x) / sqrt(len.x)
+  alpha <- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+data <- c(165, 170, 175, 180, 185)
+cal_mean_ci(data, 0.95)
+```
+
+--
+## Function with default values
+
+```{r, comment=NA}
+cal_mean_ci <- function(x, conf = 0.95){
+  len.x <- length(x)
+  se <- sd(x) / sqrt(len.x)
+  alpha <- 1-conf
+  mean(x) + se * qt(c(alpha / 2, 1 - alpha / 2), df = len.x-1)
+  
+}
+
+cal_mean_ci(data)
+cal_mean_ci(data, 0.99)
+```
 ---
 
 # Conditional executions
@@ -588,6 +632,22 @@ for (i in 1:3) {
 
 ---
 
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Write a function to count the number of even numbers in a vector.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 8L, seconds = 00)
+```
+
+
+---
+
 # While
 
 ```{r, comment=NA}
@@ -599,6 +659,23 @@ while (i < 10) {
 
 
 ```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+---
+
+## Fibonacci Sequence
+
+Print the first `n` numbers of the  Fibonacci Sequence.
+
+0, 1, 1, 2, 3, 5, 8....
+
+![](gflowers.jpg) ![](goldenratio.jpg)
 
 ---
 
@@ -658,6 +735,29 @@ print(i)
 }
 
 ```
+
+---
+
+# switch 
+
+When you want a function to do different things in different
+circumstances, then the switch function can be useful.
+
+```{r, comment=NA}
+feelings <- c("sad", "afraid")
+
+for (i in feelings){
+  print(
+  switch(i,
+  happy = "I am glad you are happy",
+  afraid = "There is nothing to fear",
+  sad = "Cheer up",
+  angry = "Calm down now"
+  ))
+}
+
+```
+
 
 ---
 class: center, middle
