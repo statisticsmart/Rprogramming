@@ -49,7 +49,7 @@ flip_coin(10)
 ```
 
 ```
- [1] "H" "H" "T" "H" "H" "H" "T" "H" "H" "H"
+ [1] "H" "T" "T" "T" "T" "T" "T" "H" "H" "H"
 ```
 
 
@@ -76,7 +76,7 @@ flip_coin(10)
 ```
 
 ```
- [1] "T" "H" "T" "H" "T" "T" "H" "H" "T" "H"
+ [1] "T" "H" "H" "H" "H" "T" "H" "T" "T" "H"
 ```
 
 ---
@@ -110,6 +110,14 @@ help:
 ```
 [1] 0
 ```
+
+---
+
+# Problem 4
+
+Write a function to calculate the correlation coefficient
+
+`$$r=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2\sum_{i=1}^n(y_i-\bar{y})^2}}$$`
 
 ---
 
@@ -173,7 +181,7 @@ sample(c("car", "goat", "goat"))
 ```
 
 ```
-[1] "goat" "goat" "car" 
+[1] "car"  "goat" "goat"
 ```
 
 ```r
@@ -181,7 +189,7 @@ sample(c("car", "goat", "goat"))
 ```
 
 ```
-[1] "goat" "goat" "car" 
+[1] "car"  "goat" "goat"
 ```
 
 --
@@ -198,7 +206,7 @@ select_first_door(2) # My first choice is the 2nd door
 ```
 
 ```
-[1] "car"
+[1] "goat"
 ```
 
 --
