@@ -49,7 +49,7 @@ flip_coin(10)
 ```
 
 ```
- [1] "H" "T" "T" "T" "T" "T" "T" "H" "H" "H"
+ [1] "H" "T" "H" "H" "H" "H" "H" "H" "H" "T"
 ```
 
 
@@ -76,7 +76,7 @@ flip_coin(10)
 ```
 
 ```
- [1] "T" "H" "H" "H" "H" "T" "H" "T" "T" "H"
+ [1] "T" "H" "T" "H" "T" "T" "T" "T" "T" "T"
 ```
 
 ---
@@ -181,7 +181,7 @@ sample(c("car", "goat", "goat"))
 ```
 
 ```
-[1] "car"  "goat" "goat"
+[1] "goat" "goat" "car" 
 ```
 
 ```r
@@ -269,6 +269,13 @@ It is easy to show that if `\(U \sim U(0, 1)\)`, then
 has CDF `\(F\)`. Namely, since `\(F\)` is invertible and `\(P(U \leq u)=u\)`, we have
 
 `$$P(X \leq x)=P(F^{-1}(U)\leq x)=P(U\leq F(x))=F(x)$$`
+
+
+---
+
+# Inverse- Trnasform Method: Example
+
+`\(f_X(x)=2x\)`, `\(0 \leq x \leq 1.\)`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
