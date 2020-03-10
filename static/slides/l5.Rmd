@@ -231,9 +231,6 @@ knitr::include_url('http://www.mathcs.emory.edu/~cheung/Courses/170/Syllabus/07/
 ---
 
 
-
----
-
 # Random Variable Generation: Inverse-Transform Method
 
 Let $X$ be a random variable with CDF $F$. Since $F$ is a nondecreasing function, the inverse function $F^{-1}$ may be defined as
@@ -246,6 +243,15 @@ $$X=F^{-1}(U)$$
 has CDF $F$. Namely, since $F$ is invertible and $P(U \leq u)=u$, we have
 
 $$P(X \leq x)=P(F^{-1}(U)\leq x)=P(U\leq F(x))=F(x)$$
+
+
+---
+
+## Inverse-Transform Method: Example
+
+$$
+\ell(\pi) = \sum_{i = 1}^{K}\sum_{j = 1}^{K} [w_{ij}(\log \pi_i - \log(\pi_i + \pi_j))].
+$$
 
 
 ---
