@@ -89,6 +89,29 @@ flip_coin(10)
 
 ---
 
+
+# Problem 3
+
+Write a function to calculate the median.
+
+help:
+
+```{r, comment=NA}
+5%%2
+
+4%%2
+```
+
+---
+
+# Problem 4
+
+Write a function to calculate the correlation coefficient
+
+$$r=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2\sum_{i=1}^n(y_i-\bar{y})^2}}$$
+
+---
+
 background-image: url('montyhall.jpg')
 background-position: center
 background-size: contain
@@ -208,9 +231,6 @@ knitr::include_url('http://www.mathcs.emory.edu/~cheung/Courses/170/Syllabus/07/
 ---
 
 
-
----
-
 # Random Variable Generation: Inverse-Transform Method
 
 Let $X$ be a random variable with CDF $F$. Since $F$ is a nondecreasing function, the inverse function $F^{-1}$ may be defined as
@@ -223,3 +243,25 @@ $$X=F^{-1}(U)$$
 has CDF $F$. Namely, since $F$ is invertible and $P(U \leq u)=u$, we have
 
 $$P(X \leq x)=P(F^{-1}(U)\leq x)=P(U\leq F(x))=F(x)$$
+
+
+---
+
+## Inverse-Transform Method: Example
+
+$$
+\ell(\pi) = \sum_{i = 1}^{K}\sum_{j = 1}^{K} [w_{ij}(\log \pi_i - \log(\pi_i + \pi_j))].
+$$
+
+
+---
+
+class: center, middle
+
+Slides available at: hellor.netlify.com
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
+
+
+

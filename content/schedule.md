@@ -35,7 +35,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 6: Simulations
 
-|[Slides]((/slides/l5.html))    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides](/slides/l5.html)    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 7: 

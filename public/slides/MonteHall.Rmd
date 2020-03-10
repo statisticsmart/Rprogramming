@@ -141,3 +141,40 @@ estimate_pi(1000, 1)
 
 ```
 
+
+
+## Bisection Method
+
+```{r, comment=NA}
+
+cal_score_function <- function(x) {
+  x * (x + 2) - 1
+}
+
+estimate_theta <- function(a, b, tol){
+  fa <- cal_score_function(a)
+  fb <- cal_score_function(b)
+ 
+  if ((fa * fb) > 0.0) {
+  print("Function has same signs at ends of interval")
+  } else {
+    
+    while (abs(a - b) > tol) {
+      
+    middle = (a + b) / 2.0
+    print(paste("X: ", middle))
+    
+    if ((fa * fb) < 0.0) {
+      b= middle
+    } else {
+      a = middle
+    }
+    
+  }
+
+  }
+}
+
+estimate_theta(0, 2, 0.0001)
+
+```
