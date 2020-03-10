@@ -33,9 +33,9 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l4.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19]  	|  [Cheat sheet]((/cheatsheets/baser.pdf) ) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 6: 
+#### Week 6: Simulations
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides]((/slides/l5.html))    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 7: 

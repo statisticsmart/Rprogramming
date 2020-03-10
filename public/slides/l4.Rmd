@@ -43,7 +43,7 @@ head(mozzie, 2)
 
 > Use Min-Max transformation to rescale all the districts variables onto 0-1 range.
 
-> Min-Max transformation is $\frac{x_i-min(x)}{min(x)-max(x)}$ where $x=(x_1, x_2, ...x_n)$.
+> Min-Max transformation is $\frac{x_i-min(x)}{max(x)-min(x)}$ where $x=(x_1, x_2, ...x_n)$.
 
 ---
 
@@ -675,6 +675,8 @@ Print the first `n` numbers of the  Fibonacci Sequence.
 
 0, 1, 1, 2, 3, 5, 8....
 
+![](gflowers.jpg) ![](goldenratio.jpg)
+
 ---
 
 # Repeat and break
@@ -733,6 +735,29 @@ print(i)
 }
 
 ```
+
+---
+
+# switch 
+
+When you want a function to do different things in different
+circumstances, then the switch function can be useful.
+
+```{r, comment=NA}
+feelings <- c("sad", "afraid")
+
+for (i in feelings){
+  print(
+  switch(i,
+  happy = "I am glad you are happy",
+  afraid = "There is nothing to fear",
+  sad = "Cheer up",
+  angry = "Calm down now"
+  ))
+}
+
+```
+
 
 ---
 class: center, middle
