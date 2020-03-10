@@ -1,6 +1,6 @@
 ---
 title: "STA 326 2.0 Programming and Data Analysis with R"
-subtitle: "Lesson 5: Writing Functions in R (Simulations)"
+subtitle: "Lesson 5: Randomisation and Simulations"
 author: "Dr Thiyanga Talagala"
 date: "2020-03-03"
 output:
@@ -180,6 +180,41 @@ in a loop and compute the proportion of times car shows.)
 $$\frac{A_{circle}}{A_{square}}=\frac{\pi r^2}{4r^2}$$
 Equation of a circle center around 0: $x^2+y^2=r^2$
 
-Write a function to approximate $\pi$
-
 <img src="monte_carlo_pi.png" width="400">
+
+Write a function to approximate $\pi$ using Monte Carlo simulations.
+
+---
+
+# Root finding algorithms: Bisection method
+
+Let $X_1,...X_n \sim N(\theta, 1)$, where $\theta$ is unknown. It is easy to show that the log-likelihood is (up to $n$)
+
+$$l(\theta)=-\frac{1}{2}\sum_{i=1}^n(x_i-\theta)^2.$$
+
+The derivative of the log-likelihood (score function) is
+$$l'(\theta)=\sum_{i=1}^n(x_i-\theta).$$ We can show that $\hat{\theta}=\bar{x}$, but we will estimate $\theta$ using the bisection method.
+
+---
+
+# Bisection method
+
+
+```{r, echo=FALSE}
+knitr::include_url('http://www.mathcs.emory.edu/~cheung/Courses/170/Syllabus/07/bisection.html')
+```
+
+---
+
+# Random Variable Generation: Inverse-Transform Method
+
+Let $X$ be a random variable with CDF $F$. Since $F$ is a nondecreasing function, the inverse function $F^{-1}$ may be defined as
+$$F^{-1}(y)=inf\{x: F(x)\geq y\}, 0 \leq y \leq 1.$$
+
+It is easy to show that if $U \sim U(0, 1)$, then
+
+$$X=F^{-1}(U)$$
+
+has CDF $F$. Namely, since $F$ is invertible and $P(U \leq u)=u$, we have
+
+$$P(X \leq x)=P(F^{-1}(U)\leq x)=P(U\leq F(x))=F(x)$$

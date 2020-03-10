@@ -10,6 +10,47 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+```{r, comment=NA}
+
+print_sn <- function(){
+  repeat{
+    a <-  rnorm(1)
+    if (a <= 1L){
+      print(a)
+    } else {
+      break
+    }
+    
+  }
+  
+}
+
+
+```
+
+
+```{r, comment=NA}
+
+print_sn <- function(){
+  repeat{
+    a <-  rnorm(1)
+    if (a <= 1L){
+      if(a <=0L){
+      next
+      } else {
+        print(a)
+      }
+    } else {
+      break
+    }
+    
+  }
+  
+}
+
+
+```
+
 
 ```{r, comment=NA}
 reveal_host_choice <- function(door) {

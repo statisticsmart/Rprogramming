@@ -85,3 +85,4 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 [l5a](/slides/l5ans.pdf)
+[l5a](/slides/MonteHall.pdf)
