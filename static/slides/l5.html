@@ -17,7 +17,7 @@
 class: center, middle, inverse, title-slide
 
 # STA 326 2.0 Programming and Data Analysis with R
-## Lesson 5: Randomisation and Simulations
+## Lesson 5: Simulations
 ### Dr Thiyanga Talagala
 ### 2020-03-03
 
@@ -49,7 +49,7 @@ flip_coin(10)
 ```
 
 ```
- [1] "T" "T" "H" "T" "T" "H" "T" "T" "T" "T"
+ [1] "T" "H" "H" "T" "T" "T" "H" "H" "H" "H"
 ```
 
 
@@ -76,7 +76,7 @@ flip_coin(10)
 ```
 
 ```
- [1] "T" "T" "T" "H" "H" "T" "T" "T" "H" "H"
+ [1] "T" "H" "T" "H" "H" "T" "T" "T" "H" "T"
 ```
 
 ---
@@ -181,7 +181,7 @@ sample(c("car", "goat", "goat"))
 ```
 
 ```
-[1] "car"  "goat" "goat"
+[1] "goat" "goat" "car" 
 ```
 
 ```r
@@ -189,7 +189,7 @@ sample(c("car", "goat", "goat"))
 ```
 
 ```
-[1] "goat" "goat" "car" 
+[1] "car"  "goat" "goat"
 ```
 
 --
@@ -266,15 +266,6 @@ It is easy to show that if `\(U \sim U(0, 1)\)`, then
 has CDF `\(F\)`. Namely, since `\(F\)` is invertible and `\(P(U \leq u)=u\)`, we have
 
 `$$P(X \leq x)=P(F^{-1}(U)\leq x)=P(U\leq F(x))=F(x)$$`
-
-
----
-
-## Inverse-Transform Method: Example
-
-$$
-\ell(\pi) = \sum_{i = 1}^{K}\sum_{j = 1}^{K} [w_{ij}(\log \pi_i - \log(\pi_i + \pi_j))].
-$$
 
 
 ---
