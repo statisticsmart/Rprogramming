@@ -7,7 +7,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Tutorial 1
+## Tutorial 1 - Answers
+
+### Create objects
 
 1. 
 
@@ -15,3 +17,47 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 3. Using the function  `rep()` , create the below sequence `1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4`
+
+
+### Subsetting
+
+4. Consider the vector 
+
+```{r, comment=NA}
+x <- c(80, 39, NA, 51, 51, 11, NA, NA, NA, 100, 80)
+```
+
+Write an R code to extract non-missing values in `x`
+
+```{r, comment=NA}
+# Answer 4
+x[!is.na(x)]
+
+```
+
+Write an R code to extract missing values and odd-numbers in `x`
+
+```{r, comment=NA}
+x[x %% 2 == 1]
+```
+
+Write an R code to extract odd numbers on `x`
+
+```{r, comment=NA}
+y <- x[x %% 2 == 1]
+y[!is.na(y)]
+```
+
+5. Consider the vector 
+
+```{r, comment=NA}
+set.seed(32020)
+st_normal <- rnorm(100)
+st_normal
+```
+
+Drop the elements corresponds to the positions multiply of 10th (10, 20, 30, ...)
+
+```{r, comment=NA}
+st_normal[-seq(1, 100, by=10)]
+```

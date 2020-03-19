@@ -30,12 +30,12 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 5: Writing functions in R and Control Structures
 
-|[Slides](/slides/l4.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19]  	|  [Cheat sheet]((/cheatsheets/baser.pdf) ) 	|  Problems 	| Answers |
+|[Slides](/slides/l4.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 6: Simulations
 
-|[Slides](/slides/l5.html) |  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides](/slides/l5.html) |  [Reading](https://rpubs.com/UTSdtay/montyhall)  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](/slides/Week6problem.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
@@ -85,5 +85,3 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-[l5a](/slides/l5ans.pdf)
-[l5a](/slides/MonteHall.pdf)
