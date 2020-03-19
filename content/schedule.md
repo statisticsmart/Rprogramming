@@ -39,12 +39,24 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 7: 
+#### Week 7: University closed over  COVID-19 outbreak.
+
+```diff
+
+! Please go to Google Classroom for up-to-date information and announcements.
+
+```
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 8: 
+#### Week 8: University closed over  COVID-19 outbreak.
+
+```diff
+
+! Please go to Google Classroom for up-to-date information and announcements.
+
+```
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
