@@ -39,7 +39,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 7: University closed over  COVID-19 outbreak.
+#### Week 7: University is closed due to COVID-19 outbreak.
 
 ```diff
 
@@ -50,7 +50,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 8: University closed over  COVID-19 outbreak.
+#### Week 8: University is closed due to COVID-19 outbreak.
 
 ```diff
 
