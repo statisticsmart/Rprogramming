@@ -1,0 +1,188 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R ^[All rights reserved by Thiyanga S. Talagala]"
+date: "25 March 2020"
+geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+# Week 2: Answers
+
+## Question 1
+
+```{r, comment=NA}
+data.vec <- c(244, 191, 160, 187, 180, 176, 174, 205, 211, 183, 211, 180, 194, 200)
+names(data.vec) <- c(1:3, "A", "B", "C", "D",
+                     "E", "F", "G", "H", "I",
+                     "J", "K")
+data.vec
+
+```
+
+## Question 2
+
+```{r, comment=NA}
+x <- c(4, "a", TRUE) # Example for explicit coercison
+class(x)
+```
+
+## Question 3 
+
+```{r, comment=NA}
+x <- c(3, 5, 1, 10, 12, 6)
+x[x < 6] = 0
+x
+```
+
+## Question 4
+
+```{r, comment=NA}
+weight <- c(60, 72, 57, 90, 95, 72, 70)
+## Method 1: Your own code
+sqrt(sum((weight-mean(weight))^2)/(length(weight)-1))
+## Method 2: built-in function
+sd(weight)
+
+```
+
+## Question 5
+
+```{r, comment=NA}
+mat <- matrix(c(1, 1, 3, 5, 2, 6, -2, -1, -3), ncol=3)
+colnames(mat) <- c("a1", "b1", "c1")
+rownames(mat) <- c("A", "B", "C")
+mat
+
+```
+
+## Question 6
+
+```{r, comment=NA}
+y <- matrix(c(1, 3, 0, 9, 5, -1), nrow=3, byrow=T)
+x <- matrix(c(3, 4, -2, 6), nrow=2, byrow=T)
+y
+x
+
+## Matrix Multiplication
+y%*%x
+
+## Transpose of x
+t(x)
+
+## Inverse
+solve(x)
+```
+
+```{r, comment=NA}
+x[1, ] # gives the first row  of x
+x[2, ] # gives the second row of x
+x[, 2] # gives the second column of x
+y[1, 2] # give the element corresponds to the 1st row and 2nd column
+```
+
+```{r, comment=NA, eval=FALSE}
+y[, 2:3] # gives an error because y contains only two columns
+```
+
+```{r}
+y[ ,1:2] # extract elements corresponds to the 1st and the 2nd columns
+```
+
+## Question 7
+
+```{r, comment=NA}
+# Y variable - Sales
+sales <- c(2580, 11942, 9845, 27800, 18926, 4800, 14550)
+
+# X variable - advertising
+advertising <- c(1.2, 2.6, 2.2, 3.2, 2.9, 1.5, 2.7)
+
+## Using your own function to estimate beta_0 and beta_1
+sales.mat <- matrix(sales, ncol = 1)
+advertising.mat <- matrix(c(rep(1, length(advertising)), advertising), ncol=2)
+
+solve(t(advertising.mat)%*%advertising.mat)%*%t(advertising.mat)%*%sales.mat
+
+## You can use built-in "lm" function to check your answer
+
+lm(sales ~ advertising)
+```
+
+## Question 8
+
+```{r, comment=NA}
+x <- -1:6
+x
+# a
+x[x < 0]
+# b
+x[x > 0]
+# c
+x[x <= 3]
+# d
+x[x < 0|x > 4]
+# e
+x[1]
+# f
+x[c(2, 4)]
+# g
+x[!x==0]
+```
+
+## Question 9
+
+### part a
+
+```{r, comment=NA}
+height <- 58:72
+weight <- c(115, 117, 120, 123, 126, 129, 132, 135, 139, 142, 146, 150, 154, 159, 164)
+mat.height.weight <- matrix(c(height, weight), ncol=2)
+mat.height.weight
+
+```
+
+### part b
+
+```{r, comment=NA}
+t(mat.height.weight)
+```
+
+### part c
+
+```{r}
+# Method 1: convert the matrix mat.height.weight to a dataframe
+dataframe.height.weight <- as.data.frame(mat.height.weight)
+colnames(dataframe.height.weight) <- c("height", "weight")
+dataframe.height.weight
+
+# Method 2
+dataframe.height.weight <- data.frame(height=height, weight=weight)
+dataframe.height.weight
+```
+
+### part d
+
+```{r, comment=NA}
+dataframe.height.weight[8, ]
+```
+
+## Question 10
+
+
+```{r, comment=NA}
+## Method 1
+data("mtcars")
+summary(mtcars$cyl)
+```
+
+```{r, comment=NA}
+## Method 2
+data(mtcars)
+attach(mtcars) 
+summary(cyl) # When you attach the data frame you can use the variable name itself. I prefer method 1
+```
