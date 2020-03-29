@@ -1,0 +1,66 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R ^[All rights reserved by Thiyanga S. Talagala]"
+subtitle: "Exploring `iris` dataset with `qplot`"
+date: "30 March 2020"
+geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+
+# Stage 1:  Planning your analysis
+
+## Step 1: Dataset overview and description
+
+Before we get started let's look at the data and plan the analysis.
+
+**Load iris dataset**
+```{r, comment=NA}
+data(iris)
+```
+
+Here is a glimpse of the dataset
+
+```{r, comment=NA}
+head(iris)
+```
+
+We have four qunatitative variables: `r colnames(iris)[1:4]` and one qualitative variable `r colnames(iris)[5]`
+
+## Step 2: Let's look at the graphs we could use to explore variables one by one.
+
+Plots that could be used to to summarize quantitative variables
+
+  - Box and whisker plot
+
+  - Histograms
+
+  - Dotplots 
+
+  - Density plot
+  
+  - Stem and leaf displays
+  
+Note: Stem and leaf displays are best-suited for small to moderate datasets, whereas others such as histograms and Box and whisker plots are best-suited for large datasets. Graph types such as Box and whisker plots are good at depicting differences between distributions and identyfying outliers.
+
+Plotss that could be used to to summarize qualitative variables
+
+  - Bar chart
+
+  - Pie chart
+
+## Step 3: Next we will look at two variables at a time.
+
+- Quantitative and Quantitative: Scatter plots
+
+- Quantitative and Qualitative: 
+
+
+   
+
+
