@@ -58,8 +58,39 @@ Plotss that could be used to to summarize qualitative variables
 
 - Quantitative and Quantitative: Scatter plots
 
-- Quantitative and Qualitative: 
+- Quantitative and Qualitative: Boxplots/ Histograms/ Dotplots/ Density plots with groups allow us to compare across different levels of the qualitative variable. **Faceting** can be used to generate the same plot for different levels of the qualitative variable.
 
+## Step 4: Three variables at a time.
+
+- Two quantitative variables and one qualitative variable: Scatterplot with different markers  (eg: size, shapes, colours) for different levels of the qualitative variable.
+
+# Stage 2: Getting started with `qplot()` in the ggplot2 package.
+
+Now we are going to use the `qplot` function to make some quick plots. In your final analysis you do not need to include all the graphs we discussed in Stage 1. However, here I plot different graphs under same category . It helps demonstrate how different graphs can be plotted for various purposes using the `qplot`.
+
+## Recap: qplot syntax
+
+
+```r
+qplot(
+  x,
+  y,
+  data,
+  facets = NULL,
+  margins = FALSE,
+  geom = "auto",
+  xlim = c(NA, NA),
+  ylim = c(NA, NA),
+  log = "",
+  main = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  asp = NA,
+  stat = NULL,
+  position = NULL
+)
+
+```
 
    
 
