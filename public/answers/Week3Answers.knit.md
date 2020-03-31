@@ -7,11 +7,7 @@ geometry: "left=3cm,right=3cm,top=2cm,bottom=2cm"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(knitr)
-opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
-```
+
 
 \newpage
 
@@ -22,17 +18,29 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 Before we get started let's look at the data and plan a analysis.
 
 **Load iris dataset**
-```{r, comment=NA}
+
+```r
 data(iris)
 ```
 
 Here is a glimpse of the dataset.
 
-```{r, comment=NA}
+
+```r
 head(iris)
 ```
 
-We have four quantitative variables: `r colnames(iris)[1:4]` and one qualitative variable: `r colnames(iris)[5]`
+```
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+```
+
+We have four quantitative variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width and one qualitative variable: Species
 
 ## Step 2: One-way analysis
 
@@ -108,16 +116,20 @@ qplot(
 
 ### Load packages
 
-```{r}
+
+```r
 library(ggplot2)
 ```
 
 ### 1. Summarizing qualitative variables
 
-```{r, fig.cap="Composition of the sample", fig.width=3, fig.height=3, fig.pos="H", comment=NA}
+
+```r
 qplot(x = Species, data = iris, geom = "bar", ylab = "Count",
       main = "Composition of Species")
 ```
+
+![Composition of the sample](Week3Answers_files/figure-latex/unnamed-chunk-4-1.pdf) 
 
 \newpage
 
@@ -127,70 +139,100 @@ Here, I have drawn plots only for `Sepal.Width`. Please take suitable graphs for
 
 #### Histogram
 
-```{r, fig.cap="Histogram of sepal width", fig.width=3, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Width, data = iris, geom = "histogram")
 ```
 
+![Histogram of sepal width](Week3Answers_files/figure-latex/unnamed-chunk-5-1.pdf) 
+
 #### Density plot
 
-```{r, fig.cap="Density plot of sepal width", fig.width=3, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Width, data = iris, geom = "density")
 ```
+
+![Density plot of sepal width](Week3Answers_files/figure-latex/unnamed-chunk-6-1.pdf) 
 
 \newpage
 
 #### Box and whisker plot
 
-```{r, fig.cap="Boxplot of sepal width", fig.width=3, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(y = Sepal.Width, data = iris, geom = "boxplot")
 ```
+
+![Boxplot of sepal width](Week3Answers_files/figure-latex/unnamed-chunk-7-1.pdf) 
 
 ## Two-way analysis
 
 ### 1. Visualizing two qualitative variables at a time
 
-```{r, fig.cap="Scatterplot of sepal length and sepal width", fig.width=3, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Length, y = Sepal.Width, data = iris, geom = "point")
 ```
+
+![Scatterplot of sepal length and sepal width](Week3Answers_files/figure-latex/unnamed-chunk-8-1.pdf) 
 
 \newpage
 
 ### 2. Visualizing qualitative and quantitative variables
 
-```{r, fig.cap="Boxplot of sepal width by species", fig.width=3, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Species, y = Sepal.Width, data = iris, geom = "boxplot")
 ```
 
+![Boxplot of sepal width by species](Week3Answers_files/figure-latex/unnamed-chunk-9-1.pdf) 
+
 #### Different ways to modify your graph
 
-```{r, fig.cap="Boxplot of sepal width by species", fig.width=4, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Species, y = Sepal.Width, data = iris, geom = "boxplot", fill = Species)
 ```
 
+![Boxplot of sepal width by species](Week3Answers_files/figure-latex/unnamed-chunk-10-1.pdf) 
+
 \newpage
 
-```{r, fig.cap="Boxplot of sepal width by species", fig.width=4, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Species, y = Sepal.Width, data = iris, geom = c("point","jitter","boxplot"), 
       alpha = 0.5, colour = Species)
 ```
 
-```{r, fig.cap="Histogram of sepal width", fig.width=4, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+![Boxplot of sepal width by species](Week3Answers_files/figure-latex/unnamed-chunk-11-1.pdf) 
+
+
+```r
 qplot(x = Sepal.Width, data = iris, geom = c("histogram"), 
      colour = Species)
 ```
 
+![Histogram of sepal width](Week3Answers_files/figure-latex/unnamed-chunk-12-1.pdf) 
+
 \newpage
 
-```{r, fig.cap="Histogram of sepal width", fig.width=4, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Width, data = iris, geom = c("histogram"), 
      fill = Species)
 ```
 
+![Histogram of sepal width](Week3Answers_files/figure-latex/unnamed-chunk-13-1.pdf) 
 
-```{r, fig.cap="Density plot of sepal width", fig.width=4, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+
+```r
 qplot(x = Sepal.Width, data = iris, geom = c("density"), 
      colour = Species)
 ```
+
+![Density plot of sepal width](Week3Answers_files/figure-latex/unnamed-chunk-14-1.pdf) 
 
 \newpage
 
@@ -198,41 +240,52 @@ qplot(x = Sepal.Width, data = iris, geom = c("density"),
 
 **Everything on a single panel**
 
-```{r, fig.cap="Scatterplot of sepal length and sepal width by species", fig.width=4, fig.height=3, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Length, y = Sepal.Width, data = iris, 
       geom = "point", color = Species)
 ```
 
+![Scatterplot of sepal length and sepal width by species](Week3Answers_files/figure-latex/unnamed-chunk-15-1.pdf) 
+
 
 **Separate panels for each species: column-wise**
 
-```{r, fig.cap="Scatterplot of sepal length and sepal width by species", fig.width=4, fig.height=2, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Length, y = Sepal.Width, 
       facets = .~Species, data = iris, geom = "point") 
 ```
+
+![Scatterplot of sepal length and sepal width by species](Week3Answers_files/figure-latex/unnamed-chunk-16-1.pdf) 
 
 \newpage
 
 **Separate panels for each species: row-wise**
 
-```{r, fig.cap="Scatterplot of sepal length and sepal width by species", fig.width=4, fig.height=4, fig.pos="H", message=FALSE, comment=NA, warning=FALSE}
+
+```r
 qplot(x = Sepal.Length, y = Sepal.Width, 
       facets = Species~., data = iris, geom = "point")
 ```
+
+![Scatterplot of sepal length and sepal width by species](Week3Answers_files/figure-latex/unnamed-chunk-17-1.pdf) 
 
 
 \newpage
 
 # `patchwork` package in R
 
-```{r, comment=NA}
+
+```r
 library(patchwork) 
 ```
 
 
 First you need to assign a name for each graph. Here, I use `q1` and `q2`.
 
-```{r, fig.cap="Composition of species", fig.width=8, fig.height=4, fig.pos="H", comment=NA,fig.pos="H"}
+
+```r
 q1 <- qplot(x = Species, y = Sepal.Width, data = iris, geom = c("point","jitter","boxplot"), 
       alpha = 0.5, colour = Species, main = "Distribution of Sepal.Width")
 q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("point","jitter","boxplot"), 
@@ -242,18 +295,23 @@ q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("point","jitter
 
 ## Arrange multiple graphs row-wise use "/"
 
-```{r, fig.cap="Arrange multiple graphs row-wise",fig.pos="H"}
-q1/q2
 
+```r
+q1/q2
 ```
+
+![Arrange multiple graphs row-wise](Week3Answers_files/figure-latex/unnamed-chunk-20-1.pdf) 
 
 \newpage
 
 ## Arrange multiple graphs column-wise: use "|"
 
-```{r, fig.cap="Arrange multiple graphs column-wise",fig.pos="H"}
+
+```r
 q1|q2
 ```
+
+![Arrange multiple graphs column-wise](Week3Answers_files/figure-latex/unnamed-chunk-21-1.pdf) 
 
 
 
@@ -261,10 +319,12 @@ q1|q2
 
 ## Arrange multiple graphs both row-wise and column-wise
 
-```{r, fig.cap="Arrange multiple graphs both row-wise and column-wise" ,fig.pos="H"}
-(q1|q2)/(q1|q2)
 
+```r
+(q1|q2)/(q1|q2)
 ```
+
+![Arrange multiple graphs both row-wise and column-wise](Week3Answers_files/figure-latex/unnamed-chunk-22-1.pdf) 
 
 \newpage
 
@@ -275,18 +335,22 @@ You do not need to include all the graphs to your final analysis. Please select 
 ## 1. Composition of the sample
 
 
-```{r, fig.cap="Composition of the sample", fig.width=5, fig.height=3, fig.pos="H", comment=NA}
+
+```r
 qplot(x = Species, data = iris, geom = "bar", ylab = "Count", 
       colour = Species, fill = Species,
       main = "Composition of Species")
 ```
+
+![Composition of the sample](Week3Answers_files/figure-latex/unnamed-chunk-23-1.pdf) 
 
 
 \newpage
 
 ## 2. Distribution of the features of sepal and petal by species
 
-```{r, fig.cap="Distribution of features related to sepal and petal by species", fig.width=8, fig.height=6, fig.pos="H", comment=NA}
+
+```r
 q1 <- qplot(x = Species, y = Sepal.Width, data = iris, geom = c("point","jitter","boxplot"), 
       alpha = 0.5, colour = Species, main = "(a) Distribution of Sepal Width")
 q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("point","jitter","boxplot"), 
@@ -298,11 +362,14 @@ q4 <- qplot(x = Species, y = Petal.Length, data = iris, geom = c("point","jitter
 (q1|q2)/(q3|q4)
 ```
 
+![Distribution of features related to sepal and petal by species](Week3Answers_files/figure-latex/unnamed-chunk-24-1.pdf) 
+
 \newpage
 
 ## 3. Relationship between features of sepal and petal by species
 
-```{r, fig.cap="Relationship between features of sepal and petal by species", fig.width=8, fig.height=6, fig.pos="H", comment=NA}
+
+```r
 p1 <- qplot(x = Sepal.Length, y = Sepal.Width, data = iris, geom = c("point","jitter"), 
       alpha = 0.5, colour = Species, 
       main="(a) Sepal Length and Sepal Width")
@@ -317,5 +384,7 @@ p4 <- qplot(x = Sepal.Length, y = Petal.Width, data = iris, geom = c("point","ji
       main = "(d) Sepal length and Petal Width")
 (p1|p2)/(p3|p4)
 ```
+
+![Relationship between features of sepal and petal by species](Week3Answers_files/figure-latex/unnamed-chunk-25-1.pdf) 
 
 **Note: Interpret all figures in your final analysis.**

@@ -25,7 +25,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 4: Functions in R 
 
-|[Slides](/slides/l3.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html#functions)[Section 2.3]    	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](https://hellor.netlify.com/slides/l3.html#63) 	| Answers |
+|[Slides](/slides/l3.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html#functions)[Section 2.3]    	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](https://hellor.netlify.com/slides/l3.html#63) 	| [Answers](/answers/Week3Answers.pdf) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 5: Writing functions in R and Control Structures
