@@ -1,0 +1,205 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Introduction to tidyverse"
+author: "Dr Thiyanga Talagala"
+date: "2020-03-31"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+class: center, middle
+# What is tidyverse?
+
+
+
+---
+# Installation
+
+---
+# Workflow
+
+
+---
+# Tibble
+
+
+---
+# Factors
+
+- A vector that is used to store categorical variables
+
+- It can only contain predefined values. Hence, factors are useful when you know the possible values a variable may take. 
+
+## Creating a factor vector
+
+```{r, comment=NA}
+grades <- factor(c("A", "A", "A", "C", "B"))
+grades
+```
+--
+Now let's check the class type
+
+```{r, comment=NA}
+class(grades) # It's a factor
+```
+--
+To obtain all levles
+
+```{r, comment=NA}
+levels(grades)
+```
+
+---
+
+# Character vector vs Factor
+
+- Observe the differences in outputs. Factor list all unique values.
+
+**Character vector**
+
+```{r, comment=NA}
+grade_character_vctr <- 
+  c("A", "D", "A", "C", "B")
+grade_character_vctr
+```
+
+**Factor vector**
+
+```{r, comment=NA}
+grade_factor_vctr <- 
+  factor(c("A", "D", "A", "C", "B"))
+grade_factor_vctr
+```
+
+---
+# Character vector vs Factor (cont.)
+
+- Factors behave like character vectors but they are
+actually integers.
+
+**Character vector**
+
+```{r, comment=NA}
+typeof(grade_character_vctr)
+```
+
+**Factor vector**
+
+```{r, comment=NA}
+typeof(grade_factor_vctr)
+```
+
+--
+- With factors all possible values of the variables can be defined under levels.
+
+```{r, comment=NA}
+grade_factor_vctr <- 
+  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+```
+
+---
+
+
+# Character vector vs Factor (cont.)
+
+
+- Let's create a contingency table with `table` function.
+
+**Character vector output with table function**
+
+```{r, comment=NA}
+table(grade_character_vctr)
+```
+
+**Factor vector (with levels) output with table function**
+
+```{r, comment=NA}
+table(grade_factor_vctr)
+```
+
+- Output corresponds to factor prints counts for all possible levels of the variable. Hence, with factors it is obvious when some levels contain no observations. 
+
+---
+# Character vector vs Factor (cont.)
+
+- With factors you can't use values that are not listed in the levels, but with character vectors there is no such restrictions.
+
+**Character vector**
+
+```{r, comment=NA}
+grade_character_vctr[2] <- "A+"
+grade_character_vctr
+```
+
+**Factor vector**
+
+```{r, comment=NA}
+grade_factor_vctr[2] <- "A+"
+grade_factor_vctr
+```
+---
+# Modify factor levels
+
+This our factor
+
+```{r, comment=NA}
+grade_factor_vctr
+```
+
+## Change labels
+
+```{r, comment=NA}
+levels(grade_factor_vctr) <- 
+  c("Excellent", "Good", "Average", "Poor", "Fail")
+grade_factor_vctr
+```
+## Reverse the level arrangement
+
+```{r, comment=NA}
+levels(grade_factor_vctr) <- rev(levels(grade_factor_vctr))
+grade_factor_vctr
+```
+
+---
+
+# Pipe operator: %>%
+
+```{r, comment=NA}
+
+
+```
+
+---
+
+
+- the Tidyverse makes heavy use of the pipe operator ( %>% ).
+
+- What does it do? 
+
+takes whatever is on the left-hand-side of the pipe and makes it the first argument of whatever function is on the right-hand-side of the pipe.
+
+---
+
+
+---
+
+
+
+---
+
