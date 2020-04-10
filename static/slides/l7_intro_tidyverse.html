@@ -25,20 +25,364 @@ class: center, middle, inverse, title-slide
 
 
 
-class: center, middle
-# What is tidyverse?
+background-image: url(tidyverse.jpeg)
+background-size: 100px
+background-position: 98% 6%
+ 
+ # What is tidyverse?
 
+- Collection of essential R packages for data science.
 
+- All packages share a common design philosophy, grammar, and data structures.
+
+### Setup
+
+```r
+install.packages("tidyverse") # install the tidyverse packages
+library(tidyverse) # load the tidyverse packages
+
+```
+![](tidyverseload.png)
+
+![](tidyversecollection.png)
 
 ---
-# Installation
 
----
+background-image: url('workflowds.png')
+background-position: center
+background-size: 700px
+
 # Workflow
 
+---
+background-image: url(readr.png)
+background-size: 100px
+background-position: 98% 6%
+
+# Workflow: import
+
+![700px](workflowds.png)
+
+![](datacollection.png)
 
 ---
+
+background-image: url(tidyr.jpeg)
+background-size: 100px
+background-position: 98% 6%
+
+
+# Workflow: tidy
+
+![700px](workflowds.png)
+
+![](longWideformat.png)
+
+---
+background-image: url(dplyr.png)
+background-size: 100px
+background-position: 98% 6%
+
+# Workflow: transform
+
+![700px](workflowds.png)
+
+![](dplyrillustration.png)
+
+---
+background-image: url(ggplot2.png)
+background-size: 100px
+background-position: 98% 6%
+
+
+# Workflow: visualise
+
+![700px](workflowds.png)
+### Illustration
+
+
+```r
+library(ggplot2)
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color=Species)) + geom_point()+theme(aspect.ratio  = 1)+scale_color_manual(values = c("blue", "red", "orange"))
+```
+
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+---
+background-image: url(purrr.png)
+background-size: 100px
+background-position: 98% 6%
+
+# Workflow: model
+
+![700px](workflowds.png)
+
+
+## Illustration: Apply a linear model to each group
+
+```r
+nested_iris &lt;- group_by(iris, Species) %&gt;% nest()
+fit_model &lt;- function(df) lm(Sepal.Length ~ Sepal.Width, data = df)
+nested_iris &lt;- nested_iris %&gt;%
+ mutate(model = map(data, fit_model))
+
+nested_iris$model[[1]] # To print other two models nested_iris$model[[3]] nested_iris$model[[3]]
+```
+
+```
+
+Call:
+lm(formula = Sepal.Length ~ Sepal.Width, data = df)
+
+Coefficients:
+(Intercept)  Sepal.Width  
+     2.6390       0.6905  
+```
+
+---
+
+# Workflow: communicate
+
+![700px](workflowds.png)
+
+![](communicate.png)
+
+---
+
+background-image: url(tidyvflowpkg.png)
+background-size: contain
+background-position: center
+
+# Workflow: R packages
+
+
+---
+
+class: duke-orange, middle, center
+
 # Tibble
+
+---
+background-image: url(tibble.png)
+background-size: 100px
+background-position: 98% 6%
+
+# Tibble
+
+- Tibbles are data.frames
+
+- Modern version the data.frames
+
+# Create a tibble
+
+
+```r
+library(tidyverse) # library(tibble)
+first.tbl &lt;- tibble(height=c(150, 200, 160), weight=c(45, 60, 51))
+first.tbl
+```
+
+```
+# A tibble: 3 x 2
+  height weight
+   &lt;dbl&gt;  &lt;dbl&gt;
+1    150     45
+2    200     60
+3    160     51
+```
+
+---
+
+# Convert an existing dataframe to a tibble
+
+
+```r
+as_tibble(iris)
+```
+
+```
+# A tibble: 150 x 5
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+ 1          5.1         3.5          1.4         0.2 setosa 
+ 2          4.9         3            1.4         0.2 setosa 
+ 3          4.7         3.2          1.3         0.2 setosa 
+ 4          4.6         3.1          1.5         0.2 setosa 
+ 5          5           3.6          1.4         0.2 setosa 
+ 6          5.4         3.9          1.7         0.4 setosa 
+ 7          4.6         3.4          1.4         0.3 setosa 
+ 8          5           3.4          1.5         0.2 setosa 
+ 9          4.4         2.9          1.4         0.2 setosa 
+10          4.9         3.1          1.5         0.1 setosa 
+# … with 140 more rows
+```
+
+---
+
+# tibble vs. data.frame
+
+1. Output
+
+**tibble**
+
+
+```r
+first.tbl &lt;- tibble(height=c(150, 200, 160), weight=c(45, 60, 51))
+first.tbl
+```
+
+```
+# A tibble: 3 x 2
+  height weight
+   &lt;dbl&gt;  &lt;dbl&gt;
+1    150     45
+2    200     60
+3    160     51
+```
+
+**data.frame**
+
+```r
+dataframe &lt;- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51))
+dataframe
+```
+
+```
+  height weight
+1    150     45
+2    200     60
+3    160     51
+```
+
+---
+
+# tibble vs data.frame (cont.)
+
+- You can create new variables
+
+**tibble**
+
+
+```r
+first.tbl &lt;- tibble(height=c(150, 200, 160), weight=c(45, 60, 51), 
+                    bmi=(height)/weight^2)
+first.tbl
+```
+
+```
+# A tibble: 3 x 3
+  height weight    bmi
+   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1    150     45 0.0741
+2    200     60 0.0556
+3    160     51 0.0615
+```
+
+**data.frame**
+
+
+```r
+df &lt;- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51), 
+                    bmi=(height)/weight^2) # Not working
+```
+
+You will get the following error message 
+
+`Error in data.frame(height = c(150, 200, 160), weight = c(45, 60, 51),  : 
+  object 'height' not found`
+
+
+---
+
+# tibble vs data.frame (cont.)
+
+With `data.frame` this is how we should create a new variable from the existing columns
+
+
+```r
+df &lt;- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51)) 
+df$bmi &lt;- (df$height)/(df$weight^2)
+df
+```
+
+```
+  height weight        bmi
+1    150     45 0.07407407
+2    200     60 0.05555556
+3    160     51 0.06151480
+```
+
+---
+
+# tibble vs data.frame (cont.)
+
+- Variable names: 
+
+
+```r
+tbl &lt;- tibble(`patient id`=c(1, 2, 3))
+tbl
+```
+
+```
+# A tibble: 3 x 1
+  `patient id`
+         &lt;dbl&gt;
+1            1
+2            2
+3            3
+```
+
+
+```r
+df &lt;- data.frame(`patient id`=c(1, 2, 3))
+df
+```
+
+```
+  patient.id
+1          1
+2          2
+3          3
+```
+
+---
+
+# tibble vs data.frame (cont.)
+
+A tibble can have columns that are lists.
+
+
+```r
+tbl &lt;- tibble (x = 1:3, y = list(1:3, 1:4, 1:10))
+tbl
+```
+
+```
+# A tibble: 3 x 2
+      x y         
+  &lt;int&gt; &lt;list&gt;    
+1     1 &lt;int [3]&gt; 
+2     2 &lt;int [4]&gt; 
+3     3 &lt;int [10]&gt;
+```
+
+This feature is not available in `data.frames`.
+
+If we try to do this with a traditional data frame we get an error.
+
+
+```r
+df &lt;- data.frame(x = 1:3, y = list(1:3, 1:4, 1:10)) ## Not working, error
+```
+
+`Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  : arguments imply differing number of rows: 3, 4, 10`
+
+---
+
+class: duke-orange, middle, center
+
+# Factors
 
 
 ---
@@ -269,27 +613,278 @@ Levels: Fail Poor Average Good Excellent
 
 ---
 
+# Order of factor levels
+
+
+```r
+fv1 &lt;- factor(c("D","E","E","A", "B", "C"))
+fv1
+```
+
+```
+[1] D E E A B C
+Levels: A B C D E
+```
+
+
+```r
+fv2 &lt;- factor(c("1T","2T","3A","4A", "5A", "6B", "6B"))
+fv2
+```
+
+```
+[1] 1T 2T 3A 4A 5A 6B 6B
+Levels: 1T 2T 3A 4A 5A 6B
+```
+
+
+---
+
+class: duke-orange, middle, center
+
+# Pipe operator: %&gt;%
+![](magrittrpic.jpeg)
+
+---
+background-image: url(magrittrlogo.png)
+background-size: 100px
+background-position: 98% 6%
+
 # Pipe operator: %&gt;%
 
+## Required package: `magrittr` 
 
+
+```r
+install.packages("magrittr")
+library(magrittr)
+```
+
+
+
+## What does it do? 
+
+It takes whatever is on the left-hand-side of the pipe and makes it the first argument of whatever function is on the right-hand-side of the pipe.
+
+
+For instance,
+
+
+```r
+mean(1:10)
+```
+
+```
+[1] 5.5
+```
+
+can be written as
+
+
+```r
+1:10 %&gt;% mean()
+```
+
+```
+[1] 5.5
+```
 
 ---
 
+# Pipe operator: %&gt;%
 
-- the Tidyverse makes heavy use of the pipe operator ( %&gt;% ).
+![](pipeillustration.png)
 
-- What does it do? 
+## Illustrations
 
-takes whatever is on the left-hand-side of the pipe and makes it the first argument of whatever function is on the right-hand-side of the pipe.
+1. `x %&gt;% f(y)` turns into `f(x, y)`
+
+1. `x %&gt;% f(y) %&gt;% g(z)` turns into `g(f(x, y), z)`
+
+---
+# Why %&gt;%
+
+- This helps to make your code more readable.
+
+**Method 1: Without using pipe (hard to read)**
+
+
+```r
+colSums(matrix(c(1, 2, 3, 4, 8, 9, 10, 12), nrow=2))
+```
+
+```
+[1]  3  7 17 22
+```
+
+**Method 2: Using pipe (easy to read)**
+
+
+```r
+c(1, 2, 3, 4, 8, 9, 10, 12) %&gt;%
+  matrix( , nrow = 2) %&gt;%
+  colSums()
+```
+
+```
+[1]  3  7 17 22
+```
+
+or
+
+
+```r
+c(1, 2, 3, 4, 8, 9, 10, 12) %&gt;%
+  matrix(nrow = 2) %&gt;% # remove comma
+  colSums()
+```
+
+```
+[1]  3  7 17 22
+```
 
 ---
 
+# Rules
+
+
+```r
+library(tidyverse) # to use as_tibble
+library(magrittr) # to use %&gt;%
+df &lt;- data.frame(x1 = 1:3, x2 = 4:6)
+```
+
+.pull-left[
+
+**Rule 1**
+
+```r
+head(df) 
+df %&gt;% head()
+
+```
+
+
+```
+  x1 x2
+1  1  4
+2  2  5
+3  3  6
+```
+
+**Rule 2**
+
+```r
+head(df, n = 2)  
+df %&gt;% head(n = 2)
+
+```
+
+
+```
+  x1 x2
+1  1  4
+2  2  5
+```
+
+]
+
+.pull-right[
+
+**Rule 3**
+
+```r
+head(df, n = 2)
+2 %&gt;% head(df, n = .)
+
+```
+
+
+```
+  x1 x2
+1  1  4
+2  2  5
+```
+
+
+**Rule 4**
+```r
+head(as_tibble(df), n = 2)
+df %&gt;% as_tibble %&gt;% head(n = 2)
+
+```
+
+
+
+```
+# A tibble: 2 x 2
+     x1    x2
+  &lt;int&gt; &lt;int&gt;
+1     1     4
+2     2     5
+```
+
+]
 
 ---
 
+# Rules (cont.)
 
+**Rule 5: subsetting**
+
+```r
+df$x1
+df %&gt;% .$x1
+```
+
+
+```
+[1] 1 2 3
+```
+
+or 
+
+```r
+df[["x1"]]
+df %&gt;% .[["x1"]]
+```
+
+
+
+```
+[1] 1 2 3
+```
+
+or 
+
+```r
+df[[1]]
+df %&gt;% .[[1]]
+```
+
+
+```
+[1] 1 2 3
+```
 
 ---
+
+# Offline reading materials
+
+Type the following code to see more examples
+
+
+```r
+vignette("magrittr")
+```
+
+---
+
+class: center, middle
+
+Slides available at: hellor.netlify.com
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
