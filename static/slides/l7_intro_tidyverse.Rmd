@@ -199,7 +199,6 @@ background-position: 98% 6%
 
 - A modern re-imagining of data frames
 
-- 
 
 # Create a tibble
 
@@ -361,7 +360,7 @@ Now let's check the class type
 class(grades) # It's a factor
 ```
 --
-To obtain all levles
+To obtain all levels
 
 ```{r, comment=NA}
 levels(grades)
@@ -371,7 +370,7 @@ levels(grades)
 
 # Character vector vs Factor
 
-- Observe the differences in outputs. Factor list all unique values.
+- Observe the differences in outputs. Factor prints all possible levels of the variable.
 
 **Character vector**
 
@@ -482,7 +481,7 @@ grade_factor_vctr
 
 # Order of factor levels
 
-**Deafult order of levels**
+**Default order of levels**
 
 ```{r, fih.height=3, comment=NA}
 fv1 <- factor(c("D","E","E","A", "B", "C"))
