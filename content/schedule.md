@@ -38,25 +38,36 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l5.html) |  [Reading](https://rpubs.com/UTSdtay/montyhall)  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](/slides/Week6problem.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
+----------------------------------------------------------------------------------
 
-#### Week 7: University is closed due to COVID-19 outbreak.
+### COVID-19 outbreak: study materials
 
 ```diff
 
 ! Please go to Google Classroom for up-to-date information and announcements.
 
 ```
+
+#### The Tidyverse
+
+- Introduction to the tidyverse
+
+- Introdcution to tibble, factors, pipe
+
+|[Slides](/slides/l7_intro_tidyverse.html)    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+
+---------------------------------------------------------------------------------------------------------
+
+#### Week 7: University is closed due to COVID-19 outbreak.
+
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 8: University is closed due to COVID-19 outbreak.
 
-```diff
-
-! Please go to Google Classroom for up-to-date information and announcements.
-
-```
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
