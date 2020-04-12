@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 # STA 326 2.0 Programming and Data Analysis with R
 ## Introduction to the tidyverse
 ### Dr Thiyanga Talagala
-### Online distance learning/teaching materials during the COVID-19 outbreak
+### Online distance learning/teaching materials during the COVID-19 outbreak.
 
 ---
 
@@ -42,8 +42,8 @@ background-position: 98% 6%
 ### Setup
 
 ```r
-install.packages("tidyverse") # install the tidyverse packages
-library(tidyverse) # load the tidyverse packages
+install.packages("tidyverse") # install tidyverse packages
+library(tidyverse) # load tidyverse packages
 
 ```
 ![](tidyverseload.png)
@@ -197,9 +197,9 @@ background-position: 98% 6%
 
 # Tibble
 
-- Tibbles are data.frames
+- Tibbles are data frames.
 
-- A modern re-imagining of data frames
+- A modern re-imagining of data frames.
 
 
 # Create a tibble
@@ -207,7 +207,7 @@ background-position: 98% 6%
 
 ```r
 library(tidyverse) # library(tibble)
-first.tbl &lt;- tibble(height=c(150, 200, 160), weight=c(45, 60, 51))
+first.tbl &lt;- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
 first.tbl
 ```
 
@@ -256,7 +256,7 @@ as_tibble(iris)
 
 
 ```r
-first.tbl &lt;- tibble(height=c(150, 200, 160), weight=c(45, 60, 51))
+first.tbl &lt;- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
 first.tbl
 ```
 
@@ -272,7 +272,7 @@ first.tbl
 **data.frame**
 
 ```r
-dataframe &lt;- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51))
+dataframe &lt;- data.frame(height = c(150, 200, 160), weight = c(45, 60, 51))
 dataframe
 ```
 
@@ -293,8 +293,8 @@ dataframe
 
 
 ```r
-first.tbl &lt;- tibble(height=c(150, 200, 160), weight=c(45, 60, 51), 
-                    bmi=(weight)/height^2)
+first.tbl &lt;- tibble(height = c(150, 200, 160), weight = c(45, 60, 51), 
+                    bmi = (weight)/height^2)
 first.tbl
 ```
 
@@ -311,8 +311,8 @@ first.tbl
 
 
 ```r
-df &lt;- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51), 
-                    bmi=(weight)/height^2) # Not working
+df &lt;- data.frame(height = c(150, 200, 160), weight = c(45, 60, 51), 
+                    bmi = (weight)/height^2) # Not working
 ```
 
 You will get an error message 
@@ -325,11 +325,11 @@ You will get an error message
 
 # tibble vs data.frame (cont.)
 
-With `data.frame` this is how we should create a new variable from the existing columns
+With `data.frame` this is how we should create a new variable from the existing columns.
 
 
 ```r
-df &lt;- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51)) 
+df &lt;- data.frame(height = c(150, 200, 160), weight = c(45, 60, 51)) 
 df$bmi &lt;- (df$weight)/(df$height^2)
 df
 ```
@@ -351,7 +351,7 @@ df
 
 
 ```r
-tbl &lt;- tibble(`patient id`=c(1, 2, 3))
+tbl &lt;- tibble(`patient id` = c(1, 2, 3))
 tbl
 ```
 
@@ -366,7 +366,7 @@ tbl
 
 
 ```r
-df &lt;- data.frame(`patient id`=c(1, 2, 3))
+df &lt;- data.frame(`patient id` = c(1, 2, 3))
 df
 ```
 
@@ -384,7 +384,7 @@ df
 
 
 ```r
-tbl &lt;- tibble(`1var`=c(1, 2, 3))
+tbl &lt;- tibble(`1var` = c(1, 2, 3))
 tbl
 ```
 
@@ -399,7 +399,7 @@ tbl
 
 
 ```r
-df &lt;- data.frame(`1var`=c(1, 2, 3))
+df &lt;- data.frame(`1var` = c(1, 2, 3))
 df
 ```
 
@@ -455,7 +455,7 @@ class: duke-orange, middle, center
 ---
 # Factors
 
-- A vector that is used to store categorical variables
+- A vector that is used to store categorical variables.
 
 - It can only contain predefined values. Hence, factors are useful when you know the possible values a variable may take. 
 
@@ -1013,7 +1013,7 @@ df %&gt;% .[[1]]
 
 # Offline reading materials
 
-Type the following codes to see more examples
+Type the following codes to see more examples:
 
 
 ```r

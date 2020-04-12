@@ -2,7 +2,7 @@
 title: "STA 326 2.0 Programming and Data Analysis with R"
 subtitle: "Introduction to the tidyverse"
 author: "Dr Thiyanga Talagala"
-date: "Online distance learning/teaching materials during the COVID-19 outbreak"
+date: "Online distance learning/teaching materials during the COVID-19 outbreak."
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -41,8 +41,8 @@ background-position: 98% 6%
 ### Setup
 
 ```r
-install.packages("tidyverse") # install the tidyverse packages
-library(tidyverse) # load the tidyverse packages
+install.packages("tidyverse") # install tidyverse packages
+library(tidyverse) # load tidyverse packages
 
 ```
 ![](tidyverseload.png)
@@ -195,16 +195,16 @@ background-position: 98% 6%
 
 # Tibble
 
-- Tibbles are data.frames
+- Tibbles are data frames.
 
-- A modern re-imagining of data frames
+- A modern re-imagining of data frames.
 
 
 # Create a tibble
 
 ```{r, comment=NA, message=FALSE}
 library(tidyverse) # library(tibble)
-first.tbl <- tibble(height=c(150, 200, 160), weight=c(45, 60, 51))
+first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
 first.tbl
 ```
 
@@ -226,13 +226,13 @@ as_tibble(iris)
 **tibble**
 
 ```{r, comment=NA}
-first.tbl <- tibble(height=c(150, 200, 160), weight=c(45, 60, 51))
+first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
 first.tbl
 ```
 
 **data.frame**
 ```{r, comment=NA}
-dataframe <- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51))
+dataframe <- data.frame(height = c(150, 200, 160), weight = c(45, 60, 51))
 dataframe
 ```
 
@@ -245,16 +245,16 @@ dataframe
 **tibble**
 
 ```{r, comment=NA}
-first.tbl <- tibble(height=c(150, 200, 160), weight=c(45, 60, 51), 
-                    bmi=(weight)/height^2)
+first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51), 
+                    bmi = (weight)/height^2)
 first.tbl
 ```
 
 **data.frame**
 
 ```{r, comment=NA, eval=FALSE}
-df <- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51), 
-                    bmi=(weight)/height^2) # Not working
+df <- data.frame(height = c(150, 200, 160), weight = c(45, 60, 51), 
+                    bmi = (weight)/height^2) # Not working
 ```
 
 You will get an error message 
@@ -267,10 +267,10 @@ You will get an error message
 
 # tibble vs data.frame (cont.)
 
-With `data.frame` this is how we should create a new variable from the existing columns
+With `data.frame` this is how we should create a new variable from the existing columns.
 
 ```{r, comment=NA}
-df <- data.frame(height=c(150, 200, 160), weight=c(45, 60, 51)) 
+df <- data.frame(height = c(150, 200, 160), weight = c(45, 60, 51)) 
 df$bmi <- (df$weight)/(df$height^2)
 df
 ```
@@ -284,12 +284,12 @@ df
 **Example 1**
 
 ```{r, comment=NA}
-tbl <- tibble(`patient id`=c(1, 2, 3))
+tbl <- tibble(`patient id` = c(1, 2, 3))
 tbl
 ```
 
 ```{r, comment=NA}
-df <- data.frame(`patient id`=c(1, 2, 3))
+df <- data.frame(`patient id` = c(1, 2, 3))
 df
 ```
 
@@ -299,12 +299,12 @@ df
 - In contrast to data frames, the variable names in tibbles can start with a number.
 
 ```{r, comment=NA}
-tbl <- tibble(`1var`=c(1, 2, 3))
+tbl <- tibble(`1var` = c(1, 2, 3))
 tbl
 ```
 
 ```{r, comment=NA}
-df <- data.frame(`1var`=c(1, 2, 3))
+df <- data.frame(`1var` = c(1, 2, 3))
 df
 ```
 
@@ -343,7 +343,7 @@ class: duke-orange, middle, center
 ---
 # Factors
 
-- A vector that is used to store categorical variables
+- A vector that is used to store categorical variables.
 
 - It can only contain predefined values. Hence, factors are useful when you know the possible values a variable may take. 
 
@@ -721,7 +721,7 @@ df %>% .[[1]]
 
 # Offline reading materials
 
-Type the following codes to see more examples
+Type the following codes to see more examples:
 
 ```{r, eval=FALSE}
 vignette("magrittr")
