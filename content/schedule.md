@@ -54,19 +54,19 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 - Introdcution to tibble, factors, pipe
 
-|[Slides](/slides/l7_intro_tidyverse.html)    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides](/slides/l7_intro_tidyverse.html)    	|  [Reading-Ch1](https://r4ds.had.co.nz/introduction.html)  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
 ---------------------------------------------------------------------------------------------------------
 
-#### Week 7: University is closed due to COVID-19 outbreak.
+#### Week 7: 
 
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 8: University is closed due to COVID-19 outbreak.
+#### Week 8: 
 
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
