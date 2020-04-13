@@ -208,6 +208,10 @@ first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
 first.tbl
 ```
 
+```{r, comment=NA, message=FALSE}
+class(first.tbl)
+```
+
 ---
 
 # Convert an existing dataframe to a tibble
