@@ -54,7 +54,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 - Introdcution to tibble, factors, pipe
 
-|[Slides](/slides/l7_intro_tidyverse.html)    	|  [Reading-Ch1](https://r4ds.had.co.nz/introduction.html)  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides](/slides/l7_intro_tidyverse.html)    	|  [Reading-Ch1](https://r4ds.had.co.nz/introduction.html)  	|  [Video Lecture ](/video.pdf)	|  [Problems](/video.pdf)	 	| [Answers](/video.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
