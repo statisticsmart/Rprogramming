@@ -33,12 +33,16 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l4.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 6: Simulations
+#### Week 6: Simulations 
+
+📝To be continued.
 
 |[Slides:5.1](/slides/l5_1.html)  [Slides:5.2](/slides/l5.html)| [Reading](https://rpubs.com/UTSdtay/montyhall)  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](/slides/Week6problem.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 ----------------------------------------------------------------------------------
+
+
 
 ### COVID-19 outbreak: study materials
 
