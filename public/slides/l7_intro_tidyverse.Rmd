@@ -336,6 +336,34 @@ df <- data.frame(x = 1:3, y = list(1:3, 1:4, 1:10)) ## Not working, error
 
 <span style="color:red">`Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  : arguments imply differing number of rows: 3, 4, 10`</span>
 
+---
+
+# Subsetting: tibble vs data.frame
+
+.pull-left[
+
+## data frame
+
+```{r, comment=NA, message=FALSE}
+df <- data.frame(x = 1:3, yz = c(10, 20, 30))
+df
+```
+
+]
+
+
+.pull-right[
+
+## tibble
+
+```{r,  comment=NA, message=FALSE}
+tbl <- tibble(x = 1:3, yz = c(10, 20, 30))
+tbl
+```
+
+
+]
+
 
 ---
 
