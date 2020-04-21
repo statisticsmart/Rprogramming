@@ -471,7 +471,33 @@ tbl[["y", exact = FALSE]]
 
 ]
 
+---
 
+## Functions work with both tibbles and dataframes
+
+```r
+names(), colnames(), rownames(), ncol(), nrow(),
+length() # length of the underlying list
+```
+.pull-left[
+```{r, comment=NA}
+tb <- tibble(a = 1:3)
+names(tb)
+colnames(tb)
+rownames(tb)
+nrow(tb); ncol(tb); length(tb)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+df <- data.frame(a = 1:3)
+names(df)
+colnames(df)
+rownames(df)
+nrow(df); ncol(df); length(df)
+```
+]
 ---
 
 class: duke-orange, middle, center
