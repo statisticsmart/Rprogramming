@@ -223,7 +223,7 @@ as_tibble(iris)
 
 ---
 
-# Convert a dataframe to a tibble
+# Convert a tibble to a dataframe
 
 ```{r, comment=NA}
 first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
@@ -498,6 +498,15 @@ rownames(df)
 nrow(df); ncol(df); length(df)
 ```
 ]
+---
+
+However, when using tibble, we can use some additional commands
+
+```{r, comment=NA}
+is.tibble(tb)
+glimpse(tb)
+```
+
 ---
 
 class: duke-orange, middle, center

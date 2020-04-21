@@ -257,7 +257,7 @@ as_tibble(iris)
 
 ---
 
-# Convert a dataframe to a tibble
+# Convert a tibble to a dataframe
 
 
 ```r
@@ -831,6 +831,36 @@ nrow(df); ncol(df); length(df)
 ]
 ---
 
+However, when using tibble, we can use some additional commands
+
+
+```r
+is.tibble(tb)
+```
+
+```
+Warning: `is.tibble()` is deprecated as of tibble 2.0.0.
+Please use `is_tibble()` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```
+[1] TRUE
+```
+
+```r
+glimpse(tb)
+```
+
+```
+Rows: 3
+Columns: 1
+$ a &lt;int&gt; 1, 2, 3
+```
+
+---
+
 class: duke-orange, middle, center
 
 # Factors
@@ -1097,7 +1127,7 @@ Levels: 1T 2T 3A 4A 5A 6B
 qplot(fv2, geom = "bar")
 ```
 
-![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -1120,7 +1150,7 @@ Levels: 3A 4A 5A 6B 1T 2T
 qplot(fv2, geom = "bar")
 ```
 
-![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
 
 ---
 
