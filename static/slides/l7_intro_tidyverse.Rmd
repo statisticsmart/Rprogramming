@@ -223,6 +223,17 @@ as_tibble(iris)
 
 ---
 
+# Convert a dataframe to a tibble
+
+```{r, comment=NA}
+first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
+class(first.tbl)
+first.tbl.df <- as.data.frame(first.tbl)
+class(first.tbl.df)
+```
+
+---
+
 # tibble vs. data.frame
 
 - Output

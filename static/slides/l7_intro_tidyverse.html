@@ -257,6 +257,29 @@ as_tibble(iris)
 
 ---
 
+# Convert a dataframe to a tibble
+
+
+```r
+first.tbl &lt;- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
+class(first.tbl)
+```
+
+```
+[1] "tbl_df"     "tbl"        "data.frame"
+```
+
+```r
+first.tbl.df &lt;- as.data.frame(first.tbl)
+class(first.tbl.df)
+```
+
+```
+[1] "data.frame"
+```
+
+---
+
 # tibble vs. data.frame
 
 - Output
@@ -980,7 +1003,7 @@ Levels: 1T 2T 3A 4A 5A 6B
 qplot(fv2, geom = "bar")
 ```
 
-![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -1003,7 +1026,7 @@ Levels: 3A 4A 5A 6B 1T 2T
 qplot(fv2, geom = "bar")
 ```
 
-![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
 
 ---
 
