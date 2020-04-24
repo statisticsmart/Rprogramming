@@ -223,6 +223,17 @@ as_tibble(iris)
 
 ---
 
+# Convert a tibble to a dataframe
+
+```{r, comment=NA}
+first.tbl <- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
+class(first.tbl)
+first.tbl.df <- as.data.frame(first.tbl)
+class(first.tbl.df)
+```
+
+---
+
 # tibble vs. data.frame
 
 - Output
@@ -340,13 +351,18 @@ df <- data.frame(x = 1:3, y = list(1:3, 1:4, 1:10)) ## Not working, error
 
 # Subsetting: tibble vs data.frame
 
+**Subsetting single columns:**
+
 .pull-left[
 
 ## data frame
 
 ```{r, comment=NA, message=FALSE}
-df <- data.frame(x = 1:3, yz = c(10, 20, 30))
+df <- data.frame(x = 1:3, 
+                 yz = c(10, 20, 30))
 df
+df[, "x"]
+df[, "x", drop=FALSE]
 ```
 
 ]
@@ -357,13 +373,139 @@ df
 ## tibble
 
 ```{r,  comment=NA, message=FALSE}
-tbl <- tibble(x = 1:3, yz = c(10, 20, 30))
+tbl <- tibble(x = 1:3, 
+              yz = c(10, 20, 30))
 tbl
+tbl[, "x"]
 ```
 
 
 ]
 
+---
+
+**Subsetting single columns (cont):**
+
+.pull-left[
+
+## tibble
+
+```{r,  comment=NA, message=FALSE}
+tbl <- tibble(x = 1:3, 
+              yz = c(10, 20, 30))
+tbl
+tbl[, "x"]
+
+```
+
+
+]
+
+.pull-right[
+
+
+```{r,  comment=NA, message=FALSE}
+# Method 1
+tbl[, "x", drop = TRUE]
+
+# Method 2
+as.data.frame(tbl)[, "x"]
+
+```
+
+
+]
+
+---
+# Subsetting single rows with the drop argument
+
+.pull-left[
+
+## dataframe
+
+```{r comment=NA, message=FALSE}
+df[1, , drop = TRUE]
+```
+
+]
+
+
+.pull-right[
+
+## tibble
+
+```{r comment=NA, message=FALSE}
+tbl[1, , drop = TRUE]
+as.list(tbl[1, ])
+```
+
+]
+
+---
+
+# Accessing non-existent columns
+
+.pull-left[
+
+## dataframe
+
+```{r comment=NA, message=FALSE}
+df$y
+
+df[["y", exact = FALSE]]
+```
+
+]
+
+.pull-right[
+
+## tibble
+
+```{r comment=NA, message=FALSE}
+tbl$y
+
+
+tbl[["y", exact = FALSE]]
+
+```
+
+]
+
+---
+
+## Functions work with both tibbles and dataframes
+
+```r
+names(), colnames(), rownames(), ncol(), nrow(),
+length() # length of the underlying list
+```
+.pull-left[
+```{r, comment=NA}
+tb <- tibble(a = 1:3)
+names(tb)
+colnames(tb)
+rownames(tb)
+nrow(tb); ncol(tb); length(tb)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+df <- data.frame(a = 1:3)
+names(df)
+colnames(df)
+rownames(df)
+nrow(df); ncol(df); length(df)
+```
+]
+---
+
+However, when using tibble, we can use some additional commands
+
+```{r, comment=NA}
+is.tibble(tb)
+glimpse(tb)
+```
 
 ---
 

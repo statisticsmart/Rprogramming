@@ -257,6 +257,29 @@ as_tibble(iris)
 
 ---
 
+# Convert a tibble to a dataframe
+
+
+```r
+first.tbl &lt;- tibble(height = c(150, 200, 160), weight = c(45, 60, 51))
+class(first.tbl)
+```
+
+```
+[1] "tbl_df"     "tbl"        "data.frame"
+```
+
+```r
+first.tbl.df &lt;- as.data.frame(first.tbl)
+class(first.tbl.df)
+```
+
+```
+[1] "data.frame"
+```
+
+---
+
 # tibble vs. data.frame
 
 - Output
@@ -453,6 +476,388 @@ df &lt;- data.frame(x = 1:3, y = list(1:3, 1:4, 1:10)) ## Not working, error
 
 &lt;span style="color:red"&gt;`Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  : arguments imply differing number of rows: 3, 4, 10`&lt;/span&gt;
 
+---
+
+# Subsetting: tibble vs data.frame
+
+**Subsetting single columns:**
+
+.pull-left[
+
+## data frame
+
+
+```r
+df &lt;- data.frame(x = 1:3, 
+                 yz = c(10, 20, 30))
+df
+```
+
+```
+  x yz
+1 1 10
+2 2 20
+3 3 30
+```
+
+```r
+df[, "x"]
+```
+
+```
+[1] 1 2 3
+```
+
+```r
+df[, "x", drop=FALSE]
+```
+
+```
+  x
+1 1
+2 2
+3 3
+```
+
+]
+
+
+.pull-right[
+
+## tibble
+
+
+```r
+tbl &lt;- tibble(x = 1:3, 
+              yz = c(10, 20, 30))
+tbl
+```
+
+```
+# A tibble: 3 x 2
+      x    yz
+  &lt;int&gt; &lt;dbl&gt;
+1     1    10
+2     2    20
+3     3    30
+```
+
+```r
+tbl[, "x"]
+```
+
+```
+# A tibble: 3 x 1
+      x
+  &lt;int&gt;
+1     1
+2     2
+3     3
+```
+
+
+]
+
+---
+
+**Subsetting single columns (cont):**
+
+.pull-left[
+
+## tibble
+
+
+```r
+tbl &lt;- tibble(x = 1:3, 
+              yz = c(10, 20, 30))
+tbl
+```
+
+```
+# A tibble: 3 x 2
+      x    yz
+  &lt;int&gt; &lt;dbl&gt;
+1     1    10
+2     2    20
+3     3    30
+```
+
+```r
+tbl[, "x"]
+```
+
+```
+# A tibble: 3 x 1
+      x
+  &lt;int&gt;
+1     1
+2     2
+3     3
+```
+
+
+]
+
+.pull-right[
+
+
+
+```r
+# Method 1
+tbl[, "x", drop = TRUE]
+```
+
+```
+[1] 1 2 3
+```
+
+```r
+# Method 2
+as.data.frame(tbl)[, "x"]
+```
+
+```
+[1] 1 2 3
+```
+
+
+]
+
+---
+# Subsetting single rows with the drop argument
+
+.pull-left[
+
+## dataframe
+
+
+```r
+df[1, , drop = TRUE]
+```
+
+```
+$x
+[1] 1
+
+$yz
+[1] 10
+```
+
+]
+
+
+.pull-right[
+
+## tibble
+
+
+```r
+tbl[1, , drop = TRUE]
+```
+
+```
+# A tibble: 1 x 2
+      x    yz
+  &lt;int&gt; &lt;dbl&gt;
+1     1    10
+```
+
+```r
+as.list(tbl[1, ])
+```
+
+```
+$x
+[1] 1
+
+$yz
+[1] 10
+```
+
+]
+
+---
+
+# Accessing non-existent columns
+
+.pull-left[
+
+## dataframe
+
+
+```r
+df$y
+```
+
+```
+[1] 10 20 30
+```
+
+```r
+df[["y", exact = FALSE]]
+```
+
+```
+[1] 10 20 30
+```
+
+]
+
+.pull-right[
+
+## tibble
+
+
+```r
+tbl$y
+```
+
+```
+Warning: Unknown or uninitialised column: `y`.
+```
+
+```
+NULL
+```
+
+```r
+tbl[["y", exact = FALSE]]
+```
+
+```
+Warning: `exact` ignored.
+```
+
+```
+NULL
+```
+
+]
+
+---
+
+## Functions work with both tibbles and dataframes
+
+```r
+names(), colnames(), rownames(), ncol(), nrow(),
+length() # length of the underlying list
+```
+.pull-left[
+
+```r
+tb &lt;- tibble(a = 1:3)
+names(tb)
+```
+
+```
+[1] "a"
+```
+
+```r
+colnames(tb)
+```
+
+```
+[1] "a"
+```
+
+```r
+rownames(tb)
+```
+
+```
+[1] "1" "2" "3"
+```
+
+```r
+nrow(tb); ncol(tb); length(tb)
+```
+
+```
+[1] 3
+```
+
+```
+[1] 1
+```
+
+```
+[1] 1
+```
+]
+
+.pull-right[
+
+```r
+df &lt;- data.frame(a = 1:3)
+names(df)
+```
+
+```
+[1] "a"
+```
+
+```r
+colnames(df)
+```
+
+```
+[1] "a"
+```
+
+```r
+rownames(df)
+```
+
+```
+[1] "1" "2" "3"
+```
+
+```r
+nrow(df); ncol(df); length(df)
+```
+
+```
+[1] 3
+```
+
+```
+[1] 1
+```
+
+```
+[1] 1
+```
+]
+---
+
+However, when using tibble, we can use some additional commands
+
+
+```r
+is.tibble(tb)
+```
+
+```
+Warning: `is.tibble()` is deprecated as of tibble 2.0.0.
+Please use `is_tibble()` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```
+[1] TRUE
+```
+
+```r
+glimpse(tb)
+```
+
+```
+Rows: 3
+Columns: 1
+$ a &lt;int&gt; 1, 2, 3
+```
 
 ---
 
@@ -722,7 +1127,7 @@ Levels: 1T 2T 3A 4A 5A 6B
 qplot(fv2, geom = "bar")
 ```
 
-![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -745,7 +1150,7 @@ Levels: 3A 4A 5A 6B 1T 2T
 qplot(fv2, geom = "bar")
 ```
 
-![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+![](l7_intro_tidyverse_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
 
 ---
 
