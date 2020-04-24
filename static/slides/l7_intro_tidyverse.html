@@ -465,7 +465,7 @@ tbl
 3     3 &lt;int [10]&gt;
 ```
 
-This feature is not available in `data.frames`.
+This feature is not available in `data.frame`.
 
 If we try to do this with a traditional data frame we get an error.
 
@@ -843,6 +843,14 @@ Warning: `is.tibble()` is deprecated as of tibble 2.0.0.
 Please use `is_tibble()` instead.
 This warning is displayed once every 8 hours.
 Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```
+[1] TRUE
+```
+
+```r
+is_tibble(tb) # is.tibble()` is deprecated as of tibble 2.0.0, Please use `is_tibble()` instead of is.tibble
 ```
 
 ```
