@@ -683,7 +683,8 @@ qplot(fv2, geom = "bar")
 You can change the order of levels
 
 ```{r, comment=NA, fig.height=3}
-fv2 <- factor(c("1T","2T","3A","4A", "5A", "6B", "3A"), levels = c("3A", "4A", "5A", "6B", "1T", "2T"))
+fv2 <- factor(c("1T","2T","3A","4A", "5A", "6B", "3A"), 
+              levels = c("3A", "4A", "5A", "6B", "1T", "2T"))
 fv2
 qplot(fv2, geom = "bar")
 ```
