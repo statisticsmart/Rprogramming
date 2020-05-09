@@ -548,7 +548,8 @@ levels(grades)
 
 ```{r, comment=NA}
 grade_factor_vctr <- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+  factor(c("A", "D", "A", "C", "B"), 
+         levels = c("A", "B", "C", "D", "E"))
 grade_factor_vctr
 levels(grade_factor_vctr)
 class(levels(grade_factor_vctr))

@@ -64,7 +64,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides-tibble](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#13)    	|  [Reading-Ch10](https://r4ds.had.co.nz/tibbles.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  [Problems-R4DS-Ch10.5](https://r4ds.had.co.nz/tibbles.html#exercises-20)	 	| [Answers](/video.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-|[Slides-factors](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#29)    	|  [Reading-Ch15](https://r4ds.had.co.nz/factors.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  [Problems-R4DS-Ch15.5.1](https://r4ds.had.co.nz/factors.html#modifying-factor-levels)	 	| [Answers](/video.pdf)	 | [R-script](/rscripts/factor_lab.R) |
+|[Slides-factors](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#29)    	|  [Reading-5.5.2](https://rstudio-education.github.io/hopr/r-objects.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  Problems	 	| Answers	 | [R-script](/rscripts/factor_lab.R) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:	|
 
 ---------------------------------------------------------------------------------------------------------

@@ -924,7 +924,8 @@ levels(grades)
 
 ```r
 grade_factor_vctr &lt;- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+  factor(c("A", "D", "A", "C", "B"), 
+         levels = c("A", "B", "C", "D", "E"))
 grade_factor_vctr
 ```
 
@@ -973,7 +974,8 @@ grade_character_vctr
 
 ```r
 grade_factor_vctr &lt;- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+  factor(c("A", "D", "A", "C", "B"), 
+         levels = c("A", "B", "C", "D", "E"))
 grade_factor_vctr
 ```
 
@@ -1039,7 +1041,8 @@ A B C D
 
 ```r
 grade_factor_vctr &lt;- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+  factor(c("A", "D", "A", "C", "B"), 
+         levels = c("A", "B", "C", "D", "E"))
 table(grade_factor_vctr)
 ```
 
