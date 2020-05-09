@@ -542,6 +542,19 @@ levels(grades)
 ```
 
 ---
+## Creating a factor vector (cont)
+
+- With factors all possible values of the variables can be defined under levels.
+
+```{r, comment=NA}
+grade_factor_vctr <- 
+  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+grade_factor_vctr
+levels(grade_factor_vctr)
+class(levels(grade_factor_vctr))
+```
+
+---
 
 # Character vector vs Factor
 
@@ -559,7 +572,7 @@ grade_character_vctr
 
 ```{r, comment=NA}
 grade_factor_vctr <- 
-  factor(c("A", "D", "A", "C", "B"))
+  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
 grade_factor_vctr
 ```
 
@@ -581,13 +594,7 @@ typeof(grade_character_vctr)
 typeof(grade_factor_vctr)
 ```
 
---
-- With factors all possible values of the variables can be defined under levels.
 
-```{r, comment=NA}
-grade_factor_vctr <- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
-```
 
 ---
 
@@ -600,12 +607,15 @@ grade_factor_vctr <-
 **Character vector output with table function**
 
 ```{r, comment=NA}
+grade_character_vctr <- c("A", "D", "A", "C", "B")
 table(grade_character_vctr)
 ```
 
 **Factor vector (with levels) output with table function**
 
 ```{r, comment=NA}
+grade_factor_vctr <- 
+  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
 table(grade_factor_vctr)
 ```
 

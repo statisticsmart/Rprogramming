@@ -1,0 +1,101 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "R Data Import and Export"
+author: "Dr Thiyanga Talagala"
+date: "Online distance learning/teaching materials during the COVID-19 outbreak."
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# Setup
+
+- Create a new project
+
+- Name it as "lesson_data_import"
+
+- Download the this data set and save it in your project.
+
+---
+
+# Import data from a csv file
+
+csv - comma seperated variables
+
+---
+
+# Importing csv file from a website
+
+```r
+maths <- read_csv("http://www.jeremy-oakley.staff.shef.ac.uk/mas113/maths.csv")
+```
+---
+
+# `read.csv` and `read_csv`
+
+- `read.csv`: base R.
+
+- `read_csv`: tidyverse.
+
+- `read.csv()` performs a similar job to `read_csv()`.
+
+- `read_csv()` works well with other parts of the tidyverse.
+
+- `read_csv()` is faster than `read.csv()`.
+
+- `read_csv()` will always read variables containing text as character variable.  In contrast, the base R function `read.csv()` will, by default, convert any character variable to a factor.
+
+<!--This is often not what you want, and can be overridden by passing the option stringsAsFactors = FALSE to read.csv().-->
+
+
+---
+
+# Writing data in R
+
+- `write_csv()` is in the `readr` package.
+
+- We can save tibble (or dataframe) to a csv file, using `write_csv()`
+
+- create a folder call data in your project.
+
+```r
+write_csv(gapminder, "data/mygapminder.csv")
+```
+
+
+---
+
+# Importing Excel .xlsx files
+
+readxl
+
+```r
+library(readxl)
+mydata <- read_xlsx("spreadsheet.xlsx)
+```
+
+---
+
+class: center, middle
+
+Slides available at: hellor.netlify.com
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
+
+
