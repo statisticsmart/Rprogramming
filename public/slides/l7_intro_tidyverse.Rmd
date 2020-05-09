@@ -572,7 +572,8 @@ grade_character_vctr
 
 ```{r, comment=NA}
 grade_factor_vctr <- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+  factor(c("A", "D", "A", "C", "B"), 
+         levels = c("A", "B", "C", "D", "E"))
 grade_factor_vctr
 ```
 
@@ -615,7 +616,8 @@ table(grade_character_vctr)
 
 ```{r, comment=NA}
 grade_factor_vctr <- 
-  factor(c("A", "D", "A", "C", "B"), levels = c("A", "B", "C", "D", "E"))
+  factor(c("A", "D", "A", "C", "B"), 
+         levels = c("A", "B", "C", "D", "E"))
 table(grade_factor_vctr)
 ```
 
