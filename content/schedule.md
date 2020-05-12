@@ -56,7 +56,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 - Introduction to the tidyverse
 
-- Introdcution to tibble, factors, pipe
+- Introdcution to tibble, factors, pipe (week 8)
 
 |[Slides-intro](/slides/l7_intro_tidyverse.html)    	|  [Reading-Ch1](https://r4ds.had.co.nz/introduction.html) [Reading-Ch2](https://r4ds.had.co.nz/explore-intro.html) 	|  [Video Lecture ](/video.pdf)	|  [Problems](/video.pdf)	 	| [Answers](/video.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
@@ -68,12 +68,16 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Slides-pipe (%>%)](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)    	|  [Reading-Ch18](https://r4ds.had.co.nz/pipes.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  Problems	 	| [Answers](/video.pdf)	 |
+
+#### Week 8: The Tidyverse
+
+#### Pipe operator
+
+|[Slides-pipe (%>%)](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)    	|  [Reading-Ch18](https://r4ds.had.co.nz/pipes.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  [Problems](/problems/pipe_questions.pdf)	 	| [Answers](/problems/pipe_answers.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 8: Data import and export
-
+#### Data import and export
 
 |[Slides](/slides/l8_import_data.html)    	|  [Reading-Ch11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	|  [Video Lecture](/video_tibble.pdf)|
 |:-:	|:-:	|:-:	|:-:		|
