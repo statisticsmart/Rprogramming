@@ -47,7 +47,7 @@ select(ir, Species)
 iris %>% as_tibble() %>% select(Species)
 ```
 
-2. Write the following code using the pipe operator.
+2. Rewrite the following code using the pipe operator.
 
 ```{r, comment=NA}
 str_c("good", sample(c("health", "food", "work", "day"), 1))
@@ -55,7 +55,7 @@ str_c("good", sample(c("health", "food", "work", "day"), 1))
 
 
 
-3. Write the following code using the pipe operator.
+3. Rewrite the following code using the pipe operator.
 
 
 ```{r, comment=NA}
