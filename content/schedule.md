@@ -52,7 +52,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 ```
 
-#### The Tidyverse
+#### Week 7: The Tidyverse
 
 - Introduction to the tidyverse
 
@@ -67,21 +67,19 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides-factors](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#29)    	|  [Reading-5.5.2](https://rstudio-education.github.io/hopr/r-objects.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  Problems	 	| Answers	 | [R-script](/rscripts/factor_lab.R) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:	|
 
----------------------------------------------------------------------------------------------------------
 
-#### Week 7: 
-
-
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides-pipe (%>%)](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)    	|  [Reading-Ch18](https://r4ds.had.co.nz/pipes.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  Problems	 	| [Answers](/video.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 8: 
+
+#### Week 8: Data import and export
 
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+|[Slides](/slides/l8_import_data.html)    	|  [Reading-Ch11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	|  [Video Lecture](/video_tibble.pdf)|
+|:-:	|:-:	|:-:	|:-:		|
 
-#### Week 9:
+#### Week 9: 
+
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
@@ -106,13 +104,20 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-
 #### Week 14: 
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 15: Recap
+
+#### Week 15: 
+
+|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+
+
+#### Week 16: Recap (instead of Independence holiday week)
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|

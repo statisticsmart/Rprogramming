@@ -21,79 +21,186 @@ output:
 ---
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+library(emo)
 ```
 
-# Setup
+# Data import with readr
 
-- Create a new project
+## R package
 
-- Name it as "lesson_data_import"
+`readr`: part of the core tidyverse.
 
-- Download the this data set and save it in your project.
+```{r,comment=NA}
+library(tidyverse)
+```
+
+## `readr` data import functions
+
+- `read_csv`: reads comma-delimited files.
+
+- `read_csv2`: reads semicolon-separated files
+
+- `read_tsv`: reads tab-delimited files
+
 
 ---
 
-# Import data from a csv file
+# 🛠 Import data from a .csv file
 
-csv - comma seperated variables
 
----
+## Syntax
 
-# Importing csv file from a website
 
 ```r
-maths <- read_csv("http://www.jeremy-oakley.staff.shef.ac.uk/mas113/maths.csv")
+datasetname <- read_csv("include_file_path")
+```
+
+When you run `read_csv`, it prints out the names and type of each column.
+
+.full-width[.content-box-yellow[Switch to R]]
+
+  
+---
+
+# If the file is saved inside the project folder
+
+.full-width[.content-box-green[Demo: Go to google classroom and watch the video importdatacsv1.mov]]
+
+
+# If the file is saved outside the project folder
+
+.full-width[.content-box-green[Demo: Go to google classroom and watch the video importdatacsv2.mov]]
+
+---
+
+# 🛠 Importing csv file from a website
+
+## Syntax
+
+```r
+datasetname <- read_csv("include url here")
+```
+
+## Example
+
+```{r, comment=NA, cache=TRUE}
+url <- "https://thiyanga.netlify.app/project/datasets/foodlabel.csv"
+foodlabel <- read_csv(url)
+```
+
+```{r,comment=NA}
+head(foodlabel, 1)
 ```
 ---
 
 # `read.csv` and `read_csv`
 
-- `read.csv`: base R.
+*  `read.csv` is in base R.
 
-- `read_csv`: tidyverse.
+*  `read_csv` is in tidyverse.
 
-- `read.csv()` performs a similar job to `read_csv()`.
+*  `read.csv()` performs a similar job to `read_csv()`.
 
-- `read_csv()` works well with other parts of the tidyverse.
+* `read_csv()` works well with other parts of the tidyverse.
 
-- `read_csv()` is faster than `read.csv()`.
+*  `read_csv()` is faster than `read.csv()`.
 
-- `read_csv()` will always read variables containing text as character variable.  In contrast, the base R function `read.csv()` will, by default, convert any character variable to a factor.
+*  `read_csv()` will always read variables containing text as character variable.  In contrast, the base R function `read.csv()` will, by default, convert any character variable to a factor.
 
 <!--This is often not what you want, and can be overridden by passing the option stringsAsFactors = FALSE to read.csv().-->
 
 
 ---
 
-# Writing data in R
+# 🛠 Writing to a File
+
+- We can save tibble (or dataframe) to a csv file, using `write_csv()`.
 
 - `write_csv()` is in the `readr` package.
 
-- We can save tibble (or dataframe) to a csv file, using `write_csv()`
 
-- create a folder call data in your project.
+## Syntax
 
 ```r
-write_csv(gapminder, "data/mygapminder.csv")
+write_csv(name_of_the_data_set_you_want_to_save, "path_to_write_to")
 ```
+
+## Example
+
+```r
+data(iris)
+# This will save inside your project folder
+write_csv(iris, "iris.csv") 
+# This will save inside the data folder which is inside your project folder
+write_csv(iris, "data/iris.csv") 
+```
+
+.full-width[.content-box-yellow[Switch to R]]
+
+
+.full-width[.content-box-green[Demo: Go to google classroom and watch the video exportdatacsv.mov]]
 
 
 ---
 
-# Importing Excel .xlsx files
+# 🛠 Importing Excel .xlsx files
 
-readxl
+## Syntax
 
 ```r
 library(readxl)
-mydata <- read_xlsx("spreadsheet.xlsx)
+mydata <- read_xlsx("file_path")
 ```
+
+.full-width[.content-box-yellow[Switch to R]]
+
+
+.full-width[.content-box-green[Demo: Go to google classroom and watch the video readxlsx.mov]]
+
+---
+# Importing SAS, SPSS and STATA files
+
+## SAS
+
+```r
+read_sas("mtcars.sas7bdat")
+write_sas(mtcars, "mtcars.sas7bdat")
+```
+## SPSS
+
+```r
+read_sav("mtcars.sav")
+write_sav(mtcars, "mtcars.sav")
+
+```
+## Stata
+```r
+read_dta("mtcars.dta")
+write_dta(mtcars, "mtcars.dta")
+```
+
+---
+
+# Importing other types of data
+
+
+- `feather`: for sharing with Python and other languages
+
+- `httr`: for web apis
+
+- `jsonlite`: for JSON
+
+- `rvest`: for web scraping
+
+- `xml2`: for XML
+
+.full-width[.content-box-blue[Working with feather, httr, jsonlite, rvest and xml2 is beyond the scope of the course.]]
 
 ---
 
 class: center, middle
 
-Slides available at: hellor.netlify.com
+Slides available at: hellor.netlify.app
 
 All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
 
