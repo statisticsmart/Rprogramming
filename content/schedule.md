@@ -64,7 +64,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides-tibble](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#13)    	|  [Reading-Ch10](https://r4ds.had.co.nz/tibbles.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  [Problems-R4DS-Ch10.5](https://r4ds.had.co.nz/tibbles.html#exercises-20)	 	| [Answers](/video.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-|[Slides-factors](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#29)    	|  [Reading-5.5.2](https://rstudio-education.github.io/hopr/r-objects.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  Problems	 	| Answers	 | [R-script](/rscripts/factor_lab.R) |
+|[Slides-factors](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#29)    	|  [Reading-5.5.2](https://rstudio-education.github.io/hopr/r-objects.html)  	|  [Video Lecture ](/video.pdf)	|  Problems	 	| Answers	 | [R-script](/rscripts/factor_lab.R) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
@@ -73,13 +73,13 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Pipe operator
 
-|[Slides-pipe (%>%)](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)    	|  [Reading-Ch18](https://r4ds.had.co.nz/pipes.html)  	|  [Video Lecture ](/video_tibble.pdf)	|  [Problems](/problems/pipe_questions.pdf)	 	| [Answers](/problems/pipe_answers.pdf)	 |
+|[Slides-pipe (%>%)](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)    	|  [Reading-Ch18](https://r4ds.had.co.nz/pipes.html)  	|  [Video Lecture ](/video.pdf)	|  [Problems](/problems/pipe_questions.pdf)	 	| [Answers](/problems/pipe_answers.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
 #### Data import and export
 
-|[Slides](/slides/l8_import_data.html)    	|  [Reading-Ch11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	|  [Video Lecture](/video_tibble.pdf)|
+|[Slides](/slides/l8_import_data.html)    	|  [Reading-Ch11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	|  [Video Lecture](/video.pdf)|
 |:-:	|:-:	|:-:	|:-:		|
 
 #### Week 9: 
