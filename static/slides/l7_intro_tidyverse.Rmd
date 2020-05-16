@@ -857,13 +857,14 @@ head(df, n = 2)
 **Rule 4**
 ```r
 head(as_tibble(df), n = 2)
-df %>% as_tibble %>% head(n = 2)
+df %>% as_tibble() %>%
+head(n = 2)
 
 ```
 
 
 ```{r, echo=FALSE, comment=NA}
-df %>% as_tibble %>% head(n = 2)
+df %>% as_tibble() %>% head(n = 2)
 ```
 
 ]

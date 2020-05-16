@@ -1407,7 +1407,8 @@ head(df, n = 2)
 **Rule 4**
 ```r
 head(as_tibble(df), n = 2)
-df %&gt;% as_tibble %&gt;% head(n = 2)
+df %&gt;% as_tibble() %&gt;%
+head(n = 2)
 
 ```
 
