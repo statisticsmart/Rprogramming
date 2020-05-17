@@ -12,6 +12,8 @@ Course meeting time: Tuesday, 4.00pm - 6.00pm
 
 Location: LCS1, New Faculty Complex, Faculty of Applied Sciences, USJ
 
+(Since, 11 March 2020 Virtual due to COVID-19 Outbreak.)
+
 This is a computer-heavy course and each class session will require computer use. 
 
 
