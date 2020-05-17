@@ -4,7 +4,6 @@
     <title>STA 326 2.0 Programming and Data Analysis with R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr Thiyanga Talagala" />
-    <meta name="date" content="2020-03-10" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,145 +16,364 @@
 class: center, middle, inverse, title-slide
 
 # STA 326 2.0 Programming and Data Analysis with R
-## Lesson 5.2: Simulations
+## Reproducible Reports with R-Markdown
 ### Dr Thiyanga Talagala
-### 2020-03-10
+### Online distance learning/teaching materials during the COVID-19 outbreak.
 
 ---
 
 
 
-
-
-
-background-image: url('montyhall.jpg')
+background-image: url(workflowds_communication.png)
 background-position: center
 background-size: contain
 
-# Monty Hall Problem
+# Data Science Workflow: Communicate
 
-.footer-note[.tiny[.green[Image Credit: ][Ben Bennetts ](https://hollamhouse.files.wordpress.com/2016/08/monty-hall-1.jpg)]]
+---
+
+# Necessary packages
+
+## Installation
+
+```r
+install.packages(knitr)
+install.packages(rmarkdown)
+```
+&lt;img src="knitrhex.png" alt="knitrhex" width="300"/&gt; &lt;img src="rmarkdown.png" alt="rmarkdown" width="250"/&gt;
 
 
 ---
 
-background-image: url('mstep1.png')
+# Introduction to R Markdown
+
+- Markdown is one of the world's most popular markup language.
+
+- R Markdown (in R)
+
+- Jupyter Notebooks (in Python)
+---
+
+# Advantages
+
+1. For .bold[.green[communicating]] to .bold[.red[decision makers]], who want to focus on the results and conclusions, not the code behind the analysis.
+
+1. For .bold[.green[collaborating]] with other .bold[.red[data scientists]], who are interested in both your conclusions, and how you reached them (i.e. the codes that you used to take the outputs).
+
+---
+class: duke-orange, center, middle
+
+# Your first rmarkdown document.
+
+
+---
+background-image: url(rmarkdown_step1.png)
+background-position: center
+background-size: contain
+
+
+---
+background-image: url(rmarkdown_step2.png)
+background-position: center
+background-size: contain
+
+---
+
+background-image: url(rmarkdown_step2_1.png)
 background-position: center
 background-size: contain
 ---
 
-background-image: url('mstep2.png')
+background-image: url(rmarkdown_step3.png)
 background-position: center
 background-size: contain
----
-
-# Monty Hall Problem: Rules
-
-- The host must always open a door that was not picked by the contestant.
-
---
-
-- The host must always open a door to reveal a goat and never the car.
-
---
-
-- The host must always offer the chance to switch between the originally chosen door and the remaining closed door.
-
-             Taken from https://en.wikipedia.org/wiki/Monty_Hall_problem
-
----
-class: center, middle, duke-orange
-
-# Let's play the game!
-
-Click here to play: http://www.math.ucsd.edu/~crypto/Monty/monty.html
-
-# Does switching increases the chance of winning the car?
-
-
----
-
-We use `sample` function to assign `car`, `goat`, `goat`, behind the doors.
-
-
-```r
-sample(c("car", "goat", "goat"))
-```
-
-```
-[1] "goat" "goat" "car" 
-```
-
-```r
-sample(c("car", "goat", "goat"))
-```
-
-```
-[1] "goat" "car"  "goat"
-```
-
---
-Here is a function that will take player's initial choice of door.
-
-
-```r
-select_first_door &lt;- function(door){
-  door.allocation &lt;- sample(c("car", "goat", "goat"))
-  door.allocation[door]
-}
-
-select_first_door(2) # My first choice is the 2nd door
-```
-
-```
-[1] "goat"
-```
-
---
-
-Modify your function so that it shows the player the door that the host selects. Hint: `sample` function act as a host.
-
----
-
-Modify your function so that it includes the player strategy (switch or stay) as an input, and returns the appropriate result.
-
-- Run your function 1000 times, for each strategy and report the proportion of times that car is selected. (You could put this
-in a loop and compute the proportion of times car shows.) 
-- How many times would you expect car to be selected out of 1000 runs? 
-
----
-
-# Approximating Pi = 3.14616
-
-`$$\frac{A_{circle}}{A_{square}}=\frac{\pi r^2}{4r^2}$$`
-Equation of a circle center around 0: `\(x^2+y^2=r^2\)`
-
-&lt;img src="monte_carlo_pi.png" width="400"&gt;
-
-Write a function to approximate `\(\pi\)` using Monte Carlo simulations.
-
----
-
-
-# Random Variable Generation: Inverse-Transform Method
-
-Let `\(X\)` be a random variable with CDF `\(F\)`. Since `\(F\)` is a nondecreasing function, the inverse function `\(F^{-1}\)` may be defined as
-`$$F^{-1}(y)=inf\{x: F(x)\geq y\}, 0 \leq y \leq 1.$$`
-
-It is easy to show that if `\(U \sim U(0, 1)\)`, then
-
-`$$X=F^{-1}(U)$$`
-
-has CDF `\(F\)`. Namely, since `\(F\)` is invertible and `\(P(U \leq u)=u\)`, we have
-
-`$$P(X \leq x)=P(F^{-1}(U)\leq x)=P(U\leq F(x))=F(x)$$`
-
-
----
 
 class: center, middle
 
-Slides available at: hellor.netlify.com
+---
+
+background-image: url(rmarkdown_step4.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+# Select a folder to save the document 
+
+![](rmarkdown_save1.png)
+---
+
+# Give a name to the document
+
+![](rmarkdown_save2.png)
+
+---
+
+background-image: url(rmarkdown_step5.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+background-image: url(rmarkdown_step6.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+background-image: url(rmarkdown_step7.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+# Edit .rmd file to include your content
+
+
+
+
+---
+
+# Change header
+
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+```
+
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+
+
+]
+
+
+---
+
+# Add content
+
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+```
+
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+
+
+
+]
+
+---
+
+# Add R codes
+
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+```
+
+&lt;img src="codechunk_example.png" alt="codechunk_example" width="100"/&gt;
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+
+```r
+rnorm(2)
+```
+
+```
+## [1] -1.301733 -0.941855
+```
+
+]
+
+
+---
+# Chunk options
+
+* `eval = FALSE` - prevents the code from being evaluated
+
+* `include = FALSE` - runs the code but doesn't show it in the final document
+
+* `echo = FALSE` - prevents the code but not the results from appearing
+
+* `message = FALSE` - prevents messages from appearing in the finished file
+
+* `results = "hide"` - hides the printed output
+
+* `error = TRUE` - causes the render to continue even if the code returns an error
+---
+
+# Text formatting
+
+.pull-left[
+
+## Code
+
+&lt;img src="text.png" alt="text" width="300"/&gt;
+
+
+]
+
+.pull-right[
+
+## Output
+
+*M1: This text is in italics.*
+
+_M2: This is also italics._
+
+**M3: This text is in bold.**
+
+__M4: This is also bold.__
+
+
+~~This text is strikethrough.~~
+
+]
+
+---
+
+# Type Equations
+
+.pull-left[
+
+````md
+This is $e^x$.
+````
+
+
+]
+
+.pull-right[
+
+This is `\(e^x\)`.
+
+
+
+]
+
+
+
+---
+
+# Mathematical Symbols
+
+---
+# Create PDF files
+
+```r
+tinytex::install_tinytex()
+
+```
+
+---
+
+Please read by blog post here: 
+
+https://thiyanga.netlify.app/post/greekletters/
+
+---
+
+
+
+---
+class: center, middle
+
+
+Slides available at: hellor.netlify.app
 
 All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
     </textarea>

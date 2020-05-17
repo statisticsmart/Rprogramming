@@ -10,7 +10,7 @@ Here's your roadmap for the semester!
 
 #### Week 1: University holiday - Independence day, February 4, 2020
 
-#### Week 2: Introduction and Basics of R programming
+#### Week 2: Introduction and Basics of R Programming
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
@@ -18,7 +18,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 3: Data structures (Matrices, Arrays, List, Data Frame, Factors) 
+#### Week 3: Data Structures (Matrices, Arrays, List, Data Frame, Factors) 
 
 |[Slides](/slides/l2.html) 	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices) [5.3 - 5.8]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](/problems/problems2.pdf) 	| [Answers](/answers/Week2Answers.pdf)  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
@@ -28,7 +28,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l3.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html#functions)[Section 2.3]    	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  [Problems](https://hellor.netlify.com/slides/l3.html#63) 	| [Answers](/answers/Week3Answers.pdf) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 5: Writing functions in R and Control Structures
+#### Week 5: Writing Functions in R and Control Structures
 
 |[Slides](/slides/l4.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
@@ -71,21 +71,21 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 8: The Tidyverse
 
-#### Pipe operator
+#### Pipe Operator
 
 |[Slides-pipe (%>%)](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)    	|  [Reading-Ch18](https://r4ds.had.co.nz/pipes.html)  	|  [Video Lecture ](/video.pdf)	|  [Problems](/problems/pipe_questions.pdf)	 	| [Answers](/problems/pipe_answers.pdf)	 |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-#### Data import and export
+#### Data Import and Export
 
-|[Slides](/slides/l8_import_data.html)    	|  [Reading-Ch11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	|  [Video Lecture](/video.pdf)|
+|[Slides](/slides/l8_import_data.html)    	|  [Reading-Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	|  [Video Lecture](/video.pdf)|
 |:-:	|:-:	|:-:	|:-:		|
 
-#### Week 9: 
+#### Week 9: Reproducible Reporting with R Markdown
 
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|Slides    	|  [Reading-Ch 27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) [Reference Guide](/cheatsheets/rmarkdown-reference.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 10: 
