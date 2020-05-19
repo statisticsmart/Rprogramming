@@ -85,8 +85,18 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 #### Week 9: Reproducible Reporting with R Markdown
 
 
-|Slides    	|  [Reading-Ch 27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) [Reference Guide](/cheatsheets/rmarkdown-reference.pdf) 	|  Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+|[Slides](/slides/l9_rmarkdown.html)    	|  [Reading-Ch 27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) [Reference Guide](/cheatsheets/rmarkdown-reference.pdf) 	|  [Video Lecture](/video.pdf)   |R Labwork ⤵️|
+|:-:	|:-:	|:-:	|:-:	|:-:		|
+
+🖥️ **R Labwork**
+
+[Rmarkdown_practical_lesson1.Rmd](/rscripts/Rmarkdown_practical_lesson1.Rmd)
+
+[sampleimage.png](/rscripts/sampleimage.png)
+
+[Output: Rmarkdown_practical_lesson1.html](/rscripts/Rmarkdown_practical_lesson1.html)
+
+
 
 #### Week 10: 
 

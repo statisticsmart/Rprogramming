@@ -40,6 +40,8 @@ background-size: contain
 install.packages(knitr)
 install.packages(rmarkdown)
 ```
+
+
 &lt;img src="knitrhex.png" alt="knitrhex" width="300"/&gt; &lt;img src="rmarkdown.png" alt="rmarkdown" width="250"/&gt;
 
 
@@ -47,11 +49,19 @@ install.packages(rmarkdown)
 
 # Introduction to R Markdown
 
+- R Markdown is a file format for making dynamic documents with R.
+
+- R Markdown allows you to organize your code, outputs, content and commentary in one place.
+
+- These documents are self-contained and fully reproducible which makes it very easy to share.
+
+- R Markdown document is written in markdown.
+
 - Markdown is one of the world's most popular markup language.
+    - R Markdown (in R)
+    - Jupyter Notebooks (in Python)
+    
 
-- R Markdown (in R)
-
-- Jupyter Notebooks (in Python)
 ---
 
 # Advantages
@@ -60,6 +70,10 @@ install.packages(rmarkdown)
 
 1. For .bold[.green[collaborating]] with other .bold[.red[data scientists]], who are interested in both your conclusions, and how you reached them (i.e. the codes that you used to take the outputs).
 
+1. As an environment in which to do data science, as a modern day lab notebook where you can capture not only .bold[.blue[what you did]], but also .bold[.blue[what you were thinking]].
+
+
+*From R for Data Science by Hadley Wickham and Grrett Grolemud.*
 ---
 class: duke-orange, center, middle
 
@@ -92,11 +106,22 @@ class: center, middle
 
 ---
 
+background-image: url(componentsrmd.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
 background-image: url(rmarkdown_step4.png)
 background-position: center
 background-size: contain
 
 class: center, middle
+
+
+
 
 ---
 
@@ -135,9 +160,9 @@ class: center, middle
 
 ---
 
+class: duke-orange, center, middle
+
 # Edit .rmd file to include your content
-
-
 
 
 ---
@@ -274,7 +299,7 @@ rnorm(2)
 ```
 
 ```
-## [1] -1.301733 -0.941855
+## [1] -0.1648972  0.8114880
 ```
 
 ]
@@ -326,47 +351,70 @@ __M4: This is also bold.__
 
 ---
 
-# Type Equations
+# Mathematical Equations
 
-.pull-left[
+**The code:**
 
-````md
-This is $e^x$.
-````
+![](equationsrmd.png)
 
 
-]
+**Output:**
 
-.pull-right[
+The general formula for the probability density function of the normal distribution with mean `\(\mu\)` and variance `\(\sigma\)` is given by
 
-This is `\(e^x\)`.
-
-
-
-]
+$$
+f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}.
+$$
 
 
+## How to type Greek letters?
 
----
-
-# Mathematical Symbols
-
----
-# Create PDF files
-
-```r
-tinytex::install_tinytex()
-
-```
-
----
-
-Please read by blog post here: 
+Please read my blog post here: 
 
 https://thiyanga.netlify.app/post/greekletters/
 
 ---
 
+### Generate PDF and WORD documents
+
+.pull-left[
+
+**Create a PDF document**
+
+![](pdfrmd.png)
+
+Requires (MiKTex on Windows, MacTex 2013+ on OS X, Tex Live 2013+ on Linux) OR
+
+Install tinytex in R. Type the following code on R Console.
+```r
+tinytex::install_tinytex()
+```
+]
+
+
+
+
+.pull-right[
+
+**Create a Word document**
+
+![](wordrmd.png)
+
+Requires an installation of MS Word.
+
+]
+
+---
+
+# R Markdown Demonstration
+
+&gt; Download [Rmarkdown_practical_lesson1.Rmd](/rscripts/Rmarkdown_practical_lesson1.Rmd)
+
+&gt; Download [sampleimage.jpg](/rscripts/sampleimage.jpg)
+
+&gt; Before running the file `Rmarkdown_practical_lesson1.Rmd`, save `Rmarkdown_practical_lesson1.Rmd` and `sampleimage.jpg` into your current working directory. 
+
+&gt; Follow the video lecture for instructions. 
 
 
 ---
