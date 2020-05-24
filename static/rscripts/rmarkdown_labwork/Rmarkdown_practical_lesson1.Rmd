@@ -114,14 +114,14 @@ qplot(data=iris, x=Sepal.Length, y=Sepal.Width, geom="point")
 Example 7: Include a figure caption
 
 ```{r, message=FALSE, warning=FALSE, fig.cap="Scatterplot of Sepal Width vs Sepal Length"}
-library(tidyverse)
+
 qplot(data=iris, x=Sepal.Length, y=Sepal.Width, geom="point")
 ```
 
-Example 7: Control figure soze
+Example 8: Control figure size
 
 ```{r, message=FALSE, warning=FALSE, fig.cap="Scatterplot of Sepal Width vs Sepal Length", out.width="50%", out.height="50%"}
-library(tidyverse)
+
 qplot(data=iris, x=Sepal.Length, y=Sepal.Width, geom="point")
 ```
 
