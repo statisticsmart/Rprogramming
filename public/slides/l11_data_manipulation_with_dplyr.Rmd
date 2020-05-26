@@ -1,0 +1,107 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Data Manipulation with dplyr"
+author: "Dr Thiyanga Talagala"
+date: "Online distance learning/teaching materials during the COVID-19 outbreak."
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(emo)
+```
+
+
+# packages
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+
+```
+
+---
+# `dplyr` verbs
+
+- `filter`
+
+- `select`
+
+- `mutate`
+
+- `summarise`
+
+- `arrange`
+
+- `group_by`
+
+---
+
+# Dataset
+
+```{r}
+library(gapminder)
+str(gapminder)
+head(gapminder)
+```
+
+---
+
+# `filter`
+
+- Picks observations by their values.
+
+- Takes logical expressions and returns the rows for which all are `TRUE`.
+
+---
+
+# `select`
+
+- Pick variables by their names.
+
+---
+
+# `mutate`
+
+- Create new variables with functions of existing variables
+
+---
+
+# `summarise`
+
+- Collapse many values down to a single summary
+
+---
+
+# `arrange`
+
+- Reorder the rows
+
+
+---
+
+# `group_by`
+---
+class: center, middle
+
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
+
+
