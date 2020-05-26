@@ -98,9 +98,11 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 
 
-#### Week 10: 
+#### Week 10: Data Wrangling
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+#### Reshaping data
+
+|[Slides](/static/slides/l10_reshaping_data.html)    	|  [Reading-R4DS 12.3](https://r4ds.had.co.nz/tidy-data.html)  	|  [Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-12.3.3 Exercises](https://r4ds.had.co.nz/tidy-data.html)	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 11: 
