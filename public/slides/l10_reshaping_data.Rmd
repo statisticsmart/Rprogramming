@@ -237,7 +237,7 @@ Melbourne <-
 
 ```{r, comment=NA, message=FALSE}
 Melbourne %>%
-  separate(Date, c("day", "month", "year"), sep="-")
+  separate(Date, into=c("day", "month", "year"), sep="-")
 ```
 
 

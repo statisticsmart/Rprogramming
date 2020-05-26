@@ -216,6 +216,65 @@ corona_wide_format
 
 ![](tidyr/longer_wider.png)
 
+
+---
+# `pivot_longer` and `pivot_wider`
+
+```{r, comment=NA}
+profit <- tibble(
+year = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+quarter = c( 1, 2, 3, 4, 2, 3, 4),
+income = c(2, NA, 3, NA, 4, 5, 6)
+)
+profit
+```
+---
+# `pivot_longer` and `pivot_wider` 
+
+```{r, comment=NA, echo=FALSE, comment=NA}
+profit <- tibble(
+year = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+quarter = c( 1, 2, 3, 4, 2, 3, 4),
+income = c(2, NA, 3, NA, 4, 5, 6)
+)
+profit
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+profit %>%
+pivot_wider(names_from = year, values_from = income)
+```
+---
+
+# Missing values
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+profit %>%
+pivot_wider(names_from = year, values_from = income)
+```
+
+```r
+profit %>%
+pivot_wider(names_from = year, values_from = income) %>%
+*pivot_longer(
+*cols = c(`2015`, `2016`),
+*names_to = "year",
+*values_to = "income",
+*values_drop_na = TRUE
+)
+```
+
+```{r, echo=FALSE, comment=NA, message=FALSE}
+profit %>%
+pivot_wider(names_from = year, values_from = income) %>%
+pivot_longer(
+cols = c(`2015`, `2016`),
+names_to = "year",
+values_to = "income",
+values_drop_na = TRUE
+)
+```
+
 ---
 class: duke-orange, center, middle
 
@@ -237,7 +296,7 @@ Melbourne <-
 
 ```{r, comment=NA, message=FALSE}
 Melbourne %>%
-  separate(Date, c("day", "month", "year"), sep="-")
+  separate(Date, into=c("day", "month", "year"), sep="-")
 ```
 
 

@@ -280,6 +280,102 @@ Corona %&gt;%
 
 ![](tidyr/longer_wider.png)
 
+
+---
+# `pivot_longer` and `pivot_wider`
+
+
+```r
+profit &lt;- tibble(
+year = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+quarter = c( 1, 2, 3, 4, 2, 3, 4),
+income = c(2, NA, 3, NA, 4, 5, 6)
+)
+profit
+```
+
+```
+# A tibble: 7 x 3
+   year quarter income
+  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1  2015       1      2
+2  2015       2     NA
+3  2015       3      3
+4  2015       4     NA
+5  2016       2      4
+6  2016       3      5
+7  2016       4      6
+```
+---
+# `pivot_longer` and `pivot_wider` 
+
+
+```
+# A tibble: 7 x 3
+   year quarter income
+  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1  2015       1      2
+2  2015       2     NA
+3  2015       3      3
+4  2015       4     NA
+5  2016       2      4
+6  2016       3      5
+7  2016       4      6
+```
+
+
+```r
+profit %&gt;%
+pivot_wider(names_from = year, values_from = income)
+```
+
+```
+# A tibble: 4 x 3
+  quarter `2015` `2016`
+    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1       1      2     NA
+2       2     NA      4
+3       3      3      5
+4       4     NA      6
+```
+---
+
+# Missing values
+
+
+```
+# A tibble: 4 x 3
+  quarter `2015` `2016`
+    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1       1      2     NA
+2       2     NA      4
+3       3      3      5
+4       4     NA      6
+```
+
+```r
+profit %&gt;%
+pivot_wider(names_from = year, values_from = income) %&gt;%
+*pivot_longer(
+*cols = c(`2015`, `2016`),
+*names_to = "year",
+*values_to = "income",
+*values_drop_na = TRUE
+)
+```
+
+
+```
+# A tibble: 5 x 3
+  quarter year  income
+    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+1       1 2015       2
+2       2 2016       4
+3       3 2015       3
+4       3 2016       5
+5       4 2016       6
+```
+
 ---
 class: duke-orange, center, middle
 
@@ -313,7 +409,7 @@ Melbourne &lt;-
 
 ```r
 Melbourne %&gt;%
-  separate(Date, c("day", "month", "year"), sep="-")
+  separate(Date, into=c("day", "month", "year"), sep="-")
 ```
 
 ```
