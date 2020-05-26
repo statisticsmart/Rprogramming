@@ -102,7 +102,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Reshaping data
 
-|[Slides](/static/slides/l10_reshaping_data.html)    	|  [Reading-R4DS 12.3](https://r4ds.had.co.nz/tidy-data.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-12.3.3 Exercises](https://r4ds.had.co.nz/tidy-data.html)	| Answers |
+|[Slides](/slides/l10_reshaping_data.html)    	|  [Reading-R4DS 12.3](https://r4ds.had.co.nz/tidy-data.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-12.3.3 Exercise](https://r4ds.had.co.nz/tidy-data.html)	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
 #### Week 11: 
