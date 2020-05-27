@@ -29,12 +29,53 @@ library(emo)
 
 
 ```{r, comment=NA, message=FALSE, warning=FALSE}
-library(tidyverse)
+library(tidyverse) # TO obtain dplyr
 library(magrittr)
+```
 
+<img src="dplyr.png" alt="knitrhex" width="250"/> <img src="magrittrlogo.png" alt="rmarkdown" width="250"/>
+
+---
+
+# Dataset
+
+```{r, comment=NA, message=FALSE}
+library(gapminder)
+str(gapminder)
+head(gapminder)
 ```
 
 ---
+# Dataset (cont.)
+
+```{r, comment=NA, message=FALSE}
+glimpse(gapminder)
+```
+
+---
+# Dataset (cont.)
+
+```{r, comment=NA, message=FALSE}
+tbl_df(gapminder)
+```
+
+---
+
+# Dataset (cont.)
+
+```{r, comment=NA, out.height="50%", eval=FALSE}
+library(skimr)
+skim(gapminder)
+```
+
+<img src="skim.png" alt="skim" width="600"/>
+
+---
+background-image: url(dplyr.png)
+background-size: 100px
+background-position: 98% 6%
+
+
 # `dplyr` verbs
 
 - `filter`
@@ -50,52 +91,294 @@ library(magrittr)
 - `group_by`
 
 ---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
 
-# Dataset
-
-```{r}
-library(gapminder)
-str(gapminder)
-head(gapminder)
-```
-
----
 
 # `filter`
 
-- Picks observations by their values.
+- Pick observations by their values.
 
 - Takes logical expressions and returns the rows for which all are `TRUE`.
 
+```{r, comment=NA, message=FALSE}
+filter(gapminder, lifeExp < 50)
+```
+
 ---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `filter` (cont)
+
+
+```{r, comment=NA, message=FALSE}
+filter(gapminder, country == "Sri Lanka")
+# gapminder %>% filter(country == "Sri Lanka")
+```
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `filter` (cont)
+
+
+```{r, comment=NA, message=FALSE}
+filter(gapminder, country %in% c("Sri Lanka", "Australia"))
+```
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `filter` (cont)
+
+```r
+filter(gapminder, country %in% c("Sri Lanka", "Australia")) %>%
+* head()
+```
+
+```{r, comment=NA, message=FALSE, echo=FALSE}
+filter(gapminder, country %in% c("Sri Lanka", "Australia")) %>%
+ head()
+```
+
+```r
+filter(gapminder, country %in% c("Sri Lanka", "Australia")) %>%
+* tail()
+```
+
+```{r, comment=NA, message=FALSE, echo=FALSE}
+filter(gapminder, country %in% c("Sri Lanka", "Australia")) %>%
+ tail()
+```
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
 
 # `select`
 
 - Pick variables by their names.
 
+
+```{r, comment=NA, message=FALSE}
+head(gapminder, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(gapminder, year:gdpPercap)
+```
+
 ---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+```{r, comment=NA, message=FALSE}
+head(gapminder, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(gapminder, year, gdpPercap)
+```
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+```{r, comment=NA, message=FALSE}
+head(gapminder, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(gapminder, -c(year, gdpPercap))
+```
+
+---
+
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `select` (cont.)
+
+
+```{r, comment=NA, message=FALSE}
+head(gapminder, 3)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+select(gapminder, -(year:gdpPercap))
+```
+
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
 
 # `mutate`
 
 - Create new variables with functions of existing variables
 
----
+```{r, comment=NA, message=FALSE, warning=FALSE}
+gapminder %>%
+mutate(gdp = pop * gdpPercap)
+```
 
-# `summarise`
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `summarise`(British) or `summarize` (US)
 
 - Collapse many values down to a single summary
 
+```{r, comment=NA, message=FALSE, warning=FALSE}
+gapminder %>%
+  summarise(
+    lifeExp_mean=mean(lifeExp),
+    pop_mean=mean(pop),
+    gdpPercap_mean=mean(gdpPercap))
+```
+
+
 ---
+
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
 
 # `arrange`
 
 - Reorder the rows
 
+```{r, comment=NA, message=FALSE, warning=FALSE}
+arrange(gapminder, desc(lifeExp))
+```
+
 
 ---
+
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
 
 # `group_by`
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Japan_SL <- filter(gapminder, country %in% c("Japan", "Sri Lanka"))
+Japan_SL
+```
+
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Japan_SL_grouped <- Japan_SL %>% group_by(country)
+Japan_SL_grouped
+```
+
 ---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `group_by` (cont.)
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Japan_SL %>% summarise(mean_lifeExp=mean(lifeExp))
+```
+
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Japan_SL_grouped %>% summarise(mean_lifeExp=mean(lifeExp))
+```
+
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# `rename`
+
+```{r, comment=NA, message=FALSE}
+head(gapminder, 3)
+```
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+rename(gapminder,
+       `life expectancy`=lifeExp,
+       population=pop) # new_name = old_name
+```
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# Combine multiple operations
+
+
+```{r, comment=NA, message=FALSE}
+gapminder %>%
+filter(country == 'China') %>% head(2)
+```
+
+
+```{r, comment=NA, message=FALSE}
+gapminder %>%
+filter(country == 'China') %>% summarise(lifemax=max(lifeExp))
+```
+
+```r
+gapminder %>%
+filter(country == 'China') %>%
+*filter(lifeExp == max(lifeExp))
+```
+
+```{r, comment=NA, message=FALSE, echo=FALSE}
+gapminder %>%
+filter(country == 'China') %>%
+filter(lifeExp == max(lifeExp))
+```
+
+---
+background-image: url(dplyr.png)
+background-size: 70px
+background-position: 98% 6%
+
+# Combine multiple operations
+
+```{r, comment=NA}
+gapminder %>%
+filter(continent == 'Asia') %>%
+group_by(country) %>%
+filter(lifeExp == max(lifeExp)) %>%
+arrange(desc(year))
+```
+
+---
+
+
 class: center, middle
 
 
