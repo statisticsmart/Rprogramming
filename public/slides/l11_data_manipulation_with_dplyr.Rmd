@@ -90,6 +90,8 @@ background-position: 98% 6%
 
 - `group_by`
 
+- `rename`
+
 ---
 background-image: url(dplyr.png)
 background-size: 70px
@@ -98,7 +100,7 @@ background-position: 98% 6%
 
 # `filter`
 
-- Pick observations by their values.
+- Picks observations by their values.
 
 - Takes logical expressions and returns the rows for which all are `TRUE`.
 
@@ -164,7 +166,7 @@ background-position: 98% 6%
 
 # `select`
 
-- Pick variables by their names.
+- Picks variables by their names.
 
 
 ```{r, comment=NA, message=FALSE}
@@ -232,7 +234,7 @@ background-position: 98% 6%
 
 # `mutate`
 
-- Create new variables with functions of existing variables
+- Creates new variables with functions of existing variables
 
 ```{r, comment=NA, message=FALSE, warning=FALSE}
 gapminder %>%
@@ -280,6 +282,7 @@ background-position: 98% 6%
 
 # `group_by`
 
+- Takes an existing tibble and converts it into a grouped tibble where operations are performed "by group". ungroup() removes grouping.
 
 ```{r, comment=NA, message=FALSE, warning=FALSE}
 Japan_SL <- filter(gapminder, country %in% c("Japan", "Sri Lanka"))
@@ -318,6 +321,8 @@ background-size: 70px
 background-position: 98% 6%
 
 # `rename`
+
+- Rename variables
 
 ```{r, comment=NA, message=FALSE}
 head(gapminder, 3)
@@ -378,6 +383,284 @@ arrange(desc(year))
 
 ---
 
+class: duke-orange, center, middle
+
+# Combine Data Sets
+
+
+---
+
+# Combine Data Sets
+
+.pull-left[
+## Mutating joins
+
+- `left_join`
+
+- `right_join`
+
+- `inner_join`
+
+- `full_join`
+
+## Set operations
+
+- `intersect`
+
+- `union`
+
+]
+
+.pull-right[
+
+## Binding
+
+- `bind_rows`
+
+- `bind_cols`
+
+]
+
+---
+# `left_join`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE}
+left_join(first, second, by="x1")
+```
+]
+
+---
+# `right_join`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE}
+right_join(first, second, by="x1")
+```
+]
+---
+# `inner_join`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE}
+inner_join(first, second, by="x1")
+```
+]
+---
+
+# `full_join`
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE}
+full_join(first, second, by="x1")
+```
+]
+---
+# Set operations
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("D", "B", "C"), x2=c(10, 2, 3))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+**intersect**
+```{r, comment=NA, message=FALSE}
+intersect(first, second)
+```
+
+**union**
+```{r, comment=NA, message=FALSE}
+union(first, second)
+```
+]
+
+---
+
+# Set operations (cont.)
+
+```r
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+*second <- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+**intersect**
+```{r, comment=NA, message=FALSE}
+intersect(first, second)
+```
+
+**union**
+```{r, comment=NA, message=FALSE}
+union(first, second)
+```
+]
+
+---
+
+# Binding
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+**bind_rows**
+```{r, comment=NA, message=FALSE}
+bind_rows(first, second)
+```
+
+
+]
+
+---
+# Binding (cont.)
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+first <- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second <- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+```{r, comment=NA, message=FALSE}
+first
+second
+
+```
+
+]
+
+.pull-right[
+**bind_cols**
+```{r, comment=NA, message=FALSE}
+bind_cols(first, second)
+```
+]
+
+---
+
+background-image: url('dplyrcs1.png')
+background-position: center
+background-size: contain
+
+---
+
+background-image: url('dplyrcs2.png')
+background-position: center
+background-size: contain
+---
 
 class: center, middle
 
@@ -386,5 +669,5 @@ Slides available at: hellor.netlify.app
 
 All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
 
-
+Acknowledgement: R Studio Education Team
 

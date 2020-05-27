@@ -148,6 +148,8 @@ background-position: 98% 6%
 
 - `group_by`
 
+- `rename`
+
 ---
 background-image: url(dplyr.png)
 background-size: 70px
@@ -156,7 +158,7 @@ background-position: 98% 6%
 
 # `filter`
 
-- Pick observations by their values.
+- Picks observations by their values.
 
 - Takes logical expressions and returns the rows for which all are `TRUE`.
 
@@ -296,7 +298,7 @@ background-position: 98% 6%
 
 # `select`
 
-- Pick variables by their names.
+- Picks variables by their names.
 
 
 
@@ -476,7 +478,7 @@ background-position: 98% 6%
 
 # `mutate`
 
-- Create new variables with functions of existing variables
+- Creates new variables with functions of existing variables
 
 
 ```r
@@ -568,6 +570,7 @@ background-position: 98% 6%
 
 # `group_by`
 
+- Takes an existing tibble and converts it into a grouped tibble where operations are performed "by group". ungroup() removes grouping.
 
 
 ```r
@@ -660,6 +663,8 @@ background-size: 70px
 background-position: 98% 6%
 
 # `rename`
+
+- Rename variables
 
 
 ```r
@@ -786,6 +791,558 @@ arrange(desc(year))
 
 ---
 
+class: duke-orange, center, middle
+
+# Combine Data Sets
+
+
+---
+
+# Combine Data Sets
+
+.pull-left[
+## Mutating joins
+
+- `left_join`
+
+- `right_join`
+
+- `inner_join`
+
+- `full_join`
+
+## Set operations
+
+- `intersect`
+
+- `union`
+
+]
+
+.pull-right[
+
+## Binding
+
+- `bind_rows`
+
+- `bind_cols`
+
+]
+
+---
+# `left_join`
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1    x3    
+  &lt;chr&gt; &lt;chr&gt; 
+1 A     red   
+2 B     yellow
+3 D     green 
+```
+
+]
+
+.pull-right[
+
+
+```r
+left_join(first, second, by="x1")
+```
+
+```
+# A tibble: 3 x 3
+  x1       x2 x3    
+  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; 
+1 A         1 red   
+2 B         2 yellow
+3 C         3 &lt;NA&gt;  
+```
+]
+
+---
+# `right_join`
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1    x3    
+  &lt;chr&gt; &lt;chr&gt; 
+1 A     red   
+2 B     yellow
+3 D     green 
+```
+
+]
+
+.pull-right[
+
+
+```r
+right_join(first, second, by="x1")
+```
+
+```
+# A tibble: 3 x 3
+  x1       x2 x3    
+  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; 
+1 A         1 red   
+2 B         2 yellow
+3 D        NA green 
+```
+]
+---
+# `inner_join`
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1    x3    
+  &lt;chr&gt; &lt;chr&gt; 
+1 A     red   
+2 B     yellow
+3 D     green 
+```
+
+]
+
+.pull-right[
+
+
+```r
+inner_join(first, second, by="x1")
+```
+
+```
+# A tibble: 2 x 3
+  x1       x2 x3    
+  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; 
+1 A         1 red   
+2 B         2 yellow
+```
+]
+---
+
+# `full_join`
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("A", "B", "D"), x3=c("red", "yellow" , "green"))
+```
+
+.pull-left[
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1    x3    
+  &lt;chr&gt; &lt;chr&gt; 
+1 A     red   
+2 B     yellow
+3 D     green 
+```
+
+]
+
+.pull-right[
+
+
+```r
+full_join(first, second, by="x1")
+```
+
+```
+# A tibble: 4 x 3
+  x1       x2 x3    
+  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; 
+1 A         1 red   
+2 B         2 yellow
+3 C         3 &lt;NA&gt;  
+4 D        NA green 
+```
+]
+---
+# Set operations
+
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("D", "B", "C"), x2=c(10, 2, 3))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 D        10
+2 B         2
+3 C         3
+```
+
+]
+
+.pull-right[
+**intersect**
+
+```r
+intersect(first, second)
+```
+
+```
+# A tibble: 2 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 B         2
+2 C         3
+```
+
+**union**
+
+```r
+union(first, second)
+```
+
+```
+# A tibble: 4 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+4 D        10
+```
+]
+
+---
+
+# Set operations (cont.)
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+*second &lt;- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 D        10
+2 B        20
+3 C        30
+```
+
+]
+
+.pull-right[
+**intersect**
+
+```r
+intersect(first, second)
+```
+
+```
+# A tibble: 0 x 2
+# … with 2 variables: x1 &lt;chr&gt;, x2 &lt;dbl&gt;
+```
+
+**union**
+
+```r
+union(first, second)
+```
+
+```
+# A tibble: 6 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+4 D        10
+5 B        20
+6 C        30
+```
+]
+
+---
+
+# Binding
+
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 D        10
+2 B        20
+3 C        30
+```
+
+]
+
+.pull-right[
+**bind_rows**
+
+```r
+bind_rows(first, second)
+```
+
+```
+# A tibble: 6 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+4 D        10
+5 B        20
+6 C        30
+```
+
+
+]
+
+---
+# Binding (cont.)
+
+
+
+```r
+first &lt;- tibble(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+second &lt;- tibble(x1=c("D", "B", "C"), x2=c(10, 20, 30))
+```
+
+.pull-left[
+
+Two compatible data sets. Column names are the same.
+
+
+```r
+first
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 A         1
+2 B         2
+3 C         3
+```
+
+```r
+second
+```
+
+```
+# A tibble: 3 x 2
+  x1       x2
+  &lt;chr&gt; &lt;dbl&gt;
+1 D        10
+2 B        20
+3 C        30
+```
+
+]
+
+.pull-right[
+**bind_cols**
+
+```r
+bind_cols(first, second)
+```
+
+```
+# A tibble: 3 x 4
+  x1       x2 x11     x21
+  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+1 A         1 D        10
+2 B         2 B        20
+3 C         3 C        30
+```
+]
+
+---
+
+background-image: url('dplyrcs1.png')
+background-position: center
+background-size: contain
+
+---
+
+background-image: url('dplyrcs2.png')
+background-position: center
+background-size: contain
+---
 
 class: center, middle
 
@@ -793,6 +1350,8 @@ class: center, middle
 Slides available at: hellor.netlify.app
 
 All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
+Acknowledgement: R Studio Education Team
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
