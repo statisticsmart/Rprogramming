@@ -575,24 +575,19 @@ background-position: 98% 6%
 
 ```r
 Japan_SL &lt;- filter(gapminder, country %in% c("Japan", "Sri Lanka"))
-Japan_SL
+Japan_SL %&gt;% head()
 ```
 
 ```
-# A tibble: 24 x 6
-   country continent  year lifeExp       pop gdpPercap
-   &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
- 1 Japan   Asia       1952    63.0  86459025     3217.
- 2 Japan   Asia       1957    65.5  91563009     4318.
- 3 Japan   Asia       1962    68.7  95831757     6577.
- 4 Japan   Asia       1967    71.4 100825279     9848.
- 5 Japan   Asia       1972    73.4 107188273    14779.
- 6 Japan   Asia       1977    75.4 113872473    16610.
- 7 Japan   Asia       1982    77.1 118454974    19384.
- 8 Japan   Asia       1987    78.7 122091325    22376.
- 9 Japan   Asia       1992    79.4 124329269    26825.
-10 Japan   Asia       1997    80.7 125956499    28817.
-# … with 14 more rows
+# A tibble: 6 x 6
+  country continent  year lifeExp       pop gdpPercap
+  &lt;fct&gt;   &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
+1 Japan   Asia       1952    63.0  86459025     3217.
+2 Japan   Asia       1957    65.5  91563009     4318.
+3 Japan   Asia       1962    68.7  95831757     6577.
+4 Japan   Asia       1967    71.4 100825279     9848.
+5 Japan   Asia       1972    73.4 107188273    14779.
+6 Japan   Asia       1977    75.4 113872473    16610.
 ```
 
 

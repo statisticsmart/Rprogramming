@@ -286,7 +286,7 @@ background-position: 98% 6%
 
 ```{r, comment=NA, message=FALSE, warning=FALSE}
 Japan_SL <- filter(gapminder, country %in% c("Japan", "Sri Lanka"))
-Japan_SL
+Japan_SL %>% head()
 ```
 
 
