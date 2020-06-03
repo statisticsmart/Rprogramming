@@ -110,6 +110,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l11_data_manipulation_with_dplyr.html)    	|  [Reading-R4DS Ch5](https://r4ds.had.co.nz/transform.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-R4DS Ch5 Exercises](https://r4ds.had.co.nz/transform.html)	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
+
 🖥️ **R Labwork**
 
 [Lab-Data Wrangling](/problems/DataWrangling_Tutorial.pdf)
