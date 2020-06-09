@@ -117,10 +117,16 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 Answers: Available on Google Classroom and LMS.
 
-#### Week 11: 
+#### Week 11: The Grammar of Graphics
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+|[Slides](/slides/l12_grammar_of_graphics.html)   	| [Video Lecture](/video.pdf)  | [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html)  	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf) 	|  [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
+|:-: |:-:	|:-:	|:-:	|:-:	|:-:	|
+
+🖥️ **R Labwork**
+
+- Perform an exploratory data analysis on `gapminder` dataset and prepare a small report using Rmarkdown. 
+
+- Perform an exploratory data analysis on `diamonds` dataset and prepare a small report using Rmarkdown. 
 
 #### Week 12: 
 

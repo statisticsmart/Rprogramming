@@ -10,13 +10,14 @@
     <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
     <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
     <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
 # STA 326 2.0 Programming and Data Analysis with R
-## Grammar of Graphics
+## The Grammar of Graphics
 ### Dr Thiyanga Talagala
 ### Online distance learning/teaching materials during the COVID-19 outbreak.
 
@@ -25,7 +26,28 @@ class: center, middle, inverse, title-slide
 
 
 
-# packages
+
+
+![description of the image](SmallChange.gif)
+
+.tiny[.green[Acknowledgement: Justin Matejke and George Fitzmaurice, Autodesk Research, Canada]]
+
+---
+
+# Grammar of Graphics
+
+.pull-left[
+
+&lt;img src="wilkinson.png" alt="knitrhex" height="500"/&gt;
+
+]
+
+.pull-right[
+
+&lt;img src="Leland.jpg" alt="knitrhex" width="350"/&gt;
+]
+---
+# Packages
 
 
 
@@ -78,276 +100,1469 @@ $ gdpPercap &lt;dbl&gt; 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 786.11
     - fully utilize the power of grammar
 
 ---
+# Grammar 
 
-# Grammar of graphics
+.pull-left[
 
-Mapping data to **aesthetic** attributes (colour, shape, size) of **geometric** objects (points, lines, bars).
+## English
+
+- Nouns
+
+- Article
+
+- Adjective
+
+- Verb
+
+- Adverb
+
+- Proposition
+
+
+]
+
+.pull-right[
+
+## Graphics
+
+&lt;img src="ggplotaes/scales.PNG" alt="knitrhex" height="500"/&gt;
+
+]
+
+---
+
+# Grammar 
+
+.pull-left[
+
+## English
+
+The little monkey hangs confidently by a branch.
+
+- Article: The
+
+- Adjective: little
+
+- Noun: monkey
+
+- Verb: hangs
+
+- Adverb: Confidently
+
+- Proposition: by
+
+- Noun: a branch
+
+
+]
+
+.pull-right[
+
+## Graphics
+
+
+```r
+ggplot(iris)+
+  aes(x = Sepal.Length,
+      y = Sepal.Width)+
+  geom_point()
+```
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+]
 
 ---
 ## Elements of ggplot2 object
 
-- Data: data to be plotted
+- Data
 
-- Aes: mapping between variables to their visualization
+- Aesthetics: `x`, `y`, `col`
 
-- Geoms: objects/shapes you add as layers to the graph (How the plot will work?)
+- Geometrics: `geom_point`, `geom_boxplot`
 
-- Stats: statistical transformations when you are not plotting the raw data
-
-- Faceting: multiple panels
 ---
+
+# Elements of ggplot2 object
+
+.pull-left[
+&lt;img src="ggplotaes/scales.PNG" alt="knitrhex" height="500"/&gt;
+]
+
+.pull-right[
+
+- Data: `data`
+
+- Aesthetics: `aes`
+
+- Geometrics: `geom_*`
+]
+
+---
+background-image: url('ggplot2_paint_thiyanga.PNG')
+background-position: center
+background-size: contain
+
+
+---
+
 
 class: duke-orange, center, middle
 
 # Making your first plot with ggplot
 
 ---
-# Data
 
+# Data: data to be plotted
 .pull-left[
-```r
-ggplot(gapminder) # Data
-```
-
+&lt;img src="ggplotaes/data.PNG" alt="knitrhex" height="500"/&gt;
 ]
 
 .pull-right[
 
-![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+```
+'data.frame':	150 obs. of  5 variables:
+ $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+ $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+ $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+ $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+ $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
 ]
 ---
+## Data
 
-#  Data + Aesthetics 
 
-.pull-left[
+.left-code[
 ```r
-ggplot(gapminder, 
-*aes(x = lifeExp, y = gdpPercap))  # Data
-
+ggplot(iris)
 ```
 
 ]
 
-.pull-right[
-
-![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
-]
----
-#  Data + Aesthetics + Geometry
-
-.pull-left[
-```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
-* geom_point()
-```
-
-]
-
-.pull-right[
-
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 ]
 
 ---
-#  Data + Aesthetics + Geometry
+
+## Aesthetics: mapping variables
+
 
 .pull-left[
+&lt;img src="ggplotaes/aes.PNG" alt="knitrhex" height="500"/&gt;
+]
+
+.pull-left[
+- x
+
+- y
+
+- colour
+
+- shape
+
+]
+---
+## Data + Aesthetics
+
+
+.left-code[
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
-* geom_point(col="forestgreen")
+ggplot(iris,
+*aes(x =S epal.Length, 
+*    y = Sepal.Width))
 ```
 
 ]
 
-.pull-right[
-
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 ]
 
 ---
-#  Data + Aesthetics + Geometry (customizing)
+# Geometrics
 
 .pull-left[
-```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-*  size=5)
-```
-
+&lt;img src="ggplotaes/geom.PNG" alt="knitrhex" height="500"/&gt;
 ]
+
 
 .pull-right[
 
-![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+- geom_point
+
+- geom_boxplot
 ]
 ---
-#  Data + Aesthetics + Geometry (customizing)
 
-.pull-left[
+## Data + Aesthetics + Geometrics
+
+
+.left-code[
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  size=5,
-*  alpha=0.5)
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width))+
+*    geom_point()
 ```
 
 ]
 
-.pull-right[
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Data + Aesthetics + Geometrics
+
+.pull-left[
+
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width))+
+  geom_point()
+```
 
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 
----
-#  Data + Aesthetics + Geometry (customizing)
+.pull-right[
+&lt;img src="ggplotaes/d1.PNG" alt="knitrhex" width="500"/&gt;
 
-.pull-left[
+]
+
+---
+
+## Data + Aesthetics + Geometrics
+
+.left-code[
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  size=5,
-  alpha=0.5,
-  shape=3)
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width))+
+*    geom_point(col = "forestgreen")
 ```
 
 ]
 
-.pull-right[
-
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 ]
 
----
-#  Data + Aesthetics + Geometry (customizing) +  Facets
 
-.pull-left[
+---
+
+ 
+## Data + Aesthetics + Geometrics
+
+.left-code[
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  alpha=0.5)+
-*  facet_grid(. ~ continent)
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width))+
+    geom_point(col = "forestgreen",
+*    shape = 8)
 ```
 
 ]
 
-.pull-right[
-
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 ]
 
 ---
+ 
+## Data + Aesthetics + Geometrics
 
-#  Data + Aesthetics + Geometry (customizing) +  Facets
-
-.pull-left[
+.left-code[
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  alpha=0.5)+
-*  facet_grid(continent ~ .)
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+*    col = Species))+
+    geom_point()
 ```
 
 ]
 
-.pull-right[
-
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 ]
 ---
+ 
+## Data + Aesthetics + Geometrics
 
-
-#  Data + Aesthetics + Geometry (customizing) +  Facets + Statistics
-
-.pull-left[
+.left-code[
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  alpha=0.5)+
-  facet_grid(continent ~ .)+
-*  stat_smooth(method = "lm", se=F, col="red")
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col= Species))+
+    geom_point(
+*    shape = 3
+    )
 ```
 
 ]
 
-.pull-right[
-
-
-```
-`geom_smooth()` using formula 'y ~ x'
-```
-
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 ]
+
+
 ---
-
-
-
-#  Data + Aesthetics + Geometry (customizing) +  Facets + Statistics + Coordinates
+## Data + Aesthetics + Geometrics
 
 .pull-left[
+
 ```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  alpha=0.5)+
-  facet_grid(continent ~ .)+
-  stat_smooth(method = "lm", se=F, col="red") +
-  coord_equal()
-```
-
-]
-
-.pull-right[
-
-
-```
-`geom_smooth()` using formula 'y ~ x'
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species))+
+    geom_point()
 ```
 
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
-]
-
----
-
-
-#  Data + Aesthetics + Geometry (customizing) +  Facets + Statistics + Coordinates + Themes
-
-.pull-left[
-```r
-ggplot(gapminder, 
- aes(y = lifeExp, x = gdpPercap)) + # Data
- geom_point(col="forestgreen", 
-  alpha=0.5)+
-  facet_grid(continent ~ .)+
-  stat_smooth(method = "lm", se=F, col="red") +
-  coord_equal()+
-*  theme(panel.background = element_blank())
-```
 
 ]
 
 .pull-right[
 
+&lt;img src="ggplotaes/d2.PNG" alt="knitrhex" width="500"/&gt;
 
-```
-`geom_smooth()` using formula 'y ~ x'
+]
+---
+# Facets: small multiples
+
+&lt;img src="ggplotaes/facets.PNG" alt="knitrhex" height="500"/&gt;
+
+---
+
+## Data + Aesthetics + Geometrics + Facets
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species))+
+    geom_point()+
+*    facet_grid(~Species)
 ```
 
+]
+
+.right-plot[
 ![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 ]
 ---
-# Different geoms
+
+## Data + Aesthetics + Geometrics + Facets
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species))+
+    geom_point()+
+*    facet_grid(Species ~.)
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+---
+
+# Statistics
+
+&lt;img src="ggplotaes/stat.PNG" alt="knitrhex" height="500"/&gt;
+
+
+---
+
+## Data + Aesthetics + Geometrics + Facets + Statistics
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species))+
+    geom_point()+
+    facet_wrap(~Species)+
+*    stat_smooth(method = "lm", se = F, col ="red")
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Data + Aesthetics + Geometrics + Facets + Statistics
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species))+
+    geom_point()+
+    facet_wrap( ~ Species)+
+*    stat_smooth(method = "lm", se = T, col = "red")
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
+---
+# Coordinate
+
+&lt;img src="ggplotaes/coord.PNG" alt="knitrhex" height="500"/&gt;
+
+---
+
+## Data + Aesthetics + Geometrics + Facets + Statistics + Coordinate
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species)) +
+    geom_point() +
+    facet_wrap( ~ Species) +
+    stat_smooth(method = "lm", se = T, col = "red") + 
+*    coord_equal()
+    
+```
+
+]
+
+.right-plot[
+
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+---
+# Theme
+
+&lt;img src="ggplotaes/theme.PNG" alt="knitrhex" height="500"/&gt;
+
+---
+
+## Data + Aesthetics + Geometrics + Facets + Statistics + Theme
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species)) +
+    geom_point() +
+    facet_wrap( ~ Species) +
+    stat_smooth(method = "lm", se = T, col ="red") + 
+    coord_equal() + 
+*    theme(legend.position = "bottom")
+    
+```
+
+]
+
+.right-plot[
+&lt;img src="l12_grammar_of_graphics_files/figure-html/unnamed-chunk-19-1.png" width="100%" /&gt;
+]
+
+---
+
+# Scale
+
+&lt;img src="ggplotaes/scales.PNG" alt="knitrhex" height="500"/&gt;
+
+---
+
+## Data + Aesthetics + Geometrics + Facets + Statistics + Theme + Scale
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species)) +
+    geom_point() +
+    facet_wrap( ~ Species) +
+    stat_smooth(method = "lm", se = T, col = "red") + 
+    coord_equal() + 
+    theme(legend.position = "bottom") +
+*    scale_color_manual(values = c("#1b9e77", "#d95f02", "#7570b3"))
+    
+```
+
+]
+
+.right-plot[
+&lt;img src="l12_grammar_of_graphics_files/figure-html/unnamed-chunk-20-1.png" width="100%" /&gt;
+]
+
+---
+
+
+## titles and axes labels
+
+.left-code[
+```r
+ggplot(iris,
+aes(x = Sepal.Length, 
+    y = Sepal.Width,
+    col = Species)) +
+    geom_point() +
+    facet_wrap( ~ Species) +
+    stat_smooth(method = "lm", se = T, col = "red") + 
+    coord_equal() + 
+    theme(legend.position = "bottom") +
+    scale_color_manual(values = c("#1b9e77", "#d95f02", "#7570b3"))+
+*labs(title="Scatter plot of Sepal Length  vs Sepal Width",
+        x ="Sepal Length (cm)", y = "Sepal Width (cm)")
+    
+```
+
+]
+
+.right-plot[
+&lt;img src="l12_grammar_of_graphics_files/figure-html/unnamed-chunk-21-1.png" width="100%" /&gt;
+]
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Dataset: gapminder 
+
+ Visualize the relationship between life expectancy, GDP per capita and continent in 2007.
+
+---
+
+.left-code[
+```r
+gapminder2007 &lt;- gapminder %&gt;%
+  filter(year == 2007)
+  
+ggplot(gapminder2007,
+aes(x = lifeExp, y = gdpPercap, col=continent)) +
+    geom_point() + theme(legend.position = "bottom") + 
+labs(title = "Relationship between life expectancy and GPD per capita by continent - 2007",
+        x ="life expectancy at birth, in years",
+        y = "GDP per capita (US$, inflation-adjusted)")
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Add a vertical line
+
+
+.left-code[
+```r
+gapminder2007 &lt;- gapminder %&gt;%
+  filter(year == 2007)
+  
+ggplot(gapminder2007,
+aes(x = lifeExp, y = gdpPercap, col=continent)) +
+    geom_point() + 
+*    geom_vline(xintercept = 70)
+
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Add a horizontal line
+
+
+.left-code[
+```r
+gapminder2007 &lt;- gapminder %&gt;%
+  filter(year == 2007)
+  
+ggplot(gapminder2007,
+aes(x = lifeExp, y = gdpPercap, col=continent)) +
+    geom_point() + 
+*    geom_hline(yintercept = 20000)
+
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Add a diagonal line
+
+
+.left-code[
+```r
+gapminder2007 &lt;- gapminder %&gt;%
+  filter(year == 2007)
+  
+ggplot(gapminder2007,
+aes(x = lifeExp, y = gdpPercap, col=continent)) +
+    geom_point() + 
+*    geom_abline(intercept = 20, slope=200)
+
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+]
+
+---
+# All Geoms
+
+
+```
+ [1] "geom_abline"         "geom_area"           "geom_bar"           
+ [4] "geom_bin2d"          "geom_blank"          "geom_boxplot"       
+ [7] "geom_col"            "geom_contour"        "geom_contour_filled"
+[10] "geom_count"          "geom_crossbar"       "geom_curve"         
+[13] "geom_density"        "geom_density_2d"     "geom_density2d"     
+[16] "geom_dotplot"        "geom_errorbar"       "geom_errorbarh"     
+[19] "geom_freqpoly"       "geom_hex"            "geom_histogram"     
+[22] "geom_hline"          "geom_jitter"         "geom_label"         
+[25] "geom_line"           "geom_linerange"      "geom_map"           
+[28] "geom_path"           "geom_point"          "geom_pointrange"    
+[31] "geom_polygon"        "geom_qq"             "geom_qq_line"       
+[34] "geom_quantile"       "geom_raster"         "geom_rect"          
+[37] "geom_ribbon"         "geom_rug"            "geom_segment"       
+[40] "geom_sf"             "geom_sf_label"       "geom_sf_text"       
+[43] "geom_smooth"         "geom_spoke"          "geom_step"          
+[46] "geom_text"           "geom_tile"           "geom_violin"        
+[49] "geom_vline"         
+```
+---
+
+# geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
+geom_boxplot()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, color=continent))+
+geom_boxplot()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+geom_boxplot()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+geom_boxplot(fill="forestgreen")
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+geom_boxplot(fill="forestgreen", alpha=0.5)
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+]
+---
+
+# geom_point
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+geom_point()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+
+#  geom_jitter
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ geom_jitter()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#  geom_jitter + geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ geom_jitter()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#  geom_jitter + geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+  geom_jitter() +
+  geom_boxplot(alpha=0.5)
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# geom_jitter + geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
+  geom_boxplot() + 
+  geom_jitter() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+]
+---
+
+#  geom_jitter + geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+  geom_boxplot() + 
+  geom_jitter() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#  geom_jitter + geom_boxplot
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+  geom_boxplot() + 
+  geom_jitter(aes(col=continent)) 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#  geom_jitter + geom_boxplot (outlier.shape = NA)
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+*  geom_boxplot(outlier.shape = NA) + 
+  geom_jitter(aes(col=continent)) 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+]
+---
+
+#  geom_jitter + geom_boxplot 
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=lifeExp, y=continent, fill=continent, col=continent))+
+*  geom_boxplot(outlier.shape = NA) + 
+  geom_jitter(aes(col=continent)) 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#  geom_jitter + geom_boxplot 
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=lifeExp, y=continent, fill=continent, col=continent))+
+*  geom_boxplot(outlier.shape = NA, alpha=0.2) + 
+  geom_jitter(aes(col=continent)) 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+]
+---
+
+#  geom_jitter + geom_boxplot + coord_flip
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=lifeExp, y=continent, fill=continent, col=continent))+
+  geom_boxplot(outlier.shape = NA, alpha=0.2) + 
+  geom_jitter(aes(col=continent)) +
+*  coord_flip()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#  geom_jitter + geom_boxplot + coord_flip
+
+
+.left-code[
+```r
+ggplot(gapminder2007, aes(y=lifeExp))+
+  geom_boxplot() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+]
+---
+
+#  geom_boxplot + facet_wrap
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(y = lifeExp))+
+  geom_boxplot() + facet_wrap(~continent, ncol = 5)
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+#  geom_density
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=lifeExp))+
+*  geom_density() + 
+  facet_wrap(~continent, ncol=5)
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+]
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Modify the code below to obtain the following plot.
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=lifeExp))+
+ geom_density() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+]
+---
+#  geom_histogram
+
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=lifeExp))+
+*  geom_histogram() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+]
+---
+# geom_bar
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=continent))+ # x-should be defined always
+ geom_bar() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+]
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Modify the code below to obtain the following plot.
+
+.left-code[
+```r
+ggplot(gapminder2007, 
+aes(x=continent))+ # x-should be defined always
+ geom_bar() 
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+]
+---
+## geom_bar (stat="identity")
+
+Method 1
+
+
+```r
+cut.percent &lt;- data.frame(cut=c("Fair", "Good", "Very Good", "Premium", 
+                                "Ideal"), percent=c(3, 9, 22.4, 25.6, 40))
+cut.percent
+```
+
+```
+        cut percent
+1      Fair     3.0
+2      Good     9.0
+3 Very Good    22.4
+4   Premium    25.6
+5     Ideal    40.0
+```
 
 
 
+
+```r
+ggplot(data=cut.percent, aes(x=cut, y=percent)) +
+  geom_bar(stat="identity")
+```
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+
+---
+
+## geom_col
+
+Method 2
+
+
+```r
+cut.percent &lt;- data.frame(cut=c("Fair", "Good", "Very Good", "Premium", 
+                                "Ideal"), percent=c(3, 9, 22.4, 25.6, 40))
+cut.percent
+```
+
+```
+        cut percent
+1      Fair     3.0
+2      Good     9.0
+3 Very Good    22.4
+4   Premium    25.6
+5     Ideal    40.0
+```
+
+
+
+
+```r
+ggplot(data=cut.percent, aes(x=cut, y=percent)) +
+  geom_col()
+```
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-53-1.png)&lt;!-- --&gt;
+
+---
+## Change the order of levels
+
+Method 2
+
+
+```r
+cut.percent &lt;- data.frame(cut=c("Fair", "Good", "Very Good", "Premium", 
+                                "Ideal"), percent=c(3, 9, 22.4, 25.6, 40))
+cut.percent$cut &lt;- factor(cut.percent$cut, 
+                  levels = c("Fair", "Good", "Very Good", 
+                             "Premium", "Ideal"))    
+```
+
+
+
+
+```r
+ggplot(data=cut.percent, aes(x=cut, y=percent)) +
+  geom_col()
+```
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+
+---
+# geom_point
+
+
+.left-code[
+```r
+gapminder %&gt;%
+filter(country == "India") %&gt;%
+ggplot(aes(x = year, y = gdpPercap)) +
+geom_point()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
+]
+
+---
+# geom_line
+
+
+.left-code[
+```r
+gapminder %&gt;%
+filter(country == "India") %&gt;%
+ggplot(aes(x = year, y = gdpPercap)) +
+geom_line()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# geom_line + geom_point
+
+
+.left-code[
+```r
+gapminder %&gt;%
+filter(country == "India") %&gt;%
+ggplot(aes(x = year, y = gdpPercap)) +
+geom_line() + 
+geom_point()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
+]
+---
+
+class: duke-green,  middle
+
+# Your turn
+
+Modify the code below to obtain the following plot.
+
+```r 
+gapminder %&gt;% filter(country == "India") %&gt;%
+ggplot(aes(x = year, y = gdpPercap)) + geom_line() + geom_point()
+```
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
+
+---
+
+# Data Wrangling + Data Visualization
+
+
+```r
+avglifeExp &lt;- gapminder %&gt;%
+  group_by(continent, year) %&gt;%
+  summarise(meanlifeExp=mean(lifeExp))
+avglifeExp
+```
+
+```
+# A tibble: 60 x 3
+# Groups:   continent [5]
+   continent  year meanlifeExp
+   &lt;fct&gt;     &lt;int&gt;       &lt;dbl&gt;
+ 1 Africa     1952        39.1
+ 2 Africa     1957        41.3
+ 3 Africa     1962        43.3
+ 4 Africa     1967        45.3
+ 5 Africa     1972        47.5
+ 6 Africa     1977        49.6
+ 7 Africa     1982        51.6
+ 8 Africa     1987        53.3
+ 9 Africa     1992        53.6
+10 Africa     1997        53.6
+# … with 50 more rows
+```
+
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to reproduce the plot below. 
+
+Hint: use `avglifeExp`
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to reproduce the plot below. 
+
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to reproduce the plot below. 
+
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-63-1.png)&lt;!-- --&gt;
+
+Hint: Next slide
+---
+
+
+```r
+gapminder %&gt;%
+  ggplot(aes(y=log(lifeExp), x=log(gdpPercap), color=continent)) + 
+  geom_point() + 
+  labs(y = "log(Life Expectancy)",
+       x = "log(GDP per capita)")
+```
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-64-1.png)&lt;!-- --&gt;
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to reproduce the plot below. 
+
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-65-1.png)&lt;!-- --&gt;
+
+
+---
+# geom_point
+
+
+.left-code[
+```r
+ggplot(gapminder, aes(x=year, y=gdpPercap, colour=continent))+geom_point()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-66-1.png)&lt;!-- --&gt;
+]
+
+---
+# geom_smooth
+
+
+.left-code[
+```r
+ggplot(gapminder, aes(x=year, y=gdpPercap, colour=continent))+
+*geom_smooth()
+    
+```
+
+]
+
+.right-plot[
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-67-1.png)&lt;!-- --&gt;
+]
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to reproduce the plot below. 
+
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-68-1.png)&lt;!-- --&gt;
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to reproduce the plot below. 
+
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-69-1.png)&lt;!-- --&gt;
+
+
+---
+class: duke-green,  middle
+
+# Your turn
+
+Write an R code to visualize the shape of standard normal distribution.
+
+Hint: `dnorm`
+
+![](l12_grammar_of_graphics_files/figure-html/unnamed-chunk-70-1.png)&lt;!-- --&gt;
+
+---
+# Recap
+
+.pull-left[
+
+## aes
+
+- x
+- y
+- colour
+- size
+
+## geom
+
+- geom_point
+- geom_jitter
+- geom_line
+- geom_bar
+- geom_col
+- geom_histogram
+- geom_smooth
+- geom_density
+- geom_abline
+- geom_vline
+- geom_hline
+]
+
+.pull-right[
+
+
+## geom arguments
+
+- colour
+- fill
+- size
+- alpha
+- shape
+
+## other elements
+
+- labs
+- coord_equal
+- coord_flip
+- scale_colour_manual
+- labs
+- facet_wrap
+- theme
+
+]
 ---
 class: center, middle
 
