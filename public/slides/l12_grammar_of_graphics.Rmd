@@ -613,7 +613,7 @@ aes(x=Sepal.Length,
 
 ---
 
-## Data + Aesthetics + Geometrics + Facets + Statistics + Theme
+## Data + Aesthetics + Geometrics + Facets + Statistics +  Coordinate+ Theme
 
 .left-code[
 ```r
@@ -653,7 +653,7 @@ aes(x=Sepal.Length,
 
 ---
 
-## Data + Aesthetics + Geometrics + Facets + Statistics + Theme + Scale
+## Data + Aesthetics + Geometrics + Facets + Statistics + Coordinate + Theme + Scale
 
 .left-code[
 ```r
@@ -881,7 +881,7 @@ ls(pattern = '^geom_', env = as.environment('package:ggplot2'))
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
 geom_boxplot()
     
 ```
@@ -902,7 +902,7 @@ geom_boxplot()
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, color=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, color=continent)) +
 geom_boxplot()
     
 ```
@@ -923,7 +923,7 @@ geom_boxplot()
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent)) +
 geom_boxplot()
     
 ```
@@ -944,7 +944,7 @@ geom_boxplot()
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
 geom_boxplot(fill="forestgreen")
     
 ```
@@ -965,7 +965,7 @@ geom_boxplot(fill="forestgreen")
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
 geom_boxplot(fill="forestgreen", alpha=0.5)
     
 ```
@@ -985,8 +985,8 @@ geom_boxplot(fill="forestgreen", alpha=0.5)
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
-geom_point()
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
+  geom_point()
     
 ```
 
@@ -1008,8 +1008,8 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
- geom_jitter()
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
+  geom_jitter()
     
 ```
 
@@ -1029,8 +1029,9 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
- geom_jitter()
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
+  geom_jitter() +
+  geom_boxplot()
     
 ```
 
@@ -1051,7 +1052,7 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
   geom_jitter() +
   geom_boxplot(alpha=0.5)
     
@@ -1074,7 +1075,7 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent)) +
   geom_boxplot() + 
   geom_jitter() 
     
@@ -1096,7 +1097,7 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent)) +
   geom_boxplot() + 
   geom_jitter() 
     
@@ -1119,7 +1120,7 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent)) +
   geom_boxplot() + 
   geom_jitter(aes(col=continent)) 
     
@@ -1142,9 +1143,9 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
+ggplot(gapminder2007, aes(x = lifeExp, y = continent, fill = continent)) +
 *  geom_boxplot(outlier.shape = NA) + 
-  geom_jitter(aes(col=continent)) 
+  geom_jitter(aes(col = continent)) 
     
 ```
 
@@ -1164,8 +1165,7 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent))+
 
 .left-code[
 ```r
-ggplot(gapminder2007, 
-aes(x=lifeExp, y=continent, fill=continent, col=continent))+
+ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent, col=continent))+
 *  geom_boxplot(outlier.shape = NA) + 
   geom_jitter(aes(col=continent)) 
     
@@ -1232,7 +1232,7 @@ ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent, col=continent)
 
 ---
 
-#  geom_jitter + geom_boxplot + coord_flip
+#  geom_boxplot 
 
 
 .left-code[
