@@ -1021,8 +1021,8 @@ ggplot(gapminder2007, aes(x = lifeExp, y = continent, fill = continent)) +
 
 .left-code[
 ```r
-ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent, col=continent))+
-*  geom_boxplot(outlier.shape = NA) + 
+*ggplot(gapminder2007, aes(x=lifeExp, y=continent, fill=continent, col=continent))+
+  geom_boxplot(outlier.shape = NA) + 
   geom_jitter(aes(col=continent)) 
     
 ```
