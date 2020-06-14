@@ -1350,7 +1350,7 @@ aes(x=lifeExp))+
 .left-code[
 ```r
 ggplot(gapminder2007, 
-aes(x=continent))+ # x-should be defined always
+aes(x=continent))+ 
  geom_bar() 
     
 ```
@@ -1360,7 +1360,7 @@ aes(x=continent))+ # x-should be defined always
 .right-plot[
 ```{r, comment=NA,  echo=FALSE, fig.height=6, warning=FALSE, message=FALSE}
 ggplot(gapminder2007, 
-aes(x=continent))+ # x-should be defined always
+aes(x=continent))+
  geom_bar() 
 ```
 ]
@@ -1375,7 +1375,7 @@ Modify the code below to obtain the following plot.
 .left-code[
 ```r
 ggplot(gapminder2007, 
-aes(x=continent))+ # x-should be defined always
+aes(x=continent))+ 
  geom_bar() 
     
 ```
