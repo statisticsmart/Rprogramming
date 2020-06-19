@@ -427,7 +427,7 @@ is.vector(first_vec)
 ```
 
 
-- charactor vector: `is.charactor()`
+- character vector: `is.charactor()`
 
 ```{r, comment=NA}
 is.character(first_vec)
@@ -669,7 +669,7 @@ y %in% x
 ## Vector arithmetic
 
 
-- operations are perfored element by element. 
+- operations are performed element by element. 
 
 ```{r, comment=NA}
 c(10, 100, 100) + 2 # two is added to every element in the vector

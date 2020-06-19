@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>STA 326 2.0 Programming and Data Analysis with R</title>
     <meta charset="utf-8" />
@@ -153,8 +153,8 @@ rnorm(10)
 ```
 
 ```
- [1] -0.7683931 -1.3131209 -0.4052699  0.7031423 -1.7029092 -1.0732330
- [7]  0.1112937  0.4289530 -0.7160608  1.1466755
+ [1] -1.119994076  1.071973085  0.803713764 -0.303405818  0.519462447
+ [6]  0.958850259  0.003146768 -0.725534633 -0.671745544  0.759788660
 ```
 
 --
@@ -168,8 +168,8 @@ a
 ```
 
 ```
- [1] -0.91047271 -1.34761384  0.42304315  0.73022379 -0.69304452  0.96750236
- [7] -1.77304577  1.11664957 -0.07682114  0.63208149
+ [1]  1.85894966  0.77571987  0.62976674  0.56095253  0.56647446  1.37409600
+ [7] -0.70106819  0.04846916  0.08976936 -1.41836084
 ```
 
 --
@@ -181,8 +181,8 @@ b
 ```
 
 ```
- [1]  -91.047271 -134.761384   42.304315   73.022379  -69.304452   96.750236
- [7] -177.304577  111.664957   -7.682114   63.208149
+ [1]  185.894966   77.571987   62.976674   56.095253   56.647446  137.409600
+ [7]  -70.106819    4.846916    8.976936 -141.836084
 ```
 
 ---
@@ -277,8 +277,8 @@ rnorm(10) # This is a comment
 ```
 
 ```
- [1] -0.28873481 -0.69653458 -1.44982262  0.01940232  0.48822780 -1.37492817
- [7] -0.38968559  0.59678659  0.19920574 -0.14959684
+ [1]  1.47185228 -0.00374577 -0.90441302  0.05740500  0.64455347 -0.01364240
+ [7]  1.10705924  3.36053715 -1.16293256 -0.29662107
 ```
 
 ```r
@@ -498,7 +498,7 @@ is.vector(first_vec)
 ```
 
 
-- charactor vector: `is.charactor()`
+- character vector: `is.charactor()`
 
 
 ```r
@@ -971,7 +971,7 @@ y %in% x
 ## Vector arithmetic
 
 
-- operations are perfored element by element. 
+- operations are performed element by element. 
 
 
 ```r
@@ -1172,6 +1172,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -1189,17 +1215,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {
