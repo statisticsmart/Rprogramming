@@ -128,9 +128,9 @@ Answers: Available on Google Classroom and LMS.
 
 - Perform an exploratory data analysis on `diamonds` dataset and prepare a small report using Rmarkdown. 
 
-#### Week 12: 
+#### Week 12: Regression Analysis with R
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|Slides    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 #### Week 13: 

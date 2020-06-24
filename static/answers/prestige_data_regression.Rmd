@@ -1,0 +1,74 @@
+---
+title: 'Prestige Data: Regression Modelling'
+output: html_document
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA)
+```
+
+# Packages
+
+```{r, comment=NA}
+library(carData)
+library(tidyverse)
+```
+
+# Data
+
+```{r}
+head(Prestige)
+```
+
+# Overview of data
+
+
+
+# general function for prediction
+
+```{r, comment=NA}
+reg <- function(fit){
+  model_fitresid <- broom::augment(fit)
+  plot <- ggplot(model_fitresid, aes(x=.fitted, y=.resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+  out <- list(shapiro.test(fit$residuals), summary(fit), plot)
+  out
+}
+
+```
+
+# Regression
+
+## Model 1
+
+```{r, comment=NA}
+fit1 <- lm(prestige ~ education + income, data = Prestige)
+
+reg(fit1)
+```
+
+## Model 2
+
+```{r, comment=NA}
+# Fit a linear model with education and income variables
+fit2 <- lm(prestige ~ education + log(income), data = Prestige)
+reg(fit2)
+```
+
+## Model 3
+
+```{r, comment=NA}
+# Fit a linear model with education and income variables
+fit3 <- lm(prestige ~ education + log(income) + type, data = Prestige)
+reg(fit3)
+```
+
+## Model 4
+
+```{r, comment=NA}
+# Fit a linear model with education and income variables
+fit4 <- lm(prestige ~ sqrt(education) , data = Prestige)
+reg(fit4)
+```

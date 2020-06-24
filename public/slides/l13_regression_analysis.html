@@ -31,220 +31,317 @@ background-size: contain
 
 
 ---
-# Problem
-
-![](facebook.jpg)
----
-# Data
-
-
-```r
-facebookdata_marketing &lt;- readRDS("~/Lecturer/1_TEACHING/2020_s1/Rprogramming/static/slides/facebookdata_marketing.rds")
-head(facebookdata_marketing)
-```
-
-```
-  month category hour paid totalReach engagedUsers postConsumers
-1    12        2    3    0       2752          178           109
-2    12        2   10    0      10460         1457          1361
-3    12        3    3    0       2413          177           113
-4    12        3   10    1      50128         2211           790
-5    12        2    3    0       7244          671           410
-6    12        2    9    0      10472         1191          1073
-  postConsumptions sawbyLiked clickbyLiked totalInteractions
-1              159       1640          119               406
-2             1674       6112         1108               789
-3              154       1503          132               536
-4             1119      32048         1386              1700
-5              580       3200          396               678
-6             1389       7852         1016               794
-```
-
-```r
-dim(facebookdata_marketing)
-```
-
-```
-[1] 500  11
-```
----
-## Variable description
-
-- **month:** Month the post was published (1, 2, 3, ..., 12)
-
-- **category:** Type of the post (1 - Link, 2 - Video, 3 - Picture)
-
-- **hour:** Hour the post was published (0, 1, ...24)
-
-- **paid:** If the company paid to Facebook for advertising (0 - No, 1 - Yes)
-
-- **totalReach:** Number of people who saw the page post
-(unique users).
-
-- **engagedUsers:** Number of people who clicked anywhere
-in the post (unique users).
-
-- **postConsumers:** Number of people who sent a direct message to the owner
-of the post.
-
-- **postConsumption:** Number of clicks anywhere in the post.
-
-- **sawbyLiked:** Number of people who saw the page post
-because they have liked that page.
-
-- **clickbyLiked:** Number of people who have liked the Page
-and clicked anywhere in the post.
-
-- **totalInteractions:** The sum of “likes,” “comments,” and “shares”
-of the post
-
-
----
 # Packages
 
 
 ```r
+library(broom)
+library(modelr)
+library(GGally)
+library(carData)
 library(tidyverse)
 library(magrittr)
-library(tidymodels)
-library(broom)
-library(GGally)
 ```
 
 ---
+# Data: Prestige of Canadian Occupations
 
 
+```r
+head(Prestige, 5)
+```
 
 ```
-     month     category      hour         paid       totalReach    
- 10     : 60   1:208    Min.   : 1.00   0   :360   Min.   :   238  
- 7      : 52   2:123    1st Qu.: 3.00   1   :139   1st Qu.:  3315  
- 4      : 50   3:169    Median : 9.00   NA's:  1   Median :  5281  
- 12     : 50            Mean   : 7.84              Mean   : 13903  
- 6      : 49            3rd Qu.:11.00              3rd Qu.: 13168  
- 11     : 45            Max.   :23.00              Max.   :180480  
- (Other):194                                                       
-  engagedUsers     postConsumers     postConsumptions    sawbyLiked   
- Min.   :    9.0   Min.   :    9.0   Min.   :    9.0   Min.   :  236  
- 1st Qu.:  393.8   1st Qu.:  332.5   1st Qu.:  509.2   1st Qu.: 2182  
- Median :  625.5   Median :  551.5   Median :  851.0   Median : 3417  
- Mean   :  920.3   Mean   :  798.8   Mean   : 1415.1   Mean   : 6585  
- 3rd Qu.: 1062.0   3rd Qu.:  955.5   3rd Qu.: 1463.0   3rd Qu.: 7989  
- Max.   :11452.0   Max.   :11328.0   Max.   :19779.0   Max.   :51456  
-                                                                      
-  clickbyLiked    totalInteractions
- Min.   :   9.0   Min.   : 108.0   
- 1st Qu.: 291.0   1st Qu.: 484.0   
- Median : 412.0   Median : 607.5   
- Mean   : 610.0   Mean   : 658.0   
- 3rd Qu.: 656.2   3rd Qu.: 756.5   
- Max.   :4376.0   Max.   :2660.0   
-                                   
+                    education income women prestige census type
+gov.administrators      13.11  12351 11.16     68.8   1113 prof
+general.managers        12.26  25879  4.02     69.1   1130 prof
+accountants             12.77   9271 15.70     63.4   1171 prof
+purchasing.officers     11.42   8865  9.11     56.8   1175 prof
+chemists                14.62   8403 11.68     73.5   2111 prof
 ```
+
+```r
+summary(Prestige)
+```
+
+```
+   education          income          women           prestige    
+ Min.   : 6.380   Min.   :  611   Min.   : 0.000   Min.   :14.80  
+ 1st Qu.: 8.445   1st Qu.: 4106   1st Qu.: 3.592   1st Qu.:35.23  
+ Median :10.540   Median : 5930   Median :13.600   Median :43.60  
+ Mean   :10.738   Mean   : 6798   Mean   :28.979   Mean   :46.83  
+ 3rd Qu.:12.648   3rd Qu.: 8187   3rd Qu.:52.203   3rd Qu.:59.27  
+ Max.   :15.970   Max.   :25879   Max.   :97.510   Max.   :87.20  
+     census       type   
+ Min.   :1113   bc  :44  
+ 1st Qu.:3120   prof:31  
+ Median :5135   wc  :23  
+ Mean   :5402   NA's: 4  
+ 3rd Qu.:8312            
+ Max.   :9517            
+```
+
+
+---
+# Data description
+
+`prestige`: Pineo-Porter prestige score for occupation, from a social survey conducted in the mid-1960s.
+
+`education`: Average education of occupational incumbents, years, in 1971.
+
+`income`: Average income of incumbents, dollars, in 1971.
+
+`women`: Percentage of incumbents who are women.
+
+`census`: Canadian Census occupational code.
+
+`type`: Type of occupation. A factor with levels (note: out of order): bc, Blue Collar; prof, Professional, Managerial, and Technical; wc, White Collar.
 
 ---
 # Training test and Test set
 
 
 ```r
-smp_size &lt;- 400
+smp_size &lt;- 80
 
 ## set the seed to make your partition reproducible
 set.seed(123)
-train_ind &lt;- sample(seq_len(nrow(facebookdata_marketing)), size = smp_size)
-train &lt;- facebookdata_marketing[train_ind, ]
-test &lt;- facebookdata_marketing[-train_ind, ]
+train_ind &lt;- sample(seq_len(nrow(Prestige)), size = smp_size)
+train &lt;- Prestige[train_ind, ]
+dim(train)
 ```
 
----
-
-# Qualitative variables
-
+```
+[1] 80  6
+```
 
 ```r
-table(train$month)/500*100
+test &lt;- Prestige[-train_ind, ]
+dim(test)
 ```
 
 ```
-
-  1   2   3   4   5   6   7   8   9  10  11  12 
-3.6 4.0 5.0 8.2 5.8 8.8 8.4 6.2 5.8 9.4 7.0 7.8 
-```
-
-
-```r
-table(train$category)/500*100
-```
-
-```
-
-   1    2    3 
-33.4 20.0 26.6 
-```
-
-
-```r
-table(train$paid)/500*100
-```
-
-```
-
- 0  1 
-58 22 
+[1] 22  6
 ```
 ---
-# Distribution of total interactions
+# Exploratory Data Analysis
+
+
+```r
+Prestigedf &lt;- train %&gt;%
+  pivot_longer(c(4, 1, 2, 3), names_to="variable", values_to="value")
+Prestigedf
+```
+
+.pull-left[
+
+```
+# A tibble: 320 x 4
+   census type  variable    value
+    &lt;int&gt; &lt;fct&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1   3156 wc    education   12.8 
+ 2   3156 wc    income    5180   
+ 3   3156 wc    women       76.0 
+ 4   3156 wc    prestige    67.5 
+ 5   8335 bc    education    7.92
+ 6   8335 bc    income    6477   
+ 7   8335 bc    women        5.17
+ 8   8335 bc    prestige    41.8 
+ 9   5133 wc    education   11.1 
+10   5133 wc    income    8780   
+# … with 310 more rows
+```
+
+]
+
+--
+.pull-right[
+
+```r
+head(train)
+```
+
+```
+                      education income women prestige census type
+medical.technicians       12.79   5180 76.04     67.5   3156   wc
+welders                    7.92   6477  5.17     41.8   8335   bc
+commercial.travellers     11.13   8780  3.16     40.2   5133   wc
+economists                14.44   8049 57.31     62.2   2311 prof
+farmers                    6.84   3643  3.60     44.1   7112 &lt;NA&gt;
+receptionsts              11.04   2901 92.86     38.7   4171   wc
+```
+
+]
+
+---
+# Exploratory Data Analysis
+
+
+```r
+ggplot(Prestige_1, aes(x=value)) + geom_histogram() + 
+  facet_wrap(variable ~., ncol=1)
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+# Exploratory Data Analysis
+
+
+```r
+ggplot(Prestige_1, aes(x=value)) + geom_histogram() + 
+  facet_wrap(variable ~., ncol=1, scales = "free")
+```
 
 ![](l13_regression_analysis_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
-# Distribution of total interactions by category
+# Exploratory Data Analysis
+
+
+```r
+ggplot(Prestige_1, aes(x=value)) + geom_histogram(colour="white") + 
+  facet_wrap(variable ~., ncol=1, scales = "free")
+```
 
 ![](l13_regression_analysis_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 ---
-# Distribution of total interactions by paid
+
+# Exploratory Data Analysis
+
+
+```r
+ggplot(Prestige_1, aes(x=value, fill=variable)) + geom_density() + 
+  facet_wrap(variable ~., ncol=1, scales = "free")
+```
 
 ![](l13_regression_analysis_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 ---
+# Exploratory Data Analysis
+
 
 ```r
-facebookdata_marketing_cont &lt;-  train %&gt;%
-  select(-c(month, category, paid))
-head(facebookdata_marketing_cont)
+ggplot(Prestige_1, aes(y = value, x = type, fill = type)) + geom_boxplot() + 
+  facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
-```
-# A tibble: 6 x 8
-   hour totalReach engagedUsers postConsumers postConsumptions sawbyLiked
-  &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;      &lt;dbl&gt;
-1    14       6030          735           659             1448       4418
-2    13      10040         1429          1346             2022       6964
-3     2       4518          626           482              729       2254
-4     3       2549          249           134              168       1917
-5     3      34512         1666          1333             1977      22816
-6     3       6876          282           245              337       5752
-# … with 2 more variables: clickbyLiked &lt;dbl&gt;, totalInteractions &lt;dbl&gt;
-```
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
 
 ---
+# Exploratory Data Analysis
 
 ```r
-GGally::ggpairs(facebookdata_marketing_cont)
+*Prestige_1 %&gt;%
+*  filter(is.na(type) == FALSE) %&gt;%
+ggplot(aes(y=value, x=type, fill=type)) + geom_boxplot() + 
+  facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
 ![](l13_regression_analysis_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 ---
+# Exploratory Data Analysis
 
 
-Relationship between total interactions and the number of people who saw the post
-because they have liked that page
-
+```r
+Prestige_1 %&gt;%
+  filter(is.na(type) == FALSE) %&gt;%
+ggplot(aes(x = value, y = type, fill = type)) + geom_boxplot() + 
+  facet_wrap(variable ~., ncol=1, scales = "free")
+```
 
 ![](l13_regression_analysis_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+---
+# Exploratory Data Analysis
+
+
+```r
+train %&gt;%
+  select(education, income, prestige, women) %&gt;%
+  ggpairs()
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+---
+# Exploratory Data Analysis
+
+
+```r
+train %&gt;%
+  filter(is.na(type) == FALSE) %&gt;%
+  ggpairs(columns= c("education", "income", "prestige", "women"),
+          mapping=aes(color=type))
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+
 
 ---
+class: duke-orange, center, middle
+# Regression analysis
 
-# Simple linear regression 
+---
+# Steps
+
+1. Fit a model
+
+2. Visualize the fitted model
+
+3. Measuring the strength of the fit
+
+4. Residual analysis 
+
+5. Interpret the coefficients 
+
+---
+class: duke-orange, middle
+
+# Model 1: prestige ~ education
+
+---
+## Recap 
+
+**True relationship between X and Y in the population**
+
+`$$Y = f(X) + \epsilon$$`
+
+**If f is approximated by a linear fuction**
+
+`$$Y = \beta_0 + \beta_1X + \epsilon$$`
+
+Suppose that the mean and variance of `\(\epsilon\)` are `\(0\)` and `\(\sigma^2\)`, then the mean response at any value of the `\(X\)` is 
+
+`$$E(Y|X=x) = E(\beta_0 + \beta_1x + \epsilon)=\beta_0+\beta_1x$$`
+
+For a single unit `\((y_i, x_i)\)`
+
+`$$y_i = \beta_0 + \beta_1x_i+\epsilon_1 \text{where} \epsilon_1 \sim N(0, \sigma^2)$$`
+
+We use sample values `\((y_i, x_i)\)` where `\(i=1, 2, ...n\)` to estimate `\(\beta_0\)` and `\(\beta_1\)`.
+
+The fitted regression model is 
+
+`$$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x$$`
+---
+
+# How to estimate `\(\beta_0\)` and `\(\beta_1\)`?
+
+Sum of squares of Residuals
+
+`$$SSR=e_1^2+e_2^2+...+e_n^2$$`
+
+The least-squares regression approach chooses coefficients `\(\hat{\beta}_0\)` and `\(\hat{\beta}_12\)` to minimize `\(SSR\)`.
+---
+class: duke-orange, middle
+
+# Model 1: prestige ~ education
+
+### 1. Fit a model
+
+---
+# Model 1: Fit a model
 
 To fit 
 
@@ -253,17 +350,115 @@ To fit
 
 
 ```r
-model1 &lt;- lm(totalInteractions ~ sawbyLiked, data=train)
-tidy(model1)
+model1 &lt;- lm(prestige ~ education, data=train)
+
+summary(model1)
+```
+
+```
+
+Call:
+lm(formula = prestige ~ education, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-26.4715  -5.8396   0.9778   6.2464  17.4767 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -9.418      3.918  -2.404   0.0186 *  
+education      5.269      0.353  14.928   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 8.754 on 78 degrees of freedom
+Multiple R-squared:  0.7407,	Adjusted R-squared:  0.7374 
+F-statistic: 222.8 on 1 and 78 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# What's messy about the output?
+
+
+```
+
+Call:
+lm(formula = prestige ~ education, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-26.4715  -5.8396   0.9778   6.2464  17.4767 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -9.418      3.918  -2.404   0.0186 *  
+education      5.269      0.353  14.928   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 8.754 on 78 degrees of freedom
+Multiple R-squared:  0.7407,	Adjusted R-squared:  0.7374 
+F-statistic: 222.8 on 1 and 78 DF,  p-value: &lt; 2.2e-16
+```
+
+
+- Extract coefficients takes multiple steps.
+
+  ```r
+  data.frame(coef(summary(model1)))
+  ```
+
+- Column names are inconvenient to use. 
+    
+- Information are stored in row names. 
+
+
+
+
+
+---
+# `broom` functions
+
+- broom takes model objects and
+turns them into tidy data frames
+that can be used with other tidy tools. 
+
+- Three main functions
+
+    `tidy()`: component-level statistics
+
+    `augment()`: observation-level statistics
+
+    `glance()`: model-level statistics
+
+---
+# Component-level statistics: `tidy()`
+
+
+```r
+model1 %&gt;% tidy()
 ```
 
 ```
 # A tibble: 2 x 5
-  term        estimate std.error statistic   p.value
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-1 (Intercept) 449.      10.1          44.6 8.29e-157
-2 sawbyLiked    0.0322   0.00103      31.4 1.08e-109
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)    -9.42     3.92      -2.40 1.86e- 2
+2 education       5.27     0.353     14.9  1.43e-24
 ```
+
+```r
+model1 %&gt;% tidy(conf.int=TRUE)
+```
+
+```
+# A tibble: 2 x 7
+  term        estimate std.error statistic  p.value conf.low conf.high
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)    -9.42     3.92      -2.40 1.86e- 2   -17.2      -1.62
+2 education       5.27     0.353     14.9  1.43e-24     4.57      5.97
+```
+
 
 
 ```r
@@ -274,35 +469,68 @@ model1 %&gt;% tidy() %&gt;% select(term, estimate)
 # A tibble: 2 x 2
   term        estimate
   &lt;chr&gt;          &lt;dbl&gt;
-1 (Intercept) 449.    
-2 sawbyLiked    0.0322
+1 (Intercept)    -9.42
+2 education       5.27
 ```
 
 Fitted model is
 
-`$$y_i = 449 + 0.0322  x_i$$`
-
+`$$y_i = 27.1 + 0.0029  x_i$$`
 ---
-# Visualizing the linear model
-
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
----
-# Visualizing the linear model (style the line)
-
+# Why are tidy model outputs useful?
 
 
 ```r
-ggplot(data=train, aes(y=totalInteractions, x=sawbyLiked))+
-  geom_point(alpha=0.5)+
-  geom_smooth(method="lm", se=FALSE,
-              col="forestgreen", lty=2, lwd=2)
+tidy_model1 &lt;- model1 %&gt;% tidy(conf.int=TRUE)
+ggplot(tidy_model1, aes(x=estimate, y=term, color=term)) + 
+  geom_point() + geom_errorbarh(aes(xmin = conf.low, xmax=conf.high))+ggtitle("Coefficient plot")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+---
+class: duke-orange, middle
+
+# Model 1: prestige ~ education
+
+### 1. Fit a model
+
+### 2. Visualise the fitted model
+
 ---
 
-# Measuring the strength of the fit
+# Model 1: Visualise the fitted model
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+---
+## Model 1: Visualise the fitted model (style the line)
+
+
+```r
+ggplot(data=train, aes(y=prestige, x=education)) + 
+  geom_point(alpha=0.5) +
+  geom_smooth(method="lm", se=FALSE,
+*              col="forestgreen", lwd=2)
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+class: duke-orange, middle
+
+# Model 1: prestige ~ education
+
+### 1. Fit a model
+
+### 2. Visualise the fitted model
+
+### 3. Measure the strength of the fit
+
+---
+# Model-level statistics: `glance()`
+
+ Measuring the strength of the fit
 
 
 ```r
@@ -311,9 +539,9 @@ glance(model1)
 
 ```
 # A tibble: 1 x 11
-  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.712         0.711  152.      985. 1.08e-109     2 -2576. 5159. 5171.
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.741         0.737  8.75      223. 1.43e-24     2  -286.  578.  585.
 # … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;
 ```
 
@@ -324,41 +552,26 @@ glance(model1)$r.squared # extract values
 ```
 
 ```
-[1] 0.7122038
+[1] 0.7407278
 ```
 
-Roughly 71% of the variability in total interactions can be explained by the number of people who saw the post
-because they have liked that page.
+Roughly 72% of the variability in prestige can be explained by the variable education.
+
 ---
-# Simple  linear regression
+class: duke-orange, middle
 
+# Model 1: prestige ~ education
 
-```r
-summary(model1)
-```
+### 1. Fit a model
 
-```
+### 2. Visualise the fitted model
 
-Call:
-lm(formula = totalInteractions ~ sawbyLiked, data = train)
+### 3. Measure the strength of the fit
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--599.84  -88.69    3.27   85.96  635.47 
+### 4. Residual analysis
 
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 4.493e+02  1.008e+01   44.57   &lt;2e-16 ***
-sawbyLiked  3.218e-02  1.025e-03   31.38   &lt;2e-16 ***
 ---
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 152.1 on 398 degrees of freedom
-Multiple R-squared:  0.7122,	Adjusted R-squared:  0.7115 
-F-statistic: 984.9 on 1 and 398 DF,  p-value: &lt; 2.2e-16
-```
----
-# Fitted values, Residuals, etc.
+# Observation-level statistics: `augment()`
 
 
 ```r
@@ -367,48 +580,40 @@ model1_fitresid
 ```
 
 ```
-# A tibble: 400 x 9
-   totalInteractio… sawbyLiked .fitted .se.fit  .resid    .hat .sigma .cooksd
-              &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
- 1              578       4418    591.    7.89  -13.4  0.00269   152. 1.05e-5
- 2              727       6964    673.    7.62   53.7  0.00251   152. 1.57e-4
- 3              659       2254    522.    8.74  137.   0.00330   152. 1.35e-3
- 4              470       1917    511.    8.91  -40.9  0.00344   152. 1.25e-4
- 5             1011      22816   1183.   18.4  -172.   0.0147    152. 9.71e-3
- 6              644       5752    634.    7.64    9.66 0.00252   152. 5.12e-6
- 7              647       3494    562.    8.19   85.3  0.00290   152. 4.59e-4
- 8              412        650    470.    9.66  -58.2  0.00403   152. 2.97e-4
- 9              420       2392    526.    8.67 -106.   0.00325   152. 7.98e-4
-10              805       8560    725.    7.91   80.3  0.00270   152. 3.79e-4
-# … with 390 more rows, and 1 more variable: .std.resid &lt;dbl&gt;
+# A tibble: 80 x 10
+   .rownames prestige education .fitted .se.fit  .resid   .hat .sigma .cooksd
+   &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1 medical.…     67.5     12.8     58.0   1.22    9.53  0.0193   8.74 1.19e-2
+ 2 welders       41.8      7.92    32.3   1.40    9.49  0.0255   8.74 1.58e-2
+ 3 commerci…     40.2     11.1     49.2   0.988  -9.03  0.0127   8.75 6.95e-3
+ 4 economis…     62.2     14.4     66.7   1.63   -4.47  0.0347   8.80 4.85e-3
+ 5 farmers       44.1      6.84    26.6   1.69   17.5   0.0373   8.57 8.03e-2
+ 6 receptio…     38.7     11.0     48.8   0.984 -10.1   0.0126   8.74 8.55e-3
+ 7 sales.su…     41.5      9.84    42.4   1.03   -0.931 0.0138   8.81 8.04e-5
+ 8 mail.car…     36.1      9.22    39.2   1.12   -3.06  0.0163   8.80 1.03e-3
+ 9 taxi.dri…     25.1      7.93    32.4   1.40   -7.27  0.0254   8.77 9.22e-3
+10 veterina…     66.7     15.9     74.6   2.08   -7.87  0.0563   8.76 2.56e-2
+# … with 70 more rows, and 1 more variable: .std.resid &lt;dbl&gt;
 ```
+
+---
+
+# Residuals and Fitted Values
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 ---
 # Residuals and Fitted Values
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 The residual is the difference between the observed and predicted response.
 
 The residual for the `\(i^{th}\)` observation is 
 
 `$$e_i = y_i - \hat{y}_i=y_i - (\hat{\beta_0}+\hat{\beta_1}x_i)$$`
----
-# Sum of squares of Residuals
 
-`$$SSR=e_1^2+e_2^2+...+e_n^2$$`
 
-The least-squares regression approach chooses coefficients `\(\hat{\beta}_0\)` and `\(\hat{\beta}_12\)` to minimize `\(SSR\)`.
-
-**Intercept:** Mean response when the explanatory variable equals 0
-
-**Slope:** Increase in the mean response for every one unit increase in the explanatory variable.
-
-Fitted model is
-
-`$$y_i = 449 + 0.0322  x_i$$`
-
-Write the interpretation of the slope and intercept.
 ---
 ## Conditions for inference for regression
 
@@ -419,6 +624,7 @@ Write the interpretation of the slope and intercept.
 3. **N**ormality of the residuals
 
 4. **E**quality of variance: **Constant** variance
+
 ---
 # Checking assumptions:  Linearity
 
@@ -426,10 +632,7 @@ Write the interpretation of the slope and intercept.
 variable must be Linear.
 
     - Check this before fitting the regression line.
-
-
 ---
-
 # Independence
 
 - Often, we can conclude that the independence assumption is sufficiently met
@@ -440,41 +643,43 @@ based on a description of the data and how it was collected.
     - Serial Effect
     
     - Cluster Effect
-
 ---
 
-## Plot of residuals vs predictor variables (linearity and constant variance)
+## Plot of residuals vs predictor variables 
+
+### linearity and constant variance
 
 .pull-left[
 
 Residuals vs X
 
-
 ```r
-ggplot(model1_fitresid, aes(x=sawbyLiked, y=.resid))+
-  geom_point() +
-  geom_hline(yintercept = 0, col = "blue", size = 1)
+ggplot(model1_fitresid, 
+  aes(x = education, y = .resid))+
+  ------ +
+  ------
+
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 
 Residuals vs Fitted
 
-
 ```r
-ggplot(model1_fitresid, aes(x=.fitted, y=.resid))+
-  geom_point() +
-  geom_hline(yintercept = 0, col = "blue", size = 1)
+ggplot(model1_fitresid, 
+  aes(x = .fitted, y = .resid))+
+  ------ +
+  ------
+
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ]
 
 ---
-
 # Normality of residuals
 
 .pull-left[
@@ -485,7 +690,7 @@ ggplot(model1_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -496,7 +701,7 @@ ggplot(model1_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -510,195 +715,53 @@ shapiro.test(model1_fitresid$.resid)
 	Shapiro-Wilk normality test
 
 data:  model1_fitresid$.resid
-W = 0.97532, p-value = 2.571e-06
+W = 0.97192, p-value = 0.07527
 ```
----
-## **L**inearity of relationship between variables? 
-
-Yes
-
-## **I**ndependence of residuals?
-
-Yes
-
-## **N**ormality of residuals?
-
-No
-
-## **E**quality of variance?
-
-Yes
-
 
 ---
-## Influential outliers
+
+class: duke-orange, middle
+
+# Model 2: prestige ~ education +  `income`
+
+### 1. Fit a model
+
+### 2. Visualise the fitted model
+
+### 3. Measure the strength of the fit
+
+### 4. Residual analysis
+
+---
+# Model 2: prestige ~ education +  `income`
 
 
 ```r
-library(lindia)
-gg_cooksd(model1)
-```
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
-
----
-
-
-```r
-train_revised &lt;- train[-261,]
-model1_revised &lt;-  lm(totalInteractions ~ sawbyLiked, data=train_revised)
-summary(model1_revised)
-```
-
-```
-
-Call:
-lm(formula = totalInteractions ~ sawbyLiked, data = train_revised)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--600.01  -87.72    3.62   85.64  635.21 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 4.496e+02  1.010e+01   44.50   &lt;2e-16 ***
-sawbyLiked  3.216e-02  1.026e-03   31.33   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 152.2 on 397 degrees of freedom
-Multiple R-squared:  0.712,	Adjusted R-squared:  0.7113 
-F-statistic: 981.5 on 1 and 397 DF,  p-value: &lt; 2.2e-16
-```
-
----
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
-
-
-
-```
-
-	Shapiro-Wilk normality test
-
-data:  model1_revised_fitresid$.resid
-W = 0.97525, p-value = 2.559e-06
-```
----
-
-
-```r
-cooksD &lt;- cooks.distance(model1)
-n &lt;- nrow(train)
-influential_obs &lt;- as.numeric(names(cooksD)[(cooksD &gt; (4/n))])
-train_revised2 &lt;- train[-influential_obs,]
-model1_revised2 &lt;-  lm(totalInteractions ~ sqrt(sawbyLiked), data=train_revised2)
-summary(model1_revised2)
-```
-
-```
-
-Call:
-lm(formula = totalInteractions ~ sqrt(sawbyLiked), data = train_revised2)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--379.43  -70.40    5.77   70.96  296.09 
-
-Coefficients:
-                 Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)      242.8810    15.2617   15.91   &lt;2e-16 ***
-sqrt(sawbyLiked)   5.7356     0.2105   27.24   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 120.5 on 371 degrees of freedom
-Multiple R-squared:  0.6667,	Adjusted R-squared:  0.6658 
-F-statistic: 742.2 on 1 and 371 DF,  p-value: &lt; 2.2e-16
-```
-
----
-
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
-
-
-
-```
-
-	Shapiro-Wilk normality test
-
-data:  model1_revised_fitresid2$.resid
-W = 0.99115, p-value = 0.02481
-```
-
----
-
-
-```r
-ggplot(data=train, aes(y=totalInteractions, x=engagedUsers))+
-  geom_point(alpha=0.5)
-```
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
----
-.pull-left[
-
-
-```r
-ggplot(data=train, aes(
-  y=totalInteractions, 
-  x=engagedUsers))+
-  geom_point(alpha=0.5)
-```
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-
-
-```r
-ggplot(data=train, aes(
-  y=totalInteractions, 
-  x=sqrt(engagedUsers))) +
-  geom_point(alpha=0.5)
-```
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
-]
----
-# Multiple linear regression model
-
-
-```r
-model2 &lt;- lm(totalInteractions ~ sawbyLiked + sqrt(engagedUsers), data=train)
+model2 &lt;- lm(prestige ~ income + education, data=train)
 summary(model2)
 ```
 
 ```
 
 Call:
-lm(formula = totalInteractions ~ sawbyLiked + sqrt(engagedUsers), 
-    data = train)
+lm(formula = prestige ~ income + education, data = train)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1046.25   -74.55     1.59    70.74   549.81 
+-18.9407  -4.1745   0.2026   4.9471  17.7176 
 
 Coefficients:
-                    Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)        3.261e+02  1.886e+01  17.293  &lt; 2e-16 ***
-sawbyLiked         2.540e-02  1.315e-03  19.316  &lt; 2e-16 ***
-sqrt(engagedUsers) 5.976e+00  7.927e-01   7.539 3.24e-13 ***
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -7.5400414  3.4980062  -2.156   0.0342 *  
+income       0.0015286  0.0003249   4.705  1.1e-05 ***
+education    4.1452613  0.3937971  10.526  &lt; 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 142.4 on 397 degrees of freedom
-Multiple R-squared:  0.7482,	Adjusted R-squared:  0.747 
-F-statistic:   590 on 2 and 397 DF,  p-value: &lt; 2.2e-16
+Residual standard error: 7.765 on 77 degrees of freedom
+Multiple R-squared:  0.7986,	Adjusted R-squared:  0.7934 
+F-statistic: 152.7 on 2 and 77 DF,  p-value: &lt; 2.2e-16
 ```
----
 
 
 ```r
@@ -707,136 +770,544 @@ model2_fitresid
 ```
 
 ```
-# A tibble: 400 x 10
-   totalInteractio… sawbyLiked sqrt.engagedUse… .fitted .se.fit   .resid    .hat
-              &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
- 1              578       4418             27.1    600.    7.48  -22.4   0.00276
- 2              727       6964             37.8    729.   10.3    -1.97  0.00520
- 3              659       2254             25.0    533.    8.32  126.    0.00341
- 4              470       1917             15.8    469.   10.0     0.852 0.00495
- 5             1011      22816             40.8   1150.   17.8  -139.    0.0157 
- 6              644       5752             16.8    573.   10.9    71.4   0.00583
- 7              647       3494             29.0    588.    8.44   58.7   0.00351
- 8              412        650             17.4    447.    9.56  -34.7   0.00451
- 9              420       2392             24.9    536.    8.22 -116.    0.00333
-10              805       8560             29.5    720.    7.43   85.3   0.00272
-# … with 390 more rows, and 3 more variables: .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;,
-#   .std.resid &lt;dbl&gt;
-```
-
-```r
-colnames(model2_fitresid)
-```
-
-```
- [1] "totalInteractions"  "sawbyLiked"         "sqrt.engagedUsers."
- [4] ".fitted"            ".se.fit"            ".resid"            
- [7] ".hat"               ".sigma"             ".cooksd"           
-[10] ".std.resid"        
+# A tibble: 80 x 11
+   .rownames prestige income education .fitted .se.fit .resid   .hat .sigma
+   &lt;chr&gt;        &lt;dbl&gt;  &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 medical.…     67.5   5180     12.8     53.4   1.45   14.1  0.0350   7.64
+ 2 welders       41.8   6477      7.92    35.2   1.38    6.61 0.0317   7.78
+ 3 commerci…     40.2   8780     11.1     52.0   1.06  -11.8  0.0186   7.70
+ 4 economis…     62.2   8049     14.4     64.6   1.51   -2.42 0.0378   7.81
+ 5 farmers       44.1   3643      6.84    26.4   1.50   17.7  0.0374   7.54
+ 6 receptio…     38.7   2901     11.0     42.7   1.56   -3.96 0.0405   7.80
+ 7 sales.su…     41.5   7482      9.84    44.7   1.03   -3.19 0.0177   7.81
+ 8 mail.car…     36.1   5511      9.22    39.1   0.991  -3.00 0.0163   7.81
+ 9 taxi.dri…     25.1   4224      7.93    31.8   1.24   -6.69 0.0257   7.78
+10 veterina…     66.7  14558     15.9     80.8   2.27  -14.1  0.0853   7.63
+# … with 70 more rows, and 2 more variables: .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;
 ```
 
 ---
-# Model 2: Check assumptions
 
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+## Plot of residuals vs predictor variables 
 
+### linearity and constant variance
+
+Residuals vs Fitted
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 
 ---
-## Model 3: Multiple linear regression with categorical variables
+
+## Plot of residuals vs predictor variables 
+
+### linearity and constant variance
+
 .pull-left[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
-
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+]
+---
+# Normality of residuals
+
+.pull-left[
+
+```r
+ggplot(model2_fitresid, 
+       aes(x=.resid))+
+  geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(model2_fitresid, 
+       aes(sample=.resid))+
+  stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
 
 ]
 
+
+```r
+shapiro.test(model2_fitresid$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  model2_fitresid$.resid
+W = 0.99183, p-value = 0.8977
+```
+
 ---
-## Model 3: Multiple linear regression with categorical
+
+class: duke-orange, middle
+
+## Model 3: prestige ~ education +  `log(income)`
+
+### 1. Fit a model
+
+### 2. Visualise the fitted model
+
+### 3. Measure the strength of the fit
+
+### 4. Residual analysis
+
+---
+## Model 3: prestige ~ education +  `log(income)`
 
 
 ```r
-model3 &lt;- lm(totalInteractions ~ sawbyLiked + sqrt(engagedUsers)+category, data=train)
+model3 &lt;- lm(prestige ~ log(income) + education, data=train)
 summary(model3)
 ```
 
 ```
 
 Call:
-lm(formula = totalInteractions ~ sawbyLiked + sqrt(engagedUsers) + 
-    category, data = train)
+lm(formula = prestige ~ log(income) + education, data = train)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--864.34  -66.89   -0.58   67.00  454.00 
+     Min       1Q   Median       3Q      Max 
+-17.5828  -4.1534   0.7978   4.3347  18.1881 
 
 Coefficients:
-                    Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)        2.693e+02  1.570e+01  17.153  &lt; 2e-16 ***
-sawbyLiked         2.653e-02  1.088e-03  24.395  &lt; 2e-16 ***
-sqrt(engagedUsers) 4.698e+00  6.569e-01   7.152 4.19e-12 ***
-category2          7.603e+01  1.498e+01   5.075 5.98e-07 ***
-category3          1.991e+02  1.344e+01  14.815  &lt; 2e-16 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -86.5942    13.4064  -6.459 8.62e-09 ***
+log(income)  10.2025     1.7189   5.936 7.91e-08 ***
+education     4.2163     0.3436  12.271  &lt; 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 114.3 on 395 degrees of freedom
-Multiple R-squared:  0.8386,	Adjusted R-squared:  0.837 
-F-statistic: 513.2 on 4 and 395 DF,  p-value: &lt; 2.2e-16
+Residual standard error: 7.298 on 77 degrees of freedom
+Multiple R-squared:  0.8221,	Adjusted R-squared:  0.8175 
+F-statistic: 177.9 on 2 and 77 DF,  p-value: &lt; 2.2e-16
 ```
----
 
 
 ```r
 model3_fitresid &lt;- augment(model3)
-model3_fitresid
+```
+
+---
+
+## Plot of Residuals vs Fitted
+
+.pull-left[
+
+Now - Model 3
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+]
+
+
+.pull-right[
+
+Before - Model 2
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+]
+
+
+---
+
+## Plot of residuals vs predictor variables 
+
+
+.pull-left[
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+
+]
+---
+# Normality of residuals
+
+.pull-left[
+
+```r
+ggplot(model3_fitresid, 
+       aes(x=.resid))+
+  geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(model3_fitresid, 
+       aes(sample=.resid))+
+  stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+
+]
+
+
+```r
+shapiro.test(model3_fitresid$.resid)
 ```
 
 ```
-# A tibble: 400 x 11
-   totalInteractio… sawbyLiked sqrt.engagedUse… category .fitted .se.fit
-              &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt;
- 1              578       4418             27.1 1           514.    9.41
- 2              727       6964             37.8 3           831.   11.4 
- 3              659       2254             25.0 2           523.   11.6 
- 4              470       1917             15.8 2           470.   13.4 
- 5             1011      22816             40.8 1          1066.   15.4 
- 6              644       5752             16.8 3           700.   12.3 
- 7              647       3494             29.0 3           697.   10.6 
- 8              412        650             17.4 1           368.   10.1 
- 9              420       2392             24.9 2           526.   11.6 
-10              805       8560             29.5 2           711.   12.1 
-# … with 390 more rows, and 5 more variables: .resid &lt;dbl&gt;, .hat &lt;dbl&gt;,
-#   .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;
+
+	Shapiro-Wilk normality test
+
+data:  model3_fitresid$.resid
+W = 0.9931, p-value = 0.9492
+```
+
+---
+
+.pull-left[
+
+## Prestige vs income by type
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+
+R code: ___________
+
+]
+
+.pull-right[
+
+
+## Prestige vs income by type
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+
+R code: ______________
+
+]
+
+---
+
+class: duke-orange, middle
+
+## Model 4: prestige ~ education +  log(income) + `type`
+
+### 1. Fit a model
+
+### 2. Visualise the fitted model
+
+### 3. Measure the strength of the fit
+
+### 4. Residual analysis
+
+---
+
+
+```r
+str(train)
+```
+
+```
+'data.frame':	80 obs. of  6 variables:
+ $ education: num  12.79 7.92 11.13 14.44 6.84 ...
+ $ income   : int  5180 6477 8780 8049 3643 2901 7482 5511 4224 14558 ...
+ $ women    : num  76.04 5.17 3.16 57.31 3.6 ...
+ $ prestige : num  67.5 41.8 40.2 62.2 44.1 38.7 41.5 36.1 25.1 66.7 ...
+ $ census   : int  3156 8335 5133 2311 7112 4171 5130 4172 9173 3115 ...
+ $ type     : Factor w/ 3 levels "bc","prof","wc": 3 1 3 2 NA 3 3 3 1 2 ...
+```
+
+---
+## Model 4: prestige ~ education +  log(income) + `type`
+
+
+```r
+model4 &lt;- lm(prestige ~ log(income) + education + type, data=train)
+summary(model4)
+```
+
+```
+
+Call:
+lm(formula = prestige ~ log(income) + education + type, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.8420  -3.7790   0.6321   4.7393  17.8611 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -71.9102    17.7934  -4.041 0.000133 ***
+log(income)   9.1505     2.2945   3.988 0.000160 ***
+education     3.5136     0.7553   4.652 1.48e-05 ***
+typeprof      6.7702     4.3797   1.546 0.126595    
+typewc       -1.6497     3.0213  -0.546 0.586758    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.746 on 71 degrees of freedom
+  (4 observations deleted due to missingness)
+Multiple R-squared:  0.8494,	Adjusted R-squared:  0.8409 
+F-statistic: 100.1 on 4 and 71 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+## Model 4: prestige ~ education +  log(income) + `type`
+
+```r
+model4_fitresid &lt;- augment(model4)
+head(model4_fitresid)
+```
+
+```
+# A tibble: 6 x 12
+  .rownames prestige log.income. education type  .fitted .se.fit .resid   .hat
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 medical.…     67.5        8.55     12.8  wc       49.6    2.06 17.9   0.0934
+2 welders       41.8        8.78      7.92 bc       36.2    1.31  5.58  0.0377
+3 commerci…     40.2        9.08     11.1  wc       48.6    2.14 -8.43  0.100 
+4 economis…     62.2        8.99     14.4  prof     67.9    1.40 -5.69  0.0431
+5 receptio…     38.7        7.97     11.0  wc       38.2    2.07  0.515 0.0944
+6 sales.su…     41.5        8.92      9.84 wc       42.6    2.36 -1.14  0.122 
+# … with 3 more variables: .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;
+```
+
+---
+
+## Plot of Residuals vs Fitted
+
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+
+---
+
+# Normality of residuals
+
+.pull-left[
+
+```r
+ggplot(model4_fitresid, 
+       aes(x=.resid))+
+  geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(model4_fitresid, 
+       aes(sample=.resid))+
+  stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+
+]
+
+
+```r
+shapiro.test(model4_fitresid$.resid)
+```
+
+```
+
+	Shapiro-Wilk normality test
+
+data:  model4_fitresid$.resid
+W = 0.9838, p-value = 0.4445
+```
+
+---
+# Visualise the model
+
+.pull-left[
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
+
+]
+
+---
+# Interpret the coefficients
+
+
+```r
+model4 %&gt;% tidy()
+```
+
+```
+# A tibble: 5 x 5
+  term        estimate std.error statistic   p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)   -71.9     17.8      -4.04  0.000133 
+2 log(income)     9.15     2.29      3.99  0.000160 
+3 education       3.51     0.755     4.65  0.0000148
+4 typeprof        6.77     4.38      1.55  0.127    
+5 typewc         -1.65     3.02     -0.546 0.587    
+```
+
+---
+## Influential outliers
+
+
+```r
+library(lindia)
+gg_cooksd(model4)
+```
+
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+
+---
+# Influential outliers (cont.)
+
+
+```r
+model4_fitresid %&gt;%
+  top_n(4, wt = .cooksd)
+```
+
+```
+# A tibble: 4 x 12
+  .rownames prestige log.income. education type  .fitted .se.fit .resid   .hat
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 medical.…     67.5        8.55      12.8 wc       49.6    2.06  17.9  0.0934
+2 veterina…     66.7        9.59      15.9 prof     78.6    1.90 -11.9  0.0795
+3 file.cle…     32.7        8.01      12.1 wc       42.2    2.32  -9.53 0.118 
+4 collecto…     29.4        8.46      11.2 wc       43.2    1.69 -13.8  0.0629
+# … with 3 more variables: .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;
+```
+
+
+---
+# Statistical inference
+
+---
+# Making predictions
+
+Method 1
+
+
+```r
+head(test)
+```
+
+```
+                       education income women prestige census type
+gov.administrators         13.11  12351 11.16     68.8   1113 prof
+general.managers           12.26  25879  4.02     69.1   1130 prof
+mining.engineers           14.64  11023  0.94     68.8   2153 prof
+surveyors                  12.39   5902  1.91     62.0   2161 prof
+vocational.counsellors     15.22   9593 34.89     58.3   2391 prof
+physicians                 15.96  25308 10.56     87.2   3111 prof
 ```
 
 ```r
-colnames(model3_fitresid)
+predict(model4, test)
 ```
 
 ```
- [1] "totalInteractions"  "sawbyLiked"         "sqrt.engagedUsers."
- [4] "category"           ".fitted"            ".se.fit"           
- [7] ".resid"             ".hat"               ".sigma"            
-[10] ".cooksd"            ".std.resid"        
+       gov.administrators          general.managers          mining.engineers 
+                 67.13432                  70.91638                  71.46917 
+                surveyors    vocational.counsellors                physicians 
+                 57.84739                  72.23557                  83.71240 
+            nursing.aides               secretaries               bookkeepers 
+                 35.92664                  43.13913                  42.87183 
+          shipping.clerks       telephone.operators             office.clerks 
+                 36.14801                  37.10841                  41.15412 
+             sales.clerks service.station.attendant      real.estate.salesmen 
+                 33.68323                  34.08491                  46.41067 
+                policemen                launderers              farm.workers 
+                 49.69682                  27.10663                  26.13155 
+        textile.labourers                machinists        electronic.workers 
+                 26.40488                  39.63996                  34.62981 
+                   masons 
+                 30.82164 
 ```
 
 ---
+# Making predictions
 
-# Model 3: Check assumptions
-
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+Method 2
 
 
+```r
+library(modelr)
+test &lt;- test %&gt;% add_predictions(model4)
+test
+```
+
+```
+                          education income women prestige census type     pred
+gov.administrators            13.11  12351 11.16     68.8   1113 prof 67.13432
+general.managers              12.26  25879  4.02     69.1   1130 prof 70.91638
+mining.engineers              14.64  11023  0.94     68.8   2153 prof 71.46917
+surveyors                     12.39   5902  1.91     62.0   2161 prof 57.84739
+vocational.counsellors        15.22   9593 34.89     58.3   2391 prof 72.23557
+physicians                    15.96  25308 10.56     87.2   3111 prof 83.71240
+nursing.aides                  9.45   3485 76.14     34.9   3135   bc 35.92664
+secretaries                   11.59   4036 97.51     46.0   4111   wc 43.13913
+bookkeepers                   11.32   4348 68.24     49.4   4131   wc 42.87183
+shipping.clerks                9.17   4761 11.37     30.9   4153   wc 36.14801
+telephone.operators           10.51   3161 96.14     38.1   4175   wc 37.10841
+office.clerks                 11.00   4075 63.23     35.6   4197   wc 41.15412
+sales.clerks                  10.05   2594 67.82     26.5   5137   wc 33.68323
+service.station.attendant      9.93   2370  3.69     23.3   5145   bc 34.08491
+real.estate.salesmen          11.09   6992 24.44     47.1   5172   wc 46.41067
+policemen                     10.93   8891  1.65     51.6   6112   bc 49.69682
+launderers                     7.33   3000 69.31     20.8   6162   bc 27.10663
+farm.workers                   8.60   1656 27.75     21.5   7182   bc 26.13155
+textile.labourers              6.74   3485 39.48     28.8   8278   bc 26.40488
+machinists                     8.81   6686  4.28     44.2   8313   bc 39.63996
+electronic.workers             8.76   3942 74.54     50.8   8534   bc 34.62981
+masons                         6.60   5959  0.52     36.2   8782   bc 30.82164
+```
 ---
 
+# In-sample accuaracy and out of sample accuracy
+
+
+```r
+# test MSE
+test %&gt;%
+add_predictions(model4) %&gt;%
+summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
+```
+
+```
+       MSE
+1 40.82736
+```
+
+```r
+# training MSE
+train %&gt;%
+add_predictions(model4) %&gt;%
+summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
+```
+
+```
+       MSE
+1 42.51919
+```
 
 ---
-
 # Other models
 
 - Decision trees
