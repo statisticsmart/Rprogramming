@@ -157,3 +157,7 @@ Answers: Available on Google Classroom and LMS.
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
+
+#### Individual projects 
+
+[Individual Projects - 2020](/resources/)

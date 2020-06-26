@@ -1,5 +1,5 @@
 ---
-title: Individual Project
+title: Individual Projects
 ---
 
 
