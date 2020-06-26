@@ -55,17 +55,28 @@ summary(Prestige)
 ---
 # Data description
 
-`prestige`: Pineo-Porter prestige score for occupation, from a social survey conducted in the mid-1960s.
 
-`education`: Average education of occupational incumbents, years, in 1971.
+**`prestige`**:  prestige of Canadian occupations, measured by the Pineo-Porter prestige score for occupation taken from a social survey conducted in the mid-1960s.
 
-`income`: Average income of incumbents, dollars, in 1971.
+**`education`**: Average education of occupational incumbents, years, in 1971.
 
-`women`: Percentage of incumbents who are women.
+**`income`**: Average income of incumbents, dollars, in 1971.
 
-`census`: Canadian Census occupational code.
+**`women`**: Percentage of incumbents who are women.
 
-`type`: Type of occupation. A factor with levels (note: out of order): bc, Blue Collar; prof, Professional, Managerial, and Technical; wc, White Collar.
+**`census`**: Canadian Census occupational code.
+
+**`type`**: Type of occupation. 
+
+    - prof: professional and technical
+    
+    - wc: white collar
+    
+    - bc: blue collar
+    
+    - NA: missing
+
+The dataset consists of 102 observations, each corresponding to a particular occupation.
 
 ---
 # Training test and Test set
@@ -212,7 +223,9 @@ class: duke-orange, center, middle
 
 5. Interpret the coefficients 
 
+
 ---
+
 class: duke-orange, middle
 
 # Model 1: prestige ~ education
@@ -224,23 +237,23 @@ class: duke-orange, middle
 
 $$Y = f(X) + \epsilon$$
 
-**If f is approximated by a linear fuction**
+**If $f$ is approximated by a linear fuction**
 
 $$Y = \beta_0 + \beta_1X + \epsilon$$
 
 Suppose that the mean and variance of $\epsilon$ are $0$ and $\sigma^2$, then the mean response at any value of the $X$ is 
 
-$$E(Y|X=x) = E(\beta_0 + \beta_1x + \epsilon)=\beta_0+\beta_1x$$
+$$E(Y|X=x_i) = E(\beta_0 + \beta_1x_i + \epsilon)=\beta_0+\beta_1x_i$$
 
 For a single unit $(y_i, x_i)$
 
-$$y_i = \beta_0 + \beta_1x_i+\epsilon_1 \text{where} \epsilon_1 \sim N(0, \sigma^2)$$
+$$y_i = \beta_0 + \beta_1x_i+\epsilon_i \text{  where  } \epsilon_i \sim N(0, \sigma^2)$$
 
 We use sample values $(y_i, x_i)$ where $i=1, 2, ...n$ to estimate $\beta_0$ and $\beta_1$.
 
 The fitted regression model is 
 
-$$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x$$
+$$\hat{y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$
 ---
 
 # How to estimate $\beta_0$ and $\beta_1$?
@@ -249,7 +262,37 @@ Sum of squares of Residuals
 
 $$SSR=e_1^2+e_2^2+...+e_n^2$$
 
-The least-squares regression approach chooses coefficients $\hat{\beta}_0$ and $\hat{\beta}_12$ to minimize $SSR$.
+The least-squares regression approach chooses coefficients $\hat{\beta}_0$ and $\hat{\beta}_1$ to minimize $SSR$.
+
+---
+background-image: url('reg/reg1.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg2.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg3.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg4.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg5.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg6.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg7.PNG')
+background-position: center
+background-size: contain
+
 ---
 class: duke-orange, middle
 
@@ -321,9 +364,17 @@ model1 %>% tidy(conf.int=TRUE)
 model1 %>% tidy() %>% select(term, estimate)
 ```
 
+
+---
+# Component-level statistics: `tidy()` (cont.)
+
+```{r, comment=NA, message=FALSE}
+model1 %>% tidy()
+```
+
 Fitted model is
 
-$$y_i = 27.1 + 0.0029  x_i$$
+$$\hat{y}_i = -9.42 + 5.27  x_i$$
 ---
 # Why are tidy model outputs useful?
 

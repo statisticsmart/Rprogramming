@@ -133,6 +133,7 @@ Answers: Available on Google Classroom and LMS.
 |Slides    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
+
 #### Week 13: 
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |

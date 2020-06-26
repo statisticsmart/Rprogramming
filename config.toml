@@ -23,8 +23,8 @@ custom_js  = []
 
 [languages]
   [languages.en]
-    title = "Hello Friend"
-    subtitle = "A simple theme for Hugo"
+    title = "R programming"
+    subtitle = "STA 326 2.0 Programming and Data Analysis with R"
     keywords = ""
     copyright = ""
     menuMore = "Show more"
@@ -50,3 +50,8 @@ custom_js  = []
         identifier = "schedule"
         name = "Schedule"
         url = "/schedule"
+    
+      [[languages.en.menu.main]]
+        identifier = "resources"
+        name = "Individual project"
+        url = "/resources"

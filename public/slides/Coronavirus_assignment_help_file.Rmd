@@ -1,0 +1,71 @@
+---
+title: "Assignment - Help file"
+date: "26/06/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Use `coronavirus` package to obtain data
+
+```r
+install.packages("coronavirus")
+```
+
+```{r, comment=NA, message=FALSE}
+library(coronavirus)
+```
+
+## Load data
+
+```{r}
+data(coronavirus)
+```
+
+
+## Data description
+
+```{r, comment=NA, message=FALSE}
+head(coronavirus)
+tail(coronavirus)
+```
+
+## To use help file
+
+```r
+?coronavirus
+```
+
+## Find the country name from the list below
+
+```{r, comment=NA, message=FALSE}
+unique(coronavirus$country)
+```
+
+## Useful codes: Data Analysis for the USA
+
+1. Load necessary packages
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+2. Filter USA
+
+```{r, comment=NA, message=FALSE}
+usa_corona <- coronavirus %>% filter(country == "US")
+```
+
+3. Extract recovered cases in the USA
+
+```{r, comment=NA, message=FALSE}
+recover_usa_corona <- usa_corona %>% filter(type=="recovered")
+head(recover_usa_corona)
+```
+
+```{r, comment=NA, message=FALSE}
+ggplot(recover_usa_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("US: Daily Covid-19 Recoveries")
+```

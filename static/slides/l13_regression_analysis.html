@@ -85,17 +85,28 @@ summary(Prestige)
 ---
 # Data description
 
-`prestige`: Pineo-Porter prestige score for occupation, from a social survey conducted in the mid-1960s.
 
-`education`: Average education of occupational incumbents, years, in 1971.
+**`prestige`**:  prestige of Canadian occupations, measured by the Pineo-Porter prestige score for occupation taken from a social survey conducted in the mid-1960s.
 
-`income`: Average income of incumbents, dollars, in 1971.
+**`education`**: Average education of occupational incumbents, years, in 1971.
 
-`women`: Percentage of incumbents who are women.
+**`income`**: Average income of incumbents, dollars, in 1971.
 
-`census`: Canadian Census occupational code.
+**`women`**: Percentage of incumbents who are women.
 
-`type`: Type of occupation. A factor with levels (note: out of order): bc, Blue Collar; prof, Professional, Managerial, and Technical; wc, White Collar.
+**`census`**: Canadian Census occupational code.
+
+**`type`**: Type of occupation. 
+
+    - prof: professional and technical
+    
+    - wc: white collar
+    
+    - bc: blue collar
+    
+    - NA: missing
+
+The dataset consists of 102 observations, each corresponding to a particular occupation.
 
 ---
 # Training test and Test set
@@ -295,7 +306,9 @@ class: duke-orange, center, middle
 
 5. Interpret the coefficients 
 
+
 ---
+
 class: duke-orange, middle
 
 # Model 1: prestige ~ education
@@ -307,23 +320,23 @@ class: duke-orange, middle
 
 `$$Y = f(X) + \epsilon$$`
 
-**If f is approximated by a linear fuction**
+**If `\(f\)` is approximated by a linear fuction**
 
 `$$Y = \beta_0 + \beta_1X + \epsilon$$`
 
 Suppose that the mean and variance of `\(\epsilon\)` are `\(0\)` and `\(\sigma^2\)`, then the mean response at any value of the `\(X\)` is 
 
-`$$E(Y|X=x) = E(\beta_0 + \beta_1x + \epsilon)=\beta_0+\beta_1x$$`
+`$$E(Y|X=x_i) = E(\beta_0 + \beta_1x_i + \epsilon)=\beta_0+\beta_1x_i$$`
 
 For a single unit `\((y_i, x_i)\)`
 
-`$$y_i = \beta_0 + \beta_1x_i+\epsilon_1 \text{where} \epsilon_1 \sim N(0, \sigma^2)$$`
+`$$y_i = \beta_0 + \beta_1x_i+\epsilon_i \text{  where  } \epsilon_i \sim N(0, \sigma^2)$$`
 
 We use sample values `\((y_i, x_i)\)` where `\(i=1, 2, ...n\)` to estimate `\(\beta_0\)` and `\(\beta_1\)`.
 
 The fitted regression model is 
 
-`$$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x$$`
+`$$\hat{y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$`
 ---
 
 # How to estimate `\(\beta_0\)` and `\(\beta_1\)`?
@@ -332,7 +345,37 @@ Sum of squares of Residuals
 
 `$$SSR=e_1^2+e_2^2+...+e_n^2$$`
 
-The least-squares regression approach chooses coefficients `\(\hat{\beta}_0\)` and `\(\hat{\beta}_12\)` to minimize `\(SSR\)`.
+The least-squares regression approach chooses coefficients `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` to minimize `\(SSR\)`.
+
+---
+background-image: url('reg/reg1.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg2.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg3.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg4.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg5.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg6.PNG')
+background-position: center
+background-size: contain
+---
+background-image: url('reg/reg7.PNG')
+background-position: center
+background-size: contain
+
 ---
 class: duke-orange, middle
 
@@ -473,9 +516,26 @@ model1 %&gt;% tidy() %&gt;% select(term, estimate)
 2 education       5.27
 ```
 
+
+---
+# Component-level statistics: `tidy()` (cont.)
+
+
+```r
+model1 %&gt;% tidy()
+```
+
+```
+# A tibble: 2 x 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)    -9.42     3.92      -2.40 1.86e- 2
+2 education       5.27     0.353     14.9  1.43e-24
+```
+
 Fitted model is
 
-`$$y_i = 27.1 + 0.0029  x_i$$`
+`$$\hat{y}_i = -9.42 + 5.27  x_i$$`
 ---
 # Why are tidy model outputs useful?
 
@@ -486,7 +546,7 @@ ggplot(tidy_model1, aes(x=estimate, y=term, color=term)) +
   geom_point() + geom_errorbarh(aes(xmin = conf.low, xmax=conf.high))+ggtitle("Coefficient plot")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
 class: duke-orange, middle
@@ -501,7 +561,7 @@ class: duke-orange, middle
 
 # Model 1: Visualise the fitted model
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 ---
 ## Model 1: Visualise the fitted model (style the line)
@@ -514,7 +574,7 @@ ggplot(data=train, aes(y=prestige, x=education)) +
 *              col="forestgreen", lwd=2)
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
 class: duke-orange, middle
@@ -600,12 +660,12 @@ model1_fitresid
 
 # Residuals and Fitted Values
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 ---
 # Residuals and Fitted Values
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 The residual is the difference between the observed and predicted response.
 
@@ -661,7 +721,7 @@ ggplot(model1_fitresid,
 
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -676,7 +736,7 @@ ggplot(model1_fitresid,
 
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -690,7 +750,7 @@ ggplot(model1_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -701,7 +761,7 @@ ggplot(model1_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -795,7 +855,7 @@ model2_fitresid
 
 Residuals vs Fitted
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -804,11 +864,11 @@ Residuals vs Fitted
 ### linearity and constant variance
 
 .pull-left[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -822,7 +882,7 @@ ggplot(model2_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -833,7 +893,7 @@ ggplot(model2_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -908,7 +968,7 @@ model3_fitresid &lt;- augment(model3)
 
 Now - Model 3
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -916,7 +976,7 @@ Now - Model 3
 
 Before - Model 2
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -927,11 +987,11 @@ Before - Model 2
 
 .pull-left[
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -945,7 +1005,7 @@ ggplot(model3_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -956,7 +1016,7 @@ ggplot(model3_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -979,7 +1039,7 @@ W = 0.9931, p-value = 0.9492
 
 ## Prestige vs income by type
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
 
 R code: ___________
 
@@ -990,7 +1050,7 @@ R code: ___________
 
 ## Prestige vs income by type
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
 
 R code: ______________
 
@@ -1087,7 +1147,7 @@ head(model4_fitresid)
 ## Plot of Residuals vs Fitted
 
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1101,7 +1161,7 @@ ggplot(model4_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1112,7 +1172,7 @@ ggplot(model4_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1134,13 +1194,13 @@ W = 0.9838, p-value = 0.4445
 
 .pull-left[
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
 
 ]
 
 .pull-right[
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1172,7 +1232,7 @@ library(lindia)
 gg_cooksd(model4)
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-63-1.png)&lt;!-- --&gt;
 
 ---
 # Influential outliers (cont.)
