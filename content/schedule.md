@@ -136,7 +136,7 @@ Assignment: Individual Project
 
 ```diff
 
-Go to LMS. Deadline: 14 July 2020
+Go to LMS. Deadline: 20 July 2020
 
 ```
 
