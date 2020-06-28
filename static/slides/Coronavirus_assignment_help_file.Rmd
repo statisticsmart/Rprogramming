@@ -70,6 +70,8 @@ head(recover_usa_corona)
 ggplot(recover_usa_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("US: Daily Covid-19 Recoveries")
 ```
 
+
+
 4. Plot country
 
 ```{r, comment=NA, message=FALSE, warning=FALSE}

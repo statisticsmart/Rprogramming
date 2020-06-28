@@ -41,6 +41,7 @@ library(GGally)
 library(carData)
 library(tidyverse)
 library(magrittr)
+library(car) # to calculate VIF
 ```
 
 ---
@@ -296,16 +297,17 @@ class: duke-orange, center, middle
 ---
 # Steps
 
-1. Fit a model
+1. Fit a model.
 
-2. Visualize the fitted model
+2. Visualize the fitted model.
 
-3. Measuring the strength of the fit
+3. Measuring the strength of the fit.
 
-4. Residual analysis 
+4. Residual analysis. 
 
-5. Interpret the coefficients 
+5. Interpret the coefficients. 
 
+6. Make predictions using the fitted model.
 
 ---
 
@@ -320,11 +322,11 @@ class: duke-orange, middle
 
 `$$Y = f(X) + \epsilon$$`
 
-**If `\(f\)` is approximated by a linear fuction**
+**If `\(f\)` is approximated by a linear function**
 
 `$$Y = \beta_0 + \beta_1X + \epsilon$$`
 
-Suppose that the mean and variance of `\(\epsilon\)` are `\(0\)` and `\(\sigma^2\)`, then the mean response at any value of the `\(X\)` is 
+The error terms are normally distributed with mean `\(0\)` and variance `\(\sigma^2\)`. Then the mean response, `\(Y\)`, at any value of the `\(X\)` is 
 
 `$$E(Y|X=x_i) = E(\beta_0 + \beta_1x_i + \epsilon)=\beta_0+\beta_1x_i$$`
 
@@ -336,7 +338,7 @@ We use sample values `\((y_i, x_i)\)` where `\(i=1, 2, ...n\)` to estimate `\(\b
 
 The fitted regression model is 
 
-`$$\hat{y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$`
+`$$\hat{Y_i} = \hat{\beta}_0 + \hat{\beta}_1x_i$$`
 ---
 
 # How to estimate `\(\beta_0\)` and `\(\beta_1\)`?
@@ -377,6 +379,11 @@ background-position: center
 background-size: contain
 
 ---
+background-image: url('reg/errors.PNG')
+background-position: center
+background-size: contain
+
+---
 class: duke-orange, middle
 
 # Model 1: prestige ~ education
@@ -386,10 +393,9 @@ class: duke-orange, middle
 ---
 # Model 1: Fit a model
 
-To fit 
-
 `$$y_i = \beta_0 + \beta_1x_i + \epsilon_i, \text{where } \epsilon_i \sim NID(0, \sigma^2)$$`
 
+To estimate `\(\beta_0\)` and `\(\beta_1\)`
 
 
 ```r
@@ -535,7 +541,7 @@ model1 %&gt;% tidy()
 
 Fitted model is
 
-`$$\hat{y}_i = -9.42 + 5.27  x_i$$`
+`$$\hat{Y}_i = -9.42 + 5.27  x_i$$`
 ---
 # Why are tidy model outputs useful?
 
@@ -608,14 +614,14 @@ glance(model1)
 
 
 ```r
-glance(model1)$r.squared # extract values
+glance(model1)$adj.r.squared # extract values
 ```
 
 ```
-[1] 0.7407278
+[1] 0.7374038
 ```
 
-Roughly 72% of the variability in prestige can be explained by the variable education.
+Roughly 73% of the variability in prestige can be explained by the variable education.
 
 ---
 class: duke-orange, middle
@@ -671,38 +677,44 @@ The residual is the difference between the observed and predicted response.
 
 The residual for the `\(i^{th}\)` observation is 
 
-`$$e_i = y_i - \hat{y}_i=y_i - (\hat{\beta_0}+\hat{\beta_1}x_i)$$`
+`$$e_i = y_i - \hat{Y}_i=y_i - (\hat{\beta_0}+\hat{\beta_1}x_i)$$`
 
 
 ---
 ## Conditions for inference for regression
 
-1. **L**inearity of relationship between variables
+- The relationship between the response and the predictors is linear.
 
-2. **I**ndependence of the residuals
+- The error terms are assumed to have zero mean and unknown constant variance `\(\sigma^2\)`.
 
-3. **N**ormality of the residuals
+- The errors are normally distributed.
 
-4. **E**quality of variance: **Constant** variance
+- The errors are uncorrelated.
+
+
 
 ---
-# Checking assumptions:  Linearity
 
-- The response variable and the explanatory
-variable must be Linear.
+# Plot of residuals in time sequence.
 
-    - Check this before fitting the regression line.
----
-# Independence
+- The errors are uncorrelated.
 
-- Often, we can conclude that the independence assumption is sufficiently met
+- Often, we can conclude that the this assumption is sufficiently met
 based on a description of the data and how it was collected.
 
-- Two common violation of the independence
 
-    - Serial Effect
-    
-    - Cluster Effect
+
+---
+background-image: url('reg/errors.PNG')
+background-position: right
+background-size: contain
+
+### Plot of residuals vs fitted values
+
+.pull-left[
+This is useful for detecting several common types of model inadequacies.
+]
+
 ---
 
 ## Plot of residuals vs predictor variables 
@@ -822,7 +834,8 @@ Residual standard error: 7.765 on 77 degrees of freedom
 Multiple R-squared:  0.7986,	Adjusted R-squared:  0.7934 
 F-statistic: 152.7 on 2 and 77 DF,  p-value: &lt; 2.2e-16
 ```
-
+---
+# Model 2: prestige ~ education +  `income` (cont.)
 
 ```r
 model2_fitresid &lt;- augment(model2)
@@ -851,26 +864,16 @@ model2_fitresid
 
 ## Plot of residuals vs predictor variables 
 
-### linearity and constant variance
 
-Residuals vs Fitted
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
-
----
-
-## Plot of residuals vs predictor variables 
-
-### linearity and constant variance
 
 .pull-left[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
-
+linearity and constant variance?
 ]
+
 ---
 # Normality of residuals
 
@@ -882,7 +885,7 @@ ggplot(model2_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -893,7 +896,7 @@ ggplot(model2_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -968,7 +971,7 @@ model3_fitresid &lt;- augment(model3)
 
 Now - Model 3
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -976,24 +979,10 @@ Now - Model 3
 
 Before - Model 2
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 ]
 
 
----
-
-## Plot of residuals vs predictor variables 
-
-
-.pull-left[
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
-
-]
 ---
 # Normality of residuals
 
@@ -1005,7 +994,7 @@ ggplot(model3_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1016,7 +1005,7 @@ ggplot(model3_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1039,7 +1028,7 @@ W = 0.9931, p-value = 0.9492
 
 ## Prestige vs income by type
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
 
 R code: ___________
 
@@ -1050,7 +1039,7 @@ R code: ___________
 
 ## Prestige vs income by type
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
 
 R code: ______________
 
@@ -1147,7 +1136,7 @@ head(model4_fitresid)
 ## Plot of Residuals vs Fitted
 
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1161,7 +1150,7 @@ ggplot(model4_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-53-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1172,7 +1161,7 @@ ggplot(model4_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1190,41 +1179,24 @@ W = 0.9838, p-value = 0.4445
 ```
 
 ---
-# Visualise the model
-
-.pull-left[
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
-
-]
-
-.pull-right[
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
-
-]
-
----
-# Interpret the coefficients
+## Multicollinearity
 
 
 ```r
-model4 %&gt;% tidy()
+car::vif(model4)
 ```
 
 ```
-# A tibble: 5 x 5
-  term        estimate std.error statistic   p.value
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-1 (Intercept)   -71.9     17.8      -4.04  0.000133 
-2 log(income)     9.15     2.29      3.99  0.000160 
-3 education       3.51     0.755     4.65  0.0000148
-4 typeprof        6.77     4.38      1.55  0.127    
-5 typewc         -1.65     3.02     -0.546 0.587    
+                GVIF Df GVIF^(1/(2*Df))
+log(income) 1.789890  1        1.337868
+education   7.471481  1        2.733401
+type        7.021948  2        1.627850
 ```
+
+VIFs larger than 10 imply series problems with multicollinearity.
 
 ---
-## Influential outliers
+## Detecting influential observations
 
 
 ```r
@@ -1232,7 +1204,7 @@ library(lindia)
 gg_cooksd(model4)
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-63-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
 
 ---
 # Influential outliers (cont.)
@@ -1254,9 +1226,29 @@ model4_fitresid %&gt;%
 # … with 3 more variables: .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;
 ```
 
+## Solutions
 
+- Remove influential observations, and re-fit model. 
+
+- Transform explanatory variables to reduce influence.
+
+- Use weighted regression to down weight influence of extreme observations.
 ---
-# Statistical inference
+# Hypothesis testing
+
+`\(Y = \beta_0 + \beta_1x_{1} + \beta_2x_{2} +  \beta_3x_{3} +  \beta_4x_{4} + \epsilon\)`
+
+## What is the overall adequacy of the model?
+
+`\(H0: \beta_1= \beta_2 = \beta_3 = \beta_4\)`
+
+`\(H1: \beta_j \neq 0 \text{ for at least one } j, j=1, 2, 3, 4\)`
+
+## Which specific regressors seem important?
+
+`\(H0: \beta_1= 0\)`
+
+`\(H1: \beta_1 \neq 0\)`
 
 ---
 # Making predictions
@@ -1340,7 +1332,7 @@ masons                         6.60   5959  0.52     36.2   8782   bc 30.82164
 ```
 ---
 
-# In-sample accuaracy and out of sample accuracy
+# In-sample accuracy and out of sample accuracy
 
 
 ```r
@@ -1366,7 +1358,95 @@ summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
        MSE
 1 42.51919
 ```
+---
 
+## Out of sample accuracy: model 1, model 2 and model 3
+
+
+```r
+# test MSE
+test %&gt;%
+add_predictions(model1) %&gt;%
+summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
+```
+
+```
+       MSE
+1 105.7605
+```
+
+```r
+# test MSE
+test %&gt;%
+add_predictions(model2) %&gt;%
+summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
+```
+
+```
+       MSE
+1 67.16647
+```
+
+```r
+# test MSE
+test %&gt;%
+add_predictions(model3) %&gt;%
+summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
+```
+
+```
+       MSE
+1 45.36052
+```
+
+Model 4: 42.51
+
+
+---
+
+.pull-left[
+
+## Modelling cycle
+
+1. EDA
+
+2. Fit
+
+3. Examine the residuals (multicollinearity/ 
+
+4. Transform/ Add/ Drop regressors if necessary
+
+5. Repeat above until you find a good model(s)
+
+6. Use out-of-sample accuracy to select the final model
+
+
+]
+
+.pull-right[
+
+## Presenting results
+
+- EDA
+
+- Final regression fit: 
+
+    - sample size
+    - estimated coefficients and standard errors
+    - `\(R_{adj}^2\)`
+    - Visualizations (model fit, coefficients and CIs)
+
+- Model adequacy checking results: Residual plots and interpretations
+
+- Hypothesis testing and interpretations
+
+    - ANOVA, etc.
+
+- Out-of sample accuracy 
+
+]
+
+- Some flexibility is possible in the presentation of results and you may want to adjust the rules above to emphasize the point you are trying to make.
 ---
 # Other models
 
@@ -1376,7 +1456,7 @@ summarise(MSE = mean((prestige - pred)^2, na.rm=TRUE))
 
 - XGBoost
 
-&gt; Data Mining course!
+- Deep learning approaches and many more..
 
 
 
