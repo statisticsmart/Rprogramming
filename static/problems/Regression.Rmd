@@ -1,0 +1,101 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Regression Analysis"
+author: Dr Thiyanga Talagala
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+![](facebook.jpg)
+
+## 1. Data
+
+Download the data file from the course website [here](https://hellor.netlify.app/schedule/) (under week 12).
+
+Use `readRDS` function to read the file.
+
+```r
+
+facebookdata_marketing <- readRDS("_GIVE_FILE PATH_/facebookdata_marketing.rds")
+
+```
+
+## Your turn (optional)
+
+Explore `here` function in the `here` package.
+
+[Read here](http://jenrichmond.rbind.io/post/how-to-use-the-here-package/)
+
+## 2. Variable description
+
+A manager of a retail company wants to develop a regression model to identify the effect of the following variables (see below) on the total number of `likes`, `comments`, and `shares` on facebook posts.
+
+- **month:** Month the post was published (1, 2, 3, ..., 12)
+
+- **category:** Type of the post (1 - Link, 2 - Video, 3 - Picture)
+
+- **hour:** Hour the post was published (0, 1, ...24)
+
+- **paid:** If the company paid to Facebook for advertising (0 - No, 1 - Yes)
+
+- **totalReach:** Number of people who saw the page post
+(unique users).
+
+- **engagedUsers:** Number of people who clicked anywhere
+in the post (unique users).
+
+- **postConsumers:** Number of people who sent a direct message to the owner
+of the post.
+
+- **postConsumption:** Number of clicks anywhere in the post.
+
+- **sawbyLiked:** Number of people who saw the page post
+because they have liked that page.
+
+- **clickbyLiked:** Number of people who have liked the Page
+and clicked anywhere in the post.
+
+Dependent variable:
+
+- **totalInteractions:** The sum of “likes,” “comments,” and “shares”
+of the post.
+
+
+## 3. Training test and Test set
+
+```{r, eval=FALSE}
+smp_size <- 400
+
+## set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(facebookdata_marketing)), size = smp_size)
+train <- facebookdata_marketing[train_ind, ]
+test <- facebookdata_marketing[-train_ind, ]
+
+```
+
+## 4. Questions
+
+1. Perform a thorough Exploratory Data Analysis on `facebookdata_marketing.rds`.
+
+2. Develop a suitable regression model to predict total interactions (The sum of “likes,” “comments,” and “shares”
+of the post).
+
+3. Test for significance of regression. What conclusions can you draw?
+
+4. Using $t$ tests, determine the contribution of the regressors in your final model. Discuss your findings.
+
+5. Plot 95% confidence interval for the regression coefficients of the model in part 2.
+
+6. Is multicollinearity a potential concern in the model identified in part 2.
+
+7. Use the model in part 2 to predict each observation in the test test and calculate the out-of-sample accuracy.
+
+8. Prepare a brief report presenting your EDA and regression analysis.
+
+#### Acknowledgement
+
+Moro, S., Rita, P., & Vala, B. (2016). Predicting social media performance metrics and evaluation of the impact on brand building: A data mining approach. Journal of Business Research, 69(9), 3341-3351.

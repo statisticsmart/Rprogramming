@@ -144,7 +144,7 @@ Go to LMS. Deadline: 20 July 2020
 
 #### Week 12: Regression Analysis with R
 
-|[Slides](/slides/l13_regression_analysis.html)    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)  	|  [Video Lecture](/video.pdf) 	|  Problems 	| Answers |
+|[Slides](/slides/l13_regression_analysis.html)    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)  	|  [Video Lecture](/video.pdf) 	|  [Problems](/problems/Regression.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 🖥️ **R Labwork**
