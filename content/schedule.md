@@ -151,7 +151,7 @@ Go to LMS. Deadline: 20 July 2020
 
 [Data-facebookdata_marketing.rds](/slides/facebookdata_marketing.rds)
 
-#### Week 13: 
+#### Week 13: The Inverse Transform Method
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
