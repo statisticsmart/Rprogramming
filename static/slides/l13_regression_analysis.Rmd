@@ -97,7 +97,7 @@ dim(test)
 
 ```{r, comment=NA, eval=FALSE}
 Prestigedf <- train %>%
-  pivot_longer(c(4, 1, 2, 3), names_to="variable", values_to="value")
+  pivot_longer(c(1, 2, 3, 4), names_to="variable", values_to="value")
 Prestigedf
 ```
 
