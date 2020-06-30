@@ -96,9 +96,9 @@ dim(test)
 # Exploratory Data Analysis
 
 ```{r, comment=NA, eval=FALSE}
-Prestigedf <- train %>%
+Prestige_1 <- train %>%
   pivot_longer(c(1, 2, 3, 4), names_to="variable", values_to="value")
-Prestigedf
+Prestige_1
 ```
 
 .pull-left[
