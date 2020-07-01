@@ -1,5 +1,6 @@
 ---
 title: "The Grammar of Graphics"
+author: "Dr Thiyanga Talagala"
 output: html_document
 ---
 
@@ -18,30 +19,38 @@ data(gapminder)
 
 **1. Slide 38**
 
-```{r, fig.cap="Figure 1", comment=NA, message=FALSE, comment=FALSE}
-ggplot(gapminder, aes(y=lifeExp, x=gdpPercap, col=continent))+geom_point()
+```{r, fig.cap="Figure 1: Plot of life Expectancy versus GDP per capita", comment=NA, message=FALSE, comment=FALSE}
+ggplot(gapminder, aes(y=lifeExp, x=gdpPercap, col=continent))+geom_point(alpha=0.5)
 
 ```
 
-It's impossible to see whats going on in Figure 1! Now lets look at the same graph with both axes scaled by factors of 10 (in other words, on logarithmic axes).
+It's impossible to see what is going on in Figure 1! Now lets look at the same graph with both axes scaled by factors of 10 (in other words, on logarithmic axes).
 
 
-```{r, comment=NA, message=FALSE, comment=FALSE, fig.cap="Figure 2"}
-ggplot(gapminder, aes(y=log(lifeExp), x=log(gdpPercap), col=continent))+geom_point()
+```{r, comment=NA, message=FALSE, comment=FALSE, fig.cap="Figure 2: Plot of log of life Expectancy versus log of GDP per capita"}
+p <- ggplot(gapminder, aes(y=log(lifeExp), x=log(gdpPercap), col=continent))+geom_point(alpha=0.5)
+p
 
 ```
 
 In Figure 2, the points are spread pretty evenly along both axes - so you can really see what's going on.
 
+According to Figure 1 and Figure 2 countries with higher GDP tend to have a higher life expectancy. According to Figure 2 we can clearly see African countries and most of the Asian countries have much lower life expectancy and GDP per capita.
+
 \vspace{3cm}
 
-**When does one use the logarithmic scale to visualize data instead of the absolute values?**
+## When does one use the logarithmic scale to visualize data instead of the absolute values?
 
 - When the dataset contains numbers of very different
 magnitudes, you should consider whether a log transform will enhance the visualization. A log transformation preserves the order of the observations while making outliers less extreme.
 
-## Extra: Create interactive graphics
+## Extra: Make `ggplot2` Graphics Interactive with `plotly`
 
+```{r, comment=NA, message=FALSE}
+library(plotly)
+ggplotly(p)
+
+```
 
 
 
