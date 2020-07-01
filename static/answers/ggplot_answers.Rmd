@@ -1,0 +1,186 @@
+---
+title: "The Grammar of Graphics"
+author: "Dr Thiyanga Talagala"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Answers
+
+```{r, comment=NA, message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(gapminder)
+data(gapminder)
+```
+
+**1. Slide 38**
+
+```{r, fig.cap="Figure 1: Plot of life Expectancy versus GDP per capita", comment=NA, message=FALSE, comment=FALSE}
+ggplot(gapminder, aes(y=lifeExp, x=gdpPercap, col=continent))+geom_point(alpha=0.5)
+
+```
+
+It's impossible to see what is going on in Figure 1! Now lets look at the same graph with both axes scaled by factors of 10 (in other words, on logarithmic axes).
+
+
+```{r, comment=NA, message=FALSE, comment=FALSE, fig.cap="Figure 2: Plot of log of life Expectancy versus log of GDP per capita"}
+p <- ggplot(gapminder, aes(y=log(lifeExp), x=log(gdpPercap), col=continent))+geom_point(alpha=0.5)
+p
+
+```
+
+In Figure 2, the points are spread pretty evenly along both axes - so you can really see what's going on.
+
+According to Figure 1 and Figure 2 countries with higher GDP tend to have a higher life expectancy. According to Figure 2 we can clearly see African countries and most of the Asian countries have much lower life expectancy and GDP per capita.
+
+\vspace{3cm}
+
+## When does one use the logarithmic scale to visualize data instead of the absolute values?
+
+- When the dataset contains numbers of very different
+magnitudes, you should consider whether a log transform will enhance the visualization. A log transformation preserves the order of the observations while making outliers less extreme.
+
+## Extra: Make `ggplot2` Graphics Interactive with `plotly`
+
+```{r, comment=NA, message=FALSE}
+library(plotly)
+ggplotly(p)
+
+```
+
+
+
+\newpage
+
+**2. Slide 63**
+
+```{r, comment=NA,warning=FALSE, message=FALSE}
+gapminder2007 <- gapminder %>%
+  filter(year == 2007)
+ggplot(gapminder2007, 
+aes(x=lifeExp, col=continent, fill=continent))+
+  geom_density(alpha=0.5) 
+```
+
+\newpage
+
+**3. Slide 66**
+
+```{r, comment=NA,  warning=FALSE, message=FALSE}
+ggplot(gapminder2007, 
+aes(x=continent, fill=continent))+ 
+ geom_bar() 
+```
+
+\newpage
+
+**4. Slide 73**
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+gapminder %>%
+filter(country == "India") %>%
+ggplot(aes(x = year, y = gdpPercap)) +
+geom_line() + 
+  geom_point() + 
+  labs(title="Time series plot of GDP per capita",
+       x="Year", 
+       y="GDP per capita (USD, inflation-adjusted)")
+```
+
+\newpage
+
+**5. Slide 75**
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+avglifeExp <- gapminder %>%
+  group_by(continent, year) %>%
+  summarise(meanlifeExp=mean(lifeExp))
+
+ggplot(avglifeExp, aes(x=year, y=meanlifeExp, col=continent))+
+  geom_line() + geom_point()
+```
+
+\newpage
+
+**6. Slide 76**
+
+```{r, comment=NA, message=FALSE}
+gapminder %>%
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977)) %>%
+  filter(continent %in% c("Asia", "Americas")) %>%
+  ggplot(aes(y=lifeExp, x=gdpPercap, color=continent)) + 
+  geom_point() + 
+  facet_wrap(~year, ncol=3)+
+  labs(title="Life Expectancy vs GDP - America and Asia",
+       y = "Life Expectancy",
+       x = "GDP per capita")
+```
+
+\newpage
+
+**7. Slide 77**
+
+```{r, comment=NA, message=FALSE}
+gapminder %>%
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977)) %>%
+  filter(continent %in% c("Asia", "Americas")) %>%
+  ggplot(aes(y=log(lifeExp), x=log(gdpPercap), color=continent)) + 
+  geom_point() + 
+  facet_wrap(~year, ncol=3)+
+  labs(title="Life Expectancy vs GDP - America and Asia",
+       y = "log(Life Expectancy)",
+       x = "log(GDP per capita)")
+```
+
+\newpage
+
+**8. Slide 79**
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+ggplot(gapminder_unfiltered, aes(gdpPercap, lifeExp, color = year)) + 
+geom_point() +
+facet_wrap(~ continent)
+```
+
+
+\newpage
+
+**9. Slide 82**
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+ggplot(gapminder, aes(y=lifeExp,  x=year)) + 
+geom_smooth() +
+facet_wrap(~ continent)
+```
+
+\newpage
+
+**10. Slide 83**
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+ggplot(gapminder, aes(y=lifeExp,  x=year)) + 
+geom_smooth() +
+  geom_point() + 
+facet_wrap(~ continent)
+```
+
+\newpage
+
+**11. Slide 84**
+
+```{r message=FALSE, fig.height=5}
+xn <- seq(-5, 5, length=10000)
+yn <- dnorm(xn)
+df <- data.frame(x=xn, y=yn)
+ggplot(df, aes(x=xn, y=yn))+
+  geom_line(col="red")
+
+```
+
+Note: 
+
+You should include Figure caption  for all graphs. It is important to interpret all graphs.

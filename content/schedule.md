@@ -119,7 +119,7 @@ Answers: Available on Google Classroom and LMS.
 
 #### Week 11: The Grammar of Graphics
 
-|[Slides](/slides/l12_grammar_of_graphics.html)   	| [Video Lecture](/video.pdf)  | [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html)  	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf) 	|  [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
+|[Slides](/slides/l12_grammar_of_graphics.html)   	| [Video Lecture](/video.pdf)  | [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html)  	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf) 	|  [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| [Answers](/answers/ggplot_answers.html) |
 |:-: |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 🖥️ **R Labwork**
