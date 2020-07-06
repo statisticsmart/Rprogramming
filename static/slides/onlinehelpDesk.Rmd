@@ -1,5 +1,5 @@
 ---
-title: 'STA 326 20: Online Helpdesk - 2020'
+title: 'STA 326 2.0: Online Helpdesk - 2020'
 author: "Dr Thiyanga Talagala"
 date: "06/07/2020"
 output: html_document
@@ -20,7 +20,7 @@ library(magrittr)
 
 # Question 1: Plotting negative values
 
-## Method 1
+## Method 1: Discontinuity Point
 
 ```{r, comment=NA, fig.pos="center", fig.cap="Figure 1: Time series plot of recovered cases (discontinuity represents missing values/ negative values)"}
 
@@ -36,13 +36,13 @@ ggplot(recovered_spain_corona, aes(x=date, y=cases)) +
 
 ## Method 2: Impute missing value
 
-```{r,comment=NA, message=FALSE, fig.cap="Figure 1: Time series plot of recovered cases (imputed values are shown in red.)"}
-# ILocate missing value
+```{r,comment=NA, message=FALSE, fig.cap="Figure 2: Time series plot of recovered cases (imputed values are shown in red.)"}
+# Locate missing value
 which(is.na(recovered_spain_corona$cases)) # Using base R
-# I use average of 93rd and 95th to impute the missing value
+# I use the average of the 93rd and the 95th to calculate the missing value/negative value.
 recovered_spain_corona$cases[94] = mean(c(recovered_spain_corona$cases[93], recovered_spain_corona$cases[95]))
 length(recovered_spain_corona$cases)
-# Now we have to create a separe variable pass to the colour argument. I called the new variable col.
+#  I add a column col that indicates desired colour.
 recovered_spain_corona$col <- as.factor(c(rep("black", 92),rep("red", 2), rep("black", 112-94)))
 summary(recovered_spain_corona)
 ggplot(recovered_spain_corona, aes(x=date, y=cases)) +
@@ -56,14 +56,14 @@ ggplot(recovered_spain_corona, aes(x=date, y=cases)) +
 
 # Frequency polygons
 
-```{r, comment=NA, message=FALSE, warning=FALSE, fig.cap="Distribution of number of recovered cases"}
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.cap="Figure 3: Distribution of number of recovered cases"}
 ggplot(recovered_spain_corona, aes(cases)) +
   geom_freqpoly(bins = 9)
 ```
 
 # Histogram
 
-```{r, comment=NA, fig.cap="Distribution of number of recovered cases"}
+```{r, comment=NA, fig.cap="Figure 4: Distribution of number of recovered cases"}
 ggplot(recovered_spain_corona, aes(cases)) +
   geom_histogram(bins = 9, col="white", alpha=0.5)
 ```
@@ -72,7 +72,7 @@ ggplot(recovered_spain_corona, aes(cases)) +
 
 A frequency polygon is a graph constructed by joining the midpoints of each interval or bin.
 
-```{r, comment=NA, fig.cap="Distribution of number of recovered cases"}
+```{r, comment=NA, fig.cap="Figure 5: Distribution of number of recovered cases"}
 ggplot(recovered_spain_corona, aes(cases)) +
   geom_histogram(bins = 9, col="white", alpha=0.5) + 
   geom_freqpoly(bins = 9, col="red")
