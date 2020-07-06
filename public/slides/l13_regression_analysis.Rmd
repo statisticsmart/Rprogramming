@@ -540,11 +540,11 @@ This is useful for detecting several common types of model inadequacies.
 
 ---
 
-## Plot of residuals vs predictor variables 
+## Plot of residuals vs fitted values and Plot of residuals vs predictor 
 
 ### linearity and constant variance
 
-.pull-left[
+.pull-right[
 
 Residuals vs X
 
@@ -565,7 +565,7 @@ ggplot(model1_fitresid,
 ```
 ]
 
-.pull-right[
+.pull-left[
 
 Residuals vs Fitted
 
