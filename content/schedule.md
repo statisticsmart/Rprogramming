@@ -178,3 +178,6 @@ Go to LMS. Deadline: 20 July 2020
 #### Individual projects 
 
 [Individual Projects - 2020](/resources/)
+
+
+
