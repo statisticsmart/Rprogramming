@@ -721,21 +721,6 @@ This is useful for detecting several common types of model inadequacies.
 
 ### linearity and constant variance
 
-.pull-right[
-
-Residuals vs X
-
-```r
-ggplot(model1_fitresid, 
-  aes(x = education, y = .resid))+
-  ------ +
-  ------
-
-```
-
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
-]
-
 .pull-left[
 
 Residuals vs Fitted
@@ -748,8 +733,25 @@ ggplot(model1_fitresid,
 
 ```
 
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+]
+
+
+.pull-right[
+
+Residuals vs X
+
+```r
+ggplot(model1_fitresid, 
+  aes(x = education, y = .resid))+
+  ------ +
+  ------
+
+```
+
 ![](l13_regression_analysis_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 ]
+
 
 ---
 # Normality of residuals

@@ -544,6 +544,28 @@ This is useful for detecting several common types of model inadequacies.
 
 ### linearity and constant variance
 
+.pull-left[
+
+Residuals vs Fitted
+
+```r
+ggplot(model1_fitresid, 
+  aes(x = .fitted, y = .resid))+
+  ------ +
+  ------
+
+```
+
+```{r, comment=NA, echo=FALSE}
+ggplot(model1_fitresid, 
+  aes(x = .fitted, y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+
 .pull-right[
 
 Residuals vs X
@@ -565,26 +587,6 @@ ggplot(model1_fitresid,
 ```
 ]
 
-.pull-left[
-
-Residuals vs Fitted
-
-```r
-ggplot(model1_fitresid, 
-  aes(x = .fitted, y = .resid))+
-  ------ +
-  ------
-
-```
-
-```{r, comment=NA, echo=FALSE}
-ggplot(model1_fitresid, 
-  aes(x = .fitted, y = .resid))+
-  geom_point() +
-  geom_hline(yintercept = 0, col = "blue", size = 1)
-
-```
-]
 
 ---
 # Normality of residuals
