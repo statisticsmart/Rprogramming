@@ -862,7 +862,7 @@ model2_fitresid
 ---
 
 
-## Plot of residuals vs predictor variables 
+## Plot of residuals vs fitted values
 
 
 
@@ -875,6 +875,7 @@ linearity and constant variance?
 ]
 
 ---
+
 # Normality of residuals
 
 .pull-left[
@@ -912,6 +913,19 @@ shapiro.test(model2_fitresid$.resid)
 data:  model2_fitresid$.resid
 W = 0.99183, p-value = 0.8977
 ```
+
+
+---
+## Plot of residuals vs predictor variables 
+
+
+.pull-left[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+]
+
+.pull-left[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+]
 
 ---
 
@@ -971,7 +985,7 @@ model3_fitresid &lt;- augment(model3)
 
 Now - Model 3
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -979,7 +993,7 @@ Now - Model 3
 
 Before - Model 2
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -994,7 +1008,7 @@ ggplot(model3_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1005,7 +1019,7 @@ ggplot(model3_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1023,12 +1037,24 @@ W = 0.9931, p-value = 0.9492
 ```
 
 ---
+## Plot of residuals vs predictor variables 
 
+
+.pull-left[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+]
+
+.pull-left[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+]
+
+
+---
 .pull-left[
 
 ## Prestige vs income by type
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
 
 R code: ___________
 
@@ -1039,7 +1065,7 @@ R code: ___________
 
 ## Prestige vs income by type
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
 
 R code: ______________
 
@@ -1136,7 +1162,7 @@ head(model4_fitresid)
 ## Plot of Residuals vs Fitted
 
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1150,7 +1176,7 @@ ggplot(model4_fitresid,
   geom_histogram(colour="white")+ggtitle("Distribution of Residuals")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-53-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1161,7 +1187,7 @@ ggplot(model4_fitresid,
   stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles")
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1177,6 +1203,20 @@ shapiro.test(model4_fitresid$.resid)
 data:  model4_fitresid$.resid
 W = 0.9838, p-value = 0.4445
 ```
+
+---
+
+## Plot of residuals vs predictor variables 
+
+
+.pull-left[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
+]
+
+.pull-left[
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
+]
+
 
 ---
 ## Multicollinearity
@@ -1204,7 +1244,7 @@ library(lindia)
 gg_cooksd(model4)
 ```
 
-![](l13_regression_analysis_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+![](l13_regression_analysis_files/figure-html/unnamed-chunk-63-1.png)&lt;!-- --&gt;
 
 ---
 # Influential outliers (cont.)

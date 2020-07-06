@@ -641,7 +641,7 @@ model2_fitresid
 ---
 
 
-## Plot of residuals vs predictor variables 
+## Plot of residuals vs fitted values
 
 
 
@@ -660,6 +660,7 @@ linearity and constant variance?
 ]
 
 ---
+
 # Normality of residuals
 
 .pull-left[
@@ -682,6 +683,31 @@ ggplot(model2_fitresid,
 ```{r, comment=NA, message=FALSE, fig.height=4}
 shapiro.test(model2_fitresid$.resid)
 ```
+
+
+---
+## Plot of residuals vs predictor variables 
+
+
+.pull-left[
+```{r, comment=NA, echo=FALSE}
+ggplot(model2_fitresid, 
+  aes(x = education, y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+.pull-left[
+```{r, comment=NA, echo=FALSE}
+ggplot(model2_fitresid, 
+  aes(x = income, y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
 
 ---
 
@@ -766,7 +792,31 @@ shapiro.test(model3_fitresid$.resid)
 ```
 
 ---
+## Plot of residuals vs predictor variables 
 
+
+.pull-left[
+```{r, comment=NA, echo=FALSE}
+ggplot(model3_fitresid, 
+  aes(x = education, y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+.pull-left[
+```{r, comment=NA, echo=FALSE}
+ggplot(model3_fitresid, 
+  aes(x = log.income., y = .resid))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+
+---
 .pull-left[
 
 ## Prestige vs income by type
@@ -868,6 +918,32 @@ ggplot(model4_fitresid,
 ```{r, comment=NA, message=FALSE, fig.height=4}
 shapiro.test(model4_fitresid$.resid)
 ```
+
+---
+
+## Plot of residuals vs predictor variables 
+
+
+.pull-left[
+```{r, comment=NA, echo=FALSE}
+ggplot(model4_fitresid, 
+  aes(x = education, y = .resid, col=type))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
+.pull-left[
+```{r, comment=NA, echo=FALSE}
+ggplot(model4_fitresid, 
+  aes(x = log.income., y = .resid, col=type))+
+  geom_point() +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+
+```
+]
+
 
 ---
 ## Multicollinearity
