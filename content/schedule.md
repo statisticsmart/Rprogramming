@@ -153,10 +153,10 @@ Go to LMS. Deadline: 20 July 2020
 
 #### Week 13: The Inverse Transform Method
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Slides-Lectorial](/slides/inverse_transformation.pdf)    	|  [Video Lecture](/video.pdf)  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### Week 14: 
+#### Week 14: The Method of Monte Carlo
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
