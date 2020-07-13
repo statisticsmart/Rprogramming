@@ -162,7 +162,7 @@ Go to LMS. Deadline: 20 July 2020
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 15: 
+#### Week 15: Functionals
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
