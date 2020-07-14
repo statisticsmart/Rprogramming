@@ -16,14 +16,14 @@ Prepared by Dr Thiyanga Talagala
 
 \begin{table}[!h]
 \begin{tabular}{ll|ll}
-\textbf{rbeta} & beta distribution & \textbf{lnorm} & log-normal distribution \\
-\textbf{rbinom} & binomial distribution & \textbf{multinom} & multinomial distribution  \\
-\textbf{rcauchy} & Cauchy distribution & \textbf{nbinom} & negative binomial distribution \\
+\textbf{rbeta} & beta distribution & \textbf{rlnorm} & log-normal distribution \\
+\textbf{rbinom} & binomial distribution & \textbf{rmultinom} & multinomial distribution  \\
+\textbf{rcauchy} & Cauchy distribution & \textbf{rnbinom} & negative binomial distribution \\
 \textbf{rchisq} & chi-squared distribution & \textbf{rnorm}& normal distribution  \\
 \textbf{rexp} & exponential distribution &  \textbf{rpois} & Poisson distribution \\
 \textbf{rf} & F distribution &  \textbf{rt} & Student's t distribution\\
 \textbf{rgamma} & gamma distribution &  \textbf{runif} & uniform distribution\\
-\textbf{rgeom} & geometric distribution &  \textbf{weibull} & Weibull distribution\\
+\textbf{rgeom} & geometric distribution &  \textbf{rweibull} & Weibull distribution\\
 \textbf{rhyper} & hyper-geometric distribution & 
 \end{tabular}
 \end{table}
