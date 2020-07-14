@@ -1,0 +1,94 @@
+---
+title: "Tutorial: Inverse Transform Method"
+output: pdf_document
+header-includes:
+   - \usepackage{mathtools}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+Using the inverse transform method, write an R function to generate a random sample of observations from the following pdf,
+
+\[
+\tag{1}
+    f_X(x)= 
+\begin{cases}
+    4x^3,& \text{if } 0 < x < 1\\
+    0,              & \text{otherwise}
+\end{cases}
+\]
+
+
+Using the written function generate 1000 random numbers. 
+
+Draw a histogram and superimpose the density function (1) in the same graph.
+
+
+## Question 2
+
+Using the inverse transform method, write an R function to generate a random sample of observations from the standard Laplace distribution with pdf,
+
+\begin{equation}
+\tag{2}
+f_X(x) = \frac{1}{2}e^{-|x|}, x \in \mathbb{R}.
+\end{equation}
+
+Using the written function generate 1000 random numbers. 
+
+Draw a histogram and superimpose the density function (2) in the same graph.
+
+
+## Question 3
+
+Using the inverse transform method, write an R function to generate a random sample of observations from the following pdf,
+
+\[
+\tag{3}
+    f_X(x)= 
+\begin{cases}
+    \frac{1}{x^2},& \text{if } x > 1\\
+    0,              & \text{otherwise.}
+\end{cases}
+\]
+
+
+To test your R function, plot a histogram of 10000 random numbers together with the density function in 3.
+
+## Question 4
+
+The CDF of the Pareto (a, b)  distribution is
+
+\begin{equation}
+\tag{4}
+F_X(x) = 1- \left(\frac{b}{x}\right)^a, x \geq b > 0,\text{ }a > 0.
+\end{equation}
+
+i) Using the inverse transform method, write an R function to generate a random sample of observations from the Pareto distribution.
+
+ii) Generate 1000 random numbers from $Pareto(2,2)$, $Pareto(1, 1)$.
+
+iii) Draw histograms of the data you generated for each distributions in (ii). The two histograms should be on the same graph. Comment on any noticeable differences between the histograms.
+
+<!--Statistical computing -p94-->
+
+## Question 5
+
+<!--Module07-Random Numbers-->
+Using the inverse transform method, write an R function to generate a random sample of observations from the following pdf,
+
+\[
+\tag{5}
+    f_X(x)= 
+\begin{cases}
+    x,& \text{if } 0 \leq x <1\\
+    2-x,              & \text{ if } 1 \leq x \leq 2.
+\end{cases}
+\]
+
+
+
+To test your R function, plot a histogram of 10000 random numbers together with the density function in 5.
