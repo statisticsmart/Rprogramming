@@ -6,7 +6,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# STA 326 2.0 Programming and Data Analysis with
+# STA 326 2.0 Programming and Data Analysis with R
 
 # Generating Random Numbers Using Inverse Transform Method
 
@@ -239,13 +239,6 @@ n10000[[2]]
 
 i) Write a function to generate random numbers from the $Exponential(\lambda)$ distribution using the inverse transformation method.
 
-```{r, out.width="100%", fig.asp=0.9, fig.align='center', fig.pos='h', echo=FALSE}
-library(ggplot2)
-ggplot() + 
-  theme_void() + 
-  theme(panel.border = element_rect(colour="white", fill=NA, size = 1))
-
-```
 
 ```{r,  comment=NA}
 exp_generator <- function(n, lambda){
@@ -266,22 +259,12 @@ exp2 <- exp_generator(1000, 2)
 ```
 
 
-```r
+```{r, comment=NA}
 exp2
 ```
 
 
-\newpage
-
 iii) Graph the density histogram of the sample with the $Exponential(2)$ density superimposed for comparison. 
-
-```{r, out.width="100%", fig.asp=0.9, fig.align='center', fig.pos='h', echo=FALSE}
-library(ggplot2)
-ggplot() + 
-  theme_void() + 
-  theme(panel.border = element_rect(colour="white", fill=NA, size = 1))
-
-```
 
 
 ```{r, comment=NA}
