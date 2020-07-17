@@ -78,3 +78,11 @@ ggplot(recovered_spain_corona, aes(cases)) +
   geom_freqpoly(bins = 9, col="red")
 ```
 
+# Question 3: Multiple Time Series
+
+```{r, comment=NA}
+us_corona <- coronavirus %>% filter(country == "US")
+head(us_corona)
+ggplot(us_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+
