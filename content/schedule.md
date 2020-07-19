@@ -158,8 +158,8 @@ Go to LMS. Deadline: 20 July 2020
 
 #### Week 14: The Method of Monte Carlo
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+|[Slides-Lectorial](/slides/Monte_Carlo.pdf)    	|  [Video Lecture](/video.pdf)  	|   [Problems](/slides/Monte_Carlo.pdf)  	| Answers |
+|:-:	|:-:	|:-:	|:-:	|
 
 
 #### Week 15: Functionals
