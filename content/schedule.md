@@ -162,11 +162,18 @@ Go to LMS. Deadline: 20 July 2020
 |:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 15: Functionals
+#### Week 15: 
+
+
+#### 15.1: Hypothesis testing
+
+|[Hypothesis testing](/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes  	|  Cheat sheet 	|  Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+#### 15.2: Functionals
 
 |Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
-
 
 
 #### Week 16: Recap (instead of Independence holiday week)
