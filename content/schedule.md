@@ -172,7 +172,7 @@ Go to LMS. Deadline: 20 July 2020
 
 #### 15.2: Functionals
 
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
+|Slides    	|  [Reading](https://adv-r.hadley.nz/functionals.html)  	|  [Cheat sheet](/cheatsheets/purrr.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
