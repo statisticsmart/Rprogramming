@@ -31,13 +31,13 @@ E-mail is the best way to get in contact with me—I will respond to all course-
 
 ### Teaching Associates: 
 
-- Ms. Asha Dilrukshi [01 March 2020 - present]
+- MS. Asha Dilrukshi [01 March 2020 - 11 March 2020 ] 
 
-- Ms. Dovini Jayasinghe [01 March 2020 - present]
+- Ms. Dovini Jayasinghe [01 March 2020 - 11 March 2020]
 
-- Ms. Kalpani Perera [01 March 2020 - present]
+- Ms. Kalpani Perera [01 March 2020 - 11 March 2020]
 
-- Ms. Vihanga Gunadasa [01 March 2020 - present]
+- Ms. Vihanga Gunadasa [01 March 2020 - 11 March 2020]
 
 ~~Ms. Pabasari Amarasinghe [Until 29 February 2020]~~ 
 

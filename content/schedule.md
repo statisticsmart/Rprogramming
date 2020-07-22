@@ -162,24 +162,20 @@ Go to LMS. Deadline: 20 July 2020
 |:-:	|:-:	|:-:	|:-:	|
 
 
-#### Week 15: 
-
-
-#### 15.1: Hypothesis testing
+#### Week 15: Hypothesis testing
 
 |[Hypothesis testing](/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes  	|  Cheat sheet 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-#### 15.2: Functionals
+
+
+#### Week 16: Functionals and Recap (instead of Independence holiday week)
 
 |Slides    	|  [Reading](https://adv-r.hadley.nz/functionals.html)  	|  [Cheat sheet](/cheatsheets/purrr.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-
-#### Week 16: Recap (instead of Independence holiday week)
-
-|Slides    	|  Reading  	|  Cheat sheet 	|  Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+|Slides - Recap   	|  
+|:-:	|
 
 
 #### Individual projects 
