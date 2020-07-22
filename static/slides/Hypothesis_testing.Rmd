@@ -48,16 +48,22 @@ H1:
 
 $\mu$ - 
 
+\newpage
+
 ```{r, comment=NA}
-z.test = function(data, mu, var, alternative){
+z.test <- function(data, mu, var, alternative){
    z = (mean(data) - mu) / (sqrt(var / length(data)))
    if(alternative =="greater"){
      1-pnorm(z)
      
    } else if (alternative =="less"){
+     
      pnorm(z)
+     
    } else {
-     pnorm(z) * 2
+     
+     pnorm(-1*abs(z)) * 2
+     
    }
    
 } 
