@@ -186,7 +186,7 @@ ggplot(df2, aes(x=x, y=y, col=coly)) + geom_point() +
 
 Suppose we want to calculate the integral $\int_a^bg(x)dx$ for a continuous function $g$ over the closed and bounded interval [a, b]. If the anti-derivative of $g$ does not exist, then numerical integration is in order. A simple numerical technique is the method of Monte Carlo. We can write the integral as
 
-$$\int_a^bg(x)dx=(b-a)\int_a^bg(x)\frac{1}{a-b}dx=(b-a)E[g(X)],$$
+$$\int_a^bg(x)dx=(b-a)\int_a^bg(x)\frac{1}{b-a}dx=(b-a)E[g(X)],$$
 
 where $X$ has the $uniform(a, b)$ distribution. 
 
