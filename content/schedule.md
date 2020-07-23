@@ -170,7 +170,7 @@ Use the upgraded LMS at https://lms.fas.sjp.ac.lk to download video lectures.
 
 #### Week 15: Hypothesis testing
 
-|[Hypothesis testing](/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes  	|  [Video Lecture](/video.pdf) 	|  Problems 	| Answers |
+|[Hypothesis testing](/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes  	|  [Video Lecture](/video.pdf) 	|  [Problems](/problems/Hypothesis_questions.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
