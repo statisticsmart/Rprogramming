@@ -477,20 +477,6 @@ Fit a linear model between `Petal.Width ~ Petal.Length` and extract the second c
 
 ```r
 library(magrittr)
-```
-
-```
-
-Attaching package: 'magrittr'
-```
-
-```
-The following object is masked from 'package:purrr':
-
-    set_names
-```
-
-```r
 iris_species %&gt;%
   map(~lm(Petal.Width ~ Petal.Length, data = .x)) %&gt;% 
   map(coef) %&gt;%
@@ -689,15 +675,16 @@ $b
 ```
 ---
 
-
-
 class: center, middle
 
-Acknowledgement: Advanced R, Hadley Wickham
+
 
 Slides available at: hellor.netlify.app
 
 All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
+
+Reference: Advanced R, Hadley Wickham
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
