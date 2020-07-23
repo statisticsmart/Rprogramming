@@ -31,7 +31,7 @@ E-mail is the best way to get in contact with me—I will respond to all course-
 
 ### Teaching Associates: 
 
-- MS. Asha Dilrukshi [01 March 2020 - 11 March 2020 ] 
+- Ms. Asha Dilrukshi [01 March 2020 - 11 March 2020 ] 
 
 - Ms. Dovini Jayasinghe [01 March 2020 - 11 March 2020]
 

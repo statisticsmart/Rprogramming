@@ -156,6 +156,12 @@ Go to LMS. Deadline: 20 July 2020
 |[Slides-Lectorial](/slides/inverse_transformation.pdf)    	|  [Video Lecture](/video.pdf)  	|   [Problems](/problems/inverse_transform_method.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|
 
+```diff
+
+Use the upgraded LMS at https://lms.fas.sjp.ac.lk to download video lectures.
+
+```
+
 #### Week 14: The Method of Monte Carlo
 
 |[Slides-Lectorial](/slides/Monte_Carlo.pdf)    	|  [Video Lecture](/video.pdf)  	|   [Problems](/slides/Monte_Carlo.pdf)  	| Answers |
@@ -164,17 +170,17 @@ Go to LMS. Deadline: 20 July 2020
 
 #### Week 15: Hypothesis testing
 
-|[Hypothesis testing](/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes  	|  Cheat sheet 	|  Problems 	| Answers |
+|[Hypothesis testing](/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes  	|  [Video Lecture](/video.pdf) 	|  Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
 
 #### Week 16: Functionals and Recap (instead of Independence holiday week)
 
-|Slides    	|  [Reading](https://adv-r.hadley.nz/functionals.html)  	|  [Cheat sheet](/cheatsheets/purrr.pdf) 	|  Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+|[Slides](/slides/l16_1_functionals.html)    	|  [Reading](https://adv-r.hadley.nz/functionals.html)  	|  [Cheat sheet](/cheatsheets/purrr.pdf) 	|    [Video Lecture](/video.pdf) |[Problems](/problems/Functionals_question.pdf) 	| [Answers](/answers/Functionals_answers.pdf) |
+|:-:	|:-:	|:-:	|:-:	|:-:	|:-:	|
 
-|Slides - Recap   	|  
+|[Recap](/slides/recap.pdf)   	|  
 |:-:	|
 
 

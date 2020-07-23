@@ -1,0 +1,38 @@
+---
+output: pdf_document
+---
+
+# STA 326 2.0 Programming and Data Analysis with R
+
+# Functionals
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question:
+
+Use the gapminder dataset.
+
+```{r, comment=NA, message=FALSE}
+library(gapminder)
+data(gapminder)
+head(gapminder)
+
+```
+
+```{r, comment=NA, fig.height=3.8}
+library(ggplot2)
+ggplot(gapminder, aes(x=year, y=lifeExp, group=country)) +
+    geom_line(alpha=0.5)
+```
+
+Write an R code to estimate $\beta_0$ and $\beta_1$ of $lifeExp = \beta_{0} + \beta_{1}year$ using least squares approach for each country. 
+
+
+
+Plot the distribution of $\hat{\beta_1}$ values. Interpret the results.
+
+
+
+<!--http://euclid.psych.yorku.ca/www/psy6135/tutorials/gapminder.html-->
