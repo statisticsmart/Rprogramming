@@ -1,0 +1,488 @@
+---
+title: "Coronavirus Situation In China"
+author: "Dilni T Ekanayake"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+library(huxtable)
+
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+```
+
+<br><br><br>
+
+# __Introduction__
+
+
+<br><br><br>
+
+<div align="justify">Due to the spread of Covid-19 virus around the world, to date 14,642,861 cases of Covid 19 have been reported in 216 countries worldwide, with 8,735,298 recovered and 608,911 deaths. According to the hospital reports received by the Health Department of Wuhan City, Hubei Province, China in December 2019, the earliest case was on December 8, 2019 and it reported as unexplained pneumonia from the traditional market “South China Seafood City”. Later, some research institutions predicted that the pneumonia perhaps caused by a new virus, [3] Yu X (29 May 2020). Since then, the virus has gradually spread throughout China.</div>
+
+![World map of Wuhan,China] (https://www.worldmap1.com/map/china/wuhan/map%20of%20wuhan%20world.jpg)
+
+<div align="justify"> “A study in Korea found that the risk of influenza incidence was significantly increased with low daily temperature and low relative humidity, a positive significant association was observed for diurnal temperature range (DTR) (Park et al., 2019)”. Wuhan is located in Hubei Province and one of the largest cities in Central China. Due to the location of the Yangtze River Delta, Wuhan has a typical subtropical, humid, monsoon climate with cold winters and warm summers and the average annual temperature and rainfall are 15.8 °C–17.5 °C and 1050 mm–2000 mm, respectively, [4] Yueling Ma (1 July 2020).When we talk about China, because it covers a large area, it is the country with the biggest climate change per single country. Northern China, January is the coldest month of the year and Southern China has a monsoon season. The Southern China is prone to typhoons from May to December, but especially July to September and West China has the most extreme summer to winter temperature differences and the average minimum temperature in January is -11°C. Most of China is very hot in July and August. Many studies reported that the COVID-19 was related to the meteorological factors, which decreased with the temperature increasing, but their effects on the mortality have not been reported. Therefore, we assume that the weather conditions might also contributed to the mortality of COVID-19.                                            
+
+
+ Thus, due to natural causes or other reasons, as the spread of the virus increased, the Chinese government decided to close some cities and countries. China was the first country to put a lockdown into effect in a bid to curb the spread of coronavirus across the nation. The world was stunned by the country’s decision, but after two months of lockdown measures, the country has seen a huge reduction in cases. As first put Wuhan City on lockdown on January 23 and Chinese authorities meant no travel in or out of the city was allowed, even for those who had important medical or humanitarian reasons.  “When the lockdown first began people were allowed out of their homes, but restrictions soon tightened. In some areas, this was limited to outings of just one member of a family every two days in order to buy necessities. Others barred residents from leaving, obligating them to order food and other supplies from couriers. When the policy later stepped up again, officials visited homes door to door to undertake health checks and force ill persons into isolation.” Then China started to relax some measures after 59 days the lockdown was first introduced and the government has ordered travellers from abroad to isolate themselves for 14 days at their homes or at government-designated centers as part of a quarantine process, [1] Kaisha Langton (30 May 2020).
+ 
+
+ 
+Other than lockdown, Chinese government launched a series of emergency measures to respond to the challenges of the epidemic. Accordingly setup headquarters for the COVID-19 pneumonia epidemic, all of the Provinces in Mainland China launched public health emergencies response and to encourage patients to see doctor in time, the Chinese government announced that the medical expenses for the COVID-19 Pneumonia would be mainly borne by the medical insurance and government. Also decided to construct two makeshift hospital within 15 days and supported to all researchers, Pharmaceutical companies for their research. Furthermore government was authorized to mobilize and expropriate all kinds of personnel, materials, transportation and related facilities to block the epidemic area, to restrict or stop the market, assembly, theater performance and other group gathering activities, to declare the suspension of work, business and class [3] Yu X (29 May 2020).
+
+
+
+ The virus is now spreading all over the world. “COVID-19 is a serious illness, and it’s much more dangerous than the flu. One Centers for Disease Control and Prevention (CDC) projection suggests that between 160 to 214 million people will eventually be infected in the US and that between 200,000 and 1.7 million could die.” [2] Nicole Wetsman (7 July 2020). Therefore everyone should know about the virus and protection methods. The symptoms of COVID-19 have ranged from mild, like those in a cold, to severe. Sometimes don’t require hospitalization, but cases are critical and can be die. The virus moves rapidly, “It also probably spreads when an infected person sneezes or coughs. Coughs and sneezes produce little droplets of mucus and saliva. If these droplets make it into another person’s eyes, mouth, or nose, they can get sick. The viruses in those little droplets can also fall onto surfaces, like tables or doorknobs — if someone touches that surface and touches their eyes, mouth, or nose, they can also get sick.” The dangerous side, there aren’t any proven treatments for COVID-19. Therefore it is important to protect ourselves and others. For that stay home as much as possible even if you’re not feeling sick, wear a cloth mask or face covering when you’re out in public, and wash your hands often, [2] Nicole Wetsman (7 July 2020).</div>
+ 
+ <br><br><br>
+ 
+# __Data Analysis and Results__
+<br><br><br>
+
+##  __Data__
+
+
+```{r, warning=FALSE}
+data(coronavirus)
+head(coronavirus)
+```
+<div align="center">Table 01: coronavirus data set</div>
+
+
+* For futher analysis this coronavirus data set was used.
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE}
+new_coronavirus <- filter(coronavirus, cases >= 0 )
+new_coronavirus %>% summary()
+```
+<div align="center">Figure 01: Summery of coronavirus data set</div>
+
+<br><br><br>
+```{r, warning=FALSE, echo=FALSE}
+China <- filter(new_coronavirus, country == "China")
+head(China)
+```
+<div align="center">Table 02: coronavirus data set for China</div>
+
+*There are 33 provices coronavirus cases recorded due to type (confirmed, death, recovered) and due to date.
+<br><br><br>
+
+## __Data Analysis__
+
+
+```{r, warning=FALSE, echo=FALSE, include=FALSE}
+
+Total_Cases <- China %>%
+  group_by(type) %>%
+  summarise(total_Cases = sum(cases))
+
+```
+
+```{r, warning=FALSE, echo=FALSE}
+Total_cases <- huxtable(Total_Cases)
+
+ Total_cases %>%  set_bold(1, everywhere) %>% 
+      set_bottom_border(1, everywhere) %>% 
+      set_background_color(evens, everywhere, "grey95")
+```
+<div align="center">Table 03: Total comfirmed, death and recovered cases in China</div>
+
+<br><br><br>
+<div align="justify">According to the table 03 and figure 02, total of recovered cases are approximately equal to total of confirmed cases and Almost completely large than to total of death cases. This implies that most of the confirmed cases were recovered. This is further illustrated by figure 03. Confirmed and recovered medians are nearly equal and death median is relatively low. Furthermore box plot shows that data of cases spread in large range but the medians of all types are low. This means most of the cases have less value.</div>  
+
+<br><br><br>
+
+```{r out.width=c('50%', '50%'), warning=FALSE, echo=FALSE, fig.show='hold'}
+ggplot(Total_Cases,
+       aes(x=type, y= total_Cases)) + geom_bar(stat="identity", width=0.5, fill="steelblue") +
+  labs(title="Figure 02: Total comfirmed, death and recovered cases in China",
+        x ="Type", y = "Cases")
+
+  
+ggplot(China,  
+aes(x=log(cases), y=type, fill=type)) +    geom_jitter(aes(col=type)) +
+   geom_boxplot(outlier.shape = NA) +  labs(title="Figure 03: Box plot of cases") +
+  coord_flip()
+```
+
+<br><br><br>
+```{r,  warning=FALSE, echo=FALSE, include=FALSE}
+type_wise <- China %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases) %>% 
+  group_by(province) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE)) %>% 
+  arrange(desc(confirmed_sum))
+```
+
+
+```{r,  warning=FALSE, echo=FALSE}
+type_wise
+```
+<div align="center">Table 04: total comfirmed, death and recovered cases according to province </div>
+
+<br><br><br>
+
+```{r,  warning=FALSE, echo=FALSE}
+ggplot(type_wise,
+       aes(x=province, y= log(confirmed_sum))) +  
+  geom_bar(stat="identity", width=0.5, fill="steelblue") +
+theme(axis.text.x = element_text(angle = 90)) + labs(title="Figure 04: Total confirmed cases based on province") 
+  
+```
+
+<br><br><br>
+
+<div align="justify">Based on table 04 and figure 04, province Hubei has highest confirmed cases (68,134) and secondly highest is Guangdong (1,589 cases). And also Hubei shows relatively high value than other provinces.  Cases gap of highest to provinces is 66,545. Province Tibet shows only one confirmed case and it is the lowest. Quinghai is the second lowest province and it had 18 confirmed cases.</div>  
+
+<br><br><br>
+
+```{r,  warning=FALSE, echo=FALSE}
+a <- type_wise %>% 
+  pivot_longer(2:4, names_to="type", values_to = "cases")
+
+ggplot(a, aes(fill=type, y=log(cases), x=province)) + 
+    geom_bar(position="dodge", stat="identity", width = 1) +
+  theme(axis.text.x = element_text(angle = 90))+
+  labs(title="Figure 05: Total cases based on province and type")
+```
+<br><br><br>
+
+<div align="justify">Figure 05 shows that all the provinces total confirmed cases and total recovered cases are relatively equal or completely equal. Also total death cases are very low compared to other type’s total. Some provinces didn’t have death cases.</div> 
+
+<br><br><br>
+```{r,  warning=FALSE, echo=FALSE }
+type_wise1 <- type_wise %>%
+mutate(death_rate = (death_sum / recovered_sum) * 100 )
+```
+
+$$
+Infection Fatality Rate (IFR) = \frac{Deaths}{Cases}* 100%
+$$
+
+```{r,  warning=FALSE, echo=FALSE}
+ggplot(type_wise1,
+       aes(x=province, y= death_rate)) +  
+  geom_bar(stat="identity", width=0.5, fill="steelblue") +
+theme(axis.text.x = element_text(angle = 90)) +
+  labs(title="Figure 06: Infection Fatality Rate based on province", y= "Infection Fatality Rate")
+  
+```
+<br><br><br>
+
+<div align="justify">According to figure 06, Hubei has highest IFR and it 7%. Xinjiang and Hainan are Second and third highest respectively. When consider the all provinces, IFR is less than to 10%. That also shows the total death cases are very lower than total recovered cases.</div>
+
+<br><br><br>
+```{r,  warning=FALSE, echo=FALSE}
+ggplot(China, aes(x=date,y=cases, fill=type)) +
+  geom_bar(stat= "identity", alpha= 1, width= 0.75, spsce=3, size=2 ) + 
+  scale_y_continuous() + theme_minimal() + 
+  labs(title="Figure 07: Total cases based on date and type")
+  
+```
+<br><br><br>
+```{r,  warning=FALSE, echo=FALSE, message=FALSE}
+type_wise2 <- China %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases) 
+  
+  
+ggplot(type_wise2, aes(x=date,y=confirmed)) +
+  geom_bar(stat= "identity", alpha=0.5 , fill= "red") + 
+  scale_y_continuous() + theme_minimal() +
+  labs(title="Figure 08: Total confirmed cases based on date", y= "cases")
+```
+<br><br><br>
+
+```{r,  warning=FALSE, echo=FALSE, message=FALSE}
+ggplot(type_wise2, aes(x=date,y=recovered)) +
+  geom_bar(stat= "identity", alpha=0.5, fill= "blue" ) + 
+  scale_y_continuous() + theme_minimal() + 
+  labs(title="Figure 09: Total recovered cases based on date", y= "cases")
+```
+<br><br><br>
+
+```{r,  warning=FALSE, echo=FALSE, message=FALSE}
+ggplot(type_wise2, aes(x=date,y=death)) +
+  geom_bar(stat= "identity", alpha=0.8, fill= "green" ) + 
+  scale_y_continuous() + theme_minimal() + 
+  labs(title="Figure 10: Total death cases based on date", y= "cases")
+```
+<br><br><br>
+
+<div align="justify">According to figures 7- 10, figure 08 shows that, the number of confirmed cases gradually increases during the period from January to mid-February and it gradually decreases during the period from mid-February to March. Shows the maximum confirmed cases during the month of February and it approximately near to 15,000. The number of confirmed cases has been gradually declining since March.
+
+
+Figure 09 shows that, the number of recovered cases increases rapidly during the period from mid-February to mid-March and decreases rapidly during the period from mid-March to mid-April. Shows maximum during March and from mid-April, the number of recovered cases gradually decreases.
+
+
+Figure 10 shows that, during the period from February to April the number of death cases shows a gradual increase and decrease. While this is relatively low, there is a sudden increase in the number of death cases in late April and it near to 1,250.
+
+
+Overall, the number of confirmed cases increases during the period from February to March. As the number of confirmed cases increases, the number of recovered cases increases at a relatively low rate from mid-February to mid-April.
+
+
+Furthermore figure 11, Table 05 and Figure 12, clearly shows the observations shown above.</div>
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, include=FALSE}
+by_date <- type_wise2 %>% 
+    group_by(date) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE)) %>%
+   pivot_longer(2:4, names_to="type", values_to = "sum_cases")
+
+```
+
+
+```{r, warning=FALSE, echo=FALSE}
+ggplot(by_date, aes(x=date, y=sum_cases, col= type)) +
+  geom_line() + geom_point() +
+  labs(title="Figure 11: Time series plot based on type", y= "cases")
+
+```
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, include=FALSE}
+monthly <- type_wise2 %>% separate(date, into=c("year", "month", "day"), sep="-") %>%
+  group_by(month) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE))
+monthly
+```
+
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+monthly <- type_wise2 %>% separate(date, into=c("year", "month", "day"), sep="-") %>%
+  group_by(month) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE)) %>%
+   pivot_longer(2:4, names_to="type", values_to = "sum_cases")
+monthly
+```
+<div align="center">Table 05: Monthy total cases</div>
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+ggplot(monthly, aes(fill=type, y=sum_cases, x=month)) + 
+    geom_bar(position="dodge", stat="identity", width = 1, space= 3) +
+  labs(title="Figure 12: Monthly total cases based on type", y= "cases")
+  
+```
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+ggplot(China,
+aes(x = date, y = log(cases), col = type))+
+    geom_point() +
+  labs(title="Figure 13: Scatter plot of date vs cases")
+```
+
+<div align="Justify">According to the figure, there is no relationship between date and cases.</div>
+
+<br><br><br>
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+data(wrld_simpl)
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(85, 130), ylim = c(17, 50)) +
+  scale_x_continuous(breaks = seq(85, 130, 120)) +
+  scale_y_continuous(breaks = seq(17, 50, 100))
+
+p +
+  geom_point(
+    data = China, aes(x = long, y = lat), color = "red",size = 1.5) +
+  geom_text(data= China,aes(x=long, y=lat, label=province),
+    color = "darkblue", fontface = "bold", check_overlap = TRUE, size= 3) +
+   labs(title="Figure 14: Provinces of China affected by the coronavirus")
+```
+
+<br><br><br>
+
+```{r,  warning=FALSE, echo=FALSE, message=FALSE}
+nearby <- China %>% 
+  filter(province %in% c( "Henan", "Chongqing", "Hunan", "jiangxi", "Anhui", "Hubei"))
+
+
+b <- nearby %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases) %>% 
+  group_by(province) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE))
+
+b
+```
+<div align="center">Table 06:total cases of provinces near to Hubei </div>
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+ggplot(b, aes(x=province ,y=confirmed_sum)) +
+  geom_bar(stat= "identity", alpha=0.5 , fill= "red") + 
+  scale_y_continuous() + theme_minimal() +
+  labs(title="Figure 15: Total confirmed cases based on date", y= "confirmed cases")
+```
+<br><br><br>
+<div align="Justify">According to the table 06 and figure 15, total confirmed cases of provinces near to Hubei are relatively very low. That means the virus has not spread to other provinces like in Hubei.</div> 
+
+<br><br><br>
+
+
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = new_coronavirus, aes(x = long, y = lat), color = "red",size = 1.5) +
+  geom_text(data= new_coronavirus,aes(x=long, y=lat, label=country),
+    color = "darkblue", fontface = "bold", check_overlap = TRUE, size= 3) +
+  labs(title="Figure 16: Provinces affected by the coronavirus based on country")
+  
+```
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+Country_sum <- new_coronavirus %>%
+  pivot_wider(names_from=type, 
+              values_from=cases) %>% 
+  group_by(country) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE)) %>% 
+  arrange(desc(confirmed_sum))
+
+```
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+top_countries <- Country_sum %>% 
+  filter( confirmed_sum >= 75000)
+top_countries
+```
+<div align="center">Table 06: 11 countries with the highest number of reported confirmed cases </div>
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+c <- top_countries %>% 
+  pivot_longer(2:4, names_to="type", values_to = "cases")
+
+ggplot(c, aes(fill=type, y=cases, x=country)) + 
+    geom_bar(position="dodge", stat="identity", width = 1) +
+  theme(axis.text.x = element_text(angle = 90))+
+  labs(title="Figure 17: Total cases based on top 11 countries and type")
+```
+<br><br><br>
+ 
+<div align="Justify"> Figure 17 shows that, US has the highest total confirmed cases and it approximately five times greater than to the second highest country Spain. Also when consider the total death cases, US has the highest but compare to confirmed cases, it relatively low. Recovered sum is also relatively low to total confirmed cases but it greater than to death sum. When compare with other countries, their recovered sum is approximately half of confirmed sum.China in the last.</div> 
+
+<br><br><br>
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+boder_countries <- new_coronavirus %>% 
+  filter(country %in% c( "Afghanistan", "Bhutan", "India", "Kazakhstan", "Kyrgyzstan", "Laos", "Mongolia", "Burma", "Nepal", "Pakistan", "Russia", "Tajikistan", "Vietnam", "China"))
+
+
+b <- boder_countries %>% 
+   pivot_wider(names_from=type, 
+              values_from=cases) %>% 
+  group_by(country) %>%
+  summarise(
+    confirmed_sum = sum(confirmed,  na.rm = TRUE),
+    death_sum = sum(death,  na.rm = TRUE),
+    recovered_sum = sum(recovered,  na.rm = TRUE))
+
+b
+```
+<div align="center">Table 07: Boder counries of China</div>
+
+<br><br><br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+d <- b %>% 
+  pivot_longer(2:4, names_to="type", values_to = "cases")
+
+ggplot(d, aes(fill=type, y=cases, x=country)) + 
+  geom_bar(position="dodge", stat="identity", width = 1) +
+  theme(axis.text.x = element_text(angle = 90))+
+  labs(title="Figure 18: Total cases of boder countries")
+```
+<br><br><br>
+
+<div align="Justify">According to figure 18, only Russia, Pakistan and India has relatively high total cases compare to other border countries. Out of those 3 countries, Russia has the highest number of confirmed cases and it is over 200000. Russia's recovered sum is lower than China's and higher than India's. And the recovered sum is very low compared to the number of confirmed cases in Russia. The situation is similar in India and Pakistan.</div>
+
+<br><br><br>
+
+# __Conclusins and Discussion__
+<br><br><br>
+
+
+<div align="Justify">Main objective in this report is to analyze the coronavirus situation in China. To come across these findings, coronavirus data set was used. The study established that Hubei province had highest coronavirus confirmed, recovery and death cases compared to other counties. Also that total values are really higher than to other provinces. This implies that the steps taken by the Chinese government to spread the virus in China have been successful. This is because as the spread of the virus in Hubei province increased, steps were taken to lockdown those provinces and cities. Because of that in other provinces of China, the number of confirmed cases are very low. Provinces near to Hubei this also proved. Overall, the number of confirmed cases and recovered cases in China is close compared to other countries. From February to May, the virus spreads rapidly from February to March, and patients recover at a relatively slow rate between mid-February and April.
+
+
+China is the country where the virus originated. But the number of reported cases in China is low compared to other countries. Especially with US. China is also the country with the highest number of cured patients compared to the reported number. Similar situation on when compared with border countries of China. Confirmed cases in China was lower than to Russia. Pakistan, India and Russia recovered cases were relatively lower than to confirmed cases. This shows that the actions taken by the Chinese government to control the virus have been successful. Also that some other countries have not taken appropriate actions or there has been a delay in taking actions.
+                                       
+                                       
+In the coronavirus data set there are some negative values in cases column and it was a bit problematic. According to this data set cases values cannot be negative and when calculations are done with negative values, the final results can vary considerably. Therefore, calculations were made regardless of those negative values. More accurate results could not be expected, but relatively accurate results were obtained than before. It is my opinion that this will not make a significant difference to the end result. Analysis of the spread of the virus in China showed that nearly 69,000 patients were reported in Hubei province alone, where the coronavirus is thought to have originated, but the total number of patients in all other provinces is less than 2,000. This made it difficult to obtain clear graphs of data representation in China. The same problem was seen in figures 03, 04, 05, and 13. Therefore in those cases, had to take the log values of cases. Hope that this analysis, which avoids such problems, will be helpful in gaining an understanding of the coronavirus status in China.</div>
+
+<br><br><br>
+
+# __References__
+
+<br><br><br>
+
+<div align="Justify"> __[1]__   Kaisha Langton. May 30, 2020. China lockdown: How long was China on    lockdown?. Available from: (https://www.express.co.uk/travel/articles/1257717/china-lockdown-how-long-was-china-lockdown-timeframe-wuhan ) 
+
+
+__[2]__   Nicole Wetsman. July 07, 2020. Everything you need to know about the coronavirus, *THE WERGE*. ( https://www.theverge.com/ )
+
+
+__[3]__   Yu x, Li N. May 14, 2020. How Did Chinese Government Implement Unconventional Measures Against COVID-19 Pneumonia. *Dovepress*. 2020:13 Pages 491—499. DOI :https://doi.org/10.2147/RMHP.S251351
+
+
+__[4]__    Yueling Ma, Yadong Zhao, Jiangtao Liu, Xiaotao He, Bo Wang, Shihua Fu, Jun Yan, Jingping Niu, Ji Zhou and Bin Luo. July 01, 2020.  Effects of temperature variation and humidity on the death of COVID-19 in Wuhan, China.  *Science of The Total Environment* : 724. DOI: https://doi.org/10.1016/j.scitotenv.2020.138226 </div>
+
+<br><br><br>

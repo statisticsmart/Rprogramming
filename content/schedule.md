@@ -188,5 +188,5 @@ Use the upgraded LMS at https://lms.fas.sjp.ac.lk to download video lectures.
 
 [Individual Projects - 2020](/resources/)
 
-
+[Individual Projects 2020: Covid-19 Situation Reports ](/coronareports/)
 

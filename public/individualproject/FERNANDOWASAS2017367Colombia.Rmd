@@ -1,0 +1,414 @@
+---
+title: "AS2017367_Colombia"
+author: "WAS Fernando"
+date: "7/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment=NA, message=FALSE,warning=FALSE)
+```
+
+```{r}
+##loading the packages
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+colombia_corona <- coronavirus %>% filter(country == "Colombia")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+```
+
+
+# Introduction
+
+
+## Location of Colombia in World map
+
+```{r}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = colombia_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+Colombia is a country in south America continent as shown above. 
+
+The COVID-19 pandemic in Colombia is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Colombia on 6 March 2020. On 12 January 2020, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, which was reported to the WHO on 31 December 2019. The case fatality ratio for COVID-19 has been much lower than SARS of 2003, but the transmission has been significantly greater, with a significant total death toll.
+
+#### Climatic condition in Colombia
+
+The Climate of Colombia is characterized for being tropical and isothermal as a result of its geographical location near the Equator presenting variations within five natural regions and depending on the altitude, temperature, humidity, winds and rainfall. Each region maintains an average temperature throughout the year only presenting variables determined by precipitation during a rainy season caused by the Intertropical Convergence Zone.
+The climates in Colombia are characterized for having tropical rainforests, savannas, steppes, deserts and mountain climate, mountain climate further divided into tierra caliente (hot land) tierra templada (temperate land) tierra fría (cold land), tierra helada (frozen land) and Páramo. Sometimes the weather of Colombia is altered by the seasons in northern hemisphere, for example, from March to June, the weather is mild Spring, from June to August the weather is hot Summer, From September to December the weather is cool Autumn, and from December to March the weather is cold Winter. This happens very rarely, and it is usually a slight difference.
+
+The average temperature in colombia in the months February, March, April and May were 81, 81, 80 and 79 degrees Faranheit respectively.
+
+#### Lockdown status of the country and actions taken by the country. 
+
+The virus was confirmed to have reached Colombia on 6 March 2020. As of 17 March, Colombia is denying entry to those who are not Colombian citizens, permanent residents or diplomats. AS of 14 March Colombia shut down all its border crossings with Venezuela.  As of 17 March with the increase in the cases curfew which was previously applied only to the tourist city center from 10:00 p.m. to 4:00 am was extended  to the whole city of Cartagena from 6:00 p.m. to 4:00 a.m. during weekdays, and for 24 hours during weekends. As of 17 March the first measure taken seeking the protection of the elderly is to decree mandatory isolation from 7:00 am on 20 March to 31 May for all adults over 70 years of age. On the evening of 20 March, President Iván Duque announced a 19-day nationwide quarantine, starting on 24 March at midnight and ending on 12 April at midnight then it was extended until 27 April. On 20 April, President Iván Duque announced a further extension of the nationwide lockdown until 11 May, but allowed the construction and manufacturing sectors to reopen starting from 27 April, under specific protocols.On 5 May, President Iván Duque announced a further extension of the nationwide lockdown for two weeks, until 25 May at midnight with certain measures for each group of people.
+
+
+
+## Explotary Data analysis
+
+```{r}
+colombia_corona <- as.data.frame(colombia_corona)
+head(colombia_corona)
+tail(colombia_corona)
+summary(colombia_corona)
+```
+
+The table colombia_corona is consist of the no.of confirmed, death and recovered corona patients from jan 22 to May 2020 of the country Colombia and the location of the country in the worls map with its latitude and longitude.
+
+
+````{r}
+confirmed_cases <- filter(colombia_corona, type == "confirmed")
+
+ggplot(confirmed_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Confirmed cases in Colombia")
+
+```
+
+
+Above graph showas the confirmed no.of corona patients in Colombia in daily basis. It shows that no.of confirmed Corona patients has been increasing since mid of March upto mid of May althogh there are fluctions in the plot. This shows the lack of control of the situation.
+
+```{r}
+death_cases <- filter(colombia_corona, type == "death")
+
+ggplot(death_cases,aes(date, cases)) + geom_path(size=1) + labs(title = "Death cases in Colombia")
+
+```
+
+
+Above graph shows the no.of deadth from Corona in colombia in daily basis. This graph also shows that no.of death is increasing from end of March to mid of May. Although fluctuations shows that in some days no.of deaths are less than the previous day, still the no.of deaths per day has incresed than the previous week. 
+
+
+```{r}
+recovered_cases <- filter(colombia_corona, type == "recovered")
+
+ggplot(recovered_cases, aes(date, cases)) + geom_path(size=1) + labs(title = "Recovered cases in Colombia")
+
+```
+
+
+Above graph shows the no.of patients recoverd from corona in Colombia in daily basis. No.of patients recovered in a day has also increased from end of March to end of May with fluctions. 
+
+```{r}
+ggplot(colombia_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Colombia")
+
+```
+
+```{r}
+
+ggplot(colombia_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Confirmed, Death and Recovered cases in Colombia")
+
+```
+
+
+Above graph shows the no.of confirmed, death and recovered corona patients in Colombia in daily bais in the same graph. This graph implies that recovery of the corona patients has started from April where corona patients has started to confirm from begining of May. And also it shows that no.of patients recovery in a day has not still increased than the no.of patients confirming with corona in a day which implies that still the this situation has not controlled by the country and still the its spreading rapidly where the curve of no.of confirming corona patients increasing exponentially. 
+
+```{r}
+colombia_corona <-  colombia_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(colombia_corona, aes(date, cum_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Total no.of confirmed, death, recovered cases in colombia")
+
+```
+
+Above graph implies that the total no.of confirmed cases has increased exponentially since mid of March. The increment of total no.of patients recovered from corona is not as total no.of patients confirmed with corona. There is a large gap between total no.of confirmed patiets with recovered patients therefore it can be concluded that still the country has to take measures to increase the medical facility in the country.
+
+```{r}
+colombia_corona_spread <- spread(select(colombia_corona, 1,6,8), key = type, value = cum_cases)
+
+colombia_corona_spread$per_confirmed <- (colombia_corona_spread$confirmed / colombia_corona_spread$confirmed)*100
+colombia_corona_spread$per_death <- (colombia_corona_spread$death / colombia_corona_spread$confirmed)*100
+colombia_corona_spread$per_recovered <- (colombia_corona_spread$recovered / colombia_corona_spread$confirmed)*100
+
+colombia_corona_gather <- gather(colombia_corona_spread, key = "type_1" , value = "Per_cum_with_confirmed",5:7)
+
+colombia_corona <- cbind.data.frame(colombia_corona, select(colombia_corona_gather, 5,6))
+colombia_corona[is.na(colombia_corona)] <- 0
+
+ggplot(colombia_corona, aes(date, Per_cum_with_confirmed , colour = type)) + geom_path(size=1) +
+  labs(title = "Percentage of total death, recovered cases with confirmed cases in colombia")
+```
+
+
+Above graph shows the total no.of death and recovered cases as a percentage of total confirmed cases in daily basis. This implies that percentage of total recovered patients with the total no.of confirmed cases is increasing daily but not in a satisfactory level. And also the percentage of total no.of death cases with total no.of confirmed cases is decreasing after increasing to about 5% which is satisfactory. 
+
+
+
+
+## Comapring with the countries in the same continent
+
+```{r}
+
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-120, 0), ylim = c(-70, 10)) +
+  scale_x_continuous(breaks = seq(-120, 0,20)) +
+  scale_y_continuous(breaks = seq(-70,10,10))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+
+```
+
+The above plot shows the nearby countries to Colombia.
+
+```{r}
+nearcountries <- subset.data.frame(coronavirus, ( -60< lat & lat < 10) & (-90 < long & long < -50) )
+
+count(nearcountries,country)
+```
+
+The above table shows the list of countries near Colombia.
+
+```{r}
+near_countries <- filter(coronavirus, country == "Argentina"|country =="Bolivia"|country =="Brazil"|
+                           country =="Chile"|country =="Colombia"|country =="Costa Rica"|country =="Ecuador"|
+                           country =="Guyana"|country =="Panama"|country =="Paraguay"|country =="Peru"|
+                           country =="Suriname"|country =="Uruguay"|country =="Venezuela")
+count(near_countries,country)
+```
+
+
+From the countries near Colombia, the countries in the same continent which Colombia belong which is the continent South America has been sorted to a new data frame for further analysis.
+
+```{r}
+p +
+  geom_point(
+    data = near_countries , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=near_countries$long, y=near_countries$lat, label=near_countries$country))
+
+
+```
+
+
+The above plot was generated in order to confirm whether all the conuntries in the south America Continent is in the relevent dataframe. Therefore it can be concluded that all the contries in the same continent has been considered. 
+
+```{r}
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Confirmed cases in the countries in South America")
+
+```
+
+Above graph shows that daily confirmed cases in Colombia negliglible when compared to other countries in the same continent. Where Brazil has the high no.of confirmed corona patients in the country. 
+
+
+```{r}
+
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Death cases in the countries in South America")
+```
+
+Above graph also shows that even the daily death rate is high in Brazil and the death rate in Colombia is negligle when compared to other countries but it is effective if the prcentage of death rate with the total cases is compared. 
+
+```{r}
+ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Recovered cases in the countries in South America")
+
+```
+
+Above graph also shows that even the daily recovered rate is high in Brazil and the death rate in Colombia is negligle when compared to other countries but it is effective if the prcentage of recovered rate with the total cases is compared. 
+
+```{r}
+ggplot(near_countries, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in South Ameriaca")
+
+```
+
+It seems that the recovered rate of Brazil has increased rapidly but then increasing. And path of Colombia is negligable when compared to other countries.
+
+```{r}
+count(near_countries, type)
+```
+
+```{r}
+near_countries <- near_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+near_countries
+```
+
+Above graph shows the table with total cases relevent to each type and country in daily basis.
+
+
+```{r}
+ggplot(near_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases in South America")
+
+```
+
+Above graph also confirms that total no.of corona confirmed, death and recovered patients in Colombia in neligible when compared to the other countries in the same continent.
+
+
+```{r}
+ggplot(subset(near_countries,type == "confirmed"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of confirmed cases in near counties")
+```
+
+Total no.of confirmed corona patients in Colombia is less than the countries Brazil, Peru, Costa Rica and Chille but higher than other counttries in South America.
+
+```{r}
+ggplot(subset(near_countries,type == "death"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of death cases in near counties")
+```
+
+Total no.of death corona patients in Colombia is less than the countries Brazil, Costa Rica and Peru but almost equal with other counttries in South America.
+
+
+```{r}
+ggplot(subset(near_countries,type == "recovered"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of recovered cases in near counties")
+```
+
+The above plot shows that even the total recovered corona patients in Colombia is less than the countries Brazil, Costa Rica and Peru but almost equal with other counttries in South America.
+
+```{r}
+
+near_countries_sub <- subset.data.frame(near_countries, select = -(7))
+
+near_countries_spread <- spread(near_countries, key = type, value = cum_cases)
+
+near_countries_spread$per_confirmed <- (near_countries_spread$confirmed/near_countries_spread$confirmed)*100
+near_countries_spread$per_death <- (near_countries_spread$death/near_countries_spread$confirmed)*100
+near_countries_spread$per_recovered <- (near_countries_spread$recovered/near_countries_spread$confirmed)*100
+
+near_countries_gather <- gather(near_countries_spread, key = "type", value = "per_cum_with_confirmed", 10:12)
+
+near_countries_gather[is.na(near_countries_gather)] <- 0
+
+
+ggplot(near_countries_gather, aes(date, per_cum_with_confirmed , colour = country)) + geom_path(size=1) +
+  labs(title = "Percentage of total death, recovered cases with confirmed cases in colombia") +
+  facet_grid(rows= vars(type)) 
+```
+
+Above plot shows that percentage of both death and recovered cases with the confirmed cases in the countries in South America. It shows that percentage of total death and recovered cases with the confirmed cases in the countries Vwnwzuala, Paraguay and Peru is higher than that of Colombia and that of colombia is same as other countries where percentage of death and recovered cases are less than 25%. 
+
+```{r}
+corona_final <- filter(near_countries, date == "2020-05-12")
+
+corona_final_confirmed <- filter(corona_final, type == "confirmed" )
+
+
+p + geom_point(data = corona_final_confirmed, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_confirmed$long, y=corona_final_confirmed$lat, label=corona_final_confirmed$country)) +
+  labs(title = "Total no.of confirmed cases as at 12-05-2020")
+
+
+```
+
+Above plot shows that Brazil has a high no.of confirmed corona cases where as colombia has a low no.of confirmed corona cases as at 12 the May 2020. And also it shows that apart from Brazil other nearby countries of colombia has a low no.of total confirmed corona patients. 
+
+```{r}
+corona_final_death <- filter(corona_final, type == "death" )
+
+p + geom_point(data = corona_final_death, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_death$long, y=corona_final_death$lat, label=corona_final_death$country))+
+  labs(title = "Total no.of death cases as at 12-05-2020")
+
+```
+
+Above plot shows that Brazil has a high no.of death corona cases where as colombia has a low no.of death corona cases as at 12 the May 2020. And also it shows that apart from Brazil other nearby countries of colombia has a low no.of total death cases.
+
+```{r}
+
+corona_final_recovered <- filter(corona_final, type == "recovered" )
+
+p + geom_point(data = corona_final_recovered, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_recovered$long, y=corona_final_recovered$lat, label=corona_final_recovered$country)) +
+  labs(title = "Total no.of recovered cases as at 12-05-2020")
+
+```
+
+Above graph is also same as previous two which means Brazil has a high no.of recovered corona cases where as colombia has a low no.of recovered corona cases as at 12 the May 2020. And also it shows that apart from Brazil other nearby countries of colombia has a low no.of total recovered. This information is not better to compare therefore it is better to compare the perceantage values of total death and recovered cases with confirmed cases as at 12th May 2020 with nearby countries as below
+
+
+
+```{r}
+
+corona_final_per <- filter(near_countries_gather, date == "2020-05-12")
+
+corona_final_per_death <- filter(corona_final_per, type == "per_death")
+
+p + geom_point(data = corona_final_per_death, aes(x = long, y = lat, colour = per_cum_with_confirmed), size = 10) +
+  geom_text(aes(x=corona_final_per_death$long, y=corona_final_per_death$lat, label=corona_final_per_death$country)) +
+  labs(title = "Percentage of total no.of death cases with respect to total confirmned cases as at 12-05-2020")
+
+```
+
+Above plot shows that although Brazil has high no.of total death cases but percetage with respect to the total confirmed cases it is low, but Suriname has high percentage of death cases with respect to its total confirmed cases which is about 10%. And Colombia also has very low death percentage.
+
+```{r}
+
+corona_final_per_recovered <- filter(corona_final_per, type == "per_recovered")
+
+p + geom_point(data = corona_final_per_recovered, aes(x = long, y = lat, colour = per_cum_with_confirmed), size = 10) +
+  geom_text(aes(x=corona_final_per_recovered$long, y=corona_final_per_recovered$lat, label=corona_final_per_recovered$country)) +
+  labs(title = "Percentage of total no.of recovered cases with respect to total confirmned cases as at 12-05-2020")
+```
+Above plot shows that although Brazil has a high no.of total recovered cases the percentage with its total no.of confirmed cases is very low where Suriname and Costa Rica has a high percentage of total recovered cases with respect to total confirmed cases. Colombia is also has a very low percentage of total recovered cases as at 12-05-2020.
+
+
+
+
+## Discussion and Conclusion
+
+Covid 19 or else Corona virus is now a world pandemic where Colombia also has to gone through. Corona virus confirmed cases has appeared in Colombia from 2nd week of March. Although the country was on lockdown from 17th May and also there had been fluctations in the no.of  confirmed corona cases in Colombia, when we take a overall look it can be seen that daily confirmed cases in increasing which means there is a upward trend in the no.of daily confirmed corona virus cases in Colombia. Not only the daily confirmed cases is increasing but also daily recovered cases are also increasing but increaing rate of confirmed cases is higher than that of recovered cases. And also rate of daily death cases is remained same for three months at a low value. The perecentage of recovered patients with respect to the total confirmed cases is low which is less than 25% which implies that still there are many corona patients who needed to be treated. Therefore from that it can be concluded that still the country has not taken a reliable measures to stop the spreading of the disease since daily no.of corona patients is increaing and also it seems health sector of Colombia is poor since the recovery rate is low but they has managed to keep the death rate also very low. 
+
+When comparing with the other countries in the South America continent the no.of corona patients in Colombia is really small which is almost negligible with the countries Brazil, Peru, Costa Rica and Chille. Althogh they both have high confirmed and recovered cases than Colombia. But the percantage of the recovered cases with respect to total confirmed cases is high in the countries Suriname and Venesuela where their total confirmed corona patients are also low. Even percentage of total recovered from the total confirmed cases is high in Suriname and Costa Rica where that of Colombia is also very low. Therefore it can be concluded that Colombia also has to take relevent measures in their medical facilities to treat corona patients like the countries Suriname.
+
+
+## References
+
+- R for Data Science by Hadley Wickham & Garrett Grolemund
+- https://www.tutorialgateway.org/logical-operators-in-r/
+- https://stackoverflow.com/questions/22038640/labeling-center-of-map-polygons-in-r-ggplot
+- http://statseducation.com/Introduction-to-R/modules/tidy%20data/select/
+http://www.sthda.com/english/wiki/reordering-data-frame-columns-in-r
+

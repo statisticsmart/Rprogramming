@@ -1,0 +1,369 @@
+---
+title: "**Belgium corona virus overview**"
+author: "Kaushika Gayathri"
+date: "7/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1.Brief introduction of country belgium
+Belgium, officially the Kingdom of Belgium, is acountry in Western Europe. It is a country bordered to the  Netherlands to the north, Germany to the east, Luxembourg to the southeast, France to the southwest, & the North Sea to the northwest. It covers an area of 30,689 $km^2$ & has a population of more than 11.5 million,making it the 22 nd most densely populated country in the world & the 6 th most densely populated country in Europe, with the density of 376 per square kilometre $(970/sq mi)$. The capital & the largest city is Brussels;other major cities are Antwerp, Ghent, Charleroi &Lie`ge
+
+![](geography-1.jpg)
+
+
+![](bel flag.jpg)
+
+### *1.Visualization of location*
+```{r,comment=NA,warning=FALSE,message=FALSE,fig.cap="Location of Belgium",echo=TRUE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="gray",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = belgium_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+```
+
+## 2.Exploratory Data Analysis
+### 1.*visualization of confirmed cases, recovered cases & deaths*
+```{r,comment=NA,warning=FALSE,message=FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+```
+```{r,warning=FALSE,message=FALSE,comment=NA}
+ belgium_corona<-coronavirus%>%filter(country=="Belgium")
+```
+#### imputing the negative vales
+```{r,warning=FALSE,message=FALSE,comment=NA}
+ #imputing the negative values
+ belgium_corona_new<-belgium_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+ summary(belgium_corona_new)
+ which(is.na(belgium_corona_new$cases))
+ belgium_corona_new$cases[283]= mean(c(belgium_corona$cases[282],belgium_corona$cases[284]))
+ length(belgium_corona_new$cases)
+ 
+ belgium_corona_new$col <-as.factor(c(rep("black",281),rep("red",2),rep("black",336-283)))
+ summary(belgium_corona_new)
+ggplot(belgium_corona_new,
+       aes(x=date,y=cases,fill=type,col=type))+
+  geom_line()+geom_jitter(aes(col=type))+
+  facet_wrap(~type,ncol = 3)+coord_flip()
+
+```
+#### summary of Belgium corona
+```{r,message=FALSE,warning=FALSE,comment=NA,echo=FALSE}
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+
+belgium_corona_confirmed<-belgium_corona%>%filter(type=="confirmed")
+
+belgium_corona_deaths<-belgium_corona%>%filter(type=="death")
+
+belgium_corona_recovered<-belgium_corona%>%filter(type=="recovered")
+
+total_recovered<-sum(belgium_corona_recovered$cases)
+total_death<-sum(belgium_corona_deaths$cases)
+
+total_confirmed<-sum(belgium_corona_confirmed$cases)
+
+total_active<-total_confirmed-total_death-total_recovered
+```
+```{r,warning=FALSE,message=FALSE,comment=NA}
+library(knitr)
+belgium_summary<-as.tibble(cbind(total_active,total_recovered,total_death))
+kable(belgium_summary)
+```
+
+
+#### calculating the precentages of Belgium
+```{r,message=FALSE,comment=NA,warning=FALSE,results="hide"}
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+#####calculating the %
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+belgium_corona
+
+time_belgium<-belgium_corona %>% separate(date,into=c("year","month","day"),sep="-")
+newtime_belgium<-time_belgium%>%
+  mutate(month=if_else(month=="01","January",(
+    if_else(month=="02","February",
+            if_else(month=="03","March",
+                if_else(month=="04","April","May"))
+            ))))
+```
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+confirmed_belgium_corona_new<-filter(newtime_belgium,type=="confirmed")%>%
+  group_by(month)%>%
+  summarise(confirmed=sum(cases))%>%
+  arrange(match(month,c("January","February","March","April","May")))
+
+recovered_belgium_corona_new<-filter(newtime_belgium,type=="recovered")%>%
+  group_by(month)%>%
+  summarise(recovered=sum(cases))%>%
+  arrange(match(month,c("January","February","March","April","May")))
+
+death_belgium_corona_new<-filter(newtime_belgium,type=="death")%>%
+  group_by(month)%>%
+  summarise(death=sum(cases))%>%
+  arrange(match(month,c("January","February","March","April","May")))
+
+sum_confirmed_belgium<-sum(confirmed_belgium_corona_new$confirmed)
+sum_recovered_belgium<-sum(recovered_belgium_corona_new$recovered)
+sum_death_belgium<-sum(death_belgium_corona_new$death)
+active_belgium<-sum_confirmed_belgium -sum_death_belgium- sum_recovered_belgium
+
+
+r1<-confirmed_belgium_corona_new%>%
+  mutate('confirmed_rate'=(confirmed/sum_confirmed_belgium)*100)
+
+r2<-recovered_belgium_corona_new%>%
+  mutate('recovered_rate'=(recovered/sum_confirmed_belgium)*100)
+
+r3<-death_belgium_corona_new%>%
+  mutate('death_rate'=(death/sum_confirmed_belgium)*100)
+```
+```{r,comment=NA}
+library(knitr)
+rate<-cbind(r1,r2,r3)
+myrate<-as.data.frame(rate)
+kable(myrate)
+
+```
+
+
+##### *cumilative sum of belgium confirmed cases visualization
+```{r,comment=NA,warning=FALSE,message=FALSE,echo=FALSE,fig.align='center'}
+library(plotly)
+belgium_corona_wide<-belgium_corona %>% pivot_wider(names_from = type,values_from = cases)
+belgium_corona_cum<-belgium_corona_wide %>% 
+  mutate(cumulative_confirmed=cumsum(confirmed))
+ belgium_corona_cum %>%  plot_ly(          
+                               x=~date,
+                               y=~cumulative_confirmed,
+                               name = "confirmed",
+                               type = "scatter",
+                               mode='lines+marks',
+                               line=list(color="blue"),
+                               marker=list(color="blue"))%>%
+        
+  layout(title="Belgium :Covid-19 confirmed cumulative counts",
+         yaxis=list(title="Number of cases"),
+         xaxis=list(title="Date"))%>%
+add_annotations(
+          x=as.Date("2020-02-02"),
+          y=1,
+          text=~paste("Belgian nationals living 
+          in hubei were repatriated 
+          on an evacation fight landing
+            at close to brussels"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=-50,
+          ay=-50
+  )%>%
+add_annotations(
+          x=as.Date("2020-02-24"),
+          y=1,
+          text=~paste("hundred belgian citizen were
+                      put in quarantine in H10 Casta
+                      palace in tenerife that 
+                      was lockdown"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=-100,
+          ay=+50
+  )%>%
+   add_annotations(
+          x=as.Date("2020-03-11"),
+          y=1,
+          text=~paste("First death of belgiumcovid-19 &two 
+          more deaths in the same day"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=-150,
+          ay=-100
+  )%>%
+   add_annotations(
+          x=as.Date("2020-03-13"),
+          y=559,
+          text=~paste(   "closure of schools ,
+          disco,cafes & 
+          cancellation of all 
+          puclic gaterings for sporting 
+                      cultural festive puposes"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=+200,
+          ay=-100
+  )%>%
+   add_annotations(
+          x=as.Date("2020-03-17"),
+          y=1243,
+          text=~paste("stricter social distancing measues imposed untill april 5"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=-100,
+          ay=-150
+  )%>%
+   add_annotations(
+          x=as.Date("2020-03-20"),
+          y=2257,
+          text=~paste("belgium closed it's borders to non essential travel"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=+100,
+          ay=-280
+  )%>%
+   add_annotations(
+          x=as.Date("2020-03-25"),
+          y=4937,
+          text=~paste("people arriving at brussels airport
+                      advice to quantine themselves"),
+          xref="x",
+          yref="y",
+          arrowhead=5,
+          arrowhead=3,
+          arrowsize=0.5,
+          showarrow=TRUE,
+          ax=-90,
+          ay=-200
+  )
+```
+
+#### 2.*comparison between the neighbouring countries*
+```{r,comment=NA,warning=FALSE,message=FALSE,results="hide"}
+unique(coronavirus$country)
+```
+```{r,message=FALSE,warning=FALSE,comment=NA}
+
+netherlands_corona<-coronavirus%>%filter(country=="Netherlands")
+
+germany_corona<-coronavirus%>%filter(country=="Germany")
+
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+
+france_corona<-coronavirus%>%filter(country=="France")
+
+```
+#### *Craeting a data frame of neightbouring countries & Belgium*
+```{r,warning=FALSE,message=FALSE,comment=NA}
+
+countries_corona<-as.data.frame(rbind(netherlands_corona,germany_corona,belgium_corona,france_corona))
+
+```
+#### *Comparison  of covid-19 deaths between the neighbouring countries of Belgium*
+```{r,warning=FALSE,message=FALSE,comment=NA}
+
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the neighbooring countries")
+```
+#### *Recovesed cases of neighbouring countries of Belgium*
+```{r,message=FALSE,warning=FALSE,comment=NA}
+
+countries_recovered<-countries_corona%>%filter(type=="recovered")
+
+```
+#### *Comparison between the recovered of covid-19 patients between the neighbooring countries of Belgium*
+```{r}
+
+ggplot(countries_recovered,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison between the recovered of covid-19 patients 
+          between the neighbooring countries")
+
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+
+```
+#### *Comparison between the confirmed covid-19 patients between the neighbooring countries of Belgium*
+```{r}
+
+ggplot(countries_cases,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison between the confirmed covid-19 
+          patients between the neighbooring countries")
+
+```
+
+
+## 3.Conclusions and Discussion
+  In the belgium corona virus data set there was a negative value of confirmed cases,but it is not significant so i have do conduct a data preprocessing step. Here i have used imputing missing data & color it in a red color for the identification. For imputing missing value i have used mean imputation interpolation method.Because of data entering erroes or changing of the methodology may occured those negative values.
+  And also the province was not available in the belgium coronavirus data set. thus we cannot conduct a provincewise analysis of the patients.
+When we are comapared to the other neightbouring countries belgium has low number of deaths compared to france & germany.The government and the National security council & the health sector has given the adequate rules to control the virus spread with in the country.
+
+## 4.References
+$\underline\{This\ https://en.m.wikipedia.org/wiki/COVID-19_pandemic_in_Belgium\ is\ underlined}$
+$\underline\{This\ https://github.com/thiyangt/CoronaSriLanka/blob/master/coronaSLDashboard.Rmd\ is\ underline}$
+
+$
+  
+
+
+
+
+
+

@@ -1,0 +1,285 @@
+---
+---
+<style>
+body{text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,command = NA, message = FALSE, warning = FALSE)
+```
+# **COVID-19 pandemic in Armenia**
+## Introduction of Armenia
+
+The COVID-19 pandemic in Armenia is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by a novel virus known as severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).On 12 January 2020, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, which was reported to the WHO on 31 December 2019.[1][2] The virus was confirmed to have reached Armenia on 1 March 2020 when its first case was reported.The disease has spread to all of the regions (marz) of Armenia and has caused 484 deaths.
+
+
+### Visualisation of the location
+```{r,out.width="50%"}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+data(wrld_simpl)
+Armenia_corona<-coronavirus%>%filter(country=="Armenia")
+
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", color = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90,90)) + scale_x_continuous(breaks = seq(-180, 180, 120)) + scale_y_continuous(breaks = seq(-90, 90, 100))
+p + geom_point(data = Armenia_corona, aes(x = long, y = lat), color = "red", size = 1)+ggtitle("Armenia Location in world map")
+```
+
+
+
+
+### Climate condition
+
+Armenia is often described as a sunny country. The climate is highland continental, dry with four seasons. Temperatures can vary considerably between seasons. The summer is generally pleasant reaching 25°C, though in the Ararat valley temperatures can climb to 40°C. Winters can be quite cold with temperatures falling to -5°C in Yerevan, and colder in the Ararat Valley (-30°C) and the Lake Arpi area (-46°C). Annual precipitation for the country as a whole average is 550 mm.
+
+### Lockdown status of the country
+
+On 16 March, Government declared a state of emergency lasting until 14 April to prevent the spread of the coronavirus. The emergency measures included the closure of all educational institutions, closing the borders with Georgia and Iran, banning gatherings with over 20 people, and postponing the 2020 Armenian constitutional referendum.[3]
+On 4 May, the national stay-at-home order was partially lifted and non-essential businesses were allowed to reopen, provided that the businesses require customers wear masks and limit the number of customers inside stores and restaurants.[4]
+
+On 14 May, the country's state of emergency was extended until 13 June. However, preschools, shopping centres, and gyms reopened and public transport resumed starting from 18 May.[5]
+
+### Action tacken by the government
+
+Armenia has suspended visa-free travel for Chinese citizens since 1 February, shortly after it implemented a 90-day visa-free regime on 19 January. Citizens of Iran can no longer receive a visa on arrival either. Additionally, passengers who have been to most of Europe, as well as Japan and South Korea, within the past 14 days, are no longer allowed to enter Armenia.[6] The border of Armenia with the Republic of Artsakh as also been closed in order to prevent the virus from spreading to the unrecognized republic (which "de-facto" proclaimed its independence in a nationwide referendum on December 10, 1992).
+
+Before the virus was confirmed to have arrived in Armenia, 118 tests were performed in February with negative results. To date, Armenia is reported to have performed 141,410 tests, of which 33,559 were positive.On 21 March, Armenia's Health Minister Arsen Torosyan said they have over 600 in quarantine in different regions of Armenia. He added that Armenia's capacity for quarantining people is nearing its limit, and that people should already resort to self-isolation as a preventative measure. Of the confirmed cases, 133 were linked to the clusters of cases from Ejmiatsin and a sewing factory in Yerevan.[7]
+On 6 April, Armenian Prime Minister Nikol Pashinyan announced that Armenia would start to produce COVID-19 tests at the Institute of Molecular Biology.[8]
+
+
+## Exploratory Data Analysis
+
+### Total Covid 19 status
+
+
+```{r,out.width="50%"}
+Armenia_corona<-coronavirus%>%filter(country=="Armenia")
+confirm_Armenia_corona<-Armenia_corona%>%filter(type=="confirmed")
+death_Armenia_corona<-Armenia_corona%>%filter(type=="death")
+recovered_Armenia_corona<-Armenia_corona%>%filter(type=="recovered")
+Armenia_dis<-data.frame(date=confirm_Armenia_corona$date,Confirm=confirm_Armenia_corona$cases,Death=death_Armenia_corona$cases, Recovered=recovered_Armenia_corona$cases)
+Armenia_Distribution<-pivot_longer(Armenia_dis,c(2,3,4),"type","values")
+#Armenia_Distribution
+ggplot(Armenia_Distribution,aes(x=type, y=value)) + geom_bar(stat = "identity")+ggtitle("Figure 1 :Armenia Daily Covid-19 Confirmed, Death and Recovered cases ")
+```
+
+
+
+
+
+According to figure,there were more than 3000 confirmed cases (3538) and very few death(1430) until 12th May 2020.
+
+### Daily Covid 19 status
+
+
+```{r,out.width="50%"}
+
+ggplot(confirm_Armenia_corona,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 2: Armenia Daily Covid-19 Confirmed cases")
+ggplot(death_Armenia_corona,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 3: Armenia Daily Covid-19 Deaths")
+ggplot(recovered_Armenia_corona,aes(x=date,y=cases))+geom_line()+ggtitle(" Figure 4: Armenia Daily Covid-19 Recoveries")
+```
+
+
+Figure 2 reveal that, there was high increased of covid 19 daily confirm cases since May. It shows, there were not any death until the end of March but after that their was very few daily deaths (Figure 3). In middle days of April, there were more covid 19 recoveries (Figure 4).
+
+
+
+
+### Cumulative covid 19 status 
+
+
+
+```{r,out.width="50%"}
+
+sum_confirm<-confirm_Armenia_corona%>%mutate(confrrm_sum=cumsum(cases))
+ggplot(sum_confirm,aes(x=date,y=confrrm_sum))+geom_line()+ggtitle("Figure 5:Armenia cumulative confirmed  covid 19 cases")
+sum_death<-death_Armenia_corona%>%mutate(death_sum=cumsum(cases))
+ggplot(sum_death,aes(x=date,y=death_sum))+geom_line()+ggtitle("Figure 6: Armenia cumulative death cases with date")
+sum_recovered<-recovered_Armenia_corona%>%mutate(recovered_sum=cumsum(cases))
+ggplot(sum_recovered,aes(x=date,y=recovered_sum))+geom_line()+ggtitle("Figure 7: Armenia cumulative recovered  covid 19")
+
+```
+
+
+
+Figure 5 show that total covid 19 confirm cases were increased after middle of March. Total deaths were increased shortly at the end days of March (Figure 6).There were increment of total recoveries after April (Figure 7).
+
+
+
+
+```{r,out.width= "50%"}
+active_cases1<-left_join(sum_confirm, sum_death, by = "date")
+#active_cases1
+active_cases<-left_join(active_cases1, sum_recovered, by = "date" )
+#active_cases
+cal_active_cases<-active_cases%>%mutate(activeCases=confrrm_sum-death_sum-recovered_sum)
+#cal_active_cases
+ggplot(cal_active_cases,aes(x=date,y=activeCases))+geom_line()+ggtitle(" Figure 8: Armenia Daily Covid 19 active acses")
+```
+
+Above figure show that daily active cases were increased at the middle of March but there was decreasing at starting of April and again increased middle of April.
+
+
+
+### Daily covid 19 status in Armenia and China
+
+
+
+```{r,out.width="50%"}
+China_corona_confirm<-coronavirus%>%filter(country=="China" & type=="confirmed")
+China_corona_confirm<-China_corona_confirm %>% mutate(cases = replace(cases, which(cases<0),NA))
+#which(is.na(China_corona_confirm$cases))
+China_corona_confirm$cases[841]=mean(c(China_corona_confirm$cases[840],China_corona_confirm$cases[842]))
+China_corona_Confirm<-China_corona_confirm%>%group_by(date)%>%summarise(con_cases=sum(cases))
+Confirm_China<-as.data.frame(China_corona_Confirm)
+df1<-data.frame(date=confirm_Armenia_corona$date,Armenia=confirm_Armenia_corona$cases,China=Confirm_China$con_cases)
+Armenia_China_Confirm<-pivot_longer(df1,c(2,3),"country","values")
+ggplot(Armenia_China_Confirm,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 9 (: Armenia & China Daily covid 19 confirmed cases")
+
+China_corona_Death<-coronavirus%>%filter(country=="China" & type=="death")%>%group_by(date)%>%summarise(Death_cases=sum(cases))
+Death_China<-as.data.frame(China_corona_Death)
+df2<-data.frame(date=death_Armenia_corona$date,Armenia=death_Armenia_corona$cases,China=Death_China$Death_cases)
+Armenia_China_Death<-pivot_longer(df2,c(2,3),"country","values")
+ggplot(Armenia_China_Death,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 10 Armenia & China Daily covid 19 Death cases")
+
+China_corona_Recovered<-coronavirus%>%filter(country=="China" & type=="recovered")%>%group_by(date)%>%summarise(Recovered_cases=sum(cases))
+Recovered_China<-as.data.frame(China_corona_Recovered)
+df3<-data.frame(date=recovered_Armenia_corona$date,Armenia=recovered_Armenia_corona$cases,China=Recovered_China$Recovered_cases)
+Armenia_China_Recovered<-pivot_longer(df3,c(2,3),"country","values")
+ggplot(Armenia_China_Recovered,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 11: Armenia & China Daily covid 19 Recovered cases")
+```
+
+
+Figure 9 show that, In early days like January, February there were only china daily covid 19 confirm cases regarding Armenia after that there were approximately same  daily confirm status but the confirmed cases were increased in Armenia after middle of April. Daily death cases were higher in China than Armenia before middle of the April (Figure 10) but Daily recovered distributed in same pattern after middle of April(Figure 11).
+
+
+
+### Daily covid 19 status in Armenia and USA
+
+```{r, out.width="50%"}
+USA_corona_confirm<-coronavirus%>%filter(country=="US"&type=="confirmed")
+df1_USA<-data.frame(date=confirm_Armenia_corona$date,Armenia=confirm_Armenia_corona$cases,USA=USA_corona_confirm$cases)
+Armenia_USA_Confirm<-pivot_longer(df1_USA,c(2,3),"country","values")
+#Armenia_USA_Confirm
+ggplot(Armenia_USA_Confirm,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 12 Armenia & USA Daily covid 19 confirm cases")
+
+USA_corona_death<-coronavirus%>%filter(country=="US"&type=="death")
+df2_USA<-data.frame(date=death_Armenia_corona$date,Armenia=death_Armenia_corona$cases,USA=USA_corona_death$cases)
+Armenia_USA_death<-pivot_longer(df2_USA,c(2,3),"country","values")
+#Armenia_USA_death
+ggplot(Armenia_USA_death,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 13:Armenia & USA daily covid 19 death cases")
+
+USA_corona_recovered<-coronavirus%>%filter(country=="US"&type=="recovered")
+df3_USA<-data.frame(date=recovered_Armenia_corona$date,Armenia=recovered_Armenia_corona$cases,USA=USA_corona_recovered$cases)
+Armenia_USA_recovered<-pivot_longer(df3_USA,c(2,3),"country","values")
+#Armenia_USA_recovered
+ggplot(Armenia_USA_recovered,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 14:Armenia & USA daily covid 19 recovered cases")
+```
+
+
+
+
+Above figure 12 show that USA daily confirmed  cases are  higher than Armenia. It started to increase at the beginning of March and after April their was not increment.Daily death cases also like confirmed cases but recovered cases not behave like that. Recovered cases had not higher increment like confirm and death cases (Figure 14).
+
+
+
+
+### Daily covid 19 status in Armenia and Azerbaijan
+
+```{r, out.width="50%"}
+library(magrittr)
+library(coronavirus)
+Azerbaijan_corona_confirm<-coronavirus %>% filter(country=="Azerbaijan"&type=="confirmed")
+df1_Azerbaijan<-data.frame(date=confirm_Armenia_corona$date,Armenia=confirm_Armenia_corona$cases,Azerbaijan=Azerbaijan_corona_confirm$cases)
+Armenia_Azerbaijan_confirm<-pivot_longer(df1_Azerbaijan,c(2,3),"country","values")
+#Armenia_Azerbaijan_confirm
+ggplot(Armenia_Azerbaijan_confirm,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 15:Armenia & Azerbaijan daily covid 19 confirmed cases")
+
+Azerbaijan_corona_death<-coronavirus%>%filter(country=="Azerbaijan"&type=="death")
+df2_Azerbaijan<-data.frame(date=death_Armenia_corona$date,Armenia=death_Armenia_corona$cases,Azerbaijan=Azerbaijan_corona_death$cases)
+Armenia_Azerbaijan_death<-pivot_longer(df2_Azerbaijan,c(2,3),"country","values")
+#Armenia_Azerbaijan_death
+ggplot(Armenia_Azerbaijan_death,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 16:Armenia & Azerbaijan daily covid 19 death cases")
+
+Azerbaijan_corona_recovered<-coronavirus%>%filter(country=="Azerbaijan"&type=="recovered")
+df3_Azerbaijan<-data.frame(date=recovered_Armenia_corona$date,Armenia=recovered_Armenia_corona$cases,Azerbaijan=Azerbaijan_corona_recovered$cases)
+Armenia_Azerbaijan_recovered<-pivot_longer(df3_Azerbaijan,c(2,3),"country","values")
+#Armenia_Azerbaijan_recovered
+ggplot(Armenia_Azerbaijan_recovered,aes(x=date, y=log(value), col= country)) + geom_line()+ggtitle("Figure 17:Armenia & Azerbaijan daily covid 19 recovered cases")
+```
+
+
+
+According to figure 15,16,17 we can say that Armenia and Azerbaijan daily covid 19 cases are distributed in same pattern that daily confirmed, death and recovered cases reported in same way.
+
+
+
+### Total covid 19 status in different countries
+
+
+
+
+```{r, out.width="50%"}
+df1_country<-data.frame(date=confirm_Armenia_corona$date,Armenia=confirm_Armenia_corona$cases,Azerbaijan=Azerbaijan_corona_confirm$cases,China=Confirm_China$con_cases,USA=USA_corona_confirm$cases)
+choose_country_corona_confirm<-pivot_longer(df1_country,c(2,3,4,5),"country","values")
+#choose_country_corona_confirm
+ggplot(choose_country_corona_confirm,aes(x=country, y=value)) + geom_bar(stat = "identity")+ggtitle("Figure 18: Total confirm cases in selected conutries ")
+
+df2_country<-data.frame(date=death_Armenia_corona$date,Armenia=death_Armenia_corona$cases,Azerbaijan=Azerbaijan_corona_death$cases,China=Death_China$Death_cases,USA=USA_corona_death$cases)
+choose_country_corona_death<-pivot_longer(df2_country,c(2,3,4,5),"country","values")
+#choose_country_corona_death
+ggplot(choose_country_corona_death,aes(x=country, y=value)) + geom_bar(stat = "identity")+ggtitle("Figure 19: Total death cases in selected conutries ")
+
+df3_country<-data.frame(date=recovered_Armenia_corona$date,Armenia=recovered_Armenia_corona$cases,Azerbaijan=Azerbaijan_corona_recovered$cases,China=Recovered_China$Recovered_cases,USA=USA_corona_recovered$cases)
+choose_country_corona_recovered<-pivot_longer(df3_country,c(2,3,4,5),"country","values")
+#choose_country_corona_recovered
+ggplot(choose_country_corona_recovered,aes(x=country, y=value)) + geom_bar(stat = "identity")+ggtitle("Figure 20: Total recovered cases in selected conutries ")
+
+```
+
+
+According to figure 18, 19 and 20 we can say that, total covid 19 status were highest in USA. Secondly higher cases were reported in China among these countries. Armenia and Azerbaijan show same covid 19 status.
+
+
+
+
+# Conclusion
+
+In Armenia daily confirmed cases  started to found at middle of March and daily death founded at the end of March.Recoveries reported after beginning of April. There were more recoveries at middle of April so active cases were low in that time. After middle of April Armenia founded more daily confirmed and death cases than China.USA always reported highest  daily covid 19 status. Armenia and Azerbaijan show same daily covid 19 status. Among 4 countries USA reported highest covid 19 status. According to that we can say, covid 19 virus was started to spread  in Armenia at the middle of March and it spread until middle of May according to data.However, at the middle of April there were controlling of spread covid 19 virus.  
+
+
+
+
+# Discussion
+
+The data set was reported covid 19 status from 22nd of January to 12th of May.It was not reported any province cases and negative values in Armenia. Latitude and longitude of center of geographic region are used to map the location of Armenia.The function of cumsum() is used to plot cumulative covid 19 status and daily active cases. We have to use log value of daily cases when comparing with other countries like China and USA because these countries so huge covid 19 status than Armenia.In that time it is not clear to use linear scale. Logarithmic scales can emphasize the rate of change in a way that linear scales do not. As well as we can plot negative values (outliers) by using mean imputation value for outliers.By using that we can use average of the points arround missing value (average of one before the missing value and after the missing value).It have done for China status. When plotting China their was reported case according to province therefor we have to group cases according to date in China and plot them. Out of results we can say that China reported covid 19 status at the beginning of the 2020. Therefor it had become lower at April. But there was huge covid 19 status in USA than others at all time because it had spread all over country severly.
+
+
+
+
+# References
+
+
+
+[1] Elsevier. "Novel Coronavirus Information Center". Elsevier Connect. Archived from the original on 30 January 2020. Retrieved 15 March 2020.
+
+[2]Reynolds, Matt (4 March 2020). "What is coronavirus and how close is it to becoming a pandemic?". Wired UK. ISSN 1357-0978. Archived from the original on 5 March 2020. Retrieved 5 March 2020.
+
+[3]"Armenia declares one-month state of emergency for coronavirus". Reuters. 1 March 2020. Retrieved 16 March 2020.
+
+[4]Elliot, Raffi (4 May 2020). "Armenia enters "new phase" of COVID-19 pandemic response as businesses reopen". The Armenian Weekly. Retrieved 31 May 2020.
+
+[5] "COVID-19: Armenian Government Approves Extending State Of Emergency". RadioFreeEurope/RadioLiberty. Retrieved 26 May 2020.
+
+[6]"IATA - International Travel Document News". www.iatatravelcentre.com.
+
+[7]"COVID-19: Updates From Armenia". EVN Report. 13 March 2020. Retrieved 23 March 2020.
+
+[8]"PM: Armenia to start production of COVID-19 tests".

@@ -1,0 +1,687 @@
+---
+title: <center> <h1> <u> **THE COVID-19 PANDEMIC IN INDIA** </u> </h1> </center>
+author: "Imani Dissanayaka "
+date: "7/18/2020"
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, comment = NA, warning = FALSE, echo = FALSE)
+```
+
+
+
+## **Introduction**
+
+### India
+
+India is the largest country in South Asia. The word "Indian" comes from Sindhu, a local name for the Indus River. Indians also call their country "Bharat," the name of a legendary emperor. India has a wide range of ethnic and cultural diversity. It is less a nation and more a collection of countries. Throughout central and southern India there are tribal populations such as Mundas, Oraons and Santals, there are Dravidian groups in southern India such as Tamils and the Malayalam-speaking peoples in Kerala. In the north, Bengalis, Kashmiris, Punjabis, Gujaratis, Rajputs, and Marathas are among the prominent groups. India shares many of its cultural groups with Pakistan, Bangladesh, and Sri Lanka. Each region has its own mix of religion, caste (social class), language, and literary, cultural and historical traditions. These traditions existed long before modern nations were created, and many people identify strongly with them. Thus, one can be a Punjabi and either a Pakistani or Indian, or a Bengali and either a Bangladeshi or Indian.Large Indian communities are also found in Nepal, Malaysia, Sri Lanka, the Middle East, South Africa, Fiji, the West Indies, the United States, Canada, and the United Kingdom.India today recognizes fourteen spoken languages as official: Hindi, Bengali, Telugu, Marathi, Tamil, Urdu, Gujarati, Malayalam, Kannada, Oriya, Punjabi, Assamese, Kashmiri, and Sindhi. Sanskrit, the classical language of northern India, is also an official language. English is widely used for national, political, and business purposes.
+
+About 80 percent of Indians are Hindus. India, however, prides itself on the freedom of religion guaranteed by its constitution. Religious minorities include Muslims (14 percent), Christians (2.4 percent), Sikhs (2 percent), Buddhists (0.7 percent), and Jains (0.5 percent). Other religious groups include Jews, Parsis (Zoroastrians), and animistic tribal peoples. The practices and beliefs associated with Hinduism vary by region, and from person to person. It is often said that Hinduism is not a religion but a way of life.It is estimated that over half of all Indians are literate (can read and write). However, this figure hides big differences between males and females, urban and rural populations, and among different social groups. Primary education is free but the quality of state-run schools tends to be poor. Still, education is important and many of India's universities have excellent reputations.
+
+### Location
+
+Modern India has an area of about 3.2 million square kilometers (1.2 million square miles), and a population of 940 million. India stretches from Cape Comorin, 8° north of the equator, to its border with the disputed Kashmir region under Pakistani control. Pakistan lies to the west, and to the east, India shares borders with Bangladesh, China, and Myanmar (Burma).
+
+India has three geographic zones. In the north lie the majestic Himalayas, which run for more than 1,500 miles (2,400 kilometers) and contain many of the world's highest peaks. Below the mountains lie the Indo-Gangetic plains. These lands run from the Arabian Sea to the Bay of Bengal and along the Indus and Ganges river valleys. The plains receive plenty of rain during the monsoon season and support much of India's agriculture. The Deccan Plateau forms the third geographical region. These are the uplands bordered by the Eastern and Western Ghats (mountains) that make up the interior of the Indian peninsula.
+
+
+```{r}
+library(ggrepel)
+library(coronavirus)
+library(magrittr)
+```
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+india_corona <- coronavirus %>% filter(country == "India")
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = india_corona, aes(x = long, y = lat), color = "red", size
+    = 3
+  ) + ggtitle(" India in world map") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 01: Location of India in world map
+
+### Climate in India
+
+The seasonal rhythm of the monsoon sets a pattern of Indian life. Winters are bright and pleasant. In late February, temperatures start to rise until May and June, when daily maximums in the northwestern plains exceed 115° F (46° C). The hot season ends with the onset of rain. The monsoon reaches southwest India in late June and sweeps northward. Cherrapunji, in the northeast, is on record as the wettest place on earth, averaging nearly 453 inches (1,150 centimeters) of rain annually. For three months, water is plentiful and the land is green. At the end of September, the rains stop and winter approaches.
+
+The climate of India comprises a wide range of weather conditions across a vast geographic scale and varied topography, making generalizations difficult. Climate in south India is generally hotter than north India. Most parts of the nation don't experience temperatures below 10 °C (50 °F) in winter, and the temperature usually tends to exceed 40 °C (104 °F) during summer. Based on the Köppen system, India hosts six major climatic sub types, ranging from arid deserts in the west, alpine tundra and glaciers in the north, and humid tropical regions supporting rain forests in the southwest and the island territories. Many regions have starkly different microclimates, making it one of the most climatically diverse countries in the world. The country's meteorological department follows the international standard of four seasons with some local adjustments: winter (January and February), summer (March, April and May), monsoon (rainy) season (June to September), and a post-monsoon period (October to December).
+
+### India’s Healthcare System
+
+The healthcare delivery system is categorized into two major components: public and private.
+The public healthcare system is made up of secondary and tertiary care institutions in key cities and provides basic healthcare facilities in the form of Primary Healthcare Centres in rural areas.
+The private sector provides the majority of secondary, tertiary, quaternary care institutions with a major concentration in metros, Tier-1 and Tier-2 cities.
+India’s healthcare industry is one of the fastest growing sectors and is expected to reach 280 billion by the year 2020.
+India is also one of the leading destinations for high end diagnostics services with tremendous capital investment for advanced diagnostic facilities.
+
+When it comes to world rankings, India was ranked 145th among 195 countries on Healthcare Access and Quality (HAQ) index in 2016.
+According to the index, India ranks worse than Bangladesh, Sri Lanka and Bhutan among its neighbours but better than Pakistan, Afghanistan and Nepal.
+India’s rank is also worse than that of many poorer countries in Sub-Saharan Africa such as Sudan (136), Equatorial Guinea (129), Botswana (122) and Namibia (137).
+
+### What is COVID-19?
+
+Coronavirus disease 2019 (COVID-19) is an infectious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).It was first identified in December 2019 in Wuhan, Hubei, China, and has resulted in an ongoing pandemic. The first confirmed case has been traced back to 17 November 2019 in Hubei. As of 19 July 2020, more than 14.2 million cases have been reported across 188 countries and territories, resulting in more than 602,000 deaths. More than 8.02 million people have recovered.
+Common symptoms include fever, cough, fatigue, shortness of breath, and loss of smell and taste. While the majority of cases result in mild symptoms, some progress to acute respiratory distress syndrome (ARDS) possibly precipitated by cytokine storm, multi-organ failure, septic shock, and blood clots. The time from exposure to onset of symptoms is typically around five days, but may range from two to fourteen days.
+
+The virus is primarily spread between people during close contact, most often via small droplets produced by coughing, sneezing, and talking. The droplets usually fall to the ground or onto surfaces rather than travelling through air over long distances. It is most contagious during the first three days after the onset of symptoms, although spread is possible before symptoms appear, and from people who do not show symptoms.
+Recommended measures to prevent infection include frequent hand washing, maintaining physical distance from others (especially from those with symptoms), quarantine (especially for those with symptoms), covering coughs, and keeping unwashed hands away from the face.There are no vaccines nor specific antiviral treatments for COVID-19 and not expected until 2021 at the earliest.
+
+
+### The COVID-19 pandemic in India
+
+The COVID-19 pandemic in India is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19). The first case of COVID-19 in India, which originated from China, was reported on 30 January 2020. India currently has the largest number of confirmed cases in Asia, and has the third highest number of confirmed cases in the world after the United States and Brazil with the number of total confirmed cases breaching the 100,000 mark on 19 May, 200,000 on 3 June, and 1,000,000 confirmed cases on 17 July 2020.
+
+India's case fatality rate is relatively lower at 2.80%, against the global 4.7%, as of 6 July. Six cities account for around half of all reported cases in the country – Mumbai, Delhi, Ahmedabad, Chennai, Pune and Kolkata. As of 24 May 2020, Lakshadweep is the only region which has not reported a case. On 10 June, India's recoveries exceeded active cases for the first time reducing 49% of total infections followed by recovery rate crossing 60% till early July. Although, active have continued to increase persistently.
+
+
+![](India_COVID-19_cases_density_map.svg)
+
+
+Figure 02: Map of COVID-19 cases per million population in India by states and UT. 
+
+Data source: MoHFW. Based on 2019 National Health Mission population projection.
+
+### The COVID-19 pandemic lockdown in India
+
+On 22 March, India observed a 14-hour voluntary public curfew at the instance of the Prime Minister Narendra Modi. It was followed by mandatory lockdowns in COVID-19 hotspots and all major cities. Further, on 24 March, the Prime Minister ordered a nationwide lockdown for 21 days, affecting the entire 1.3 billion population of India. On 14 April, the PM extended the nationwide lockdown till 3 May which was followed by two-week extensions starting 3 and 17 May with substantial relaxations. Beginning 1 June the Government has started unlocking the country (barring containment zones) in three unlock phases.
+Services would be resumed in a phased manner starting from 8 June. It was termed as "Unlock 1.0". PM Modi later clarified that the lockdown phase in the country was over and that 'unlock' had already begun. The second phase of unlock, Unlock 2.0, was announced for the period of 1 to 31 July, with more ease in restrictions.
+
+### Actions taken by government 
+
+* Ban on people from stepping out of their homes.
+* All services and shops closed except pharmacies, hospitals, banks, grocery shops and other essential services.
+* Closure of commercial and private establishments (only work-from-home allowed).
+* Suspension of all educational, training, research institutions.
+* Closure of all places of worship.
+* Suspension of all non-essential public and private transport.
+* Prohibition of all social, political, sports, entertainment, academic, cultural, religious activities.
+
+On 26 March, finance minister Nirmala Sitharaman announced a ₹170,000 crore (US$24 billion) stimulus package to help those affected by the lockdown. The plan was to benefit the migrant workers through cash transfers and initiatives for food security. The package was aimed to provide food security measures for poor households through direct cash transfers, free cereal and cooking gas for three months. It also provided insurance coverage for medical personnel.
+
+On 27 March, the Reserve Bank of India announced a slew of measures to help mitigate the economic impacts of the lockdown.
+
+On 29 March, the Indian Railways announced that it would start services for special parcel trains to transport essential goods, in addition to the regular freight service.
+
+On 29 March, the government ordered landlords to not demand rent and employers to pay wages without deduction. 
+
+By the first week of April, essential industries such as growing, harvesting and food deliveries were allowed to operate.
+
+### Impact of lockdown
+
+Food delivery services were banned by several state governments despite the central government's approval. Thousands of people emigrated out of major Indian cities, as they became jobless after the lockdown. Following the lockdown, India's electricity demand fell down to a five-month low on 28 March. The lockdown broke the supply chain of narcotics in Punjab. Many states were keen on opening up liquor shops during the lockdown which was finally allowed in the 3rd phase beginning on May 4. Reports of a surge in illicit liquor sales and most importantly, drying up of revenue from liquor sale was the main stimulation. Due to the lockdown, more than 350 deaths were reported as of 10 May, with reasons ranging from starvation, suicides, exhaustion, road and rail accidents, police brutality and denial of timely medical care. Among the reported deaths, most were among the marginalised migrants and labourers.
+
+The United Nations (UN) and the World Health Organization (WHO) have praised India's response to the pandemic as 'Comprehensive and robust,' terming the Lockdown restrictions as aggressive but vital for containing the spread and building necessary healthcare infrastructure. The Oxford COVID-19 Government Response Tracker (OxCGRT) noted the government's swift and stringent actions, emergency policy making, emergency investment in healthcare, fiscal stimulus, investment in vaccine and drug R&D. It gave India a score of 100 for its strict response. Michael Ryan, chief executive director of the WHO's health emergencies programme noted that India had tremendous capacity to deal with the outbreak owing to its vast experience in eradicating smallpox and polio. In June, India was ranked 56th of 200 countries in COVID 19 safety assessment report by Deep Knowledge Group. Though, other commentators have also raised concerns about the economic fallout arising as a result of the pandemic and preventive restrictions. The lockdown was justified by the government and other agencies for being preemptive to prevent India from entering a higher stage which could make handling very difficult and cause even more losses thereafter.
+
+
+## **Exploratory Data Analysis**
+
+Here we used corona virus dataset and it contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province from 22nd of January to 12th of May 2020.
+
+```{r}
+
+library(rmarkdown)
+library(knitr)
+#sub1 <- subset(wide_india_corona,confirmed == max(confirmed))
+head(india_corona)%>% kable(caption = "covid-19 in India")
+#tail(india_corona)%>% kable(caption = "covid-19 in India")
+```
+
+Table 01: covid-19 in India
+
+This table shows the first six rows of covid-19 data set of india.
+
+### Visualization of death, confirmed, recovered and active cases
+```{r}
+#recover_india_corona <- india_corona %>% filter(type=="recovered")
+#head(recover_india_corona)
+```
+
+```{r}
+#ggplot(recover_india_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("india: Daily Covid-19 Recoveries")
+
+```
+
+
+```{r}
+recover_india_corona <- india_corona %>% filter(type=="recovered")
+#head(recover_india_corona)
+confirm_india_corona <- india_corona %>% filter(type=="confirmed")
+#head(confirm_india_corona)
+death_india_corona <- india_corona %>% filter(type=="death")
+#head(death_india_corona)
+
+```
+
+```{r}
+library(tibble)
+wide_india_corona <- india_corona %>% pivot_wider(names_from = type, values_from = cases)
+#wide_india_corona
+```
+
+```{r}
+wide_india_corona$active <- wide_india_corona$confirmed - wide_india_corona$death - wide_india_corona$recovered
+#wide_india_corona$active
+```
+
+
+```{r}
+ggplot(wide_india_corona, aes (x = date , y = confirmed)) + geom_line(colour = "red")+ ggtitle("India: Daily Covid-19 confirmed")  + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 03: Daily Covid-19 confirmed cases in India
+
+Figure 03 shows that up to end of March, daily confirmed cases were less than 500 but 500 to 2500 daily confirmed cases were recorded in April. Number of confirmed cases increased rapidly.
+```{r}
+ggplot(wide_india_corona, aes (x = date , y = confirmed)) + geom_line()+ ggtitle("India: Daily Covid-19 confirmed") + 
+stat_smooth(col = "red") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 04: Smoothing method for daily Covid-19 confirmed cases in India
+
+We can see a non-linear model for Daily Covid-19 confirmed cases in India.
+
+```{r}
+new_wide_india_corona <- separate(wide_india_corona, date, into = c("year" , "month", "day"), sep = "-")
+#head(new_wide_india_corona)
+```
+
+
+```{r}
+ggplot(new_wide_india_corona, aes (x = day , y = confirmed, col = month)) + geom_point()+ facet_grid(month ~.)+ ggtitle("India: Daily Covid-19 confirmed") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 05: Daily Covid-19 confirmed cases in India among months
+
+We can get more clear idea about increase of daily confirmed cases using figure 04. In February and March confirmed cases within a day didn't exceed 500 but in april,500 to 2000 cases recorded daily. We have data up to 12th of May and we can see daily confirmed cases in May vary between 2500 - 4500.  
+
+```{r}
+ggplot(wide_india_corona, aes (x = date , y = death)) + geom_line(colour = "forest green")+ ggtitle("India: Daily Covid-19 death") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 06: Daily Covid-19 death cases in India
+
+Using figure 06, we can see that very few number of people died in a day up to middle of march. Then daily death cases increased and 75 to 125 people died within a day of May.
+
+```{r}
+ggplot(new_wide_india_corona, aes (x = day , y = death, col = month)) + geom_point()+ facet_grid(month ~.)+ ggtitle("India: Daily Covid-19 deaths") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 07: Daily Covid-19 death cases in India among months
+
+Figure 07 shows that, daily reported death cases were less than 25 in first three months of 2020. In end of the April it increased up to 75 and 50 - 150 daily death cases reported in May.
+
+```{r}
+ggplot(wide_india_corona, aes (x = date , y = recovered)) + geom_line(colour = 
+                                                                        "blue")+ ggtitle("India: Daily Covid-19 Recovered") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 08: Daily Covid-19 confirmed cases in India
+
+
+```{r}
+ggplot(new_wide_india_corona, aes (x = day , y = recovered, col = month)) + geom_point()+ facet_grid(month ~.)+ ggtitle("India: Daily Covid-19 recovered") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 09: Daily Covid-19 recovered cases in India among months
+
+Using both figure 07 and 08, we can see that very few number of patients recovered up to middle of April. Then daily recovered number was increasing rapidly. 750 - 1750 covid-19 patients recovered daily in May.
+```{r}
+ggplot(wide_india_corona, aes (x = date , y = active)) + geom_line()+ ggtitle("India: Daily Covid-19 active") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 10: Daily Covid-19 active cases in India
+
+```{r}
+ggplot(new_wide_india_corona, aes (x = day , y = active, col = month)) + geom_point()+ facet_grid(month ~.)+ ggtitle("India: Daily Covid-19 active") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 11: Daily Covid-19 active cases in India among months
+
+Figure 10 and 11 showS that number of active cases reported within a day was very low up to end of the March. Then it rapidly increased and more than 2500 active cases recorded in 4th of May.
+
+```{r}
+ggplot(india_corona, aes(x = date, y = cases, col = type)) + geom_point()+ ggtitle("India: Daily Covid-19 confirmed, death and Recovered") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 12: Daily covid-19 confirmed, death and recovered cases.
+
+
+```{r}
+ggplot(india_corona, aes(x = date, y = cases, col = type)) + geom_point()+ facet_grid(type~.)+ ggtitle("India: Daily Covid-19 confirmed, death and Recovered") + theme(plot.title = element_text(hjust = 0.5))
+```
+
+Figure 13: Daily covid-19 confirmed, death and recovered cases.
+
+Figure no 12 and 13 show that rate of recovering was higher than the rate of death. We can see a linear relationship between date and number of death cases. Rate of confirm cases was higher than the rate of recovering.
+```{r}
+
+library(rmarkdown)
+library(knitr)
+sub1 <- subset(wide_india_corona,confirmed == max(confirmed))
+kable(sub1 , caption = "Maximum number of confirmed cases")
+
+```
+
+Table 02: Maximum number of confirmed cases
+
+The maximum number of confirmed cases recorded in 10th of May 2020 and it was 4353.
+
+```{r}
+sub2 <- subset(wide_india_corona,death == max(death))
+kable(sub2 , caption = "Maximum number of death cases")
+
+```
+
+Table 03: Maximum number of death cases
+
+The maximum number of death cases recorded in 04th of May 2020 and it was 175.
+
+```{r}
+sub3 <- subset(wide_india_corona,recovered == max(recovered))
+kable(sub3 , caption = "Maximum number of recovered cases")
+
+```
+
+Table 04: Maximum number of recovered cases
+
+The maximum number of recovered cases recorded in 12th of May 2020 and it was 1871.
+
+```{r}
+sub4 <- subset(wide_india_corona,active == max(active))
+kable(sub4 , caption = "Maximum number of active cases")
+
+```
+
+Table 05: Maximum number of active cases
+
+The maximum number of active cases recorded in 04th of May 2020 and it was 2685.
+
+
+
+```{r}
+cum_active_india <- mutate(wide_india_corona, cumulative_active = cumsum(active))
+cum_confirmed_india <- mutate(wide_india_corona, cumulative_confirmed = cumsum(confirmed))
+cum_death_india <- mutate(wide_india_corona, cumulative_death = cumsum(death))
+cum_recovered_india <- mutate(wide_india_corona, cumulative_recovered = cumsum(recovered))
+overall_india <- data.frame(date = wide_india_corona$date, confirmed = cum_confirmed_india$cumulative_confirmed, death = cum_death_india$cumulative_death, recovered = cum_recovered_india$cumulative_recovered, active = cum_active_india$cumulative_active)
+
+overall_india <- pivot_longer(overall_india, c(2, 3, 4, 5), "status", "value")
+
+ggplot(overall_india, aes(x=date, y=value, colour=status)) + geom_line()+ ggtitle(" Covid-19 in India") + theme(plot.title = element_text(hjust = 0.5))
+
+#cum_active_india
+```
+
+Figure 14: Overall covid-19 situation in India
+
+Figure 14 shows the cumulative sum of confirmed, death, recovered and active cases up to 12th of May. Number of confirmed covid-19 patients in India was steeply increased within a short period (from April to first two weeks of May)and it passed 70 000 confirmed cases. Number of recovered people also started to increase from middle of the April but recovery speed was lower than the speed of finding new infected cases. More than 20 000 people recovered and nearly 3000 people died from covid-19.
+
+```{r}
+#ggplot(cum_active_india, aes (x = date , y = cumulative_active)) + geom_point()+geom_vline(xintercept = 2020-04-15, col = "red", linetype = 4)+ ggtitle("india: Covid-19 active cases")
+
+```
+
+### Comparison with other countries
+
+I selected Sri Lanka, China, US, Pakistan and Bangladesh to compare covid-19 pandemic with India. Pakistan lies to the west of India and India shares borders with Bangladesh, China, and Myanmar (Burma).Sri Lanka is an island country lying in the Indian Ocean and separated from peninsular India by the Palk Strait. India, Sri Lanka, China, Pakistan and Bangladesh are in Asia continent. Here I selected US also because US currently has the worst outbreak of any country in the world.
+
+Figure 15 shows the countries I used to compare covid-19 situation. 
+
+
+```{r}
+srilanka_corona <- coronavirus %>% filter(country == "Sri Lanka")
+```
+
+
+```{r}
+#ggplot(srilanka_corona, aes(x = date, y = cases, col = type)) + geom_line() + geom_point()+ ggtitle("Sri lanka: Daily Covid-19")
+```
+
+```{r}
+wide_srilanka_corona <- coronavirus %>% filter(country == "Sri Lanka") %>% pivot_wider(names_from = type, values_from = cases)
+```
+
+
+```{r}
+#head(wide_srilanka_corona)
+```
+
+
+```{r}
+wide_srilanka_corona$active <- wide_srilanka_corona$confirmed - wide_srilanka_corona$death - wide_srilanka_corona$recovered
+#wide_srilanka_corona$active
+```
+
+```{r}
+china_corona <- coronavirus %>% filter(country=="China") 
+few_china_corona <- head(china_corona)
+us_corona <- coronavirus %>% filter(country=="US") 
+pakistan_corona <- coronavirus %>% filter(country=="Pakistan") 
+bangladesh_corona <- coronavirus %>% filter(country=="Bangladesh") 
+countries_map <- data.frame(sl = srilanka_corona, china_corona, us_corona, pakistan_corona, bangladesh_corona)
+```
+
+```{r}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = india_corona, aes(x = long, y = lat), color = "red", size= 1 ) + 
+  geom_point(data = srilanka_corona, aes(x = long, y = lat), color = "blue", size= 1)+
+  geom_point(data = few_china_corona, aes(x = long, y = lat), color = "yellow", size= 2)+
+   
+  geom_point(data = us_corona, aes(x = long, y = lat), color = "orange", size= 1)+
+   geom_point(data = pakistan_corona, aes(x = long, y = lat), color = "forest green", size= 1 ) + 
+  geom_point(data = bangladesh_corona, aes(x = long, y = lat), color = "brown", size= 1)+
+  ggtitle(" Countries used to compare") + theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+Figure 15: Countries selected to compare covid-19 pandemic
+
+### Comparing active cases
+
+```{r}
+
+india_srilanka_active <- data.frame(date= wide_india_corona$date,India =wide_india_corona$active,SriLanka = wide_srilanka_corona$active)
+#head(india_srilanka_active)
+india_srilanka_active <- pivot_longer(india_srilanka_active, c(2, 3), "country", "value")
+
+
+ggplot(india_srilanka_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle("India & Sri Lanka: Daily Covid-19 active cases") + theme(plot.title = element_text(hjust = 0.5))+ scale_color_manual(values = c("red", "forest green"))
+
+
+```
+
+Figure 16: Daily Covid-19 active cases in India & Sri Lanka
+
+Both countries reported very few number of active cases up to the middle of March but after that time period it increased steeply in India while Sri Lanka remains as earlier days.
+```{r}
+#active_srilanka_corona <- coronavirus %>% filter(country=="Sri Lanka" & type=="reco")
+
+#recover_india_corona <- coronavirus %>% filter(country=="India" & type=="recovered")
+
+#india_srilanka <- data.frame(date=recover_india_corona$date, srilanka=recover_srilanka_corona$cases, india=recover_india_corona$cases)
+
+#india_srilanka <- pivot_longer(india_srilanka, c(2, 3), "country", "value")
+#head(india_srilanka)
+
+#ggplot(india_srilanka, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle("India & Sri Lanka Daily Covid-19 recovered cases")
+
+```
+
+
+```{r}
+#recover_china_corona <- coronavirus %>% filter(country=="China" & type=="recovered")
+
+#india_china <- data.frame(date=recover_india_corona$date, china=recover_china_corona$cases, india=recover_india_corona$cases)
+
+#india_china <- pivot_longer(india_china, c(2, 3), "country", "value")
+
+#ggplot(india_china, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("India & China Daily Covid-19 recovered cases")
+
+#wide
+wide_china_corona <- coronavirus %>% filter(country=="China")  %>% pivot_wider(names_from = type, values_from = cases)
+wide_china_corona$active <- wide_china_corona$confirmed - wide_china_corona$death - wide_china_corona$recovered
+
+
+india_china_active <- data.frame(date= wide_india_corona$date,India =wide_india_corona$active,China = wide_china_corona$active)
+#head(india_srilanka_active)
+india_china_active <- pivot_longer(india_china_active, c(2, 3), "country", "value")
+
+
+ggplot(india_china_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle("India & China: Daily Covid-19 active cases") + theme(plot.title = element_text(hjust = 0.5))+ scale_color_manual(values = c("blue", "red"))
+
+
+```
+
+Figure 17: Daily Covid-19 active cases in India & China
+
+China is the origin of nowel covid virus. So daily reported active cases were increased in middle of January but it began to reduce in end of February. In March, China recorded negative active cases and it was going to zero in April and May. India affected covid-19 after few months so there daily number of active cases began to increase from middle of March.
+
+
+```{r}
+#coronavirus %>% filter(country=="China") %>%ggplot( aes(x = cases, y = type))+ geom_boxplot()
+```
+
+```{r}
+#recover_us_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+#india_us <- data.frame(date=recover_india_corona$date, us=recover_us_corona$cases,india=recover_india_corona$cases)
+
+#india_us <- pivot_longer(india_us, c(2, 3), "country", "value")
+
+#ggplot(india_us, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("India & US Daily Covid-19 recovered cases")
+
+#wide
+wide_us_corona <- coronavirus %>% filter(country=="US")  %>% pivot_wider(names_from = type, values_from = cases)
+wide_us_corona$active <- wide_us_corona$confirmed - wide_us_corona$death - wide_us_corona$recovered
+
+
+
+india_us_active <- data.frame(date= wide_india_corona$date,India =wide_india_corona$active,US = wide_us_corona$active)
+
+india_us_active <- pivot_longer(india_us_active, c(2, 3), "country", "value")
+
+
+ggplot(india_us_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle("India & US: Daily Covid-19 active cases") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Figure 18: Daily Covid-19 active cases in India & US
+
+As figure shows, daily active cases in US began to increase steeply and it reached the 30 000 daily active cases level within a month. India hadn't pass 5000 daily active cases until middle of May and it was very low compared to the US.
+
+```{r}
+#recover_pakistan_corona <- coronavirus %>% filter(country=="Pakistan" & type=="recovered")
+#india_pakistan <- data.frame(date=recover_india_corona$date, pakistan=recover_pakistan_corona$cases,india=recover_india_corona$cases)
+
+#india_pakistan <- pivot_longer(india_pakistan, c(2, 3), "country", "value")
+#ggplot(india_pakistan, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("India & Pakistan Daily Covid-19 recovered cases")
+
+#wide
+wide_pakistan_corona <- coronavirus %>% filter(country=="Pakistan")  %>% pivot_wider(names_from = type, values_from = cases)
+wide_pakistan_corona$active <- wide_pakistan_corona$confirmed - wide_pakistan_corona$death - wide_pakistan_corona$recovered
+
+
+india_pakistan_active <- data.frame(date= wide_india_corona$date,India =wide_india_corona$active,Pakistan = wide_pakistan_corona$active)
+
+india_pakistan_active <- pivot_longer(india_pakistan_active, c(2, 3), "country", "value")
+
+
+ggplot(india_pakistan_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle("India & Pakistan: Daily Covid-19 active cases") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Figure 19: Daily Covid-19 active cases in India & Pakistan
+
+Both India and Pakistan show a little bit similar pattern in reporting daily covid-19 active cases. Earlier Pakistan reported daily active cases more than India but after April, most of the days India had higher number of active cases.
+
+
+```{r}
+#recover_bangladesh_corona <- coronavirus %>% filter(country=="Bangladesh" & type=="recovered")
+#india_bangladesh <- data.frame(date=recover_india_corona$date, bangladesh =recover_bangladesh_corona$cases, india=recover_india_corona$cases)
+
+#india_bangladesh <- pivot_longer(india_bangladesh, c(2, 3), "country", "value")
+
+#ggplot(india_bangladesh, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("India & Bangladesh Daily Covid-19 recovered cases")
+
+wide_bangladesh_corona <- coronavirus %>% filter(country=="Bangladesh")  %>% pivot_wider(names_from = type, values_from = cases)
+wide_bangladesh_corona$active <- wide_bangladesh_corona$confirmed - wide_bangladesh_corona$death - wide_bangladesh_corona$recovered
+
+
+india_bangladesh_active <- data.frame(date= wide_india_corona$date,India =wide_india_corona$active,Bangladesh = wide_bangladesh_corona$active)
+
+india_bangladesh_active <- pivot_longer(india_bangladesh_active, c(2, 3), "country", "value")
+
+
+ggplot(india_bangladesh_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle("India & Bangladesh: Daily Covid-19 active cases") + theme(plot.title = element_text(hjust = 0.5))+ scale_color_manual(values = c("purple","red"))
+
+
+```
+
+Figure 20: Daily Covid-19 active cases in India & Bangladesh
+
+Number of daily reported active cases in India started to increase from middle of March and Bangladesh reported it after the April. It increased with time in both countries but rate of increasing in India was higher than Bangladesh.
+
+
+### Daily cases compared with 5 countries
+
+Here, I compared confirmed, death, recovered and active cases reported daily among these six countries to get idea about the situation in India.
+```{r}
+daily_all_confirmed <- data.frame(date = india_corona$date,India = wide_india_corona$confirmed, Srilanka = wide_srilanka_corona$confirmed, China = wide_china_corona$confirmed, US = wide_us_corona$confirmed, Pakistan = wide_pakistan_corona$confirmed, Bangladesh = wide_bangladesh_corona$confirmed) 
+daily_all_confirmed <- pivot_longer(daily_all_confirmed, c(2,3,4,5,6,7), "country", "value")
+ggplot(daily_all_confirmed,aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle(" Daily Covid-19 confirmed cases") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Figure 21: Daily Covid-19 confirmed cases
+
+We can see that China started to report daily covid-19 confirmed cases in the begining and then other countries reported it from February. Daily reported confirmed cases in China began to reduce but then US reported higher number of daily confirmed cases. Maximum number of daily confirmed cases in China was around 15 000 but US passed it in end of March and after that US recorded more than 15000 confirmed cases daily. Comparing with US, India had very low number of daily confirmed cases but that values were higher than the daily confirmed cases in Pakistan, Bangladesh and Sri Lanka.
+
+```{r}
+daily_all_death <- data.frame(date = india_corona$date,India = wide_india_corona$death, Srilanka = wide_srilanka_corona$death, China = wide_china_corona$death, US = wide_us_corona$death, Pakistan = wide_pakistan_corona$death, Bangladesh = wide_bangladesh_corona$death) 
+daily_all_death <- pivot_longer(daily_all_death, c(2,3,4,5,6,7), "country", "value")
+ggplot(daily_all_death,aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle(" Daily Covid-19 death cases") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Figure 22: Daily Covid-19 death cases
+
+Daily death cases among these six countries show the similar pattern to daily confirmed cases in figure 20.US shows the higher number of daily death cases and India had higher number than Pakistan, Bangladesh and Sri Lanka.
+
+```{r}
+daily_all_recovered <- data.frame(date = india_corona$date,India = wide_india_corona$recovered, Srilanka = wide_srilanka_corona$recovered, China = wide_china_corona$recovered, US = wide_us_corona$recovered, Pakistan = wide_pakistan_corona$recovered, Bangladesh = wide_bangladesh_corona$recovered) 
+daily_all_recovered <- pivot_longer(daily_all_recovered, c(2,3,4,5,6,7), "country", "value")
+ggplot(daily_all_recovered,aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle(" Daily Covid-19 recovered cases") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Figure 23: Daily Covid-19 recovered cases
+
+Daily recovered cases in china began to increase in February and it reduced after the march. Then US started reporting daily recovered cases higher than other countries. India shows higher number of daily recovered cases than Pakistan, Bangladesh and Sri Lanka.
+
+```{r}
+india_srilanka_china_us_pakistan_bangladesh_active <- data.frame(date= wide_india_corona$date,India =wide_india_corona$active,Srilanka = wide_srilanka_corona$active, China = wide_china_corona$active, US = wide_us_corona$active, Pakistan = wide_pakistan_corona$active, Bangladesh = wide_bangladesh_corona$active) 
+
+india_srilanka_china_us_pakistan_bangladesh_active <- pivot_longer(india_srilanka_china_us_pakistan_bangladesh_active, c(2, 3, 4, 5, 6, 7), "country", "value")
+
+
+ggplot(india_srilanka_china_us_pakistan_bangladesh_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle(" Daily Covid-19 active cases") + theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+Figure 24: Daily Covid-19 active cases
+
+Daily covid-19 active cases in China began to increase in first two weeks of February and after that period China reported negative number of daily active cases. US started reporting higher number of daily active cases around 20000 and it began to reduce after May. India shows higher number of daily active cases than Pakistan, Bangladesh and Sri Lanka.
+
+I get the cumulative sum of active cases for the further analysis.
+
+```{r}
+cum_active_india <- mutate(wide_india_corona, cumulative_active = cumsum(active))
+cum_active_srilanka <- mutate(wide_srilanka_corona, cumulative_active = cumsum(active))
+cum_active_china <- mutate(wide_china_corona, cumulative_active = cumsum(active))
+cum_active_us <- mutate(wide_us_corona, cumulative_active = cumsum(active))
+cum_active_pakistan <- mutate(wide_pakistan_corona, cumulative_active = cumsum(active))
+cum_active_bangladesh <- mutate(wide_bangladesh_corona, cumulative_active = cumsum(active))
+overall_active <- data.frame(date = wide_india_corona$date, India = cum_active_india$cumulative_active, Srilanka = cum_active_srilanka$cumulative_active, China = cum_active_china$cumulative_active, US = cum_active_us$cumulative_active,Pakistan = cum_active_pakistan$cumulative_active, Bangladesh = cum_active_bangladesh$cumulative_active)
+
+overall_active <- pivot_longer(overall_active, c(2, 3, 4, 5,6,7), "country", "value")
+
+ggplot(overall_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle(" Covid-19 cumulative acive cases") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Figure 25: Covid-19 active cases
+
+US had the highest Covid-19 active cases among these countries and US had more than one million patients in 12th of May. Other five countries didn't had more than 150 000 active cases up to the 12 th of May.
+
+Figure 25 is not clear enough to study about India so I drop US and analyze again.
+
+```{r}
+#cum_active_china
+```
+
+```{r}
+cum_active_india <- mutate(wide_india_corona, cumulative_active = cumsum(active))
+cum_active_srilanka <- mutate(wide_srilanka_corona, cumulative_active = cumsum(active))
+cum_active_china <- mutate(wide_china_corona, cumulative_active = cumsum(active))
+#cum_active_us <- mutate(wide_us_corona, cumulative_active = cumsum(active))
+cum_active_pakistan <- mutate(wide_pakistan_corona, cumulative_active = cumsum(active))
+cum_active_bangladesh <- mutate(wide_bangladesh_corona, cumulative_active = cumsum(active))
+overall_active <- data.frame(date = wide_india_corona$date, India = cum_active_india$cumulative_active, Srilanka = cum_active_srilanka$cumulative_active, China = cum_active_china$cumulative_active, Pakistan = cum_active_pakistan$cumulative_active, Bangladesh = cum_active_bangladesh$cumulative_active)
+
+overall_active <- pivot_longer(overall_active, c(2, 3, 4, 5,6,), "country", "value")
+
+ggplot(overall_active, aes(x=date, y=value, colour=country)) + geom_line()+ ggtitle(" Covid-19 cumulative acive cases(without US)") + theme(plot.title = element_text(hjust = 0.5))+ scale_color_manual(values = c("purple", "forest green", "red", "blue", "brown", "black"))
+
+```
+
+Figure 26: Covid-19 active cases
+
+China had around 50 000 covid-19 active patients in middle of February and after that it reduced. In April, number of covid-19 active patients in China became lower than 5000 and it approach to zero in May. India, Pakistan and Bangladesh had increasing number of patients up to may. Sri Lanka didn't report higher number of active cases like other five countries.
+
+## **Conclusion and Discussion**
+
+The first case of COVID-19 in India, which originated from China, was reported on 30 January 2020. Very few number of confirmed cases reported daily up to end of March but after that it increased steeply. World Health Organization (WHO) mention that it takes 5 - 6 days from when someone is infected with the virus for symptoms to show and however it can take up to 14 days. That can be a reason for that higher number of daily confirmed cases reported from end of march. 
+
+Number of daily covid-19 death cases also increased from end of March but that increment is very low when compared with daily confirmed, recovered and active cases. Maximum number of daily death cases is 175  and it recorded after the three months from the first confirmed case.
+
+Some literatures show that mild cases typically recover within two weeks, while those with severe or critical diseases may take three to six weeks to recover. We also noticed that in recovered cases in India.
+
+In some graphs we got negative values for daily active cases. Lower number of daily confirmed cases, higher number of death cases and higher number of recovered cases are the reasons for it.
+
+In mid-January Chinese authorities stopped movement in and out of Wuhan, the centre of epidemic, and 15 other cities in Hubei province. They took immediate actions to control covid-19 virus. These things causes to control active cases in China. India and Sri Lanka follow the actions taken by China and we noticed that Sri Lanka had control covid-19 pandamic within given period. on 24 March, the Prime Minister ordered a nationwide lockdown for 21 days. Government response in US was insufficient for the covid-19 and it may causes to that higher number of active cases.
+
+Using these information, we can conclude that India also can control this covid-19 pandemic but it take several months because still India is not passed the peak point of active cases. 
+
+Without a vaccine, other prophylactic measures, or effective treatments, a key part of managing COVID‑19 is trying to decrease and delay the epidemic peak, known as "flattening the curve". This is done by slowing the infection rate to decrease the risk of health services being overwhelmed, allowing for better treatment of current cases, and delaying additional cases until effective treatments or a vaccine become available. We can see that Sri Lanka was maintaining that flat curve.
+
+These results may be change if we consider the population density in each country but data like population, population density in each country are not include in coronavirus package. It was one of the limitation in this study.
+
+We have data only from 22nd of January to 12th of May 2020 and that period is not enough to predict about covid-19.
+
+### References
+
+1.  https://en.wikipedia.org/wiki/Climate_of_India
+2.  https://www.everyculture.com/wc/Germany-to-Jamaica/Indians.html#ixzz6SKZGqZOY
+3.  https://en.wikipedia.org/wiki/COVID-19_pandemic_in_India
+4.  https://en.wikipedia.org/wiki/COVID-19_pandemic_lockdown_in_India
+5.  https://www.hindustantimes.com/india-news/india-s-case-count-crosses-100-000-delhi-eases-restrictions-covid-19-news-today/story-rFf9hpAOpOKoKPF8CKQ99N.html
+6.  https://www.nature.com/articles/d41586-020-00741-x
+7.  https://www.who.int/health-topics/coronavirus#tab=tab_1
+8.  https://en.wikipedia.org/wiki/Coronavirus_disease_2019
+9.  https://theconversation.com/as-coronavirus-forces-us-to-keep-our-distance-city-density-matters-less-than-internal-density-137790
+10. https://ourworldindata.org/grapher/covid-19-death-rate-vs-population-density
+11. https://www.theverge.com/2020/1/23/21078457/coronavirus-outbreak-china-wuhan-quarantine-who-sars-cdc-symptoms-risk
+
+

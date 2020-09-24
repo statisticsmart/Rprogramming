@@ -1,0 +1,317 @@
+---
+title: "COVID-19 Pandemic in Spain"
+author: "Ayesha Lakmali"
+date: "6/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message=FALSE)
+```
+
+### Introduction: 
+COVID-19 is a novel coronavirus that had not previously been identified in humans.The first case was detected in the Hubei province of China at the end of December 2019.Thousand of new cases are being reported each day,and because the illness has only recently been detected,it is known that the virus spread via cough and sneeze droplets.
+
+As the COVID-19 disease spreads outside of China, countries like Italy,Spain and the United States are leading the world in new coronavirus cases.The virus was first confirmed to have spread to Spain on 31 January 2020,when a German tourist tested positive for cOVID-19 in La Gomera,Canary Islands. The community transmission began by mid-February in Spain,as other European countriess also began to see substantial rises.By 13 March, cases had been confirmed in all 50 provinces of the country.
+
+The lockdown was imposed on 14 March 2020.On 25 March, the parliament approved the government's request to extend of the state of alarm until 11 April. On 29 March, it was announced that begining the following day, all non essential workers were ordered to remain at home for the next 14 days.By late March, the community of Madrid has recorded the most cases and deaths in the country.On 25 March,the death toll in Spain surpassed that of mainland China,and only that of Italy was higher.on 2 April,950 people died of the virus in a 24-hour period at the time,the most by any country in a single day.On 17 May,the daily death toll announced by the Spanish government  fell below 100 for the first time,and 1 June was the first day without deaths by coronavirus.
+
+As of 12 May 2020,there have been 269,520 confirmed cases and 26,856 deaths.The actual number of cases was considered to be much higher, as many people with only mild or no symptoms were unlikely to have been tested.
+
+On 10 March 2020 the government of Spain decreed the immediate cancellation of all direct flights from Italy to Spain untill 25 March.On 12 March, all traffic between Morocco and Spain was suspended.Movement between provinces will be forbidden at least untill the end of June.
+On 10 March, the Ministry of Culture ordered the closing of its buildings in Madrid,including the museums of EI Prado, Reina Sofia, Thyssen, the Spanish Filmoteca Espanola, Archaeological and Anthropological museums, as well as the National Library and the Royal Palace among others.
+As of 23 March 2020,there were 240,245 police officers and more than 2,500 military deployed across the country.
+
+### Loading data set
+```{r results=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+### Detection of outliers
+```{r results=FALSE}
+library(tidyverse)
+library(magrittr)
+
+spain_corona <- coronavirus %>% filter(country == "Spain")
+
+spain_corona[94,7] <- 6740  ## Detection of an outlier and correction. 
+```
+
+### Visualisation of the location
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+p <- ggplot()+ 
+  geom_polygon(data = wrld_simpl, 
+               aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+  p + geom_point(
+    data = spain_corona, aes(x = long, y = lat), color = "red" , size = 1
+  )
+```
+
+### Geography of Spain
+
+
+Spain is a country located in southwestern Europe occupying most(about 82 percent) of the Iberian Peninsula. Portugal, France, Andorra, Morocco, Gibraltar are the neighbour countries of Spain.
+
+
+### Climate
+
+Three main climatic zones can be separated, according to geographical situation and orographic conditions in Spain.
+
+The Mediterranean climate, characterized by dry and warm summers. According to Koppen climate classification, it is dominant in the peninsula, with two varieties: Csa and Csb
+
+The semiarid climate(Bsh, Bsk) located in the southeatern quarter of the country, especially in the region of Murcia and in the Ebro valley. In contrast with the Mediterranean climate, the dry season extends beyond the summer.
+
+The oceanic climate(Cfb) is located in the northern quarter of the country, especially in the regions of Basque country, Asturias, Cantabria and partly Galicia. In contrary to the Mediterranean climate, winter and summer tempratures are influenced by the ocean. 
+
+Apart from these main types, other sub-types can be found, like desertic climate in parts of southeastern Spain, like in coastal Almera. 
+
+## Exploratory data analysis
+```{r}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+
+confirmed_cases_spain <- spain_corona %>%  filter(type=="confirmed")
+
+recovered_cases_spain <- spain_corona %>% filter(type=="recovered")
+
+death_cases_spain <- spain_corona %>% filter(type=="death")
+
+merged_list <- cbind(confirmed_cases_spain, "recovered"= recovered_cases_spain$cases, "death" = death_cases_spain$cases)
+
+total_cases <- sum(merged_list$cases)
+cat("Total cases in Spain = ", total_cases)
+
+total_recovery <- sum(merged_list$recovered)
+cat("Total recovery cases in Spain = ", total_recovery)
+
+total_death <- sum(merged_list$death)
+cat("Total death cases in Spain = ", total_death)
+
+total_active <- total_cases - (total_recovery + total_death)
+cat("Total active cases in Spain = ", total_active)
+
+```
+
+### Cummilative line plot for total cases, total recoveries and total deaths
+```{r}
+ggplot(merged_list, aes(x=date)) + 
+  geom_line(aes(y = cumsum(recovered)), color = "darkred") +
+  geom_line(aes(y = cumsum(death)), color="steelblue") +
+  geom_line(aes(y = cumsum(cases)), color="red") +
+  ylab("cases")
+```
+
+The cummulative scale graph is based on total confirmed cases of COVID-19(sum of total cases detected by PCR tests) in Spain from January 2020 to May 2020.Since Spain confirmed its first case, the authorities have confirmed 26,920 deaths on 12 May 2020 as a result of COVID-19 virus,most of them in the community of Madrid.
+
+As of the same date, the number of recoveries Spain registered  was considerably higher than that of deaths. 138,980 patients were able to regain their health.
+
+
+### Line plot for total cases, total recoveries and total deaths
+```{r}
+ggplot(merged_list, aes(x=date)) + 
+  geom_line(aes(y = recovered), color = "blue") +
+  geom_line(aes(y = death), color="black") +
+  geom_line(aes(y = cases), color="red") +
+  ylab("cases")
+```
+
+The line graph shows, number of confirmed cases(red), number of deaths(black), number of recoveries(blue) on a linear scale.Between 6 March and 25 March the COVID-19 confirmed cases has been increased. On 25 March, 9630 cases were reported, the highest number for a day. After that point, daily new cases increased with a peak of 7304 on 16 April.There were 887 cases reported on 18 April.
+
+On 2 April, 961 deaths were reported,highest number for a single country over a 24-hour inteval. Between 3 April and 18 April, consecutive decreases in number of deaths were reported.On 1 may,there was reported zero death cases.
+
+From 26 April to 12 May, the number of recoveries were higher than the number of new cases and deaths.
+
+## Comparision with other countries
+In this study, we considered following four countries for comparision.US, Brazil, China(only Hubei province), India
+We seslected these countries because these are the most effected from COVID-19 virus.
+
+### Recovery Rate Comparison with most affected countries in the world
+
+```{r}
+library(tidyverse)
+library(magrittr)
+
+recovery_rate_spain <- (total_recovery/ total_cases)*100
+cat("Recovery rate in Spain = ", recovery_rate_spain) 
+
+us_corona <- coronavirus %>% filter(country == "US")
+confirmed_cases_us <- us_corona %>% filter(type == "confirmed")
+recovered_cases_us <- us_corona %>% filter(type == "recovered")
+total_cases_us <- sum(confirmed_cases_us$cases)
+total_recoveries_us <- sum(recovered_cases_us$cases)
+recovery_rate_us <- (total_recoveries_us/ total_cases_us)*100
+cat("Recovery rate in US = ", recovery_rate_us) 
+
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+confirmed_cases_brazil <- brazil_corona %>% filter(type == "confirmed")
+recovered_cases_brazil <- brazil_corona %>% filter(type == "recovered")
+total_cases_brazil <- sum(confirmed_cases_brazil$cases)
+total_recoveries_brazil <- sum(recovered_cases_brazil$cases)
+recovery_rate_brazil <- (total_recoveries_brazil/ total_cases_brazil)*100
+cat("Recovery rate in Brazil = ", recovery_rate_brazil) 
+
+india_corona <- coronavirus %>% filter(country == "India")
+confirmed_cases_india <- india_corona %>% filter(type == "confirmed")
+recovered_cases_india <-india_corona %>% filter(type == "recovered")
+total_cases_india <- sum(confirmed_cases_india$cases)
+total_recoveries_india <- sum(recovered_cases_india$cases)
+recovery_rate_india <- (total_recoveries_india/ total_cases_india)*100
+cat("Recovery rate in India = ", recovery_rate_india) 
+
+china_corona <- coronavirus %>% filter(country == "China" & province == "Hubei") 
+confirmed_cases_china <- china_corona %>% filter(type == "confirmed")
+recovered_cases_china <- china_corona %>% filter(type == "recovered")
+total_cases_china <- sum(confirmed_cases_china$cases)
+total_recoveries_china <- sum(recovered_cases_china$cases)
+recovery_rate_china <- (total_recoveries_china/ total_cases_china)*100
+cat("Recovery rate in China = ", recovery_rate_china) 
+
+recovery_rates <- c(recovery_rate_spain, recovery_rate_us, recovery_rate_brazil, recovery_rate_india, recovery_rate_china)
+
+barplot(recovery_rates, main="Recovery Rate Comparision", horiz=TRUE, names.arg = c("Spain", "US", "Brazil", "India", "China"), col = c("pink","light blue","light green", "yellow", "red"))
+
+
+```
+
+The bar graph illustrates, 
+
+Spain = 56.77%, US = 16.82%, Brazil = 40.74%, India = 32.87%, China = 93.37%
+
+The first case of COVID-19 was detected in the Hubei province of China at the end of December 2019.On 12 of May,it is recorded 84,011 confirmed cases in China. But its' recovery rate is greater than other selected countries.It is 93.37%. Spain has second place in recovery rate comparision compared to other selected countries.It is 56.77%. There is lowest recovery rate in US.
+
+### Death Rate Comparison with most affected countries in the world
+```{r}
+library(tidyverse)
+library(magrittr)
+
+death_rate_spain <- (total_death / total_cases)*100
+cat("Death rate in spain = ", death_rate_spain) 
+
+death_cases_us <- us_corona %>% filter( type == "death")
+total_death_us <- sum(death_cases_us$cases)
+death_rate_us <- (total_death_us/ total_cases_us)*100
+cat("Death rate in us = ", death_rate_us) 
+
+death_cases_brazil <- brazil_corona %>% filter( type == "death")
+total_death_brazil <- sum(death_cases_brazil$cases)
+death_rate_brazil <- (total_death_brazil / total_cases_brazil)*100
+cat("Death rate in brazil = ", death_rate_brazil) 
+
+death_cases_india <- india_corona %>% filter( type == "death")
+total_death_india <- sum(death_cases_india$cases)
+death_rate_india <- (total_death_india / total_cases_india)*100
+cat("Death rate in india = ", death_rate_india) 
+
+death_cases_china <- china_corona %>% filter( type == "death")
+total_death_china <- sum(death_cases_china$cases)
+death_rate_china <- (total_death_china / total_cases_china)*100
+cat("Death rate in china = ", death_rate_china) 
+
+death_rates <- c(death_rate_spain, death_rate_us, death_rate_brazil, death_rate_india, death_rate_china)
+
+barplot(death_rates, main="Death Rate Comparision", horiz=TRUE, names.arg = c("Spain", "US", "Brazil", "India", "China"), col = c("light blue","red","yellow", "light green", "grey"))
+
+```
+
+
+According to the above graph,
+
+Spain = 10.99%, US = 6.01%, Brazil = 6.99%, India = 3.25%, China = 6.62%
+
+Spain is one of the European countries most affected by the COVID-19. From end of the January to 12 of May,2020, 26920 lost their lives in Spain Because of this oandemic. Compared to other four countries, the death rate of Spain is recorded as 10.99%. According to the above graph, we can identify Brazil is the second most effected country.From 28 January to 12 May,2020, India has the lowest death rate.It is 3.25%
+
+### Cummulative line plot for confirmed cases in selected countries.
+```{r}
+df_confirmed_5_countries<- data.frame("date" = confirmed_cases_spain$date, "confirmed_cases_spain" = confirmed_cases_spain$cases,  "confirmed_cases_us" = confirmed_cases_us$cases, "confirmed_cases_brazil" = confirmed_cases_brazil$cases,  "confirmed_cases_india" = confirmed_cases_india$cases,  "confirmed_cases_china" = confirmed_cases_china$cases)
+
+ggplot(df_confirmed_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(confirmed_cases_spain)), color = "black") +
+  geom_line(aes(y = cumsum(confirmed_cases_us)), color="steelblue") +
+  geom_line(aes(y = cumsum(confirmed_cases_brazil)), color="red") +
+  geom_line(aes(y = cumsum(confirmed_cases_india)), color="green") +
+  geom_line(aes(y = cumsum(confirmed_cases_china)), color="orange") +
+  
+  ylab("confirmed cases")
+
+```
+The line graph shows, confirmed cases in Spain(black), confirmed cases in US(steelblue), confirmed cases in Brazil(red), confirmed cases in India(green), confirmed cases in China(orange).
+
+The ongoing cOVID-19 pandemic was confirmed to have reached the United States in January 2020.According the above graph, by the end of the March,Confirmed cases in US has increased with higher increasing rate.In Spain,by 13 March, cases had been confirmed in all 50 provinces of the country.On 12 May, Spain reached 244,804 confirmed cases for corona virus.
+
+
+### Cummilative line plot for recovered cases in selected countries
+
+```{r}
+
+df_recocery_5_countries<- data.frame("date" = recovered_cases_spain$date, "recovered_cases_spain" = recovered_cases_spain$cases,  "recovered_cases_us" = recovered_cases_us$cases, "recovered_cases_brazil" = recovered_cases_brazil$cases,  "recovered_cases_india" = recovered_cases_india$cases,  "recovered_cases_china" = recovered_cases_china$cases)
+
+ggplot(df_recocery_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(recovered_cases_spain)), color = "darkred") +
+  geom_line(aes(y = cumsum(recovered_cases_us)), color="steelblue") +
+  geom_line(aes(y = cumsum(recovered_cases_brazil)), color="red") +
+  geom_line(aes(y = cumsum(recovered_cases_india)), color="green") +
+  geom_line(aes(y = cumsum(recovered_cases_china)), color="orange") +
+  
+  ylab("recovered cases")
+
+```
+The above graph illustrates, recovered cases in Spain(dark red), recovered cases in US(steelblue), recovered cases in Brazil(red), recovered cases in India(green), recovered cases in China(orange).
+
+From January to mid of the March, China has increasing recovery rate.But From end of the March to May there was approximately constant recovary rate. It is shown that, India has the lowest recovered rate compared to other selected countriesAccording to the above graph, from mid of march to may, US, Spain and Brazil have incresed their recovered rate with higher rate.
+
+### Cummilative line plot for death cases in selected countries
+
+```{r}
+
+df_death_5_countries<- data.frame("date" = death_cases_spain$date, "death_cases_spain" = death_cases_spain$cases,  "death_cases_us" = death_cases_us$cases, "death_cases_brazil" = death_cases_brazil$cases,  "death_cases_india" = death_cases_india$cases,  "death_cases_china" = death_cases_china$cases)
+
+ggplot(df_death_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(death_cases_spain)), color = "darkred") +
+  geom_line(aes(y = cumsum(death_cases_us)), color="steelblue") +
+  geom_line(aes(y = cumsum(death_cases_brazil)), color="red") +
+  geom_line(aes(y = cumsum(death_cases_india)), color="green") +
+  geom_line(aes(y = cumsum(death_cases_china)), color="orange") +
+  
+  ylab("death cases")
+
+```
+The above graph illustrates, recovered cases in Spain(dark red), recovered cases in US(steelblue), recovered cases in Brazil(red), recovered cases in India(green), recovered cases in China(orange).
+
+The first confirmed case of local transmission in US was recorded in January. While the first knwon deaths happened in February. By the end of March, cases had occurred in all states in US.Accoording to the above graph,as of 12 May,2020 the US had the most deaths in the selected countries. The second most effected country is Spain during this study period. 
+
+### Discussion
+
+Spain is one of the European countries most effected by the COVID-19 pandemic. The virus was first confirmed to have spread to Spain on 31 January 2020. By 13 March, cases had been confirmed in all 50 provinces of the country. The lockdown was imposed on 14 March 2020. On 25 March, the death toll in Spain surpassed that of mainland china, and only that of Italy was higher. On 2 April, 950 people died of the virus in a single day. Aa a summery,The number of confirmed cases was 244,804 and 26920 people lost their lives due to COVID-19 pandemic in Spain.138,980 patients were able to regain their health.Recovery rate of China is greater than other selected countries during the sdudied period.It is 93.37%. Spain has second place in recovery rate comparision compared to other selected countries.It is 56.77%. There is lowest recovery rate in US.Compared to other four countries, the death rate of Spain is recorded as 10.99%. According to the above graph, we can identify Brazil is the second most effected country.From 28 January to 12 May,2020, India has the lowest death rate.It is 3.25%
+
+The data are collected from the World Health Organization website and WHO publishes.There is an outlier in Spain corona data set. Before analyzing data, it is corrected by using WHO reports.This study is based on the data from 22 January to 12 May,2020. 
+
+### Conclusion
+
+In conclusion, this study shows how COVID-19 virus affected Spain, how the virus spread with time. Study also considered how the recovery from COVID-19 happened in Spain and how fatal was it with regard to deaths.
+
+Finally Spain COVID-19 spread is compared with 4 other major countries affected by COVID-19. The actual number of cases and deaths can be different from these data. These are recorded data by the hospitals and medical centers. In this situation, social distances, clean hands often, wear a mask, maintain safe distance from others are some of steps that a person can reduce the chance of being infected or spreading COVID-19.And also it is helpful for future epidemic cotrol.
+
+
+### References
+
+(01) "Q&A on coronaviruses (COVID-19)". www.who.int. Retrieved 2020-03-24. The outbreak began in Wuhan, China, in December 2019.
+(02) Sheikh, Knvul; Rabin, Roni Caryn (2020-03-10). "The Coronavirus: What Scientists Have Learned So Far". The New York Times. Retrieved 2020-03-24.
+(03)  "Coronavirus latest: Britain's Prince Charles tests positive for Covid-19". South China Morning Post. 2020-03-25. Retrieved 2020-03-25. 
+
+
+

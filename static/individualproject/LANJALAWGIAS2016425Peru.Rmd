@@ -1,0 +1,207 @@
+---
+title: "AS2016425_Peru"
+author: "W.G.I Lanjala"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# **COVID 19 EPIDEMIC IN PERU**
+
+## **INTRODUCTION**
+
+The epidemic of novel coronavirus illness became as a global threat. It was first identified Whuhan in china in December 2019 and by today it was spreded among more than 188 countries in the world. In Peru, its first case reported in March 6. However after 25 days coutry reported 1000 cases and after two weeks of that day it was 10000 case.Peru is located on the central western coast of South America facing the Pacific Ocean.The Peruvian current of cold waters transmits its coldness to the coast, and it is the cause of the absence of rains during the whole year. Very dry warm climate: (desert or arid tropical). Average temperature is 24°C - 75.2ºF
+Visualization of Peru in worldmap as belows.
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+Peru_Corona <- coronavirus %>% filter(country == "Peru")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Peru_Corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )+
+  ggtitle("Figure 01: Country location in World Map")
+
+```
+
+
+On 6 March the first confirmed case in Peru was announced. The person was a 25-year-old Peruvian living in Lima who had recently returned from travels in France, Spain, and the Czech Republic.On 10 March 2020, 11 cases were confirmed. 7 of the new cases were related to the first known case in Peru.On the following day, two new cases were registered.Due to the global pandemic, the Peruvian government decided to cancel classes in public and private schools, as a precautionary measure until 30 March.On 15 March, President Martín Vizcarra made a national announcement, declaring a 15-day quarantine effective from 16 March. Putting in place stringent rules 9 days after the first case was seen in the country. There was a sudden ban on all travel between provinces, all travel into and out of the country, and a ban put on place for planes, boats, trains, buses, and private automobiles. On 17 March, the second full day of quarantine, citizens were required to fill out an online form to obtain permission to leave home. Military paraded the streets of Lima to enforce this, and people were not allowed to walk together. At 8 pm that night through an organized effort, Peruvians and residents in Peru went out to their balconies and windows to applaud the front-line workers such as doctors, the Peruvian Armed Forces, market shop owners, and National Police of Peru to applaud their efforts during the pandemic. However On 19 March, the Peruvian Ministry of Health (MINSA) was briefed about the first death related to the disease, a 78-year-old man.On the same day, the death toll was updated to 3.On 2 April, the President made a live announcement to the country that for the remaining 10 days of quarantine, they would add one more restriction to flatten the curve. Mobilization outside of the house will be limited by days. Only men will be able to leave the house to buy groceries, medicines, or go to the bank on Monday, Wednesday, and Friday.Only women are allowed outside on Tuesday, Thursday, and Saturday. No one is allowed on Sunday. On 7 April, President Vizcarra announced that for Holy Week, Thursday and Friday there will be no one allowed to leave home for regular business.Like that Government & Health authorities got lots of action to controt COVID 2019 pandemic.
+
+## **EXPLORATARY DATA ANALYSIS**
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+Death_Peru_Corona <- Peru_Corona %>% filter(type == "death")
+ggplot(Death_Peru_Corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 02: Daily Covid-19 Death in Peru")
+
+
+Confirmed_Peru_Corona <- Peru_Corona %>% filter(type == "confirmed")
+ggplot(Confirmed_Peru_Corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 03: Daily Covid-19 Confirmed Cases in peru")
+
+Recovered_Peru_Corona <- Peru_Corona %>% filter(type == "recovered")
+ggplot(Recovered_Peru_Corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 04: Daily Covid-19 Recovered cases in Peru")
+
+
+
+Peru_corona_Pw <- Peru_Corona %>% pivot_wider( names_from="type", values_from="cases")
+Peru_corona_Pw
+
+Peru_corona_Pw_new <- mutate(Peru_corona_Pw, active=confirmed-(recovered+death))
+
+Peru_corona_Pw_new
+
+Peru_corona_Pw_new1 <- Peru_corona_Pw_new %>% mutate(active = replace(active, which(active < 0), NA))
+
+ggplot(Peru_corona_Pw_new1, aes(x=date, y=active))+
+  geom_line()+ggtitle("Figure 05:Daily Covid-19 Active cases in Peru")
+
+Peru_corona_summarise <- Peru_corona_Pw_new %>% summarise(Confirmed_mean=mean(confirmed), Recovered_mean=mean(recovered), Death_mean=mean(death), Active_mean=mean(active))
+
+Peru_corona_summarise
+
+Corona_Peru_Death_Recovered <- coronavirus %>% filter(type == c("death", "recovered"))
+ggplot(Corona_Peru_Death_Recovered)+
+ aes(x=date, y=cases, col=type)+
+  geom_line()+
+ggtitle("Figure 06: Comparison of the Death & Recovered COVID19 cases in Peru")
+
+
+
+
+
+```
+
+
+
+
+**Now let's compaire with some other countries**
+```{r,  comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+Corona_Peru_US_confirmed <- coronavirus %>% filter(country == c("Peru", "US")) %>% filter(type=="confirmed")
+ggplot(Corona_Peru_US_confirmed)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+ggtitle("Figure 07: Comparison of the confirmed COVID19 cases in Peru & US")
+
+Corona_Peru_US_Death <- coronavirus %>% filter(country == c("Peru", "US")) %>% filter(type=="death")
+ggplot(Corona_Peru_US_Death)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+ggtitle("Figure 08: Comparison of the Death COVID19 cases in Peru & US")
+
+Corona_Peru_US_Recovered <- coronavirus %>% filter(country == c("Peru", "US")) %>% filter(type=="Recovered")
+ggplot(Corona_Peru_US_confirmed)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+ggtitle("Figure 09: Comparison of the Recovered COVID19 cases in Peru & US")
+
+
+
+
+Corona_Peru_China_confirmed <- coronavirus %>% filter(country == c("Peru", "China")) %>% filter(type=="confirmed")
+ggplot(Corona_Peru_China_confirmed)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+ggtitle("Figure 10:Comparison of the confirmed COVID19 cases in Peru & China")
+```
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+Corona_Peru_Bolivia <- coronavirus %>% filter(country == c("Peru", "Bolivia"))
+
+ggplot(Corona_Peru_Bolivia)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+ggtitle("Figure 11: Comparison of the confirmed,Recovered & Death COVID19 cases in Peru 
+& Bolivia")
+
+Corona_Peru_Brazil <- coronavirus %>% filter(country == c("Peru", "Brazil"))
+ggplot(Corona_Peru_Brazil)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+ggtitle("Figure 12: Comparison of the confirmed,Recovered & Death COVID19 cases in Peru 
+& Brazil")
+
+Corona_Peru_Chile <- coronavirus %>% filter(country == c("Peru", "Chile"))
+ggplot(Corona_Peru_Chile)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+ggtitle("Figure 13: Comparison of the confirmed,Recovered & Death COVID19 cases in Peru 
+& Chile")
+
+Corona_Peru_Colombia <- coronavirus %>% filter(country == c("Peru", "Colombia"))
+ggplot(Corona_Peru_Colombia)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+ggtitle("Figure 14: Comparison of the confirmed,Recovered & Death COVID19 cases in Peru 
+& Colombia")
+
+
+
+Corona_Peru_Ecuador <- coronavirus %>% filter(country == c("Peru", "Ecuador")) 
+Corona_Peru_Ecuador1<- Corona_Peru_Ecuador %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+ggplot(Corona_Peru_Ecuador1)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+ggtitle("Figure 15: Comparison of the Confirmed,Recovered & Death COVID19 cases in Peru & Ecuador")
+
+
+Corona_Peru_Italy_Death <- coronavirus %>% filter(country == c("Peru", "Italy")) %>% filter(type=="death")
+ggplot(Corona_Peru_Italy_Death)+
+ aes(x=date, y=cases, col=country)+
+  geom_line()+
+ggtitle("Figure 16: Comparison of the Death COVID19 cases in Peru & Italy")
+
+```
+
+## **DISCUSSION AND CONCLUSION**
+
+Peru is located on the central western coast of South America facing the Pacific Ocean and it is bordered by Bolivia, Brazil, Chile, Colombia, and Ecuador. Due to the situation of COVID19 epidemic,it was one of the earliest quarantines in Latin America, and came in before lockdown orders in France, the U.K., and other European countries that were at the time far ahead of Peru in their contagion curves.But it hasn’t worked as hoped. Through this study anyone can understend current situation of COVID19 in Peru.Futher this give clear idea about how much Peru controled this situation with respect to some other countries. So I selected some coutries to compaire coronavirus situation.
+
+When we consider about current situation in Peru,they have reported first case in March. According to Figure 03, after reporting first case, there is an upward trend in number of confirmed cases. But number of confirmed cases not slightly increasing. It varies up and down.But there is no trend in recovered cases in Peru.It is heavily fluctuated.According to Figure 02, it show slighly increasing in death due to the coronavirus. Its recorded mean is 18.4. However Peru took immediate action for coronavirus pandemic they couldn"t control the situation.However confirmed cases increased day by day in Peru,its recovered cases are higher than death cases.So country death rate is low. Active cases is Peru also slightly increasing and decreasing
+
+According to the WHO report United State is one of the country which the worst hit by coronavirus pandemic with over 1.4 million cases and 87000 deaths. when we consider about comparision with US, there is a highly difference between US & Peru. US repoted high confirmed, recovered and death cases than Peru. We can conclude that the Coronavirus condition in Peru is better than US.And also china is the country which first reported cases reported in the world. In February and March, china reported high number of COVID 19 cases and reported cases are very low after mid of March but in Peru it was spreded since march and number of confirmed cases are fluctuated up and down.
+
+Since Peru is broaded by 5 country I compaired with that  neighbourhood countries. According to the figure 10, Peru is reported high cases than Bolivia. Death cases in both Peru & Bolivia is less but number of reported cases in Peru is higher than Bolivia. But confirmed cases are very highly in Peru with respect to Bolivia. In Brazil, confirmed, Recovered and death cases are higher than Peru.However confirmed cases is high for both countries , number of reported death cases is low. After May, Brazil reported very high cases than Peru.Chile reported less number of confirmed, death and recovered cases than Peru.In both countries reported death cases is low. As well as Peru reported very high  confirmed cases than colombia. There is a high difference between them. However both countries reported low death cases.In Ecuador Number of recovered cases is less than Peru but death cases are high than peru. However death cases are very low for both countries than its confirmed cases.With respect to the borded countries Bolivia is in better condition than Peru because its confirmed, recovered and death cases lower than peru.
+
+ Italy that is widely considered one of the main epicenters of the pandemic, has registered the highest COVID 2019 death rate and death toll in the world, to the present day. So I compaired reported death cases in Peru with Italy. According to the Figure 16, it show very high difference in reported death cases italy and Peru.So Peru 's coronavirus situation is better than Italy. 
+
+However the Peru is one of the first Latin America country to respond with the lockdown, country situation couldn't control because due to the human behavior.So Peru has still seen cases rise rapidly. However deaths remain in high.
+
+
+## **Referencess**
+
+1. https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwju8-Gs49nqAhWKOCsKHeiYBWsYABAAGgJzZg&ohost=www.google.lk&cid=CAESQeD2qxOFXMTmsCLvJULobfY-JQc0Az__ss7NjknX9FOrtNgSdLSPxG8RR0_IdnJmz9tiUnm_dd5ZcC_vIIyARC3D&sig=AOD64_0l3s6JS5e3LTKaAseuU3uLtpUTrw&q=&ved=2ahUKEwi489ms49nqAhWu6XMBHVzjAP8Q0Qx6BAgNEAE&adurl=
+
+2. https://www.google.lk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjyorLZ4tnqAhXQ6nMBHbkzAWIQFjAEegQIDRAH&url=https%3A%2F%2Fwww.go2peru.com%2Fperu_guide%2Ftips%2Fperu_climate.htm&usg=AOvVaw0sXTBytKcrjTU5k9FiRMvo

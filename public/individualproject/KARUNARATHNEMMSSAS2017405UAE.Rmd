@@ -1,0 +1,285 @@
+---
+title: "Assignment"
+author: "M.M.S.S.Karunarathne"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# COVID-19
+
+  COVID 19 (Coronavirus disease) is an infectious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). Firstly, identified in Wuhan in China on December 2019.The first confirmed case has been traced back to 17 November 2019 in Hubei. It spread very quickly in all over the world. As of 18 July 2020, more than 14.3 million cases have been reported across 188 countries and territories, resulting in more than 602,000 deaths. More than 8.04 million people have recovered.
+  
+  Coronavirus primarily spread between close contact of people, small droplets producing by coughing sneezing and talking. Common symptoms of Coronavirus are fever, cough, fatigue, shortness of breath, loss of smell and taste. Typically, it takes around five days to show symptom from the time of exposure. But may take 2 – 14 days as a range. Can identify the diagnosis using RT-PCR testing and CT scans. Also lots of countries were doing so many experiments regarding coronavirus.
+
+  Lots of countries has been taken necessary precautions to control to spreading of this virus.Some countries were lockdown and some countries run under the control condition.So many schools and universities were closed and started online education. Hand washing, face covering, quarantine and social distancing are the main methods that we can use to prevent from this serial interval.
+
+## COVID-19 in UAE 
+
+  United Arab Emirates (UAE) is a middle east country which in Asia with about 9.2 million population. UAE was the first Middle East country to report a coronavirus-positive case on 29th January 2020 in a family who arrived from Wuhan.
+
+
+```{r eval=TRUE, echo=FALSE,results='hide'}
+library(coronavirus)
+data(coronavirus)
+unique(coronavirus$country)
+```
+
+```{r eval=TRUE, echo=FALSE, message=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+uae_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = uae_corona, aes(x = long, y = lat),colour = "red", size
+    = 1)+
+labs(title = "Visualisation of the location of UAE")
+```
+
+The United Arab Emirates (UAE) has a desert climate ,which has mild winters and very hot, sunny summers. But these days cloudy rainy climate condition.  
+
+United Arab Emirates (UAE) has already taken necessary precaution to reduce the spreading of this disease.UAE has ended nationwide coronavirus curfew and lifted restrictions on businesses, including hair salons and cinemas, after three months of stringent curbs, despite a spike in infections.The United Arab Emirates will allow citizens and resident expatriates to travel abroad once they have tested negative for COVID-19 required and in some instances it may be mandatory for the test to be carried out less than 48 hours before departure.
+
+
+
+## Exploration Data Analysis
+
+
+### Description of Dataset 
+
+The 2019 Novel Coronavirus COVID-19 (2019-nCoV) dataset provides a daily summary of the Coronavirus (COVID-19) cases(confirmed, death, and recovered) by state/province. 
+(Data period from 22 Januare 2020 to 12 May 2020 )
+
+A data frame with 7 variables
+
++ Date : Date in YYYY-MM-DD format
++ Province : Name of province/state, for countries where data is provided split across multiple provinces/states
++ Country : Name of country/region
++ Lat : Latitude of center of geographic region, defined as either country or, if available, province
++ Long : Longitude of center of geographic region, defined as either country or, if available, province
++ Type : An indicator for the type of cases (confirmed, death, recovered)
++ Cases : Number of cases on given date
+
+
+### Data
+
+```{r eval=TRUE, echo=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+Head Data
+
+```{r comment=NA}
+head(coronavirus)
+```
+
+Tail Data
+
+```{r comment=NA}
+tail(coronavirus)
+```
+
+Name of Countries 
+
+```{r comment=NA}
+unique(coronavirus$country)
+```
+
+
+
+### United Arab Emirates Data Analysis 
+
+#### Confirmed cases in United Arab Emirates
+
+```{r eval=TRUE, echo=FALSE ,comment=NA}
+uae_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+confirmed_uae_corona <- uae_corona %>% filter(type=="confirmed")
+head(confirmed_uae_corona)
+tail(confirmed_uae_corona)
+```
+```{r eval=TRUE, echo=FALSE }
+ggplot(confirmed_uae_corona, aes(x=date, y=cases)) + geom_line(colour="red",size=0.8) + ggtitle("Figure 01:UAE Daily Covid-19 Confirmed")+ theme_bw()
+```
+
+As per figure 01 we can see that the number of confirmed cases were increased from the period 22 January 2020 to 12 May 2020. The maximum confirmed number day is 783 on 12th may 2020.
+
+
+#### Death head cases in United Arab Emirates
+
+```{r eval=TRUE, echo=FALSE ,comment=NA}
+uae_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+death_uae_corona <- uae_corona %>% filter(type=="death")
+head(death_uae_corona)
+tail(death_uae_corona)
+```
+```{r eval=TRUE, echo=FALSE }
+ggplot(death_uae_corona, aes(x=date, y=cases)) + geom_line(colour="orange",size=0.8)  + ggtitle("Figure 02:UAE Daily Covid-19 death")+ theme_bw()
+```
+
+As per figure 02 we can see that the number of death cases were increased from the period 22 January 2020 to 10 May 2020 and sudden decreasing were there during 11th and 12 May. But 13 is the maximum number of death per day during time period . 
+
+
+#### Recovered head cases in United Arab Emirates
+
+```{r eval=TRUE, echo=FALSE ,comment=NA}
+uae_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+recovered_uae_corona <- uae_corona %>% filter(type=="recovered")
+head(recovered_uae_corona)
+tail(recovered_uae_corona)
+```
+```{r eval=TRUE, echo=FALSE }
+ggplot(recovered_uae_corona, aes(x=date, y=cases)) + geom_line(colour="green",size=0.8) + ggtitle("Figure 03:UAE Daily Covid-19 recovered")+ theme_bw()
+```
+
+As per figure 03 we can see that the number of recovered cases were increased continuously from the period 22 January 2020 to 12 May 2020 and last day (12th may) shown the maximum recovered number per day is 631.
+
+
+#### Active Cases in United Arab Emirates
+
+```{r eval=TRUE, echo=FALSE ,comment=NA, results='hide'}
+library(dplyr)
+uae_corona_new1 <- uae_corona %>%
+  pivot_wider(names_from = type, values_from =cases)
+uae_corona_new1
+
+
+uae_corona_new2 <- uae_corona_new1 %>%
+  mutate(active=confirmed-recovered-death)
+uae_corona_new2
+
+```
+
+```{r eval=TRUE, echo=FALSE ,comment=NA}
+uae_corona_new3 <- uae_corona_new2 %>%
+  mutate(active_total=cumsum(active),recovered_total=cumsum(recovered),death_total=cumsum(death))
+uae_corona_new3
+```
+
+```{r eval=TRUE, echo=FALSE }
+ggplot(uae_corona_new3, aes(x=date, y=active_total)) + geom_line(colour="blue",size=0.8) + ggtitle("Figure 04:UAE Daily Covid-19 active total")+ theme_bw()
+
+```
+
+As per figure 04 we can see that the number of active total were increased continuously from the period 22 January 2020 to 12 May 2020.
+
+
+
+### Comparison with other countries
+
+#### United Arabic Emirates confirmed cases with Neighboring countries
+
+ Iran, Oman, Qatar and Saudi Arabic are the four Neighboring countries which are so close to United Arab Emirates. All these are middle east countries.
+ 
+ 
+```{r eval=TRUE, echo=FALSE ,comment=NA,results='hide'}
+country_corona <- filter (coronavirus,country %in% c("Iran","Oman","Qatar","Saudi Arabia","United Arab Emirates"))
+confirmed_country_corona <- country_corona %>% filter(type=="confirmed")
+head(confirmed_country_corona)
+tail(confirmed_country_corona)
+```
+
+```{r eval=TRUE, echo=FALSE }
+ggplot(confirmed_country_corona, aes(x=date, y=cases)) + geom_line(aes(colour = country), linetype = 1) +facet_grid(~country)+ ggtitle("Figure 05:Comparison of United Arabic Emirates confirmed cases with Neighboring countries ")+ theme_bw()
+
+```
+
+As per figure 05 Saudi Arabia and Qatar have continuous increment, But Iran had a huge increment in begin of the April and control it. Oman is a small country and considering to all other countries , Oman has small number of cases.Large number of cases were confirmed in Iran.
+
+
+#### United Arabic Emirates confirmed cases with US
+
+```{r eval=TRUE, echo=FALSE ,comment=NA,results='hide'}
+country_corona2 <- filter (coronavirus,country %in% c("United Arab Emirates","US"))
+confirmed_country_corona2 <- country_corona2 %>% filter(type=="confirmed")
+head(confirmed_country_corona2)
+tail(confirmed_country_corona2)
+```
+
+```{r eval=TRUE, echo=FALSE }
+library(RColorBrewer)
+
+ggplot(confirmed_country_corona2, aes(x=date, y=cases)) + geom_line(aes(colour = country), linetype = 1) +facet_grid(~country)+ ggtitle("Figure 06:Comparison of United Arabic Emirates confirmed cases with US  ")+ theme_bw()
+
+```
+
+As per figure 06 US has more confirmed cases compare to United Arabic Emirates. 
+
+
+#### United Arabic Emirates confirmed cases with China
+
+```{r eval=TRUE, echo=FALSE ,comment=NA,results='hide'}
+country_corona3 <- filter (coronavirus,country %in% c("United Arab Emirates","China"))
+confirmed_country_corona3 <- country_corona3 %>% filter(type=="confirmed")
+head(confirmed_country_corona3)
+tail(confirmed_country_corona3)
+```
+
+```{r eval=TRUE, echo=FALSE }
+
+
+ggplot(confirmed_country_corona3, aes(x=date, y=cases)) + geom_line(aes(colour = country), linetype = 1) +facet_grid(~country)+ ggtitle("Figure 07:Comparison of United Arabic Emirates confirmed cases with China  ")+ theme_bw()
+
+```
+
+As per figure 07 China has more confirmed cases in the begin of the time period and decrease continuosly from the month of march compared to United Arabic Emirates. 
+
+#### Increase distribution of United Arab Emirates , US , Iran , Oman , Qatar and Saudi Arabia 
+
+```{r eval=TRUE, echo=FALSE ,comment=NA,results='hide'}
+country_corona4 <- filter (coronavirus,country %in% c("United Arab Emirates","US","Iran","Oman","Qatar","Saudi Arabia" ))
+confirmed_country_corona4 <- country_corona4 %>% filter(type=="confirmed")
+
+```
+
+```{r eval=TRUE, echo=FALSE }
+
+ggplot(confirmed_country_corona4, aes(x=date, y=cases)) + geom_area(fill="purple") +facet_grid(~country)+ ggtitle("Figure 08: Some countries  confirmed cases without China  ")+ theme_bw()
+
+```
+As per figure 08 we can see that US has highest number of confirmed cases than other countries. 
+
+
+## Conclusions and Discussion
+
+Since last year world we are fighting with COVID-19 (coronavirus). This infection disease has been effect not only for human health this effect society very badly . Also people day-today works have been controlled due to this disease. 
+
+Coronavirus data set has been limited to 12 th may 2020 and limited to 187 countries. But today it has spread though the world and 215 countries were infected. 
+
+United Arab Emirates(UAE) also effected and confirmed cases , daeath and recovered cases had increased during the time period. But in last two days death caese were decrease. (Figures 01,02, and 03) As per the worldometer UAE has been controlled the confirmed and death cases after 12th May 2020. 
+
+Among Neighboring countries which has near to United Arabic Emitter Worldometer shows that from other Asian countries Iran was the second highest number of cases recorded country in Asia .Analysis results also confirmed that (check figure 05) among all other Neighboring countries Iran shown the highest number. Also still Iran has been fighting this disease and daily death and confirmed cases were increasing.The second highest number of cases were record in Neighboring countries was Saudi Arabic.Worldometer also confirmed that still Saudi Arabi fighting against COVID 19 and daily increasing the cases.Qatar and Oman Also still fighting against coronavirus and Qatar daily cases were decrease (AS per worldometer from 12th may) but Oman COVID 19 cases were increased after 12th may as per worldometer.
+
+China was the country where coronavirus started. But china frighted and right now China has been controlled the spread of this virus and daily noly few new cases will confirm. Mostly coronavirus was in undercontrolled level. 
+
+According to worldometer USA is the highest number of confirmed cases , deaths and recovered was founded. In our result also we can see among all other countries USA shown the highest number of cases.
+
+According to time period of dataset we can see except china other countries have effected coronavirus and increase the number of cases continuously. Only China has controlled coronavirus to satisfaction level. 
+
+## Reference
+
++ Praveen Duddu ; “COVID-19 in the Middle East: Coronavirus-affected countries” , 20 march 2020 ; https://www.pharmaceutical-technology.com/features/coronavirus-affected-countries-middle-east-covid-19/
++ https://www.doh.gov.ae/covid-19
++ Arabian Business/ Industries  https://www.arabianbusiness.com/travel-hospitality/449138-uae-allows-citizens-expats-to-travel-abroad
++ United Arab Emirates ; Minister of Health & Prevention ;https://www.mohap.gov.ae/en/AwarenessCenter/Pages/COVID-19.aspx
++ Worldometer;COVID-19 CORONAVIRUS PANDEMIC; https://www.worldometers.info/coronavirus/?utm_campaign=homeAdUOA?Si

@@ -1,0 +1,553 @@
+---
+title: "Report of COVID-19 Data Analysis: Kuwait Case" 
+author: "S. A. Chamathka Kaushani (AS2017407)"
+date: "7/14/2020"
+output: html_document
+---
+
+<style>
+body{
+text-align: justify
+} </style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align='center')
+```
+## 1. Introduction
+More than 14,495,639 people in all over the world have been infected with the coronavirus, at least 606,474 have died and over 8,661,399 recovered cases are reported so far, according to the  [worldometers.info](https://www.worldometers.info/coronavirus/). Case numbers are surging throughout 213 countries and territories around the world and 2 international conveyances. Still, coronavirus deaths remain well below their peak levels. And as some places reimpose restrictions, others continue to reopen their economies.
+The attack rate or transmissibility (how rapidly the disease spreads) of a virus is indicated by its reproductive number (Ro, pronounced R-nought or r-zero), which represents the average number of people to which a single infected person will transmit the virus.WHO's estimated (on Jan. 23) Ro to be between 1.4 and 2.5. For comparison, the Ro for the common flu is 1.3 and for SARS it was 2.0.
+The novel coronavirus' case fatality rate has been estimated at around 2%, in the WHO press conference held on January 29, 2020. However, it noted that, without knowing how many were infected, it was too early to be able to put a percentage on the mortality rate figure. But the fatality rate can change as a virus can mutate, according to epidemiologists.For comparison, the case fatality rate for SARS was 10%, and for MERS 34%.
+In this report, the Kuwait COVID-19 case will be analyzed and compared with few other countries.
+
+#### 1.1. Visualization of the Location on World Map
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# kuwait on the world map 
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+
+data(wrld_simpl)
+kuwait_corona <- coronavirus %>% filter(country == "Kuwait")
+
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "grey", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = kuwait_corona, aes(x = long, y = lat), color = "red", size = 1)
+```
+
+#### 1.2. Climate Condition
+The spring season in March is warm with occasional thunderstorms. The frequent winds from the northwest are cold in winter and hot in summer. Southeasterly damp winds spring up between July and October. Hot and dry south winds prevail in spring and early summer. The shamal, a northwesterly wind common during June and July, causes dramatic sandstorms.] Summers in Kuwait are some of the hottest on earth. The highest recorded temperature was 54 °C (129 °F) at Mitribah on 21 July 2016, which is the highest temperature recorded in Asia.
+In 2014 Kuwait was the fourth highest country in the world in term of CO2 per capita emissions after Qatar, Curaçao and Trinidad and Tobago according to the World Bank. On average, every single inhabitant released 25.2 metric tons of CO2 in the atmosphere that year. In comparison, the world average was 5.0 tons per capita the same year.
+Access to bio capacity in Kuwait is lower than world average. In 2016, Kuwait had 0.59 global hectares of bio capacity per person within its territory, much less than the world average of 1.6 global hectares per person. In 2016 Kuwait used 8.6 global hectares of biocapacity per person - their ecological footprint of consumption. This means they use about 14.5 times as much biocapacity as Kuwait contains. As a result, Kuwait is running a biocapacity deficit.
+
+#### 1.3. Lockdown Status of Kuwait
+The COVID-19 pandemic in Kuwait is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first confirmed case in Kuwait was announced on 24 February 2020. As of 16 July, there are 57,668 confirmed cases of COVID-19, with 47,545 recoveries and 402 deaths.
+Kuwait ended the full curfew on 30 May and started taking steps towards a gradual return to normal life by placing partial curfew from 6 pm until 6 am. This step is a first of five with each phase tentatively lasting for 3 weeks which could vary depending on the assessment by the Ministry of Health. Initially, the country started with a voluntary stay at home approach since midnight of 11 March, with the government suspending work across all government sectors except emergency services. All commercial air travel and border travel were suspended since midnight of 14 March 2020 (start of 15 March). Partial curfew was implemented since 22 March 2020 where curfew hours were between 5 pm until 4 am. This was amended on 6 April, where end of curfew hours were extended from 4 am to 6 am. With the start of the holy month of Ramadan on 24 April, the partial curfew was further amended to 4 pm until 8 am with special permissions for deliveries from 5 pm until 1 am (under strict health code conditions). On 10 May, the country was placed under full curfew based on the assessment of the Ministry of Health.
+
+#### 1.4. First Reported Incident in Kuwait
+On 24 February, Kuwaiti Ministry of Health announced that there were 3 cases detected coming from Iran that carry coronavirus disease 2019. The first person was a Kuwait I national, 53 years old, while the second was a Saudi national, 61 years old, and the third was a person from the stateless community.[16] Later, 2 cases were announced on that same day.[17] At the end of 24 February, there were 5 confirmed cases in Kuwait.
+
+#### 1.5. Actions Taken on the Deceased
+April 16: The Director of Funeral Affairs Department of Kuwait Municipality, revealed that the administration had buried 3 bodies who had died due to the Coronavirus, without washing them. Ministry of Health has issued direct orders that in the event of death due to the virus, the deceased is placed in a completely closed sterile bag which does not open. The burial procedures are as per usual proceeding and the selection of graves is according to the established numerical sequence, and therefore there are no places designated for those who died with the virus. In addition, only 3 people with the deceased were allowed to enter and attend the burial which takes place in the cemetery. Kuwaiti MP Khalīl aṣ-Ṣaliḥ suggested that medical workers who die fighting the pandemic be treated as martyrs, under the martyrs' office, which controls the affairs of families of people who died fighting off the Iraqi invasion of Kuwait.
+
+#### 1.6. Actions Taken by the Government After the First Case
+All commercial flights were suspended on 13 March, with an exception for cargo flights. A public holiday was declared from 12 to 26 March, with work to resume on 29 March. Some shops were closed, and restrictions were placed on restaurants. Authorities asked people to stay home for Friday prayers, saying "The doors of the mosques will stay closed" and citing a fatwa allowing people not to attend prayers in mosques. Classes were suspended from 1 to 12 March, which was extended to 29 March, and later to 4 August.
+Visas were partially suspended, and quarantines required for all arrivals from certain high-risk countries. Arrivals at Kuwait International Airport from other countries were required to self-quarantine for 14 days. The borders with Iraq and Saudi Arabia were closed.
+Food exports were banned, and Minister of Commerce & Industry Khalid Al Roudan reassured people that the country had enough food and shipping was continuing.
+On 15 March, Interior Minister Anas Khalid Al-Saleh told people to follow the measures imposed by the government and stop going out unnecessarily. He warned that curfews or deportations could be used if people failed to comply.
+
+
+#### 1.7. Impacts of COVID - 19 in Kuwait
+
+**Academic Studies**
+
+The suspension of the schools was needed to avoid the spread of the coronavirus in children, teenagers and younger people (Kindergarten up to university level). The high school graduates (Grade 12 seniors) were the most affected by the suspension since graduation is usually in May–June yearly. However, the academic year will be resumed in August 2020, which means their graduation will be delayed. Furthermore, getting sponsored scholarships to study in universities, will also be delayed due to the same reasons.
+
+**Economics**
+
+The strategic planning and surplus for food and supplies are for six months. All supermarkets and grocery stores have all usual products as before the border closure or the imposed partial curfew.
+However, small businesses are the most affected since they are losing a lot of money, and yet, have to pay rent or salaries to their workers. The government have promised packages and solutions to ensure these businesses are compensated for these unfortunate circumstances with the partial lockdown.
+
+**People**
+
+People are confined to their homes. However, there is a tendency to rush to buy supplies in non-curfew hours (6 AM – 5PM), even though the Kuwaiti government have reiterated that goods and supplies should last six months.
+The partial lockdown, staying at home and physical distancing has led to theaters, malls, department stores, and entertainment venues to be closed. Gyms and restaurants are also closed due to the coronavirus.
+Due to raising cases and to help curb the spread of the pandemic coronavirus Kuwait has total full time curfew from 4 PM on Sunday 10 May 2020 till 30 May 2020. Above all of that, the ministry has provided people with websites link to book an appointment so they can go out to supermarket buy their needs or for the hospital.
+
+#### 1.8. Healthcare in Kuwait
+Kuwait has a high standard state-funded healthcare system, which provides treatment without charge to holders of a Kuwaiti passport. A public insurance scheme exists to provide reduced cost healthcare to non-citizens. Private healthcare providers also run medical facilities in the country, available to members of their insurance schemes. 
+The government maintains the Kuwaiti Health Office in London to deal with the funding of treatment for Kuwaiti citizens in the UK. £13 million was embezzled from it between 2009 and 2016 by four accountants who worked there in collaboration with 20 doctors working in British hospitals.
+
+***
+
+## 2. Exploratory Data Analysis
+
+### 2.1. Analysis of Death, Confirmed, Recovered and Active Cases
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# total corona cases in kuwait
+kuwait_corona %>% 
+  select(date,type,cases) %>% 
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  
+  mutate(cum_confirmed = cumsum(confirmed), 
+         cum_death = cumsum(death),
+         cum_recovered = cumsum(recovered),
+         cum_active = cumsum(confirmed - death - recovered)) %>% 
+  mutate(cum_active = replace(cum_active, which(cum_active < 0), 0)) %>%
+  select(date, cum_confirmed, cum_death, cum_recovered, cum_active)  %>%
+  filter(cum_confirmed > 0) %>%
+
+  pivot_longer(cols = c("cum_confirmed","cum_death","cum_recovered", "cum_active"), 
+               names_to = "Type", values_to = "Cases") %>%
+  ggplot(aes(x = date,y= Cases,color= Type)) +
+  geom_line(size = 1) + 
+  ggtitle("Total reported covid-19 cases in Kuwait") +
+  theme_minimal() + theme_update(plot.title = element_text(hjust = 0.5))
+```
+
+As the plot shows, the cummulative of recovered cases are increasing as well as the confirmed cases are also rising. But we can see the overall deaths are significantly low which is 407 until today. As the total active cases are decreasing, it is possible to have a hope about the end of the COVID-19 pandemic in Kuweit.
+
+* Total Confirmed Cases: 59012
+
+* Total Death Cases    : 407
+
+* Total Recovered Cases: 48381
+
+* Total Active Cases   : 10224
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# Daily corona cases in kuwait 
+kuwait_corona %>% 
+  select(date,type,cases) %>% 
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  
+  mutate(confirmed, death) %>% 
+  select(date, confirmed, death)  %>%
+  filter(confirmed > 0) %>% 
+  #filter(date == Sys.Date() - 2) %>%
+  
+  pivot_longer(cols = c("confirmed","death"), names_to = "Type", values_to = "Cases") %>%
+  
+  ggplot(aes(x = date,y= Cases,fill= Type)) + 
+  #coord_flip() +
+  geom_col(position = "dodge") + 
+  ggtitle("Daily Reported covid-19 cases in Kuwait")
+```
+
+According to the plot it is very clear that the daily death rate is much lower when compared to the number of COVID-19 cases reported daily.
+
+***
+
+### 2.2. Comparison with other countries
+
+#### 2.2.1. Comparison with Neighbouring Countries: Iraq vs Iran vs Israel vs UAE vs Kuwait
+
+**Iraq:** 
+
+The public health care system in Iraq is free and has been free for decades. Medical staff who develop symptoms ordered back to work after being tested but before getting the results. They have to wait at least a week for the results and have to live with fear that their continued presence is endangering colleagues and patients until then. Also the news says that the technicians who run the COVID-19 tests in Iraqi laboratories are also getting infected by the virus. Since the healthcare staff is also getting infected with the virus, it estimates that the number of infected paramedics is even higher.
+
+**Iran:** 
+
+Iran is, the one of the countries, severely affected by Covid-19. Official figures indicate that as of mid-May 2020, more than 118,000 people were infected and almost 7000 lost their lives to Covid-19 infection. Among others, Iran’s health personnel have borne the heaviest burden. According to state media, 15,000 medical staff and 100,000 nurses have been active in the fight against the Covid-19 in Iran and unfortunately a number of them have lost their lives in this battle. Since the start of the outbreak, UNICEF has been supporting protection of Iran’s health personnel against COVID-19 through provision of Personal Protective Equipment (PPE) items, such as surgical masks, gloves, coveralls, shields, aprons and goggles.
+
+**Israel:** 
+
+Israel has one of the most technologically advanced and highest-quality healthcare systems in the world. Hospitals in Israel are equipped with modern facilities and high-quality medical technology. Also the medical personnel there are very well-trained. Moreover Israel helped its neighbouring countries during COVID-19 pandemic by providing medical protection masks, disinfectant and such.
+
+**UAE:**
+
+UAE also known as United Arab Emirates was the first country in the Middle East to report a confirmed case. The first patient, a 73-year-old Chinese woman, was released on 9 February after recovering. On April 22, 2020, It was reported that about hundreds of low-income migrant workers were seen queuing up across the road outside an Abu Dhabi hospital with the temperature outdoors exceeding 35 degrees Celsius, to get tested for Coronavirus. The tests were free of charge in the entire United Arab Emirates only if the person shows symptoms, has travel history, has come in contact with a positive case. However, if not, the test costs around 370 dirham ($100). The doctors confirmed a sharp daily increase in the number of positive cases specifically in the densely populated communities that house low-income group workers.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the confirmed cases
+coronavirus %>%
+  filter(country == "Iraq" | country == "Iran" | country == "Israel" | country == "United Arab Emirates" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_confirmed = cumsum(confirmed)) %>% 
+  filter(cum_confirmed > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_confirmed, color = country)) + 
+  geom_line(size = 1) +
+  ggtitle("Comparing total confirmed cases in Iraq, Iran, Israel and UAE vs Kuwait")
+
+```
+
+Among those five countries Iran shows a significantly large number of COVID-19 cases and the curve is still increasing rapidly. That must be the biggest reason Iran got the support of UNICEF to protect the health personnal there. Compared with Iran the other four countries shows a fewer number of COVID-19 cases until the third week of July. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the death cases
+coronavirus %>%
+  filter(country == "Iraq" | country == "Iran" | country == "Israel" | country == "United Arab Emirates" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_death = cumsum(death)) %>% 
+  filter(cum_death > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_death,color = country)) + geom_line(size = 1) +
+  ggtitle("Comparing total death cases in Iraq, Iran, Israel and UAE vs Kuwait")
+ 
+```
+
+With rapidly increasing amount of COVID-19 cases, the death cases due to the COVID-19 are also rising significantly. According to the plot, Iraq shows a sudden increase of death cases at the end of the first week of June. Having to wait at least a week for the COVID-19 test must be the main reason behind it. The other three countries shows a moderate amount of death cases compared to the Iraq and Iran.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the recovered cases
+coronavirus %>%
+  filter(country == "Iraq" | country == "Iran" | country == "Israel" | country == "United Arab Emirates" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_recovered = cumsum(recovered)) %>% 
+  filter(cum_recovered > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_recovered,color = country)) + geom_line(size = 1) +
+  ggtitle("Comparing total recovered cases in Iraq, Iran, Israel and UAE vs Kuwait")
+ 
+```
+
+With the huge amount of COVID-19 positived cases, Iran takes the lead when it comes to the recovery. Israel, Kuwait and UAE shows a moderate amount of recovered cases as well as the confirmed and death cases. But the amount of recovered cases of Iran shows a signficant increase due to the sudden increase of confirmed cases.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the active cases
+coronavirus %>%
+  filter(country == "Iraq" | country == "Iran" | country == "Israel" | country == "United Arab Emirates" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_active = cumsum(confirmed - recovered - death)) %>% 
+  filter(cum_active > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_active, fill = country)) + 
+  geom_col() +
+  ggtitle("Comparing total active cases in Iraq, Iran, Israel and UAE vs Kuwait")
+ 
+```
+
+As the first country in the Middle East to report a confirmed case, UAE shows a fewer amount of active cases compared with the other five countries. But there are some large number of active cases in Iran since they have a rapidly increasing amount of confirmed cases from the begining. Iraq also shows an increase on active cases after the first week of June. Israel and Kuwait have a moderate amount of active cases compared with the other four countries.
+
+***
+
+#### 2.2.2. Comparison with Other Asian Countries: Japan vs Sri Lanka vs South Korea vs Kuwait
+
+**Japan:** 
+
+Japan boasts the world's top number of hospital beds per population (according to WHO data, Japan had 13.7 beds per 100,000 population in 2018, while there only 8.2 such beds in Germany and 3.6 beds in Italy). There is not enough beds to handle COVID-19 infections and from the beginning of April, the capital Tokyo started to accommodate people with mild symptoms in hotels. In early April Japan’s second largest city, Osaka, made a nationwide request to provide medical gowns. In Japan, which also boasts the world's fastest population aging rate, there are many nursing homes, but staffing shortages have become a major social problem, and some accommodation-type and day care-type facilities have had cluster infections, and many of those businesses were forced to close temporarily.
+
+**Sri Lanka:**
+
+Sri Lanka; our motherland has taken steps to  help prevent the spread of COVID-19 in the country with the help of military services as well as the medical personnal. 
+
+**South Korea:**
+
+South Korea is widely known as for a country which is having a really good heathcare system in all over the world.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the confirmed cases
+coronavirus %>%
+  filter(country == "Japan" | country == "Sri Lanka" | country == "Korea, South" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_confirmed = cumsum(confirmed)) %>% 
+  filter(cum_confirmed > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_confirmed,color = country)) + geom_line(size = 1) +
+  ggtitle("Comparing total confirm cases in Japan, Sri Lanka and South Korea vs Kuwait")
+
+```
+
+According to the plot Kuwait reported more COVID-19 cases than the other three countries. Among them, Sri Lanka reported a lesser amount of cases compared with the others.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the death cases
+coronavirus %>%
+  filter(country == "Japan" | country == "Sri Lanka" | country == "Korea, South" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_death = cumsum(death)) %>% 
+  filter(cum_death > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_death,color = country)) + 
+  geom_line(size = 1) + 
+  ggtitle("Comparing total death cases in Japan, Sri Lanka and South Korea vs Kuwait")
+```
+
+As the plot shows, the maximum death toll among these four countries reported from Japan. The curve has a sudden increase after the first week of April. Eventhough Japan reported fewer confirmed COVID-19 cases than Kuwait, the death curve of of Japan much higher than the Kuwait curve. Sri Lanka and Kuwait reported their first COVID-19 death case weeks later. Latelu the death cases in Kuwait started to rise for some reason and Sri Lanka kept kept it in a minimum which is 11 deaths so far.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the recovered cases
+coronavirus %>%
+  filter(country == "Japan" | country == "Sri Lanka" | country == "Korea, South" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_recovered = cumsum(recovered)) %>% 
+  filter(cum_recovered > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_recovered,color = country)) + 
+  geom_line(size = 1) + 
+  ggtitle("Comparing total recovered cases in Japan, Sri Lanka and South Korea vs Kuwait")
+ 
+```
+
+As the country who reported a higher number of COVID-19 confirmed cases among these four countries, Kuwait represents the highest number of recovered cases. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the active cases
+coronavirus %>%
+  filter(country == "Japan" | country == "Sri Lanka" | country == "Korea, South" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_active = cumsum(confirmed - recovered - death)) %>% 
+  filter(cum_active > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_active,color = country)) + 
+  geom_line(size = 1) + 
+  ggtitle("Comparing total active cases in Japan, Sri Lanka and South Korea vs Kuwait")
+ 
+``` 
+
+According to the plot, we can say that among these four countries Sri Lanka has the loweset amount of active cases with some increases and decreases so far. Eventhough both Japan and Kuwait already showed their peaks, we cannot say that there will not be another one again. Because both curves show slight increases time to time and seems to be still increasing.But when we look at the trend curve of South Korea, we can say they already passed their peak since the curve kept decreasing for few weeks.
+
+***
+
+#### 2.2.3. Comparison with China
+
+According to the reports, the first COVID-19 case in the world identified from Wuhan, China. The city, on January 23, shut down its transport links. Following Wuhan lock down, the city of Huanggang was also placed in quarantine, and the city of Ezhou closed its train stations. This means than 18 million people have been placed in isolation. The World Health Organization (WHO) said cutting off a city as large as Wuhan is "unprecedented in public health history" and praised China for its incredible commitment to isolate the virus and minimize the spread to other countries.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the confirmed cases
+coronavirus %>%
+  filter(country == "China" | country == "Kuwait") %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(date) %>%
+
+  mutate(cum_confirmed = cumsum(confirmed)) %>% 
+  filter(cum_confirmed > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_confirmed,color = country)) + 
+  geom_line() + 
+  ggtitle("Comparing total confirmed cases in China vs Kuwait")
+```
+
+Since January confirmed COVID-19 cases started to rise in China and unfortunately the curve rised over 15,000 in the middle of February. It was the highest reported in China. Afterward the curve tends to decrease as the number of COVID-19 cases reported in China is getting lesser. Compared to China, Kuwait kept the virus from spreading, taking necessory precautions yet the curve still have some ups and downs.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the death cases
+coronavirus %>%
+  filter(country == "China" | country == "Kuwait") %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(date) %>%
+
+  mutate(cum_death = cumsum(death)) %>% 
+  filter(cum_death > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_death,color = country)) + 
+  geom_line() + 
+  ggtitle("Comparing death death cases in China vs Kuwait (By Date)")
+```
+Compared to Kuwait, the death toll in China is higher and a sudden peak reported in middle of April which is over 1,000. 
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the recovered cases
+coronavirus %>%
+  filter(country == "China" | country == "Kuwait") %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(date) %>%
+
+  mutate(cum_recovered = cumsum(recovered)) %>% 
+  filter(cum_recovered > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_recovered,color = country)) + 
+  geom_line() + 
+  ggtitle("Comparing total recovered cases in China vs Kuwait (By Date)")
+ 
+```
+
+COVID-19 cases in both Kuwait and China are still recovering and the curve is still going on.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the active cases
+coronavirus %>%
+  filter(country == "China" | country == "Kuwait") %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(date) %>%
+
+  mutate(cum_active = cumsum(confirmed - recovered - death)) %>% 
+  filter(cum_active > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_active,color = country)) + 
+  geom_line() + 
+  ggtitle("Comparing total active cases in China vs Kuwait (By Date)")
+ 
+```
+As they find new positive cases, both China and Kuwait still have active cases.
+
+***
+
+#### 2.2.4. Comparison with USA
+
+The U.S. health care system is unique among advanced industrialized countries. The U.S. does not have a uniform health system, has no universal health care coverage, and only recently enacted legislation mandating healthcare coverage for almost everyone. Rather than operating a national health service, a single-payer national health insurance system, or a multi-payer universal health insurance fund, the U.S. health care system can best be described as a hybrid system.
+On 1st of April, US reached to an unfortunate milestone in global COVID-19 pandemic. Because the death toll in the US surged past 4,000, making the number higher than that of China. The number of death cases reported in US at this moment is 139,426. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the confirmed cases
+coronavirus %>%
+  filter(country == "US" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_confirmed = cumsum(confirmed)) %>% 
+  filter(cum_confirmed > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_confirmed,color = country)) + 
+  geom_line() + 
+  ggtitle("Comparing total confirmed cases in US vs Kuwait")
+
+```
+
+The amount of the confirmed cases in US are much higher than Kuwait. Compared to US, Kuwait showed a lesser amount of confirmed cases so far. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the death cases
+coronavirus %>%
+  filter(country == "US" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_death = cumsum(death)) %>% 
+  filter(cum_death > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_death,color = country)) + 
+  geom_line(size = 1) + 
+  ggtitle("Comparing total death cases in US vs Kuwait")
+ 
+```
+
+According to the plot the death cases of US started to increase from April. When compared to the US, it is very clear that the death cases in Kuwait are much lower.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the recovered cases
+coronavirus %>%
+  filter(country == "US" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_recovered = cumsum(recovered)) %>% 
+  filter(cum_recovered > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_recovered,color = country)) + 
+  geom_line(size = 1) + 
+  ggtitle("Comparing total recovered cases in US vs Kuwait")
+ 
+```
+
+The US curve shows the recovery from COVID-19 rate is as similar as the rate of spreading virus and the Kuwait cases are much lesser as they have a less number of confirmed cases compared to US.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the active cases
+coronavirus %>%
+  filter(country == "US" | country == "Kuwait") %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(cum_active = cumsum(confirmed - recovered - death)) %>% 
+  filter(cum_active > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=cum_active,color = country)) + 
+  geom_line(size = 1) + 
+  ggtitle("Comparing total active cases in US vs Kuwait")
+ 
+```
+
+As the plot shows the trend curve of Kuwait stays almost steady so far. But US shows some sudden decreases time to time even though the curve is still going on higher rapidly.
+
+***
+
+## 3. Conclusions
+
+* Eventhough Kuwait able to take necessory precautions after the first COVID-19 case, yet positive cases are still surging throught the country. Compared to the confirmed COVID-19 positive cases, speed of recovering in Kuwait is much better and able to keep the death toll at a minimum level. The amount of active cases are also tend to decrease day by day.
+
+* Compared to its neighbouring countries such as Iraq, Iran, Israel and UAE; the spreading of the virus in Kuwait is at a moderate level. The death cases are in a lower level copared to the Iraq and Iran and almost closer to the amount of Israel and UAE. Recovering and active amount in Kuwait are also in a minimum levelcopared with its neighbouring countries.
+
+* When compared to the other Asian countries such as Japan, Soth Korea and Sri Lanka; Kuwait is at the top when it comes to the spread of the virus in the country. But Kuwait able to keep the death toll in a minimum level and the recovery rate is in maximum, compared to these other three Asian countries. Still the majority number of active cases are in Kuwait among these three other countries.
+
+* When compared with China; obviously Kuwait has lesser amount of COVID-19 cases.
+
+* Compared with USA; Kuwait has lesser amount of COVID-19 cases.
+
+***
+
+## 4. Discussion
+
+Get a rough idea on how COVID-19 affected to Kuwait is the main focus of this report. So that using the data from the coronavirus repositery (R package) has been used to do the analysis. Mainly the analysis devided into four parts which are confirmed cases, death cases, recovered cases and active cases. The first three types directly could retrieve from the dataset and the type 'active cases' has to be calculated. When calucale the active cases, there were negative values and had to filter them out to show them as zero active cases. 
+When do the comparison, China and America has been selected specilly because they are the first and current epicenters of the virus in the world. The reason for not choosing the second epicenter is that the results will not be much differ from the US and China. When comparing Kuwait with China, it had to filter the data by the date not by the country. The reason for that is the data from China contained the information of provinces and China curve was all over the output.
+After the analysis and all of the conclusions pulled from it, it is very clear that the Kuwait is still at risk even though the curves tend to be decreased.
+
+***
+
+## 5. Limitations
+
+**Data**
+
+The raw data is pulled from 'The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset' of Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE). The data and dashboard is refreshed on a daily bases.
+
+**Packages**
+
+* Interface - rmarkdown
+* Data manipulation - [dplyr](https://dplyr.tidyverse.org/) and [tidyr](https://tidyr.tidyverse.org/)
+* Data visualization - [ggplot2](http://ggplot2.tidyverse.org/)
+
+**Update**
+
+The last update of this data is 14^th^, July 2020.
+
+***
+
+## 6. Sources
+
+* [Wikipedia](https://www.wikipedia.org/)
+
+* [Stackoverflow](https://stackoverflow.com/)
+
+* [WHO](https://www.who.int/)
+
+* [LMS Forum](http://www.sci.sjp.ac.lk/vle/mod/forum/view.php?id=9862)
+
+* [Course Materials](https://hellor.netlify.app/)
+
+* [Ourworldindata](https://ourworldindata.org/coronavirus/country/kuwait?country=~KWT)
+
+* [R Studio rmarkdown Cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+
+* [R-graph-gallery](https://www.r-graph-gallery.com/)
+

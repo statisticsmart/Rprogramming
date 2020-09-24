@@ -1,0 +1,323 @@
+---
+title: "Corona virus Pandemic in Indonesia"
+author: "K.D.K.G.kaluarachchi"
+date: "7/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,warning=FALSE,comment = NA)
+```
+The COVID‑19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID‑19), caused by severe acute respiratory syndrome coronavirus 2 (SARS‑CoV‑2).[1] The outbreak was first identified in Wuhan, China, in December 2019. The World Health Organization declared the outbreak a Public Health Emergency of International Concern on 30 January 2020 and a pandemic on 11 March. As of 20 July 2020, more than 14.4 million cases of COVID‑19 have been reported in more than 188 countries and territories, resulting in more than 605,000 deaths; more than 8.12 million people have recovered.
+This report discusses the pandemic of Corona virus in Indonesia.
+
+#### **Visualization of the location**
+
+Indonesia is an archipelagic country located in Southeast Asia, lying between the Indian Ocean and the Pacific Ocean. It is located in a strategic location astride or along major sea lanes connecting East Asia, South Asia and Oceania. Indonesia is the largest archipelago in the world.
+Indonesia is an archipelagic country extending about 5,120 kilometres (3,181 mi) from east to west and 1,760 kilometres from north to south.Indonesia has 13,466 islands.Indonesia has total land area of 1,904,569 square kilometres,Including 93,000 square kilometres of inland seas (straits, bays, and other bodies of water). This makes it the largest island country in the world.
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+Indonesia_corona <- coronavirus %>% filter(country == "Indonesia")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(maptools)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Indonesia_corona, aes(x = long, y = lat), color = "red", size= 1)
+```
+
+    
+There are 8,844 named islands according to estimates made by the government of Indonesia, with 922 of those are permanently inhabited.[5] It comprises five main islands: Sumatra, Java, Borneo (known as Kalimantan in Indonesia), Sulawesi, and New Guinea; two major island groups (Nusa Tenggara and the Maluku Islands) and sixty smaller island groups. Four of the islands are shared with other countries: Borneo is shared with Malaysia and Brunei; Sebatik, located off the northeastern coast of Kalimantan, shared with Malaysia; Timor is shared with East Timor; and New Guinea is shared with Papua New Guinea.
+
+
+#### **Climate condition**
+
+Indonesia's climate tends to be relatively even year-round. Indonesia has two seasons—a wet season and a dry season—with no extremes of summer or winter. For most of Indonesia, the dry season falls between May and October while the wet season between November and April.Indonesia's climate is almost entirely tropical, dominated by the tropical rainforest climate found in every major island of Indonesia, followed by the tropical monsoon climate that predominantly lies along Java's coastal north, Sulawesi's coastal south and east, and Bali, and finally the tropical savanna climate, found in isolated locations of Central Java, lowland East Java, coastal southern Papua and smaller islands to the east of Lombok.
+
+
+#### **Impact of Corona virus to the Indonesia**
+
+The COVID-19 pandemic in Indonesia is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). It was confirmed to have spread to Indonesia on 2 March 2020, after a dance instructor and her mother tested positive for the virus. Both were infected from a Japanese national.As of 10 July, Indonesia has reported 72,347 cases, the highest in Southeast Asia, ahead of the Philippines and Singapore. In terms of death numbers, Indonesia ranks sixth in Asia with 3,469 deaths.[4] Review of data, however, indicated that the number of deaths may be much higher than what has been reported as those who died with acute COVID-19 symptoms but had not been confirmed or tested were not counted in the official death figure.
+
+Indonesia has conducted 1,015,678 tests against its 273 million population so far, or around 3,712 tests per million, making it one of the lowest testing rates in the world. As a comparison, it is lower than Kenya which has only around 53.8 million population, yet has conducted 3,724 tests per million.
+
+Instead of implementing a nationwide lockdown, the government had approved large-scale social restrictions (Indonesian: Pembatasan Sosial Berskala Besar, abbreviated as PSBB) for some regencies and cities. Starting from late May, they began to apply New Normal, along with another green and yellow zone regions. This policy received a lot of criticism and is considered as a disaster because cases are still increasing
+
+
+#### **Lockdown status** 
+Indonesia, despite a growing coronavirus caseload, has avoided locking down population centers in favor of softer control measures to sustain an economy already stressed by poverty.
+President Joko “Jokowi” Widodo has reiterated that he will not impose a nationwide lockdown, despite the growing number of confirmed COVID-19 cases in the country and has cautioned regional heads who seek to impose stricter movement restrictions in their respective regions.
+The President said Indonesian people's cultural characteristics and discipline were the two main reasons why the government had ruled out a lockdown, adding that the decision was also made after evaluating policies enacted by other countries during the pandemic.
+Instead of imposing a lockdown, he reiterated his call for people to stay home and maintain physical distance from each other to curb the spread of the disease.
+
+#### **Actions taken by government**
+
+Indonesia has denied transit and entry for all foreign visitors since 2 April.Indonesians who returned from China, South Korea, Italy, Iran, United Kingdom, Vatican City, France, Spain, Germany, and Switzerland were subject to additional health screening and a 14-day stay-at-home notice or quarantine depending on appearing symptoms.
+Garuda Indonesia, Citilink, Lion Air, Batik Air, and Sriwijaya Air cancelled several flights and grounded their aircraft. Meanwhile Indonesia AirAsia cancelled all flights. International airlines have either temporarily suspended services or continue operating with reduced frequency. Other airlines such as China Airlines and Etihad Airways choose to continue their services as usual.
+From 24 April until 8 June, the government suspends all passenger to travel outside areas with at least one confirmed case, regions that had imposed large-scale social restrictions (PSBB), and those that had been declared COVID-19 red zones. The ban applies to all types of public and private transportation by air, sea, land, and railway, except for vehicles carrying leaders of state institutions, police and military vehicles, ambulances, fire trucks, hearses and vehicles transporting logistical supplies, staple goods and medicines.
+
+## Exploratory Data Analysis
+
+The folllowing results are obtained from data, collected from Indonesia over period of 22.01.2020 - 12.05.2020.
+
+Table 01:Daily covid_19 confirmed cases in Indonesia
+```{r,fig.cap= "Table 01:Daily covid_19 confirmed cases in Indonesia", fig.align='center'}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(knitr)
+All_Data_Indonesia<- coronavirus %>% filter(country == "Indonesia",)
+Coronavirus_Indonesia_1<-select(All_Data_Indonesia,-c(province,country,lat,long))
+
+Corona_Indonesia<-Coronavirus_Indonesia_1 %>%
+  pivot_wider(names_from = type, values_from = cases)
+Corona_Indonesia%>%filter(confirmed >0)
+```
++ According to Table 01 data ,first Corona Virus inflected case revealed at 2020-03-02 and first death case revealed at 2020-03-11.
+
+Table 02:Total Covid 19 cases : Indonesia 
+```{r}
+Coronavirus_Indonesia_2<-Corona_Indonesia%>% summarise(sum_confirmed=sum(confirmed),sum_recoverd=sum(recovered),sum_death=sum(death))
+Coronavirus_Indonesia_3<-Coronavirus_Indonesia_2%>%mutate(sum_active=sum_confirmed-sum_recoverd-sum_death)
+
+kable(Coronavirus_Indonesia_3[1:4])
+```
++ Table 02 shows that all confirmed cases from 2020-01-22 to 2020-05-12 were 3063.From those cases, 1007 death cases were recorded and 3063 were recovered.By the 2020-05-12,the number of patients recieving treatment was 10679.
+
+
+
+
+```{r,fig.cap= "Figure 01:Daily covid_19 confirmed cases in Indonesia", fig.align='center'}
+confirm_Indonesia_corona <-Corona_Indonesia %>% select(date,confirmed)
+
+ggplot(confirm_Indonesia_corona, aes(x=date, y=confirmed)) +geom_line(color="purple") + geom_point(color="darkblue")
+
+
+```
+
++ Figure o1 shows the daily comformed Covid 19 cases. From March to May ,there is a significant increase in confirmed cases in inflecting Corona virus per day.Highest number of daily confirmed cases were recorded in May. 
+
+```{r,fig.cap= "Figure 02:Daily covid_19 death cases in Indonesia", fig.align='center'}
+death_Indonesia_corona <-Corona_Indonesia %>% select(date,death)
+
+ggplot(death_Indonesia_corona, aes(x=date, y=death)) +geom_line(color="brown") + geom_point(color="red")
+
+
+```
++  Figure o2 shows that daily reported death cases due to Covid 19 . From March to May ,there is a slight increase in death cases from Covid 19 per day.Highest number of daily death cases were recorded in April. 
+
+
+```{r,fig.cap= "Figure 03:Daily covid_19 recovered cases in Indonesia", fig.align='center'}
+recovered_Indonesia_corona <-Corona_Indonesia  %>% select(date,recovered)
+
+ggplot(recovered_Indonesia_corona, aes(x=date, y=recovered)) +geom_line(color="forestgreen") + geom_point(color="darkgreen")
+
+
+```
++  Figure o3 shows that daily reported recovered cases from Covid 19 . From March to May ,there is a significant increase in recovered cases from Covid 19 per day.Highest number of daily recovered cases were recorded in May. 
+
+
+Table 03: Maximum values of daily covid 19 cases of Indonesia
+```{r}
+Corona_Indonesia_max<-Corona_Indonesia%>%summarise(max_confirmed=max(confirmed),max_recovered=max(recovered),max_death=max(death))
+
+kable(Corona_Indonesia_max[1:3])
+```
++ The highest number of patients reported in a sigle day is 553 and the highest number of deaths reported per day is 60.Also,the highest number of recovered cases reportrd in a day is 243.
+
+Table 04: Daily Covid 19 cases :Monthwise
+```{r}
+Corona_Indonesia_Month<-Corona_Indonesia %>% separate(date, into=c("year","month","date"),sep = "-")
+Corona_Indonesia_Month_grouped<-Corona_Indonesia_Month %>% group_by(month)
+Corona_Indonesia_Month_grouped_sum<-Corona_Indonesia_Month_grouped%>%summarise(sum_confirmed=sum(confirmed),sum_recovered=sum(recovered),sum_death=sum(death))
+Corona_Indonesia_Month_grouped_sum_T<-Corona_Indonesia_Month_grouped_sum %>% mutate(month=recode(month, 
+                                                                                         `01`="JAN",
+                                                                                         `02`="FEB",
+                                                                                         '03'="MAR",
+                                                                                         '04'="APR",
+                                                                                         '05'="MAY"))
+
+kable(Corona_Indonesia_Month_grouped_sum_T[1:4])
+```
++ The highest number of confirmed cases in a month and highest number of deaths in a month were reported in April.The values are 8590 and 656 respectively .The highest recovery cases was reported in May and that value is 1541.
+
+##### **Comparison the Covid 19 cases of Indonesia with neighbouring countries.**
+Indonesia shared it's Land Boaders with Malaysia,Timor-Leste and Papua New Guinea.Papua New Guinea and Timor-Leste have very low population than Indonesia. Only Malaysia used for the comparison.
+
+```{r,fig.cap= "Figure 04:Neighbouring countries of Indoneesia: Daily Covid-19 case", fig.align='center',out.height="120%", out.width="120%"}
+All_Data_neibhbour_Indonesia<- coronavirus %>% filter(country%in%c("Indonesia", "Malaysia","Timor-Leste"))
+
+Coronavirus_neibhbour_Indonesia<-select(All_Data_neibhbour_Indonesia,-c(province,lat,long))
+
+ggplot(Coronavirus_neibhbour_Indonesia, aes(x=date, y=cases,col=country)) + geom_line()+facet_grid(~type)
+```
++ Figure 04 illastrate that comparison daily Covid 19 cases with malaysia and Timor-Leste.In daily confirmed cases and in daily recovered cases, Indonesia shows a significant increase From March to May but Malaysia shows a some increase from March to April and some decrease from April to may in both confimed and recovered cases.
+
+
+Table 05:Total cases of Covid 19 of Indonesia's neighbouring countries.
+```{r}
+All_Data_neibhbour_Indonesia<- coronavirus %>% filter(country%in%c("Indonesia", "Malaysia","Timor-Leste"))
+
+Coronavirus_neibhbour_Indonesia<-select(All_Data_neibhbour_Indonesia,-c(province,lat,long))
+
+Corona_neighbour<-Coronavirus_neibhbour_Indonesia %>%
+  pivot_wider(names_from = type, values_from = cases)
+
+
+
+Corona_neighbour_Country<-Corona_neighbour%>%group_by(country)
+Corona_neighbour_Country_sum<-Corona_neighbour_Country%>%summarise(sum_confirmed=sum(confirmed),sum_recoverd=sum(recovered),sum_death=sum(death))
+Corona_neighbour_Country_sum_1<-Corona_neighbour_Country_sum%>%mutate(sum_active= sum_confirmed-sum_recoverd- sum_death)
+kable(Corona_neighbour_Country_sum_1[1:5])
+```
++ When compairing Indonesia with Malysia and Timor-Leste, Indonesia shows more  confirmed cases than Malysia and Timor Leste.But higest recovered cases were reported from m alysia .Timor-Leste shows very low confirmed cases and no any deaths in this period.
+
+Table 06: Daily Covid 19 cases of Indonesia's neighbouring countries:As Percentage.
+```{r}
+Corona_neighbour_Country_sum_2<-Corona_neighbour_Country_sum_1%>%mutate(percent_recovered=(sum_recoverd /sum_confirmed )*100,percent_death=(sum_death /sum_confirmed )*100,percent_active=(sum_active /sum_confirmed )*100)
+Corona_neighbour_Country_percent<-Corona_neighbour_Country_sum_2%>%select(-c(sum_confirmed, sum_recoverd ,sum_death ,sum_active))
+
+kable(Corona_neighbour_Country_percent[1:4])
+```
++ According to Table 06,when taking recovered, death and active cases as a percentage of confirmed cases ,Indonesia showes highest death percentage and Timor-Leste shows highest recovered percentage.
+
+
+##### **Comparison the Covid 19 cases of Indonesia with the best recovered countries of Asia**
+Indonesia located in Asian Continent .The country which recorded first Corona inflected person is Chaina . It is also located in Asian Continent.But for now the Corona is well controlled by China.Japan and Thailand also well recovered contries in Asian continent.
+```{r,fig.cap= "Figure 04:Daily covid_19 death cases:Best recovered countries in same continent ", fig.align='center'}
+All_Data_best_recover_countries<- coronavirus %>% filter(country %in% c("Indonesia", "Japan","Thailand","China"))
+
+All_Data_best_recover_countries_confirmed<-All_Data_best_recover_countries%>%filter(type=="confirmed")
+
+ggplot(All_Data_best_recover_countries_confirmed, aes(x=date, y=cases,col=country)) + geom_line()
+```
+Figure 04 shows that comparison of daily covid 19 cases of Indonesia with Japan,China and Thailand .When indonesia comparing with China in confimed cases,Indonesia shows some increase of cases than China from April.When comparing with Japan ,Japan shows high valus from mid-March to May but in May Indonesia shows some increase in May. When considering recovered cases ,after 
+
+  
+
+```{r,fig.cap= "Figure 05:Daily covid_19 death cases:Best recovered countries in same continent: ", fig.align='center'}
+All_Data_best_recover_countries<- coronavirus %>% filter(country %in% c("Indonesia", "Japan","Thailand","China"))
+
+All_Data_best_recover_countries_death<-All_Data_best_recover_countries%>%filter(type=="death")
+
+ggplot(All_Data_best_recover_countries_death, aes(x=date, y=cases,col=country)) + geom_line()
+```
+From January to mid march only China shows death cases .After mid March Indonesia and Japan shows similar daily death cases .Suddenly China shows very high value in death cases a day in April.That value is higher than 1000.
+
+```{r,fig.cap= "Figure 06:Daily covid_19 death cases:Best recovered countries in same continent ", fig.align='center'}
+All_Data_best_recover_countries<- coronavirus %>% filter(country %in% c("Indonesia", "Japan","Thailand","China"))
+
+All_Data_best_recover_countries_recovered<-All_Data_best_recover_countries%>%filter(type=="recovered")
+
+ggplot(All_Data_best_recover_countries_recovered, aes(x=date, y=cases,col=country)) + geom_line()
+```
+According to Figure 06 from April to May Indonesia shows higher recover cases than China .In April Japan and Indonesia shows slight similar values but  in May  Japan shows higher values in recovered cases.
+
+
+Table 07: Daily Covid 19 cases of Indonesia :Comparison with Japan, Thailand and China .
+```{r}
+All_Data_best_recover_1<- coronavirus %>% filter(country %in% c("Indonesia", "Japan","Thailand"))
+
+Coronavirus_best_recover_1<-select(All_Data_best_recover_1,-c(province,lat,long))
+
+Corona_best_recover_new<-Coronavirus_best_recover_1%>%pivot_wider(names_from = type, values_from = cases)
+
+
+Corona_best_recover_new_Country<-Corona_best_recover_new%>%group_by(country)
+
+Corona_best_recover_new_Country_sum<-Corona_best_recover_new_Country%>%summarise(sum_confirmed=sum(type=confirmed),sum_recoverd=sum(type=recovered),sum_death=sum(type=death))
+
+
+Corona_best_recover_new_Country_sum_1<-Corona_best_recover_new_Country_sum%>%mutate(sum_active= sum_confirmed-sum_recoverd- sum_death)
+
+
+
+Corona_China<-coronavirus %>% filter(country=="China")
+
+Corona_China_New<-select(Corona_China,-c(lat,long))
+
+
+Corona_China_confirm<-Corona_China_New%>%filter(type=="confirmed")
+Corona_China_confirm_sum<-Corona_China_confirm%>%summarise(sum_confirmed=sum(cases))
+
+Corona_China_recover<-Corona_China_New%>%filter(type=="recovered")
+Corona_China_recover_sum<-Corona_China_recover%>%summarise(sum_recovered=sum(cases))
+
+Corona_China_death<-Corona_China_New%>%filter(type=="death")
+Corona_China_death_sum<-Corona_China_death%>%summarise(sum_death=sum(cases))
+
+Corona_China_active_sum<-84018-79222-4637
+
+
+Corona_best_recover_new_Country_sum_new<-Corona_best_recover_new_Country_sum_1%>% add_row(country="China",sum_confirmed=84018,sum_recoverd=79222,sum_death=4637,sum_active=159 )
+
+kable(Corona_best_recover_new_Country_sum_new[1:5])
+```
+According to Table 07 both China and Japan show more confirmed and recovered cases than Indonesia.China shows significantly high death cases than Indonesia ,Japan and Thailand. 
+
+```{r}
+Corona_best_recover_new_Country_sum_2<-Corona_best_recover_new_Country_sum_new%>%mutate(percent_recovered=(sum_recoverd /sum_confirmed )*100,percent_death=(sum_death /sum_confirmed )*100,percent_active=(sum_active /sum_confirmed )*100)
+
+
+Corona_best_recover_new_Country_percent<-Corona_best_recover_new_Country_sum_2%>%select(-c(sum_confirmed, sum_recoverd ,sum_death ,sum_active))
+
+kable(Corona_best_recover_new_Country_percent[1:4])
+```
+Table 08 shows that percentages of recovered, death and active cases according to confirmed cases .As shown by the table Thailand and china show good recover percentages as more than 90%. When taking death cases as a percentage ,all Japan ,Thailand and China show low percentage Than Indonesia.Always Indonesia shows more death cases than other two countries .
+
+
+## Conclussions
+
+This data set shows daily confirmed ,death and recovered cases of Indonesia from 22-01-2020 to 12-05-2020. The first corona virus inflect person was recorded at 02-03-2020 and first death case reported at 11-03-2020.A patient who was recovered for the first time was reported at 12-03-2020. 
+With the first corona patient reported in March daily confirmed cases increased stedily and by May it had reached 533 maximum value.
+The number of daily death cases starts by 2 and it increaces to 60 by the middle of April and then gradually decreases towards May.It also shows a gradual increase in patients recovering from March to May .This is a good trend.
+In April, there are higher number of confirmed cases and higher number od death cases were reported than other months.
+Indonesia shares it's land boaders with Malayasia ,Papua New Gunia and Timor-Leste. There is a some issu in data of Papua New Guinea .So only Malayasia and Timor-Leste used for comparison.
+In daily confirmed cases and in daily recovered cases, Indonesia shows a significant increase From March to May but Malaysia shows a some increase from March to April and some decrease from April to may in both confimed and recovered cases.
+As a number ,Indonesia shows a higher number of confirmed cases and a higher number of death cases than Malysia and Timor-Leste.But Malaysia shows more recovered cases than indonesia.Although taking recovered ,death and active cases as a percentage of confirmed cases both Malysia and Timor-Leste. 
+China was the the country which starts the corona virus .But after some time they  managed the spreding well.Both Indonesia and China located in Asian continent .Also Japan and Thailand also the well recovered countries in Asian continent. So Indonesia was compared with those three countries.
+China shows a considarable varience in all cases from January to April.After April China shows low values in confirmed and death cases .After April recovered cases also low due to lack of reported confirmed cases.From mid March to May normaly Indonesia and Japan show approximately equal values in daily confirmed cases and daily death cases .But both Indonesia and Japan shows high values than China in these cases..In daily recovered cases from mid April Japan shows high daily  recovered cases than Indonesia .All these three countries (Japan ,Thailand and China)show higher recover percentage than Indonesia.Thailand and China show higher percentages than 90%.
+
+
+## Discussion 
+
+According to the records of John Hopkins University, Indoneesia is the country with the most coronavirus deaths and the highest fatality rate in Southeast Asia.Indonesia's death rate stood at 6.82 percent compared to 5.2 worldwide .
+Indonesia has a population of more than a quarter of a billion. More than eight million people live in its capital Jakarta – the epicentre of the country’s outbreak.But lack of tests according to population might caused to increase in deaths.
+In comparison, the rate in the Philippines is 6.5 percent, Singapore 0.1 percent, Malaysia 1.7 percent, China 5.6 percent and both Japan and South Korea between 2 and 3 percent.
+Indonesia's health system compares poorly with those in other countries hit hard by the virus.
+Jakarta, having only 132 referral hospitals to treat Covid-19 patients across the country is not enough to counter the coronavirus pandemic.
+Indonesian hospitals need ICUs, isolation rooms, as well as ventilators. These facilities are detrimental
+Overworked doctors and nurses were often forced to treat patients without adequate personal protective equipment, leaving them at even higher risk of getting infected by the coronavirus. At least 24 doctors in Indonesia have died from Covid-19 since early March. 
+Nobody under the age of 18 has died in Malaysia, But in Indonesia, senior doctors have warned that more than 100 children may have died from the coronavirus.Cases of children being exposed to COVID-19 have mostly been infected by family members who are positive patients or caregivers
+In Indonesia, a very high number of smokers and slow initial response by the health authorities have led to more deaths than in its Southeast Asian neighbors. 
+Many Indonesians are generally unfit, and this makes them more vulnerable [to Covid-19]. Most people in Indonesia have unhealthy lungs because most are smokers.Around 75 percent of adult males in Indonesia are smokers according to 2015 World Health Organization data, the highest rate in the world.
+
+ However, not every country has been affected equally and the current status and progress of each country also varies from one another, in some instances to great extent. Japan has been found more successful in controlling the trend and maintain the pandemic stabilised condition in its country. Countries need to learn lessons from Japan, South Korea and China to get control over COVID 19
+pandemic. Other than government restricting on social gatherings and enforcing travel bans to mitigate its spread, individuals also need to show responsibility to avoid useless movements.
+While countries need to increase testing of suspected cases at large scale to save people lives.
+
+### References
+
+https://jakartaglobe.id/news/indonesia-currently-has-highest-covid19-mortality-rate-in-asia
+https://www.abc.net.au/news/2020-06-18/why-are-so-many-indonesian-children-dying-from-coronavirus/12356444
+https://theconversation.com/3-overlooked-facts-behind-indonesias-high-covid-19-death-rate-135223
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Indonesia
+https://health.economictimes.indiatimes.com/news/industry/indonesias-health-system-on-the-brink-as-coronavirus-surge-looms/74809373

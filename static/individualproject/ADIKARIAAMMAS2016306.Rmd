@@ -1,0 +1,282 @@
+---
+title: "The_Analysis_Covid19_Brazil"
+author: "A.A.M.M.Adikari"
+date: "7/15/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+
+## <span style="color: blue;">Introduction</span>
+The coronavirus COVID-19 pandemic is the most dangerous and significant challenge the whole world had to face in 2019-2020. This coronavirus has spread over every continent and has a massive effect on world health. In the health sector and the economy, political and social divisions turned upside down. This coronavirus is an unexpected situation for the whole world, and nobody was ready for that. Therefore, powerful world countries also flatted because of this pandemic. When considering Brazil, it is the largest country in both South America and Latin America. At 8.5 million square kilometers (3.2 million square miles) and with over 211 million people, Brazil is the world's fifth-largest country by area and the sixth-most populous. The Atlantic Ocean bounds Brazil on the east, and it borders all other countries in South America except Ecuador and Chile. Therefore, investigating the Brazil corona situation is very interesting and very important. 
+
+
+**Figure 01: Brazil in world map**
+
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+brazil_corona<- coronavirus%>% filter(country == "Brazil")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = brazil_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+                       
+
+The scientist found out the coronavirus is destroying at 40 °Cs. Moreover, there was a rumor about the spreading cast of coronaviruses low in high-temperature countries. Therefore, when investigating the corona situation in Brazil, we must consider the climate situation. The central parts of the Brazilian Highlands receive most of their precipitation during the summer months (November to April) Storms and floods may strike the Northeast at that time. Summer temperatures are mostly uniform. In January, most of the lowlands average roughly 79 °F (26 °C), and the mountains are a few degrees cooler, depending on elevation. The hottest region of the country, averages some 84 °F (29 °C), with daytime temperatures exceeding 100 °F (38 °C). In the winter (May to October), the Brazilian Highlands are generally dry and snow pitfalls in only a few southernmost states. Winter temperatures in the Amazon lowlands remain virtually unchanged from those of the summer months, but temperatures in the drought quadrilateral drop to about 79 °F (26 °C). Temperatures in the Brazilian Highlands average about 68 °F (20 °C) in the central and northern regions and are more lukewarm toward the south averages 57 °F (14 °C) in June and July. By considering these situations, Brazil usually has less than 40 °C temperatures.
+
+
+Brazil's coronavirus outbreak is one of the world's most severe, with more than 2m cases recorded since March. On 25th February, Brazil recorded its first Covid-19 case, and the first death was recorded on 17th March 2020. On 20th March, the government of Rio Grande do Norte declared a public emergency, and the day after, cases in São Paulo rose almost 40% in two hours. Deaths also increased in the period. The state issued a lockdown order for non-essential businesses, lasting from 24th March⁠ through at least ⁠7th April. Cities in the Campinas region declared an emergency. 9th April 2020, the federal government sent out its first financial assistance to the public. Over 2.5 million people received R$600 ($116). After days, on 20th April, Several cities started to ease social isolation guidelines in favor of contact tracing. Some retail stores were allowed to open as long as customers wore masks, the number of in-person customers has reduced, and customer personal information tracked. 7th May, several cities in the northern states of Amazonas and Pará began issuing lockdown measures to curb the spread of the virus. Other cities in other countries consider doing the same. Two days, the government of Rio Grande does Sul established a new social distancing plan.
+
+
+However, it was not long before the virus spread to major cities like Rio de Janeiro and São Paulo. Cases then began to rise sharply. In May, São Paulo's mayor warned that its underfunded health system was on the verge of collapse as it became a new hotspot for Covid-19. He said demand for hospital beds had skyrocketed. This hospital, built inside a sports gym in the city, is one of many makeshift facilities that opened up. However, despite the rise in cases, there was still no national lockdown. States and cities adopted their measures, but protests met these, and data later showed that compliance lessened as time went on. Stay-at-home orders and other restrictions are critics by far-right President Jair Bolsonaro, who denounced them as "dictatorial." He even joined anti-lockdown protests in the capital, Brasilia. Mr. Bolsonaro has repeatedly played down the risks of what he calls "little flu," and his response to the pandemic has been slowly critics. He has argued that regional lockdowns have a more damaging effect than the virus itself, and accused the media of spreading panic and paranoia.
+The president has also been spot meeting supporters while not wearing a mask, such as in Brasilia. 5th June Brazilian government shuts down the official website with COVID-19 daily reports and will no longer report the total number of deaths and active cases. 9th June A court order forces the Brazilian government to continue publishing cumulative cases and death counts. 
+
+
+On 20th June, Brazil became only the second country to pass one million cases, and that number has continued to rise steadily. Experts say it is likely much higher due to a lack of testing. However, lockdowns lifted even as cases surged. In Rio and São Paulo, restaurants and bars reopened despite the continued increase in transmissions. Today (2020.07.20), it is the second-worst affected country behind the U.S. More than 74,000 people have died with the virus due to a lack of testing. Furthermore, the exact figures believed to be even higher. As critics and the media says, cause to the current situation in Brazil was an idiotic, careless policy of the government and its presidents.
+
+
+## <span style="color: blue;">Data Exploration</span> 
+
+This analysis based on coronavirus data set in r software which included  countries data during 2020-01-22 to 2020-05-12 period. Coronavirus dataset has the following fields:
+
+### Qualitative data
++ **date** - The date of the summary
++ **province** - The province or state, when applicable
++ **country** - The country or region name
++ **type** - the type of case (i.e., confirmed, death)
+
+### Quantitative data
++ **lat** - Latitude point
++ **long** - Longitude point
++ **cases** - the number of daily cases (corresponding to the case type)
+
+**Table 01: Top 10 countries in corona confirmed cases**
+```{r, message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+library(dplyr)
+
+summary_df <- coronavirus %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_confirmed_cases = sum(cases)) %>%
+  arrange(-total_confirmed_cases)
+summary_df %>% head(10) 
+ 
+```
+
+**Table 02: Top 10 countries in corona death cases**
+```{r, message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+library(dplyr)
+summary_df <- coronavirus %>% 
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(total_death_cases = sum(cases)) %>%
+  arrange(-total_death_cases)
+summary_df %>% head(10)
+```
+
+
+According to above details during the 2020-01-22 to 2020-05-12 period Brazil had the 7th maximum confirmed cases and 6th maximum death cases in the world.
+
+**Table03: Summary of Brazil Corona data set**
+```{r , message=FALSE, echo=TRUE, comment=NA, warning=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+brazil<-brazil_corona%>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(brazil)
+```
+
+
+Use above code to check available outliers. But there are no any outliers in Brazil data.
+
+  **Figure02: Time Series plot of Brazil Corona according to type**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+ggplot(brazil_corona, aes(x=date, y=cases, col=type )) + geom_line()
+```
+        
+        
+ 
+
+**Figure03: Histogram of Brazil Corona confirmed cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+confirmed_brazil_corona <- brazil_corona %>% filter(type=="confirmed")
+death_brazil_corona <- brazil_corona %>% filter(type=="death")
+recovered_brazil_corona <- brazil_corona %>% filter(type=="recovered")
+ggplot(confirmed_brazil_corona, aes(cases)) +
+  geom_histogram(bins = 12, col="black",fill="blue", alpha=0.5)
+```
+
+
+**Table04: Summary of Brazil Corona confirmed data set**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+summary(confirmed_brazil_corona)
+```
+
+According to Figure03,It seems the distributions of confirmed cases in Brazil was positively skewwed and Table04 shows mean value is 1591.
+
+**Figure04: Histogram of Brazil Corona death cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+ggplot(death_brazil_corona, aes(cases)) +
+  geom_histogram(bins = 12, col="black",fill="green",  alpha=0.5)
+```
+
+
+**Table05: Summary of Brazil Corona death data set**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+summary(death_brazil_corona)
+```
+
+According to Figure04,It seems the distributions of death cases in Brazil was positively skewwed and Table05 shows mean value is 111.3.
+
+**Figure05: Histogram of Brazil Corona recovered cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+ggplot(recovered_brazil_corona, aes(cases)) +
+  geom_histogram(bins = 12, col="black",fill="yellow",  alpha=0.5)
+```
+
+
+**Table06: Summary of Brazil Corona recovered data set**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+summary(recovered_brazil_corona)
+```
+According to Figure05,It seems the distributions of recovered cases in Brazil was positively skewwed and Table06 shows mean value is 648.19.
+
+**Brazil compare with USA**
+
+
+**Figure06: Density plot of Brazil and USA Corona confirmed cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+confirmed_brazil_corona <- brazil_corona %>% filter(type=="confirmed")
+death_brazil_corona <- brazil_corona %>% filter(type=="death")
+recovered_brazil_corona <- brazil_corona %>% filter(type=="recovered")
+
+usa_corona<- coronavirus %>% filter(country == "US")
+confirmed_usa_corona <- usa_corona %>% filter(type=="confirmed")
+death_usa_corona <- usa_corona %>% filter(type=="death")
+
+peru_corona<- coronavirus %>% filter(country == "Peru")
+confirmed_peru_corona <- peru_corona %>% filter(type=="confirmed")
+death_peru_corona <- peru_corona %>% filter(type=="death")
+recovered_peru_corona <- peru_corona %>% filter(type=="recovered")
+
+argentina_corona <- coronavirus %>% filter(country == "Argentina")
+confirmed_argentina_corona <- argentina_corona %>% filter(type=="confirmed")
+death_argentina_corona <- argentina_corona %>% filter(type=="death")
+recovered_argentina_corona <- argentina_corona %>% filter(type=="recovered")
+
+##Brazil vs. USA
+data1<- rbind(confirmed_brazil_corona,confirmed_usa_corona)
+attach(data1)
+ggplot(data1, aes(x=cases, fill=country)) + geom_density(alpha= 0.5)+scale_fill_brewer(palette= "Dark3")
+```
+
+**Figure07: Density plot of Brazil and USA Corona death cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+data2<- rbind(death_brazil_corona,death_usa_corona)
+attach(data2)
+ggplot(data2, aes(x=cases, fill=country)) + geom_density(alpha= 0.5)
+```
+
+Considering Figure06 and Figure07 when comparing with USA, Brazil has low Confirmed cases and death cases upto may 22nd.
+
+**Brazil compare with Peru & Argentina**
+
+
+**Figure08: Density plot of Brazil and Peru and Argentina Corona confirmed cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+##Brazil vs. Peru
+data3<- rbind(confirmed_brazil_corona, confirmed_peru_corona,confirmed_argentina_corona)
+attach(data3)
+ggplot(data3, aes(x=log(cases), fill=country)) + geom_density(alpha= 0.5)+scale_fill_brewer(palette= "Accent")
+```
+
+
+**Figure09: Density plot of Brazil and Peru and Argentina Corona death cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+data4<- rbind(death_brazil_corona,death_peru_corona, death_argentina_corona)
+attach(data4)
+ggplot(data4, aes(x=log(cases), fill=country)) + geom_density( alpha= 0.5) +scale_fill_brewer(palette= "Dark2")
+```
+
+
+**Figure10: Density plot of Brazil and Peru and Argentina Corona recovered cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+data5<- rbind(recovered_brazil_corona,recovered_peru_corona, recovered_argentina_corona)
+attach(data5)
+ggplot(data5, aes(x=log(cases), fill=country)) + geom_density( alpha= 0.5) +scale_fill_brewer(palette= "Dark2")
+```
+
+here,I consider the log values because normal values are not displayed well. According to Figure08, Figure09, Figure10 Brazil ha the high confirmed cases,death cases and recovered cases compared to Peru and Argentina.
+
+**Timeseries model for Brazil confiremed cases**
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+
+
+# To store the data in a time series object, we use the ts() function in R
+library(TTR)
+library(forecast)
+
+#fit a model
+fit_confirmed<- auto.arima(confirmed_brazil_corona$cases)
+fit_confirmed
+```
+
+**Figure11:Time series forecast of Brazil confirmed cases**
+
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+#forecasts
+ggplot(confirmed_brazil_corona, aes(x= date,y= cases)) +
+  geom_line() +
+  geom_forecast(h= 50)
+forecast(fit_confirmed,h = 50)
+
+
+```
+
+
+
+## <span style="color: blue;">Conclusion</span> 
+
+Covid_19 is the most challenging situation in 2020 and now it is became as world wide pandemic. By looking at this analyze I can conclude that, Brazil confirmed cases and death cases rising rappidly. The most effected and series country is USA and when comparing Brazil with it it shows low rates. But When considering neighbouring countries to Brazil (Peru, Argentina) Brazil shows the serious situation. However, the recovered number of cases also high amount in Brazil when comparing to neighbour countries. That is good situation. The obtained time series model is ARIMA(3,1,2)Considering Brazil confirmed cases. 
+
+## <span style="color: blue;">References</span> 
+
++ https://github.com/RamiKrispin/coronavirus
++ https://www.britannica.com/place/Brazil/Climate
++ https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Brazil
++ https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html

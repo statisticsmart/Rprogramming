@@ -1,0 +1,613 @@
+---
+title: "Final Assignment"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#                **_Covid-19 in Isreal_**
+
+## 1.Introducton
+
+
+ **Figure 1.1 - Visualisation of Israel**
+```{r, comment=NA, message=FALSE, echo=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+israel_corona <- coronavirus %>% filter(country == "Israel")
+
+
+plot_israel <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+              fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+              scale_x_continuous(breaks = seq(-180, 180, 120)) +  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+
+plot_israel  + geom_point(data = israel_corona, aes(x = long, y = lat), color = "red", size= 1)
+
+```
+
+
+  Israel is located at the eastern end of the Mediterranean Sea in Western Asia. It is bounded to the north by Lebanon, the northeast by Syria, the east by Jordan and the West Bank, and to the southwest by Egypt.
+
+  Israel has a Mediterranean climate with long, hot, rainless summers and relatively short, cool, rainy winters.The climate is as such due to Israel's location between the subtropical aridity of the Sahara and the Arabian deserts, and the subtropical humidity of the Levant and Eastern Mediterranean. The climate conditions are highly variable within the state and modified locally by altitude, latitude, and the proximity to the Mediterranean.
+  
+  Israel successfully battled against the first corona wave with a full lockdown and reopened the country in mid-June. The government has imposed travel restrictions since 26th January and has extended this accordingly with measures of imposing 14-day self-isolation rule for visitors. On 9 March Israel declared a mandatory quarantine for all people entering Israel, requiring all entrants to quarantine themselves for 14 days upon entering the country. Israel announced that non-urgent court activity would be frozen. Israel Government cooperated with ISA to track the movements of infected citizens two weeks prior to getting tested positive and to inform them to self-isolate for 14 days through text messages. This method pre-identified 500 citizens who then tested positive.
+  
+  The decreasing trend of active cases stopped and started showing a 300% increase. Hence the country is now battling the second wave though it is not in complete lockdown. Israel has now reimposed some coronavirus restrictions, though it has yet to go back into full lockdown. The schools had been closed again also bars, clubs and event halls were shut, restaurants limited to 20 people and all pools and gyms closed earlier this week.
+  
+ **Figure 1.2 - Health index of Israel**
+ 
+![](Israel_key indicators.png)
+
+
+   According to the health index of Israel, it has a density of 3.576 Doctors and 5.702 Nursing and Midwifery personnel per 1000 of population and a 27.9 per cent of its population are under 15 with a 3.8 per cent being over 60.
+
+
+
+## 2.Data Analysis
+
+
+####  * Visualisation of death, confirmed, recovered and  active cases
+
+  As the world continues to grapple with the coronavirus pandemic, Israel  is also working to curb the spread of COVID-19 among their populations.
+
+ **Figure 1.3 - Daily Confirmed cases**  
+   
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+
+fil_israel<- coronavirus %>% filter(country == "Israel")
+
+tbl_israel_corona <- as_tibble(fil_israel)
+
+a <- pivot_wider(tbl_israel_corona, names_from=type, values_from=cases) 
+
+corona_israel<- mutate(a, active_cases = confirmed-(recovered + death))
+
+p <- ggplot(corona_israel, aes(x=date, y=confirmed)) + geom_line() + ggtitle("Israel: Daily Covid-19 confirmed cases")
+p
+```
+
+  According to the above figure Israel had their first confirmed covid-19 patient in the second half of February, and has been maintaining it in a lower rate of increase till around third week. Then a spike shows that the cases increased instantly and then it has been reduced gradually till May in a step wise manner.
+  
+
+**Figure 1.4 - Daily Recovered cases** 
+
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+q <- ggplot(corona_israel, aes(x=date, y=recovered)) + geom_line() + ggtitle("Israel: Daily Covid-19 Recoveries")
+q
+```
+
+  The figure clearly shows that the recoveries of Israel had been increasing along with the time from March to mid-April and has been maintained around 600 level and 400 level with some fluctuations till May.
+
+
+**Figure 1.5 - Daily Death cases** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+r <- ggplot(corona_israel, aes(x=date, y=death)) + geom_line() + ggtitle("Israel: Daily Covid-19 Deaths")
+r
+```
+
+  It shows that first Covid-19 casualty has been reported in the second half of March and has been increased gradually till mid-April and has followed a decreasing trend till May.
+  
+
+
+**Figure 1.6 - Daily active cases** 
+
+```{r,comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+active_cases <- mutate(corona_israel, active_cases = replace(active_cases, which(active_cases < 0), NA))
+s <- ggplot(active_cases, aes(x=date, y=active_cases)) + geom_line() + ggtitle("Israel: Daily Covid-19 Active cases")
+s
+
+```
+
+
+  According to the figure the active cases has been increased gradually till Mid-March and had shown a spike above 1000 in the second half of March. After this spike the numbers have been fluctuating around 600 till the first quarter of April and has been decreased till mid-April.
+  
+**Figure 1.7 - Comparison of daily covid-19 cases**
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+israel_corona <- pivot_longer(active_cases, 6:9, names_to="case_type", values_to = "cases")
+
+ggplot(israel_corona, aes(x=date, y=cases, col=case_type, fill=case_type))+ geom_line (alpha=0.9) 
+```
+  
+  According to the above figure active and confirmed cases seem to overlap each other till the first quarter of April and with the gradual increase of recoveries and decrease of confirmed cases, the active cases seem to drop gradually. The death rate is maintained at a lower level.
+  
+  
+**Table 1.1  -  Summary of Covid-19 in Israel**
+  
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+corona_israel<- mutate(a, active_cases = confirmed-(recovered + death))
+d <- separate(corona_israel, date, into=c("year", "mo", "date"), sep="-") 
+
+library(tidyverse) 
+library(magrittr)
+
+r <- d %>% group_by(mo) %>% mutate(confirmed = as.double(confirmed)) %>% summarise((d = sum(confirmed))) 
+s <- d %>% group_by(mo) %>% mutate(death = as.double(death)) %>%summarise((d = sum(death)))
+t <- d %>% group_by(mo) %>% mutate(recovered = as.double(recovered)) %>% summarise((d = sum(recovered))) 
+u <- d %>% group_by(mo) %>% mutate(active_cases = as.double(active_cases)) %>% mutate(active_cases = replace(active_cases, which(active_cases < 0), NA)) %>%summarise((d = sum(active_cases)))
+
+first.tbl <- tibble(month = r$mo, confirmed = r$`(d = sum(confirmed))` , death =s$`(d = sum(death))`, recovered = t$`(d = sum(recovered))` , active_cases = u$`(d = sum(active_cases))`)
+
+library(knitr)
+isco <- kable(first.tbl, caption = "Covid-19 cases" )    
+isco
+
+```
+
+
+**Figure 1.8 - Covid-19 in Israel**
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+isc <- first.tbl %>%  pivot_longer(2:5, names_to="case_type", values_to = "cases")
+isc[is.na(isc)] = 0
+
+ggplot(isc, aes(month, cases,col=case_type)) + geom_point(alpha = 0.8)
+
+```
+
+  The figure shows that the monthly totals of active cases, confirmed cases, deaths and recoveries. The months March and April shows strict increases and had been normalized in May.
+
+
+####  * Comparison with other countries
+
+
+##### Israel with Lebanon
+
+**Figure 1.9 - Visualisation of Lebanon and Israel**   
+ 
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+israel_lebanon_corona <- coronavirus %>% filter(country %in% c("Israel", "Lebanon"))
+
+plot_israel_lebanon <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+                                               fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+
+plot_israel_lebanon  + geom_point(data = israel_lebanon_corona, aes(x = long, y = lat), colour="red" , size= 1)
+```
+     
+  It shows that Israel is located to the south of Lebanon.  
+  
+**Figure 1.10 - Covied-19 cases in Israel and Lebanon**   
+  
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(ggpubr)
+
+fil_IL<- coronavirus %>% filter (country %in% c("Israel", "Lebanon"))
+
+tbl_IL_corona <- as_tibble(fil_IL)
+a <- pivot_wider(tbl_IL_corona, names_from=type, values_from=cases) 
+
+corona_IL<- mutate(a, active_cases = confirmed-(recovered + death))
+IL_grouped <- corona_IL %>% group_by(country)
+
+
+p <- ggplot(IL_grouped, aes(x=date, y=confirmed, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases")
+q <- ggplot(IL_grouped, aes(x=date, y=recovered, col=country)) + geom_line() + ggtitle("Daily Covid-19 recoveries")
+r <- ggplot(IL_grouped, aes(x=date, y=death, col=country)) + geom_line() + ggtitle("Daily Covid-19 deaths")
+
+
+active_cases <- mutate(IL_grouped, active_cases = replace(active_cases, which(active_cases < 0), NA))
+s <- ggplot(active_cases, aes(x=date, y=active_cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 active cases")
+
+ggarrange(p, q, r, s, ncol = 2, nrow = 2)
+```
+  
+ According to the above figure confirmed cases of Israel appear to be very high compared to Lebanon as well as recoveries, deaths and active cases.
+
+**Table 1.2  -  Summary of Covid-19 cases**
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+library(knitr)
+qq <- IL_grouped %>% summarise(confirmed=sum(confirmed), deaths=sum(death), recovered=sum(recovered), active=sum(active_cases))
+
+n <- qq %>% mutate(recovered_rate = recovered*100 / confirmed)
+ilc <- n %>% mutate(death_rate = deaths*100 / confirmed)
+
+kable(ilc[1:7], caption = "Covid cases in Israel and Lebanon")
+```
+
+
+**Figure 1.11 - Comparison of recovery and death rate** 
+
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+IL_C <- ilc %>% pivot_longer(6:7, names_to="type", values_to = "rate")
+ggplot(IL_C, aes(x = type, y = rate,col = country))+ geom_point(alpha=0.6)
+
+
+```
+
+ 
+  According to the above figure the death rate of Israel is near half of that of Lebanon, while the recovery rate is nearly a one third of Lebanon.
+
+##### Israel with Syria
+
+**Figure 1.12 - Visualisation of Syria and Israel** 
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+israel_syria_corona <- coronavirus %>% filter(country %in% c("Israel", "Syria"))
+
+plot_israel_syria <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+                                               fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+
+plot_israel_syria  + geom_point(data = israel_syria_corona, aes(x = long, y = lat), colour="red" , size= 1)
+
+```
+
+   It shows that Israel is located to the south of Syria. 
+  
+**Figure 1.13 - Covied-19 cases in Israel and Syria**  
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(ggpubr)
+
+fil_IS<- coronavirus %>% filter (country %in% c("Israel", "Syria"))
+
+tbl_IS_corona <- as_tibble(fil_IS)
+
+a <- pivot_wider(tbl_IS_corona, names_from=type, values_from=cases) 
+
+corona_IS<- mutate(a, active_cases = confirmed-(recovered + death))
+IS_grouped <- corona_IS %>% group_by(country)
+IS_grouped[is.na(IS_grouped)] = 0
+
+
+p <- ggplot(IS_grouped, aes(x=date, y=confirmed, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases")
+q <- ggplot(IS_grouped, aes(x=date, y=recovered, col=country)) + geom_line() + ggtitle("Daily Covid-19 recoveries")
+r <- ggplot(IS_grouped, aes(x=date, y=death, col=country)) + geom_line() + ggtitle("Daily Covid-19 deaths")
+active_cases <- mutate(IS_grouped, active_cases = replace(active_cases, which(active_cases < 0), NA))
+s <- ggplot(active_cases, aes(x=date, y=active_cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 active cases")
+
+ggarrange(p, q, r, s, ncol = 2, nrow = 2)
+```
+
+
+   
+  According to the above figure Israel has a higher confirmed case rate compared to Syria as well as recoveries, deaths and active cases rates. Syria almost shows a constant rate compared to the scale of Israel.
+
+
+**Table 1.3  -  Summary of Covid-19 cases**
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(knitr)
+qq <- IS_grouped %>% summarise(confirmed=sum(confirmed), deaths=sum(death), recovered=sum(recovered), active=sum(active_cases))
+
+n <- qq %>% mutate(recovered_rate = recovered*100 / confirmed)
+si <- n %>% mutate(death_rate = deaths*100 / confirmed)
+
+kable(si[1:7], caption = "Covid cases in Israel and Syria")
+```
+
+
+**Figure 1.14 - Comparison of recovery and death rate** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+IS_C <- si %>% pivot_longer(6:7, names_to="type", values_to = "rate")
+ggplot(IS_C, aes(x = type, y = rate,col = country))+ geom_point(alpha=0.6)
+
+```
+
+
+  According to the above figure the death rate of Syria is nearly four times of that of Israel, while the recovery rate is nearly similar.
+  
+
+##### Israel with Jordan
+
+**Figure 1.15 - Visualisation of Jordan and Israel** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+israel_jordan_corona <- coronavirus %>% filter(country %in% c("Israel", "Jordan"))
+
+plot_israel_jordan <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+                                               fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+plot_israel_jordan  + geom_point(data = israel_jordan_corona, aes(x = long, y = lat), colour="red" , size= 1)
+
+```
+
+
+It shows that Jordan is located to the south east of Israel.
+
+
+**Figure 1.16 - Covied-19 cases in Israel and Jordan** 
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+library(coronavirus)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(ggpubr)
+
+fil_IJ<- coronavirus %>% filter (country %in% c("Israel", "Jordan"))
+
+tbl_IJ_corona <- as_tibble(fil_IJ)
+a <- pivot_wider(tbl_IJ_corona, names_from=type, values_from=cases) 
+
+corona_IJ<- mutate(a, active_cases = confirmed-(recovered + death))
+IJ_grouped <- corona_IJ %>% group_by(country)
+IJ_grouped[is.na(IJ_grouped)] = 0
+
+p <- ggplot(IJ_grouped, aes(x=date, y=confirmed, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases")
+q <- ggplot(IJ_grouped, aes(x=date, y=recovered, col=country)) + geom_line() + ggtitle("Daily Covid-19 recoveries")
+r <- ggplot(IJ_grouped, aes(x=date, y=death, col=country)) + geom_line() + ggtitle("Daily Covid-19 deaths")
+
+
+active_cases <- mutate(IJ_grouped, active_cases = replace(active_cases, which(active_cases < 0), NA))
+s <- ggplot(active_cases, aes(x=date, y=active_cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 active cases")
+
+ggarrange(p, q, r, s, ncol = 2, nrow = 2)
+
+```
+
+   According to the above figure Israel has a very higher confirmed case count compared to Jordan as well as recoveries, deaths and active cases counts. Jordan almost shows a constant rate with small fluctuations compared to the scale of Israel. 
+
+**Table 1.4  -  Summary of Covid-19 cases**
+
+```{r,  comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+library(knitr)
+qq <- IJ_grouped %>% summarise(confirmed=sum(confirmed), deaths=sum(death), recovered=sum(recovered), active=sum(active_cases))
+
+n <- qq %>% mutate(recovered_rate = recovered*100 / confirmed)
+ij <- n %>% mutate(death_rate = deaths*100 / confirmed)
+
+kable(ij[1:7], caption = "Covid cases in Israel and Jordan")
+```
+
+
+**Figure 1.17 - Comparison of recovery and death rate** 
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+IJ_C <- ij %>% pivot_longer(6:7, names_to="type", values_to = "rate")
+ggplot(IJ_C, aes(x = type, y = rate,col = country))+ geom_point(alpha=0.9)
+```
+
+
+   According to the above figure  the death rate is almost similar in Israel and Jordan, and the recovered rate is higher than that of Jordan.
+
+##### Israel with Egypt
+
+**Figure 1.18 - Visualisation of Egypt and Israel** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+israel_egypt_corona <- coronavirus %>% filter(country %in% c("Israel", "Egypt"))
+
+plot_israel_egypt <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+                                               fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+plot_israel_egypt  + geom_point(data = israel_egypt_corona, aes(x = long, y = lat), colour="red" , size= 1)
+```
+
+
+   It shows that Egypt is located to the south of Israel and is bounded by the Mediterranean Sea.
+
+**Figure 1.19 - Covied-19 cases in Israel and Egypt** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(ggpubr)
+
+fil_IE<- coronavirus %>% filter (country %in% c("Israel", "Egypt"))
+
+tbl_IE_corona <- as_tibble(fil_IE)
+a <- pivot_wider(tbl_IE_corona, names_from=type, values_from=cases) 
+
+corona_IE<- mutate(a, active_cases = confirmed-(recovered + death))
+IE_grouped <- corona_IE %>% group_by(country)
+IE_grouped[is.na(IE_grouped)] = 0
+
+p <- ggplot(IE_grouped, aes(x=date, y=confirmed, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases")
+q <- ggplot(IE_grouped, aes(x=date, y=recovered, col=country)) + geom_line() + ggtitle("Daily Covid-19 recoveries")
+r <- ggplot(IE_grouped, aes(x=date, y=death, col=country)) + geom_line() + ggtitle("Daily Covid-19 deaths")
+
+active_cases <- mutate(IE_grouped, active_cases = replace(active_cases, which(active_cases < 0), NA))
+s <- ggplot(active_cases, aes(x=date, y=active_cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 active cases")
+
+ggarrange(p, q, r, s, ncol = 2, nrow = 2)
+```
+
+   According to the above figure the confirmed corona cases has been strictly increased in Israel in April and had been higher than that of Egypt until the mid of May, and then the active cases of Egypt has taken a rise. The recoveries are higher in Israel compared to Egypt and Deaths has been fluctuated around a similar behavior until mid-April and had been significantly lowered in Israel. The active cases have been low in Egypt compared to Israel till mid of April and has increased towards May.  
+
+**Table 1.5  -  Summary of Covid-19 cases**
+
+```{r,  comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+library(knitr)
+qq <- IE_grouped %>% summarise(confirmed=sum(confirmed), deaths=sum(death), recovered=sum(recovered), active=sum(active_cases))
+
+n <- qq %>% mutate(recovered_rate = recovered*100 / confirmed)
+ie <- n %>% mutate(death_rate = deaths*100 / confirmed)
+
+kable(ie[1:7], caption = "Covid cases in Israel and Egypt")
+```
+
+
+**Figure 1.20 - Comparison of recovery and death rate** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+IE_C <- ie %>% pivot_longer(6:7, names_to="type", values_to = "rate")
+ggplot(IE_C, aes(x = type, y = rate,col = country))+ geom_point(alpha=0.6)
+```
+ 
+  According to the above figure the death rate of Egypt is nearly four times larger than that of Israel. The recovered rate of Egypt is nearly 3 times lower than that of Israel.
+
+##### Israel with China
+
+**Figure 1.21 - Visualisation of China and Israel** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+israel_chi_corona <- coronavirus %>% filter(country %in% c("Israel", "China"))
+
+plot_israel_chi <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+                                               fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+plot_israel_chi  + geom_point(data = israel_chi_corona, aes(x = long, y = lat), colour="red" , size= 1)
+
+```
+
+  It shows that China is located is Eastern Asia, to the east from Israel.
+  
+  
+**Figure 1.22 - Covied-19 cases in Israel and China** 
+
+```{r, comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+
+library(coronavirus)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(ggpubr)
+
+fil_Ic<- coronavirus %>% filter (country %in% c("Israel", "China"))
+
+tbl_Ic_corona <- as_tibble(fil_Ic)
+a <- pivot_wider(tbl_Ic_corona, names_from=type, values_from=cases) 
+
+corona_Ic<- mutate(a, active_cases = confirmed-(recovered + death))
+Ic_grouped <- corona_Ic %>% group_by(country)
+Ic_grouped[is.na(Ic_grouped)] = 0
+mutate(Ic_grouped, recovered = replace(recovered, which(recovered < 0), NA))
+
+p <- ggplot(Ic_grouped, aes(x=date, y=confirmed, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases")
+q <- ggplot(Ic_grouped, aes(x=date, y=recovered, col=country)) + geom_line() + ggtitle("Daily Covid-19 recoveries")
+r <- ggplot(Ic_grouped, aes(x=date, y=death, col=country)) + geom_line() + ggtitle("Daily Covid-19 deaths")
+
+
+active_cases <- mutate(Ic_grouped, active_cases = replace(active_cases, which(active_cases < 0), NA))
+s <- ggplot(active_cases, aes(x=date, y=active_cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 active cases")
+
+ggarrange(p, q, r, s, ncol = 2, nrow = 2)
+```
+
+
+  This shows that Israel case counts looks almost constant when compared with the china scale. China had a peak in confirmed cases in February and one in recoveries in March.
+ 
+ 
+**Table 1.6  -  Summary of Covid-19 cases**
+
+```{r,  comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+library(knitr)
+qq <- Ic_grouped %>% summarise(confirmed=sum(confirmed), deaths=sum(death), recovered=sum(recovered), active=sum(active_cases))
+
+n <- qq %>% mutate(recovered_rate = recovered*100 / confirmed)
+ic <- n %>% mutate(death_rate = deaths*100 / confirmed)
+
+kable(ic[1:7], caption = "Covid cases in Israel and China")
+```
+
+**Figure 1.23 - Comparison of recovery and death rate** 
+```{r,  comment=NA,  message=FALSE, echo=FALSE, warning=FALSE}
+Ic_C <- ic %>% pivot_longer(6:7, names_to="type", values_to = "rate")
+ggplot(Ic_C, aes(x = type, y = rate,col = country))+ geom_point(alpha=0.9)
+```
+
+  It shows that the death rate of Israel is almost 4 times lower than that of china and the recovery rate of china is nearly 1.3 times higher than that of Israel.
+  
+  
+## 3.Conclusions and Discussion
+   
+   Although Israel had relatively large confirmed cases in numbers compared Jordan, Syria and Lebanon, the rate of recoveries has been higher compared to that of the other three countries. The death rate has also been favorable in Israel compared to Jordan, Syria and Lebanon which implies that Israel is noticeably managing covid19 well. although without a clear idea on the population and population density these implications are only based upon the fractions taken compared to the number of confirmed cases.
+   
+## 4. References
+  https://hellor.netlify.app/schedule/
+  https://www.r-graph-gallery.com/239-custom-layout-legend-ggplot2.html

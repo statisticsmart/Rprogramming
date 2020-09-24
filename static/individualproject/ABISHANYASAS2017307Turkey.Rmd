@@ -1,0 +1,329 @@
+---
+title: "Covid-19"
+author: "S.Abishanya"
+date: "July 18, 2020"
+output: html_document
+---
+
+<style>
+body {
+text-align:justify}
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, command = NA, message = FALSE, warning = FALSE,out.width = "50%")
+```
+
+# **COVID-19 pandemic in Turkey**
+###location 
+
+```{r,out.width="80%"}
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+Turkey_corona <- coronavirus %>% filter(country == "Turkey")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data =Turkey_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+
+```
+
+### Climate condition
+Although Turkey is situated in a geographical location where climatic conditions are quite temperate  diverse nature of the landscape, and the existence in particular of the mountains that run parallel to the coasts, result in significant differences in climatic conditions from one region to the other. While the coastal areas enjoy milder climates, the inland Anatolian plateau experiences extremes of hot summers and cold winters with limited rainfall.
+   Turkey receives most of the rainfall in the winter season. In this season, mean temperature usually is below 5 and there is no too much evaporation. But summer rainfall is very limited and could not be enough to remove water deficit resulted from increased temperature and evaporation. 
+The Aegean and Mediterranean coasts have cool, rainy winters and hot, moderately dry summers. Annual precipitation in those areas varies from 580 to 1,300 millimeters, depending on location. The Black Sea coast receives the greatest amount of rainfall. The eastern part of that receives 2,200 millimeters annually and is the only region of Turkey that receives rainfall throughout the year.
+
+### Lockdown status in Turkey
+
+   The disease was confirmed to have reached Turkey on 11 March 2020, after a man who had returned to Turkey from Europe, tested positive.The first death due to COVID-19 in the country occurred on 15 March 2020 and by 1 April, it was confirmed that COVID-19 had spread all over Turkey On 14 April 2020,On 1 February, Turkey announced its decision to stop all the flights from China.
+   One of the first measures taken by the government was the declaration of curfew for the 65-year-old and older group, which is likely to be the most affected by the virus. This ban was recently extended to cover the under-20 group. Limited to the age range of 18-20, those who work in public institutions or in private sector that have not switched to distance working and some seasonal agricultural workers are exempted from this prohibition.
+Additionally, as of March 29, 2020, passengers will no longer be able to travel with airlines and busses without a travel permit. This statement was expanded to a ban on entry and exit for all vehicles, including personal vehicles, to 30 provinces with metropolitan status and Zonguldak province, with a memorandum issued by the Ministry of Interior. Exemptions of this prohibition include those who were discharged from the hospital where they were treated, those who travelled to attend the funeral of their first-degree relatives and those who came to the city in the last 5 days and have no accommodation, those who completed military service, and those who were released from prisons.
+
+   
+### Action taken by goverment
+##### Education
+On 8 March, the Ministry of National Education announced that they were using special disinfectants to keep schools clean against the virus threat after that all schools in Turkey would be closed starting from 16 March 2020 for a week.
+The remote classes for primary, secondary and high schools started on 23 March 2020 on TRT EBA TV, a channel created through the collaboration of TRT and the Ministry of Education
+
+#####Travel Restriction
+Turkey closed all board gates and announced that pavilions, discotheques, bars and night clubs would be closed temporarily starting from 10:00 on 16 March, On 16 March announced a nationwide ban on prayer gatherings in mosques, including Friday prayers, due to the pandemic and temporarily closing all public gathering places such as cafes, gyms, Internet cafes and movie theaters, except shops and restaurants not offering music, starting midnight the following day
+
+#####Economics
+Turkey goverment announced stated that public banks will deliver pensions to retirees above the age of 76 to their homes, with the minimum amount of payment for retired people being ???1,500.The Banks Association of Turkey also sent a notice to different banks across the country and limited their working hours to 12:00 pm to 5:00 pm, which went into effect on 23 March 2020.Some of the economic measures taken by the Turkish government are; describing the pandemic as a force majeure event as per public procurement contracts, postponement of general assembly meetings, limitations on dividend distribution, flexibility on rent payments, modification on short time working and compensatory work rules, export control on disinfectants, medical diagnostic kits, masks and intensive care equipment.
+  
+### summary of COVID 19 in Turkey
+   
+ | Type | Cases|
+ | ---| ---|
+ | confirmed cases | 141475  |
+ | death | 3894| 
+ | recovered | 98889|
+```{r}
+
+confirmed_Turkey_corona <- Turkey_corona %>% filter(type=="confirmed")
+death_Turkey_corona <- Turkey_corona %>% filter(type=="death")
+recovered_Turkey_corona <- Turkey_corona %>% filter(type=="recovered")
+
+confirmed_cases <- select(confirmed_Turkey_corona,cases)
+Total_confirm_cases <- sum(confirmed_cases)
+#Total_confirm_cases
+
+death_cases <- select(death_Turkey_corona,cases)
+Total_death_cases <- sum(death_cases)
+#Total_death_cases
+
+recovered_cases <- select(recovered_Turkey_corona,cases)
+Total_recovered_cases <- sum(recovered_cases)
+#Total_recovered_cases
+```
+
+### Daily confirmed cases in Turkey
+```{r}
+ggplot(confirmed_Turkey_corona, aes(x=date, y=cases)) + geom_line(size=1, color = "red") + ggtitle("Turkey: Daily Covid-19 comfirmed")
+#maximum_confirm <- confirmed_Turkey_corona %>% filter(cases ==  max(confirmed_Turkey_corona$cases))
+
+```
+
+Middle of the March confirmed cases ofcovid 19 founded in Turkey,up to middle of April corona virus effect increased and after April it became decreasing, maximum number (5138 cases) of confirm cases founded on 11th of April 2020 and in April month Tukey also highly effected by corona virus.
+
+### Daily death cases in Turkey
+```{r}
+ggplot(death_Turkey_corona, aes(x=date, y=cases)) + geom_line(size=1, color = "red") + ggtitle("US: Daily Covid-19 death")
+ #maximum_death <-death_Turkey_corona %>% filter(cases ==  max(death_Turkey_corona$cases))
+```
+
+On 15 first covid-19 death founded in Turkey, death rate increased up to middle of April and it decreased, high deaths founded 3rd week of April.maximun number of death (127 cases) founded on 19th of April 2020. 
+
+### Daily recovered cases in Turkey
+```{r}
+ggplot(recovered_Turkey_corona, aes(x=date, y=cases)) + geom_line(size=1, color = "red") + ggtitle("US: Daily Covid-19 recovered")
+#maximum_recovered <-recovered_Turkey_corona %>% filter(cases ==  max(recovered_Turkey_corona$cases))
+```
+
+After the April month only recovered cases incresed and end of the April most of the patients recovered, After May first week recovered cases also slightly decreased.maximun number of recovered cases (5231 cases) founded on 29th of April 2020.
+
+### Daily active cases in Turkey
+```{r}
+
+
+cumsum_confirmed_cases <- confirmed_Turkey_corona %>% mutate(cumsum((cases)))
+#cumsum_confirmed_cases
+
+cumsum_death_cases <- death_Turkey_corona %>% mutate(cumsum((cases)))
+#cumsum_death_cases
+
+cumsum_recovered_cases <- recovered_Turkey_corona %>% mutate(cumsum((cases)))
+#cumsum_recovered_cases
+
+Turkey_corona1 <- left_join(cumsum_confirmed_cases,cumsum_death_cases , by = "date") %>% left_join(cumsum_recovered_cases, by = "date")
+
+active_cases <- Turkey_corona1 %>% mutate(active =`cumsum((cases)).x` - `cumsum((cases)).y` - `cumsum((cases))`)
+#tail(active_cases)
+ggplot(active_cases, aes(x=date, y=active)) + geom_line(size=1, color = "purple") + ggtitle("US: Daily Covid-19 active cases")
+
+
+
+```
+
+Daily active cases increased during April month, that mean in April month covid-19 highly effected in Turkey.
+
+### Turkey vs China
+#### daily confirmed cases
+
+```{r}
+confirmed_china_corona <- coronavirus %>% filter(country == "China" & type == "confirmed")
+confirmed_china_coronaCases <- confirmed_china_corona %>% group_by(date) %>% summarise(a = sum(cases))
+Turkey_China_confirmed <- data.frame(date = confirmed_Turkey_corona$date,Turkey = confirmed_Turkey_corona$cases, China = confirmed_china_coronaCases$a)
+Turkey_China_confirmed_cases <- pivot_longer(Turkey_China_confirmed, c(2,3),"country", "values")
+ggplot(Turkey_China_confirmed_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 confirmed cases of Turkey and China")
+```
+
+compared confirmed cases with China covid-19 confirmed cases,when china covid-19 cases decreased that time Turkey founded covid-19 increasing in their country.
+
+#### daily recovered cases
+```{r}
+recovered_china_corona <- coronavirus %>% filter(country == "China" & type == "recovered")
+recovered_china_coronaCases <- recovered_china_corona %>% group_by(date) %>% summarise(b = sum(cases))
+Turkey_China_recovered <- data.frame(date = recovered_Turkey_corona$date,Turkey = recovered_Turkey_corona$cases, China = recovered_china_coronaCases$b)
+Turkey_China_recovered_cases <- pivot_longer(Turkey_China_recovered, c(2,3),"country", "value")
+ggplot(Turkey_China_recovered_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 recovered cases of Turkey and China")
+
+```
+
+Compared the recovered rate with Covid-19 recovery rate,recovery rate high china when the Turkey found confirmed covid-19 cases and after April it became high compared with China recovery patients rate.
+
+#### daily death cases
+```{r}
+death_china_corona <- coronavirus %>% filter(country == "China" & type == "death")
+death_china_coronaCases <- death_china_corona %>% group_by(date) %>% summarise(c = sum(cases))
+Turkey_China_death <- data.frame(date = death_Turkey_corona$date,Turkey = death_Turkey_corona$cases, China = death_china_coronaCases$c)
+Turkey_China_death_cases <- pivot_longer(Turkey_China_death, c(2,3),"country", "value")
+ggplot(Turkey_China_death_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 death cases of Turkey and China")
+#max(death_china_corona$date)
+
+```
+
+When the death rate high in China that time there was no confirmed founded in Turkey,but end of the March death rate was approximately equal in both countries and after few days Turkey Covid-19 death rate increasesd, On 16 0f April 2020 death cases is maximum in China.
+
+### Turkey vs US
+#### daily confirmed cases
+
+```{r}
+confirmed_US_corona <- coronavirus %>% filter(country == "US" & type == "confirmed")
+Turkey_US_confirmed <- data.frame(date = confirmed_Turkey_corona$date,Turkey = confirmed_Turkey_corona$cases, US = confirmed_US_corona$cases)
+Turkey_US_confirmed_cases <- pivot_longer(Turkey_US_confirmed, c(2,3),"country", "values")
+ggplot(Turkey_US_confirmed_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 confirmed cases of Turkey and US")
+
+```
+
+Confim cases in Turkey is low when compared with USA.USA confirmed the covid-19 cases before the Turkey but USA daily confirm cases high.
+
+#### daily recovered cases
+```{r}
+recovered_US_corona <- coronavirus %>% filter(country == "US" & type == "recovered")
+Turkey_US_recovered <- data.frame(date = recovered_Turkey_corona$date,Turkey = recovered_Turkey_corona$cases, US = recovered_US_corona$cases)
+Turkey_US_recovered_cases <- pivot_longer(Turkey_US_recovered, c(2,3),"country", "values")
+ggplot(Turkey_US_recovered_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 recovered cases of Turkey and US")
+```
+
+ Daily recovered cases in both cases approximatly equal but USA was slightly high. 
+
+#### daily death cases
+
+```{r}
+
+death_US_corona <- coronavirus %>% filter(country == "US" & type == "death")
+Turkey_US_death <- data.frame(date = death_Turkey_corona$date,Turkey = death_Turkey_corona$cases, US = death_US_corona$cases)
+Turkey_US_death_cases <- pivot_longer(Turkey_US_death, c(2,3),"country", "values")
+ggplot(Turkey_US_death_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 death cases of Turkey and US")
+
+```
+
+Daily death rate in Turkey was low when compared with USA death rate,it because of USA daily confirmed cases were high when compared with Turkey.
+
+### Turkey vs Syria
+
+```{r}
+confirmed_Syria_corona <- coronavirus %>% filter(country == "Syria" & type == "confirmed")
+Turkey_Syria_confirmed <- data.frame(date = confirmed_Turkey_corona$date,Turkey = confirmed_Turkey_corona$cases, Syria = confirmed_Syria_corona$cases)
+Turkey_Syria_confirmed_cases <- pivot_longer(Turkey_Syria_confirmed, c(2,3),"country", "values")
+ggplot(Turkey_Syria_confirmed_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 confirmed cases of Turkey and Syria")
+
+recovered_Syria_corona <- coronavirus %>% filter(country == "Syria" & type == "recovered")
+Turkey_Syria_recovered <- data.frame(date = recovered_Turkey_corona$date,Turkey = recovered_Turkey_corona$cases, Syria = recovered_Syria_corona$cases)
+Turkey_Syria_recovered_cases <- pivot_longer(Turkey_Syria_recovered, c(2,3),"country", "values")
+ggplot(Turkey_Syria_recovered_cases, aes(x=date, y=log(value),colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 recovered cases of Turkey and Syria")
+
+death_Syria_corona <- coronavirus %>% filter(country == "Syria" & type == "death")
+Turkey_Syria_death <- data.frame(date = death_Turkey_corona$date,Turkey = death_Turkey_corona$cases, Syria = death_Syria_corona$cases)
+Turkey_Syria_death_cases <- pivot_longer(Turkey_Syria_death, c(2,3),"country", "values")
+ggplot(Turkey_Syria_death_cases, aes(x=date, y=log(value), colour = country)) + geom_line(size=1) + ggtitle("US: Daily Covid-19 death cases of Turkey and Syria")
+```
+
+Syria isone of the nearest country to Turkey but covid-19 cases were very low when we compared with Turkey, compared with Syria daily confirmed cases, death cases and recovered cases were very high in Turkey. 
+
+### confirmed cases in the countries
+
+```{r,out.width="50%"}
+ #Total_confirm_cases
+ Total_confirm_cases_China <- select(confirmed_china_coronaCases,a) %>% summarise(s1 = sum(a)) 
+ #Total_confirm_cases_China
+ Total_confirm_cases_US<- select( confirmed_US_corona,cases) %>% summarise(s2 = sum(cases)) 
+# Total_confirm_cases_US
+ Total_confirm_cases_Syria<- select( confirmed_Syria_corona,cases) %>% summarise(s3 = sum(cases)) 
+ #Total_confirm_cases_Syria
+ confirmed <- tibble(country = c("Turkey", "China", "USA", "Sriya"),confirmCases = c(Total_confirm_cases ,    Total_confirm_cases_China, Total_confirm_cases_US, Total_confirm_cases_Syria ) )
+ #confirmed
+ ggplot(confirmed, aes(x= country, y = confirmCases, fill = country)) + geom_bar(stat="identity", width = 0.5) + ggtitle("comfirmed cases")
+  
+```
+
+When compared the total confirned cases with the countries,among the 4 countrie total confirmed cases in USA was very high and total confirmed cases in Syria was very low, when compared total confirmed cases in Turkey with other countries Total confirm cases in Turkey was higher than Syria, China and also lower than USA. 
+
+### death cases in the countries
+
+```{r,out.width="50%"}
+ # Total_death_cases
+ Total_death_cases_China <- select(death_china_coronaCases,c) %>% summarise(s1 = sum(c)) 
+ #Total_confirm_cases_China
+ Total_death_cases_US<- select( death_US_corona,cases) %>% summarise(s2 = sum(cases)) 
+# Total_death_cases_US
+ Total_death_cases_Syria<- select( death_Syria_corona,cases) %>% summarise(s3 = sum(cases)) 
+ #Total_death_cases_Syria
+ death <- tibble(country = c("Turkey", "China", "USA", "Sriya"),deathCases = c(Total_death_cases ,    Total_death_cases_China, Total_death_cases_US, Total_death_cases_Syria ) )
+ ggplot(death, aes(x= country, y = deathCases, fill = country)) + geom_bar(stat="identity",width = 0.5) +    ggtitle(" Total death cases")
+```
+
+When compared the total death cases with the countries,among the 4 countrie total death cases in USA was very high and total death cases in Syria was very low, when compared total death cases in Turkey with other countries Total death cases in Turkey was higher than Syria lower than USA.Total death cases  both Turkey and China was approximately equal.
+
+### recovered cases in the countries
+
+```{r, out.width="50%"}
+    #Total_recovered_cases
+ Total_recovered_cases_China <- select(recovered_china_coronaCases,b) %>% summarise(s1 = sum(b)) 
+ #Total_recovered_cases_China
+ Total_recovered_cases_US<- select( recovered_US_corona,cases) %>% summarise(s2 = sum(cases)) 
+# Total_recovered_cases_US
+ Total_recovered_cases_Syria<- select( recovered_Syria_corona,cases) %>% summarise(s3 = sum(cases)) 
+ #Total_recovered_cases_Syria
+ recovered <- tibble(country = c("Turkey", "China", "USA", "Sriya"),recoveredCases = c(Total_recovered_cases ,    Total_recovered_cases_China, Total_recovered_cases_US, Total_recovered_cases_Syria ) )
+ #recovered
+ ggplot(recovered, aes(x= country, y = recoveredCases, fill = country)) + geom_bar(stat="identity", width = 0.5) +ggtitle("recorvered")
+    
+
+```
+
+When compared the total recovered cases with the countries,among the 4 countrie total recovered cases in USA was very high and total recovered cases in Syria was very low, when compared total recovered cases in Turkey with other countries,Total recovered cases in Turkey was higher than Syria,China and lower than USA.
+
+### Discussion
+  This study contain data only on 22nd of January 2020 to 12th May 2020.I used log transformed value to compare Turkey with countries because the normal value did not clear difference.when compared with USA,Turkey covid-19 effect was somewhere it because of USA was a very large country compared Turkey.In the same time Syria is one of the nearest country to Turkey but in Syria covid-19 was not highly effected.China had province also therefore, I got sum of the cases for every date given in dataset then compared with China, Compare with China covid-19 cases were highly effected in Turkey.In Turkey total number of death cases was less than recovered cases therefore most of covid-19 patients were recoveed.
+ 
+  
+  
+  
+### conclusion
+   
+Turkey highly effected on April month by covid-19,Total number of confirm cases 141475, total number of death cases 3894 and total number of recovered cases 98889 it shows that death cases is low and majority of the patients recovered by the doctors.
+
+
+
+### References
+
+   1.	"Turkiye'deki Guncel Durum". Ministry of Health. 18 July 2020. Retrieved 18 July 2020.
+   2.  Jump up to:a b c "Turkey confirms first coronavirus patient, recently returned from Europe". Daily Sabah. 11            March 2020. Retrieved 11 March 2020.
+   3.	"Saglik Bakani Koca: Son 24 saatte 7 kisi hayatini kaybetti, 293 yeni vaka goruldu". Euronews. 23 March 2020.           Retrieved 24 March 2020.
+   4.	"Saglik Bakani Koca: Turkiye de 4.haftada vaka artis hizi dususe gecti." Anadolu Agency. 14 April 2020. Retrieved        10 May 2020.
+   5. "Turkey's public health system faces coronavirus pandemic". DW News. 7 May 2020. Retrieved 10 May 2020.
+   6. Reynolds, Matt (4 March 2020). "What is coronavirus and how close is it to becoming a pandemic?". Wired UK. ISSN        1357-0978. Archived from the original on 5 March 2020. Retrieved 5 March 2020.
+   7. "High consequence infectious diseases (HCID); Guidance and information about high consequence infectious diseases       and their management in England". GOV.UK. Archived from the original on 3 March 2020. Retrieved 17 March 2020.
+   8. Wintour, Patrick (23 February 2020). "Turkey and Pakistan close borders with Iran over coronavirus deaths". The         Guardian.
+   9. Congar, Kerem (10 April 2020). "Erdogan'dan Turk Konseyi'ne koronavirus mesaji: Bu surecten guclenerek cikacagiz".       Euronews.Retrieved 10 April 2020.
+  10. Yardimci,Tugba (14 April 2020)."Turkish politician dies due to coronavirus".Anadolu Agency.Retrieved 14 April           2020.
+
+
+
+
+

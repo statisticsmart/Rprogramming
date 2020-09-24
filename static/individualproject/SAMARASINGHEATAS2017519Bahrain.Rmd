@@ -1,0 +1,427 @@
+---
+title: "Bahrain: Coronavirus Pandemic"
+author: "Achini Samarasinghe"
+date: "7/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+
+```{r}
+
+library(magrittr)
+library(gapminder)
+library(tidyverse)
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(knitr)
+library(gridExtra)
+```
+# 1. Introduction
+Bahrain is a sovereign state in the Persian Gulf. The island nation comprises a small archipelago made up of 40 natural islands and an additional 51 artificial islands, centered around Bahrain Island which makes up around 83 percent of the country's landmass. The country is situated between the Qatar peninsula and the north eastern coast of Saudi Arabia.The total area of the country is about 780 square kilometers. 
+
+
+```{r}
+bahrain_corona <- coronavirus %>% filter(country == "Bahrain")
+```
+
+```{r}
+
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+```
+```{r}
+p +
+  geom_point(
+    data = bahrain_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+**Climate**
+
+The climate of the small archipelago of Bahrain is desert, mild in winter and very hot in summer.
+Basically, there are two main seasons.
+In winter, from December to February, temperatures are usually pleasant. The sun often shines, and the rains are scarce and sporadic.
+Summer in Bahrain is very hot and sunny, with highs around 34/36 °C in May and October and around 38/40 °C from June to September; lows are around 29/32 °C from June to September, and the humidity from the Persian Gulf makes the heat hard to bear. Moisture gradually increases over the summer.
+
+```{r}
+bahrain_temptreture <- data.frame(Month =c("Average high °C","Average  low °C"), Jan = c( "20°", "14°"), Feb = c("22°","15°"), Mar= c("25°", "18°"), Apr= c("30°", "22°"), May= c("35°", "27°"), Jun= c("38°", "29°"), Jul= c("39°", "31°"), Aug= c("39°", "31°"), Sep= c("37°", "29°"), Oct= c("34°", "26°"), Nov= c("28°", "21°"), Dec=c("23°", "17°"))
+
+kable(bahrain_temptreture, caption = "Table 1:Bahrain - Average temperatures")
+
+```
+
+The prevailing wind in Bahrain is the Shamal, which is moist and blows from the north-west, more frequently in the summer months. Another wind, hot and dry, the Qaws, can blow throughout the year, but preferably in spring.
+
+As mentioned, the climate in Bahrain is desert, in fact, just 70 millimeters (2.8 inches) of rain fall per year. Most of the rains occur in the winter months, however, they are irregular, and occasionally, there can be some intense rainfalls in winter, which, being concentrated in a few hours, can cause flash floods.
+
+**Lockdown status and Actions taken by the government**
+
+The COVID-19 pandemic in Bahrain is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).
+On 21 February, Bahrain confirmed the first COVID-19 cases, a school bus driver who came from Iran via Dubai.
+On 24 February Bahrain suspended all flights from Dubai Airport and Sharjah Airport for 48 hours.It also announced a travel ban on Iran.
+On 21 February Bahrain suspended all schools, nurseries and universities for two weeks to curb the spread of COVID-19 infection.
+On 26 February Civil Aviation Affairs in Bahrain announced that suspension of flights to and from Dubai International Airport was extended for an additional 48 hours. Flights to and from Iraq and Lebanon were suspended until further notice.The Health Ministry announced compulsory health check ups for all citizens and residents who traveled to Iran in February.
+
+On 16 March, the Ministry of Health reported that a 65-year-old Bahraini woman had died from the coronavirus, marking the first death in Bahrain and the Gulf from the disease. On the same day, the national coronavirus task force launched an appeal for volunteers to provide medical and administrative support during the crisis. The Civil Aviation Authority also announced a significant reduction of incoming flights to Bahrain.
+On 17 March, the Bahraini government unveiled an $11.39 billion stimulus package to support the country's economy during the pandemic, also covering water and electricity bills over the next 3 months.
+On 22 March, Bahrain banned public gatherings of more than 5 individuals with all gatherings in public parks and beaches being strictly prohibited - violators could be punished by a fine of 5000 Bahraini dinars and/or 3 years imprisonment.
+On 23 March, the National Taskforce for Combating the Coronavirus designated the Bahrain International Exhibition & Convention Centre as the main testing centre for COVID-19.
+On 24 March Bahrain banned the export of hand sanitizers and detergents for a period of 3 months owing to unprecedented domestic demand.The country's lower house of parliament approved an urgent proposal for a partial curfew from 6 pm to 5 am which is to be reviewed by the upper house of parliament. 
+On 25 March The executive committee of the Bahraini government announced the closure of all non-essential commercial enterprises from March 26 onward. Exceptions to this rule included supermarkets, banks, bakeries, and healthcare facilities. The closure would take effect at 7 pm on March 26 and last until 7 pm on April 9. All businesses will be allowed to re-open from April 9 to April 23.
+On 31 March, Bahrain's Information & eGovernment Authority released the BeAware Bahrain application on the Apple & Google Play store. The application uses GPS location data to alert users about nearby active cases of COVID-19 or locations visited by positive cases of the disease.
+
+On 7 April, the government announced a continuation of restrictions on public gatherings but permitted the opening of commercial enterprises from April 9 to April 23, provided that they follow hygiene guidelines. The government also announced that wearing face masks is mandatory while in public.
+On 8 April, the government announced that it would spend US$570 million to pay for the salaries of all Bahraini employees working in the private sector from April to June 2020.
+On 22 April, the Bahraini Government Executive Committee announced the extension of social-distancing protocols into the Islamic month of Ramadan, adding that the general public should refrain from attending public iftars, ghabgas, and majlises.
+On 23 April, the Ministry of Industry and Commerce opened a virtual mall website called mall.bh. The e-service was setup to enable more than 100 participating shops to sell goods and services to customers amid physical closures of stores.
+On 24 April, the country reported its largest single-day increase in new cases, with 301 confirmed cases of COVID-19 detected, 212 of whom are migrant workers.
+
+
+On 14 May, Bahrain's National Health Regulatory Authority issued permits to private hospitals to conduct COVID-19 testing on non-infected patients or asymptomatic cases for a fee.
+On 18 May, the country reported that total active cases exceeded 4,000 individuals and that the total number of tests stood at 236,828.
+
+
+# 2. Exploratory Data Analysis
+
+## 2.1. Visualisation of death, confirmed, recovered and active cases in Bahrain 
+
+
+
+
+```{r, fig.cap="Figure 1 : Daily Confirmed COVID-19 cases"}
+confirmed_bahrain_corona <- bahrain_corona %>% filter(type=="confirmed")
+ggplot(confirmed_bahrain_corona, aes(x=date, y=cases)) + geom_line() + geom_point() + labs(y ="confirmed cases")
+
+```
+
+Figure 1 shows the number of confirmed cases per day. Much of the COVID-19 data is presented as a daily count of new confirmed infections for the preceding 24 hours. The numbers of daily confirmed cases are not always increased with time. It goes up and down. On average the numbers of daily confirmed cases in May is higher than February.
+
+Daily counts tell us how fast the epidemic is growing, but they don’t tell us how big it has grown overall. For that, we need a graph of the total number of cases so far.
+
+```{r, fig.cap="Figure 2 : Total confirmed COVID-19 cases"}
+confirmed_cumulative_bahrain <- confirmed_bahrain_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+ggplot(confirmed_cumulative_bahrain, aes(x=date, y=cumulative_confirmed)) + geom_line() +geom_point() + labs(y ="confirmed cases")
+```
+Figure 2 shows that the total confirmed cases in Bahrain. This is called a cumulative graph, because each day’s data point is the sum total of all the previously confirmed cases. After the mid of the April graph shows that there is a steep upward slope. That means the diagnosis of many new cases in a short period of time.
+
+This is an excellent tool for visualising the full extent of the outbreak so far. But the danger is that it makes things look much worse than they are, because the total number of confirmed cases since the beginning of the outbreak can only go up, not down.
+
+```{r, fig.cap= "Figure 3 : Total and daily confirmed COVID-19 deaths"}
+death_bahrain_corona <- bahrain_corona %>% filter(type=="death")
+recovered_us_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+death_cumulative_bahrain <- death_bahrain_corona %>% mutate(cumulative_death = cumsum(cases))
+death_cumulative_bahrain <- data.frame(date=recovered_us_corona$date, daily_death_cases = death_bahrain_corona$cases, total_death_cases= death_cumulative_bahrain$cumulative_death)
+death_cumulative_bahrain<-  pivot_longer(death_cumulative_bahrain, c(2, 3), "cases", "value")
+ggplot(death_cumulative_bahrain, aes(x=date, y=value, colour=cases)) + geom_line() +geom_point() + theme(legend.title = element_blank()) + labs(y ="death cases")
+
+```
+Figure 3 shows that the total and daily confirmed COVID-19 death in Bahrain. During this period higher number of death cases in a single day is one. During this period total number of death cases are eight.
+
+
+
+```{r, fig.cap="Figure 4 :Total and daily recovered COVID-19 cases"}
+recovered_us_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+recovered_bahrain_corona <- bahrain_corona %>% filter(type == "recovered")
+recovered_cumulative_bahrain <- recovered_bahrain_corona %>% mutate(cumulative_recovered = cumsum(cases))
+recovered_cumulative_bahrain <- data.frame(date=recovered_us_corona$date, daily_recovered_cases = recovered_bahrain_corona$cases, total_recovered_cases= recovered_cumulative_bahrain$cumulative_recovered)
+recovered_cumulative_bahrain<-  pivot_longer(recovered_cumulative_bahrain, c(2, 3), "cases", "value")
+ggplot(recovered_cumulative_bahrain, aes(x=date, y= log(value), colour=cases)) + geom_line() +geom_point() + theme(legend.title = element_blank()) + labs(y ="recovered cases(logarithmic scale)")
+
+
+```
+Figure 4 shows that the total and daily recovered COVID-19 cases. The numbers of daily recovered cases are not always increased with time. It goes up and down. In March total recovered curve show that there is a steep upward slope. That means the total recovered cases are increasing at increasing rate. After the beginning of the April the total recovered cases are increasing at decreasing rate.
+
+```{r, fig.cap= "Figure 5 : Active COVID-19 cases"}
+bahrain_corona_pivot_wider <-bahrain_corona %>% pivot_wider(names_from=type,values_from=cases)
+bahrain_corona_active <- bahrain_corona_pivot_wider %>% mutate(cumulative_confirmed = cumsum(confirmed), cumulative_recovered = cumsum(recovered), cumulative_death = cumsum(death), active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+ggplot(bahrain_corona_active, aes(x= date, y= active_cases)) + geom_line() + geom_point() + labs(y ="active cases")
+
+
+```
+Figure 5 shows that the number of active COVID-19 cases in Bahrain. By removing deaths and recoveries from total cases, we get "currently infected cases" or "active cases".According to the graph the active COVID-19 cases are increased with time. But at some points suddenly the active cases are decreased. After that again active cases are increased in the previous way. After the may there is a steep upward slope. That means the active cases are increasing at increasing rate.
+
+
+
+
+
+## 2.2.	Comparison with Neighbouring countries
+
+Bahrain is situated between the Qatar peninsula and the north eastern coast of Saudi Arabia. Bahrain is the one of the Gulf Cooperation Council (GCC) country. Saudi Arabia, Kuwait and Qatar are the members of the Gulf Cooperation Council (GCC).
+
+
+```{r}
+bahrain_corona_pivot_wider <-bahrain_corona %>% pivot_wider(names_from=type,values_from=cases)
+bahrain_corona_active <- bahrain_corona_pivot_wider %>% mutate(cumulative_confirmed = cumsum(confirmed), cumulative_recovered = cumsum(recovered), cumulative_death = cumsum(death), active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+bahrain_corona_active <- bahrain_corona_active[c(112), ]
+bahrain_corona_table <- select(bahrain_corona_active, -c(date, province, lat, long, confirmed, death, recovered))
+#bahrain_corona_table <- select(bahrain_corona_table, -c(date))
+bahrain_corona_table <- bahrain_corona_table %>% mutate(total= cumulative_recovered + cumulative_death + active_cases)
+bahrain_corona_table <- bahrain_corona_table %>% mutate(active_cases_percentage= (active_cases/total)*100, recovered_cases_perecentage= (cumulative_recovered/total)*100, death_cases_percentage= (cumulative_death/total)*100)
+
+bahrain_corona_table<- bahrain_corona_table %>% pivot_longer(2:9, names_to="type", values_to = "Bahrain")
+
+
+kuwait_corona <- coronavirus %>% filter(country== "Kuwait")
+kuwait_corona_pivot_wider <-kuwait_corona %>% pivot_wider(names_from=type,values_from=cases)
+kuwait_corona_active <- kuwait_corona_pivot_wider %>% mutate(cumulative_confirmed = cumsum(confirmed), cumulative_recovered = cumsum(recovered), cumulative_death = cumsum(death), active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+kuwait_corona_active <- kuwait_corona_active[c(112), ]
+kuwait_corona_table <- select(kuwait_corona_active, -c(date, province, lat, long, confirmed, death, recovered,recovered))
+kuwait_corona_table <- kuwait_corona_table %>% mutate(total= cumulative_recovered + cumulative_death + active_cases)
+kuwait_corona_table <-kuwait_corona_table %>% mutate(active_cases_percentage= (active_cases/total)*100, recovered_cases_perecentage= (cumulative_recovered/total)*100, death_cases_percentage= (cumulative_death/total)*100)
+
+kuwait_corona_table <- kuwait_corona_table %>% pivot_longer(2:9, names_to="type", values_to = "kuwait ")
+
+qatar_corona <- coronavirus %>% filter(country== "Qatar")
+qatar_corona_pivot_wider <-qatar_corona %>% pivot_wider(names_from=type,values_from=cases)
+qatar_corona_active <- qatar_corona_pivot_wider %>% mutate(cumulative_confirmed = cumsum(confirmed), cumulative_recovered = cumsum(recovered), cumulative_death = cumsum(death), active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+qatar_corona_active <- qatar_corona_active[c(112), ]
+qatar_corona_table <- select(qatar_corona_active, -c(date, province, lat, long, confirmed, death, recovered,recovered))
+
+qatar_corona_table <- qatar_corona_table %>% mutate(total= cumulative_recovered + cumulative_death + active_cases)
+qatar_corona_table <-qatar_corona_table %>% mutate(active_cases_percentage= (active_cases/total)*100, recovered_cases_perecentage= (cumulative_recovered/total)*100, death_cases_percentage= (cumulative_death/total)*100)
+
+qatar_corona_table <- qatar_corona_table %>% pivot_longer(2:9, names_to="type", values_to = "Qatar")
+
+
+
+
+saudi_corona <- coronavirus %>% filter(country== "Saudi Arabia")
+saudi_corona_pivot_wider <-saudi_corona %>% pivot_wider(names_from=type,values_from=cases)
+saudi_corona_active <- saudi_corona_pivot_wider %>% mutate(cumulative_confirmed = cumsum(confirmed), cumulative_recovered = cumsum(recovered), cumulative_death = cumsum(death), active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+saudi_corona_active <-saudi_corona_active[c(112), ]
+
+saudi_corona_table <- select(saudi_corona_active, -c(date, province, lat, long, confirmed, death, recovered,recovered))
+
+saudi_corona_table <- saudi_corona_table %>% mutate(total= cumulative_recovered + cumulative_death + active_cases)
+saudi_corona_table <-saudi_corona_table %>% mutate(active_cases_percentage= (active_cases/total)*100, recovered_cases_perecentage= (cumulative_recovered/total)*100, death_cases_percentage= (cumulative_death/total)*100)
+
+
+saudi_corona_table <- saudi_corona_table %>% pivot_longer(2:9, names_to="type", values_to = "Saudi Arabia")
+
+as <- data.frame(type=saudi_corona_table$type, Bahrain= bahrain_corona_table$Bahrain, Qatar= qatar_corona_table$Qatar, Kuwait= kuwait_corona_table$`kuwait `, Saudi_Arabia= saudi_corona_table$`Saudi Arabia` )
+as <- as %>% mutate_at(2:5, round, 3)
+as <-as %>%pivot_longer(2:5, names_to="country", values_to = "cases")
+as<- as %>% pivot_wider(names_from = type, values_from = cases)
+as <- as %>% mutate_at(6:8, round, 3)  
+as <- select(as, -c(cumulative_confirmed))
+
+kable(as, caption = "Table 2 : The status of COVID-19 in Bahrain, Qatar, Kuwait and Saudi Arabia as of 12 May 2020.")
+
+```
+
+```{r, fig.cap= "Figure 6: Total confirmed COVID-19 cases in Bahrain, Qatar, Saudi Arabia and kuwait"}
+confirmed_qatar_corona <- coronavirus %>% filter(country=="Qatar" & type=="confirmed")
+confirmed_kuwait_corona <- coronavirus %>% filter(country=="Kuwait" & type=="confirmed")
+confirmed_saudi_arabia_corona <- coronavirus %>% filter(country=="Saudi Arabia" & type=="confirmed")
+cumulative_confirmed_qatar <- confirmed_qatar_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+cumulative_confirmed_kuwait <- confirmed_kuwait_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+cumulative_confirmed_saudi_arabia <- confirmed_saudi_arabia_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+cumulative_confirmed_bahrain_corona <- confirmed_bahrain_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+cumulative_confirmed_bahrain_qatar_saudi_arabia_kuwait_corona <- data.frame(date=recovered_us_corona$date, Bahrain=cumulative_confirmed_bahrain_corona$cumulative_confirmed, Qatar=cumulative_confirmed_qatar$cumulative_confirmed, Saudi_Arabia=cumulative_confirmed_saudi_arabia$cumulative_confirmed, Kuwait=cumulative_confirmed_kuwait$cumulative_confirmed)
+cumulative_confirmed_bahrain_qatar_saudi_arabia_kuwait_corona <- pivot_longer(cumulative_confirmed_bahrain_qatar_saudi_arabia_kuwait_corona, c(2, 3, 4,5), "country", "value")
+ggplot(cumulative_confirmed_bahrain_qatar_saudi_arabia_kuwait_corona, aes(x=date, y=value, colour=country)) + geom_line()  + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="confirmed cases (logarithmic scale)") + geom_point()
+
+
+```
+
+Figure 6 shows that the confirmed COVID-19 cases in Bahrain, Qatar, Saudi Arabia and Kuwait. In the beginning of the March total confirmed cases are higher in Bahrain and Kuwait. . After March total confirmed cases in Saudi Arabia are increased over the other countries. 
+
+
+```{r, fig.cap="Figure 7 : Total confirmed COVID-19 deaths in Bahrain, Qatar, Saudi Arabia and kuwait" }
+death_qatar_corona <- coronavirus %>% filter(country=="Qatar" & type=="death")
+death_kuwait_corona <- coronavirus %>% filter(country=="Kuwait" & type=="death")
+death_saudi_arabia_corona <- coronavirus %>% filter(country=="Saudi Arabia" & type=="death")
+cumulative_death_qatar <- death_qatar_corona %>% mutate(cumulative_death = cumsum(cases))
+cumulative_death_kuwait <- death_kuwait_corona %>% mutate(cumulative_death = cumsum(cases))
+cumulative_death_saudi_arabia <- death_saudi_arabia_corona %>% mutate(cumulative_death = cumsum(cases))
+cumulative_death_bahrain_corona <- death_bahrain_corona %>% mutate(cumulative_death = cumsum(cases))
+cumulative_death_bahrain_qatar_saudi_arabia_kuwait_corona <- data.frame(date=recovered_us_corona$date, Bahrain=cumulative_death_bahrain_corona$cumulative_death, Qatar=cumulative_death_qatar$cumulative_death, Saudi_Arabia=cumulative_death_saudi_arabia$cumulative_death, Kuwait=cumulative_death_kuwait$cumulative_death)
+cumulative_death_bahrain_qatar_saudi_arabia_kuwait_corona <- pivot_longer(cumulative_death_bahrain_qatar_saudi_arabia_kuwait_corona, c(2, 3, 4,5), "country", "value")
+ggplot(cumulative_death_bahrain_qatar_saudi_arabia_kuwait_corona, aes(x=date, y=value, colour=country)) + geom_line()  + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="death cases (logarithmic scale)") + geom_point()
+
+
+```
+
+Figure 7 shows that Total confirmed COVID-19 deaths in Bahrain, Qatar, Saudi Arabia and Kuwait. After the march total death cases are higher in Saudi Arabia. The reason is the total confirmed cases in Saudi Arabia are higher compare with the other three countries. Since the mid of the April the total death cases in Kuwait are increasing at increasing rate. The total death cases in Kuwait is less than the Saudi Arabia but higher than the Bahrain and Qatar. But total confirmed cases in Kuwait is less than the Qatar.
+
+
+```{r, fig.cap= "Figure 8 : Total recovered COVID-19 cases in Bahrain, Qatar, Saudi Arabia and kuwait"}
+recovered_qatar_corona <- coronavirus %>% filter(country=="Qatar" & type=="recovered")
+recovered_kuwait_corona <- coronavirus %>% filter(country=="Kuwait" & type=="recovered")
+recovered_saudi_arabia_corona <- coronavirus %>% filter(country=="Saudi Arabia" & type=="recovered")
+cumulative_recovered_qatar <- recovered_qatar_corona %>% mutate(cumulative_recovered = cumsum(cases))
+cumulative_recovered_kuwait <- recovered_kuwait_corona %>% mutate(cumulative_recovered = cumsum(cases))
+cumulative_recovered_saudi_arabia <- recovered_saudi_arabia_corona %>% mutate(cumulative_recovered = cumsum(cases))
+cumulative_recovered_bahrain_corona <- recovered_bahrain_corona %>% mutate(cumulative_recovered = cumsum(cases))
+cumulative_recovered_bahrain_qatar_saudi_arabia_kuwait_corona <- data.frame(date=recovered_us_corona$date, Bahrain=cumulative_recovered_bahrain_corona$cumulative_recovered, Qatar=cumulative_recovered_qatar$cumulative_recovered, Saudi_Arabia=cumulative_recovered_saudi_arabia$cumulative_recovered, Kuwait=cumulative_recovered_kuwait$cumulative_recovered)
+cumulative_recovered_bahrain_qatar_saudi_arabia_kuwait_corona <- pivot_longer(cumulative_recovered_bahrain_qatar_saudi_arabia_kuwait_corona, c(2, 3, 4,5), "country", "value")
+ggplot(cumulative_recovered_bahrain_qatar_saudi_arabia_kuwait_corona, aes(x=date, y=value, colour=country)) + geom_line()  + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="recovered cases (logarithmic scale)") + geom_point()
+
+
+
+```
+
+Figure 8 shows that the recovered COVID-19 cases in Bahrain, Qatar, Saudi Arabia and Kuwait. Among those countries Bahrain has the highest total recovered cases in March month. After March total recovered cases in Saudi Arabia are increased over the other countries. The reason is after  the march total confirmed cases are also increased in Saudi Arabia over  the other countries.
+
+
+```{r, fig.cap= "Figure 9 : Daily confirmed COVID-19 cases in  Gulf Cooparation Council (GCC) countries"}
+daily_confirmed <- coronavirus %>% filter(type== "confirmed")
+daily_confirmed <- filter(daily_confirmed, country %in% c("Bahrain", "Qatar", "Kuwait", "Saudi Arabia", "Oman", "Iraq"))
+ggplot(daily_confirmed , aes(x = date, y =cases, col = country))  +geom_smooth(method = "loess") + facet_wrap(. ~ country, ncol = 3) +xlab("Date") 
+
+
+
+```
+
+
+
+## 2.3. Comparison with China
+
+The COVID 19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID 19), caused by severe acute respiratory syndrome coronavirus 2 (SARS CoV 2). The outbreak was first identified in Wuhan, China, in December 2019.
+
+
+```{r, fig.cap="Figure 10 : Daily confirmed COVID-19 cases in Bahrain and China"}
+confirmed_china_corona <- coronavirus %>% filter(country=="China" & type=="confirmed" )
+confirmed_china_corona_select <- select(confirmed_china_corona,-c(country, lat, long, type))
+confirmed_china_province<-confirmed_china_corona_select %>%pivot_wider(names_from=province, values_from=cases)
+final_confirmed_china<- confirmed_china_province %>% mutate(confirmed =confirmed_china_province %>% select(Anhui:Zhejiang) %>% rowSums())
+final_confirmed_china <- select(final_confirmed_china, c(date, confirmed))
+confirmed_bahrain_china_corona <- data.frame(date=recovered_us_corona$date, Bahrain=confirmed_bahrain_corona$cases, China=final_confirmed_china$confirmed)
+confirmed_bahrain_china_corona <- pivot_longer(confirmed_bahrain_china_corona, c(2, 3), "country", "value")
+ggplot(confirmed_bahrain_china_corona, aes(x=date, y=value,colour=country)) + geom_line() + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="confirmed cases (logarithmic scale)") + geom_point()
+
+```
+
+Figure 10 shows that the daily confirmed COVID-19 cases in Bahrain and China. In February and March the daily confirmed COVID-19 cases in china is higher than the Bahrain. After the mid of February the daily confirmed cases in china has decreased slowly with the time. After the mid of April the daily confirmed COVID-19 cases in Bahrain is higher than the China.
+
+```{r, fig.cap="Figure 11 : Total confirmed COVID-19 cases in Bahrain and China"}
+confirmed_china_corona <- coronavirus %>% filter(country=="China" & type=="confirmed" )
+confirmed_china_corona_select <- select(confirmed_china_corona,-c(country, lat, long, type))
+confirmed_china_province<-confirmed_china_corona_select %>%pivot_wider(names_from=province, values_from=cases)
+final_confirmed_china<- confirmed_china_province %>% mutate(confirmed =confirmed_china_province %>% select(Anhui:Zhejiang) %>% rowSums())
+final_confirmed_china <- select(final_confirmed_china, c(date, confirmed))
+cumulative_final_confirmed_china <- final_confirmed_china %>% mutate(cumulative_confirmed = cumsum(confirmed))
+cumulative_confirmed_bahrain_corona <- confirmed_bahrain_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+cumulative_confirmed_bahrain_china <- data.frame(date=recovered_us_corona$date, Bahrain=cumulative_confirmed_bahrain_corona$cumulative_confirmed, China=cumulative_final_confirmed_china$cumulative_confirmed)
+cumulative_confirmed_bahrain_china <- pivot_longer(cumulative_confirmed_bahrain_china, c(2, 3), "country", "value")
+ggplot(cumulative_confirmed_bahrain_china, aes(x=date, y=value, colour=country)) + geom_line() + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb")+ geom_smooth(method = "loess")+ geom_point() + labs(y ="confirmed cases (logarithmic scale)") + geom_point()
+
+```
+Figure 11 shows that the total confirmed COVID-19 cases in Bahrain and China. Throughout the period the total confirmed COVID-19 cases are higher in China. In February the total confirmed cases in China are increasing at decreasing rate. Since the beginning of March the total confirmed cases in China is not vary much. Because increasing confirmed cases are very small compare to the total confirmed cases .But the since of the March the total confirmed COVID-19 cases in Bahrain are increasing at increasing rate.
+
+
+
+
+```{r, fig.cap= "Figure 12 : Total confirmed COVIC-19 deaths in Bahrain and China"}
+death_china_corona <- coronavirus %>% filter(country=="China" & type=="death" )
+death_china_corona_select <- select(death_china_corona,-c(country, lat, long, type))
+death_china_province<-death_china_corona_select %>%pivot_wider(names_from=province, values_from=cases)
+final_death_china<- death_china_province %>% mutate(death =death_china_province %>% select(Anhui:Zhejiang) %>% rowSums())
+final_death_china <- select(final_death_china, c(date, death))
+cumulative_final_death_china <- final_death_china %>% mutate(cumulative_death = cumsum(death))
+cumulative_death_bahrain_corona <- death_bahrain_corona %>% mutate(cumulative_death = cumsum(cases))
+cumulative_death_bahrain_china <- data.frame(date=recovered_us_corona$date, Bahrain=cumulative_death_bahrain_corona$cumulative_death, China=cumulative_final_death_china$cumulative_death)
+cumulative_death_bahrain_china <- pivot_longer(cumulative_death_bahrain_china, c(2, 3), "country", "value")
+ggplot(cumulative_death_bahrain_china, aes(x=date, y=value, colour=country)) + geom_line()  + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="death cases (logarithmic scale)") + geom_point()
+
+```
+Figure 12 shows that the total COVID-19 deaths in Bahrain and China. Throughout the period the total deaths are higher in China. In January the total death cases in China are increasing at increasing rate. In between February to March the total death cases are increasing at decreasing rate. Since the beginning of March the total death cases in China is not vary much.  Because increasing death cases are very small compare to the total death cases. The total death cases in  Bahrain is very small Compare to the total death cases in China.
+
+
+## 2.4. Comparison with US 
+
+The ongoing COVID-19 pandemic was confirmed to have reached the United States in January 2020. The first confirmed case of local transmission was recorded in January. By the end of March, cases had occurred in all 50 U.S. states, the District of Columbia, and all inhabited U.S. territories except American Samoa. After the U.S. become the most confirmed active cases and deaths in the world.
+
+
+```{r, fig.cap="Figure 13: Total confiremed COVID-19 cases in Bahrain and US "}
+confirmed_usa_corona <- coronavirus %>% filter(country=="US" & type=="confirmed")
+cumulative_confiremed_usa <- confirmed_usa_corona %>% mutate(cumulative_confirmed_= cumsum(cases))
+cumulative_confirmed_bahrain_corona <- confirmed_bahrain_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+cumulative_confirmed_bahrain_usa_corona <- data.frame(date=recovered_qatar_corona$date, Bahrain=cumulative_confirmed_bahrain_corona$cumulative_confirmed, us=cumulative_confiremed_usa$cumulative_confirmed_)
+cumulative_confirmed_bahrain_usa_corona <- pivot_longer(cumulative_confirmed_bahrain_usa_corona, c(2, 3), "country", "value")
+ggplot(cumulative_confirmed_bahrain_usa_corona, aes(x=date, y=value, colour=country)) + geom_line()+ geom_point() + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="confirmed cases (logarithmic scale)")
+
+
+```
+
+Figure 13 shows that the total confirmed COVID-19 cases in Bahrain and US. Throughout the period the total confirmed COVID-19 cases are higher in US. US curve show that there is a steep upward slope. That means the total confirmed cases are increasing at increasing rate. After the end of the March total confirmed cases in us are increasing at decreasing rate. Since of the March the total confirmed COVID-19 cases in Bahrain are increasing  at increasing rate.
+
+```{r, fig.cap="Figure 14 :  Total confirmed COVIC-19 deaths in Bahrain and China "}
+death_usa_corona <- coronavirus %>% filter(country=="US" & type=="death")
+cumulative_death_usa <- death_usa_corona %>% mutate(cumulative_death_= cumsum(cases))
+cumulative_death_bahrain_corona <- death_bahrain_corona %>% mutate(death_confirmed = cumsum(cases))
+cumulative_death_bahrain_usa_corona <- data.frame(date=recovered_qatar_corona$date, Bahrain = cumulative_death_bahrain_corona$death_confirmed, us= cumulative_death_usa$cumulative_death_)
+cumulative_death_bahrain_usa_corona <- pivot_longer(cumulative_death_bahrain_usa_corona, c(2, 3), "country", "value")
+ggplot(cumulative_death_bahrain_usa_corona, aes(x=date, y=value, colour=country)) + geom_line()+ geom_point() + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="death cases (logarithmic scale)")
+
+
+```
+
+Figure 14 shows that the total  COVID-19 death cases in Bahrain and US. Throughout the period the total death cases are higher in US.  In March us curve show that there is a steep upward slope.  That means the total death cases are increasing at increasing rate. After the end of the March total confirmed cases in us are increasing at decreasing rate.
+
+
+```{r, fig.cap="Figure 15 : Total recovered COVIC-19 cases in Bahrain and China "}
+recovered_usa_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+cumulative_recovered_usa <- recovered_usa_corona %>% mutate(cumulative_recovered_= cumsum(cases))
+cumulative_recovered_bahrain_corona <- recovered_bahrain_corona %>% mutate(recovered_confirmed = cumsum(cases))
+cumulative_recovered_bahrain_usa_corona <- data.frame(date=recovered_qatar_corona$date, Bahrain = cumulative_recovered_bahrain_corona$recovered_confirmed, us= cumulative_recovered_usa$cumulative_recovered_)
+cumulative_recovered_bahrain_usa_corona <- pivot_longer(cumulative_recovered_bahrain_usa_corona, c(2, 3), "country", "value")
+ggplot(cumulative_recovered_bahrain_usa_corona, aes(x=date, y=value, colour=country)) + geom_line()+ geom_point() + scale_y_continuous(trans = 'log10')+ annotation_logticks(sides="lb") + labs(y ="recovered cases (logarithmic scale)")
+
+
+```
+
+Figure 15 shows that the total recovered COVIC-19 cases in Bahrain and China. In the mid of the March total recovered cases in Bahrain are higher than the total recovered cases in US. Between the mid of the march to April the total recovered cases in china are increasing at increasing rate. Also in march the total recovered cases in Bahrain are increasing at increasing rate.
+
+
+# 3. Conclusions and Discussion
+
+
+The COVID-19 pandemic, also known as the corona virus pandemic is an ongoing global pandemic of coronavirus disease 2019. The outbreak was first identified in Wuhan, China in December 2019. On the 11 th of March 2020, the World Health Organization declared COVID-19 a pandemic with 118,320 confirmed cases reported in 114 countries. The COVID-19 pandemic has since continued to escalate with 4,628,903 cases and 312,009 deaths reported in 216 countries, areas or territories as of 18 May 2020.
+
+The first case of COVID-19 in the Bahrain was reported on 21 February 2020. In this time period the total confirmed cases in Bahrain are 5531. The percentage of recovered cases are 39.6%.  The percentage of death is less than 1. The percentage of active cases is 60%.
+
+The status of COVID-19 in the Gulf Cooparation Council (GCC) countries (Saudi Arabia, UAE, Kuwait, Qatar, Oman, Iraq and Bahrain) as of 12 of May 2020 widely varied. Among those countries Saudi Arabia has the highest total confirmed COVID-19 cases and highest total recovered cases. Bahrain has lowest total confirmed cases and total recovered cases compare to the other countries. 
+
+US, Russia, Spain, Italy and France are at the top of the list of COVID-19 hit countries. Compare to those countries Bahrain COVID-19 cases are very small. 
+
+The overall status of COVID-19 in Bahrain comparison to many countries around the world are relatively stable so far. GCC countries are the high rates of Bacille Calmette Guerin (BCG) vaccination. Also the temperatures in these GCC countries is very high. Bahrain is a one of the GCC country. These two factors were recently found to be inversely correlated with COVID-19 infectivity, morbidity, and mortality.
+
+Overall, the COVID-19 status in the Bahrain seems to be undercontrol as 12 May 2020. Because Bahrain has managed to limit the massive spread of the infection among their population by implementing proactive plans and timely decisions in response to Covid-19 outbreak.
+
+When we compared the COVID-19 status between two countries there are so many factors that affect the last conclusion direct and indirect. We can’t get final decision based only on total recovered, confirmed and death cases. Population, climate, government policy, economic status are some of the factors which affect the COVID-19 status. 
+
+Policymakers in the affected countries have adopted varying strategies to deal with these crisis. As a result the current COVID-19 status in terms of number of cases and deaths hugely varies between countries. It is important to note that reporting of cases is influenced by the testing capabilities and policies in addition to the preparedness of each country.
+
+
+# 4. References
+
+https://www.nytimes.com/interactive/2020/03/21/upshot/coronavirus-deaths-by-country.html
+
+
+https://thewire.in/health/covid-19-data-in-south-asia-shows-india-is-doing-worse-than-its-neighbours
+
+https://robjhyndman.com/hyndsight/logratios-covid19/
+
+https://ourworldindata.org/coronavirus/country/bahrain?country=~BHR
+

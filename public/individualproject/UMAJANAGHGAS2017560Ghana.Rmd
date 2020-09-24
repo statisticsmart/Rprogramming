@@ -1,0 +1,234 @@
+---
+title: '1'
+author: "G.H.G.UMAJANA"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,comment = NA, message = F, warning = F)
+```
+```{r}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(sp)
+library(grid)
+data("wrld_simpl")
+```
+# **1. Introduction.**
+ Ghana means "Warrior King" in the Soninke language. ... Ghana's population of approximately 30 million spans a variety of ethnic, linguistic and religious groups. According to the 2010 census, 71.2% of the population was Christian, 17.6% was Muslim, and 5.2% practised traditional faiths
+
+__Location__
+
+```{r, fig.cap= "Figure 1 Location in the world map"}
+ghana_corona <- coronavirus %>% filter(country == "Ghana")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = ghana_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+Land. Situated on the coast of the Gulf of Guinea in western Africa, Ghana is bordered to the northwest and north by Burkina Faso, to the east by Togo, to the south by the Atlantic Ocean, and to the west by Côte d'Ivoire.
+
+__Climate condition__
+
+The climate of Ghana is tropical and there are two main seasons: the wet and the dry seasons. North Ghana experiences its rainy season from April to mid-October while South Ghana experiences its rainy season from March to mid-November. The tropical climate of Ghana is relatively mild for its latitude.
+
+__Lockdown status of the country__
+
+After three weeks, Ghana is lifting the coronavirus lockdown in its two biggest cities, Accra and Kumasi starting 1 AM local time on Monday Apr. 20. A lockdown of the two worst affected metropolitan areas had been in place since Mar. 30, 2020.
+
+Non-essential businesses will now be allowed to open while the wearing of masks is encouraged. But there are still bans on large gatherings and schools will remain closed.
+
+__Action taken by the goverment__
+
+During a state of emergency, governments, as the duty-bearers, are allowed to temporarily suspend the exercise and enjoyment of some rights. They are also allowed to bypass some procedural limits to have more of a free hand to deal with the emergency, while maintaining law and order.
+
+But national and international laws set limits for governments to follow to avoid abuses and possible human rights violations.
+
+Ghana has introduced a range of measures in a bid to stop the spread of the coronavirus. These include quarantine and isolation of those who have the virus. Restrictions have also been placed on a host of events, including public and social gatherings. The country’s borders have been shut and partial lockdowns imposed in Greater Accra, Tema, Kasoa and Greater Kumasi.
+
+Many of these measures have been imposed under a new law, the Imposition of Restrictions Act, which was passed by parliament two weeks ago. The act was opposed mainly by the parliamentarians belonging to the minority party.
+
+The law states that “the imposition of the restriction under subsection (1) shall be reasonably justifiable in accordance with the spirit of the Constitution.”
+
+But this is not the case. This is just one of a number of big concerns with the new law, and the way in which the president has gone about enacting it.
+
+The first is that it is draconian and opens the door to overreach and violations of fundamental rights and freedoms in Ghana. Second, the president chose not to put an expiry date on when the provisions of the act will be lifted. Thirdly the act is general – its doesn’t mention COVID-19 as its focus. Section 7 provides only a broad definition of “disaster”, which means that any president can use it in future under various circumstances.
+
+__The problems with the goverment act__
+
+The World Health Organisation (WHO) declared COVID-19 a pandemic and a public health emergency of international concern on 30 January. Based on the WHO definition, a state of emergency exists in Ghana as in many other countries affected by the pandemic.
+
+Ghana has a law – the Emergency Powers Act, 1994 (Act 472) – that allows it to declare a state of emergency. Its 1992 constitution also makes provision for a state of emergency. The reasons for this include a public health emergency which can trigger a quarantine or isolation order. This would justify restricting people’s movement.
+
+This shows that the president didn’t need a new law. He had all the powers he needed set out in the constitution as well as a number of existing laws to restrict the movement of Ghanaians during a health crisis such as COVID-19.
+
+By taking these steps the government has gone the route of a number of states which have enacted what have been described as emergency laws in response to the coronavirus pandemic, without actually declaring a state of emergency under law. Terms such as “restriction”, “lockdown” and “lockout” are preferred.
+
+#**2. Exploratory of Data Analysis.**
+
+Number of deaths and number of active cases for Ghana will be analysed.
+
+```{r}
+data("coronavirus")
+Ghana_corona <- coronavirus %>% filter(country == "Ghana")
+Ghana_confirmed <- Ghana_corona %>% filter(type == "confirmed")
+Ghana_recovered <- Ghana_corona %>% filter(type == "recovered")
+Ghana_deaths <- Ghana_corona %>% filter(type == "death")
+
+Ghana_wide <- Ghana_corona %>%
+  pivot_wider(names_from = "type", values_from = "cases") %>%
+  mutate(active_cases = cumsum(confirmed - death - recovered),
+         confirmed_cumulative = cumsum(confirmed),
+         recovered_cumulative = cumsum(recovered),
+         deaths_cumulative = cumsum(death))
+
+```
+
+## 2.1.1 Daily confirmed cases within Ghana.
+
+```{r}
+ggplot(data = Ghana_confirmed,
+       mapping = aes(x = date, y = cases)) +
+  geom_line() +
+  ggtitle("Figure 2: Daily confirmed CORONA cases within Ghana")
+```
+
+  End of the march begin the increase of the daily cofirmed corona cases and afeter first weak of may daily confirmed cases got their maximum point and higher number of cases record during the month may.
+  
+### 2.1.2 Daily corona virus recoveries within Ghana. 
+  
+  ```{r}
+  ggplot(data = Ghana_recovered,
+  mapping = aes(x = date, y = cases)) +
+  geom_line() +
+  ggtitle("Figure 3: Daily Corova recoveries within Ghana")
+  
+  ```
+  
+  Daily corona virus recoveries start on end of march and  recovery rate is increasing april to may.
+  
+  
+###2.1.3 Daily Corona deaths within Ghana
+  
+  ```{r}
+  ggplot(data = Ghana_deaths,
+   mapping = aes(x = date, y = cases)) +
+   geom_line() +
+   ggtitle("Figure 4: Daily Corona deaths in Ghana")
+   ```
+   When considering about figure 4 maximum corona deaths records end of april and also most number of deaths records in month april.
+   
+###2.1.4.Daily number of active corona cases in Ghana
+
+```{r}
+ggplot(data = Ghana_wide,
+       mapping =  aes(x = date, y = active_cases)) +
+  geom_line() +
+  ggtitle("Figure 5: Daily active corona cases in Ghana")
+```
+
+
+Daily number of corona cases increasing heigh from april to may. Middle of may  increase above 4000 cases.
+
+```{r}
+Ghana_comparison <- coronavirus %>%
+  filter(country %in% c("Ghana","Nigeria","South Africa","US")) %>%
+  pivot_wider(names_from = "type", values_from = "cases") %>%
+  group_by(country) %>%
+  arrange(date) %>%
+  mutate(active = cumsum(confirmed - recovered - death),
+         cumconfirmed = cumsum(confirmed),
+         cumrecovered = cumsum(recovered),
+         cumdeaths = cumsum(death))
+```
+
+###2.1.5 comparison of daily corona cases Ghana vs Nigeria, South Africa, US
+
+ ```{r}
+  ggplot(data = Ghana_comparison,
+         mapping = aes(x = date, y = cumconfirmed)) +
+    geom_line(aes(col = country)) +
+    ggtitle("Figure 6 :  Comparison of daily corona cases with Nigeria, South Africa vs US")
+  ```
+  
+  Figure 06 shows that daily corona cases count is approximately same in Ghana ,nigeria and south Africa. But there is a big differene of daily corona cases count of "US" considering about other three countries.
+  
+###2.1.6 Comparison of daily active corona cases.
+
+```{r}
+ggplot(data = Ghana_comparison,
+       mapping = aes(x = date, y = active)) +
+  geom_line(aes(col = country)) +
+  ggtitle("Figure 7: Comparision of daily active corona cases")
+```
+
+
+  Figure 07 also approximately same with figure 06. Daily active corona cases of US is higher than other three countries. African continent countries have approximately same increase of daily active corona cases.
+  
+###2.1.7 Comparision of daily Corona recoveries.
+
+```{r}
+ggplot(data = Ghana_comparison,
+       mapping = aes(x = date, y = cumrecovered)) +
+  geom_line(aes(col = country)) +
+  ggtitle("Figure 8 Comparision of daily Corona recoveries" )
+```
+ Following figure also same as previos 2 figurese. Daily corona recoveris of US have high rate becase US have over 1 million corona patients. Ghana and other two countries have low rate of recoveris because these countries have low count of patients.
+ 
+ 
+#**3. Conclusion and Discussion.**
+
+__Conclusion__
+
+When considering about previous figures daily confirmed corona cases and recoveries within Ghana is incresing but daily corona deaths in Ghana shows that they control the death rate of Ghana. But daily active corona cases in Ghana increasing highly. Considering about other countries, Ghana have approximately same pattern of increasing daily corona cases, daily active corona cases and daily corona recoveries. But US have Higher count of corona cases of previous features.
+
+__Discusion__
+
+ Ghana control their death rate of corona virus but their daily active corona cases going high because of that future spread of coronavirus may be increased.
+ Because of that Ghana goverment must take action for social distancing rules broken person in ghana. And they may accept WHO condition for coronavirus.
+ and Nigeria and South Africa have same pattern of spreding coronavirus with Ghana. These two countries should follow previos conditions. US is the most affected country due to coronavirus they must acept WHO condition to decrease their coronavirus case and deaths.
+ 
+#**4. References.**
+
+*https://www.statista.com/statistics/1110883/coronavirus-cases-in-ghana/
+*https://cran.r-project.org/web/packages/covid19.analytics/vignettes/covid19.analytics.html
+*https://en.wikipedia.org/wiki/Ghana
+*https://www.theguardian.com/global-development/2020/may/03/coronavirus-easing-of-lockdown-a-relief-to-ghanas-poor-despite-fears-it-is-premature
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+

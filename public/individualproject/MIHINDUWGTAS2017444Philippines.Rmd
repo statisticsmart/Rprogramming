@@ -1,0 +1,394 @@
+---
+title: "Report of Philippines COVID-19 Situation"
+author: "AS2017444 - W.G.T. Mihindu"
+date: "7/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Introduction
+***
+The Philippines is an archipelago of 7,107 islands. It stretches from the south of China to the northern tip of Borneo. The country has over a hundred ethnic groups and a mixture of foreign influences which have molded a unique Filipino culture.The Philippines is the third largest English-speaking country in the world. The country is divided into three geographical areas: Luzon, Visayas, and Mindanao. It has 17 regions, 81 provinces, 136 cities, 1,494 municipalities, and 41,995 barangays.
+
+The COVID-19 pandemic in the Philippines is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus reached the Philippines on January 30, 2020, when the first case of the disease was confirmed in Metro Manila. It involved a 38-year-old Chinese woman who was confined in San Lazaro Hospital in Manila.
+
+As of July 18, 2020, there have been 65,304 confirmed cases of the disease in the country. Out of these cases, 22,067 recoveries and 1,773 deaths were recorded.It has the second highest number of confirmed COVID-19 cases in Southeast Asia, behind Indonesia, and ranks 13th in Asia and 32nd in the world. The largest single-day increase in the number of confirmed cases was reported on July 8, when the Department of Health (DOH) announced 2,539 new cases.
+
+
+#### __Visualization of the location__
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+data(wrld_simpl)
+
+coronavirus_philippines <- coronavirus %>% filter(country == "Philippines")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = coronavirus_philippines, aes(x = long, y = lat), color = "red", size= 2)
+```
+
+#### __Climate condition__
+
+The Philippines has five types of climates: tropical rainforest, tropical monsoon, tropical savanna, humid subtropical and oceanic (both are in higher-altitude areas) characterized by relatively high temperature, oppressive humidity and plenty of rainfall. There are two seasons in the country, the wet season and the dry season, based upon the amount of rainfall.[1] This is also dependent on location in the country as some areas experience rain all throughout the year (see Climate types). Based on temperature, the warmest months of the year are March through October; the winter monsoon brings hotter air from November to February. May is the warmest month, and January, the coolest.
+
+#### __Lockdown status of Philippines & Actions taken by the government__
+
+Filipino President Rodrigo Duterte announced on Tuesday, June 30, that the lockdown would be extended in Cebu City until July 15, amid the rise in coronavirus disease (COVID-19) infections. The lockdown was extended following the advice from the health secretary, Francisco Duque III, after Cebu City was announced the epicenter of the COVID-19 outbreak in the country.
+
+Additionally, Duterte further announced on Wednesday, July 1, that the general community quarantine (GCQ) has been extended by one month in Metro Manilla due to an increase in COVID-19 cases. The extension is expected to end on July 31. Metro Manila has joined a number of areas in Luzon and Visayas that are currently under the GCQ.
+
+As of July 1, health authorities have confirmed 37,514 COVID-19 cases and 1266 associated deaths in the country. Further spread of the virus is expected in the near term.
+
+
+## Exploratory Data Analysis
+***
+
+#### __1. Visualization of death cases in Philippines due to COVID-19__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_death_cases_philippines <- coronavirus_philippines %>% filter(type == "death")
+
+cum_deaths <- mutate(corona_death_cases_philippines, cumulative_death_sum = cumsum(cases))
+
+ggplot() + geom_col(data = corona_death_cases_philippines, aes(x = date, y = cases)) + ggtitle("Daily Covid-19 Death Cases in Philippines")
+
+ggplot(cum_deaths, aes(x = date, y = cumulative_death_sum)) + geom_line(col = "red") + ggtitle("Total Covid-19 Death Cases in Philippines")
+
+```
+
+* Interpretation :- 
+
+  + The first death case is recorded in February month and from the middle of March death cases                     are increased. Highest death cases are reported in mid of the April.
+                   
+  + There is an exponential growth of death cases in Philippines shown in second graph.
+
+
+#### __2. Visualization of confirmed cases in Philippines due to COVID-19__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_confirmed_cases_philippines <- coronavirus_philippines %>% filter(type == "confirmed")
+
+cum_confirmed <- mutate(corona_confirmed_cases_philippines, cumulative_confirmed_sum = cumsum(cases))
+
+ggplot() + geom_col(data = corona_confirmed_cases_philippines, aes(x = date, y = cases)) + ggtitle("Daily Covid-19 Confirmed Cases in Philippines")
+
+ggplot(cum_confirmed, aes(x = date, y = cumulative_confirmed_sum)) + geom_line(col = "blue") + ggtitle("Total Covid-19 Confirmed Cases in Philippines")
+
+```
+
+* Interpretation :-
+
+  + In February confirmed cases are nearly zero. From the mid of March confirmed cases are                          increased highly and highest confirmed cases in Philippines are reported in end of March.
+  
+  + There is an exponential growth of confirmed cases in Philippines shown in total confirmed                        cases graph.
+
+
+#### __3. Visualization of daily recovered cases in Philippines due to COVID-19__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_recovered_cases_philippines <- coronavirus_philippines %>% filter(type == "recovered")
+
+cum_recovered <- mutate(corona_recovered_cases_philippines, cumulative_recovered_sum = cumsum(cases))
+
+ggplot() + geom_col(data = corona_recovered_cases_philippines, aes(x = date, y = cases)) + ggtitle("Daily Covid-19 Recovered Cases in Philippines")
+
+ggplot(cum_recovered, aes(x = date, y = cumulative_recovered_sum)) + geom_line(color = "green") + ggtitle("Total Covid-19 Recovered Cases in Philippines")
+
+```
+
+* Interpretation :-
+
+  + First recovery case is observed in February. From April recovery cases are increased highly.                    In May highest recovery cases can be seen.
+
+  + There is an exponential growth of recovery cases in Philippines shown in total recovery cases                   graph.
+
+
+#### __4. Visualization of Active cases in Philippines__
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+corona_active_cases_philippines <- mutate(corona_confirmed_cases_philippines, 
+                                          death = corona_death_cases_philippines$cases,                                                                   recovered = corona_recovered_cases_philippines$cases, 
+                                          active_cases = (cases - death - recovered), 
+                                          active_cases_cum = cumsum(active_cases))
+
+ggplot() + geom_col(data = corona_active_cases_philippines, aes(x = date, y = active_cases)) + ggtitle("Daily Covid-19 Active Cases in Philippines")
+
+ggplot(corona_active_cases_philippines, aes(x = date, y = active_cases_cum)) + geom_line(color = "brown") +  ggtitle("Total Covid-19 Active Cases in Philippines")
+
+```
+
+* Interpretation :- 
+
+  + From March active cases in Philippines are observed in a high rate.Highest active case is                       reported in end of March.
+  
+  + There is an exponential growth of active cases in Philippines shown in total active cases                       graph.
+
+
+### __Comparing with Japan__
+
+Japan was choosed because of many reasons.Some of them are given below.
+
+* Neighbouring Countries.
+* The Philippines shares a maritime border with Japan in the South China Sea although the extent of the border    is disputed by the two countries.
+
+
+#### __1. Visualization of Death Cases Philippines vs Japan__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+coronavirus_japan <- coronavirus %>% filter(country == "Japan")
+corona_death_cases_japan <- coronavirus_japan %>% filter(type == "death")
+
+cum_deaths_japan <- mutate(corona_death_cases_japan, cumulative_death_sum_japan = cumsum(cases))
+
+ggplot() + geom_line(data = cum_deaths, aes(x = date, y = cumulative_death_sum, col = "blue")) + geom_line(data = cum_deaths_japan, aes(x = date, y = cumulative_death_sum_japan, color = "red")) + scale_color_discrete(name = "Country", labels = c("Philippines", "Japan")) + ggtitle("Total Covid-19 Death Cases Japan Vs Philippines") 
+
+```
+
+* Interpretation - There is an exponential growth of death cases in both Philippines and Japan shown here.In                        Philippines sudden increment can be seen in end of March and in Japan sudden increment can be                     seen in April.
+
+
+#### __2. Visualization of Confirmed Cases Philippines vs Japan__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_confirmed_cases_japan <- coronavirus_japan %>% filter(type=="confirmed")
+
+cum_confirmed_japan <- mutate(corona_confirmed_cases_japan, cumulative_confirmed_sum_japan = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x = date, y = cumulative_confirmed_sum, col = "blue")) + geom_line(data = cum_confirmed_japan, aes(x = date, y = cumulative_confirmed_sum_japan, color="red")) + scale_color_discrete(name = "Country", labels = c("Philippines", "Japan")) + ggtitle("Total Covid-19 Confirmed Cases Japan Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in confirmed cases in Philippines. In Japan sigmoid curve can be                    seen in confirmed cases.
+
+
+#### __3. Visualization of Recovered Cases Philippines vs Japan__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_recovered_cases_japan <- coronavirus_japan %>% filter(type=="recovered")
+
+cum_recovered_japan <- mutate(corona_recovered_cases_japan, cumulative_recovered_sum_japan = cumsum(cases))
+
+ggplot() + geom_line(data = cum_recovered, aes(x = date, y = cumulative_recovered_sum, col = "blue")) + geom_line(data = cum_recovered_japan, aes(x = date, y = cumulative_recovered_sum_japan, color="red")) + scale_color_discrete(name = "Country", labels = c("Philippines", "Japan")) + ggtitle("Total Covid-19 Recovered Cases Japan Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in recoverd cases in Japan. In Philippines recovered cases are                    increased very lower than Japan.
+
+
+#### __4. Visualization of Active cases Philippines vs Japan__
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_active_cases_japan <- mutate(corona_confirmed_cases_japan,
+                                    death = corona_death_cases_japan$cases,
+                                    recovered = corona_recovered_cases_japan$cases,
+                                    active_cases_japan = (cases - death - recovered),
+                                    active_cases_japan_cum = cumsum(active_cases_japan))
+
+ggplot() + geom_line(data = corona_active_cases_philippines, aes(x = date, y = active_cases_cum, color = "blue")) + geom_line(data = corona_active_cases_japan, aes(x = date, y = active_cases_japan_cum, color = "red")) + scale_color_discrete(name = "Country", labels = c("Philippines", "Japan")) + ggtitle("Total Covid-19 Active Cases Japan Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in active cases in Philippines. In Japan there is a exponential                    growth of recovery cases until end of April and sudden drop down after that point and                           gradually decreased.
+
+
+### __Comparing with India__
+
+India was choose because of two reasons,
+
+* Asian continent countries.
+* Current world top three in COVID-19 cases.
+
+
+#### __1. Visualization of Death Cases Philippines vs India__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+coronavirus_india <- coronavirus %>% filter(country == "India")
+corona_death_cases_india <- coronavirus_india %>% filter(type == "death")
+
+cum_deaths_india <- mutate(corona_death_cases_india, cumulative_death_sum_india = cumsum(cases))
+
+ggplot() + geom_line(data = cum_deaths, aes(x = date, y = cumulative_death_sum, col = "blue")) + geom_line(data = cum_deaths_india, aes(x = date, y = cumulative_death_sum_india, color = "green")) + scale_color_discrete(name = "Country", labels = c("Philippines", "India")) + ggtitle("Total Covid-19 Death Cases India Vs Philippines") 
+
+```
+
+* Interpretation - There is an exponential growth in death cases in India. In Philippines death cases are                            increased in a lower rate than India.
+
+
+#### __2. Visualization of Confirmed Cases Philippines vs India__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_confirmed_cases_india <- coronavirus_india %>% filter(type=="confirmed")
+
+cum_confirmed_india <- mutate(corona_confirmed_cases_india, cumulative_confirmed_sum_india = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x = date, y = cumulative_confirmed_sum, col = "blue")) + geom_line(data = cum_confirmed_india, aes(x = date, y = cumulative_confirmed_sum_india, color="green")) + scale_color_discrete(name = "Country", labels = c("Philippines", "India")) + ggtitle("Total Covid-19 Confirmed Cases India Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in confirmed cases in India. In Philippines confirmed cases are                    increased in a lower rate than India.
+
+
+#### __3. Visualization of Recovered Cases Philippines vs India__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_recovered_cases_india <- coronavirus_india %>% filter(type=="recovered")
+
+cum_recovered_india <- mutate(corona_recovered_cases_india, cumulative_recovered_sum_india = cumsum(cases))
+
+ggplot() + geom_line(data = cum_recovered, aes(x = date, y = cumulative_recovered_sum, col = "blue")) + geom_line(data = cum_recovered_india, aes(x = date, y = cumulative_recovered_sum_india, color="green")) + scale_color_discrete(name = "Country", labels = c("Philippines", "India")) + ggtitle("Total Covid-19 Recovered Cases India Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in recovered cases in India. In Philippines recovered cases are                    increased in a lower rate than India.
+
+
+#### __4. Visualization of Active cases Philippines vs India__
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_active_cases_india <- mutate(corona_confirmed_cases_india,
+                                    death = corona_death_cases_india$cases,
+                                    recovered = corona_recovered_cases_india$cases,
+                                    active_cases_india = (cases - death - recovered),
+                                    active_cases_india_cum = cumsum(active_cases_india))
+
+ggplot() + geom_line(data = corona_active_cases_philippines, aes(x = date, y = active_cases_cum, color = "blue")) + geom_line(data = corona_active_cases_india, aes(x = date, y = active_cases_india_cum, color = "green")) + scale_color_discrete(name = "Country", labels = c("Philippines", "India")) + ggtitle("Total Covid-19 Active Cases India Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in active cases in India. In Philippines active cases are                          increased in a lower rate than India.
+
+
+### __Comparing with United States of America__
+
+United States was choose because of two reasons,
+
+* Current world top three in COVID-19 cases.
+
+
+#### __1. Visualization of Death Cases Philippines vs USA__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+coronavirus_usa <- coronavirus %>% filter(country == "US")
+corona_death_cases_usa <- coronavirus_usa %>% filter(type == "death")
+
+cum_deaths_usa <- mutate(corona_death_cases_usa, cumulative_death_sum_usa = cumsum(cases))
+
+ggplot() + geom_line(data = cum_deaths, aes(x = date, y = cumulative_death_sum, col = "blue")) + geom_line(data = cum_deaths_usa, aes(x = date, y = cumulative_death_sum_usa, color = "brown")) + scale_color_discrete(name = "Country", labels = c("Philippines", "USA")) + ggtitle("Total Covid-19 Death Cases USA Vs Philippines") 
+
+```
+
+* Interpretation - There is an exponential growth in death cases in USA. In Philippines death cases curve is                         nearly zero comparing with USA.
+
+
+#### __2. Visualization of Confirmed Cases Philippines vs USA__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_confirmed_cases_usa <- coronavirus_usa %>% filter(type=="confirmed")
+
+cum_confirmed_usa <- mutate(corona_confirmed_cases_usa, cumulative_confirmed_sum_usa = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x = date, y = cumulative_confirmed_sum, col = "blue")) + geom_line(data = cum_confirmed_usa, aes(x = date, y = cumulative_confirmed_sum_usa, color="brown")) + scale_color_discrete(name = "Country", labels = c("Philippines", "USA")) + ggtitle("Total Covid-19 Confirmed Cases USA Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in confirmed cases in USA. In Philippines confirmed cases curve                    is nearly zero comparing with USA.
+
+
+#### __3. Visualization of Recovered Cases Philippines vs USA__
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_recovered_cases_usa <- coronavirus_usa %>% filter(type=="recovered")
+
+cum_recovered_usa <- mutate(corona_recovered_cases_usa, cumulative_recovered_sum_usa = cumsum(cases))
+
+ggplot() + geom_line(data = cum_recovered, aes(x = date, y = cumulative_recovered_sum, col = "blue")) + geom_line(data = cum_recovered_usa, aes(x = date, y = cumulative_recovered_sum_usa, color="brown")) + scale_color_discrete(name = "Country", labels = c("Philippines", "USA")) + ggtitle("Total Covid-19 Recovered Cases USA Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in recovered cases in USA. In Philippines recoverd cases curve                     is nearly zero comparing with USA.
+
+
+#### __4. Visualization of Active cases Philippines vs USA__
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+corona_active_cases_usa <- mutate(corona_confirmed_cases_usa,
+                                    death = corona_death_cases_usa$cases,
+                                    recovered = corona_recovered_cases_usa$cases,
+                                    active_cases_usa = (cases - death - recovered),
+                                    active_cases_usa_cum = cumsum(active_cases_usa))
+
+ggplot() + geom_line(data = corona_active_cases_philippines, aes(x = date, y = active_cases_cum, color = "blue")) + geom_line(data = corona_active_cases_usa, aes(x = date, y = active_cases_usa_cum, color = "brown")) + scale_color_discrete(name = "Country", labels = c("Philippines", "USA")) + ggtitle("Total Covid-19 Active Cases USA Vs Philippines")
+
+```
+
+* Interpretation - There is an exponential growth in active cases in USA. In Philippines active cases curve is                       nearly zero comparing with USA.
+
+## Conclusions
+***
+
+
+* Death cases due to COVID 19 in Philippines, Japan, India and USA all have exponential curves.
+
+* Death cases are higher in Philippines than Japan. 
+
+* Confirmed cases, recovered cases in Japan is higher than Philippines according to the curves. Controlling         COVID-19 cases are satisfactory according to the exponential curve of recovery.
+
+* Death cases, confirmed cases, recovery cases and active cases have a higher rate in India than the Philippines.
+
+* Death cases, confirmed cases, recovery cases and active cases have a higher rate in USA than the Philippines.     When comparing with USA cases of Philippines can be seen in a minimum amount.
+
+* India and USA in current world top three and one in COVID-19 cases.
+
+
+## Discussion
+***
+
+
+This report gives a brief idea about the Philippines COVID-19 situation. The COVID-19 pandemic in the Philippines is part of the worldwide pandemic of coronavirus disease 2019. The situation of the Philippine due to COVID-19 is analyzed according to the death cases, confirmed cases, recovered cases and the active cases in there. Death cases are increased from middle of March. In April there are the highest cases. Confirmed cases are also become from the March. End of March, April, May months have high confirmed cases. Daily recovered cases are high in April and May. May has the highest daily recovered cases. Active cases are higher in end of March, April and May. Then Philippine was compared with Japan, one of the neighboring country. Confirmed cases, recovered cases in Japan is higher than Philippine. Later Philippine was compared with India and USA in current world top three in COVID-19 cases. Death cases, confirmed cases, recovery cases and active cases have a higher rate in India and USA than the Philippine. So, comparing with that two countries we can say that Philippines has handled the pandemic better than India and USA.
+
+
+## References
+***
+
+1. https://brusselspe.dfa.gov.ph/the-philippines-introduction
+2. https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Philippines
+3. https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+4. https://www.garda.com/crisis24/news-alerts/355801/philippines-authorities-extend-gcq-and-lockdown-in-manila-and-cebu-city-until-july-15-update-24
+5. https://www.worldometers.info/coronavirus/?utm_campaign=homeAdvegas1?
+6. https://stackoverflow.com/
+7. https://www.who.int/
+8. https://hellor.netlify.app/
+

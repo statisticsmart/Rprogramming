@@ -1,0 +1,324 @@
+---
+title: "Analising Coronavirus data of Poland"
+author: "Prepared by Ishara Munasingha"
+date: "19/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1. Introduction of Poland
+
+## 1.1 Visualisation of the location
+<font size="3"> 
+Poland is a country located in Cenral Europe. It is divided into 16 administrative subdivisions, covering an area of 312696 square kilometers. With a population of nearly 38.5 million people, Poland is the fifth most populous member state of the European Union. Poland's capital and largest metropolis is Warsaw. Poland is bordered by the Baltic Sea, Lithuania, and Russia's Kaliningrad Oblast to the north, Belarus and Ukraine to the east, Slovakia and the Czech Republic to the south, and Germany to the west.
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 1: Location of Poland."}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+poland_corona <- coronavirus %>% filter(country == "Poland")
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "yellow", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = poland_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+## 1.2 Climate Condition of Poland
+The climate in Poland is continential, with very cold winters, often below freezing (0°C or 32°F), and warm summers. Poland's long-term and short-term weather patterns are made transitional and variable by the collision of diverse air masses above the country's surface. Maritime air moves across Western Europe, Arctic air sweeps down from the North Atlantic Ocean, and subtropical air arrives from the South Atlantic Ocean. Although the Polar air dominates for much of the year, its conjunction with warmer currents generally moderates temperatures and generates considerable precipitation, clouds, and fog. When the moderating influences are lacking, winter temperatures in mountain valleys may drop to a minimum of −20°C (−4°F).
+
+The spring arrives slowly in March or April, bringing mainly sunny days after a period of alternating wintertime and springtime conditions. Summer, which extends from June to August, is generally less humid than winter. Showers and thunderstorms alternate with dry sunny weather that is generated when southern and eastern winds prevail. Early autumn is generally sunny and warm before a period of rainy, colder weather in November begins the transition into winter. Winter, which may last from one to three months, brings frequent snowstorms but relatively low total precipitation.
+
+## 1.3 Health index of Poland
+Health care in Poland is free and is delivered through a publicly funded health care system called the Narodowy Fundusz Zdrowia, which is free for all the citizens of Poland provided they fall into the "insured" category (usually meaning that they have their health insurance paid for by their employer, or are the spouse or child of an insured person). According to Article 68 of the Polish Constitution everyone has a right to have access to health care. Citizens are granted equal access to the publicly funded healthcare system. In particular, the government is obliged to provide free health care to young children, pregnant women, disabled people and to the elderly. However, private healthcare use is very extensive in Poland. Patients who are uninsured have to pay the full cost of medical services.
+
+The main financing source is health insurance in the National Health Fund. Citizens are obligated to pay insurance fee (redistributed tax) which is 9% deducted from personal income (7,75% is deducted from the tax, 1,25% covered by insured goes directly to the National Health Fund). National budget covers around 5% of all health care expenses. Since 2007 emergency rescue services are financed in total from national budget. About 70% of health expenses in Poland are covered by the National Health Fund, with the remaining 30% coming from private health insurance.
+
+## 1.4 Coronavirus status of Poland
+The COVID-19 pandemic in Poland is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2(SARS-CoV-2). In February and March 2020, health authorities in Poland carried out laboratory testing of suspected cases of infection by coronavirus, one of the seven known human coronaviruses, as well as home quarantining and monitoring.The first case of a laboratory confirmed coronavirus infection in Poland was that of a man hospitalised in Zielona Góra, with confirmation announced officially on 4 March 2020.The local transmission phase of coronavirus in Poland was declared to the World Health Organization on 10 March.The first death from coronavirus disease 2019(COVID-19) in Poland was that of a 56-year-old woman on 12 March. 
+
+## 1.5 Lockdown status of Poland
+Lockdown-type control measures started on 10–12 March, closing schools and university classes and cancelling mass events, and were strengthened on 25 March, limiting non-family gatherings to two people and religious gatherings to six and forbidding non-essential travel. On 20 March, the Ministry of Health tried to prevent medical personnel from commenting on the pandemic. The Polish Ombudsman Adam Bodnar defended medical personnel's right to speak publicly about the epidemic on constitutional grounds of freedom of speech and the right of the public to information. Doctors opposed the self-censorship orders.Fatality counts initially only included deaths from lab-confirmed coronavirus infection. Starting on 1 April 2020, fatalities that were clinically or epidemiologically diagnosed as COVID-19 were also considered as COVID-19 deaths by NIPH–NIH. As of 28 March 2020, people in Poland who died in quarantine from suspected COVID-19 were not tested post mortem for coronavirus.As of 29 March 2020, there were 269,307 people under quarantine for suspected coronavirus infection and 42,783 coronavirus tests had been made since the beginning of testing. The lockdown restrictions were tightened starting on 31 March–1 April by a government regulation, requiring individuals walking in streets to be separated by two metres, closing parks, boulevards, beaches, hairdressers and beauty salons, and forbidding unaccompanied minors from exiting their homes. A followup regulation on 10 April loosened the restrictions on public gatherings starting from 20 April, allowing religious gatherings and funerals to be held for up to a maximum of 50 people.
+
+As of 13 June 2020, Poland have restored full border traffic within the internal borders of the European Union. This means that people can travel freely cross the internal borders of the European Union. Travelers will regain the right to free entry, exit and transit through the territory of the Republic of Poland. They do not have to quarantine.
+
+## 1.6 Actions taken by the government
+Polish authorities did not participate in the 28 February 2020 European Union tender procedure for purchasing COVID-19 pandemic related medical equipment, in which 20 other member states participated. Poland applied on 6 March for the 17 March tender for the purchase of gloves, goggles, face shields, surgical masks and protective clothing; the European Commission stated that all requests in the tender were satisfied by offers.
+
+Hospitals has been transformed into isolation hospitals to accommodate those in need of medical help. There will be one additional isolation hospital set up in each voivodship, and two such hospitals in bigger regions. This kind of medical facilities will only treat people suspected of having contracted coronavirus. The goal is for beds with respirators to account for 10% of places at the converted facilities. In accordance with the law, medical personnel may be seconded to those facilities that are vital in preventing the epidemic's spread. 
+
+Government-paid social insurance contributions for three months, for companies employing up to nine people, self-employed individuals and freelancers. One-off benefits of circa 2,000 PLN gross (80% of the monthly minimal wage) for self-employed and freelancers. Around 2.2 million people are estimated to be eligible for these benefits. Enabling the taxpayers to deduct their donations given for counteracting the pandemic from their income.The President of the Office of Competition and Consumer Protection (“UOKiK”) is actively combating the economic effects of the COVID-19 pandemic in Poland and proposes solutions that are intended to protect consumer interests and counter abusive practices on the market.
+
+# 2. Exploratory Data Analysis
+
+## 2.1 Visualisation of Poland
+
+### 2.1.1 Confirmed Data of Poland
+#### Summarry
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+confirmed_poland_corona <- poland_corona %>% filter(type=="confirmed")
+summary(confirmed_poland_corona)
+```
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2: Time series plot of coronavirus confirmed cases"}
+ggplot(confirmed_poland_corona, aes(x=date, y=cases)) + geom_line(size=1) + ggtitle("Poland: Daily Covid-19 confirmed")
+
+```
+
+According to figure 2 there was not coronavirus confirmed pations in Poland before begining of the month of March. After middle of the month of the March it can be clearly seen that number of coronavirus confirmed pations has highly increased. Few days it was recored more than 400 coronavirus confirmed cases per day after month of March.
+
+
+### Histogram and Frequency polygon for confirmed cases.
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 3: Distribution of number of coronavirus confirmed cases"}
+ggplot(confirmed_poland_corona, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="red")
+```
+
+Considering between 22 January of 2020 and 12 May 2020 period majority days do not have coronavirus confirmed pations. Secondly majority days it has been confirmed 250-350 coronavirus pations per day.
+
+### 2.1.2 Recovered Data of Poland.
+#### Summary
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+poland_corona <- coronavirus %>% filter(country == "Poland")
+recovered_poland_corona <- poland_corona %>% filter(type=="recovered")
+
+recovered_poland_corona <- recovered_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovered_poland_corona)
+```
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 4: Time series plot of coronavirus confirmed cases (discontinuity represents missing values/ negative values)."}
+ggplot(recovered_poland_corona, aes(x=date, y=cases)) + geom_line(size=1) + ggtitle("Poland: Daily Covid-19 Recoveries")
+
+
+```
+
+Figure 4 shows that coronavirus confirmed pations have recovered in Poland after middle of March. After month of the March it can be clearly seen that number of coronavirus recovered pations has increased per day. Few times After middle of April, mere than 300 pations recovered per day.  Discontinuity of the plotted line represent missing values or negative values.
+
+### Histogram and Frequency polygon for recovered cases
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 5: Distribution of number of coronavirus recovered cases"}
+ggplot(recovered_poland_corona, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="red")
+```
+
+Considering between 22 January of 2020 and 12 May 2020 period it can be seen that majority days recovered below 100 corona virus confirmed pations per day.
+
+### 2.1.3 Deaths Data of Poland
+#### Summary
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+death_poland_corona <- poland_corona %>% filter(type=="death")
+summary(death_poland_corona)
+```
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 6: Time series plot of coronavirus death cases."}
+ggplot(death_poland_corona, aes(x=date, y=cases)) + geom_line(size=1) + ggtitle("Poland: Daily Covid-19 death")
+```
+
+According to figure 6 coronavirus deaths has started since middle of march. But after month of the March number of coronavirus deaths has increased.
+
+### Histogram and Frequency polygon for deaths
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 7: Distribution of number of coronavirus deaths"}
+ggplot(death_poland_corona, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="red")
+```
+
+Figure 7 shows that below 40 deths has been occured per day between 22 January of 2020 and 12 May 2020 period.
+
+### 2.1.4 Comparison of Coronavirus data
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 8: Time series plot of Coronavirus cases."}
+poland_corona <- poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(poland_corona, aes(x=date, y=cases, col=type)) + geom_line(size=1) + ggtitle("Poland: Daily Covid-19 details")
+
+```
+
+According to figure 8 it can be clearly seen that minimum number of pations has died compairing with number of coronavirus confirmed pations. Majority of coronavirus confirmed pations has recovered.
+
+
+### Summary
+
+| Month   | Confirmed | Recovered  | Active  | Deaths |
+| --------| ---------:| ---------:|---------:|---------:|
+| January |     0    |    0 |     0 |   0 |
+| February|     0    |    0 |     0 |   0 |
+| March   |  2311    |   19 |  2259 |  33 | 
+| April   | 10566    | 3229 |  6726 | 611 | 
+| May     |  4044    | 2895 |   954 | 195 | 
+| Total   | 16921    | 6143 |  9939 | 839 | 
+
+Table 1: Monthly summary in coronavirus cases
+
+According to table, there are 16921 coronavirus has confirmed and 6143 has recovered by them. 839 deths have occured by 12 May 2020. There is 9939 coronavirus active cases by 12 May 2020.
+
+## 2.2 Comparison with Other countries.
+
+### 2.2.1 Comparison with neighboring countries.
+
+### 2.2.1.1 Comparison with Confirmed.
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 9: Compairing Time series plots of confirmed Coronavirus cases with neighboring countries."}
+confirmed_Belarus_corona <- coronavirus %>% filter(country=="Belarus" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_Germany_corona <- coronavirus %>% filter(country=="Germany" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_Lithuania_corona <- coronavirus %>% filter(country=="Lithuania" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_Ukraine_corona <- coronavirus %>% filter(country=="Ukraine" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+confirmed_neighbor_countries <- data.frame(date=confirmed_poland_corona$date, Poland=confirmed_poland_corona$cases, Belarus=confirmed_Belarus_corona$cases, Germany=confirmed_Germany_corona$cases, Lithuania=confirmed_Lithuania_corona$cases, Ukraine=confirmed_Ukraine_corona$cases)
+
+confirmed_neighbor_countries<- pivot_longer(confirmed_neighbor_countries, c(2, 3, 4, 5, 6), "country", "value")
+
+ggplot(confirmed_neighbor_countries , aes(x=date, y=value, colour=country)) + geom_line(size=1)
+
+```
+
+According to figure 9 considered all contries have confirmed coronavirus cases after month of February. Daily Coronavirus confirmed cases in Poland is less than daily Coronavirus confirmed cases in Germany and greater than daily Coronavirus confirmed cases in Lithuania. Poland and Ukraine has approximately equal Coronavirus confirmed cases in per day.
+
+### 2.2.1.2 Comparison with recovered.
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 10: Compairing Time series plots of recovered Coronavirus cases with neighboring countries."}
+recovered_Belarus_corona <- coronavirus %>% filter(country=="Belarus" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_Germany_corona <- coronavirus %>% filter(country=="Germany" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_Lithuania_corona <- coronavirus %>% filter(country=="Lithuania" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_Ukraine_corona <- coronavirus %>% filter(country=="Ukraine" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+recovered_neighbor_countries <- data.frame(date=recovered_poland_corona$date, Poland=recovered_poland_corona$cases, Belarus=recovered_Belarus_corona$cases, Germany=recovered_Germany_corona$cases, Lithuania=recovered_Lithuania_corona$cases, Ukraine=recovered_Ukraine_corona$cases)
+
+recovered_neighbor_countries<- pivot_longer(recovered_neighbor_countries, c(2, 3, 4, 5, 6), "country", "value")
+
+ggplot(recovered_neighbor_countries , aes(x=date, y=value, colour=country)) + geom_line(size=1)
+
+```
+
+Above figure shows that Germany has recovered coronavirus cases since middle of March. But other countries with Poland has recovered coronavirus cases after March. From month of April approxiately equal number of coronavirus confirmed pations have recovered same days in Poland, Belarus, Lithuania and Ukraine. But majority days, number of Recovered pations of Germany is greater than Poland and other neighboring countries.
+
+### 2.2.1.3 Comparison with deaths.
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 11: Compairing Time series plots of Coronavirus deaths with neighboring countries."}
+death_Belarus_corona <- coronavirus %>% filter(country=="Belarus" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_Germany_corona <- coronavirus %>% filter(country=="Germany" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_Lithuania_corona <- coronavirus %>% filter(country=="Lithuania" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_Ukraine_corona <- coronavirus %>% filter(country=="Ukraine" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+death_neighbor_countries <- data.frame(date=death_poland_corona$date, Poland=death_poland_corona$cases, Belarus=death_Belarus_corona$cases, Germany=death_Germany_corona$cases, Lithuania=death_Lithuania_corona$cases, Ukraine=death_Ukraine_corona$cases)
+
+death_neighbor_countries <- pivot_longer(death_neighbor_countries, c(2, 3, 4, 5, 6), "country", "value")
+
+ggplot(death_neighbor_countries , aes(x=date, y=value, colour=country)) + geom_line(size=1)
+
+```
+
+According to figure 11 daily Coronavirus deaths in Poland is less than daily Coronavirus deaths in Germany. But daily Coronavirus deaths in Poland is greater than that value of Belarus, Lithuania and Ukraine. 
+
+### 2.2.2 Comparison with other countries.
+### 2.2.2.1 Comparison with Confirmed.
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 12: Compairing Time series plots of confirmed Coronavirus cases with other countries."}
+confirmed_US_corona <- coronavirus %>% filter(country=="US" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_China_corona <- coronavirus %>% filter(country=="China" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_Russia_corona <- coronavirus %>% filter(country=="Russia" & type=="confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+confirmed_other_countries <- data.frame(date=confirmed_poland_corona$date, Poland=confirmed_poland_corona$cases, US=confirmed_US_corona$cases, China=confirmed_China_corona$cases, Russia=confirmed_Russia_corona$cases)
+
+confirmed_other_countries<- pivot_longer(confirmed_other_countries, c(2, 3, 4, 5), "country", "value")
+
+ggplot(confirmed_other_countries , aes(x=date, y=value, colour=country)) + geom_line(size=1)
+
+```
+
+According to the figure 12 it can be clearly seen that majority of chinese coronvirus cases has confirmed before March. US has confirmed coronavirus cases from begining of March. Poland and Russia has confirmed coronavirus cases from middle of March. Russia and US daily coronavirus cases is highly greater than Poland. Daily coronavirus confirmed cases in China has in minimum (closes to 0) between middle of March and middle of May period.
+
+
+### 2.2.2.2 Comparison with recovered.
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 13: Compairing Time series plots of recovered Coronavirus cases with other countries."}
+recovered_US_corona <- coronavirus %>% filter(country=="US" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_China_corona <- coronavirus %>% filter(country=="China" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_Russia_corona <- coronavirus %>% filter(country=="Russia" & type=="recovered")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+recovered_other_countries <- data.frame(date=recovered_poland_corona$date, Poland=recovered_poland_corona$cases, US=recovered_US_corona$cases, China=recovered_China_corona$cases, Russia=recovered_Russia_corona$cases)
+
+recovered_other_countries<- pivot_longer(recovered_other_countries, c(2, 3, 4, 5), "country", "value")
+
+ggplot(recovered_other_countries , aes(x=date, y=value, colour=country)) + geom_line(size=1)
+
+```
+
+Figure 13 shows that  majority of chinese coronvirus cases has recovered before month of April. US coronavirus confirmed pations has recovered from ending of March. Poland and Russia coronavirus confirmed pations has recovered after month of March.
+
+### 2.2.2.3 Comparison with deaths.
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 14: Compairing Time series plots of Coronavirus deaths with neighboring countries."}
+death_US_corona <- coronavirus %>% filter(country=="US" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_China_corona <- coronavirus %>% filter(country=="China" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_Russia_corona <- coronavirus %>% filter(country=="Russia" & type=="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+death_other_countries <- data.frame(date=death_poland_corona$date, Poland=death_poland_corona$cases, US=death_US_corona$cases, China=death_China_corona$cases, Russia=death_Russia_corona$cases)
+
+death_other_countries<- pivot_longer(death_other_countries, c(2, 3, 4, 5), "country", "value")
+
+ggplot(death_other_countries , aes(x=date, y=value, colour=country)) + geom_line(size=1)
+
+```
+
+According to figure 14 maximum number of daily coronavirus deaths recorded in US. Daily coronavirus deaths in Poland is less than China, US and Russia. It is very small value compairing with US. Figure shows that more than 1000 deths in China in a day between April and May.
+
+# 3. Discussion and Conclusion
+## 3.1 Discussion
+The data set has been cosidered from 22 of Junuary 2020 to 12 of May 2020 time period. Daily coronavirus confirmed cases, recovered cases and deaths has been considered for this analysis.There was a negative value in coronavirus cases data set on 19 th of March 2020. It is impossible. Therefore that value was not not considerd for analysis.
+
+Poland has few neighboring countries. They are Belarus, Czech Republic, Germany, Lithuania, Ukraine and Solvakia. Among them It was considered Belarus, Germany, Lithuania and Ukraine to compaired coronavirus cases results with Poland.China, Russia, US, India, Australia are major contries of the world. Among them China, Russia and US coronavirus cases results were compaired with coronavirus cases results in Poland. Also Russia is a Europian continential country. Therefore Russia has selected to compair with Poland. Figure 14 shows that more than 1000 deths in China in a day between April and May. But that value had been missed. Therefore, after it has been added that day.
+
+## 3.2 Conclusion
+There was not coronavirus confirmed pations in Poland before begining of the month of March. After middle of the month of the March, the number of coronavirus confirmed pations has highly increased. Few days it was recored more than 400 coronavirus confirmed cases per day after month of March. Coronavirus confirmed pations have recovered after middle of March. Coronavirus deaths has started since middle of march. But after month of the March number of coronavirus deaths has increased. Majority of coronavirus confirmed pations has recovered. Daily deaths of Poland is minimum considering coronavirus confirmed cases between 22 of Junuary 2020 and 12 of May 2020.Poland has maximum impact from coronavirus comparing with neighbour country Lithuania. Poland, Belarus and Ukraine has approximately same impact from coronavirus.Poland has minimum impact from coronavirus Comparing with German, Russia, US.
+
+# 4. References
+
+https://hellor.netlify.app/schedule/
+
+https://apps.who.int/gho/data/node.cco.ki-POL?lang=en
+
+http://www.oceanhealthindex.org/region-scores/scores/poland
+
+https://en.m.wikipedia.org/wiki/Poland
+
+https://www.google.com/search?q=climatic+conditions+in+poland&oq=climate+codition+in+polan&aqs=chrome.1.69i57j0.23078j0j7&client=ms-android-samsung-gj-rev1&sourceid=chrome-mobile&ie=UTF-8
+
+https://github.com/thiyangt/tea
+
+https://github.com/aneesrana/gganimate
+
+https://hellor.netlify.app/slides/onlinehelpdesk
+
+https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports
+
+https://www.worldometers.info/coronavirus/country/poland/
+
+https://robjhyndman.com/hyndsight/logratios-covid19/
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Poland
+
+</font> 
+

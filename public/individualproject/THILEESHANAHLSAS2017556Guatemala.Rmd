@@ -1,0 +1,469 @@
+---
+title: " Guathemala :Coronavirus Country Report"
+author: "H.L.S Thileeshana"
+date: "7/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+# 1. Introduction
+
+<font size="4">Guatemala is the third largest county in Central America and shares borders to the north and west with Mexico, to the southeast with EI salvador and Honduras, to the northeast with belize and the Caribbean Sea,and to the south with the Pacific Ocean. </font>
+
+
+
+```{r}
+library(coronavirus)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(dplyr)
+library(gridExtra)
+library(scales)
+library(knitr)
+```
+
+
+```{r}
+library(ggplot2)
+data(wrld_simpl)
+```
+
+```{r}
+guatemala_corona <- coronavirus %>% filter(country == "Guatemala") 
+
+
+```
+
+```{r}
+p <- ggplot() +   geom_polygon(     data = wrld_simpl,     aes(x = long, y = lat, group = group), fill = "gray", colour = "white"   ) +   coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   scale_x_continuous(breaks = seq(-180, 180, 120)) +   scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   geom_point(     data = guatemala_corona, aes(x = long, y = lat), color = "red", size     = 1.5   )
+
+```
+
+<font size="4">
+Guatemala's weather is etenally comfortable :neither too hot nor too cold.Its seasonstend to be divided into the dry seasons and the wet seasons,although the temperature,which averages 22°C(72F) across the country.November through to april is the dry season.The rainy seasons runs from may to October.From December to march,Guatemala can be reached by cool air masses from the United States,and in these cases, the temperatureat night can be drop below 10°C(50F) in Guatemala City, and around 13/15°C in the plains.
+
+The COVID-19 pandemic in Guatemala is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Guatemala in March 2020.
+
+On January 31, president of Guatemala Alejandro Giammattei issued a prohibition for the arrival of visitors coming from the People's Republic of China due to the international concern for the outbreak that originated in Wuhan.On February 25, the government implements safety procedures for travellers coming from high-risk countries who are entering Guatemala from any terrestrial, maritime or aerial transport. These countries include China, South Korea, Iran and every European country.
+
+On 13 March 2020, the first case in Guatemala, a Guatemalan man who traveled from Italy to Guatemala, was confirmedTwo days prior to the country's first case, the Guatemalan government banned entry to citizens of all European countries, Iran, China and South Korea, which was put into effect on 12 March.On 13 March 2020, the Guatemalan government extended its travel restrictions to travelers from the US and Canada. Starting on 16 March, no travelers coming from these countries will be allowed to enter Guatemala, until March 31 (15 day quarantine is in place as of March 16).
+On 15 March 2020, the Guatemalan government confirmed its second case and the first COVID-19 death in the country. The same day, the Guatemalan government cancels all public events and prohibits agglomerations of more than 100 people. All public and private schools and universities are to be closed for at least three weeks. Holy Week celebrations are also cancelled.
+
+On March 21, 2020, the Guatemalan President Alejandro Giammattei alongside its Vice-President and the Council Of Ministry declared a nationwide curfew and a global travel ban, in an effort to tackle the coronavirus pandemic and prevent the spreading of the virus.On May 25, at least two hundred textile workers at the ′′K.P. Textil′′ plant in San Miguel Petapa tested positive for COVID-19. Nine cases were reported at the plant on May 12, but human rights groups complain that no action was taken at the time. Guatemala reported more than 3,300 confirmed infections and 58 deaths.</font>
+
+# 2. Exploratory Data Analysis
+
+## 2.1  Vizuzlization of death ,confirmed ,recovered and active cases
+
+```{r}
+guatemala_corona <- coronavirus %>% filter(country == "Guatemala") 
+
+```
+
+```{r}
+confirmed_guatemala_corona <- guatemala_corona %>% filter(type == "confirmed")
+figure1 <- ggplot(confirmed_guatemala_corona,aes(x=date,y=cases)) + geom_point()+geom_line() +ggtitle("Guatemala daily Covid-19 confirmed Cases")+theme(legend.title = element_blank())
+
+grid.arrange(figure1,bottom="Figure 1:Daily Confirmed cases")
+
+```
+ 
+ <font size="4">Figure 1 shows that number of confirmed cases per day in Guatemala.Using daily data, we can observe how fast the epidemic is growing. Data has recorded until on the 12th of May. According to this figure, more than 80 people infected coronavirus when the end of May. In late April shows a vast increase in confirmed cases.
+The average number of cases reported in May and April is higher. Among them, the May average is highest.</font>
+
+
+
+```{r}
+
+confirmed_guatemala_corona <- guatemala_corona %>% filter(type == "confirmed")
+cumulative3 <-confirmed_guatemala_corona %>% mutate(cumulative_confirmed = cumsum(cases))
+
+confirmed_us_corona <- coronavirus %>% filter(country=="US" & type=="confirmed")
+
+
+confirmed_cumultative<- data.frame(date=confirmed_us_corona$date, Daily_confirmed_cases=confirmed_guatemala_corona$cases, Total_cases=cumulative3$cumulative_confirmed)
+
+confirmed_cumultative <- pivot_longer(confirmed_cumultative, c(2, 3),"type","value")
+Figure2<-ggplot(confirmed_cumultative, aes(x=date, y=value, colour=type)) +geom_point()+ geom_line()+ggtitle("Guatemala Covid-19 Total and Daily confirmed Cases")+theme(legend.title = element_blank())
+grid.arrange(Figure2,bottom="Figure 2:Total and daily Confirmed cases")
+```
+
+<font size="4">Figure 2 shows that confirmed cases per day and total confirmed cases in Guathemala. Using the plot of the total number of cases, we can easily identify how big it has grown overall.
+According to figure 2, the total number of confirmed cases is close to 1250 in mid-May.According to figure 2, the total number of confirmed cases is close to 1250 in mid-May. Less than 100 confirmed cases have reported in early April and close to 1250 people are infected coronavirus in mid-May.</font>
+
+
+
+```{r}
+
+death_guatemala_corona <- guatemala_corona %>% filter(type == "death")
+
+cumulative4 <-death_guatemala_corona %>% mutate(cumulative_death= cumsum(cases))
+
+death_us_corona <- coronavirus %>% filter(country=="US" & type=="death")
+death_cumultative<- data.frame(date=death_us_corona$date, Daily_death_cases=death_guatemala_corona$cases, Total_cases=cumulative4$cumulative_death)
+
+death_cumultative <- pivot_longer(death_cumultative, c(2, 3),"type","value")
+
+figure3 <- ggplot(death_cumultative, aes(x=date, y=value, colour=type)) +geom_jitter()+geom_point()+ geom_line()+ggtitle("Guatemala Total and daily Covid-19 death Cases")+theme(legend.title = element_blank())
+
+grid.arrange(figure3,bottom="Figure 3:Total and daily death cases")
+
+```
+
+<font size="4">Figure 3 shows that tola number of death and death cases per day in Guatemala. According to figure 3, the death rate increases in late April.Total Number of death close to 30 in mid-May. When considering death cases per day it goes up and down with time.</font>
+
+
+
+
+```{r}
+
+recovered_guatemala_corona <- guatemala_corona %>% filter(type =="recovered")
+cumulative2 <-recovered_guatemala_corona %>% mutate(cumulative_recovered = cumsum(cases))
+recovered_us_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+recovered_cumultative<- data.frame(date=recovered_us_corona$date, Daily_recoverd_cases=recovered_guatemala_corona$cases, Total_cases=cumulative2$cumulative_recovered)
+recovered_cumultative <- pivot_longer(recovered_cumultative, c(2, 3),"type","value")
+figure4 <- ggplot(recovered_cumultative, aes(x=date, y=value, colour=type)) +geom_point()+ geom_line()+ggtitle("Guatemala Total and Daily Covid-19 Recovered Cases")+theme(legend.title = element_blank())
+
+grid.arrange(figure4,bottom="Figure 4:Total and Daily Recovered cases")
+
+```
+
+<font size="4">According to figure 4, shows no recovered cases until late March. After that increases the number of recovered patients in Guatemala.When mid-May number of recovered patients reached more than 100.</font>
+
+
+
+```{r}
+
+guatemala_corona <- coronavirus %>% filter(country == "Guatemala") 
+
+confirmed_guatemala_corona <- guatemala_corona %>% filter(type == "confirmed")
+
+
+recovered_guatemala_corona <- guatemala_corona %>% filter(type =="recovered")
+
+
+death_guatemala_corona <- guatemala_corona %>% filter(type == "death")
+
+guatemala_corona_pivotwider <- guatemala_corona %>% pivot_wider(names_from = type,values_from=cases)
+
+cumulative_active <- guatemala_corona_pivotwider %>%mutate(cumulative_confirmed = cumsum(confirmed),cumulative_recovered = cumsum(recovered),cumulative_death = cumsum(death),
+  active_cases_guatemala = cumulative_confirmed - cumulative_recovered - cumulative_death)
+
+figure5 <- ggplot(cumulative_active, aes(x=date, y=active_cases_guatemala))+ geom_line() + geom_point() +ggtitle("Guatemala Cumulative of Covid-19 Active Cases")+theme(legend.title = element_blank())
+
+grid.arrange(figure5,bottom="Figure 5:Total active cases")
+
+```
+
+ <font size="4">Figure 5 shows that the number of COVID 19 cases in Guatemala. According to the graph number of total active cases not change after that it shows a slight increase until the beginning of April. Although the total number of active cases was rising rapidly. The number of active cases had exceeded 1000 when mid-May.</font>
+ 
+ 
+
+```{r}
+
+guatemala_corona <- coronavirus %>% filter(country == "Guatemala")   
+
+guatemala_corona_seperate <- guatemala_corona %>% separate(date,into =c("year","month","day"))
+
+guathemala_corona_select<-select(guatemala_corona_seperate,month,type,cases)
+
+confirmed_cases <- guathemala_corona_select %>% filter(type =="confirmed")
+
+confirmed_cases_grouped <-confirmed_cases %>% group_by(month)
+
+confirmed_cases_grouped <- confirmed_cases_grouped %>% summarise(confirmed=sum(cases))
+
+recovered_cases <- guathemala_corona_select %>% filter(type =="recovered")
+
+recovered_cases_grouped <- recovered_cases %>% group_by(month)
+
+recovered_cases_grouped <- recovered_cases_grouped %>% summarise(recovered=sum(cases))
+
+death_cases <- guathemala_corona_select %>% filter(type =="death")
+
+death_cases_grouped <- death_cases %>% group_by(month)
+
+death_cases_grouped <- death_cases_grouped %>% summarise(death=sum(cases))
+
+tibble1 <- tibble(Month=c("Jan","Feb","March","April","May"),Confirmed = confirmed_cases_grouped$confirmed,Recovered = recovered_cases_grouped$recovered,Death = death_cases_grouped$death)
+
+
+kable(tibble1,caption = "Summary Tables")
+
+kable(summary(tibble1,caption = "Table 2"))
+
+
+```
+
+
+
+# 2.2 Comparison with other countries
+
+## 2.2.1 Comparison with Mexico.
+
+<font size="4">Mexico, officially the United Mexican States, is a country in the southern portion of North America. It is bordered to the north by the United States; to the south and west by the Pacific Ocean; to the southeast by Guatemala, Belize, and the Caribbean Sea;Guatemala shares borders to the north and west with Mexico, so I chose to compare with Mexico .</font>
+
+```{r}
+
+
+confirmed_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type=="confirmed")
+
+confirmed_mexico_corona <- coronavirus %>% filter(country=="Mexico" & type=="confirmed")
+
+confirmed_us_corona <- coronavirus %>% filter(country=="US" & type=="confirmed")
+
+cumulative_guathemala <-confirmed_guatemala_corona %>% mutate(cumulative_confirmed_guathemala = cumsum(cases))
+
+cumulative_mexico <-confirmed_mexico_corona %>% mutate(cumulative_confirmed_mexico = cumsum(cases))
+
+cumulative_guatemala_mexico<- data.frame(date=confirmed_us_corona$date, Guatemala=cumulative_guathemala$cumulative_confirmed_guathemala, Mexico=cumulative_mexico$cumulative_confirmed_mexico )
+
+cumulative_guatemala_mexico <- pivot_longer(cumulative_guatemala_mexico, c(2, 3), "country", "value")
+
+figure6 <- ggplot(cumulative_guatemala_mexico, aes(x=date, y=value, colour=country)) + geom_point() +labs(title ="Cumulative of Confirmed case in Guathemala and Mexico",y="Confirmed cases (Logarithmic scale)") + scale_y_continuous(trans = 'log10')+geom_smooth() +annotation_logticks(sides = "lb")
+
+grid.arrange(figure6,bottom="Figure 6:Total Confirmed cases in Guatemala and Mexico")
+
+
+
+```
+
+
+<font size="4">According to figure 6 in Mexico confirmed cases reporting rate was increased gradually until mid-April. After that rate of increasing confirmed cases is gradually decrease.When consedering Guatemala confirmed cases rate increased in late March and the rate of increasing has gradually decreased.</font>
+
+
+
+```{r}
+
+recovered_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type=="recovered")
+recovered_mexico_corona <- coronavirus %>% filter(country=="Mexico" & type=="recovered")
+recovered_us_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+
+cumulative_guathemala <-recovered_guatemala_corona %>% mutate(cumulative_recovered_guathemala = cumsum(cases))
+cumulative_mexico <-recovered_mexico_corona %>% mutate(cumulative_recovered_mexico = cumsum(cases))
+
+cumulative_guatemala_mexico<- data.frame(date=recovered_us_corona$date, Guatemala=cumulative_guathemala$cumulative_recovered_guathemala, Mexico=cumulative_mexico$cumulative_recovered_mexico )
+
+cumulative_guatemala_mexico <- pivot_longer(cumulative_guatemala_mexico, c(2, 3), "country", "value")
+
+figure7 <-ggplot(cumulative_guatemala_mexico, aes(x=date, y=value, colour=country)) + geom_point()+ labs(title ="Cumulative of recovered case in Guathemala and Mexico", y="Recovered cases (Logarithmic scale)") + scale_y_continuous(trans = 'log10') + annotation_logticks(sides = "lb")+geom_smooth()
+
+grid.arrange(figure7,bottom="Figure 7:Total Recovered cases in Guatemala and Mexico")
+
+
+```
+
+ <font size="4"> Figure 7 clearly shows that the Mexico recovered rate of patients have increased until mid April but that rate has decreased to some extent after mid April.when considering Guatemala the recovered rate has decreased in the mid-April but rate increases in late April.</font>
+
+
+
+```{r}
+
+death_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type=="death")
+death_mexico_corona <- coronavirus %>% filter(country=="Mexico" & type=="death")
+death_us_corona <- coronavirus %>% filter(country=="US" & type=="death")
+guatemala_mexico<- data.frame(date=death_us_corona$date, Guatemala=death_guatemala_corona$cases, Mexico=death_mexico_corona$cases)
+
+guatemala_mexico <- pivot_longer(guatemala_mexico, c(2, 3), "country", "value")
+
+figure8 <-ggplot(guatemala_mexico, aes(x=date, y=value, colour=country)) + geom_point() + labs(title ="Daily of Death case in Guathemala and Mexico", y="Recorded Death cases (Logarithmic scale)")+ scale_y_continuous(trans = 'log10') + annotation_logticks(sides = "lb") +geom_smooth() 
+
+
+grid.arrange(figure8,bottom="Figure 8:Daily Death cases in Guatemala and Mexico")
+
+
+```
+
+<font size="4">In figure 8 through out the period considered the number of deaths per day in Mexico has continuosly increased.When considered Guathemala im mid April highly incresed death per day.</font>
+
+
+  
+## 2.2.2 Comparision with Neighbouring countries.  
+
+<font size="4">Guatemala is a country in Central America bordered by Mexico to the north and west, Belize and the Caribbean to the northeast, Honduras to the east, El Salvador to the southeast.Therefore,it is importatnt to compare with these countries.</font>
+
+```{r}
+
+confirmed_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type =="confirmed")
+
+confirmed_mexico_corona <- coronavirus %>% filter(country =="Mexico" & type =="confirmed")
+
+confirmed_EI_salvador_corona <- coronavirus %>% filter(country =="EI Salvador" & type =="confirmed")
+
+confirmed_honduras_corona <- coronavirus %>% filter(country =="Honduras" & type =="confirmed")
+
+confirmed_belize_corona <- coronavirus %>% filter(country =="Belize" & type =="confirmed")
+
+confirmed_us_corona <- coronavirus %>% filter(country =="US" & type =="confirmed")
+
+cumulative_guathemala <-confirmed_guatemala_corona %>% mutate(cumulative_confirmed_guathemala = cumsum(cases))
+
+cumulative_mexico <-confirmed_mexico_corona %>% mutate(cumulative_confirmed_mexico = cumsum(cases))
+
+cumulative_Honduras <-confirmed_honduras_corona %>% mutate(cumulative_confirmed_honduras= cumsum(cases))
+
+cumulative_Belize <-confirmed_us_corona %>% mutate(cumulative_confirmed_belize = cumsum(cases))
+
+cumulative_guatemala_mexico_honduras_belize<- data.frame(date=confirmed_us_corona$date, Guatemala=cumulative_guathemala$cumulative_confirmed_guathemala, Mexico =  cumulative_mexico$cumulative_confirmed_mexico, Honduras = cumulative_Honduras$cumulative_confirmed_honduras,Belize= cumulative_Belize$cumulative_confirmed_belize)
+
+cumulative_guatemala_mexico_honduras_belize <- pivot_longer(cumulative_guatemala_mexico_honduras_belize, c(2, 3,4,5), "country", "value")
+
+figure9 <- ggplot(cumulative_guatemala_mexico_honduras_belize, aes(x = date, y = value, colour = country)) +geom_point()+ geom_line() + labs(title = "Cumulative of confirmed case in Guathemala, Mexico, Honduras and Belize ",y="Confirmed cases (Logarithmic scale)")+ scale_y_continuous(trans = 'log10') + annotation_logticks(sides = "lb") 
+
+grid.arrange(figure9,bottom="Figure 9:Total Recovered cases in Guatemala,Mexico,Honduras and Belize")
+
+```
+
+<font size="4">According to figure 9, the number of confirmed cases in Belize is much higher than in the other countries considered. Mexico and Honduras have the next highest number of confirmed cases, respectively. Guatemala has the lowest death rate and the highest number of deaths.</font>
+
+## 2.2.3 Comparison with China Hubei and US
+
+<font size="4">The two countries were selected because the virus began to spread from china Hubei province and has the highest distribution in the US.An also mostly located in central North America, between Canada and Mexico.</font>
+
+```{r}
+
+confirmed_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type=="confirmed")
+
+confirmed_mexico_corona <- coronavirus %>% filter(country=="Mexico" & type=="confirmed")
+
+confirmed_china_corona <- coronavirus %>% filter(country=="China" & type=="confirmed")
+
+confirmed_china_Hubei_corona <- confirmed_china_corona %>% filter(province=="Hubei")
+
+confirmed_us_corona <- coronavirus %>% filter(country=="US" & type=="confirmed")
+
+cumulative_guathemala <-confirmed_guatemala_corona %>% mutate(cumulative_confirmed_guathemala = cumsum(cases))
+
+cumulative_mexico <-confirmed_mexico_corona %>% mutate(cumulative_confirmed_mexico = cumsum(cases))
+
+cumulative_china_hubei <-confirmed_china_Hubei_corona %>% mutate(cumulative_confirmed_china_hubei= cumsum(cases))
+
+cumulative_US <-confirmed_us_corona %>% mutate(cumulative_confirmed_us = cumsum(cases))
+
+cumulative_guatemala_mexico_china_us<- data.frame(date=confirmed_us_corona$date, Guatemala=cumulative_guathemala$cumulative_confirmed_guathemala, Mexico =  cumulative_mexico$cumulative_confirmed_mexico, China_Hubei = cumulative_china_hubei$cumulative_confirmed_china_hubei, US = cumulative_US$cumulative_confirmed_us)
+
+cumulative_guatemala_mexico_china_us <- pivot_longer(cumulative_guatemala_mexico_china_us, c(2, 3,4,5), "country", "value")
+
+
+figure10 <- ggplot(cumulative_guatemala_mexico_china_us, aes(x = date, y = value, colour = country)) +geom_point() + scale_y_continuous(trans = 'log10') + annotation_logticks(sides = "lb") + labs(title = "Cumulative of Confirmed case in Guathemala, Mexico, Hubei Province China and US",y = "Confirmed cases (Logarithmic scale)") +geom_smooth()
+
+grid.arrange(figure10,bottom="Figure 10:Total Confirmed cases in Guatemala,Mexico,China(hubei) and US")
+
+
+```
+
+<font size="4">Figure 9 shows that the confirmed cases in the Hubei province of China has become stabel after mid February but other countires confirmed cases increase when that period.The number of confirmed cases reported in Mexico is low until the beginning of March, but more confirmed cases are reported from March than in other countries.When comapre with other countries number of death cases in US higher than other countries.Death cases in Guatemala are lower than in other countries, but the death rate is closer to Mexico.The US death rate shows some decrese after April.</font>
+
+
+
+```{r}
+
+recovered_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type=="recovered")
+
+recovered_mexico_corona <- coronavirus %>% filter(country=="Mexico" & type=="recovered")
+
+recovered_china_corona <- coronavirus %>% filter(country=="China" & type=="recovered")
+
+recovered_china_Hubei_corona <- recovered_china_corona %>% filter(province=="Hubei")
+
+recovered_us_corona <- coronavirus %>% filter(country=="US" & type=="recovered")
+
+cumulative_guathemala <-recovered_guatemala_corona %>% mutate(cumulative_recovered_guathemala = cumsum(cases))
+
+cumulative_mexico <-recovered_mexico_corona %>% mutate(cumulative_recovered_mexico = cumsum(cases))
+
+cumulative_china_hubei <-recovered_china_Hubei_corona %>% mutate(cumulative_recovered_china_hubei= cumsum(cases))
+
+cumulative_US <-recovered_us_corona %>% mutate(cumulative_recovered_us = cumsum(cases))
+
+cumulative_guatemala_mexico_china_us<- data.frame(date=recovered_us_corona$date, Guatemala=cumulative_guathemala$cumulative_recovered_guathemala, Mexico =  cumulative_mexico$cumulative_recovered_mexico, China_Hubei = cumulative_china_hubei$cumulative_recovered_china_hubei, US = cumulative_US$cumulative_recovered_us)
+
+cumulative_guatemala_mexico_china_us <- pivot_longer(cumulative_guatemala_mexico_china_us, c(2, 3,4,5), "country", "value")
+
+
+figure11 <- ggplot(cumulative_guatemala_mexico_china_us, aes(x = date, y = value, colour = country)) +geom_point()+ geom_smooth() + scale_y_continuous(trans = 'log10') + annotation_logticks(sides = "lb") + labs(title = "Cumulative of recovered case in Guathemala, Mexico, Hubei Province China and US",y="Recovered cases (Logarithmic scale)")
+
+grid.arrange(figure11,bottom="Figure 11:Total Recovered cases in Guatemala,Mexico,China(hubei) and US")
+
+
+```
+
+<font size="4">According to figure 11  recorded number of recovered cases in the Hubei province of China has become stable after mid-march.The recovered rate of the US and Mexico is very similar but the number of recovered patients in the US is higher than Mexico.The Guatemala recovered rate is lower than other countries.</font>
+
+
+
+```{r}
+
+death_guatemala_corona <- coronavirus %>% filter(country=="Guatemala" & type=="death")
+
+death_mexico_corona <- coronavirus %>% filter(country=="Mexico" & type=="death")
+
+death_china_corona <- coronavirus %>% filter(country=="China" & type=="death")
+
+death_china_Hubei_corona <- death_china_corona %>% filter(province=="Hubei")
+
+death_us_corona <- coronavirus %>% filter(country=="US" & type=="death")
+
+cumulative_guathemala <-death_guatemala_corona %>% mutate(cumulative_death_guathemala = cumsum(cases))
+
+cumulative_mexico <-death_mexico_corona %>% mutate(cumulative_death_mexico = cumsum(cases))
+
+cumulative_china_hubei <-death_china_Hubei_corona %>% mutate(cumulative_death_china_hubei= cumsum(cases))
+
+cumulative_US <-death_us_corona %>% mutate(cumulative_death_us = cumsum(cases))
+
+cumulative_guatemala_mexico_china_us<- data.frame(date = death_us_corona$date, Guatemala = cumulative_guathemala$cumulative_death_guathemala, Mexico = cumulative_mexico$cumulative_death_mexico, China_Hubei=cumulative_china_hubei$cumulative_death_china_hubei, US=cumulative_US$cumulative_death_us)
+
+cumulative_guatemala_mexico_china_us <- pivot_longer(cumulative_guatemala_mexico_china_us, c(2, 3,4,5), "country", "value")
+
+
+figure12 <- ggplot(cumulative_guatemala_mexico_china_us, aes(x=date, y=value, colour=country)) +geom_point()+ geom_line() + scale_y_continuous(trans = 'log10') + annotation_logticks(sides = "lb") + labs(title ="Cumulative of death case in Guathemala, Mexico, Hubei Province China and US",y="Death cases (Logarithmic scale)")
+
+grid.arrange(figure12,bottom="Figure 12:Total Death cases in Guatemala,Mexico,China(hubei) and US")
+
+```
+
+<font size="4">Figure 12 clearly shows that death rate and number of death in the US higher than Mexico,Guatemala and Hubei.China hubei province shows some increment in number of death in mid-April.The number of deathes and death rate in Guathemal is lower  than Mexico, Hubei and US.</font>
+
+
+
+# 3. Conclusions and Discussion(Limitations)
+
+<font size="4">The coronavirus stared in the Hubei province of China and spread rapidly during February and March. Then gradually became stable. According to the Countries considered, the virus started spreading in those countries in late March.
+In the US, the coronavirus continuous to grew and became difficult to control. Although it began to spread later, more deaths and confirmed cases reported. 
+The number of cases recovered in each country is higher than the number of death cases. According to the data, the virus seems to have spread continuously in Mexico. About a month after the confirmed cases reported, the recovered cases appear.
+Among the countries considered, the death rate is highest in the US, second only to the Hubei province in China. The death rate in Guatemala is less than 1% of the infected. Therefore according to the data, When compared with other countries controlling the situation in Guatemala is much better.
+
+The disease has reached different countries at different times, but comparing them all in this way can show whether the disease is progressing faster or slower in various places once it arrives.
+It is not possible to get an accurate decision based on the number of deaths. Because deaths depend on the underlying age and health of populations; the availability of various treatments; and the capacity of different health systems themselves. Some states and countries only report figures in which a coronavirus infection confirmed through testings.
+These comparisons are not fair. The spread of the pandemic has been very different in Europe and North America from most other countries in the world. They are affected by several factors like climate, geography, genetic make-up, age-structure of the population </font>
+
+
+# 4. Reference
+<font size="4">The wire. 2020. Latest Updates. [ONLINE] Available at: https://www.nytimes.com/interactive/2020/03/21/upshot/coronavirus-deaths-by-country.html . [Accessed 17 July 2020]
+
+The wire. 2020. Opinion. [ONLINE] Available at: https://thewire.in/health/covid-19-data-in-south-asia-shows-india-is-doing-worse-than-its-neighbours. [Accessed 17 July 2020].
+
+Our World in data. 2020. Coronavirus Pandemic (COVID-19). [ONLINE] Available at: https://ourworldindata.org/coronavirus. [Accessed 14 July 2020] 
+
+Grarda World. 2020. careers. [ONLINE] Available at: https://www.garda.com/crisis24/news-alerts/343556/guatemala-government-announces-full-weekend-lockdown-from-may-22-update-13. [Accessed 15 July 2020].  
+
+wikipedia. 2020. Article. [ONLINE] Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Guatemala. [Accessed 13 July 2020]
+
+World Health Organization. 2020. emergencies. [ONLINE] Available at:https://covid19.who.int/region/amro/country/us  /. [Accessed 16 July 2020]  
+
+World Health Organization. 2020. emergencies. [ONLINE] Available at: https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports. [Accessed 14 July 2020]. 
+
+wikipedia. 2020. Article. [ONLINE] Available at: https://en.wikipedia.org/wiki/Guatemala. [Accessed 13 July 2020].</font>

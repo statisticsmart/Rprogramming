@@ -1,0 +1,242 @@
+---
+title: "The impact of COVID-19 on Qatar"
+author: "AS2017342"
+date: "7/8/2020"
+output: 
+  html_document: 
+    keep_md: yes
+    toc: yes
+---
+
+<style>
+body{
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, comment = NA, message = F, warning = F)
+```
+```{r}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(sp)
+library(grid)
+data("wrld_simpl")
+
+```
+
+# **1. Introduction.**
+
+
+## 1.1 Visualization of the country.
+
+```{r, fig.cap = "Figure 1: Location in the world map"}
+qatar_corona <- coronavirus %>% filter(country == "Qatar")
+                                       
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = qatar_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+
+Qatar is located in the Eastern coast of the Arabian peninsula and like many other middle Eastern countries is known for it's vast dessert plains.Qatar has a very dry climate with very less annual rainfall and this natuarally results in very high temperatures.To add to the fact that the country is filled with dessert lands,no rivers or fresh water lakes can be found within the country.
+
+With a population of around 2.8 million as of 2020,Qatar is one of the richest countries in the world based on the GDP per capita.Similar to other neighbouring countries like Saudi Arabia and Kuwait,Qatar too is rich with many natural resources which helps boost the countries economy.Petrolium and natural gases are the driving foces of the economy and have played a major role in making Qatar one of the wealthiest countries.
+
+But when it comes to the COVID-19 pandemic Qatar has been pretty unlucky.With the country scheduled to host the 2022 FIFA World Cup the timing of the pandemic could not have been any worse.The construction of stadiums and facilities have come to an abrupt halt.Due to this global pandemic the tourist revenue of the country has taken a major hit.This could have a negative impact on a country planning to host a major sporting event in the near future.
+
+Furthermore,Qatar is considered as one of the countries which has been heavily affected by the pandemic within the middle Eastern region.As of the 6th of July 2020 the number of cases in Qatar surpassed 100,000.The number of cases reported within a particular day have decreased when compared to the months of April and May.But still the country suffers due to the spread of the virus.
+
+
+## 1.2 Lockdown status and actions taken by the government.
+
+Due to the reduction of identified new cases per day the government of Qatar decided to lift the lockdown restrictions under 4 phases.The 1st phase began on the 15th of June.Under this phase a selected number of parks were opened for visitors.But childeren under 12 years were not allowed inside the parks.Furthermore private health clinics were opened with 40% capacity.The capacity will increase by 20% within each of the 3 other phases.
+
+Phase 2 was commenced on the 1st of July and under this phase restaurants and malls were given permission to open with a limited capacity and for a limited time period.The same rules were applied for museums,libraries and for markets.
+
+Phase 3 is planned to commnece on the 1st of August.This phase would further relax the lockdown restrictions as it permits the arrival of flights from low risk countries specially for residents returning from abroad.Furthermore shopping malls will be allowed to reopen completely while gyms,swimming pools and salons will be allowed to operate with a limited capacity.
+
+The final phase of the easing of lockdown restrictions is scheduled to begin on the 1st of September.Within this phase wedding parties and business gatherings will be permitted for the public and the complete reopening of theatres,museums,libraries and cinemas will also take place.
+
+As of now the government of Qatar plan on lifting lockdown restrictions in the above stated manner.But if the situation within the country worsens they might decide to deffer the phases 3 and 4 indefinitely. 
+
+
+# **2. Exploratory Data Analysis.**
+
+## 2.1 Analysis of the data for Qatar.
+
+Within this section the number of cases confirmed,the number of recoveries,the number of deaths and the number of active cases for Qatar will be analyzed.
+
+```{r}
+data("coronavirus")
+Qatar_corona <- coronavirus %>% filter(country == "Qatar")
+Qatar_confirmed <- Qatar_corona %>% filter(type == "confirmed")
+Qatar_recovered <- Qatar_corona %>% filter(type == "recovered")
+Qatar_deaths <- Qatar_corona %>% filter(type == "death")
+
+Qatar_wide <- Qatar_corona %>%
+  pivot_wider(names_from = "type", values_from = "cases") %>%
+  mutate(active_cases = cumsum(confirmed - death - recovered),
+         confirmed_cumulative = cumsum(confirmed),
+         recovered_cumulative = cumsum(recovered),
+         deaths_cumulative = cumsum(death))
+
+
+```
+
+### 2.1.1 Daily confirmed cases within Qatar.
+
+```{r}
+ggplot(data = Qatar_confirmed,
+       mapping = aes(x = date, y = cases)) +
+  geom_line() +
+  ggtitle("Figure 2: Daily confirmed COVID-19 cases within Qatar")
+```
+
+The above plot shows that the number of cases reported within a particular day shows an exponential increase.The 1st confirmed case within Qatar was reported on the 29th of February.Throughout the month of March no significant increase was shown.The exponential increase begins from the month of April and keeps on rising throughout the month of May.
+
+### 2.1.2 Daily COVID-19 recoveries within Qatar.
+
+```{r}
+ggplot(data = Qatar_recovered,
+       mapping = aes(x = date, y = cases)) +
+  geom_line() +
+  ggtitle("Figure 3: Daily COVID-19 recoveries within Qatar")
+```
+
+Similar to figure 2 this plot too shows a significant increase after the month of April.This is an expected variation as from figure 2 it was identified that the number of daily confirmed cases increase after April.Thus,when the number of confirmed cases increases the number of recoveries too should increase within that period of time.
+
+### 2.1.3 Daily COVID-19 deaths within Qatar.
+
+```{r}
+ggplot(data = Qatar_deaths,
+       mapping = aes(x = date, y = cases)) +
+  geom_line() +
+  ggtitle("Figure 4: Daily COVID-19 deaths within Qatar")
+```
+
+According to figure 4 there has been only 14 deaths reported within Qatar with the highest number of deaths per day being 2.Although there were many confirmed cases within the country,the number of deaths is significantly low when compared to the number of confirmed cases.
+
+### 2.1.4 Daily number of active COVID-19 cases within Qatar.
+
+```{r}
+ggplot(data = Qatar_wide,
+       mapping = aes(x = date, y = active_cases)) +
+  geom_line() +
+  ggtitle("Figure 5: Daily active COVID-19 cases within Qatar")
+```
+
+According to figure 5 the number of active cases are on the rise.Again,the exponential increase is observed from the month of April onwards.From figure 2 it was identified that the number of confirmed cases showed a significant increase from April onwards.Although according to figure 3 the number of recoveries shows an increasing nature it should be noted that while a particular patient is undergoing the recovery process he/she is considered as an active case.Thus,although the number of recoveries increases an increasing nature in the number of active cases can also be expected.
+
+
+## 2.2 Comparison with other countries.
+
+This section explores the statistics available for Qatar with other countries.The countries used for the comparison procedure are Saudi Arabia,Kuwait and the United States.Kuwait and Saudi Arabia are used for the comparison because, both of those countries are within the middle Eastern region along wih Qatar and furthermore are considered to be neighbouring countries of Qatar as well.The US is considered to be the country that is most affected by the pandemic with the highest number of confirmed cases and the highest number of deaths.Therefoe along with China where the virus originated the US has become a global benchmark for comparison purposes.
+
+```{r}
+Qatar_comparison <- coronavirus %>%
+  filter(country %in% c("Qatar", "Kuwait", "Saudi Arabia", "US")) %>%
+  pivot_wider(names_from = "type", values_from = "cases") %>%
+  group_by(country) %>%
+  arrange(date) %>%
+  mutate(active = cumsum(confirmed - recovered - death),
+         cumconfirmed = cumsum(confirmed),
+         cumrecovered = cumsum(recovered),
+         cumdeaths = cumsum(death))
+```
+
+### 2.2.1 Comparison of daily COVID-19 cases.
+
+```{r}
+ggplot(data = Qatar_comparison,
+       mapping = aes(x = date, y = cumconfirmed)) +
+  geom_line(aes(col = country)) +
+  ggtitle("Figure 6: Comparison of the daily COVID-19 confirmed cases")
+```
+
+From figure 6 it is evident that the number of daily confirmed cases for Qatar is less than Saudi Arabia but is greater than Kuwait.But according to the graph the number of confirmed cases seem to be on the rise for all 3 countries.But when comparing with the US,the number of confirmed cases is significantly low for Qatar,Kuwait and Saudi Arabia.
+
+### 2.2.2 Comparison of daily COVID-19 recoveries.
+
+```{r}
+ggplot(data = Qatar_comparison,
+       mapping = aes(x = date, y = cumrecovered)) +
+  geom_line(aes(col = country)) +
+  ggtitle("Figure 7: Comparison of daily COVID-19 recovered cases")
+```
+
+The daily recoveries for Qatar and Kuwait seem to be quite similar while the number of daily recoveries for Saudi Arabia shows a significant increase during the month of May.Again, when comparing with the US the figures of Qatar seem very insignificant.But this does not mean that the figures of Qatar should be ignored.Due to the large scale spread within the US the figures of Qatar may seem insignificant.But within the middle East region Qatar's figures can be paired closely with that of Kuwait.
+
+### 2.2.3 Comparison of daily active COVID-19 cases.
+
+```{r}
+ggplot(data = Qatar_comparison,
+       mapping = aes(x = date, y = active)) +
+  geom_line(aes(col = country)) +
+  ggtitle("Figure 8: Comparison of daily active COVID-19 cases")
+```
+
+Figure 8 clearly displays an increase in the number of active cases for Qatar and Kuwait.But the number of active cases within Saudi Arabia seems to reduce when compared to Qatar and Kuwait.This maybe because, from figure 7 it was identified that although there was no increase in the number of recovered cases for Qatar and Kuwait,Saudi Arabia showed a significant increase in the number of daily recovered cases.Thus,since the number of recovered cases increased the number of active cases might have come down.
+
+
+# **3. Discussion and Conclusions.**
+
+## 3.1 Discussion.
+
+The analyzed dataset spans from january 22nd 2020 to 12th May 2020.All the outputs obtained correspond to this specific period.But the world is still faced with the threat of the COVID-19 pandemic.Thus any predictions made for the dates after 12th of May will be subjected to a certain amount of variability.In the 1st section of this report it was mentioned that the government of Qatar implemented a 4 phase plan to lift the lockdown restrictions.The 1st phase began on the 15th of June.Thus,this implies that the number of confirmed cases within Qatar might have reduced leading upto the 15th of June.Since the dataset is only available till the 12th of May this variation is not visible within the outputs obtained for this report.
+
+The results of Qatar were compared with those of Kuwait,Saudi Arabia and the United States.It was clearly visible that while the outcomes for Qatar,Kuwait and Saudi Arabia were within the same spectrum the outcomes for the US showed drastically different results.Obviously it is a well known fact that the US is heavily affected by the pandemic.This definetely plays a role in the outcomes for the US.But it should be noted that Qatar is a significantly small country when compared to the United States.Qatar is approximately 849 times smaller than the United States.Therefoe it is not quite accurate to make a direct comparison between the results for Qatar and the United States.Ideally an adjustment should be made to the outcomes of Qatar in order to capture the size difference between the two countries.
+
+The data for Qatar is not further broken down into various provinces within the country.Thus,the analysis was only capable for the country as a whole.Further insights regarding the country such as,the highest affected area within the country,the area where the most deaths were reported and the area where the highest number of active cases are present are not possible due to the nature of the available data.
+
+During the period between January 22nd and May 12th only 14 deaths were reported within Qatar.This is a very low number considering the number of confirmed cases.Although Kuwait has only 10277 confirmed cases compared to Qatar's 25149 Kuwiat reported 75 deaths which is 61 more than that of Qatar.Thus,Qatar's medical staff can be given credit for working tirelessly in order to reduce the number of deaths reported.Thus,it can be said that the country has been able to manage the pandemic well by keeping the number of casualties to a minimum.
+
+The number of active cases represents indivituals who are undergoing treatments.This can be obtained by removing the total number of recovered cases and the total number of deaths from the total number of confirmed cases.When the total number of confirmed cases increases instinctively the total number of active cases also increases.The total number of active cases can reduce if the total number of recovered cases increases or if the total number of deaths increases.In figure 8 the total number of active cases within Saudi Arabia reduces.This maybe due to the increase in the number of recovered cases which can be observed in figure 7.No such behaviour can be observed for Qatar.
+
+
+## 3.2 Conclusions.
+
+* As of 12th May 2020 the number of confirmed cases within Qatar keeps on rising.
+
+* The impact of COVID-19 on Qatar is less than that on Saudi Arabia but is greater than that on Kuwait.
+
+* As of 12th May 2020 Qatar has been able to keep the number of casualties to a very low number.
+
+* The virus started spreading throughout the country from April onwards.
+
+* Globally,the virus started affecting most of the countries from the start of April 2020.
+
+* The United States seem to be finding it hard to control the spread of the virus.
+
+
+# **4. References.**
+
+1. Wickham,H., and Grolemund,G.2017.R for Data Science.California:O'REILLY.
+2. https://www.worldtravelguide.net/guides/middle-east/qatar/weather-climate-geography/
+3. https://www.aljazeera.com/news/2020/06/qatar-lift-coronavirus-restrictions-phases-200608200635130.html
+4. https://en.wikipedia.org/wiki/Qatar
+
+
+
+
+
+
+

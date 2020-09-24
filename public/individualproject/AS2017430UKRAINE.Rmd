@@ -1,0 +1,404 @@
+---
+title: "Ukraine COVID-19 Analysis"
+output: 
+  html_document:
+  css: style.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<p style="font-family: timesNewRomen, serif; font-size:14pt">**1.Inroduction**</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+
+The corona virus pandemic is the defining global health crisis of our time. Since its emergence late last year, the virus has spread to every continent except Antarctica. The world Health Organization has made the assessment, that COVID-19 can be characterized as a pandemic, but it is a pandemic that can be controlled.\
+</p>
+
+</p>
+
+<p align = "center">
+![](AS2017430_UKRAINE_images/panemic.jpg){width = 50%}
+</p>
+
+
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt">**Visualization of the location**</p>
+
+<!--FirstParagraph discribed the location of the ukraine-->
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+    Ukraine is situated in the central part of the Eastern Europe. It is the large country in          Eastern Europe and Kyiv is the capital city. Ukraine has an area of 603,628 km2. This country      is the 46th largest country in the world. Ukraine is bordered by Belarus to the north, Russia      to the east,the sea of Azov and the black sea which has coastline exceed 1500 kilometers,          Moldova and Romania to the southwest and Hungary, Slovakia and Poland to the west. In the far southeast, Ukraine is separated from Russia by the Kerch strait, with connects the sea of Azov  to the black sea.
+</p>
+
+<!--loading the packeges that would be want-->
+```{r ,echo=FALSE,comment=NA, message=FALSE,eval=TRUE}
+library(tidyverse)
+library(magrittr)
+
+```
+<!--loading and understand structure of the full dataset-->
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE}
+library(coronavirus)
+data(coronavirus)
+#head(coronavirus)
+#str(coronavirus)
+```
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+#filter the country of ukraine
+ukraine_data1 <- coronavirus %>% filter(country == "Ukraine")
+#convert the dataframe in to the tibble
+ukraine_data <- as_tibble(ukraine_data1)
+```
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+library(ggmap)
+library(sf)
+library(mapview)
+location_of_Ukraine <- st_as_sf(ukraine_data, coords = c("long", "lat"), crs = 4326)
+mapview(location_of_Ukraine,alpha =0)
+```
+
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt">**Climate Condition**</p>
+
+<!--Second Paragraph discribed the climate of the ukraine-->
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+The climate of Ukraine is temperate continental. The only exception is the southern coast of Crimea, where the climate is subtropical of the Mediterranean type. Generally, the climate is moderately warm, humid air coming from the Atlantic Ocean. Average annual temperature range from 5.5 -7 Celsius in the north, to 11- 13 Celsius in south. Average winter temperature ranges from -8 to -12 temperature in southern region approaches -9 Celsius. The average summer temperature ranges from 18 -25 Celsius. However, it can exceed 35 Celsius during the day. Frequent weather fronts bring weather changes, note, however, that clear, sunny weather is typical for Ukraine (up to 230 sunny days per year). Precipitation falls unevenly across Ukraine. The southern coast of Crimea is the warmest place in Ukraine. The summer temperature here reaches 39 Celsius, while the average temperature in January is 4 Celsius. Relative air humidity is 65 - 80%.
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt">**Lockdown status of the country**</p>
+
+<!--Third Paragraph-->
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+In Ukraine, first confirmed COVID-19 case is observed March 3 in 2020 in Chernivtsi oblast, a man who travelled from Italy to Romania by Plane and taken arrived in Ukraine by car. On 12 march two more cases in confirmed. Two persons who returned from Italy and Poland. The, woman, from Radomyshi, in the Zhytomyr oblast, died on 13 March. In Chernivtsi oblast, gradually increased the confirmed cases and all infected persons are connected with previous cases. On 18 March, member of the Ukrainian parliament also confirmed positive case. An emergency was declared on 20 March in the Kiev oblast, Chernivtsi oblast, Zhytomyr oblast, Dnipropetrovsk oblast, Ivano Frankivsk oblast and the city of Kiev.\
+On 20 March, the first case of recovery from COVID-19 was reported for a man in Chernivtsi who was the first infected person in the country. On 25 march, the government introduced a 30-day emergency regime across Ukraine that was scheduled planned to end on 24 April when there are 113 confirmed cases. Since 6 April, wearing a face mask is required by the government in public places but in 21 April, it was reported, that the ministry planned to requested an extension of the quarantine until May 12, albeit with some exceptions, such as opening libraries and museums until May 11. On 4 May, the government extended the quarantine until 22 May.\
+A government re-opened the country in several stage. Firstly, re-opened parks, beauty salons so on. Secondly, opened nurseries, public transports and hotels. On 01 June, railway connection re-opened and international flights resumed on 15 June, however as of this date Ukrainians could only travel to Albania, Belarus, the UK, US, and Turkey. 
+</p>
+<p style="font-family: timesNewRomen, serif; font-size:12pt">**Action taken by the government**</p>
+
+<!--fourth paragraph-->
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+The government website provides all health protectively information. The government take immediate action against this pandemic situation. Following are the action taken by government.\
+-In public transport, all passengers are to wear masks and gloves. The number of passengers in the transport vehicle is to be equal to the number of sitting places. Passengers are required to keep distance in subway cars, on escalators and on platforms while waiting for the train.\
+- For sports clubs: the number of visitors should not exceed 1 person per 10 square meter in individual workout, and 5 square meter per person during team workouts (but up to 10 people in a group).\
+- The government allowed excursions for groups up to 50 people, as well as indoor religious events, provided 1 person per 5 square meter and visitors maintained a distance of 1.5 meters.\
+- The 2019/2020 academic year for schoolchildren and students continues in a remote format. The External Independent Evaluation will take place from June 25 to July 17. International students who come to take the exams are exempt from passing observation or self-isolation.\
+- In tourism, the government divided two time zones such as red zone and green zone. In red zone country which countries with more than 40 active cases per 100,000 populations. People entering Ukraine need to undergo self-isolation or observation 14 days. Green zone countries which countries less than 40 active cases per 100,000 population entering Ukraine do not need self-isolation or observation.
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:14pt">**2.Exploratory Data Analysis**</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+Following outputs are given the summary of the Ukraine coronavirus data. The 336 observation
+observations are taken from 22 January to 12 May. The several variables are obtained such as date of the observation taken from, province of the case identified, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given date.\
+</p>
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+#convert charater vectors in to factors
+ukraine_data$province <- as.factor(ukraine_data$province)
+ukraine_data$country <- as.factor(ukraine_data$country)
+ukraine_data$type <- as.factor(ukraine_data$type)
+head(ukraine_data)
+summary(ukraine_data)
+#str(ukraine_data)
+```
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+ggplot(ukraine_data,aes(x=cases,y=type,fill = type,col = type,)) + 
+  geom_boxplot(outlier.shape = NA,alpha = 0.2)+
+  geom_jitter(aes(col=type))+ 
+  labs(x = "no of cases per day", y = "type of the case",title = "Figure : 01")
+```
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+This figure shows that, confirmed, death and recovered cases in Ukraine. At first, there were no cases but in shortly, number of confirmed case are increased speedily and it is too much larger than death and confirmed cases. Especially, Ukraine has small amount of death cases than confirmed cases. Ukraine had considerable recoveries.\
+</p>
+
+<!--plotting all type of cases in one graph in month-->
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+df <- ukraine_data %>% separate(date, into = c("year","month","day"))
+#convert charater vectors in to factors
+df$month <- as.factor(df$month)
+df$year <- as.factor(df$year)
+df$day <- as.factor(df$day)
+#convert numeric stored variable month in to the categorical variables
+levels(df$month) <- c("Jan","Feb","Mar","Apr","May")
+df1 <- df %>% mutate(date = ukraine_data$date)
+df2 <- df1 %>% mutate(Precentage_cases = df1$cases*100/sum(cases))
+```
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+p1 <- ggplot(df2, aes(x=date, y=cases,col=type)) +geom_line(lwd = 1) + 
+  labs(x = "Months" , y = "number of cases of each day", subtitle = "Figure :02")+
+  theme_classic() 
+p1 + scale_color_manual(values=c("#CC6666", "#9999CC","#009999"))
+```
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+On March there are several number of confirmed cases is identified and recover cases are very lower than confirmed cases in this month. In April confirmed cases are increased and recovering are lower. Highest number of confirmed cases are reported in this month and no deaths. It can be seen virus is spared in to the community somehow and spreading very higher. In May deaths are reported but reported deaths are very lower than confirmed and recover cases. Further it is noticed, recover cases are started to increase.\
+</p>
+
+<!--folowing figure can easy to read than previous figure-->
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+According to that figure, it can be much easy to understand the fluctuation of the deaths, confirmed cases and recovered cases in each month. It can be some times, confirmed cases are increased fast after April. After the May it decreased. Deaths are in controlled certain range and It’s very lower than confirmed cases. Recovered cases are stared to increase nearly in May. It means recovering procedure is very slower than virus spreading procedure.\ 
+</p>
+
+<!--per-Processing some countries data-->
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+china_data <- coronavirus %>% filter(country == "China") %>% filter(type=="confirmed")
+china_data <- china_data %>% mutate(
+  cases = replace(cases, which(cases < 0), NA))
+#Identified the missing values
+#which(is.na(china_data$cases))----code
+#use the average of the 840th and the 842th to calculate the missing value.
+china_data$cases[841] = mean(c(china_data$cases[840], china_data$cases[842]))
+#length(china_data$cases)----code
+#ggplot(china_data, aes(x=date, y=cases)) +geom_line(lwd = 1, na.rm = FALSE)
+
+us_data <- coronavirus %>% filter(country == "US") %>% filter(type=="confirmed")
+us_data <- us_data %>% mutate(
+  cases = replace(cases, which(cases < 0), NA))
+
+Italy_data <- coronavirus %>% filter(country == "Italy") %>% filter(type=="confirmed")
+Italy_data <- Italy_data %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+#There is no minus valus or missing values in south Africa . So that I didn't change 
+southAfrica_data <- coronavirus %>% filter(country == "South Africa") %>% filter(type=="confirmed")
+
+southKorea_data <- coronavirus %>% filter(country == "Korea, South") %>% filter(type=="confirmed")
+southKorea_data <- southKorea_data %>% mutate(
+  cases = replace(cases, which(cases < 0), NA))
+
+SriLanka_data <- coronavirus %>% filter(country == "Sri Lanka") %>% filter(type=="confirmed")
+SriLanka_data <- SriLanka_data %>% mutate(
+  cases = replace(cases, which(cases < 0), NA))
+
+#filter the ukraine confirmed cases also.
+ukraine_data2 <- ukraine_data %>% filter(type=="confirmed")
+
+#converted as tibble
+china_data <- as_tibble(china_data)
+us_data <- as_tibble(us_data)
+Italy_data <- as_tibble(Italy_data)
+southAfrica_data <- as_tibble(southAfrica_data)
+southKorea_data <- as_tibble(southKorea_data)
+SriLanka_data <- as_tibble(SriLanka_data)
+
+target_dataset <- bind_rows(us_data,southAfrica_data,ukraine_data2,Italy_data,
+                             southKorea_data,SriLanka_data)
+library(ggplot2)
+library(gganimate)
+theme_set(theme_bw())
+
+target_dataset1 <- target_dataset %>% separate(date, into=c("year","month","day"))
+target_dataset1$day <- as.integer(target_dataset1$day)
+target_dataset1$month <- as.integer(target_dataset1$month)
+
+p2 <-ggplot(target_dataset, aes(x=date,y= log(cases),col=country)) +
+  geom_line(lwd = 0.5) +
+  labs(x = "Months" , y = "log(confirmed cases)", subtitle = "Figure :03")+
+  coord_cartesian(ylim = c(1, 12))
+
+p2 + geom_point() +transition_reveal(target_dataset1$month)
+```
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+In this figure, it is selected specific countries considering the special reasons. Except, South Korea, other countries had no confirmed cases but they had risk. Italy has been starting to increase confirmed cases near May. Next, US was reported. Ukraine also is started reported case after March when the Italy, US had highest increased cases. Especially, it can be seen south Korea and Sri Lanka are controlled, increasing of the confirmed case up to the May.\
+</p>
+
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+library(ggplot2)
+library(gganimate)
+library(gifski)
+#created a simple dataset to get the total caes of each month of different countries
+final_data <- tibble(countryFinal = rep(c("Ukraine","China","US","Italy","South Afriaca","Sri Lanka",
+                                 "South Korea"),each = 5),monthFinal =rep(1:5,times =7),
+                     casesFinal = c(0,0,645,9761,5617,9802,69554,2925,1677,62,
+                               7,61,188104,881252,299952,2,1126,104664,99671,15753,
+                               0,0,1353,4294,5703,1,0,142,520,226,11,3139,6636,988,188))
+
+
+dec_intake_formatted = final_data %>% 
+  group_by(monthFinal)%>%      
+  mutate(rank = rank(-casesFinal),
+         Value_rel = casesFinal/casesFinal[rank==1],
+         Value_lbl = paste0(" ",casesFinal)) %>%
+  group_by(countryFinal) %>%
+  filter(rank <= 7)
+
+#createing animated graph
+anim = ggplot(dec_intake_formatted, aes(rank, group = countryFinal,fill = as.factor(countryFinal),colour = as.factor(countryFinal)))+
+  geom_tile(aes(y = casesFinal/2,
+                height = casesFinal,
+                width = 0.9), alpha = 0.8, color = NA) +
+  geom_text(aes(y = 0, label = paste(countryFinal, " ")), vjust = 0.2, hjust = 1, size = 7) + #determine size of the country label
+  geom_text(aes(y=casesFinal,label = Value_lbl, hjust=0),size = 8 ) +#determine size of the value label
+  coord_flip(clip = "off", expand = TRUE) +
+  scale_x_reverse() +
+  theme_minimal() +
+  theme(axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position="none",
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        panel.grid.major.x = element_line( size=.1, color="grey" ),
+        panel.grid.minor.x = element_line( size=.1, color="grey" ),
+        plot.title=element_text(size=25, hjust=0.5, face="bold",     colour="black", vjust=-1),
+        plot.subtitle=element_text(size=18, hjust=0.5, face="italic", color="red"),
+        plot.background=element_blank(),
+        plot.margin = margin(1,4, 1, 8, "cm")) +
+  transition_states(monthFinal , transition_length = 4, state_length = 1) +
+  ease_aes('sine-in-out') +
+  labs(title = ' Figure :04 Number of Confirmed cases per month by country: {closest_state}')
+
+library(png)
+animate(anim, nframes = 350,fps = 25,  width = 1200, height = 1000, 
+        renderer = gifski_renderer("gganim.gif"))
+```
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+Following figure explained confiremed cases were increasing in specific countries which is defined in perviously, in January to May. It is included to China in oder to getting  clear idea.
+</p>
+
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+poland_data <- coronavirus %>% filter(country == "Poland") %>% filter(type=="confirmed")
+Belarus_data <- coronavirus %>% filter(country == "Belarus") %>% filter(type=="confirmed")
+Romaina_data <- coronavirus %>% filter(country == "Romania") %>% filter(type=="confirmed")
+Russia_data <- coronavirus %>% filter(country == "Russia") %>% filter(type=="confirmed")
+#converted as tibble
+poland_data <- as_tibble(poland_data)
+Belarus_data <- as_tibble(Belarus_data)
+Romaina_data <- as_tibble(Romaina_data)
+Russia_data <- as_tibble(Russia_data)
+target_dataset2 <- bind_rows(poland_data,Belarus_data,Romaina_data,Russia_data,ukraine_data2)
+p3 <- ggplot(target_dataset2, aes(x=date,y= log(cases),col=country)) +geom_line(lwd = 0.8) +
+  labs(x = "Months" , y = "log(confirmed cases)", subtitle = "Figure :05")+
+  coord_cartesian(ylim = c(1, 10))
+ p3 + scale_color_manual(values=c("#009900", "#009999","#CC99FF","#CC9900","#990000"))
+```
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+This figure shows that confirmed case of Belarus, Poland, Romania and Russia. Those are the countries, which are surrounded by Ukraine. If those countries have risk, then Ukraine also in a risk.  Russia has large number of cases it was increased too. Poland and Romania, had fast increased case in March to April. Belarus and Ukraine were slow increases but after April Belarus, Poland, Romania, and Ukraine approximately similar cases reported and in a certain number of confirmed case.
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+This is wolrd map, It can be seen countries which are used in this anlysis.
+</p>
+
+<!--Plotting the location of the several countries-->
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+target_dataset3 <- bind_rows(target_dataset,target_dataset2)
+#+ geom_point(data=target_dataset2, aes(x=long, y=lat, group=FALSE, size=1:560),
+             #color=c("red"), alpha = 0.5)
+#(target_dataset3)
+p+ geom_point(data=target_dataset3, aes(x=long, y=lat, group=FALSE),
+             color= c("red"), alpha = 0.5)
+```
+
+<p style="font-family: timesNewRomen, serif; font-size:14pt">**3. Discussion**</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+
+The dataset is loaded by coronavirus dataset given in the package R. Ukraine dataset is obtained by it. The dataset has no null values or minus value for cases. In figure two, it can be seen, before March there were no confirmed or death cases but it is occurred several recovered cases. When considering the all cases in country in details, it is ensuring those recover cases are impossible because Ukraine reported its first recovered case in March 20. Ukraine is caparisoned with other countries also. Those countries are selected due to a specific unique reasons. China is the first country which is founded corona virus in Hubei Province. South Korea is victimized by the virus after the china in early February. Sri Lanka also victimized in early and it’s have medium health facilities. Those two countries could control this pandemic situation in their countries. In order to getting idea about the continent of Africa, it is concluded that south Africa. Currently, US and Italy are popular because they had large number of coronavirus cases than other countries in world wide. Those date are obtained by coronavirus dataset but it happened to see some negative cases and null values. The all unusual observations are re-coded as a different manner. It is used manual method to obtain count of confirmed cases in each country in monthly. In figure five also same as in figure three comparison. Ukraine is caparisoned with its neighborhood countries. All datasets are obtained in special way which is described previously.\
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:14pt">**4. Conclusions**</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+
+Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to March. However, it is directly affected to the other countries. At that time, most of countries in Asia had high risk but all countries did not expect serious situations like this. China is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population they taken action to preventing virus. South Korea and Sri Lanka are taken immediate action while virus entering the virus in to the country. Somehow they could be able controlled confirmed cases in April.\
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+At very first, US had several confirmed cases in early February. Italy is reported large number of confirmed cases day by day nearly in March. Their death rate was very high than other countries at that time. In early April, US happened increase the confirmed case. In May, US reported their highest number of confirmed cases and death cases. Us is the country which has large number of population in Europe. After US is victimized, most of other countries in Europe also in risk.\
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+The Ukraine became a victim of virus after March and it happened to increase confirmed cases after April to May. Ukraine government had started to take actions against this situation after March but at that time virus is spread to the society but not as large way as US or Italy. However, Ukraine could control the pandemic situation in their country nearly in May. Ukrainians keep the rules which are built by the government in order to prevent virus. The government website also crated to inform the Society. Ukraine has middle health facilities when comparing to US, China but they could reduce their death using those facilities. Us is the first country which has modern technologies and highest health facilities but US could not controlled the situation until May. It is pointed out, prevent spread virus is the best thing to control this situation. Comparing US, Italy, South Africa, Ukraine had low number of confirmed case than those countries.\
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+The continent of Africa has larger number of countries which has poor health facilities and suffering from so than other countries. South Africa happened to start increasing the case. In May, it dramatically increasing much difficulties and no reducing.  If this happened this way, it cannot be able to control the deaths. So that, all countries have same responsible for prevent the virus in order to preventing spread to the poor country.\
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt;text-align: justify">
+Belarus, Poland, Romania and Russia are the neighborhood countries of the Ukraine. It can be seen, all those countries victimized by the virus and damage is higher than Ukraine. Except, Russia, Belarus, other countries could control the situation but Ukraine confirmed case are bit high than Romania and Poland.  When considering the Ukraine only, it was found that Ukraine is reported very low number of confirmed cases and it is increase very fast also. These kind of situations are happened clearly in three times during this time period. It may be happened because the small clusters founded in Chernivtsi, Kiev oblast so on. Lastly, at very first Ukraine could not able to control the situation but Ukraine is fought back against the virus near April. Finally, Ukraine is succeeding to prevent virus spreading and reduced death cases and increased the recovered case. That’s remarkable thing.\
+</p>
+
+<p style="font-family: timesNewRomen, serif; font-size:14pt">**5. References**</p>
+
+
+<p style="font-family: timesNewRomen, serif; font-size:12pt">
+
+<https://en.wikipedia.org/wiki/Ukraine>\
+<https://www.britannica.com/place/Ukraine>\
+<https://reliefweb.int/report/ukraine/ukraine-covid-19-situation-overview-no-2-18-may-2020>\
+<https://covid19.gov.ua/en>\
+<https://hellor.netlify.app/slides/onlinehelpdesk>\
+<https://towardsdatascience.com/create-animated-bar-charts-using-r-31d09e5841da>\
+<https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>\
+<https://towardsdatascience.com/https-towardsdatascience-com-everything-you-need-to-know-about-animated-bar-charts-be033f398619>\
+<http://r-spatial.github.io/mapview/>
+</p>
+
+
+```{r,echo =FALSE,comment=NA, message=FALSE,eval=TRUE,warning=FALSE}
+#ontained number of cases in each month separately
+#ukraine_data2<-  ukraine_data2 %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(ukraine_data2$cases)
+
+#china_data <-  china_data %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(china_data$cases)
+
+#us_data <-  us_data %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(us_data$cases)
+
+#Italy_data <-  Italy_data %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(Italy_data$cases)
+
+#southAfrica_data <-  southAfrica_data %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(southAfrica_data$cases)
+
+#SriLanka_data <-  SriLanka_data %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(SriLanka_data$cases)
+
+#southKorea_data <-  southKorea_data %>% separate(date, into = c("year","month","day"))%>% 
+  #filter(month == "05")
+#sum(southKorea_data$cases)
+```
+<!--end-->
+
+
+

@@ -1,0 +1,445 @@
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<center>
+**Assignment**
+
+**Coronavirus report of Malaysia**
+
+**STA 326 2.0 Programming and Data Analysis with R**
+
+**......................................................................................................**
+
+**AS2017412**
+
+**P.B.Kodithuwakku**
+
+**......................................................................................................**
+</center>
+
+# 01.Introduction
+
+
+## 1.1 Visualisationof the Location
+
+Malaysia is a country in Southeast Asia.Malaysia is a milti-ethnic, multi-religious union of 13 states and three fedaral territories consisting of two areas devided by some 640 miles of the South China Sea. Most muslim ethnic Malay are politically dominant and benefit from positive discrimination in industry, education and civil service. but significant Chinese ethnic minority retains economyic influence. Despite ethnic and religious differences, communities are relatively united. Malaysia is a federal constitutional elective monarchy. 
+
+
+
+
+
+```{r,message=FALSE,warning=FALSE, echo=FALSE, fig.align='center'}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+malaysia_location <- tibble(lat=2.5, long=112.5) 
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = malaysia_location, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+<center>
+
+
+  ![Map of Malaysia](Malaysia.png)
+
+</center>
+
+
+<center>
+**Area : 330,830 square kilometres**
+
+**Capital : Kuala Lumpur**
+
+**Population : 32,730,000**
+  
+**population Density : 92 per square kilometres**
+
+**Prime minister : Abdullah al-haj**
+</center>
+
+
+
+
+## 1.2 Climate condition of Malaysia
+
+Both peninsular and insular Malaysia lie in the same tropical latitudes and are affected by similar airsreams. Malaysia has high temperatures and humidities, heavy rainfall and a climatic year patterned around the northeast and southwest monsoons.the four seasons of the climate year are the northeast monsoon(from november or december until march), the first intermonsoonal period(from march to April or May), the southwest monsoon(from May or June to September or Octomber) and the second intermonsoonal period(Octomber to November). In this Corona Situation, they spend the first intermonsoonal period and the southwest monsoonal period. Further Malaysia has an equatorial climate and climate impacts are penetraring internally.Temperatures are uniformly high throughout the year.On the peninsula, they average about 80 Fahrenheit(27 Celsius) in most Lowland areas.Temperatures are lower in the interior highland regions. In coastal areas, minimum temperatures range from the low to mid 70 Fahrenheit(27 Celsius),and maximum temperatures hover around 90 Fahrenheit(32 Celsius). The mean annual rainfall on the Malaysia is approximately 100 inches(2,540 mm).
+                       
+## 1.3 Coronavirus disease in Malaysia
+
+Corona virus disease, a novel pneumonia disease originating in wuhan, was confirmed by the World Health Organization on 12 january 2020 before becoming an outbreak in all countries. On 25 January 2020, Malaysia reported its first three incidents, all of whom were Chinese nationals who had visited the country. Through January 30th the number of cases had risen to eight. Malaysians were also not well prepared to combat the pandemic, primarily because of the ongoing political crisis and also because they were told that the virus would not easily spread in Malaysia.
+                      However in a few weeks, Malaysia had reported the highest total number of confirmed coronavirus infections in Southeast Asia, by the end of March 2020 breaking the 2,000 active cases mark. Consequently, The government took a several measures to ease the mass panic and to protect the health of Malaysian people. The goverment of Malaysia imposed a Movment Control Order Starting on 18 march 2020 to separate the coronavirus chain. In addition, on 1 March 2020 an alliance was formed with 38 professional medical societies to support the MoH in the field of healthcare. This coalition's intention was to keep the community well informed, and to ensure that the information provided was true and accurate.
+
+# 02 Exploratory Data Analysis 
+
+
+```{r comment=NA, include=FALSE}
+library(coronavirus)
+```
+
+```{r comment=NA, include=FALSE}
+head(coronavirus)
+```
+
+```{r comment=NA, include=FALSE}
+str(coronavirus)
+```
+
+```{r warning=FALSE, comment=NA, include=FALSE}
+library(skimr)
+skim(coronavirus)
+```
+
+```{r warning=FALSE, comment=NA, include=FALSE}
+library(tidyverse)
+library(magrittr)
+malaysia_corona <- coronavirus %>% filter(country == "Malaysia")
+```
+
+```{r warning=FALSE, comment=NA, include=FALSE}
+library(dplyr)
+tbl_df(malaysia_corona)
+```
+
+```{r comment=NA, include=FALSE}
+str(malaysia_corona)
+```
+
+```{r warning=FALSE, comment=NA, include=FALSE}
+library(skimr)
+skim(malaysia_corona)
+```
+
+
+```{r warning=FALSE, comment=NA, include=FALSE}
+library(tidyverse)
+library(magrittr)
+
+```
+```{r comment=NA, include=FALSE}
+
+malaysia_corona_pw <- malaysia_corona %>% pivot_wider(names_from = type, values_from= cases )
+head(malaysia_corona_pw )
+```
+
+
+
+## 2.1 Confirmed cases in the Malaysia
+
+```{r comment=NA, include=FALSE}
+confirmed_malaysia_corona <- malaysia_corona %>% filter(type=="confirmed")
+head(confirmed_malaysia_corona)
+```
+```{r eval=FALSE, comment=NA, include=FALSE}
+ggplot(confirmed_malaysia_corona, aes(x=date, y=cases, color=province)) + geom_point() + geom_line() + ggtitle("Malysia : Daily Covid-19 confirmed")
+
+```
+
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,fig.cap="Figure 2.1: Daily covid-19 confirmed cases in Malaysia", fig.align='center'}
+
+ggplot(data=confirmed_malaysia_corona, aes(x=date, y=cases))+ 
+ geom_col()
+
+```
+This Figure 2.1 shows daily confiremed covid-19 cases in Malaysia. The 1st comfirmed cases of the corona virus disease in Malaysia is reported in january. There has been significant increase since the end of february. The highest number of daily confirmed ceses have reported on March and April. May saw a slight decrease in the number of covid-19 confirmed cases, compared to April.
+
+# 2.2 Recovered cases in the Malaysia
+
+```{r comment=NA, include=FALSE}
+recover_malaysia_corona <- malaysia_corona %>% filter(type=="recovered")
+head(recover_malaysia_corona)
+recover_malaysia_corona
+```
+
+
+```{r eval=FALSE, comment=NA, include=FALSE}
+ggplot(recover_malaysia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Malysia : Daily Covid-19 Recoveries")
+
+```
+
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,fig.cap="Figure 2.2: Daily covid-19 recovered cases in Malaysia", fig.align='center'}
+
+ggplot(data=recover_malaysia_corona, aes(x=date, y=cases))+ 
+ geom_col()
+
+```
+
+Figure 2.2 shows daily recovered covid-19 cases in Malaysia. The 1st recoverd cases of the corona virus disease in Malaysia is reported in February. Since mid-march, there has been a significant increase in the recovered cases of corona virus. The highest number of recovered ceses have reported on April.
+
+# 2.3 Death cases in the Malaysia
+
+```{r comment=NA, include=FALSE}
+death_malaysia_corona <- malaysia_corona %>% filter(type=="death")
+head(death_malaysia_corona)
+```
+```{r eval=FALSE, comment=NA, include=FALSE}
+ggplot(death_malaysia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Malysia : Daily Covid-19 death")
+
+```
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,fig.cap="Figure 2.3: Daily covid-19 death cases in Malaysia", fig.align='center'}
+
+ggplot(data=death_malaysia_corona, aes(x=date, y=cases))+ 
+ geom_col()
+
+
+  
+
+```
+Figure 2.3 shows daily death covid-19 cases in Malaysia. The 1st death cases of the corona virus disease in Malaysia is reported in March. Since mid-march, there has been a significant increase in the death cases of corona virus. The highest number of death ceses have reported on April. The highest number of death cases per day was eight.
+
+
+# 2.4 Summary cases in the Malaysia
+
+
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE,fig.cap="Figure 2.4: Daily covid-19 confirmed, recovered and death cases in Malaysia", fig.align='center'}
+ggplot(malaysia_corona, aes(x = date, y = cases, color = type, group = type)) + geom_point() + geom_line() + scale_color_brewer(palette = 'Dark2') + theme_classic(base_size = 12)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+summary_table <- malaysia_corona_pw %>% summarise(
+  confirmed_cases=sum(confirmed),
+  recovered_cases=sum(recovered),
+  death_cases=sum(death))
+
+summary_table
+```
+
+```{r, echo=FALSE, warning=FALSE}
+library(knitr)
+summary_table <- tibble(Country=c("Malaysia"),
+                        Confirmed=c(6742),
+                        Death=c(109),
+                        Recovered=c(5223),
+                        Active=c(1410))
+kable(summary_table, caption = "Table 2.1: Summary table for covid 19 cases in Malaysia")
+```
+
+
+Figure 2.4 shows all daily covid-19 cases in Malaysia.From March month to beginning of april month, There has been a significant increase in the confirmed cases greater than recovered cases. Since mid-april, there has been a significant increase in the recovered cases greater than confirmed cases. The number of Death cases is Significantly lower than the number of Confirmed cases. According to table 2.1 Malaysia has a 1410 active cases of covid-19
+
+
+## 2.5 Comparison with Neighbouring countries
+
+We are going to compare with neighbouring countres because of Climate condition of Malaysia. Malaysia has an equatorial climate as well as It is a South Asian country. So we have to choice countries with equatorial climate. Lot of South Asian countries have equatorial climate. So selected countries are
+
+
+* Singapore
+* Indonesia
+* Thailand
+* Philippines
+
+**Confirmed cases Comparison**
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2.5.1: Daily Comfirmed cases", fig.align='center'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+Neighbour_comparison <- coronavirus %>% filter(country %in% c("Malaysia", "Singapore", "Indonesia", "Thailand", "Philippines"))
+confirmed_cases <- Neighbour_comparison %>% filter(type=="confirmed")
+ggplot(confirmed_cases, aes(x=date,y=cases, color=country))+geom_line()+geom_point()
+```
+Acording to the Figure 2.5.1, Malaysia has a slight decrease in the spread of corona virus compared to Singapore, Indonesia and Philippines.because of that Singapore, Indonesia and Philippines covid-19 confirmed cases is greater than  malaysia covid-19 confirmed cases. but Thailand covid-19 confirmed cases is Significantly lower than malaysia covid-19 confirmed cases.
+
+
+**Recovered cases Comparison**
+```{r,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2.5.2: Daily recovered cases", fig.align='center'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+Neighbour_comparison <- coronavirus %>% filter(country %in% c("Malaysia", "Singapore", "Indonesia", "Thailand", "Philippines"))
+recovered_cases <- Neighbour_comparison %>% filter(type=="recovered")
+ggplot(recovered_cases, aes(x=date,y=cases, color=country))+geom_line()+geom_point()
+```
+Figure 2.5.2 shows the daily recovered covid 19 cases in Malaysia, Singapore, Indonesia, Philippine and Thailand. From mid-March to mid-April, Malaysia has a significantly increse in the recovered cases of corona virus compared to Singapore, Indonesia, Thailand and Philippines.Since end of April, There has been a significant decrease in the recovered cases of corona virus compared to other Neighbouring countries. There has been a huge increse in the number of covid-19 recovered cases in singapore compared to Malaysia Since early may.
+
+
+**Death cases Comparison**
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2.5.3: Daily Death cases", fig.align='center'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+Neighbour_comparison <- coronavirus %>% filter(country %in% c("Malaysia", "Singapore", "Indonesia", "Thailand", "Philippines"))
+death_cases <- Neighbour_comparison %>% filter(type=="death")
+ggplot(death_cases, aes(x=date,y=cases, color=country))+geom_line()+geom_point()
+```
+
+Figure 2.5.3 shows the daily covid 19 death cases in Malaysia, Singapore, Indonesia, Philippine and Thailand.Indonesia and Philipphine has a Significant increse in the Death cases of corona virus compared to Malaysia, Singapore and Thailand. Malaysia will be able to control theire daily deaths in this situation.
+
+**Summary cases Comparison table**
+
+```{r warning=FALSE, include=FALSE}
+library(knitr)
+Ncountry_group_death <- death_cases %>% group_by(country)
+Ncountry_group_recovered <- recovered_cases %>% group_by(country)
+Ncountry_group_confirmed <- confirmed_cases %>% group_by(country)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+summary_table_death <- Ncountry_group_death %>% summarise(Death_cases=sum(cases))
+summary_table_death
+
+summary_table_recovered <- Ncountry_group_recovered %>% summarise(Recovered_cases=sum(cases))
+summary_table_recovered
+
+summary_table_confirmed <- Ncountry_group_confirmed %>% summarise(confirmed_cases=sum(cases))
+summary_table_confirmed
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+summary_table <- tibble(Country=c("Malaysia","Indonesia","Philippines","Singapore", "Thailand"),
+                        Confirmed=c(6742,14749,11350,24671,3017),
+                        Death=c(109,1007,751,21,56),
+                        Recovered=c(5223,3063,2106,3851,2798),
+                        Active=c(1410,10679,8493,20799,163))
+kable(summary_table)
+```
+
+
+
+
+
+
+
+
+
+## 2.6 Comparison with USA and China
+
+We are going to compare with USA and China. because of that China reported the first covid-19 case, and the US and China reported the largest number of covid-19 cases.but US and China are a biggest countries.further those countries are developed countries. So this part we can't take a idea about corona disease. because the population of these countries are vastly different.However We can get a rough idea of the spread of corona virus in Malaysia with powerful countries. 
+
+
+**Confirmed cases Comparison**
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2.6.1: Daily Comfirmed cases", fig.align='center'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+USnChina_comparison <- coronavirus %>% filter(country %in% c("Malaysia", "US", "China"))
+confirmed_cases_other <- USnChina_comparison %>% filter(type=="confirmed")
+ggplot(confirmed_cases_other, aes(x=date,y=cases, color=country))+geom_line()+geom_point()
+```
+Figure 2.6.1 shows the daily covid 19 confirmed cases in Malaysia, China and US. According to the this figure China and US covid-19 confirmed cases is greater than  malaysia covid-19 confirmed cases. However, there has been a decline in the confirmed cases of covid-19 in China since March. But There has been a huge increse in the number of Daily covid-19 confirmed cases in US compared to Malaysia and China Since mid-march. The number of daily confirmed cases in the US exceeds the 30,000 limit in April.
+
+**Recovered cases Comparison**
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2.6.2: Daily recovered cases", fig.align='center'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+USnChina_comparison <- coronavirus %>% filter(country %in% c("Malaysia", "US", "China"))
+recovered_cases_other <- USnChina_comparison %>% filter(type=="recovered")
+ggplot(recovered_cases_other, aes(x=date,y=cases, color=country))+geom_line()+geom_point()
+```
+
+Figure 2.6.2 shows the daily covid 19 recovered cases in Malaysia, China and US. Malaysia has a significantly decrease in the recovered cases of corona virus compared to China and US.Since end of May, There has been a significant increase in the recovered cases of corona virus in US compared to China and Malaysia. US reported the number of highest recovered cases per day. It is greater than 30,000.
+
+
+**Death cases Comparison**
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Figure 2.6.3: Daily Death cases", fig.align='center'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+USnChina_comparison <- coronavirus %>% filter(country %in% c("Malaysia", "US", "China"))
+death_cases_other <- USnChina_comparison %>% filter(type=="death")
+ggplot(death_cases_other, aes(x=date,y=cases, color=country))+geom_line()+geom_point()
+```
+
+Figure 2.6.3 shows the daily covid 19 death cases in Malaysia, China and US. Malaysia has a significantly decrease in the death cases of corona virus compared to China and US.Since mid-March, There has been a significant increase in the death cases of corona virus in US compared to China and Malaysia. In mid-April, Unexpected corona deaths were reported in china.
+
+**Summary cases Comparison table**
+
+
+```{r warning=FALSE, include=FALSE}
+library(knitr)
+country_group_death <- death_cases_other %>% group_by(country)
+country_group_recovered <- recovered_cases_other %>% group_by(country)
+country_group_confirmed <- confirmed_cases_other %>% group_by(country)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+summary_table_death <- country_group_death %>% summarise(Death_cases=sum(cases))
+summary_table_death
+summary_table_recovered <- country_group_recovered %>% summarise(recovered_cases=sum(cases))
+summary_table_recovered
+summary_table_confirmed <- country_group_confirmed %>% summarise(confirmed_cases=sum(cases))
+summary_table_confirmed
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+summary_table <- tibble(Country=c("Malaysia","US","China"),
+                        Confirmed=c(6742,1369376,84018),
+                        Death=c(109,82356,4637),
+                        Recovered=c(5223,230287,79222),
+                        Active=c(1410,1056733,159))
+kable(summary_table)
+```
+
+# 3.0 Results
+
+* The 1st comfirmed cases of the corona virus disease in Malaysia is reported in january. 
+* Confirmed corona virus cases in malaysia has been significant increase since the end of february. 
+* The highest number of daily confirmed ceses in Malaysia has reported on March and April.
+* May saw a slight decrease in the number of covid-19 confirmed cases in Malaysia, compared to April.
+* The 1st recoverd cases of the corona virus disease in Malaysia is reported in February. 
+* Since mid-march, there has been a significant increase in the recovered cases of corona virus in Malaysia. 
+* The highest number of recovered ceses in Malaysia has reported on April.
+* The 1st death cases of the corona virus disease in Malaysia is reported in March. 
+* Since mid-march, there has been a significant increase in the death cases of corona virus in Malaysia. 
+* The highest number of death ceses in Malaysia has reported on April. 
+* The highest number of Malaysia death case per day was eight.
+* From March month to beginning of april month, There has been a significant increase in the confirmed cases in Malaysia greater than recovered cases in Malaysia. 
+* Since mid-april, there has been a significant increase in the recovered cases in Malaysia greater than confirmed cases. 
+* The number of Death cases in malaysia is Significantly lower than the number of Confirmed cases. 
+* Malaysia has a 1410 active cases of covid-19.
+* Malaysia has a slight decrease in the spread of corona virus compared to Singapore, Indonesia and Philippines.
+* Singapore, Indonesia and Philippines covid-19 confirmed cases is greater than malaysia covid-19 confirmed cases.
+* Thailand covid-19 confirmed cases is Significantly lower than malaysia covid-19 confirmed cases.
+* From mid-March to mid-April, Malaysia has a significantly increse in the recovered cases of corona virus compared to Singapore, Indonesia, Thailand and Philippines.
+* Since end of April, There has been a significant decrease in the recovered cases in malaysia corona virus compared to Singapore, Indonesia, Thailand and Philippines countries recovered cases.
+* There has been a huge increse in the number of covid-19 recovered cases in singapore compared to Malaysia Since early may.
+* Indonesia and Philipphine has a Significant increse in the Death cases of corona virus compared to Malaysia, Singapore and Thailand.
+* China and US covid-19 confirmed cases is greater than malaysia covid-19 confirmed cases.
+* There has been a huge increse in the number of Daily covid-19 confirmed cases in US compared to Malaysia and China Since mid-march.
+*  Malaysia has a significantly decrease in the recovered cases of corona virus compared to China and US.
+* Since end of May, There has been a significant increase in the recovered cases of corona virus in US compared to China and Malaysia.
+* Malaysia has a significantly decrease in the death cases of corona virus compared to China and US.
+* Since mid-March, There has been a significant increase in the death cases of corona virus in US compared to China and Malaysia.
+
+# 4.0 Conclusion
+
+Corona virus(Covid-19) desease is severely affected worldwide. It was the first time a patient had been found in China. Malaysia is also suffering from the corona virus. The 1st comfirmed cases of the corona virus disease in Malaysia is reported in january 25. There has been a some contorl in this situation. Because of that  we can saw a decrease in the number of confirmed cases and we can saw an increase in the number of recovered cases. futher, There is also a slight decrease in the number of death cases in malaysia. Malaysia will be able to control theire daily deaths in this situation. Compared to other countries, Malaysia is somewhat ahead in the fight aginst the corona virus. Movement Control Order may be the reason for that. However Malaysia must be careful, Otherwise there could be a rapid increase in the spread of corona virus in the future.
+
+# 5.0 references
+
+* https://en.wikipedia.org/wiki/Malaysia
+* https://www.britannica.com/place/Malaysia/Climate
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Malaysia
+* https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7258884/

@@ -1,0 +1,250 @@
+---
+title: "COVID-19 Outbreak of Mexico"
+author: "M.C.D.Mendis"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# $\underline{Introduction}$
+
+
+### **Location of the Mexico**
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(coronavirus)
+library(magrittr)
+Mexico_corona<-coronavirus%>%filter(country=="Mexico")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Mexico_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+data(Mexico_corona)
+tail(Mexico_corona)
+
+
+
+
+```
+
+
+Mexico is located in Middle America, bordering the Caribbean sea and the Gulf of Mexico, between Belize and the US and bordering the North Pacific Ocean, between Guatemala and the US. 
+Capital of Mexico: Mexico City 
+
+### **Climate condition of Mexico**
+
+
+The climate in Mexico is tropical with a rainy and dry season and little temperature fluctuation from season to season. The temperature in all areas of Mexico typically ranges between 50F and 90F throughout the year. Average annual humidity is around 70%. 
+The temperature in winter averages between 20 and 24 degrees Celsius (high 68 to 74 Fahrenheit) and in summer the average temperature is around 28 degree Celsius (83 Fahrenheit). October through May is the city’s dry season, which means this period has very little rain.
+
+
+### **Lockdown status of Mexico**
+
+
+The first confirmed case of coronavirus was registered in Mexico at the end of February but social distancing measures were not introduced until mid-March. Schools were officially closed from 20th March, although some states had already suspended classes some days earlier. While most of the economy was stopped from 23rd March, some industries were declared key to functioning of the nation and were exempt from the restrictions, triggering protests by workers who said they did not feel safe. Tourism is a key sector in Mexican economy and, in April, the country registered only 86000 foreign visitors down from 2.8 million the same month last year, according to official data. From 18th May, areas where there have been few infections started easing restrictions. On 1st of June, the construction sector and automobile manufacturers resumed operations and parks in Mexico City re-opened to a third if their capacity. In the state of Baja California Sur – popular with tourists – some hotels and restaurants also resumed activities. Mexico has confirmed more than 150,000 infections and about 17,500 deaths during mid of the March. Under a phased reopening announced by Mexico City’s authorities, about 340,000 factory workers returned to their jobs. Churches and restaurants would also be able to resume activities at a reduced capacity, though deaths and new cases continue to rise in one of Latin America’s worst hit countries.
+
+
+### **Government actions against Corona Pandemic**
+
+•	Several governors have felt the need to put in place stricter protective measures than those of the federal government. 
+
+•	Eighteen states have imposed a mix of measures, such as obligatory stay-at-home orders, the mandatory use of face masks, and fines for social gatherings. 
+
+•	Twenty five of Mexico’s 32 states are offering small and medium-sized businesses tax incentives and credits beyond the limited fiscal stimulus provided by the federal government. 
+•	A few state leaders suspended schools and universities before the federal government and, together with business groups, have called Lopez Obrador’s response insufficient. 
+
+•	Several governors have felt the need to put in place stricter protective measures than those of the federal government.
+
+•	Eighteen states have imposed a mix of measures, such as obligatory stay-at-home orders, the mandatory use of face mask, and fines for social gatherings.
+
+•	Twenty five of Mexico’s 32 states have been offered small and medium-sized businesses tax incentives and credits beyond the limited fiscal stimulus provided by the federal government.
+
+
+
+# $\underline{Exploratory Data Analysis}$
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+Mexico_corona_death<-Mexico_corona%>%filter(type=="death")
+
+ggplot(Mexico_corona_death, aes(x=date, y=cases)) + geom_line() + ggtitle("Mexico: Daily Covid-19 Deaths")
+head(Mexico_corona_death)
+
+Mexico_corona_death%>%summarise(mean_cases=mean(cases))
+
+```
+
+The first death has been reported on 19th March. The death toll increased steadily with a fluctuating pattern. According to this chart, highest daily death count was reported during mid-May. However the death rate is 35per day at the moment. 
+
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+Mexico_corona_confirmed<-Mexico_corona%>%filter(type=="confirmed")
+
+ggplot(Mexico_corona_confirmed, aes(x=date, y=cases)) + geom_line() + ggtitle("Mexico: Daily Covid-19 Confirmed")
+head(Mexico_corona_confirmed)
+
+Mexico_corona_confirmed%>%summarise(mean_cases=mean(cases))
+
+```
+
+The first case was reported on 28th of February 2020. Confirmed cases became increased in slow rate until end of the April, but the rate increased rapidly till now. The average cases per day is 342.
+
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+Mexico_corona_recovered<-Mexico_corona%>%filter(type=="recovered")
+
+ggplot(Mexico_corona_recovered, aes(x=date, y=cases)) + geom_line() + ggtitle("Mexico: Daily Covid-19 Recovered")
+head(Mexico_corona_recovered)
+Mexico_corona_recovered%>%summarise(mean_cases=mean(cases))
+
+```
+
+
+Recovery has been started to report on end of the March. It become rapidly increased after end of the April. Average recovery cases per day is 232.
+
+
+
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+Mexico_corona_Pw <- Mexico_corona %>% pivot_wider(names_from="type", values_from="cases")
+Mexico_corona_Pw
+
+Mexico_corona_Pw_new <- mutate(Mexico_corona_Pw, active=confirmed-(recovered+death))
+Mexico_corona_Pw_new
+
+Mexico_corona_Pw_new1 <- Mexico_corona_Pw_new %>% mutate(active = replace(active, which(active < 0),NA))
+
+ggplot(Mexico_corona_Pw_new1,aes(x=date, y=active))+
+  geom_line(color="Red")+labs(title="Mexico: Daily Covid-19 Active Cases")
+
+Mexico_corona_Pw_new%>%summarise(mean_active=mean(active))
+
+```
+
+Active cases become rapidly increased begining of the month of May.Average Active cases per day is 76. 
+
+
+### **Comparison with other countries**
+
+The reason to compare with Guatemala, US and Belize; there are boarder jumpers with those neighboring countries where COVID-19 	cases are on the rise. Italy has reported more than twice as many deaths than China because those countries compared with Mexico.
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+corona_Mexico_US<-coronavirus %>%filter(country == c("Mexico","US"))
+
+ggplot(corona_Mexico_US)+
+  aes(x=date,y=cases,col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+  ggtitle("comparison of the confirmed,Recovered & Death COVID19 cases in
+          Mexico & US")
+```
+
+
+When we compare US with Mexico, US got reported high number of cases in every aspect, however US have reached satisfactory recovery rate.
+
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+corona_Mexico_guatemala<-coronavirus %>%filter(country == c("Mexico","Guatemala"))
+
+ggplot(corona_Mexico_guatemala)+
+  aes(x=date,y=cases,col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+  ggtitle("comparison of the confirmed,Recovered & Death COVID19 cases in
+          Mexico & Guatemala")
+
+```
+
+
+Guatemala has very few cases and deaths compared to Mexico, but Mexico reached a satisfactory recovered rate to Guatemala.
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+corona_Mexico_belize<-coronavirus %>%filter(country == c("Mexico","Belize"))
+
+ggplot(corona_Mexico_belize)+
+  aes(x=date,y=cases,col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+  ggtitle("comparison of the confirmed,Recovered & Death COVID19 cases in
+          Mexico & Belize")
+```
+
+Belize has very few cases and deaths compared to Mexico, but Mexico reached a satisfactory recovered rate to Belize.
+
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+corona_Mexico_Italy<-coronavirus %>%filter(country == c("Mexico","Italy"))
+
+ggplot(corona_Mexico_Italy)+
+  aes(x=date,y=cases,col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+  ggtitle("comparison of the confirmed,Recovered & Death COVID19 cases in
+          Mexico & Italy")
+```
+
+
+Italy has passed their peak season while Mexico is still increasing. However Italy has reached better recovery rate.
+
+
+```{r,comment = NA,echo=FALSE,message=FALSE,warning=FALSE}
+corona_Mexico_China<-coronavirus %>%filter(country == c("Mexico","China"))
+
+ggplot(corona_Mexico_China)+
+  aes(x=date,y=cases,col=country)+
+  geom_line()+
+  facet_wrap(~type)+
+  ggtitle("comparison of the confirmed,Recovered & Death COVID19 cases in
+          Mexico & China")
+```
+
+
+China has passed their peak season before Mexico reach to an endemic level. However Mexico has reported high death rate than China.
+
+
+
+# $\underline{Conclusion\space
+and\space
+Discussion}$ 
+
+The country with the fourth highest number of COVID-19 deaths is Italy,with over 34,000 deaths.As the number of COVID-19 cases and deaths continue to rise in Mexico,its death toll may surpass that of Italy by the end of the May.
+In Mexico,the number of COVID-19 cases have continued to steadily increase as the country falls between the low and moderate transmission risk levels.In Italy,the number of confirmed cases of COVID-19 continues to steadily decline as the  country maintains a low-risk transmission level.Italy reached its peak of daily COVID-19 cases in late March,wheres Mexico was seeing starting to see a gradual increase of cases during that time.
+
+The US-Mexico border has long been a region of contrasts.But people in both countries are puzzling over the latest one,The number of confirmed cases of the coronavirus on the Mexican side is just a small fraction of the US count.China has passed their peak season before Mexico reach to an endemic level. However Mexico has reported high death rate than China. Belize & Guatemala have very few cases and deaths compared to Mexico, but Mexico reached a satisfactory recovered rate to Belize & Guatemala.
+
+There are also concerns that the  actual COVID-19 death count is underreported in Mexico,as the reported deathcount only includes people who tested positive for COVID-19 and died in hospitals.The reported death figures on a given date does not necessarily show the number of new deaths on that day this is due to delays.
+
+
+  
+
+# $\underline{References}$
+
+* [www.bbc.com](www.bbc.com)
+* [www.liveandinvestoverseas.com](www.liveandinvestoverseas.com)
+* [https://ourworldindata.org](https://ourworldindata.org)
+

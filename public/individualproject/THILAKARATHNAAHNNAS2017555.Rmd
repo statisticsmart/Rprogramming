@@ -1,0 +1,278 @@
+---
+title: "Japan"
+author: "AS2017555"
+date: "19/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1.Introduction to coronavirus 
+
+this is my coronavirus document for Japan.coronavirus are a large family of viruses that are known to cause illness ranging from the common cold to more severe diseases. so this report make to find how this virus distributed around the world.
+
+```{r}
+library(coronavirus)
+```
+
+```{r}
+data(coronavirus)
+```
+
+```{r}
+head(coronavirus)
+```
+
+```{r}
+tail(coronavirus)
+```
+
+```{r}
+unique(coronavirus$country)
+```
+```{r}
+library(tidyverse)
+library(magrittr)
+```
+```{r}
+japan_corona <- coronavirus %>% filter(country == "Japan")
+```
+```{r}
+recover_japan_corona <- japan_corona %>% filter(type == "recovered")
+head(recover_japan_corona)
+```
+```{r}
+death_japan_corona <- japan_corona %>% filter(type == "death")
+head(death_japan_corona)
+```
+```{r}
+confirm_japan_corona <- japan_corona %>% filter(type == "confirmed")
+head(confirm_japan_corona)
+```
+
+
+```{r}
+ggplot(recover_japan_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Japan:Daily covid 19 recoveries")
+```
+```{r}
+ggplot(death_japan_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Japan:Daily covid 19 deaths")
+```
+```{r}
+ggplot(confirm_japan_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Japan:Daily covid 19 confimed")
+```
+
+
+
+#### visualization of location
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+```
+```{r}
+p<- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y= lat, group=group), fill ="gray", colour="white"
+  ) +
+  coord_cartesian(xlim = c(-180,180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180,180,120))+
+  scale_y_continuous(breaks = seq(-90,90,100))
+p +
+  geom_point(
+    data = japan_corona, aes(x=long, y=lat), color = "red",size
+    =1
+  )
+ 
+```
+
+Japan comprises 6,852 islands extending along the pacific coast of Asia.It stretches over 3,000 km northeast-southwest from the sea of Okhotsk to the East china and Philippine seas. The country's five main islands, from north to south, are Hokkaido, Honshu, Shikoku,Kyushu, and Okinawa.
+ 
+#### climate condition of Japan
+
+Japan has four distinct seasons with a climate ranging from subarctic in the north to subtropical in the south. conditions are different between the pacific side and the sea of Japan side.Eastern Japan has hot and humid summers and cold winters with very heavy snow on the sea of Japan side and in mountainous areas.
+
+#### lockdown status of Japan
+
+As COVID-19 deaths have soared into the tens of thousands in some European nations and over 100,000 in the United States, the count was less than 1,000 in Japan as of early July, a remarkably low number among group of 7 countries, despite Japan's aging society and the large high risk ratio of it's population.prime minister Shinzo Abe has declared a state of emegency in Tokyo and six other hard-hit Japanese prefectures to 45 the fight against the coronavirus outbreak. but this is no European or Wuhan- style lockdown.some Tokyo residents drew criticism for rushing to escape from Tokyo  to the countryside.
+
+#### Actions taken by the Japan's government
+
+On April 7,2020, the government decided upon the emergency economic measures for response to COVID-19 to protect the lives and lifestyles of the public and move toward economic recovery (revised on April 20,2020). On April 30, the first supplementary budget for FY2020 to implement those measures was enacted by the Diet. On June 12, 2020, the second supplemntary budget for FY2020, which aims at enhancing the government's measures to protect the lives and lifestyles of the public from COVID-19 and move forward economic rocovery, was also enacted by the diet.
+
+2. Exploratory data analysis
+
+```{r}
+head(japan_corona)
+```
+```{r}
+summary(japan_corona)
+```
+
+#### Data description
+Description:-Daily summary of the Coronavirus (COVID-19) cases by state/province.
+
+Usage:-coronavirus
+
+Format:-A data frame with 7 variables.
+
+date:-Date in YYYY-MM-DD format.
+
+province:-Name of province/state, for countries where data is provided split across multiple provinces/states.
+
+country:-Name of country/region.
+
+lat:-Latitude of center of geographic region, defined as either country or, if available, province.
+
+long:-Longitude of center of geographic region, defined as either country or, if available, province.
+
+type:-An indicator for the type of cases (confirmed, death, recovered).
+
+cases:-Number of cases on given date.
+
+Details:-The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province.
+
+Source:-Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website.
+
+```{r}
+smp_size <- 270
+## set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(japan_corona)), size=smp_size)
+train <- japan_corona[train_ind, ]
+dim(train)
+```
+
+
+```{r}
+test <-japan_corona[-train_ind, ]
+dim(test)
+```
+
+
+```{r}
+head(train)
+```
+
+```{r}
+Japan_corona_1<-train %>%  
+  pivot_longer(c(7), names_to="variable", values_to="value")
+Japan_corona_1
+```
+
+```{r}
+ggplot(Japan_corona_1,aes(x=value))+geom_histogram()+
+  facet_wrap(variable ~.,ncol=1)
+```
+
+```{r}
+ggplot(Japan_corona_1,aes(x=value))+geom_histogram(colour="white")+
+  facet_wrap(variable ~.,ncol=1, scales="free")
+```
+
+```{r}
+ggplot(Japan_corona_1,aes(x=value, fill=variable))+geom_density()+
+  facet_wrap(variable ~.,ncol=1, scales="free")
+```
+```{r}
+ggplot(Japan_corona_1,aes(y=value, x=type, fill=type))+geom_boxplot()+
+  facet_wrap(variable ~.,ncol=1, scales="free")
+```
+
+
+```{r}
+ggplot(Japan_corona_1,aes(x=value, y=type, fill=type))+geom_boxplot()+
+  facet_wrap(variable ~.,ncol=1, scales="free")
+```
+
+```{r}
+ggplot(recover_japan_corona,aes(x=cases))+geom_histogram()+
+  facet_wrap(type ~.,ncol=1, scales="free")
+```
+```{r}
+ggplot(death_japan_corona,aes(x=cases))+geom_histogram()+
+  facet_wrap(type ~.,ncol=1, scales="free")
+```
+```{r}
+ggplot(confirm_japan_corona,aes(x=cases))+geom_histogram()+
+  facet_wrap(type ~.,ncol=1, scales="free")
+```
+```{r}
+ggplot(recover_japan_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Japan recovery:Daily covid 19")
+```
+```{r}
+ggplot(death_japan_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Japan deaths:Daily covid 19")
+```
+```{r}
+ggplot(confirm_japan_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Japan confirm:Daily covid 19")
+```
+
+
+
+
+#### comparison with Italy
+
+```{r}
+Italy_corona <- coronavirus %>% filter(country == "Italy")
+head(Italy_corona)
+```
+```{r}
+ggplot(Italy_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Italy:Daily covid 19")
+```
+
+```{r}
+summary(Italy_corona)
+```
+
+#### comparison with south korea
+```{r}
+Korea_South_corona <- coronavirus %>% filter(country == "Korea, South")
+head(Korea_South_corona)
+```
+```{r}
+ggplot(Korea_South_corona,aes(x=date, y=cases)) + geom_line()+ ggtitle("Korea_south:Daily covid 19")
+```
+
+```{r}
+summary(Korea_South_corona)
+```
+
+
+
+3. Conclusions and Discussion
+
+there are 187 countries in our project.I have taken country Japan for my visualisation.Japan comprises 6,852 islands extending along the pacific coast of Asia.It stretches over 3,000 km northeast-southwest from the sea of Okhotsk to the East china and Philippine seas. The country's five main islands, from north to south, are Hokkaido, Honshu, Shikoku,Kyushu, and Okinawa.
+there are 3 types of cases can find in every country. there are confirmed, recovered and death cases.In Japan since January to may months there is a high increase in may month of recovery cases. Also there is a increasing pattern since march to may months in death cases and in confirmed cases there is a increase since march to may minths.
+there are 7 variables to visualise our data. there are date, province, country, lat, long, type and cases.
+I have given 270 data for my training set so my testing det has 80 data.
+the data visualise from 2020-01-22 to 2020-05-12 and between these two dates there are 74.87 mean number of cases.maximum number of cases are 2221. median number of cases are 5.
+the maximum number of cases were distributed in 138 mean longtude and in 36 mean latitude. coronavirus distributed Jan to May in 138 maximum longtude and maximum lattitude is 36.
+In the density plot, it shows large peak at the beginning of coronavirus and then it decreased.
+when plot histograms for death, recovered and confirmed typrs of cases, those 3 plots shows large number of cases at the beginning and after that it shows decrease pattern.
+south korea is a nearest country to Japan. so when got summary of south korea cases there are 1369 maximum number of cases and mean number of cases are 6225. it is lower than to japan. so coronavirus has distributed around Japan than to South korea.covid 19 distributed around 128 longtude in South korea. It is lower than to Japan and lattitude of south korea is same to Japan.
+Italy reported lot of coronavirus cases than other countries some times.so when summarize it's data to compare with japan there are 8014 number of peoples identified. it is very large number when compare with Japan. mean number of cases also higher than to Japan. it is 1075.
+so we can conclude that, Italy faced to very difficult situation in this months.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

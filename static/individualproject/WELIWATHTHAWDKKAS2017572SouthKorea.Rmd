@@ -1,0 +1,296 @@
+---
+title: "**Corona Virus Analysis of South Korea**"
+author: "W. D. K.K. Weliwaththa"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(patchwork)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Inroduction**
+
+South Korea is a country located in East Asia of Asian continent. Land area of this country is 100062 squared kilometers and around 51.7 million people live in South Korea which  provides a population density of 507 people per squared kilometer. Below red dot in figure shows the location of the South Korea in world map.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p + geom_point(data = south_korea_corona, aes(x = long, y = lat), color = "red", size = 1)
+```
+
+## Climate
+
+When considering the climate changes of South Korea, it  has four distinct seasons as mentioned below.
+
+* Spring - From late March to early May
+* Summer - From mid May to early September
+* Autumn - From mid September to early November
+* Winter - From mid November to mid March
+
+South Korea have a humid continental climate and a humid subtropical climate because of the effect of East Asian monsoon. From the end of June to end of July, there is a short rainy season called Jangma and it make the above precipitation heavier in summer. the minimum and the maximum temperatures of the country can be observed as -20 degrees and 30 degrees in celcius respectively. Summer provide more uncomfortable even than winter because of the late summer typhoons which introduce strong winds, heavy rain and floods.
+
+First COVID-19 patient from the South Korea was confirmed on 20 January, 2020. Until the end of the month February, COVID-19 confirmed cases were announced below 5 confirms per day. From end of the February to early July period sudden increment of confirmed cases in couple of hundreds were observed. Reason for this incident was mostly attributed to "Patient 31". This person considered as the 31st COVID-19 positive confirmed person found in South Korea and that person is a 61 years old women. So, this woman got so famous because she has participated in a gathering at Shincheonji Church of Jesus the Temple of the Tabernacles of the Testimony church in Paegu and has visited for many places with virus. So, because of this, newly confirmed patients were increased in multiple hundreds in that time and turned the South Korea's coronavirus outbreak into an epidemic.
+
+South Korea never imposed a countrywide lockdowns, curfew or stopped its people from going to work. South Korean authorities reacted remarkably quickly when the reports about spread of coronavirus from china are released. Authorities have done below actions to control the virus.
+
+* Government ordered factories to start producing coronavirus test kits together and within two weeks their daily test kit production was over 100,000. Government gave this order just week after their first COVID-19 victim was found. This shows their quick response ability.
+* As the second key feature they have done lots of coronavirus testings effectively by making more than 600 testing centers. Authorities always monitor the spread of the virus and threat those with it successfully.
+* Government became very transparent by sharing all public information about places that confirmed coronavirus victims traveled.
+* They have used modern technological features like live tracking of each person to record their travels and behavior.
+
+
+# **Exploratory Data Analysis**
+
+
+Considering the coronavirus analysis of South Korea, there are main facts to be consider. They are,
+
+* Confirmed Cases
+* Active Cases
+* Death Cases
+* Recovered Cases
+
+In this coronavirus data set, we are considering incidents happened from 22.01.2020 to 12.05.2020 range. According to the data set there are 10962 deaths for that period. Highest number of confirmed cases are recorded from end of February to early March because of the effect of "Patient 31". But we can observe that from mid of March they have controlled the spread of virus successfully to below 6 confirmed cases per day. Maximum of 851 cases confirmed on 3rd of March and graph represent an average of 98 cases per day for whole period. Below shows the plot of confirmed cases.  
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+
+Confirmed_south_korea_corona <- south_korea_corona %>% filter(type == "confirmed")
+ggplot(Confirmed_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Korea: Daily Covid-19 Confirmed Cases")
+```
+
+
+Coronavirus data set mention that the first COVID-19 death of South Korea was happened on 20.02.2020 which is sharply after month finding first COVID-19 confirmed case in South Korea. Total deaths for the period is 259 people. Maximum death cases for a day is recorded as 11 cases on 02.03.2020. Death case percentage of COVID-19 confirmed cases is 2.36% and it is a good value. With the time they have managed to reduce the death cases to lower value. Below shows the graphical representation of death cases.
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+data(coronavirus)
+
+recover_south_korea_corona <- south_korea_corona %>% filter(type == "recovered")
+ggplot(recover_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Korea: Daily Covid-19 Recovered Cases")
+```
+
+Below shows the graphical representation of recovered cases out of confirmed cases. There are total 9729 recovered cases according to the data set. First recovered person left the hospital on 07.02.2020, which is around 18 days after first COVID-19 positive patient found. Maximum of 1369 recoveries happened on 22.03.2020 which is around two months after first patient found in South Korea. Rate of getting recovered out of confirmed cases is 88.75%. It is a hopeful value for COVID-19 confirmed patients to have positive hopes to recover. Mean recovered cases per day is around 86. But there is a slight reduction of recoveries closer to the end of our period but can see bulks of patients get recover at once with the time.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+data(coronavirus)
+
+death_south_korea_corona <- south_korea_corona %>% filter(type == "death")
+ggplot(death_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Korea: Daily Covid-19 Death Cases")
+```
+
+
+According to the data set there are no any active cases for the period ending from 12.05,2020. But considering numeric calculations there is a missing of 974 cases for that period. So we can assume that those 974 cases are still active cases. It is a 8.88% percentage compared to confirmed cases. They also will get recover soon without getting sudden death cases because of higher probability for getting recover.
+
+
+## Lets Consider Country Japan to compare with South Korea
+
+I have selected Japan to compare with South Korea because Japan is neighbor country to South Korea. People live in both countries are looks like to be equal in appearance with unique characteristics. Japan is nearly 4 times bigger than South Korea in land area and also Japan has a population of 126 million. But only 334 people per squared kilometer. So Japanese can maintain a better social distance between their population.
+
+### Lets consider the plots of confirmed cases of COVID-19 in Japan and South Korea.
+
+
+```{r, message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+Confirmed_south_korea_corona <- south_korea_corona %>% filter(type == "confirmed")
+P1 <- ggplot(Confirmed_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Korea: Confirmed Cases")
+
+japan_corona <- coronavirus %>% filter(country == "Japan")
+Confirmed_japan_corona <- japan_corona %>% filter(type == "confirmed")
+Confirmed_japan_corona <- Confirmed_japan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#which(is.na(Confirmed_japan_corona$cases))
+Confirmed_japan_corona$cases[98] = mean(c(Confirmed_japan_corona$cases[97], Confirmed_japan_corona$cases[99]))
+#length(Confirmed_japan_corona$cases)
+Confirmed_japan_corona$col <- as.factor(c(rep("black", 96), rep("red", 2), rep("black", 112-98)))
+
+P2 <- ggplot(Confirmed_japan_corona, aes(x=date, y=cases,)) + geom_line(aes(colour = col, group =1)) + scale_colour_identity() + ggtitle("Japan: Confirmed Cases")
+
+P2 + P1
+```
+
+
+Japan country data set had some negative values and I removed them and did the analysis. Japan have around 7000 more confirmed cases than South Korea have. When comparing the plots we can observe that coronavirus started to spread heavier during April May months but coronavirus starts to reduce impact in South Korea during April May months. Maximum confirmed cases per day exceeds 1000 range in Japan.
+
+### Lets consider the plots of Death cases of COVID-19 in Japan and South Korea. 
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+japan_corona <- coronavirus %>% filter(country == "Japan")
+death_japan_corona <- japan_corona %>% filter(type == "death")
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+death_south_korea_corona <- south_korea_corona %>% filter(type == "death")
+
+death1 <- data.frame(date = death_japan_corona$date, Japan=death_japan_corona$cases, South_Korea=death_south_korea_corona$cases)
+death1 <- pivot_longer(death1,c(2,3),"country","value")
+ggplot(death1, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("Japan Vs South Korea: Daily Covid-19 Death Cases")
+```
+
+According to the plot we can clearly see more deaths have happened in Japan compared to South Korea. But until April, death rate of South Korea is high than Japan. After month April, Japan has increased in death rate. Japan have 657 death score while South Korea maintain below than half of Japan death cases.
+
+### Lets consider the plots of Recovered cases of COVID-19 in Japan and South Korea.
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+japan_corona <- coronavirus %>% filter(country == "Japan")
+recover_japan_corona <- japan_corona %>% filter(type == "recovered")
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+recover_south_korea_corona <- south_korea_corona %>% filter(type == "recovered")
+
+recover1 <- data.frame(date = recover_japan_corona$date, Japan=recover_japan_corona$cases, South_Korea=recover_south_korea_corona$cases)
+recover1 <- pivot_longer(recover1,c(2,3),"country","value")
+ggplot(recover1, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("Japan Vs South Korea: Daily Covid-19 Recovered Cases")
+```
+
+Total of 8531 people have been recovered from coronavirus successfully in Japan. But that amount is smaller compared to  South Korea. We can see sudden recoveries done in both countries in specific times. In Japan both maximum deaths and recoveries both has happened in May. Japan have exceed 2000 limit of recoveries per day in month May.
+
+
+## Lets Consider Country Russia to compare with South Korea
+
+Russia is also a neighboring country located in north of South Korea. Russia is the biggest country in the world which holds more than 17 million squared kilometers. But the population is considerably in low amount. Only around 147 million population is there in Russia which provides a population density of around 9 person per squared kilometer.    
+
+### Lets consider the plots of confirmed cases of COVID-19 in Russia and South Korea.
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+russia_corona <- coronavirus %>% filter(country == "Russia")
+confirmed_russia_corona <- russia_corona %>% filter(type == "confirmed")
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+confirmed_south_korea_corona <- south_korea_corona %>% filter(type == "confirmed")
+
+confirmed2 <- data.frame(date = confirmed_russia_corona$date, Russia=confirmed_russia_corona$cases, South_Korea=confirmed_south_korea_corona$cases)
+confirmed2 <- pivot_longer(confirmed2,c(2,3),"country","value")
+ggplot(confirmed2, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("Russia Vs South Korea: Daily Covid-19 Confirmed Cases")
+```
+
+When comparing confirmed cases of Russia with SOuth Korea, we can see Russia have very high values of confirmed cases. Russia have 232243 cases confirmed. Total confirmed cases of South Korea is 10962, but in the end of the month May we can see Russia's per day confirmed cases are above 10000. Even though Russia have very low population density, coronavirus affected to country very dangerously.
+
+### Lets consider the plots of death cases of COVID-19 in Russia and South Korea.
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+russia_corona <- coronavirus %>% filter(country == "Russia")
+death_russia_corona <- russia_corona %>% filter(type == "death")
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+death_south_korea_corona <- south_korea_corona %>% filter(type == "death")
+
+death2 <- data.frame(date = death_russia_corona$date, Russia=death_russia_corona$cases, South_Korea=death_south_korea_corona$cases)
+death2 <- pivot_longer(death2,c(2,3),"country","value")
+ggplot(death2, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("Russia Vs South Korea: Daily Covid-19 Death Cases")
+```
+
+As the confirmed cases are very high in Russia, this data set mention higher death rate too. There are 2116 death cases recorded within the given period. Even though it is a higher value, as a percentage it is 0.91%. But South Korea have a higher rate of 2.36% even low number of death cases occurred.
+
+
+### Lets consider the plots of recovered cases of COVID-19 in Russia and South Korea.
+
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+russia_corona <- coronavirus %>% filter(country == "Russia")
+recover_russia_corona <- russia_corona %>% filter(type == "recovered")
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+recover_south_korea_corona <- south_korea_corona %>% filter(type == "recovered")
+
+recover2 <- data.frame(date = recover_russia_corona$date, Russia=recover_russia_corona$cases, South_Korea=recover_south_korea_corona$cases)
+recover2 <- pivot_longer(recover2,c(2,3),"country","value")
+ggplot(recover2, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("Russia Vs South Korea: Daily Covid-19 Recovered Cases")
+```
+
+According to the plot shown above, we can observed that higher value of people have got recovered after month May. Total number of recovered cases are 43512 in Russia. But before month April can observe that more number of patients have got recovered in South Korea, while single person recovered in Russia. In South Korea recovery time seems to be faster than in Russia.
+
+
+## Lets Consider Country China to compare with South Korea
+
+Coronavirus emerged in the country of China called Wuhan, and spread throughout the world causing a pandemic. China has a total land area of 9.6 million square kilometers. But China has the world largest population in the world. Population is 1400 million and have a population density of 145 person per squared kilometer. South Korea is very near to the People's Republic of China. China is located in northwest direction from South Korea. Lets do a comparison between China and South Korea about the coronavirus status.
+
+### Lets consider the plots of confirmed cases of COVID-19 in China and South Korea.
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+china_corona <- coronavirus %>% filter(country == "China")
+confirmed_china_corona <- china_corona %>% filter(type == "confirmed")
+confirmed_south_korea_corona <- south_korea_corona %>% filter(type == "confirmed")
+
+confirmed2 <- data.frame(date = confirmed_china_corona$date, China=confirmed_china_corona$cases, South_Korea=confirmed_south_korea_corona$cases)
+confirmed2 <- pivot_longer(confirmed2,c(2,3),"country","value")
+ggplot(confirmed2, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("China Vs South Korea: Daily Covid-19 Confirmed Cases")
+
+```
+
+When considering the above plot of confirmed cases of China and Korea, as we know China is the homeland of this coronavirus. So there is a high representation of confirmed cases in beginning months in China. With the reduction of coronavirus spreading in China, plot shows an increment of spreading coronavirus in South Korea from end of February. This China data set have data about two main provinces of China names Anhui and Beijing. Anhui has high probability to have a new confirmed case than Beijing.
+
+### Lets consider the plots of death cases of COVID-19 in China and South Korea.
+
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+china_corona <- coronavirus %>% filter(country == "China")
+death_china_corona <- china_corona %>% filter(type == "death")
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+death_south_korea_corona <- south_korea_corona %>% filter(type == "death")
+
+death3 <- data.frame(date = death_china_corona$date, China=death_china_corona$cases, South_Korea=death_south_korea_corona$cases)
+death3 <- pivot_longer(death3,c(2,3),"country","value")
+ggplot(death3, aes(x=date, y=value, colour=country)) + geom_line() + ggtitle("China Vs South Korea: Daily Covid-19 Death Cases")
+```
+
+This graph shows death cases of China country for two provinces. When comparing to South Korea this shows higher death cases for China. This shows that the death case curve of South Korea is negligible compared to China. In this two provinces of China it seems to be higher deaths in Anhui than Beijing. 
+
+
+### Lets consider the plots of recovered cases of COVID-19 in China and South Korea.
+
+```{r, message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
+
+recover_south_korea_corona <- south_korea_corona %>% filter(type == "recovered")
+P1 <- ggplot(recover_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Korea: Recovered Cases")
+
+china_corona <- coronavirus %>% filter(country == "China")
+recover_china_corona <- china_corona %>% filter(type == "recovered")
+recover_china_corona <- recover_china_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#which(is.na(recover_china_corona$cases))
+recover_china_corona$cases[98] = mean(c(recover_china_corona$cases[97], recover_china_corona$cases[99]))
+recover_china_corona$col <- as.factor(c(rep("black", 96), rep("red", 2), rep("black", 112-98)))
+#length(recover_china_corona$cases)
+P3 <- ggplot(recover_china_corona, aes(x=date, y=cases,)) + geom_line(aes(colour = col, group =1)) + scale_colour_identity() + ggtitle("China: Recovered Cases")
+
+P3 + P1
+```
+
+
+According to the above graph comparing recoveries of South Korea with China, there are dense recovered cases in China than South Korea because the confirmed cases are too high in China. In the decrements of recovers in China between March and April, South Korea has its highest recovery amount. 
+
+
+# Conclusion and Discussion
+
+This project was done to analysis the coronovirus effect of the country South Korea. To do the analysis with comparisons, I have used three other neighboring countries. they are Japan, Russia and China. Russia is the largest country in the world and China has the largest population in the world. All these 4 countries have similar climate conditions. But coronavirus spreading is different in countries. As we know China is the spreader of this coronavirus. Considering confirmed case of all countries, can be list way of spread happens. First China had the coronavirus and then South Korea, then after Japan and finally Russia. Even though Russia has the lowest population density, it had more confirmed cases than South Korea and Japan. So there is a hidden fact of spreading coronavirus. That is the quality and behavior of the people in the country effect on the risk of spreading virus inside country. And also if consider China, virus spreading not happened equally among whole country. It is limited for curtain area. Coronavirus started to spread in winter season and it has passed summer season and now in the autom season. In the present, virus effect is getting slight reductions. So we can predict that there will have an effect of climate and environment conditions of countries for that reduction. So, compared to othe 3 countries South Korea is in first place of successfully facing coronavirus.
+
+
+After hitting 5000 confirmed cases in South Korea, the total confirmed cases curve starts to leveling off and starts to bend for constant level. This is the biggest achievement of South Korea. They have controlled spreading this much as they had a previous example few years back. In 2015 they have faced different coronavirus outbreak called Middle East Respiratory Syndrome (MERS) outbreak. MERS effected on 186 people and killed 38 people in South Korea. They overcome from that outbreak successfully. South Korean authorities got this situation as valuable experience. And they planned for future, how to face this kind of outbreak in future. They have learned about the importance of the diagnostic tests, details about basic infection prevention measures and also the learned to use new technology for tracking each and every confirmed cases to find their contactors quickly.
+
+With this COVID-19 outbreak, South Korea maintained their confirmed cases as 30. But unfortunately a woman got confirmed for coronavirus and named her as 'Patient 31'. She have gone to a church for a pray with hundreds of people. What was the mistake South Korea did. Because of that confirmed cases count was increased from 30 to 3150 in early stage.
+
+Authorities traced patient 31's contacts and diagnosis to find other confirmed cases. And they were quickly isolated and start treating to get recover. Using the contact tracing methods they covered have the entire contact list around 9000 people to keep country safe. So they used modern technology to detect virus quickly and ways to protect people. They have created new websites and apps to alert people about victim person, places locations.  Government introduced new laws to protect people when they get to social. Best thing is South Korea never got lockdown fully or partially for COVID-19 as other countries. There is a impressing transparancy in government and authority works. So, there are no doubt about any fact regarding coronavirus on South Korean people.
+
+# References
+
+* <https://en.wikipedia.org/wiki/South_Korea>
+* <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea>
+* <https://en.wikipedia.org/wiki/Russia>
+* <https://en.wikipedia.org/wiki/China>
+* <https://en.wikipedia.org/wiki/Japan>
+* <https://english.alarabiya.net/en/features/2020/04/03/South-Korea-conquered-coronavirus-without-a-lockdown-a-model-to-follow->
+
+
+
+

@@ -1,0 +1,777 @@
+---
+title: "The Novel Coronavirus In Oman"
+author: "Heshani Achinthika"
+output: html_document
+frontmatter: true 
+fontsize: 11pt
+p style='text-align: justify
+
+---
+<style>
+body{
+text-align:justify}
+</style>
+
+```{r setup ,include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+    
+```
+
+# **1.Introduction of  Oman**
+
+### *Visualization of the country* 
+`
+ 
+```{r ,message=FALSE, warning=FALSE, comment=NA,echo=FALSE}
+    library(coronavirus)
+    library(tidyverse)
+    library(dplyr)
+    library(magrittr)
+    library(ggplot2)
+    library(maptools)
+    library(tibble)
+    library(ggrepel)
+    library(png)
+    library(grid)
+    library(sp)
+    data("coronavirus")
+
+    oman_corona <- coronavirus %>% filter(country == "Oman")
+    recover_oman <- oman_corona %>%filter(type=="recovered")
+    nearBy <- coronavirus %>%
+       filter(country %in% c("Oman","Iran","Saudi Arabia","Qatar","United Arab Emirates","Yemen","Pakistan"))
+
+
+
+    data(wrld_simpl)
+
+    p <- ggplot() +
+      geom_polygon(
+      data = wrld_simpl,
+      aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+      ) + xlab("Longitude") + ylab("Latitude") +
+      coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+      scale_x_continuous(breaks = seq(-180, 180, 120)) +
+      scale_y_continuous(breaks = seq(-90, 90, 100))
+
+    p +
+      geom_point(
+      data = oman_corona, aes(x = long, y = lat), color = "red", size= 1
+      ) + annotate(geom = "text", x = 57, y = 25, label = "Oman",fontface = "italic", color = "grey22", size = 4)
+    #view(oman_corona)
+
+ 
+```
+ 
+ 
+  Oman is a country on the southeastern coast of the Arabian Peninsula in Western Asia. Located in a strategically important position at the mouth of the Persian Gulf, the country shares land borders with the United Arab Emirates to the northwest, Saudi Arabia to the west, and Yemen to the southwest, and shares marine borders with Iran and Pakistan.
+
+
+```{r,echo=FALSE,fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+library("ggplot2")
+library("sf")
+theme_set(theme_bw())
+library("rnaturalearth")
+library("rnaturalearthdata")
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+
+library("ggplot2")
+world_points<- st_centroid(world)
+world_points <- cbind(world, st_coordinates(st_centroid(world$geometry)))
+
+ggplot(data = world) +
+  geom_sf() +
+  geom_text(data= world_points,aes(x=X, y=Y, label=name),
+             color = "darkblue", fontface = "bold", check_overlap = FALSE) + ggtitle("Map of Oman & its neighboring countires")+ #annotation_north_arrow(location = "bl", which_north = "true", pad_x = unit(0.75, "in"), pad_y = unit(0.5, "in" ), style = north_arrow_fancy_orienteering)+
+                                                                                   
+  # annotate(geom = "text", x = 57, y = 25, label = "Gulf of Oman", 
+  #          fontface = "italic", color = "grey22", size = 6) +
+  coord_sf(xlim = c(40, 75), ylim = c(12, 35), expand = FALSE)+ geom_point(aes(21.5,55.9),col = "red",)
+
+```
+
+
+
+
+
+### *Climate Condition*
+
+
+  The Climate of Oman can be described as subtropical dry, hot desert climate with low annual rainfall, very high temperatures in summer and a big difference between maximum and minimum temperatures, especially in the inland areas.
+ ***Muscat*** lies on the Tropic of Cancer. Since ancient times it has been numbered as one of the *“hottest towns”* of the world. In the 14th century the Arab geographer Abdul Razak described the climate as follows: *“The heat in Muscat was so great that it burns the marrow, the sword melted in the sheath and the precious stones in the handle burnt to coal.”* 
+Summer temperatures in Muscat and northern Oman averaging 30 to 40 °C (86.0 to 104.0 °F). Oman receives little rainfall, with annual rainfall in Muscat averaging 100 mm (3.9 in), occurring mostly in January. In the south, the Dhofar Mountains area near Salalah has a tropical-like climate and receives seasonal rainfall from late June to late September as a result of monsoon winds from the Indian Ocean, leaving the summer air saturated with cool moisture and heavy fog. Summer temperatures in Salalah range from 20 to 30 °C (68.0 to 86.0 °F)—relatively cool compared to northern Oman.
+
+The mountain areas receive more rainfall, and annual rainfall on the higher parts of the Jabal Akhdar probably exceeds 400 mm (15.7 in). Low temperatures in the mountainous areas leads to snow cover once every few years. Some parts of the coast, particularly near the island of Masirah, sometimes receive no rain at all within the course of a year. The climate is generally very hot, with temperatures reaching around 54 °C (129.2 °F) (peak) in the hot season, from May to September.
+On 26 June 2018 the city of Qurayyat set the record for highest minimum temperature in a 24-hour period, 42.6 °C (108.7 °F).
+  So Normally Oman has summer (June to September) is very low rainfall. Winter is cooler with occasional rainfall. Spring and autumn are warm, mostly dry and pleasant and cooler night. A hot, dust-laden wind, the Shamal, blows in the spring and summer-period, from March till August. sometimes these winds can be very strong, and cause Sandstorms, that can occur throughout the year. Most rain falls during the winter months in sudden, short but heavy cloudbursts and thunderstorms.
+  
+  *"Cited by: https://en.wikipedia.org/wiki/Oman#Climate "*
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width="15%"}
+library(knitr)
+include_graphics("2.jpg")
+include_graphics("3.jpg")
+include_graphics("5.jpg")
+include_graphics("6.jpg")
+include_graphics("7.jpg")
+include_graphics("8.jpg")
+
+
+```
+
+
+
+
+
+
+### *Lockdown status*
+
+ The virus was confirmed to have reached Oman on 24 February 2020 when two citizens tested positive for COVID-19 after returning from Iran. 
+   Muscat continues to be the most affected governorate with the highest number of confirmed cases at over 24,800 and 110 deaths,and accounted for 76% of the total cases in the country by early June, with the majority of the cases being in the expatriate community.On 10 April, the entire governorate was put under lockdown until 22 April,this was extended twice, with the lockdown being lifted on 29 May.
+
+  Muttrah was initially the worst affected wilayat (province) of the governorate and the country, it held 45% of the total confirmed cases of the country in early April mostly due to local transmissions, and hence was isolated on 1 April. By early June, over 5,000 cases had been reported. The wilayat remained under isolation even after the lockdown in the Muscat governorate was lifted. The isolation was lifted in most parts of the wilayat starting on 6 June. On 14 June, the wilayat of Seeb surpassed Muttrah in total number of cases at over 5,600.]
+
+  Starting 13 June, lockdowns were imposed in the governorate of Dhofar, the wilayat of Masirah, the wilayat of Duqm and the areas of Jebel Akhdar and Jebel Shams until 3 July. 
+  
+  *"Cited by: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Oman "*
+
+### *Action take by the government*
+ 
+Muscat is very quiet two weeks after stepped up efforts to prevent the spread of COVID-19 by the newly formed Supreme Committee. Oman acted early and barred entry to travelers from China, South Korea, Iran and Italy on March 2, but government calls for social distancing were not having the desired effect. Days later, the government restricted entry to only Omani citizens and legal residents. This decision was followed by requiring everyone returning from abroad to self-quarantine for 14 days, and finally, the shutting down of all commercial flights on March 29 (with the exceptions of flights to and from the Musandam Governorate, which is surrounded by UAE territory).
+
+During the week of March 15, the Supreme Committee announced that all government offices would go to 30 percent staffing. They also announced the closure of schools, most shops and malls, except for supermarkets and banks, while restaurants are only offering take-away. Some large supermarket chains supposedly offer home delivery, but experience has been that online orders are almost impossible to place, and delivery is only offered after five days. Gatherings in public places are banned.
+
+Last week, on March 25, Sultan Haitham chaired a session of the Supreme Committee and then announced a personal donation of about $26 million. In the same vein, Oman’s larger banks have established mechanisms for private donations to the health ministry’s efforts and several banks made their own donations. The Central Bank has also announced funds to shore up the banking sector and the government announced an array of measures to reduce the burden on businesses, including deferment of municipal taxes and rents for factories in industrial zones among other measures.
+
+  The results appear to be impressive: as of April 1, the number of cases reported in Oman is 210, with only one death. On the same day, the administrative district of Matrah was completely closed due to indications of “social transmission” of the virus in that area among people who had not traveled abroad. Matrah Wilaya includes some of greater Muscat’s best-known tourist attractions including Matrah Port, Matrah Suq, the National Museum among other well-known spots.
+
+  Also on April 1, the Supreme Committee and Royal Oman Police announced the establishment of checkpoints on roads connecting Oman’s governorates. The checkpoints are manned jointly by the police and the army who are enforcing instructions to limit ground travel between regions to emergency personnel and those transporting necessities such as food. The Royal Oman Police also reported that several citizens had been called in for questioning and possible prosecution for spreading false information through social media accounts.
+  Instead of ring tones, cell phone calls play a message in Arabic and English continuously reminding residents to stay home.  
+
+  Supermarkets are well stocked and the public so far appears to be understanding and supportive of the government’s efforts, but the economic cost is large and growing. Oman is vulnerable to oil price shocks, and the combination of the coronavirus outbreak and the ongoing oil price dispute between Saudi Arabia and Russia will stress the economy and government finances.  Health Minister Ahmed Al-Saidi gave an interview on March 29 in which he stressed the importance of social distancing and staying home as much as possible. He noted that it is impossible to predict how long it will take to control coronavirus.
+
+  While Oman is bogged down with preventing the spread of COVID-19, something to watch is China’s growing soft power in Muscat and across the region. The Royal Air Force of Oman has now conducted two special flights of transport aircraft to China to bring back medical supplies and equipment, with the second flight heavily covered in state media. At the same time, state media is reporting the rapid increase in infections and deaths in the United States, while noting China’s success in bringing the virus under control.
+
+  While Omanis are aware of COVID-19’s origin in Wuhan and may know about China’s early efforts to suppress information about the outbreak, at this point Beijing is offering assistance and posing as a model for controlling the spread while the US is focused on its own public health crisis. China’s ability to offer equipment is clearly a small part of the worldwide Chinese effort to project a positive image.
+  
+  Oman appears to be managing the spread of coronavirus effectively, so far at least with the lowest numbers of deaths and infected persons in the Gulf. Testing is also ramping up, and the controls imposed between regions and the sustained messaging of the public to stay home and maintain social distancing are also likely to produce positive results, especially since over half the number of total cases are within the greater Muscat area.
+  
+  More weeks of strictly controlled movement and closure of much of the economy will no doubt be painful, but the view here is that controlling the spread of the virus and protecting public health are the highest priorities.
+  
+  *"Cited by : https://www.atlanticcouncil.org/blogs/menasource/omans-handling-of-the-coronavirus/ "*
+  
+  
+  
+  
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width="15%"}
+
+include_graphics("14.jpeg")
+include_graphics("9.jpg")
+include_graphics("10.jpg")
+include_graphics("11.jpg")
+include_graphics("oman-sterilisation.jpg")
+include_graphics("13.jpg")
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+  
+  
+# **2.Exploratary Data Analysis** 
+
+### *Daily updates*
+  
+
+```{r,echo=FALSE,eval=FALSE, message=FALSE, warning=FALSE, r,echo=FALSE}
+  #individual plots
+  # death_oman <- oman_corona %>%filter(type=="death")
+  # newCases_oman <- oman_corona %>%filter(type=="confirmed")
+  # par(mfrow=c(3,1))
+  # ggplot(recover_oman , aes(x=date, y=cases)) + geom_line(col="#1f77b4") +geom_point(col="blue")+geom_jitter()+ ggtitle("Oman: Daily Covid-19 Recoveries")
+  #  ggplot(newCases_oman , aes(x=date, y=cases)) + geom_line(col="forestgreen") +geom_jitter(col="forestgreen")+ ggtitle("Oman: Daily Covid-19 New Cases")
+  # 
+  #   ggplot(death_oman , aes(x=date, y=cases)) + geom_line(col="red") +geom_jitter(col="red")+ ggtitle("Oman: Daily Covid-19 death Cases")
+
+```
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona %>%
+  ggplot(aes(x=date,y= cases,col=type))+geom_line()+geom_point()+facet_wrap(~type,scales = 'free_y')+scale_color_manual(values = c("#43a2ca","red","forestgreen"))+ ggtitle("Coronavirus in Oman")
+```
+
+
+This is the overall look of Oman Coronavirus status, So deaths, confirmed cases as well as number of recovered clearly shows increasing.In further I'm going to explore what happen in Oman in the rest of data exploration.
+
+
+
+
+
+
+### *Visualisation of death, recovered, active cases*
+```{r echo=FALSE,eval= FALSE, message=FALSE, warning=FALSE}
+library(tidyr)
+
+  oman_corona %>% 
+    filter(date == max(date)) %>%
+    select(type, cases) %>%
+    group_by(type) %>%
+    summarise(total_cases = sum(cases)) %>%
+    pivot_wider(names_from = type,
+              values_from = total_cases) %>%
+  arrange(-confirmed)
+```
+
+
+```{r,echo= FALSE ,comment = NA,message=FALSE,warning=FALSE}
+ library(plotly) 
+ oman_corona %>%
+ group_by(type, date) %>% 
+  summarise(total_cases = sum(cases)) %>% 
+   pivot_wider(names_from = type, values_from = total_cases) %>% 
+  arrange(date) %>% 
+  mutate(active = confirmed - death - recovered) %>% 
+ mutate(active_total = cumsum(active), 
+                 recovered_total = cumsum(recovered), 
+                death_total = cumsum(death)) %>% 
+   plot_ly(x = ~ date, 
+               y = ~ active_total,
+                   name = 'Active',  
+                   fillcolor = '#1f77b4',
+                   type = 'scatter', 
+                   mode = 'none',
+                   stackgroup = 'one') %>% 
+   add_trace(y = ~ death_total,  
+              name = "Death", 
+             fillcolor= 'red')%>%
+  add_trace(y = ~recovered_total,  
+             name = 'Recovered',  
+            fillcolor = 'forestgreen') %>% 
+   layout(title = "Distribution of Covid19 Cases in Oman",
+         legend = list(x = 0.1, y = 0.9), 
+          yaxis = list(title = "Number of Cases")) 
+
+
+
+```
+
+
+According to the above plot we can see even though there is an increasing pattern number of death cases and active cases more than half of corona patients have been recovered and the slope of active cases are shows that curve is going flat.
+
+### *Daily cumulative cases by Oman*
+    
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  summarise(total = sum(cases, na.rm = TRUE)) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = total
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  mutate(active = confirmed - death) %>%
+  mutate(
+    confirmed_cum = cumsum(confirmed),
+    death_cum = cumsum(death),
+    active_cum = cumsum(active)
+  )%>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~confirmed_cum,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Confirmed",
+    line = list(color = "#1f77b4"),
+    marker = list(color = "#1f77b4")
+  ) %>%
+  add_trace(
+    x = ~date,
+    y = ~death_cum,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Death",
+    line = list(color = "red"),
+    marker = list(color = "red")
+  ) %>%
+  add_annotations(
+    x = as.Date("2020-02-29"),
+    y = 1,
+    text = paste("First Two cases"),
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 1,
+    showarrow = TRUE,
+    ax = -10,
+    ay = -90
+  ) %>%
+ add_annotations(
+    x = as.Date("2020-04-01"),
+    y = 3,
+    text = paste("First death"),
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 1,
+    showarrow = TRUE,
+    ax = -9,
+    ay = -90
+  ) %>%
+  layout(
+    title = "Comparision of Daily cummulative Confirmed  cases and Deaths",
+    yaxis = list(title = "Cumulative number of cases "),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+  )
+```
+
+So first death was happened after one recognize the corona patients, and that time there are nearly two thousand cases was discovered.
+
+
+
+### *Daily New Cases in Oman*
+
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = cases
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~confirmed,
+    type = "bar",
+    mode = "lines+markers",
+    name = "Confirmed",
+    line = list(color = "#1f77b4"),
+    marker = list(color = "#1f77b4")
+  )%>%
+layout(
+    title = "Daily new cases in Oman",
+    yaxis = list(title = "Novel Coronavirus Daily cases "),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+  )
+```
+
+
+Daily new cases shows increasing pattern.
+
+
+### *Active cases in Oman*
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = cases
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  mutate(active = confirmed - death) %>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~active,
+    type = "area",
+    mode = "lines",
+    name = "Active",
+    line = list(color = "#43a2ca"),
+    marker = list(color = "#43a2ca")
+  )%>%
+layout(
+    title = "Active cases in Oman",
+    yaxis = list(title = "Total Coronavirus Currentlty Infected  "),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+  )
+
+```
+
+  According to plot we can see at end of the may there is day with no active cases but after that it shows gradually upward trend in active cases in Oman.
+
+
+
+### *Total Coronavirus Deaths in Oman*
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = cases
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  mutate(
+     death_cum = cumsum(death))%>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~death_cum,
+    type = "area",
+    mode = "lines",
+    name = "Death",
+    line = list(color = "red"),
+    marker = list(color = "red")
+  )%>%
+layout(
+    title = "Total Deaths",
+    yaxis = list(title = "Total Coronavirus Deaths "),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+  )
+```
+So we can see after the end of the 2nd week of July total number of death reach to more than two hundred and seventy.Within June to July 80% of total death happens.
+
+
+
+
+### *Daily Death in Oman*
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = cases
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~death,
+    type = "bar",
+    mode = "lines",
+    name = "Death",
+    line = list(color = "red"),
+    marker = list(color = "red")
+  )%>%
+layout(
+    title = "Daily Deaths",
+    yaxis = list(title = "Novel Coronavirus Daily Deaths "),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+  )
+```
+
+### *Newly Infected vs. Newly Recovered in Oman*
+
+```{r, comment = NA,echo= FALSE,message=FALSE,warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = cases
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~confirmed,
+    type = "area",
+    mode = "lines",
+    name = "Confirmed",
+    line = list(color = "red"),
+    marker = list(color = "red")
+  )%>%
+    add_trace(
+    x = ~date,
+    y = ~recovered,
+    type = "area",
+    mode = "lines",
+    name = "Recovered",
+    line = list(color = "forestgreen"),
+    marker = list(color = "forestgreen")
+  )%>%
+layout(
+    title = "New Cases vs. New Recoverires ",
+    yaxis = list(title = "New Daily Coronavirus Cases+Cured"),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+  )
+```
+
+At most time time number recoveries and confirmed are similarly, that implies few number of daily active cases.
+
+
+
+
+### *Outcome of Cases(Recovery or Death) in Oman*
+
+
+```{r,,echo=FALSE,message=FALSE, warning=FALSE}
+oman_corona%>%
+  group_by(date, type) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = cases
+  ) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  mutate(
+    death_cum = cumsum(death),
+    recovered_cum = cumsum(recovered)
+    )%>%
+  mutate(closed=death_cum+recovered_cum)%>%
+  mutate(death_P=(death_cum/closed)*100)%>%
+  mutate(rec_P = (recovered_cum/closed)*100)%>%
+  plot_ly()%>%
+  add_trace(
+    x = ~date,
+    y = ~death_P,
+    type = "area",
+    mode = "lines",
+    name = "Death Rate",
+    line = list(color = "red"),
+    marker = list(color = "red")
+  )%>%
+    add_trace(
+    x = ~date,
+    y = ~rec_P,
+    type = "area",
+    mode = "lines",
+    name = "Recovery Rate",
+    line = list(color = "forestgreen"),
+    marker = list(color = "forestgreen")
+  )%>%
+layout(
+    title = "Outcome of total cloesd cases (recovery rate vs death rate)",
+    yaxis = list(title = "Percent (%)"),
+    xaxis = list(title = "Date"),
+    legend = list(x = -0.1, y = 0.9),
+    hovermode = "compare"
+  )
+```
+
+
+In here Percentage values are calculated using cumulative total deaths and recoveries over cumulative number of closed cases.So there is high change been recover from coronavirus in oman.
+
+
+
+
+### *Comparison with Neighboring countries* 
+
+```{r, comment = NA,echo= FALSE,message=FALSE,warning=FALSE}
+  
+  conf_df <- nearBy %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "Confirmed") %>%
+  ungroup() 
+  library(plotly)
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = " Confirmed cases oman & its neighboring ",
+          textinfo="label+value+percent parent")
+
+```
+
+
+
+When compared to the neighboring countries it shows that Iran,Pakistan and Saudi Arabia(SA) are highly affected by corona virus, there recognized more than Two hundred thousand confirmed cases.Compare to Iran,Pakistan,SA,Qatar and united Arad Emirates Oman has 6% of confirmed cases.
+
+### *Comparisons of confirmed cases with neighboring countries*
+
+
+
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+nearBy%>%
+  filter(type == "confirmed")%>%
+  ggplot(aes(x=date, y=cases,col=country)) + geom_line() +geom_jitter()+ ggtitle("Oman & its Negihbouring counties Daily Confirmed cases")
+
+```
+ 
+ 
+According to plot  daily highest confirmed cases are recorded from Pakistan as well as minimum from Yemen.
+
+
+
+
+### *Comparisons of death cases with neighboring countries*
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+nearBy%>%
+  filter(type == "death")%>%
+  ggplot(aes(x=date, y=cases,col=country)) + geom_line() +geom_jitter()+ ggtitle("Oman & its Negihbouring counties Daily death cases")
+```
+
+
+
+
+### *Comparisons of recovered cases with neighboring countries*
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+nearBy%>%
+  filter(type == "recovered")%>%
+  ggplot(aes(x=date, y=cases,col=country)) + geom_line() +geom_jitter()+ ggtitle("Oman & its Negihbouring counties Daily recovered cases")
+```
+
+
+
+
+### *Comparisons of Active cases with neighboring countries*
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+ActD<-nearBy %>%
+group_by(country, type) %>%
+  summarise(total = sum(cases)) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = total
+  ) %>%
+  mutate(unrecovered = confirmed - ifelse(is.na(death), 0, death))%>%
+  mutate(active=confirmed-recovered-death)%>%
+  mutate(active_tot=cumsum(active))%>%
+ arrange(active) %>%
+  ungroup() %>% 
+  mutate(country = trimws(country)) %>%
+  mutate(country = factor(country, levels = country))
+#ggplot(aes(x=active))+geom_bar()
+
+# ggplot(ActD,aes(x=country,y=active))+geom_bar(stat = "identity")#+scale_fill_brewer(palette = "blues")
+  fig <- plot_ly(ActD, x = ~country, y = ~active, type = 'bar',maker=list(color =c('rgba(204,204,204,1)','rgba(204,204,204,1)','rgba(204,204,204,1)', 'rgba(222,45,38,0.8)','rgba(204,204,204,1)', 'rgba(204,204,204,1)',
+                                'rgba(204,204,204,1)'))) 
+fig <- fig %>% layout(title = "Corona Active Cases",
+         xaxis = list(title = "Country",tickangle = -40),
+         yaxis = list(title = "cases"))
+
+fig
+```
+
+
+
+
+
+### *Comparision of death and confirmed cases*
+
+
+```{r message=FALSE, warning=FALSE, ,echo=FALSE}
+
+  nearBy %>%
+  group_by(country,type) %>%
+  summarise(total = sum(cases)) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = total
+  ) %>%
+  arrange(confirmed) %>%
+ ungroup() %>%
+  mutate(country = trimws(country)) %>%
+  mutate(country = factor(country, levels = country))%>%
+plot_ly(
+ x = ~country,
+  y = ~ confirmed,
+  type = "bar",
+  name = "Confirmed",
+  marker = list(color = "blue")
+) %>%
+  add_trace(
+    y = ~death,
+    name = "Death",
+    marker = list(color = "red")
+  ) %>%
+  layout(
+    title = "Comparision of confrimed and death caseses with neghibouring  countires ",
+    barmode = "precentage",
+    yaxis = list(title = "Total cases"),
+    xaxis = list(title = "Country", tickangle = -45),
+    hovermode = "compare",
+    margin = list(
+      # l = 60,
+      # r = 40,
+      b = 12,
+      t = 26,
+      pad = 2
+    )
+  )
+
+```
+
+
+
+
+### *Comparison of Oman corona with world China and America*
+
+
+```{r ,echo=FALSE,message=FALSE, warning=FALSE}
+library(knitr)
+
+TopC<- coronavirus %>%
+  filter(country %in% c("Oman", "China","US"))%>%
+group_by(country, type) %>%
+  summarise(total = sum(cases)) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = total
+  ) %>%
+  mutate(unrecovered = confirmed - ifelse(is.na(death), 0, death))%>%
+  mutate(active=confirmed-recovered-death)%>%
+  mutate(active_tot=cumsum(active))%>%
+ arrange(active) %>%
+  ungroup() %>% 
+  mutate(country = trimws(country)) %>%
+  mutate(country = factor(country, levels = country))
+#ggplot(aes(x=active))+geom_bar()
+kable(TopC[,c(1:4,6)],captionc= "Comparision with China and US")
+
+
+```
+
+
+# **3. Conclusions and Discussion (Limitations)**
+
+Oman is not much highly affected from coronavirus yet, according the above data exploration we can see coronavirus is starting to spread through oman as well as its neighboring countries. As we see Pakistan is the mostly affected country among its neighboring country and in other hand Yemen is the least affected country form coronavirus and highest daily death are 14. We can see at the end of 2nd week of July oman has near 0.7% death rate And we looked for number of active cases it relatively few in Oman so i think it is not much hard to over come with coronavirus. When compare to most affected country  from coronavirus(America) Oman not has enough number of cases to compare with it, but when compare with china oman has minimum death rate, on that way also oman able to face the coronavirus.
+
+My country data set only have data regarding to date only not in specific province or not even different longitude and latitude points. When I going through out corona status in Oman I found the capital Muscat is the most affected by corona virus therefore I want to plot  how far corona virus spread through out the country but data not sufficient for it because only single point location given in the data set.And I want to look for is any relationship regarding to affect corona virus, as example due to location, age, gender and climate status but unfortunately data set not sufficient for it. Finally I want to predict which kind of person have more likelihood to impact from corona virus. For further analysis I suggest to use data set at least contain records  regarding to variables i mentioned above.
+
+
+# **4. References**
+ * https://en.wikipedia.org/wiki/Oman#Climate
+ * https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Oman
+ * https://github.com/RamiKrispin/coronavirus
+ * https://gist.github.com/thomasp85/05169ad44ddcc8ed56da6ff7bf7fbe36
+ * https://www.omicsonline.org/projection-of-future-changes-in-rainfall-and-temperature-patterns-in-oman-2157-7617.1000154.php?aid=18817
+ * https://www.atlanticcouncil.org/blogs/menasource/omans-handling-of-the-coronavirus/
+ * https://www.aa.com.tr/en/latest-on-coronavirus-outbreak/oman-half-of-govt-staff-resume-work/1860234
+ * https://english.mubasher.info/news/3609062/Coronavirus-cases-in-Oman-reach-52/?currentUserCountryCode=US
+ * https://www.arabianbusiness.com/culture-society/445387-coronavirus-muscat-to-remain-in-total-lockdown-until-may-8
+ * charts : https://plotly.com/r/bar-charts/ 
+ * https://www.worldometers.info/coronavirus/country/china/ 
+  

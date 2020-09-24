@@ -1,0 +1,419 @@
+---
+title: "An Overview of the current Coronavirus State in United Kingdom"
+author: "Sandani Kumanayake"
+date: "6/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+The United Kingdom of Great Britain and Northern Ireland, commonly known as the United Kingdom (UK or U.K.) or Britain, is a sovereign country located off the north¬western coast of the European mainland. The following are a plot of UK and the location of UK in the world map.
+
+```{r,message=FALSE, warning=FALSE, fig.cap ="A Plot of UK", fig.align="center"}
+library(maps)
+library(mapdata)
+map('worldHires','UK', xlim=c(-11,3), ylim=c(49,60.9))
+points(-1.615672,54.977768,col=2,pch=18)
+```
+```{r, message=FALSE, warning=FALSE, fig.cap ="A Plot of UK", fig.align="center"}
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+library(ggplot2) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(png) 
+library(gridBase) 
+library(sp) 
+data(wrld_simpl)
+
+uk_location <- tibble(lat=55.3781	, long=3.436) 
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  
+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = uk_location, aes(x = long, y = lat), color = "red", size = 1)
+
+```
+
+
+UK has a temperate climate. In general, this means that Britain gets cool, wet winters and warm, wet summers. It rarely features the extremes of heat or cold, drought or wind that are common in other climates. The weather conditions are also very changeable.
+
+There have been more than 313,000 confirmed cases of coronavirus in the UK and almost 44,000 people have died becouse of coronavirus up to the present time. The UK government is only responsible for lockdown restrictions in England. This is because health is a devolved matter, which means that Scotland, Wales and Northern Ireland are responsible for their own policies in relation to public health matters. ‘Lockdown’ was imposed through public health legislation, with separate regulations made in the UK, Scottish and Welsh Parliaments and the Northern Ireland Assembly. The Scottish government, Welsh government and Northern Ireland executive remain responsible for introducing and lifting restrictions in their respective territories, and can make different decisions.
+
+England, Scotland and Wales introduced lockdown restrictions on 26 March 2020 and Northern Ireland on 28 March 2020 with only minor differences in their respective approaches. However, over time, differences between the approach of each part of the UK emerged, and the four-nation exit strategy appears to have broken down.Each of the four governments has now published its own roadmap for easing lockdown restrictions.The UK outlined a phased approach to lifting lockdown restrictions which comprised of three steps, the first of which applied from 13 May 2020.The Northern Ireland Executive’s ‘pathway to recovery’ sets out five steps, the Scottish government outlines four phases and the Welsh government uses a traffic-light system to show how they intend to ease lockdown restrictions, but neither specifies provisional dates for the commencement of each. The UK government has said that in the event of a localised spike in infections it will delay the easing of restrictions or reimpose lockdown measures on a local basis in England. The devolved governments have similar powers to impose local lockdowns if required.
+
+## Exploratory Data Analysis
+
+Daily summary of the Coronavirus (COVID-19) cases by state/province.A data frame with 7 variables.
+date - Date in YYYY-MM-DD format.
+province - Name of province/state, for countries where data is provided split across multiple provinces/states.
+country - Name of country/region.
+lat - Latitude of center of geographic region, defined as either country or, if available, province.
+long - Longitude of center of geographic region, defined as either country or, if available, province.
+type - An indicator for the type of cases (confirmed, death, recovered).
+cases - Number of cases on given date.
+
+Here is the coronavirus dataframe.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+```
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+unique(coronavirus$country)
+```
+
+There are 187 countries in this data set.
+This is a summary of the United Kingdom coronaviris data.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(tidyverse) 
+library(magrittr)
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+summary(uk_corona)
+```
+
+Following dataframe shows the Confirmed corona virus caes in United Kingdom.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+confirmedcases_uk_corona <- uk_corona %>% filter(type=="confirmed") 
+head(confirmedcases_uk_corona)
+sum(confirmedcases_uk_corona$cases)
+```
+The total confirmed cases in UK in this data set is 227741.
+
+```{r,comment=NA, message=FALSE, warning=FALSE}
+ggplot(confirmedcases_uk_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("UK: Daily Covid-19 Confirmed cases")
+```
+
+As we can see in this graph the number of confirmed cases in UK is rapidly increased in month March and it came to a peak value in April. But upto May the more than 5000 daily cases were recorded. The speciality of this data set is, one day the covid confirmed cases are very high and the next day there are no covid cinfirmed cases, this pattern is continued till May.
+
+
+```{r,comment=NA, message=FALSE, warning=FALSE}
+unique(uk_corona$province)
+ggplot(confirmedcases_uk_corona, aes(x=province, y=cases)) + geom_col() + ggtitle("UK: Daily Covid-19 Confirmed cases by state") + ylim(0,1000)
+```
+
+The most Covid-19 cnfirmed caeses were recorded from Cayman Islands.
+The following dataframe shows the deaths beacuese of coronavirus in UK.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+deaths_uk_corona <- uk_corona %>% filter(type=="death") 
+head(deaths_uk_corona)
+sum(deaths_uk_corona$cases)
+```
+
+The total deaths:UK in the data set is 32769. This is approximately 14.4% from the confirmed cases in UK.
+
+```{r}
+ggplot(deaths_uk_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("UK: Daily Covid-19 deaths")
+```
+
+As we can see in this graph, the Deaths were very in the month of April. The deaths shows a decreasing pattern from the end of April to May.
+The following dataframe shows the recovered coronavirus cases in UK.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+recover_uk_corona <- uk_corona %>% filter(type=="recovered") 
+head(recover_uk_corona)
+```
+
+
+```{r}
+ggplot(recover_uk_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("UK: Daily Covid-19 recoveries")
+```
+There is an outlier in this dataset. Recovered cases cannot be a negative value. Therefore I removed this value from the data set.
+
+```{r}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+recover_uk_corona <- uk_corona %>% filter(type=="recovered") 
+recover_uk_corona2 <- recover_uk_corona %>% filter(cases >= 0)
+ggplot(recover_uk_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("UK: Daily Covid-19 recoveries without Outliers")
+sum(recover_uk_corona2$cases)
+```
+
+In this graph we can see that recovered cases high in April, thats because in April the confirmed cases were in a high level.Recovered caeses are low in the month of May.
+The total recovered cases: UK in this data set is only 1367. It's  approximately 0.6% from the confirmed cases in UK.
+Now let's find out about the active coronavirus cases during these months.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(coronavirus)
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+uk_corona2 <- uk_corona %>% filter(cases >= 0)
+coronaUK_wider <- uk_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+coronaUK_wider$active_uk_corona <- coronaUK_wider$confirmed - coronaUK_wider$death - coronaUK_wider$recovered
+ggplot(coronaUK_wider, aes(x=date, y=active_uk_corona)) + geom_line() + ggtitle("UK: Daily Covid-19 Active cases")
+```
+
+Active corona recoreded its maximum on a day of April.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+ggplot(uk_corona2, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("UK: Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+
+As we can see in this graph The recovered cases are very low compared to confirmed cases.Deaths distribution is above the recovered distribution.
+
+United kingdom is situated north-west of the European continent between the Atlantic Ocean and the North Sea.The UK has only one land border, and that is on the island of Ireland. The UK shares maritime borders with Belgium, Denmark, France, Germany, The Netherlands and Norway. From the following analysis we can compare the coronavirus status in UK with neighboring countries of UK.
+
+```{r, comment=NA, message=FALSE, warning=FALSE, out.width="70%", out.height="70%"}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+confirmedcases_uk_corona <- uk_corona %>% filter(type=="confirmed") 
+
+Ireland_corona <- coronavirus  %>% filter(country == "Ireland")
+confirmed_ireland_corona <- Ireland_corona %>% filter(type=="confirmed")
+
+Belgium_corona <- coronavirus  %>% filter(country == "Belgium")
+confirmed_belgium_corona <- Belgium_corona %>% filter(type=="confirmed")
+
+Denmark_corona <- coronavirus  %>% filter(country == "Denmark")
+confirmed_denmark_corona <- Denmark_corona %>% filter(type=="confirmed")
+
+France_corona <- coronavirus  %>% filter(country == "France")
+confirmed_france_corona <- France_corona %>% filter(type=="confirmed")
+
+Germany_corona <- coronavirus  %>% filter(country == "Germany")
+confirmed_germany_corona <- Germany_corona %>% filter(type=="confirmed")
+
+Netherlands_corona <- coronavirus  %>% filter(country == "Netherlands")
+confirmed_netherlands_corona <- Netherlands_corona %>% filter(type=="confirmed")
+
+Norway_corona <- coronavirus  %>% filter(country == "Norway")
+confirmed_norway_corona <- Norway_corona %>% filter(type=="confirmed")
+
+Neighbor_confirm <- rbind(confirmedcases_uk_corona, confirmed_ireland_corona, confirmed_belgium_corona, confirmed_denmark_corona, confirmed_france_corona, confirmed_germany_corona, confirmed_netherlands_corona, confirmed_norway_corona)
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK's neighbour countries") + ylim(0,10000)
+
+ggplot(Neighbor_confirm, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,30000)
+
+
+ggplot(Neighbor_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed cases in UK's neighbour countries")
+
+
+```
+
+From these graphs we can see that Norway and Denmark has low coronavirus cases compared to neighbor countries.It is mainly because of  the low population in these contries compared to neighbor countries. Belgium, France, Germany and Netherlands have approximately same confirmed cases as UK. France recorded higher outlier cases than other countries.
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, out.width="70%", out.height="70%"}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+death_uk_corona <- uk_corona %>% filter(type=="death") 
+
+Ireland_corona <- coronavirus  %>% filter(country == "Ireland")
+death_ireland_corona <- Ireland_corona %>% filter(type=="death")
+
+Belgium_corona <- coronavirus  %>% filter(country == "Belgium")
+death_belgium_corona <- Belgium_corona %>% filter(type=="death")
+
+Denmark_corona <- coronavirus  %>% filter(country == "Denmark")
+death_denmark_corona <- Denmark_corona %>% filter(type=="death")
+
+France_corona <- coronavirus  %>% filter(country == "France")
+death_france_corona <- France_corona %>% filter(type=="death")
+
+Germany_corona <- coronavirus  %>% filter(country == "Germany")
+death_germany_corona <- Germany_corona %>% filter(type=="death")
+
+Netherlands_corona <- coronavirus  %>% filter(country == "Netherlands")
+death_netherlands_corona <- Netherlands_corona %>% filter(type=="death")
+
+Norway_corona <- coronavirus  %>% filter(country == "Norway")
+death_norway_corona <- Norway_corona %>% filter(type=="death")
+
+Neighbor_deaths <- rbind(death_uk_corona, death_ireland_corona, death_belgium_corona, death_denmark_corona, death_france_corona, death_germany_corona, death_netherlands_corona, death_norway_corona)
+
+ggplot(Neighbor_deaths, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Deaths in UK's neighbour countries") + ylim(0,2500)
+
+ggplot(Neighbor_deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Deaths") + ylim(0,30000)
+
+ggplot(Neighbor_deaths, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Deaths in UK's neighbour countries")
+
+```
+
+From these graphs we can clearly see that UK coronavirus deaths are higher than the neighboring countries.Norway and Denmark recorded the lowest deaths compared to neighbor countries.In here France and UK have higher outlier cases.
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, out.width="70%", out.height="70%"}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+recovered_uk_corona <- uk_corona2 %>% filter(type=="recovered") 
+
+Ireland_corona <- coronavirus  %>% filter(country == "Ireland")
+recovered_ireland_corona <- Ireland_corona %>% filter(type=="recovered")
+
+Belgium_corona <- coronavirus  %>% filter(country == "Belgium")
+recovered_belgium_corona <- Belgium_corona %>% filter(type=="recovered")
+
+Denmark_corona <- coronavirus  %>% filter(country == "Denmark")
+recovered_denmark_corona <- Denmark_corona %>% filter(type=="recovered")
+
+France_corona <- coronavirus  %>% filter(country == "France")
+recovered_france_corona <- France_corona %>% filter(type=="recovered")
+
+Germany_corona <- coronavirus  %>% filter(country == "Germany")
+recovered_germany_corona <- Germany_corona %>% filter(type=="recovered")
+
+Netherlands_corona <- coronavirus  %>% filter(country == "Netherlands")
+recovered_netherlands_corona <- Netherlands_corona %>% filter(type=="recovered")
+
+Norway_corona <- coronavirus  %>% filter(country == "Norway")
+recovered_norway_corona <- Norway_corona %>% filter(type=="recovered")
+
+Neighbor_recoveries <- rbind(recovered_uk_corona, recovered_ireland_corona, recovered_belgium_corona, recovered_denmark_corona, recovered_france_corona, recovered_germany_corona, recovered_netherlands_corona, recovered_norway_corona)
+
+ggplot(Neighbor_recoveries, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Recoveries in UK's neighbour countries") + ylim(0,10000)
+
+ggplot(Neighbor_recoveries, aes(x=country, y=cases)) + geom_col() + ggtitle("Recoveries") + ylim(0,30000)
+
+ggplot(Neighbor_recoveries, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Recoveries in UK's neighbour countries")
+
+```
+
+The number of recovered cases is very low in UK compared to neighbor countries.France and Germany have high number of recovered cases. In this case Germany shows high outlier cases.
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggpubr)
+coronaUK_wider <- uk_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+coronaUK_wider$active_uk_corona <- coronaUK_wider$confirmed - coronaUK_wider$death - coronaUK_wider$recovered
+
+coronaireland_wider <- Ireland_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronaireland_wider$active_ireland_corona <- coronaireland_wider$confirmed - coronaireland_wider$death - coronaireland_wider$recovered
+
+coronabelgium_wider <- Belgium_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronabelgium_wider$active_belgium_corona <- coronabelgium_wider$confirmed - coronabelgium_wider$death - coronabelgium_wider$recovered
+
+coronadenmark_wider <- Denmark_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronadenmark_wider$active_denmark_corona <- coronadenmark_wider$confirmed - coronadenmark_wider$death - coronadenmark_wider$recovered
+
+coronafrance_wider <- France_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronafrance_wider$active_france_corona <- coronafrance_wider$confirmed - coronafrance_wider$death - coronafrance_wider$recovered
+
+coronagermany_wider <- Germany_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronagermany_wider$active_germany_corona <- coronagermany_wider$confirmed - coronagermany_wider$death - coronagermany_wider$recovered
+
+coronanetherlands_wider <- Netherlands_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronanetherlands_wider$active_netherlands_corona <- coronanetherlands_wider$confirmed - coronanetherlands_wider$death - coronanetherlands_wider$recovered
+
+coronanorway_wider <- Norway_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronanorway_wider$active_norway_corona <- coronanorway_wider$confirmed - coronanorway_wider$death - coronanorway_wider$recovered
+
+gg1 <- ggplot(coronaUK_wider, aes(x=date, y=active_uk_corona)) + geom_line() + ggtitle("UK: Daily Covid-19 Active cases")
+gg2 <- ggplot(coronaireland_wider, aes(x=date, y=active_ireland_corona)) + geom_line() + ggtitle("Ireland: Daily Covid-19 Active cases")
+gg3 <- ggplot(coronabelgium_wider, aes(x=date, y=active_belgium_corona)) + geom_line() + ggtitle("Belgium: Daily Covid-19 Active cases")
+gg4 <- ggplot(coronadenmark_wider, aes(x=date, y=active_denmark_corona)) + geom_line() + ggtitle("Denmark: Daily Covid-19 Active cases")
+gg5 <- ggplot(coronafrance_wider, aes(x=date, y=active_france_corona)) + geom_line() + ggtitle("France: Daily Covid-19 Active cases")
+gg6 <- ggplot(coronagermany_wider, aes(x=date, y=active_germany_corona)) + geom_line() + ggtitle("Germany: Daily Covid-19 Active cases")
+gg7 <- ggplot(coronanetherlands_wider, aes(x=date, y=active_netherlands_corona)) + geom_line() + ggtitle("Netherlands: Daily Covid-19 Active cases")
+gg8 <- ggplot(coronanorway_wider, aes(x=date, y=active_norway_corona)) + geom_line() + ggtitle("Norway: Daily Covid-19 Active cases")
+
+theme_set(theme_pubr())
+figureA <- ggarrange(gg1, gg2, gg3, gg4, gg5, gg6, gg7, gg8)
+figureA
+
+
+
+```
+
+Here we can see as summary of all the Active cases distributions. We can see that there are negative values in some countries. That mean their recoveries are and deaths are higher than the confirmed cases.
+
+
+
+```{r,comment=NA, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(ggpubr)
+
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+usa_corona <- coronavirus %>% filter(country == "US")
+china_corona <- coronavirus %>% filter(country == "China")
+
+corona <- rbind(uk_corona, usa_corona, china_corona)
+corona_confirmed <- corona %>% filter(type=="confirmed")
+gg9 <- ggplot(corona_confirmed, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,25000)
+
+corona_deaths <- corona %>% filter(type=="death")
+gg10 <- ggplot(corona_deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Deaths")
+
+corona_recovered <- corona %>% filter(type=="recovered") 
+gg11 <- ggplot(corona_recovered, aes(x=country, y=cases)) + geom_col() + ggtitle("Recoveries")
+
+theme_set(theme_pubr())
+figureB <- ggarrange(gg9, gg10, gg11)
+figureB
+
+
+
+
+coronaUK_wider <- uk_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronaUK_wider$active_uk_corona <- coronaUK_wider$confirmed - coronaUK_wider$death - coronaUK_wider$recovered
+
+coronaUSA_wider <- usa_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronaUSA_wider$active_USA_corona <- coronaUSA_wider$confirmed - coronaUSA_wider$death - coronaUSA_wider$recovered
+
+coronaChina_wider <- china_corona %>% pivot_wider(names_from=type, values_from=cases)
+coronaChina_wider$active_China_corona <- coronaChina_wider$confirmed - coronaChina_wider$death - coronaChina_wider$recovered
+
+gg12 <- ggplot(coronaUK_wider, aes(x=date, y=active_uk_corona)) + geom_line() + ggtitle("UK: Daily Covid-19 Active cases")
+gg13 <- ggplot(coronaUSA_wider, aes(x=date, y=active_USA_corona)) + geom_line() + ggtitle("USA: Daily Covid-19 Active cases")
+gg14 <- ggplot(coronaChina_wider, aes(x=date, y=active_China_corona)) + geom_line() + ggtitle("China: Daily Covid-19 Active cases")
+
+theme_set(theme_pubr())
+figureC <- ggarrange(gg12, gg13, gg14)
+figureC
+
+
+```
+
+Here i compared UK cornavirus data with China and US. I choosed China because CoronaVirus started from this country and United States becouse up to now the most confirmed cases recorded from this country.
+Compared to China and US, UK has approximately equal number of confirmed cases as China.
+The deaths in UK is in between China's Corona deaths and US corona deaths.
+The most important case is apparently UK has very low number of Recovered cases compared to China and US.
+From thses three countries only China shows negative values in active cases.
+
+## Discussion
+
+March 6, 2020, the first death as a result of coronavirus was recorded in the UK. the number of deaths in the UK has increased significantly since then.On April 21, 1172 deaths were recorded, which is the highest total in single day in the UK since the outbreak began.Since May 5,the UK has had highest number of deaths in Europe. The latest data captures more than only the hospital deaths of patients who had tested positive for coronavirus and so definitely had the infection. It looks at community deaths - people who died at home or in residential care who doctors recorded on the death certificate as probably having Covid-19. 
+The percentage of patients who have recovered from the coronavirus in the UK currently stands at 2 per cent. This must be mainly because of no follow-up for cases outside the hospitals.
+
+## Conclusions
+
+From the UK coronavirus data set it is clearly observable that UK's number of recovered Cases are in a low level and number of deaths are increasing significantly.
+Therefore, UK government should pay attention to recover more patients, the health care facilities provided by the hospitals should be increased. 
+While everyone is being advised to keep their distance from other people to help stop the spread od coronavirus, some people with underlying health conditions need to take even more precoutions to protect themselves, that includes people over the age of 70.
+
+
+## References
+
+Wikipedia - ![https://en.wikipedia.org/w/index.php?title=United_Kingdom&oldid=965167549]
+
+BBC - ![https://www.bbc.co.uk/bitesize/guides/zpykxsg]
+
+BBC News
+
+
+
+
+
+
+
+
+
+
+
+
+

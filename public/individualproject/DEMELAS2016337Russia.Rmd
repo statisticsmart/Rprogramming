@@ -1,0 +1,307 @@
+---
+title: "Covid-19 in Russia"
+author: "V.P.C De Mel"
+output: html_document
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1.$\underline{Introduction}$
+
+### 1.1 $\underline{Visualization \space of \space Russia}$
+
+```{r , message=FALSE, echo=FALSE, comment=NA, warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(forecast)
+russia_corona <- coronavirus %>% filter(country == "Russia")
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = russia_corona, aes(x = long, y = lat), color = "red", size
+    = 5
+  )
+```
+
+Russia is a country that stretches over a vast expanse of Eastern Europe and Northern Asia. Comprising much of Northern Eurasia, it is the world's largest country in total area. Located in the north, west and east latitudes of the Northern Hemisphere, most of Russia is much closer to the North Pole than to the equator. Individual country comparisons are of little value in gauging Russia's enormous size and diversity. The country's 17.09 million square kilometers include one-eighth of the Earth's inhabited land area. Its European portion, which occupies a substantial part of continental Europe, is home to most of Russia's industrial activity and is where, roughly between the Dnieper River and the Ural Mountains, the Russian Empire took shape. Russia includes the entire northern portion of Asia.
+
+
+  Extending for 57,792 kilometres (35,910 mi), the Russian border is the world's longest. Along the 20,139-kilometer land frontier, Russia has boundaries with 14 countries: Norway, Finland, Estonia, Latvia, Lithuania, Poland (via the Kaliningrad Oblast), Belarus, Ukraine, Georgia, Azerbaijan, Kazakhstan, Mongolia, the People's Republic of China and North Korea.
+  
+  
+Approximately two-thirds of the frontier is bounded by seawater. Virtually all of the lengthy northern coast is well above the Arctic Circle; except for the port of Murmansk—which receives currents that are somewhat warmer than would be expected at that latitude, due to the effects of the Gulf Stream—that coast is locked in ice much of the year. Thirteen seas and parts of two oceans—the Arctic and Pacific—wash Russian shores.
+Russia shares a maritime boundary with the United States and with Japan.
+
+### 1.2 $\underline{Climate \space conditions \space of \space Russia}$
+
+Climate Of course with an area the size of Russia, it is difficult to give any sort of general advice about the climate and weather except that summers are warm to hot, and winters get very cold in some areas. In general, the climate of Russia can be described as highly continental influenced climate with warm to hot dry summers and (very) cold winters with temperatures of -30°C and lower and sometimes heavy snowfall. sometimes very strong easterly winds, called Buran can occur, bringing freezing cold temperatures and snowstorms. Precipitation varies from region to region; the Western parts of Russia have the most rain (up to 750 mm), the southern and southeastern areas in the russian Steppes are the Dryest with an annual average below 200 mm.Northern & Central European Russia have the most varied climate; the mildest areas are along the Baltic coast. The Summer is mostly dry and sunny, sunshine may be nine hours a day, with local showers or thunderstorms in the afternoon and evening. As almost everywhere in Russia, winters can be very cold with frost and snowfall, the first Snow often falls in early October. Spring and Autumn can be quite unsettled, sometimes low pressure systems can bring frequent rain- or snowfall and strong winds.
+
+
+Siberia: This area of Russia is famous for its extreme climate with very cold winters, but warm to hot summers, although they tend to be short and wet. Average Precipitation is about 500 mm, most falls in the form of rain in spring and Autumn. The winter is mostly dry, snow covers the ground from end october to mid march in some years. In the winter the weather can be very dangerous sometimes with temperatures below -35°C, strong winds and snowstorms. The coldest place in Russia is Oimjakon in the central Sibirian region Jakutia, where the winter temperatures are almost the lowest in the world, below -50°C im January. The Artic sea is Ice-bound from November to end March.
+
+
+Southern European Russia: Winter is shorter than in the north.The Russian Steppes (in the southeast) have hot, dry summers and very cold winters. The north and northeastern areas around the Black Sea have milder winters, but frequent rainfall all the year round. The climate in this region is slightly mediterranean influenced.
+
+### 1.3 $\underline{Lockdown \space status \space in \space Russia}$
+
+On 25 March, President Putin announced that the 2020 Russian constitutional referendum would be postponed due to the epidemic.He said that the next week starting with 30 March, would be non-working nationwide and urged Russians to stay at home.  Later, the non-working period was prolonged twice, lasting until 11 May. On 27 March, international flights were grounded after the government ordered the civil aviation authority to suspend all regular and charter flights to and from the country. On 29 March, Mayor of Moscow Sergey Sobyanin issued a stay-at-home order starting the next day. On 30 March, similar orders or recommendations were announced in numerous other federal subjects, with many more announcing such restrictions over the next few days. The same day, the border was shut, with all border crossings closed.
+
+
+On 11 April, Moscow's mayor, Sobyanin, signed a decree introducing a digital pass system to enforce the coronavirus lockdown, in which residents would require such a permit to travel around the city and Moscow Oblast using personal and public transport, with different types of passes including travelling to work, visiting hospitals and clinics, and private trips. Such permits would become mandatory on 15 April. On 11 May, President Putin announced the end of the national non-working period on 12 May.
+
+### 1.4 $\underline{Actions \space taken \space by \space the \space government}$
+
+The Russian federal authorities announced a number of measures designed to mitigate the impact of the COVID-19 crisis for businesses and individuals. 
+
+The range of measures is very broad and includes, amongst others, the deferral of tax and lease payments, suspension of field tax audits, prolongation of various state licenses and permits, credit holidays and bank loans at reduced rates. 
+
+Some measures are directed at wide categories of individuals or businesses, whereas others focus on narrower groups of persons, such as: 
+
+* Small- and medium-sized enterprises (SMEs), in particular those operating in the economic sectors most affected by COVID-19 crisis
+
+* Companies operating in the most affected sectors (the Government-approved list of most affected sectors includes air and auto transportation, culture and leisure, sports, tourism, hospitality, catering, non-food retail, education, etc.)
+
+* Systemically important companies operating in various sectors (as approved by the Governmental Commission on Sustainable Development of the Russian Economy) 
+
+# 2.$\underline{Analysis}$
+
+
+
+### 2.1 $\underline{Descriptive \space Analysis}$
+```{r, echo=FALSE , fig.cap= "Figure 01 : Daily Covid-19 Confirmed cases in Russia" , fig.align='center'}
+confirmed_russia_corona <- russia_corona %>% filter(type=="confirmed")
+# head(confirmed_russia_corona)
+
+ggplot(confirmed_russia_corona, aes(x=date, y=cases)) + geom_line(color = "green") + ggtitle("Russia: Daily Covid-19 Confirmed cases")
+
+```
+
+```{r,echo=FALSE , fig.cap= "Figure 02 : Daily Covid-19 Deaths in Russia " ,fig.align='center'}
+deaths_russia_corona <- russia_corona %>% filter(type=="death")
+# head(deaths_russia_corona)
+
+ggplot(deaths_russia_corona, aes(x=date, y=cases)) + geom_line(color = "purple") + ggtitle("Russia: Daily Covid-19 Deaths")
+
+```
+
+```{r , echo=FALSE , fig.cap= "Figure 03 : Daily Covid-19 Recoveries in Russia " , fig.align='center'}
+recover_russia_corona <- russia_corona %>% filter(type=="recovered")
+# head(recover_russia_corona)
+
+ggplot(recover_russia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Russia: Daily Covid-19 Recoveries")
+
+```
+
+```{r , echo=FALSE , fig.cap= "Figure 04 : Comparison between confirmed cases , Deceases and Recoveries in Russia " , fig.align='center'}
+ggplot(russia_corona, aes(x=date, y=cases, col=type)) + geom_line() + theme(legend.position = "bottom") + ggtitle("Russia : Comparison between confirmed cases , Deceases and Recoveries" )
+
+```
+
+```{r , echo=FALSE , fig.cap= "Figure 05 : Total confirmed cases in Russia" , fig.align='center'}
+A<-confirmed_russia_corona %>% mutate(Total_cases = cumsum(cases))
+ggplot(A , aes(x = date,y = Total_cases)) + geom_line(color = "green") +ylab("Total Confirmed cases")
+```
+
+```{r , echo=FALSE , fig.cap= "Figure 06 : Total Deaths in Russia" , fig.align='center'}
+B<-deaths_russia_corona %>% mutate(Total_cases = cumsum(cases))
+ggplot(B , aes(x = date,y = Total_cases)) + geom_line(color = "purple") +ylab("Total Deaths")
+```
+
+```{r , echo=FALSE , fig.cap= "Figure 07 : Total Recoveries in Russia" , fig.align='center'}
+D<-recover_russia_corona %>% mutate(Total_cases = cumsum(cases))
+ggplot(D , aes(x = date,y = Total_cases)) + geom_line(color = "red") + ylab("Total Recoveries")
+```
+
+```{r , echo=FALSE , fig.cap= "Figure 08 : Daily covid-19 Active cases in Russia" , fig.align='center'}
+widen_active<-russia_corona %>% 
+  pivot_wider(names_from=type, values_from=cases) %>% mutate(active = confirmed -( death + recovered))
+ggplot(widen_active , aes(x = date  , y = active)) + geom_line(colour = "red") + ggtitle("Russia: Daily Covid-19 Active cases")
+```
+
+```{r , echo=FALSE , eval=FALSE}
+widen_table<-russia_corona %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases)
+
+widen_table$confirmed %>% sum()
+widen_table$death %>% sum()
+widen_table$recovered %>% sum()
+widen_active$active %>% sum()
+```
+
+```{r , comment=NA , echo=FALSE }
+current_situation <- data.frame( 232243 , 2116 , 43512 , 186615 , 0.91 , 18.7 , 80.4)
+names(current_situation)<-c("confirmed" ,"Deaths" , "Recovered" , "Active" ,"Death percerntage" , "recovery percentage" , "Active percentage")
+current_situation
+```
+Table 1 : situation up to 12-05-2020
+
+```{r,echo=FALSE , eval=FALSE}
+# Find mothly confirmed cases
+p<-russia_corona %>%
+  separate(date, into=c("year", "month", "day"), sep="-") %>%
+  filter(month == "01") %>% filter(type == "confirmed") 
+p$cases %>% sum()
+
+# Find monthly deaths
+q <-russia_corona %>%
+  separate(date, into=c("year", "month", "day"), sep="-") %>%
+  filter(month == "01") %>% filter(type == "death") 
+q$cases %>% sum()
+```
+
+
+```{r ,echo=FALSE , fig.cap="Figure 09:Monthly confirmed cases in Russia" , fig.align='center'}
+monthly_confirmed <- c( 2 ,  0 , 2335 , 104161 ,  125745 )
+month <- c( "jan","feb","mar","apr","may")
+month <-factor(month , levels = c( "jan","feb","mar","apr","may"))
+monthly_confirmedcases <-data.frame(month,monthly_confirmed)
+ggplot(monthly_confirmedcases, aes(x=month , y = monthly_confirmed)) + geom_bar(stat="identity" ,fill = "lightblue")+ggtitle("Russia: Monthly confirmed cases")
+```
+
+```{r ,echo=FALSE , fig.cap="Figure 10:Monthly Deaths in Russia" , fig.align='center'}
+monthly_deaths <- c( 0 ,  0 , 17 , 1056 ,  1043 )                                                                                             
+monthly_Deaths <-data.frame(month,monthly_deaths)
+ggplot(monthly_Deaths , aes(x=month , y = monthly_deaths)) + geom_bar(stat="identity" ,fill = "lightblue")+ggtitle("Russia: Monthly Deaths")
+
+```
+
+**Note : data available only up to 12th may 2020**
+
+### 2.2 $\underline{Comparison \space with \space other \space countries}$
+
+
+```{r , echo=FALSE , fig.cap="Figure 11:Covid-19 Confirmed cases : Comparison between Russia and italy " , fig.align='center'}
+italy_corona <- coronavirus %>% filter(country == "Italy")
+confirmed_italy_corona<-italy_corona %>% filter(type =="confirmed")
+Russia_vs_Italy_confirmed<-rbind(confirmed_russia_corona,confirmed_italy_corona)
+ggplot(Russia_vs_Italy_confirmed, aes(x=date, y=cases, col=country)) + geom_line() + theme(legend.position="bottom") +ggtitle("Covid-19 Confirmed cases : Comparison between Russia and italy" ) 
+
+```
+
+```{r , echo=FALSE , fig.cap="Figure 12:Covid-19 Confirmed cases : Comparison between Russia and US" , fig.align='center'}
+us_corona <- coronavirus %>% filter(country == "US")
+confirmed_us_corona<-us_corona %>% filter(type =="confirmed")
+Russia_vs_US_confirmed<-rbind(confirmed_russia_corona,confirmed_us_corona)
+ggplot(Russia_vs_US_confirmed, aes(x=date, y=cases, col=country)) + geom_line() + theme(legend.position="bottom") +ggtitle("Covid-19 Confirmed cases : Comparison between Russia and US" ) 
+```
+
+```{r , echo=FALSE , fig.cap="Figure 13:Covid-19 Confirmed cases : Comparison between Russia and Iran" , fig.align='center'}
+iran_corona <- coronavirus %>% filter(country == "Iran")
+confirmed_iran_corona<-iran_corona %>% filter(type =="confirmed")
+Russia_vs_iran_confirmed<-rbind(confirmed_russia_corona,confirmed_iran_corona)
+ggplot(Russia_vs_iran_confirmed, aes(x=date, y=cases, col=country)) + geom_line() + theme(legend.position="bottom") +ggtitle("Covid-19 Confirmed cases : Comparison between Russia and Iran" ) 
+```
+
+```{r , echo=FALSE , fig.cap="Figure 14:Covid-19 Deaths : Comparison between Russia and italy " , fig.align='center'}
+italy_corona <- coronavirus %>% filter(country == "Italy")
+deaths_italy_corona<-italy_corona %>% filter(type =="death")
+Russia_vs_Italy_deaths<-rbind(deaths_russia_corona,deaths_italy_corona)
+ggplot(Russia_vs_Italy_deaths, aes(x=date, y=cases, col=country)) + geom_line() + theme(legend.position="bottom") +ggtitle("Covid-19 Deaths : Comparison between Russia and italy" ) 
+
+```
+
+```{r , echo=FALSE , fig.cap="Figure 15:Covid-19 Deaths : Comparison between Russia and US" , fig.align='center'}
+us_corona <- coronavirus %>% filter(country == "US")
+deaths_us_corona<-us_corona %>% filter(type =="death")
+Russia_vs_US_confirmed<-rbind(deaths_russia_corona,deaths_us_corona)
+ggplot(Russia_vs_US_confirmed, aes(x=date, y=cases, col=country)) + geom_line() + theme(legend.position="bottom") +ggtitle("Covid-19 Deaths : Comparison between Russia and US" ) 
+```
+
+```{r , echo=FALSE , fig.cap="Figure 16:Covid-19 Deaths : Comparison between Russia and Iran" , fig.align='center'}
+iran_corona <- coronavirus %>% filter(country == "Iran")
+deaths_iran_corona<-iran_corona %>% filter(type =="death")
+Russia_vs_iran_deaths<-rbind(deaths_russia_corona,deaths_iran_corona)
+ggplot(Russia_vs_iran_deaths, aes(x=date, y=cases, col=country)) + geom_line() + theme(legend.position="bottom") +ggtitle("Covid-19 Deaths : Comparison between Russia and Iran" ) 
+```
+
+### 2.3 $\underline{ Inferential \space Analysis}$
+
+fit a time series model for confirmed covid-19 cases in russia.
+
+```{r , comment=NA}
+fit_confirmed<-auto.arima(confirmed_russia_corona$cases)
+fit_confirmed
+
+```
+we obtained a ARIMA(1,2,1) model for Confirmed cases in Russia
+
+
+
+```{r , echo=FALSE ,fig.cap="Figure 17:Russia: Forecasts for daily Covid-19 Confirmed cases" , fig.align='center'}
+ggplot(confirmed_russia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Russia: Forecasts for daily Covid-19 Confirmed cases") + geom_forecast(h = 100)
+```
+
+
+
+we obtained ARIMA(3,1,0) model for Covid-19 deaths in Russia
+```{r , comment=NA}
+fit_deaths<-auto.arima(deaths_russia_corona$cases)
+fit_deaths
+```
+
+```{r , echo=FALSE ,fig.cap="Figure 18:Russia: Forecasts for daily Covid-19 Deaths" , fig.align='center' }
+ggplot(deaths_russia_corona , aes(x = date , y = cases)) +geom_line() + geom_forecast(h = 100)
+```
+
+we obtained ARIMA(1,1,3) model for Covid-19 deaths in Russia
+```{r , comment=NA}
+fit_recover<-auto.arima(recover_russia_corona$cases)
+fit_recover
+```
+
+```{r , echo=FALSE ,fig.cap="Figure 19:Russia: Forecasts for daily Recoveries" , fig.align='center' }
+ggplot(recover_russia_corona , aes(x = date , y = cases)) +geom_line() + geom_forecast(h = 100)
+```
+
+
+
+
+
+# 3. $\underline{Conclusion \space And \space Discussion}$
+
+* on 17th march 2020, Russia found two figured confirmed cases for the first time(17), and thereafter the number of confirmed cases began to move. We can see in Figure 01 there is an upward trend up to 27th April and then there is a sudden increase up to 2nd may. 
+
+* After announcing the first Covid - 19 death on 19th march, we can see in Figure 02 the number has continuously increased and the maximum number of deaths occured on 29th April (105 deaths).
+
+* No recoveries were found until 12th February. With the increasing of number of confirmed cases, the number of recoveries also increased. In figure 03, we can see there is a sudden increase from 3rd may to 10th may. In figure 08, the number of active cases shows a same kind of pattern with figure 01 (Number of Confirmed cases) 
+
+* In figure 09 we can see the maximum number of confirmed cases were recorded in May (*Note that data only available up tp 12th may*) which is 125,745 cases . In Figure 10, we can see highest number of deaths occurres in april (35 per day) but in May thare were 1043 deaths occurred within first 12 days (87 per day). Table 01 shows the current situation (12-05-2020), the active percentage is much higher than the recovery percentage.
+
+* Figure 11 and Figure 14 shows the comparisons between Russia and Italy. In the midst of march the highest number of confirmed cases and deaths were recorded from Italy in the world. In figure 08 we can see the Italy's confirmed cases are higher than Russia from the beginning of march to the midst of April, but thereafter Italy shows a downword trend and Russia shows an upward trend. In Figure 11 the situation is bit different , we can see The Italy leads always. But still at the moment Russia follows an increasing pattern while Italy follows an decreasing pattern.    
+
+* Figure 12 and Figure 15 shows the comparisons between Russia and US. The highest number of deaths and confirmed cases were recorded from US up to now. Not surprisingly US leads in both figure 09 and figure 12 with huge gap between two countries. We can see in figure US shows a bit control on confirmed cases but still US suffers the most due to covid-19 pandemic. 
+
+* Iran is another Europe country that highly suffered from covid-19 pandemic. In figure 13 and figure 16 shows the comparisons between Russia ans Iran. Same as shown in figure 11, Iran had more number of confirmed cases than in Russia from the beginning of march to the midst of April. But then Iran shows a decreasing pattern and Russia has an increasing pattern.
+
+# 4. $\underline{References}$
+
+* https://en.wikipedia.org/wiki/Geography_of_Russia#Global_position_and_boundaries
+
+* https://www.weatheronline.co.uk/reports/climate/Russia.htm#:~:text=In%20general%2C%20the%20climate%20of,lower%20and%20sometimes%20heavy%20snowfall.&text=The%20winter%20is%20mostly%20dry,mid%20march%20in%20some%20years.
+
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Russia
+
+* https://www.whitecase.com/publications/alert/covid-19-russian-governments-measures-support-russian-economy

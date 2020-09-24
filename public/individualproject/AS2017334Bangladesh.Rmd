@@ -1,0 +1,247 @@
+---
+title: "Bangladesh Corona Condition"
+author: "Sharmila Dulmi"
+date: "July 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## INTRODUCTION
+
+We are still facing the global crisis of the COVID-19 pendemic.As individuals we can do our part in keeping others safe by following the rules suggested by the government and WHO.This is the reprort by analysing coronavirus dataof the Bangladesh.
+
+
+This is the code segment which we use to load the data
+
+
+```{r}
+library(coronavirus)
+```
+```{r}
+data("coronavirus")
+```
+
+**Now consider about the data description.**
+
+```{r}
+head(coronavirus)
+```
+```{r}
+tail(coronavirus)
+```
+```{r}
+unique(coronavirus$country)
+```
+```{r}
+library(tidyverse)
+library(magrittr)
+```
+
+**In this report consider about the Bangladesh Corona Condition by all of the countries which have coronavirus.**
+
+```{r}
+Bangladesh_corona<-coronavirus%>%filter(country=="Bangladesh")
+```
+
+**Extract recovered cases in the Bangladesh**
+
+
+```{r}
+recover_Bangladesh_corona<-Bangladesh_corona%>%filter(type=="recovered")
+head(recover_Bangladesh_corona)
+```
+
+**This ggplot shows the Bangladesh daily COVID-19 recoveries.**
+
+```{r}
+ggplot(recover_Bangladesh_corona,aes(x=date,y=cases))+geom_line()+ggtitle("US:Daily Covid-19 recoveries")
+```
+
+### * Visualisation of the location
+
+
+Bangladesh is a densely-populated, low-lying, mainly riverine country located in South Asia with a coastline of 580 km (360 mi) on the northern littoral of the Bay of Bengal. The delta plain of the Ganges (Padma), Brahmaputra (Jamuna), and Meghna Rivers and their tributaries occupy 79 percent of the country.
+
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Bangladesh_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+### * Climate Condition
+
+Bangladesh with tropical monsoon climate characterised by wide seasonal variations in rainfall, high temperatures, and high humidity. Regional climatic differences in this flat country are minor. Three seasons are generally recognised: a hot, muggy summer from March to June; a hot, humid and rainy monsoon season from June to November; and a warm-hot, dry winter from December to February. In general, maximum summer temperatures range between 38 and 41 centigrades.April is the hottest month in most parts of the country. January is the coolest month, when the average temperature for most of the country is 16-20 centigrades during the day and around 10 centigrades at night.
+
+### * Lockdown Status
+
+The COVID-19 pandemic in Bangladesh is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to Bangladesh in March 2020. The first three known cases were reported on 8 March 2020 by the country's epidemiology institute, IEDCR. Since then, the pandemic has spread day by day over the whole nation and the number of affected people has been increasing.
+
+In order to protect the population, the government declared "lockdown" throughout the nation from 23 March to 30 May and prepared some necessary steps to spread awareness to keep this syndrome away from them.How away the disease invasived rapidly.Bangladesh is the third most affected country in South Asia, after India and Pakistan., Bangladesh declared a 10-day shut down effective from 26 March to 4 April.[10] This was later extended to 30 May.[11].How ever Bangladesh under lockdown within the next few days with this coronavirus.
+
+### * Actions taken by the government
+
+
+All the section are closed and people have been asked to practice social distancing and stay at home. Public transport would be limited and advice was given to avoid them.The government asked the Army to ensure social distancing.Some people have been arrested for allegedly spreading false information about the coronavirus pandemic.To treat all the patient in Bangladesh has 1,169 ICU beds, amounting to 0.72 beds per 100,000 citizens. Of these 432 beds are in government hospitals and 737 in private hospitals.There are only 550 ventilators in the country.And the government warm up to increase all the facilities for treatments.
+
+## EXPLORATORY DATA ANALYSIS
+
+```{r}
+head(Bangladesh_corona)
+```
+```{r}
+summary(Bangladesh_corona)
+```
+### * Data Description
+
+Description :- Daily summary of the coronavirus(CoVID-19)cases by provinse.
+
+Usage:- Coronavirus
+
+Format :- A data frame with 7 variables
+
+Date :- Date in Year/Month/Date format
+
+province :- Name of the province,for countries where data is provided split across multiple provinces.
+
+country :- Name of the country.
+
+lat :- Latitude of center of the geographic region,defined as either country or ,if available province.
+
+type :- An indicator for the type of cases (confirmed,death,recovered)
+
+cases :- Number of cases on given date.
+
+Details :- The dataset contains the daily summary of COVIT-19 cases (confirmed,death and recovered) by state.
+
+Source :- Johns Hopkins University center for system science and engineering(JHU CCSE) Coronavirus website.
+
+Before modeling split the data into training and testing sets.Use this model to make predictions to check the out of sample accuracy of the model.Now randomly select 80 rows from the Bangladesh Corona data set from the original data set.
+
+```{r}
+smp_size<-80
+## set the seed to make your partition reproducible
+set.seed(123)
+train_ind<-sample(seq_len(nrow(Bangladesh_corona)),size=smp_size)
+train<-Bangladesh_corona[train_ind, ]
+dim(train)
+```
+```{r}
+test<-Bangladesh_corona[-train_ind, ]
+dim(test)
+```
+```{r}
+head(train)
+```
+```{r}
+Bangladesh_corona_1<-train%>%
+  pivot_longer(c(4,5,7),names_to="Variable",values_to="value")
+Bangladesh_corona_1
+```
+**Histogram of the Bangladesh Coronavirus**
+
+```{r}
+ggplot(Bangladesh_corona_1,aes(x=date))+geom_histogram(colour="white")+facet_wrap(type~.,ncol=1)
+```
+
+
+**Boxplot of the Bangladesh Coronavirus**
+
+```{r}
+Bangladesh_corona_1%>%
+  filter(is.na(type)==FALSE)%>%
+ggplot(aes(y=value,X=type,fill=type))+geom_boxplot()
+ facet_wrap(variable~.,ncol=1,scale="free")
+```
+ **This is the ggplot about Bangladesh Coronavirus represents confirmed,death and recovered.**
+ 
+```{r}
+ Bangladesh<-coronavirus%>%filter(country=="Bangladesh")
+ head(Bangladesh_corona)
+ ```
+```{r}
+ ggplot(Bangladesh_corona,aes(x=date,y=cases,col=type))+geom_line()
+```
+
+
+By the consider about the histogram,boxplot and ggplot we can say Bangladesh Coronavirus situaion the confirmed cases are most larger than to the recovered and death.It shows that ggplot clearly.By considering all the data comparatively death amount is small than other two types.But with the time death amount increasing according to the plot.All the types are increase After the April month.Histogram shows nearly equal recover type amount largely.But it increase of a sudden.When the consider about the box plot we can get same idea by the histogram and ggplot aswel. 
+ 
+**This histogram about the Recover Bangladesh CronaVirus data**
+
+```{r}
+ggplot(recover_Bangladesh_corona,aes(x=cases))+geom_histogram(colour="white")+facet_wrap(type~.,ncol=1,scales = "free")
+```
+
+Now consider about the Bangladesh coronavirus condition with other two countries.First take India because it is the nearest main country with coronavirus and same continent. 
+```{r}
+India_corona<-coronavirus%>%filter(country=="India")
+head(India_corona)
+```
+```{r}
+recover_Bangladesh_corona<-coronavirus%>%
+  filter(country=="Bangladesh"&type=="recovered")
+recover_India_corona<-coronavirus%>%
+  filter(country=="India"&type=="recovered")
+Bangladesh_India<-data.frame(date=recover_Bangladesh_corona$date,
+  Bangladesh=recover_Bangladesh_corona$cases,
+  India=recover_India_corona$cases)
+Bangladesh_India<-pivot_longer(Bangladesh_India,c(2,3),"country","value")
+ggplot(Bangladesh_India,aes(x=date,y=value,colour=country))+
+  geom_line()
+```
+
+According to this plot India faced to very difficult situation greater than Bangladesh.
+Now take the china to compare with Bangladesh.As the coronavirus started country.
+
+```{r}
+China_corona<-coronavirus%>%filter(country=="China")
+head(China_corona)
+```
+```{r}
+recover_Bangladesh_corona<-coronavirus%>%
+  filter(country=="Bangladesh"&type=="recovered")
+recover_China_corona<-coronavirus%>%
+  filter(country=="China"&type=="recovered")
+Bangladesh_China<-data.frame(date=recover_Bangladesh_corona$date,
+  Bangladesh=recover_Bangladesh_corona$cases,
+  China=recover_China_corona$cases)
+Bangladesh_China<-pivot_longer(Bangladesh_China,c(2,3),"country","value")
+ggplot(Bangladesh_China,aes(x=date,y=value,colour=country))+
+  geom_line()
+```
+
+According to this plot at the begining of the coronavirus China with heavy affect with coronavirus.But the time passing that condition change.However finally Bangladesh ahead from the China.China get through repulse the coronavirus more than Bangladesh.
+
+## Conclusions and Discussion
+
+ In this report consider about the Bangladesh coronavirus condition by analysing dataset.For this analysis we use sample of the dataset and get histograms and boxplots for that sample to predict the conclutions of the country situation.When the coronavirus starting period Bangladesh does not face to that much corona virus calamity.When the time is passing Bangladesh also compliance to coronavirus.By consider about the other contry situations with Bangladesh It represent good position greater than India.But China face to coronavirus feaver good appearence greater than India and Bangladesh also. 
+
+## REFERENCES
+
+*En.wikipedia.org.2020.COVID-19 Pandemic In Bangladesh.[online]Available at:<https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Bangladesh>[Accessed 19 July 2020].
+
+*En.wikipedia.org.2020.Geography of Bangladesh.[online]Available at:<https://en.wikipedia.org/wiki/Geography_of_Bangladesh>[Accessed 19 July 2020].

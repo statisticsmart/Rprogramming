@@ -1,0 +1,267 @@
+---
+title: "corona_Switzerland"
+author: "Thakshila Nanayakkara"
+date: "20/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA)
+```
+
+ # Packages need to install
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(knitr)
+library(skimr)
+```
+
+  $$ 1.About\ Switzerland $$ 
+  
+   *Introduction
+   
+Switzerland belongs to the european continent which is boundered by Swiss Apls to the south, Swiss Plateu and Jura mountins on the west.
+
+*Climatic Condition 
+
+Switzerland faced all the  climates: Spring, Summer, Autumn and Winter in different quartiles of the year. from July to August the daytime temperature is 18°to 28°C and from January to February it goes to -2° to 7°C.
+ 
+```{r}
+data("coronavirus")
+head(coronavirus)
+tail(coronavirus)
+```
+```{r}
+glimpse(coronavirus)
+```
+
+```{r}
+unique(coronavirus$country)
+```
+
+## Corona dataset in Switzerland
+```{r}
+switz_corona <- coronavirus %>% filter(country == "Switzerland")
+switz_corona
+```
+
+### recovered cases at first & last days
+```{r}
+recover_switz_corona <- switz_corona %>% filter(type == "recovered")
+head(recover_switz_corona)
+tail(recover_switz_corona)
+```
+
+```{r}
+ggplot(recover_switz_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Switzerland: Daily Covid-19 Recoveries")
+```
+
+*Visualisation of Switzerland
+```{r}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = switz_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+*Lockdown status of Switzerland
+ 
+ The virus was confirmed have spread to Switzerland on 25th of February, 2020.the first case of COVID-19 was confirmed from the canton of Ticino which borders Italy. On 28th February, 2020 the national government banned all the events with more than 1,000 participants. On 16 March, after confirmed cases are over 2,000, schools and most shops were closed. On 20 March, all gatherings of more than 5 people in public spacces were banned. 
+ 
+```{r}
+world_recovered <- coronavirus %>%
+  filter(type == 'recovered') %>%
+  group_by(country) %>%
+  filter(cases == max(cases)) %>%
+  arrange(desc(date))
+```
+
+```{r}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = world_recovered, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+```{r}
+switz_type <- switz_corona %>% group_by(type) 
+switz_type
+ggplot(switz_corona, aes(x=date, y=cases,fill=factor(type))) + geom_bar(position="stack", stat="identity") + coord_flip()
+```
+The above barchart shows that mostly in march and april more corona cases were found.
+
+**All the corona cases in Switzerland**
+```{r}
+pivot_switz_type <- switz_type %>%
+pivot_wider(c(1, 4:7), names_from = "type", values_from = "cases")
+kable(pivot_switz_type)
+```
+
+```{r}
+switz_corona_cases <- select(pivot_switz_type, c(date, lat, long, confirmed, death, recovered))
+switz_corona_cases
+summary(switz_corona_cases)
+```
+
+1. Confirmed corona cases in Switzerland
+```{r}
+switz_confirmed_corona <- select(switz_corona_cases, c(date,confirmed))
+summary(switz_confirmed_corona)
+arrange(switz_confirmed_corona, desc(confirmed))
+#plot to represent the data
+ggplot(switz_confirmed_corona,
+       aes(x = confirmed, y = date)) +
+  geom_boxplot() +
+  geom_point() +
+  labs(title = "Box plot of confirmed cases of comparing countries")
+```
+The above descriptive statistics and box plot show that at the last weeks of March and first week of April, more corona patients were confirmed.
+
+
+2. Deaths due to corona virus in Switzerland
+```{r}
+switz_death_corona <- select(switz_corona_cases, c(date,death))
+summary(switz_death_corona)
+arrange(switz_death_corona, desc(death))
+#plot to represent the data
+ggplot(switz_death_corona,
+       aes(x = death, y = date)) +
+  geom_boxplot() +
+  geom_point() +
+  labs(title = "Box plot of deaths due to corona in comparing countries")
+```
+The above data figured that at the first weeks of April many patients with coronavirus got died.
+
+
+3. Recovered corona cases in Switzerland
+```{r}
+switz_recovered_corona <- select(switz_corona_cases, c(date,recovered))
+summary(switz_recovered_corona)
+arrange(switz_recovered_corona, desc(recovered))
+#plot to represent the data
+ggplot(switz_recovered_corona,
+       aes(x = recovered, y = date)) +
+  geom_boxplot() +
+  geom_point() +
+  labs(title = "Box plot of recovered cases of comparing countries")
+```
+The begining of the month of April, more corona cases were recovered and the mean of recovered cases is 239.3 per day.
+
+$$ Comparison \ With\  Other\ Countries $$
+```{r}
+pivot_corona <- coronavirus %>%
+pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+```
+
+```{r}
+compare_corona <- coronavirus %>% filter(country == c("Switzerland", "China", "US", "United Kingdom", "France", "Germany"))
+```
+
+```{r}
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = compare_corona, aes(x = long, y = lat, col = country), size
+    = 1
+  )
+```
+
+```{r}
+pivot_compare_corona <- compare_corona %>%
+pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+```
+
+
+```{r}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = confirmed, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of confirmed cases of comparing countries")
+```
+This scatterplot interprets that United States has a linear high sloped confirmed cases when comparing to the other conutries.Switzerland also shows a slight slope with a low gratitute.In Europe, all the considered countrie equally show an increment in confirmed cases.
+
+```{r}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = death, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of deaths due to coronavirus of comparing countries")
+```
+Here also same as the scaterplot of confirmed cases of comparing countries. United States shows a greater slope and Switzerland has an insignificant linear regression.
+
+```{r}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = recovered, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of recovered cases of comparing countries")
+```
+The above scatterplot represents United Staes, Germany and Switzerland have greater increments of recovered cases respectively.
+
+$$ 3.\ Conclusion $$
+
+1. Through the above results we can conclude Switzerland faced for coronavirus in severe at last weeks of March and first weeks of April.
+
+2. When comparing to the other countries which highly affected by coronavirus, there is no big impact happened to Switzerland.
+
+3. When taking the recovered cases of the countries Switzerland comes front as it shows a significant regrssion linear fitted line though it was lower than the United States and Germany. Since Switzerland has not shown a significance in confirmed cases and number of deaths due to coronavirus.
+
+$$ 4. \ References $$
+
+https://hellor.netlify.app/resources/
+
+https://r4ds.had.co.nz/exploratory-data-analysis.html
+
+https://r4ds.had.co.nz/data-visualisation.html
+
+https://classroom.google.com/w/NjIwMTA0MDIzMTJa/t/all
+
+https://en.wikipedia.org/wiki/Switzerland
+
+https://www.myswitzerland.com/en/planning/about-switzerland/general-facts/facts-about-switzerland/climate/#:~:text=The%20climate%20is%20moderate%20with,%C2%B0%20%2D%2059%C2%B0%20F).
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Switzerland
+

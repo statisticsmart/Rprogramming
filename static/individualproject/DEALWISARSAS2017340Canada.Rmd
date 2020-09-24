@@ -1,0 +1,249 @@
+---
+title: "AS2017340_Canada"
+author: "Randi Shashikala"
+date: "7/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# 1.Introduction
+
+## 1.1 Visualization of the location
+
+Canada is a country in the northern part of North America. Its ten provinces and three territories extend from the Atlantic to the Pacific and northward into the Arctic Ocean, covering 9.98 million square kilometres (3.85 million square miles), making it the world's second-largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 mi), is the world's longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal, and Vancouver.
+```{r,message=FALSE,warning=FALSE, echo=FALSE, fig.cap="Figure 01: Location of Canada", fig.align='center'}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+Canada_location <- tibble(lat=56.1304, long=-106.3468) 
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Canada_location, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+## 1.2 Climate condition of Canada
+
+Canada is often associated with cold weather and snow, but in reality, its climate is as diverse as its landscape. Generally, Canadians enjoy four very distinct seasons, particularly in the more populated regions along the US border. Daytime summer temperatures can rise to 35°C and higher, while lows of -25°C are not uncommon in winter. More moderate temperatures are the norm in spring and fall.Summers can be hot and dry on the prairies, humid in central Canada, and milder on the coasts. Spring is generally pleasant across the country. Autumns are often crisp and cool, but brightened by rich orange and red leaves on trees.Winters are generally cold with periods of snow, although southern Alberta enjoys the occasional "Chinook", a warm dry wind from the Rocky Mountains that gusts through and melts the snow. Winters are mild and wet on the west coast, in cities such as Vancouver and Victoria.
+
+When the temperature does drop, Canadians stay warm thanks to an infrastructure of heated houses, cars and public transportation systems. Some cities have also installed walkways to and from buildings in schools.The Atlantic Provinces are wetter than the provinces of Central Canada. Yearly precipitation, most of which is cyclonic in origin, exceeds 50 inches (1,250 mm) in places and is fairly evenly distributed throughout the year. There are few thunderstorms, and the low Appalachian Mountains produce only a little orographic rainfall. In general, the rainfall on Canada’s east coast is less than that on the west coast because the prevailing wind is offshore.
+    
+## 1.3 Lockdown status of the Canada
+
+On January 12, 2020, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, which was reported to the WHO on December 31, 2019.The virus was confirmed to have reached Canada on January 27, 2020, after an individual who had returned to Toronto from Wuhan, Hubei, China, tested positive. The first case of community transmission in Canada was confirmed in British Columbia on March 5. Canada has implemented travel restrictions since 14th of March 2020, when it has advised against unnecessary international travels. From 16th of March, access to the country was allowed only to Canadian citizens and permanent residents, as well as to US citizens. On 18th of March, the closure of the Canada – US border was announced and became effective as of 20th of March. From 12th of March, the closure of schools and universities was gradually implemented in various provinces and territories of Canada as well as the closure of several business practices and prohibitions on gatherings.
+
+Canadian provinces imposed lockdowns in March to contain the spread of the coronavirus, which has killed 8,430 people in Canada and infected 101,337, according to the latest government data. Ontario, Canada’s largest province by population, started gradually reopening its economy in June.Prime Minister Justin Trudeau says the coronavirus border shutdown between Canada and the United States is being extende until July 21. The federal Minister of Health invoked the Quarantine Act, legally requiring all travellers (excluding essential workers) returning to the country to self-isolate for 14 days.
+
+
+## 1.4 Actions taken by the goverment
+
+The Government of Canada's response complements the pandemic public health and safety measures and strategies of the provinces and territories, which are designed to meet the unique requirements of each jurisdiction.The Government of Canada is committing more than $1 billion dollars to public health measures to ensure the health and safety of Canadians.To support the immediate response to the outbreak, $50 million was allocated to support initial actions, including border and travel measures and sustained activation of the Health Portfolio Operations Centre and the National Microbiology Laboratory. In addition, $7.1 million was provided to support the repatriation of Canadians and $2 million was contributed to the World Health Organization to support their efforts to contain the outbreak.As the situation evolves, the Government of Canada will expand existing communications and public education to ensure that Canadians can make informed decisions on how best to protect themselves.
+
+Prime Minister Justin Trudeau unveiled the COVID-19 Economic Response Plan, a C$82 billion dollar stimulus package that grants direct and immediate assistance to Canadians and businesses in an effort to minimize COVID-19’s disruption to the economy. The stimulus package, representing more than 3% of Canada’s GDP, allocates C$27 billion to support workers and businesses and C$55 billion in liquidity through tax deferrals. In addition, Canada has already committed C$1.1 billion dollars in aid to fight and mitigate the public health threat posed by coronavirus, allocating the majority of those funds to providing provincial and territorial support (C$500 million) as well investment in research (C$275 million).
+
+To ensure Canadians get trusted and accurate information, the Government of Canada is providing $50 million to the Public Health Agency of Canada's dedicated communications capacity and public education efforts.The Government of Canada is working closely with provinces and territories to ensure that all necessary and appropriate supports are available to ensure a comprehensive coordinated response to COVID-19.The Public Health Agency of Canada's National Microbiology Laboratory is central to the response to COVID-19. It has been working collaboratively with Canadian provincial and territorial public health laboratories to ensure there is additional testing capacity, including in the rapid diagnosis of COVID-19 in multiple jurisdictions, and is integral to Canada's research on the novel coronavirus, vaccines, and treatment.
+
+# 2.Data Analysis
+
+## 2.1 Visualization of the Spread of COVID-19 in Canada
+
+```{r dpi=100,echo=FALSE,message=FALSE, warning=FALSE,}
+
+library(coronavirus)
+library(plotly)
+Canada_corona <- coronavirus %>% filter(country == "Canada" )
+confirmed_corona_Canada <- Canada_corona %>% filter(type == "confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplotly(ggplot(confirmed_corona_Canada, aes(x = date, y= cases, color=province))+geom_line()+ggtitle("Figure 02: Daily COVID-19 confirmed in Canada"))
+```
+
+Figure 02 shows daily confirmed COVID-19 cases in Canada. The 1st confirmed cases of the corona virus disease in Canada is reported in 05th of March. There is a significant increase in confirmed cases after 20th of March. The highest number of daily confirmed cases have been reported on 03rd of May in Quebec province & the value is 2209.Ontario & Alberta provinces also reported rapid daily confirmed cases between April and May.  
+
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+recovered_corona_Canada <- Canada_corona %>% filter(type == "recovered")
+recovered_corona_Canada <- recovered_corona_Canada%>%
+  mutate(cases=replace(cases,which(cases < 0),NA))
+recovered_corona_Canada$cases[71]=mean(c(recovered_corona_Canada$cases[70], recovered_corona_Canada$cases[72]))
+recovered_corona_Canada$col <- as.factor(c(rep("blue",69),rep("red",2),rep("blue",112-71)))
+ggplot(recovered_corona_Canada,aes(x=date,y=cases))+geom_line(aes(color=col,group=1))+scale_color_identity()+ggtitle("Figure 03: Daily COVID-19 recovered in Canada")
+```
+
+Daily recovered COVID-19 cases are shown in the figure 03.End of the March, first COVID-19 recovered case is reported in Canada. Since April to May recovered cases per day is higher than 250. The highest number of daily recovered cases are reported in April and it is 1385. There is one negative point in daily recovered cases. Imputed values are shown in red.
+
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+
+death_corona_Canada <- Canada_corona %>% filter(type =="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplotly(ggplot(death_corona_Canada, aes(x=date, y= cases,color=province)) + geom_line() + geom_point()+ggtitle("Figure 04:Daily COVID-19 death in Canada"))
+
+```
+
+The first COVID-19 death in Canada is recorded in 09th of March in British Columbia province. In April and May Quebec has the higher number of daily death. The highest number of daily death is reported in Quebec and the count is 163. Other provinces expect Quebec and Ontario has been reported the count of daily deaths lower than 50
+
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(coronavirus)
+library(tidyverse)
+library(plotly)
+Canada_active <-coronavirus %>% filter(country=="Canada")%>%
+  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  mutate(active_total = cumsum(active),
+         recovered_total = cumsum(recovered),
+         death_total = cumsum(death))
+ggplotly(ggplot(Canada_active,aes(x =date,y =active_total))+geom_line(color="cornflowerblue")+ggtitle("Figure 05: Total acive COVID-19 cases in Canada"))
+
+```
+
+Above figure 05 shows the total active COVID-19 cases in Canada. There are 33064 active COVID-19 cases are reported when 12th of May. It can be seen the active COVID-19 cases are increase with time.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE, results='asis'}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+Canada_corona <- coronavirus %>% filter(country == "Canada" )%>%
+  separate(date, into = c("Year", "Month", "Day"), sep = "-")%>%
+  mutate(Month = if_else(Month== "01", "Jan",(
+    if_else(Month == "02", "Feb",
+            if_else(Month == "03", "Mar",
+                    if_else(Month == "04","Apr","May")
+            ))
+  ))
+  )
+
+confirmed_Canada_corona <- filter(Canada_corona, type=="confirmed") %>%
+  group_by(Month)%>%
+  summarise(confirmed=sum(cases))%>%
+  arrange(match(Month, c("Jan", "Feb", "Mar", "Apr", "May")))
+
+recovered_Canada_corona <- filter(Canada_corona, type =="recovered") %>%
+  group_by(Month)%>%
+  summarise(recovered = sum(cases))%>%
+  arrange(match(Month, c("Jan", "Feb", "Mar", "Apr", "May")))
+
+death_Canada_corona <- filter(Canada_corona, type=="death")%>%
+  group_by(Month)%>%
+  summarise(death = sum(cases))%>%
+  arrange(match(Month, c("Jan", "Feb", "Mar", "Apr", "May")))
+
+Canada_corona_total <- tibble(
+  Month=c("Jan", "Feb", "Mar", "Apr","May"),
+  Confirmed=c(4,16,8507,45930,17962),
+  Recovered=c(0,6,1586,19832,12631),
+  Death=c(0,0,101,3209,1990))
+Canada_corona_total <-Canada_corona_total%>%
+  mutate(Active=Confirmed-Recovered-Death)
+Summary_table1 <- as.data.frame(Canada_corona_total)
+kable(Summary_table1,caption ="<b>Table 01: Summary table for covid 19 cases in Canada</b>", align = "c")
+```
+
+Table 01 shows that all COVID-19 cases in Canada. This table also represented the summary of above figure 03, 04 and 05.It can be seen that highest number of confirmed cases, deaths, recovered cases and active cases have been recorded in April.It is a rapid increase compare with other months.
+
+## 2.2 Comparision of COVID-19 in Canada with US and China
+
+```{r dpi=100,echo=FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+Canada_China_US <- coronavirus %>% filter(country %in% c("Canada", "China", "US"))
+confirmed <- Canada_China_US %>% filter(type=="confirmed")
+ggplotly(ggplot(confirmed, aes(x=date,y=cases, color=country))+geom_line()+ggtitle("Figure 06: Daily Comfirmed COVID-19 in Canada, US & China"))
+```
+
+Figure 06 shows the daily confirmed COVID-19 cases in Canada, US and China. It can be seen very clearly the number of daily confirmed cases in US is higher than Canada and China. China and Canada has been reported confimed cases province wise. Daily confirmed cases in china has been dropped after 01st of March while Canada and US has started reporting the new confirmed cases. The number of daily confirmed cases in US exceeds the 30,000 limit in April. However, the number of daily confirmed cases in Canada is lower than China & US.
+
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+Canada_China_US <- coronavirus %>% filter(country %in% c("Canada", "China", "US"))
+recovered <- Canada_China_US %>% filter(type=="recovered")
+ggplotly(ggplot(recovered, aes(x=date, y= cases ,color=country))+geom_line()+ggtitle("Figure 07: Daily recovered COVID-19 in Canada, Us & China"))
+```
+
+US has the highest daily recovered COVID-19 cases. The number of highest recovered cases per day is 33227 and it is reported in US. Compare with US and China, the number of daily recovered cases in Canada has the least value. Figure 07 shows the number of cases daily recovered in Canada is approximately increase with time.
+
+```{r dpi=100,echo=FALSE, message=FALSE, warning=FALSE}
+Canada_China_US <- coronavirus %>% filter(country %in% c("Canada", "China", "US"))
+death <- Canada_China_US %>% filter(type=="death")
+ggplotly(ggplot(death, aes(x=date, y= cases, color=country))+geom_point()+ggtitle("Figure 08: Daily COVID-19 death in Canada, US & China"))
+```
+
+Above figure shows the number of daily deaths in Canada, US and China. The highest number of daily death also reported in US. Since 31st of March, the count of daily death reported in US is higher than 1000. There is highly spike in daily death of china in 17 of April and the value is recorded as 1290. All these deaths are reported from Hubei province. . All these deaths are reported from Hubei province. The count of daily death of Canada can be considered as very small compare with US.
+
+```{r dpi=100, echo=FALSE, warning=FALSE, results='asis'}
+summary_table <- tibble(Country=c("Canada","US","China"),
+                        Confirmed=c(72419,1369376,84018),
+                        Death=c(5300,82356,4637),
+                        Recovered=c(34055,230287,79222),
+                        Active=c(33064,1056733,159))%>%
+  mutate(Death_percentage = round((Death/Confirmed)*100, 2), Recovered_percentage = round((Recovered/Confirmed)*100, 2),
+Active_percentage=round((Active/Confirmed)*100, 2))        
+  
+                        
+knitr::kable(summary_table,caption ="<b> Table 02: Summary table for COVID-19 cases in Canada, US and China</b>  ", color= 'black',align = "c")
+```
+
+
+Table 02 shows Summary of total covid 19 cases in Canada, Us and China. When 12th of May, total active cases in Canada, US and China is 33064, 1056733 and 159 respectively. It is reported the total active cases in Canada is approximately 46% as a percentage of confirmed cases. That value for US and china is approximately 77% and 0.19%. US has been reported the highest active and confirmed cases and both of these values are greater than 1000000. As a percentage the China has reported the minimum active cases.
+
+# 3.Conclusions and Discussion
+
+## 3.1 Conclusions
+
+COVID-19 is still an unclear infectious global pandemic. In Canada, the first confirmed case for COVID-19 was identified on January 25th of 2020 from Ontario province.By the end of the March, pandemic situation showed a rapid spread among the community in Canada. Although the pandemic was started in Ontario, majority of the daily confirmed cases were reported in Quebec province from April to 12th of May (Figure 02 clearly show it). As of 12th May 2020, Canada has reported a total of 33064 active cases with 34055 recovered cases and 5300 deaths. Active cases are approximately 46% as a percentage of total confirmed cases. Quebec reported the highest daily confirmed cases (2209 cases per day) and daily deaths.The majority of cases ware repoted in April. So, it can be conclued that April was the critical period of spread of COVID-19 in Canada.
+
+The death rate of Canada is higher than United states(US) when comparing with the neighbouring country. But, the recovered rate (percentage) of Canada is approximately 47% and US is 16%. The recovered rate and percentage of active cases of Canada has got better values than US. The situation of Canada by 12th of May is better compared to neighbouring country United States at the same moment.
+
+By 12th of May China has only 0.19% of active cases whereas in Canada it is approximately 46%. China has the highest recovered rate as well as a lower death rate than Canada and US. China has controlled the COVID-19 pandemic well in first five months compared to Canada and US.
+
+
+## 3.2 Discussion
+
+The World Health Organization (WHO) reported Naval Coronavirus (COVID-19) as still an unclear infectious global pandemic. This report was focused on COVID-19 distribution of Canada based on the data from 22nd of January 2020 to 12th of May 2020. Number of COVID-19 confirmed cases, deaths and recovered cases in Canada was analyzed by this report. Coronavirus data set was used to getting the data related to the Canada. There was a negative value in recovered cases on 01st of April. For that the negative value was replaced as NA and imputated the new value for missing value (NA). The mean of above and below values of missing value was imputated as new value. The red line of figure 03 was indicated that imputed value. This new value was used to analyze the daily recovered cases. This error may be happend due to the changing of calculation method or due to mistakes happen when data entry. 
+
+There was some issues with data reported method of Canada for given data set. Although daily confirmed cases and daily death were recorded as province by province,and the daily recovered cases of Canada was reported for whole country. It was bit confused to get daily active cases in Canada and compare with daily cases in other countries like US by using figures. This is the reason for some figures show line like verticle lines (like figure 06).To avoid this issue and get better analysis, cumulative counts also used to comparisons(Table 01 & 02).
+
+
+The COVID-19 cases of Canada has compared with US and China. The reasons for choosing these countries for comparison were, US is the neighbouring country of Canada. As well US has the worst outbreak in the world. The situation of US also effected on Canada as they are the neighbouring countries. Comparing with US, Canada has appeared to have its COVID-19 outbreak under control. But actually the situation in Canada is not satisfactory when comparing with other countries that have controlled the pandemic situation. The government of Canada was getting many actions to control the spread of COVID-19 in Canada. Canada-US border was closed and travel restriction was placed.Spread of COVID-19 was started in China. So, COVID-19 cases of china was choose to compare with Canada.
+
+
+# 4.References
+
+* https://www.who.int/ 
+* https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html
+* https://www.statista.com/statistics/1107034/covid19-cases-deaths-tests-canada/
+* https://health-infobase.canada.ca/covid-19/epidemiological-summary-covid-19-cases.html
+* https://www.worldometers.info/coronavirus/country/us/
+* https://github.com/CSSEGISandData/COVID-19
+* https://ipac-canada.org/coronavirus-resources.php
+* https://www.canada.ca/en/environment-climate-change/corporate/covid-19.html
+* https://globaledge.msu.edu/countries/canada
+* https://www.justice.gc.ca/eng/csj-sjc/covid.html
+* https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection/canadas-reponse/government-canada-takes-action-covid-19.html
+
+
+
+

@@ -1,0 +1,917 @@
+---
+title: "__Corona Virus report for Romania__"
+author: "__Silaxsha Punniyamoorthy__"
+date: "7/20/2020"
+output: html_document
+---
+<style>
+body{
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE , comment = NA , message = FALSE , warning =FALSE , fig.align="center", fig.cap = "middle", out.width = "65%")
+```
+
+# 1. __Introduction__
+
++ __Corona Virus (COVID-19)__
+
+An event affecting an exceptionally high proportion of population is known as pandemic. Corona virus outbreak is the recent pandemic we all are facing across the world. 
+
+![](corona.jpg)
+
+
+It is a communicable disease which originally started to spread in Wuhan, China, but it later started to spread all over the world. The people who got exposed to corona virus tend to have mild to moderate respiratory illness. Corona virus spreads primarily through droplets of saliva or discharge from the nose when an infected person coughs or sneezes. The most common symptoms are fever, dry cough and tiredness. The main preventive measures are wearing a face mask and maintaining social distancing as much as we can. This corona virus pandemic has some serious effects such as loss of lives, poverty, down in economy, change of lifestyle, mental stress etc. As of 19th July, the total corona virus cases across the world surpassed 14 million with deaths over 6 lakhs. Therefore, the need to do some statistical analysis becomes crucial to make some wise decisions. There are so many researches are in process to find a medicine to this as well. 
+
+Top ten countries with highest number of corona virus cases as of 19th July are, United States , Brazil , India , Russia , Peru , South Africa, Mexico , Chile , UK and Iran. The locations are depicted below.
+
+```{r}
+
+library(tidyverse)
+library(tibble)
+library(ggplot2)
+library(maptools)
+library(knitr)
+library(magrittr)
+library(rmarkdown)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(directlabels)
+library(ggthemes)
+
+```
+
+
+```{r fig.cap='Figure 01: Location of top ten countries with high corona virus cases', out.width= "75%"}
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "lightblue", colour = "cornflowerblue"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+toplocation <- tibble(lat= c(55.3781, 21, 32.45, -13.64, -23.65, -7.95, 53.72, 30.33, -26.33, 16.85	)	,
+                      long=c(-3.4360, 78, -99.74, -72.89, -70.39,-34.88, 91.43,48.28, 28.13, -99.92))
+
+p +
+  geom_point(
+    data = toplocation, 
+    aes(x = long, y = lat), color = "red", size = 1 
+    ) + 
+  geom_text(
+    data= toplocation, 
+    aes(long, lat, label = c("UK", "India", "USA", "Peru", "Chile", "Brazil","Russia","Iran", "South Africa","Mexico")), 
+    hjust = -0.2 ,size =4, color = "brown"
+    )
+
+```
+
++ __Romania__
+    
+Romania is a country which is located in the Europe. It shares land borders with Bulgaria to the south, Ukraine to the north, Hungary to the west, Serbia to the southwest, Moldova to the east and has its opening to the Black Sea. The location is depicted below.
+
+```{r fig.cap='Figure 02: Location of Romania', out.width="75%"}
+romania_corona <- coronavirus %>% filter(country == "Romania")
+
+p +
+  geom_point(
+    data = romania_corona, 
+    aes(x = long, y = lat), color = "red", size = 1
+  ) + 
+  geom_text(
+    data= romania_corona, 
+    aes(long, lat, label = "Romania", hjust = -0.2), 
+    hjust = -0.2 ,size =4 , color = "darkgreen"
+    )
+
+```
+
+
+It is the 12th-largest country in Europe. Its capital and largest city is Bucharest. Romania ranks 52nd in the Human Development Index and is a developing country. Its annual economic growth rate is 3.5% as of 2020. Romania has a climate that is temperate and continental, with four distinct seasons. It is divided into 41 counties and the municipality of Bucharest.The official language is Romanian. Romania is a secular state and has no state religion. Football is the most popular sport in Romania. It is one of the second world countries as well. The most common causes of death in Romania are cardiovascular diseases and cancer. 
+
++ __Corona virus in Romania__
+
+There is no any wonder that corona virus has affected Romania too. The virus was confirmed to have reached Romania on 26 February 2020, when the first case in Gorj County was confirmed. On 22 March, the first three deaths were reported in Romania. All three had pre-existing conditions: one was on dialysis, one had terminal lung cancer, and one had diabetes. On 3 July, there were 741 people in institutional quarantine and a further 58,991 in home isolation under medical supervision. As of 18 July, the Romanian Government reports 943,733 tests have been processed. As of 19 July, Romania has 36, 691 confirmed corona virus cases in which 2009 deaths and  22, 488 recoveries are reported.
+
++ __Actions taken by the government__
+        
+On 21 February, following a COVID-19 pandemic in Italy, the Romanian government announced a 14-day quarantine for citizens returning from the affected regions. The Romanian government announced several preventive measures including designation of five hospitals as isolation centres for new cases, purchase and placement of thermal scanners in international airports and specially designated lines for passengers coming from areas affected by COVID-19 outbreak, arranged awareness programs etc. On 8 March, the government announced a ban on all indoor or outdoor activities involving the participation of more than 1,000 participants. On 9 March, it announced the cessation of flights, bus transport, rail transport to and from Italy, closed schools and disinfected public places and border closures. On 14 March, the president Klaus Iohannis announced his decision to decree the state of emergency and it was further extended. On 16 March, President Iohannis signed an emergency decree, giving authorities the power to remove, report or close websites spreading fake news about the COVID-19 pandemic, with no opportunity to appeal. The State of Alert replaced the State of Emergency in Romania on 15 May 2020. On 16 June, the State of Alert was extended for an additional 30 days. During the State of Alert period some restrictions regarding operating businesses remain in place. The government also took actions on law breakers as well.
+  
++ __Impact of corona virus on Romania__
+  
+Romania faced down in economy mainly in textile industry. Several factories, shops and offices were closed. Hence, many people starved without jobs. All the sports events and examinations were postponed as well.
+  
+  
+## 2. __Exploratory Data Analysis__
+
+## _Analysis of Romania dataset_
+
+### _Description of the data_
+
+```{r}
+
+head(romania_corona)
+
+```
+
+```{r}
+
+glimpse(romania_corona)
+```
+
+```{r}
+summary(romania_corona)
+```
+
+From the above outputs, we can clearly explain the description of the Romania corona virus data.
+
+The dataset consists of 7 variables namely date, province, country, lat, long, type and cases. The variable type has the categories namely confirmed, recovered and death. There are 336 rows where each 112 rows represent a particular type. The available data are from 22nd of January to 12th of May. Eventhough the dataset has a column named province, there are no any data in it. This dataset does not have multiple latitudes and longitudes as well.
+
+
+```{r fig.cap='Figure 03'}
+ggplot(data = romania_corona , aes(x= date , y = cases , col = type  , shape = type)) +
+  geom_point(size = 2) + 
+  labs(title = "Plot of daily Romania corona virus cases", x= "Month", y ="Number of cases")+ 
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"), 
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+```{r fig.cap='Figure 04'}
+ggplot(data = romania_corona , aes(x= date , y = cases , col = type  , shape = type)) +
+  geom_point(size = 2) + 
+  labs(title = "Plot of daily Romania corona virus cases according to type", x= "Date", y ="Number of cases") + 
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),  
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"), 
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + 
+  facet_wrap(~type)
+
+```
+
+The above plots shows that no any cases were confirmed until the month of March. Since March, the confirmed cases, deaths and recoveries tend to rise.
+
+```{r}
+confirmed_romania <- romania_corona %>% filter(type=="confirmed")
+head(confirmed_romania)
+summary(confirmed_romania)
+```
+
+From the above summary, we can see that the maximum number of confirmed cases in a single day is 523 and the mean of confirmed cases is 140.9.
+
+```{r fig.cap='Figure 05'}
+
+ggplot(data = confirmed_romania , aes(y=cases, x= date, fill=cases)) + 
+  geom_bar(stat= "identity") + 
+  labs(title = "Plot of daily Covid-19 confirmed cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"), 
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+
+```{r fig.cap='Figure 06'}
+ggplot(confirmed_romania, aes(x=date, y=cases )) + 
+  geom_line(col= "darkblue", size = 0.8) + 
+  labs(title = "Plot of daily Covid-19 confirmed cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),  
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"), 
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+In the above plots (Figure 05 & Figure 06), we can see that there is an increasing trend of confirmed cases from March to half way through April. After that, there is a slight decreasing trend, which is a good sign.
+
+
+```{r}
+confirmed_romania %>% 
+  separate(date, into = c("year", "month", "day")) %>% 
+  group_by(month) %>% 
+  summarise(meancases = mean(cases), maximum = max(cases), minimum = min(cases)) %>% 
+  kable(caption= "Summary of confirmed cases")
+
+``` 
+
+The above table suggests that the month of April have highest maximum and minimum number of confirmed cases.
+
+```{r fig.cap='Figure 07'}
+confirmed_romania %>% 
+  separate(date, into = c("year", "month", "day")) %>% 
+  ggplot(aes(day, cases)) +
+  geom_point(col ="darkblue") +
+  labs(title = "Plot of daily Romania corona virus confirmed cases according to month", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =5, vjust = 0.5)) +
+  facet_wrap(~month, nrow = 1)
+```
+
+The above plot shows that the month of April was very hard for Romanians becasuse we can see that it is the peak of the confirmed cases graph. Confirmed cases tend to rise upto April and after that it tends to decrease.
+
+
+```{r}
+confirmed_romania[which.max(confirmed_romania$cases),] %>% kable()
+```
+
+From the above output, we can say that 11th of April 2020 recorded the highest number ofconfirmed cases in Romania.
+
+
+```{r}
+recovered_romania <- romania_corona %>% filter(type=="recovered")
+head(recovered_romania)
+summary(recovered_romania)
+```
+
+The above summary suggests that the maximum number of recoveries recorded in a single day is 489 and the mean of recoveries is 68.62.
+
+```{r fig.cap='Figure 08'}
+
+ggplot(data = recovered_romania , aes(y=cases, x= date, fill=cases)) + 
+  geom_bar(stat= "identity") +
+  labs(title = "Plot of Romania corona virus recovered cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+
+```{r fig.cap='Figure 09'}
+ggplot(recovered_romania, aes(x=date, y=cases , col = "red")) + 
+  geom_line(size = 0.8 , color = "blue") + 
+  labs(title = "Plot of Romania corona virus recovered cases", x= "Date", y ="Number of cases")+
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+From the above plots (Figure 08 & Figure 09), we can say that there is an incressing trend of recoveries since March.
+
+
+```{r}
+recovered_romania %>% 
+  separate(date, into = c("year", "month", "day")) %>% 
+  group_by(month) %>% 
+  summarise(meancases = mean(cases),  maximu = max(cases), minimum = min(cases)) %>%
+  kable(caption = "Summary of recoveries")
+
+```
+
+We can clearly say that there is an increasing trend of recoveries becasue mean number of recoveries, maximum number of recoveries and minimum number of recoveries rise across the months from January to May.
+
+```{r fig.cap='Figure 10'}
+recovered_romania %>% 
+  separate(date, into = c("year", "month", "day")) %>% 
+  ggplot(aes(day, cases)) +
+  geom_point(col="forestgreen") +
+  labs(title = "Plot of Romania corona virus recovered cases according to month", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =5, vjust = 0.5)) +
+    facet_wrap(~month, nrow = 1)
+```
+
+The above plot suggests that there is an increasing trend of recoveries over the months.
+
+
+```{r}
+recovered_romania[which.max(recovered_romania$cases),] %>% kable()
+
+```
+
+As per the above output, we can say that the maximum number of recoveries was recorded on 9th of May.
+
+
+```{r}
+deaths_romania <- romania_corona %>% filter(type=="death")
+head(deaths_romania)
+summary(deaths_romania)
+
+```
+
+The above summary suggests that the maximum number of deaths recorded in a single day is 35 and the mean number of deaths is 8.946.
+
+```{r fig.cap='Figure 11'}
+ 
+ggplot(data = deaths_romania , aes(y=cases, x= date , fill = cases)) + 
+  geom_bar(stat= "identity") + 
+  labs(title = "Plot of Romania daily Covid-19 deaths", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown",fill = "linen", size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+
+
+```{r fig.cap='Figure 12'}
+ggplot(deaths_romania, aes(x=date, y=cases )) +
+  geom_line(size = 0.8 , color = "forestgreen") +
+  labs(title = "Plot of Romania daily Covid-19 deaths", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown",fill = "linen" ,size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+From the above plots (Figure 11 & Figure 12), we can say that there is an incressing trend of deaths since half way through March.
+
+```{r}
+deaths_romania %>% 
+  separate(date, into = c("year", "month", "day")) %>% 
+  group_by(month) %>% 
+  summarise(meancases = mean(cases),  maximum = max(cases), minimum = min(cases)) %>%
+  kable(caption = "Summary of deaths")
+```
+
+We can clearly say that there is an increasing trend of deaths because, mean number of deaths, maximum number of deaths and minimum number of deaths rise across the months.
+
+
+```{r fig.cap='Figure 13'}
+deaths_romania %>% 
+  separate(date, into = c("year", "month", "day")) %>% 
+  ggplot(aes(day, cases )) +
+  geom_point(col = "purple") +
+  labs(title = "Plot of Romania corona virus death cases according to month", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =5, vjust = 0.5)) +
+  facet_wrap(~month, nrow = 1)
+```
+ 
+The above plot suggests that there is an increasing trend of deaths over the months.
+
+
+```{r}
+deaths_romania[which.max(deaths_romania$cases),] %>% kable()
+
+```
+
+From the above output, we can say that 8th of May recorded the maximum number of deaths in a single day.
+
+
+```{r fig.cap='Figure 14'}
+ggplot(romania_corona, aes(x=date, y=cases , col = type)) + 
+  geom_line(size = 0.8) + 
+  labs(title = "Plot of Romania daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+From the aboe plot we can see that there is an increasing trend in all three types. However, since half way of April, there is a decreasing trend in confirmed cases.
+
+
+```{r}
+confirmeddata <- romania_corona %>% 
+  filter(type == "confirmed") %>% 
+  mutate(cumulative_cases = cumsum(cases))
+
+deathdata <- romania_corona %>% 
+  filter(type == "death") %>% 
+  mutate(cumulative_deaths = cumsum(cases))
+
+recovereddata <- romania_corona %>% 
+  filter(type == "recovered") %>% 
+  mutate(cumulative_recovered = cumsum(cases))
+
+dataset <- data.frame(date = romania_corona$date, confirmedcases = confirmeddata$cases, recoveredcases = recovereddata$cases, deaths = deathdata$cases ,
+                      cumulativecases = confirmeddata$cumulative_cases, cumulativerecovered = recovereddata$cumulative_recovered,
+                      cumulativedeaths = deathdata$cumulative_deaths)
+
+dataset <- dataset %>% 
+  mutate(active = cumulativecases- cumulativerecovered - cumulativedeaths, recoveryrate = (cumulativerecovered/ cumulativecases)* 100)
+
+```
+
+
+```{r fig.cap='Figure 15'}
+ggplot(dataset, aes(x= date, y= cumulativecases)) +
+  geom_line(size = 1, col = "forestgreen") +
+  geom_point(size = 0.9) +
+  labs(title = "Plot of Romania cumulative confirmed Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+The above plot shows the cumulative covid-19 confirmed cases count across time. We can say that the cumulative corona virus cases increasing over the months. However the increasing rate is slightly decreasing.
+
+
+```{r fig.cap='Figure 16'}
+ggplot(dataset, aes(x= date, y= cumulativedeaths)) +
+  geom_line(size = 1, col = "forestgreen") +
+  geom_point(size= 0.8) +
+  labs(title = "Plot of Romania cumulative death Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+
+```
+
+The above plot shows the cumulative covid-19 death cases count across time. We can say that the cumulative death count is increasing over the months.
+
+
+```{r fig.cap='Figure 17'}
+ggplot(dataset, aes(x= date, y= cumulativerecovered)) +
+  geom_line(size = 1, col = "red") +
+  geom_point(size= 0.8) +
+  labs(title = "Plot of Romania cumulative recovered Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+
+```
+
+The above plot shows the cumulative covid-19 recovery cases count across time. We can say that the cumulative recoveries count is increasing over the months. In addition, the increasing rate is also slightly increasing.
+
+
+```{r fig.cap='Figure 18'}
+ggplot(dataset, aes(x= date, y = active)) + 
+  geom_point(col = "cornflowerblue") + 
+  geom_line() +
+  labs(title = "Plot of Romania active Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+
+```
+
+The above plot shows the number of active covid-19 cases count across time. We can say that the number of active cases are increasing up to April end. After that there is a starting of a decreasing trend, which is a good sign.
+
+
+```{r fig.cap='Figure 19'}
+ggplot(dataset, aes(x= date, y = recoveryrate)) + 
+  geom_point(col = "cornflowerblue") + 
+  geom_line() +
+  labs(title = "Plot of Romania Covid-19 recovery rate", x= "Date", y ="Percentage") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2), 
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+
+```
+
+The above plot shows the recovery rate percentage of covid-19 cases across time. We can say that the recovery rate has both increasing and decreasing trends. But since April, the recovery rate is increasing continously, which is indeed a good sign!!
+
+
+## _Comparing covid-19 situation of Romania with Neighbouring countries_
+
+Romania is bounded by Ukraine to the north, Moldova to the northeast, Bulgaria to the south, Serbia to the south west and Hungary to the west. Therefore, i wanted to compare the Romanian corona virus data with these countries.
+
+__1. Ukraine__
+
+```{r}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+head(ukraine_corona)
+
+```
+
+```{r fig.cap='Figure 20'}
+ukraine_rom <- bind_rows(romania_corona , ukraine_corona )
+ggplot(ukraine_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) + 
+  labs(title = "Plot of Romania vs Ukraine Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+The above plot suggests that Ukraine is slighly worser than Romania with respect to corona virus pandemic.
+
+
+```{r fig.cap='Figure 21'}
+ukraine_rom <- bind_rows(romania_corona, ukraine_corona)
+ggplot(ukraine_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.5 ) +
+  labs(title = "Plot of Romania vs Ukraine Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + 
+  facet_wrap(~type) + 
+  stat_smooth(se=F)
+
+```
+
+The above plot clearly shows that the corona virus started to spread late(April) in Ukraine than Romania. Both countries has an increasing trend with respect to the types death and recovered. But Ukraine has the fastest increasing rate of confirmed cases than Romania. Comparatively, Romania is in a beteer situation than Ukraine.
+
+
+__2. Moldova__
+
+```{r}
+moldova_corona <- coronavirus %>% filter(country == "Moldova")
+head(moldova_corona)
+
+```
+
+
+```{r fig.cap='Figure 22'}
+moldova_rom <- bind_rows(romania_corona , moldova_corona )
+ggplot(moldova_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) + 
+  labs(title = "Plot of Romania vs Moldova Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+The above plot suggests that Moldova is in a far better situation than Romania with respect to corona virus pandemic.
+
+
+```{r fig.cap='Figure 23'}
+moldova_rom <- bind_rows(romania_corona , moldova_corona )
+ggplot(moldova_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) + 
+  labs(title = "Plot of Romania vs Moldova Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type) + 
+  stat_smooth(se= F)
+
+```
+
+The above plot suggests that Romania has the fastest increasing trend than Moldova, with respect to all three types. Comparatively, Moldova is in a better situation than Romania.
+
+
+__3. Bulgaria__
+
+```{r}
+bulgaria_corona <- coronavirus %>% filter(country == "Bulgaria")
+head(bulgaria_corona)
+
+```
+
+
+```{r fig.cap='Figure 24'}
+bulgaria_rom <- bind_rows(romania_corona, bulgaria_corona)
+ggplot(bulgaria_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs Bulgaria Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+The above plot clearly suggests that Bulgaria is in a much safer situation than Romania.
+
+```{r fig.cap='Figure 25'}
+bulgaria_rom <- bind_rows(romania_corona, bulgaria_corona)
+ggplot(bulgaria_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs Bulgaria Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot suggests that Romania has the fastest increasing trend than Bulgaria, with respect to all three types. Comparatively, Bulgaria is in a far better situation than Romania.
+
+
+__4. Serbia__
+
+```{r}
+serbia_corona <- coronavirus %>% filter(country == "Serbia")
+head(serbia_corona)
+
+```
+
+```{r fig.cap='Figure 26'}
+serbia_rom <- bind_rows(romania_corona, serbia_corona)
+ggplot(serbia_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs Serbia Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+Frome the above plot we can see that there is no much difference between Romania and Serbia. But comparatively Serbia is in a safer situation than Romania.
+
+```{r fig.cap='Figure 27'}
+serbia_rom <- bind_rows(romania_corona, serbia_corona)
+ggplot(serbia_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs Serbia Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot suggests that Romania has the fastest increasing trend than Serbia, with respect to all three types. Comparatively, Serbia is in a better situation than Romania.
+
+
+__5. Hungary__
+
+```{r}
+hungary_corona <- coronavirus %>% filter(country == "Hungary")
+head(hungary_corona)
+
+```
+
+```{r fig.cap='Figure 28'}
+hungary_rom <- bind_rows(romania_corona, hungary_corona)
+ggplot(hungary_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs Hungary Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+```
+
+The above plot clearly suggests that Hungary is in a much safer situaion than Romania with respect to corona virus pandemic.
+
+```{r fig.cap='Figure 29'}
+hungary_rom <- bind_rows(romania_corona, hungary_corona)
+ggplot(hungary_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs Hungary Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot suggests that Romania has the fastest increasing trend than Hungary, with respect to all three types. Comparatively, Hungary is in a much safer situation than Romania.
+
+
+```{r fig.cap='Figure 30'}
+neighbour <- bind_rows(romania_corona, ukraine_corona, moldova_corona, bulgaria_corona, serbia_corona, hungary_corona)
+ggplot(neighbour, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania vs neighbouring countries Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type)
+
+```
+
+Finally we can say that Ukraine is in more risky situation and Bulgaria is in more safer situation than other countries.
+
+
+## _Comparing covid-19 situation of Romania with other countries in Europe_
+
+Out of the countries in Europe, France and Germany are the two important countries which are affected by covid-19. Therefore, i wanted to compare Romania corona virus situation with these two countries as well.
+
+
+__1. France__
+
+```{r}
+france_corona <- coronavirus %>% filter(country == "France")
+head(france_corona)
+```
+
+```{r fig.cap='Figure 31'}
+france_rom <- bind_rows(romania_corona, france_corona)
+ggplot(france_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) + 
+  labs(title = "Plot of Romania and France daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + 
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot clearly depicts the huge effect of corona virus in France. France has the highest number of confirmed cases, deaths and recoveries than Romania. Comparatively, Romania is in a much safer situation than France.
+
+
+__2. Germany__
+
+```{r}
+germany_corona <- coronavirus %>% filter(country == "Germany")
+head(germany_corona)
+```
+
+
+```{r fig.cap='Figure 32'}
+germany_rom <- bind_rows(romania_corona, germany_corona)
+ggplot(germany_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) + 
+  labs(title = "Plot of Romania and Germany daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + 
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot clearly shows the huge effect of corona virus in Germany. Germany has the highest number of confirmed cases, deaths and recoveries than Romania. Comparatively, Romania is in a much safer situation than Germany.
+
+
+## _Comparing covid-19 situation of Romania with USA , UK and Italy_
+
+USA , UK and Italy are the most affected countries with huge number of deaths. Therefore, i wanted to compare the Romania situation with these contries as well.
+
+
+__1. United Kingdom (UK)__
+
+```{r}
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+head(uk_corona)
+
+```
+
+
+```{r fig.cap='Figure 33'}
+uk_rom <- bind_rows(romania_corona, uk_corona)
+ggplot(uk_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) + 
+  labs(title = "Plot of Romania and UK daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + 
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot clearly depicts the huge effect of corona virus in UK. Romania has very slow increasing trend of confirmed cases and deaths than UK. In addition,Romania has the fastest recovery trend than UK. Therefore, Romania is in a much safer situation than UK.
+
+
+__2. United States of America (USA)__
+
+```{r}
+us_corona <- coronavirus %>% filter(country == "US")
+head(us_corona)
+
+```
+
+
+```{r fig.cap='Figure 34'}
+us_rom <- bind_rows(romania_corona, us_corona)
+ggplot(us_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania and US daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + 
+  facet_wrap(~type) + 
+  stat_smooth(se = F)
+
+```
+
+The above plot clearly depicts the huge effect of corona virus in US. Romania has very slow increasing trend of confirmed cases, deaths and recoveries than US. However,US has the fastest recovery trend too. Comparatively, Romania is in a much safer situation than US.
+
+
+__3. Italy__
+
+```{r}
+italy_corona <- coronavirus %>% filter(country == "Italy")
+head(italy_corona)
+
+```
+
+
+```{r fig.cap='Figure 35'}
+italy_rom <- bind_rows(romania_corona, italy_corona)
+ggplot(italy_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania and Italy daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type) +
+  stat_smooth(se= F)
+
+```
+
+The above plot clearly depicts the huge efefct of corona virus in Italy. Romania has very slow increasing trend of confirmed cases, deaths and recoveries than Italy. However,Italy has the fastest recovery trend too. Comparatively, Romania is in a much safer situation than Italy.
+
+
+```{r fig.cap='Figure 36'}
+topaffected <- bind_rows(romania_corona, uk_corona, us_corona, italy_corona)
+ggplot(topaffected, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania and severely affected countries daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) 
+
+```
+
+```{r fig.cap='Figure 37'}
+topaffected <- bind_rows(romania_corona, uk_corona, us_corona, italy_corona)
+ggplot(topaffected, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania and severely affected countries daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) + facet_wrap(~type) + stat_smooth(se = F)
+```
+
+From the above plots we can say that US is the most affected country by corona virus than Italy, UK and Romania. When comparing with these most affected countries, Romania's coronavirus cases and deaths are very very low. Therefore, Romania is in a much safer situation than  US, UK and italy.
+
+
+## _Comparing covid-19 situation of Romania with China_
+
+
+China is the first country that faced corona virus. Therefore i wanted to compare the corona virus pandemic situation of Romania with China.
+
+```{r}
+china_corona <- coronavirus %>% filter(country == "China")
+head(china_corona)
+
+```
+
+```{r fig.cap='Figure 38'}
+china_rom <- bind_rows(romania_corona, china_corona)
+ggplot(china_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania and China daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5))
+
+```
+
+
+```{r fig.cap='Figure 39'}
+china_rom <- bind_rows(romania_corona, china_corona)
+ggplot(china_rom, aes(x=date, y=cases , col = country)) +
+  geom_line(size = 0.8, alpha = 0.6 ) +
+  labs(title = "Plot of Romania and China daily Covid-19 cases", x= "Date", y ="Number of cases") +
+  theme(plot.background = element_rect(colour = "brown", fill= "linen",size =2),
+        plot.title = element_text(size = rel(1) , color = "Blue"),
+        axis.line = element_line(size=1, color = "black " , linetype = "solid"),
+        axis.text.x = element_text(angle = -30, color = "blue", size =12, vjust = 0.5)) +
+  facet_wrap(~type) +
+  stat_smooth(se= F)
+
+```
+
+From the above plot we can say that China has very high number of confiremd cases, deaths and recoveries than Romania.Therefore, we can say that when compared to China, Romania is not severely affected by corona virus.
+
+
+## 3. __Discussion and Conclusion__
+
+From the above analysis , it can be concluded that Romania's daily number of confirmed cases increased from March to half way through April. The month of April recorded maximum confirmed cases. After that, the daily number of confirmed cases decreases. This decreasing trend is a good sign and the spread can be controlled easily at this stage. The daily number of deaths and recoveries tend to increase continously over the months. Maximum number of deaths and recoveries in a single day was recorded on 8th and 9th of May respectively.
+
+The cumulative corona virus cases count increases continously but the rate of increasing trend is slightly decreasing. The cumulative death count and recovery count are increasing continously. However, the rate of increasing trend of recovery rate is also increasing, which is an advantage. The number of active cases tend to increase until April end. However, from the beginning of May they tend to decrease. At this stage, there is a high possibilty to control the spread easily. The recovery rate have both increasing and decreasing trends. The recovery rate was down around April becuase it is the month with peak confirmed cases. But after that the recovery rate shows an increasing pattern. This shows that the process to control the spread is going good.
+
+Then the Romania corona virus situation is compared to the neighbouring countries such as Ukraine, Moldova, Bulgaria, Serbia and Hungary. Romania is in a worse situation when compared with Moldova, Bulgaria, Serbia and Hungary. However, Romania is in a slightly better situation than Ukraine. After that corona virus situation in Romania is compared with France and Germany, which are in the same continent Europe. The analysis revealed that, France and Germany are severely affected by corona virus than Romania. When compared with the countries US, UK and Italy which are severely affected by corona virus, Romania is in a far better situation than them. Finally, when compared with the situation in China, it can be concluded that Romania is in a much safer situation with high possibilty to control the spread and save lives.
+
+Unfortunately, the data available is upto half way through May and its already 2 months passed. Hence, the analysis and conlusions which are presented in this report can be used to make decisions around May Only. We can not rely on the results of this report now because, anything could have occured within this 2 months period.
+
+
+## 4. __References__
+
++ Donato Teutonico. (2015). ggplot2 Essentials: Explore the full range of ggplot2 plotting capabilities to create meaningful and spectacular graphs. 
+  Pack Publishing.
+
++ Hadley Wickham. (2015). ggplo2: Elegant Graphics for Data Analysis. Springer.
+
++ Romania, from https://en.wikipedia.org/wiki/Romania
+
+
+

@@ -1,0 +1,596 @@
+---
+title: "Covid-19 Pandemic in Belarus"
+author: "Prepared by - Prabha Ilankoon"
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br/><br/>
+
+## 1. Introduction
+
+The Novel COVID-19 Coronavirus is the hottest topic. This is caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). Every day, the media and newspapers share the number of new cases and deaths in several countries, try to measure the impacts of the virus on citizens and remind people to stay home in order to stay safe.  In addition to governments, media and companies discussing about it, data scientists and data professionals in general are putting their knowledge and time at the service of the virus. This leads to a have analyzation of this pandemic situation, the expansion of the COVID-19 and how it spreads in the population.
+
+On 12 January 2020, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei, China, which was reported to the WHO on 31 December 2019. Belarus is also a part of the ongoing worldwide pandemic of coronavirus disease. The virus was confirmed to have spread to Belarus, when the first case of COVID-19 in the country was registered in Minsk on 28 February 2020.
+
+From the evidence so far, the COVID-19 virus can be transmitted in any area, including areas with hot and humid weather. WHO has announced that, heat at 56°C kills the coronavirus at around 10000 units per 15 min. This is a quick reduction. Coronavirus spreads in Belarus with the record of the first patient in February 2020. People didn't had experience with this kind of huge pandemic situation after the SARS viral in 2003.
+
+### 1.1 Visualization of the country
+
+Belarus, officially the Republic of Belarus, formerly known by its Russian name Byelorussia or Belorussia, is a landlocked country in Eastern Europe. Capital of Belarus is Minsk. And it is the most popular city in Belarus. Over 40% of its total area (207,600 square kilometers) is forested. Major economic sectors of Belarus are service industries and manufacturing.
+
+Over 70% of Belarus's population of 9.49 million resides in urban areas. More than 80% of the ethnic of population is Belarusian, while minorities of Russians, Poles and Ukrainians. Since 1995, the country has two official languages: Belarusian and Russian.
+<br/><br/>
+
+```{r Figure 1 : Belarus in World map, echo=FALSE, fig.align = 'center', out.width = "80%", fig.cap = "Figure 1 : Belarus in World map"}
+library(knitr)
+library(png)
+library(jpeg)
+knitr::include_graphics("Images/Belarus_map.png")
+```
+<br/><br/>
+
+### 1.2 Climate condition
+
+Belarus lies between latitudes 51° and 57° N, and longitudes 23° and 33° E. It has a temperate-continental climate with moderate features which is characteristic for Central Europe, with hot summers, long, cold winters and very distinct seasons. Abundant Snowfall may occur throughout the country from December to sometimes early March. It has climate features mild to cold winters, with average minimum temperatures, and cool and moist summers with an average temperature of 18 °C (64.4 °F). Belarus has an average annual rainfall of 550 to 700 mm (21.7 to 27.6 in). The country is in the transitional zone between continental climates and maritime climates.
+<br/><br/>
+
+```{r Figure 2 : Climates of Belarus, echo=FALSE, fig.align = 'center', out.width = "80%", fig.cap = "Figure 2 : Climates of Belarus"}
+library(knitr)
+library(png)
+library(jpeg)
+knitr::include_graphics("Images/Climate 1.jpg")
+```
+
+<br/><br/>
+However, the country is exposed to different air masses, Russian or Arctic, Atlantic or Mediterranean, so it can experience sudden changes in temperature and weather.Winter in Belarus is cold, with temperatures normally below freezing (0 °C or 32 °F) even during the day for a few months.In spring, the temperatures increase rapidly. The thaw occurs between March and April, which is also a difficult time for traveling because of the mud, at least outside of the cities and on unpaved roads. While in early April there may still be snow and frost, at the end of the month, the first warm days can occur, with temperatures above 25 °C (77 °F). Summer in Belarus is quite warm, and unlike in winter, it tends to become progressively warmer as you move from the north to the south.
+
+<br/><br/>
+
+### 1.3 Lockdown status of the country
+
+At the early stage of the virus, Belarus did not impose any lockdowns. It never imposed any restrictions at all. Even the rest of the continent had lockdown, it was open for businesses as usual in before. Belarus is the only country in Europe without imposed any official quarantine or social distancing measures. Thus no official containment measure has been introduced in Belarus. The factories, pubs and restaurants are not forced to close. Churches were packed for Orthodox Easter. Because of that The World Health Organization singled Belarus out for a "lack of adequate social distancing measures" and called the country to shutter nonessential businesses, give up on mass events and enforce distance learning.
+
+Alexander Lukashenko, is the president of Belarus. At this time he was campaigning for the presidential election to be held by the end of August. He has repeatedly played down the danger of the coronavirus, saying a lockdown would be ineffective, unjustified and bad for business and society. Country's top-flight football league was held during this time and it was the only sport played in Europe during the pandemic. There he had given some unique advices to his citizens to avoid infection such as drinking vodka, taking saunas and even driving tractors. But the people and authorities are unhappy about the acts of the president.On March 28, he filled an arena with supporters to watch him play hockey. Lukashenko took a break from the game to assure a journalist that “there are no viruses here” and that hockey is the “best antivirus medicine.”
+<br></br>
+
+```{r Figure 3 : President Lukashenko playing hockey during coronavirus pandemic, echo=FALSE, fig.align = 'center', out.width = "50%", fig.cap = "Figure 3 : President Lukashenko playing hockey during coronavirus pandemic"}
+library(knitr)
+library(png)
+library(jpeg)
+knitr::include_graphics("Images/Figure 1.jpg")
+```
+
+<br></br>
+Also, Belarus held a large-scale military parade in Minsk on May 9 to mark the 75th anniversary of the Soviet Union’s Victory over Nazi Germany in the 1941-1945 Great Patriotic War. The leader of Belarus has used the coronavirus crisis as a trolling method for Putin. While Putin has followed the rest of the world in imposing a lockdown as coronavirus cases have surged there, Lukashenko has scoffed at such restrictions as “coronapsychosis” and kept his country open for business despite criticism from the World Health Organization. As the authorities are unhappy with the president, the Ministry of Health had taken measures to encourage social distancing. But Lukashenko had told it cannot overrule him. Around 25 percent of the population took part in a "community work day", including the president himself. So even though the coronavirus reaches its peak in Belarus, commemorations of the 75th anniversary of Nazi Germany’s surrender in World War II on May 9 had kept on their national agenda. 
+
+<br/><br/>
+
+### 1.4 Actions taken by the government
+
+Knowing Lukashenko wouldn’t act to slow the spread of the coronavirus, members of the public didn't wait to enact their own proactive containment measures. The private sector has largely switched to remote work. Fewer people were on the streets or public transport, and those who do venture out wear face masks. Some bars and restaurants have closed on their own. With the number of patients were increased, Schools were closed for three weeks around Easter. Universities were allowed to switch to e-learning but many did not. The Belarusian national train service rearranged passenger seats to enable social distancing. Belarusians, who in large part are well informed reading independent online outlets and social media, have started to implement social distancing across the country. In Minsk, the metro feels empty, hand sanitisers are everywhere and a lot of restaurants are closed. People only left home for shopping, keeping a 1.5 metre distance from other customers. 
+
+Followings are some of the steps taken by the government.
+
+* Govermnet announced a modest 40 million dollar coronavirus stimulus package, amounting to just about $5 per person.  Belarusians had stepped in to address shortages in medical supplies. Activists in Minsk brought together over 140 volunteers with 3D printers to create high-tech face masks for doctors, some equipped with anti-bacterial filters.
+
+* On 25 March, a mandatory 14-day self-quarantine requirement was instituted for persons entering Belarus from countries affected by the pandemic, with the exception of diplomats and their families, air crews and persons transiting Belarus on return to their home countries.
+
+* On 4 April, the Ministry of Education of Belarus announced a one-week extension of spring vacation for schools. On 10 April another one-week extension followed.
+
+* On April 7, 2020, the Government of Belarus has implemented social distancing measures in Minsk.
+
+* On 9 April, a mandatory 14-day self-isolation requirement was issued by the government for foreign and Belarusian citizens with either confirmed COVID-19 diagnosis, or the status of first- or second-level contact. The penalties for breaking the requirement included administrative detention, fine and imprisonment.
+
+* 14-day self-quarantine requirement, issued on 9 April, was lifted from persons entering Belarus from 37 countries. 
+
+<br/><br/>
+
+### 1.5 Economic impact due to Corona-Virus 
+
+The spread of COVID-19 has kept investors around the world in suspense since February, when financial markets started their slide. Since then, markets have been subject to high levels of volatility, divestments, and flight into ‘safer haven assets’. Political leaders have titled the spread of COVID-19 the ‘biggest challenge since World War II’, while the IMF forecasts the ‘great lockdown’ as the ‘worst economic downturn since the great depression’.
+
+Uncertainty and worries over a prolonged global economic downturn following the global spread of COVID-19 and the subsequent lockdown of countries have triggered a synchronised sell-off in equities and commodities in February and March 2020. Stock markets of advanced economies recorded their worst losses since the financial crisis in 2008, with many of them entering bear market territory. The MSCI World Index, which reflects stock market movements of 23 developed economies, fell by more than 34% from peak to trough in little more than a month, down to its lowest level since July 2016. 
+
+* On 30 March 2020, Belarus and IMF started negotiations on a 900 million dollar loan intended to compensate the economic losses from the coronavirus pandemic.
+
+* According to the National Bank of Belarus data, inflation in March accelerated and accounted to 4.9%, 0.85% higher than in February.
+
+* On 10 April, the United States Agency for International Development (USAID) issued a 1.3 million dollar financial aid for Belarus to help counter the coronavirus pandemic.
+
+* On 25 April, it was reported the agreement on a 90 million Euro loan was reached between Belarus and the International Bank for Reconstruction and Development (IBRD).
+
+* According to the 27 April remarks by Dmitry Krutoy, the First Deputy Prime Minister of Belarus, a total of 2–2.5 billion dollar of external loans were planned to be used as support for the Belarusian economy. According to Krutoy, health care system support and counter-unemployment measures are the main focus of the Belarusian government amid the pandemic crisis.
+
+<br/><br/>
+
+## 2. Exploratory data analysis
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(rmarkdown)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(png)
+```
+
+The necessary data set was obtained from the "coronavirus" package in R.This includes information about top 58 countries that have been affected from Covid-19. Data includes details from January 22 to May 12, 2020. The description of data is as follows :
+
+1. date - Collection date      
+2. province - Specific province of the country
+3. country - Country
+4. lat - Latitude of the country
+5. long - Longitude of the country
+6. type - Type of the case reported(confirmed, recovered, death)
+7. cases - Number of cases reported
+
+
+```{r, echo=FALSE, results='hide'}
+data(coronavirus)
+```
+
+Belarus has been selected for the analysis. Belarus can be interpret in the world map as follow.
+
+```{r, echo=FALSE, results='hide'}
+belarus_corona <- coronavirus %>% filter(country == "Belarus")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 4 : Location of Belarus in world map"}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) + labs(title="Belarus in world map",
+        x ="Latitude", y = "Longitude")
+
+p +
+  geom_point(
+    data = belarus_corona, aes(x = long, y = lat), color = "black", size
+    = 2
+  )
+```
+<br></br>
+
+### 2.1 Visualization of cases
+
+Three types of cases were considered as follows:
+
+* Confirmed
+* Recovered
+* Death
+<br></br>
+
+#### 2.1.1 Visualization of Confirmed cases
+
+According to the plot, it illustrates that first corona patient was confirmed in Belarus at the end of the February(28). After April, confirmed cases has increased except April 18 and 19. Majority of patients were reported as Covid-19 positive on April 20. It is 1485 victims. After middle of April there were more than 500  new cases reported daily in Belarus.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 5 : Daily Covid-19 confirmed cases in Belarus"}
+library(plotly)
+library(ggplot2)
+confirmed_belarus_corona <- belarus_corona %>% filter(type=="confirmed")
+confirmed_belarus_corona_plot <- ggplot(confirmed_belarus_corona, aes(x=date, y=cases)) + geom_line(col = "blue") + 
+geom_point(col = "blue") +   labs(x ="Date", y = "No of cases") + ggtitle("Belarus : Daily Covid-19 Confirmed cases")
+ggplotly(confirmed_belarus_corona_plot)
+```
+
+<br></br>
+
+#### 2.1.2 Visualization of Recovered cases
+
+As show in figure 7, first corona patient has got recovered on March 9. Until middle of the April recovered cases were low. Highest number of patients have recovered on May 7, 679 patients. There was a negative value recorded in the data set on April 5 indicates with red color. It was replaced it with 0 assuming cases are positive and discrete. 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 6 : Daily Covid-19 recovered cases in Belarus(Imputed values are shown in red"}
+library(plotly)
+library(ggplot2)
+recovered_belarus_corona <- belarus_corona %>% filter(type=="recovered")
+
+recovered_belarus_corona1 <- recovered_belarus_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+recovered_belarus_corona1$col <- as.factor(c(rep("blue", 73),rep("red", 2), rep("blue", 112-75)))
+
+recovered_belarus_corona_plot <- ggplot(recovered_belarus_corona1, aes(x=date, y=cases)) +
+  geom_line(aes(color = col, group=1)) + scale_colour_identity() + labs(x ="Date", y = "No of cases") + ggtitle("Belarus : Daily Covid-19 Recovered cases")
+w <- ggplotly(recovered_belarus_corona_plot) 
+hide_legend(w)
+```
+
+<br></br>
+
+#### 2.1.3 Visualization of death cases
+
+Following figure represents details of the death cases from January to May. It shows that until March ends, there are no reported deaths. First death in Belarus has occured on March 31. But later the number of deaths have increased. During May at least two deaths have recorded daily. Maximum number of deaths has reported as seven on May 12.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 7 : Daily Covid-19 death cases in Belarus"}
+library(plotly)
+death_belarus_corona <- belarus_corona %>% filter(type=="death")
+ggplot(death_belarus_corona,
+       aes(x = date, 
+           y = cases))+
+        geom_line(col = "blue")+ 
+         geom_point(col = "blue")+
+  labs(x ="Date", y = "No of cases")+
+        ggtitle("Belarus : Daily Covid-19 Death cases")
+```
+
+<br></br>
+
+All the above three cases can interpret using one single plot. For easy interpretation ggplotly() function has used. Here we can see that after middle of March, the daily confirmed cases are highly getting increased. Even confirmed cases are high, their death cases remains at a low level. That is because, the recovered amount has increased slightly day by day.  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.width=8, fig.height=5, fig.cap = "Figure 8 : Confirmed, recovered and death cases in Belarus"}
+library(ggplot2)
+library(plotly)
+belarus_corona <- belarus_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+all_cases_plot <- ggplot(belarus_corona,
+       aes(x = date, 
+           y = cases,
+           col = type))+
+  scale_shape_manual(values = c(15, 16, 17)) +
+  geom_point(aes(shape = type, color = type), size = 1) + labs(x ="Date", y = "No of cases") + ggtitle("Belarus : Confirmed, Recovered and Death cases")
+ggplotly(all_cases_plot)
+```
+
+<br></br>
+Through following figure we can illustrate the distribution of daily Covid-19 cases month wise. In January, February and March as Belarus is in the early stage of Covid pandemic and hence does not show a huge amount of cases. Only few cases have reported. But later as the pandemic is spreading all over the country confirmed cases has increased hugely in April. Recovered number of patients in May is higher than April.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.width=10, fig.height=6, fig.cap = "Figure 9 : Month wise Covid-19 cases of Belarus"}
+library(ggplot2)
+
+seperate_belarus_corona <- belarus_corona %>% separate(date, into=c("year", "month", "day"), sep="-")
+belarus_corona_month <- seperate_belarus_corona%>% 
+  mutate(month = if_else(month == "01", "January", (
+  if_else(month == "02", "February",
+          if_else(month == "03", "March",
+                  if_else(month == "04", "April", "May"))
+          
+))))
+
+ggplot(belarus_corona_month, aes(x=type, y=cases, colour=type))+geom_point()+ geom_smooth() +   facet_wrap(~ month) + labs(x ="Type", y = "No of cases") + ggtitle("Belarus : Covid-19 cases by month")
+
+
+```
+
+<br></br>
+
+#### 2.1.4 Visualization of Active Cases
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 10 : Cumulative of daily Covid-19 active cases in Belarus"}
+library(plotly)
+belarus_corona_widefromat <- belarus_corona %>% pivot_wider(names_from = type, values_from=cases)
+
+belarus_cum <- belarus_corona_widefromat %>%
+  mutate(cumulative_confirmed = cumsum(confirmed),
+  cumulative_recovered = cumsum(recovered),
+ cumulative_death= cumsum(death),
+active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+belarus_cum %>% plot_ly(x = ~date,
+                y= ~active_cases, 
+                name = 'active',
+                fillcolor = 'conrnflowerblue',
+                type = 'scatter',
+                mode = 'none',
+                stackgroup = 'one') %>%
+  layout(title = "Belarus : Cumulative of Covid-19 Active cases",
+         yaxis = list(title = "Number of cases"),
+         xaxis = list(title = "Date"))
+```
+
+
+<br></br>
+$$Active cases = Confirmed cases - Recovered cases - Death cases$$
+
+Above plot implies the cumulative count of daily active cases of Belarus. There are no active cases until February 28, since the confirmed cases accured after that day. Although the count increases daily, on April 18 and 19 there is a decline in the usual increasing plot. On April 19, active cases reduced to 4237 from 4391. It happen as the number of recovered patients increased on the day.
+
+<br></br>
+
+#### 2.1.5 Visualization of all cases
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+confirmed_belarus_corona_new <- filter(belarus_corona_month, type=="confirmed") %>%
+  group_by(month) %>%
+  summarise(confirmed = sum(cases))%>%
+  arrange(match(month, c("January", "February", "March", "April", "May")))
+
+
+recovered_belarus_corona_new <- filter(belarus_corona_month, type=="recovered") %>%
+  group_by(month) %>%
+  summarise(recovered = sum(cases))%>%
+  arrange(match(month, c("January", "February", "March", "April", "May")))
+
+
+death_belarus_corona_new <- filter(belarus_corona_month, type=="death") %>%
+  group_by(month) %>%
+  summarise(death = sum(cases))%>%
+  arrange(match(month, c("January", "February", "March", "April", "May")))
+
+
+sum_confirmed <- sum(confirmed_belarus_corona$cases)
+sum_recovered <- sum(recovered_belarus_corona$cases)
+sum_death <- sum(death_belarus_corona$cases)
+active <- sum_confirmed - sum_recovered - sum_death
+
+
+belarus_confirmed_rate <- confirmed_belarus_corona_new %>%
+  mutate(confirmed_rate = (confirmed / sum(confirmed))*100)
+
+belarus_recovered_rate <- recovered_belarus_corona_new %>%
+  mutate(recovered_rate = (recovered / sum(recovered))*100)
+
+belarus_death_rate <- death_belarus_corona_new %>%
+  mutate(death_rate = (death / sum(death))*100)
+
+```
+
+$$Rate = \frac{Number of cases in the month}{Total number of cases in all the months} * 100$$
+
+  | Month | Confirmed | Confirmed Rate(%) |Recovered | Recovered Rate(%) |  Death |Death Rate(%) |  Active |
+  | --------- |:---------:| -----:| -------:|-----:|-------:|-----:|-----:|
+  | Janaury   | 0     | 0      |   0  | 0      | 0   | 0      | 0  |
+  | February  |1      | 0.004  | 0    | 0      | 0   | 0      | 1 |
+  | March     | 151   |0.607   | 47   |  0.674 | 1   | 0.704  | 103 |
+  | April     | 13875 | 55.783 | 2340 | 33.548 | 88  | 61.972 | 11448
+  | May       |10846  |43.606  | 4588 | 65.778 | 53  | 37.324 | 6205 |
+  | Total     | 24873 | 100    | 6975 |  100   | 142 | 100    | 17756 |
+Table 1 : Month wise summary table of Belarus 
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 11 : Summary of total cases of Belarus "}
+summary_values <- c(24873, 6975, 142, 17756)
+
+barplot(summary_values,
+main = "Summary of Total Cases of Belarus",
+xlab = "No of cases",
+ylab = "Type",
+names.arg = c( "Confirm", "Recover", "Death", "Active"),
+col = "darkred",
+horiz = TRUE)
+
+```
+<br></br>
+This table and figure includes a summary of confirmed, recovered, death and active cases of Belarus. April shows the highest confirmed and death rates while May is having the highest recovered rate. There are about 17756 active cases reported until May 12. Death rate is highest on April. Totally 142 patients have died from January 22 to May 12 due to Covid-19 in Belarus.
+
+<br></br>
+
+### 2.2 Comparison with other countries
+
+China and US are selected for the comparison with Belarus. Hubei province in China is declared as the origin place of Corona virus. So it is important to compare Belarus with Hubei. US is playing a major topic when talking about Covid-19 as US is having the highest number of confirmed infections in the world. It is about a quarter of the global total. Situation of US looks really bad. At the early stage China also has a bad situation but later it was managed due to taking necessary and immediate actions to scatter the pandemic. Following represents the comparison of Belarus cases with respect to Hubei in China and US
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 12 : Country wise comparison of cases in Belarus, China and US "}
+library(ggplot2)
+china_corona <- coronavirus %>% filter(country=="China", province=="Hubei")
+china_corona1 <- china_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+
+us_corona <- coronavirus %>% filter(country=="US")
+us_corona1 <- us_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+
+m1 <-  bind_rows(belarus_corona, china_corona1)
+m2 <- bind_rows(m1, us_corona1)
+
+m3 <- ggplot(m2,
+       aes(x = date, 
+           y = cases,
+           col = type))+
+  geom_point()+
+  facet_grid(~country) + labs(x ="Date", y = "No of cases") + ggtitle("Country wise comparison of cases in Belarus, China(Hubei) & US")
+ggplotly(m3)
+```
+
+<br></br>
+
+Above figure indicate that at the very first stage Hubei is having the highest number of confirmed patients, but in the middle time period US has exceeded Hubei province's limit. With the start of April, Belarus also has increased confirmed cases than China. Death count of US is low when compared to its confirmed cases, that is because after April recovered cases has increased. Hubei show majority of recovered amount until middle of March while both Belarus and US show high recovered amount than China at the latter part. After middle of March US has reported more than 15,000 new cases daily. Following figure implies this.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 13 : Type wise comparison of cases in Belarus, China and US "}
+library(ggplot2)
+ggplot(m2,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_point()+
+  facet_grid(~type) + labs(x ="Date", y = "No of cases") + ggtitle("Type wise comparison of cases in Belarus, China(Hubei) & US")
+```
+<br></br>
+More over following represents detailed information about comparison of cases one by one.
+
+<br></br>
+
+#### 2.2.1 Comparison of Confirmed cases
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.width = 10, fig.height = 8, fig.cap = "Figure 14 : Comparison of  Covid-19 confirmed cases in Belarus, China and US "}
+library(ggplot2)
+library(cowplot)
+confirmed_corona <- m2 %>% filter(type=="confirmed")
+confirmed_corona_all <- ggplot(confirmed_corona,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(alpha=1)+  labs(x ="Date", y = "No of cases") + ggtitle("Daily confirmed cases of Belarus, China(Hubei) & US")
+
+ss <- m2 %>% separate(date, into=c("year", "month", "day"), sep="-")
+ssnew <- ss%>% 
+  mutate(month = if_else(month == "01", "Jan", (
+  if_else(month == "02", "Feb",
+          if_else(month == "03", "Mar",
+                  if_else(month == "04", "Apr", "May"))
+))))
+confirmed_corona_all_month <- ggplot(ssnew, aes(x=country, y=cases, colour=country))+geom_point()+ geom_smooth() +   facet_wrap(~ month) + labs(x ="Country", y = "No of cases") + ggtitle("Month wise confirmed cases in Belarus, China(Hubei) & US")
+
+confirmed_corona_all_country <- ggplot(ssnew, aes(month, cases, color = month)) + 
+geom_point() +
+facet_wrap(~ country) + labs(x ="Month", y = "No of cases") + ggtitle("Country wise confirmed cases in Belarus, China(Hubei) & US")
+
+plot_grid(confirmed_corona_all, confirmed_corona_all_month, confirmed_corona_all_country, ncol=2, nrow =2)
+
+```
+<br></br>
+
+#### 2.2.2 Comparison of Recovered cases
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.width = 10, fig.height = 4, fig.cap = "Figure 15 : Comparison of  Covid-19 recovered cases in Belarus, China and US "}
+library(ggplot2)
+recoverd_corona <- m2 %>% filter(type=="recovered")
+recoverd_corona_all <- ggplot(recoverd_corona,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(alpha=1) +  labs(x ="Date", y = "No of cases") + ggtitle("Daily Recovered cases of Belarus, China(Hubei) & US")
+
+rr <- recoverd_corona %>% separate(date, into=c("year", "month", "day"), sep="-")
+rrnew <- rr%>% 
+  mutate(month = if_else(month == "01", "January", (
+  if_else(month == "02", "February",
+          if_else(month == "03", "March",
+                  if_else(month == "04", "April", "May"))
+))))
+recoverd_corona_all_month <- ggplot(rrnew, aes(x=country, y=cases, colour=country))+geom_point()+ geom_smooth() +   facet_wrap(~ month) + labs(x ="Country", y = "No of cases") + ggtitle("Month wise Recovered cases in Belarus, China(Hubei) & US")
+
+plot_grid(recoverd_corona_all, recoverd_corona_all_month)
+```
+
+<br></br>
+
+#### 2.2.3 Comparison of Death cases
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.width=10, fig.cap = "Figure 16 : Comparison of  Covid-19 death cases in Belarus, China and US "}
+library(ggplot2)
+library(cowplot)
+death_corona <- m2 %>% filter(type =="death")
+
+death_corona_all <- ggplot(death_corona,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_point(alpha=1)+  labs(x ="Date", y = "No of cases") + ggtitle("Daily Covid-19 Death Cases of Belarus, China(Hubei) & US")
+
+dd <- death_corona %>% separate(date, into=c("year", "month", "day"), sep="-")
+ddnew <- dd%>% 
+  mutate(month = if_else(month == "01", "January", (
+  if_else(month == "02", "February",
+          if_else(month == "03", "March",
+                  if_else(month == "04", "April", "May"))
+))))
+death_corona_all_month <- ggplot(ddnew, aes(x=country, y=cases, colour=country))+geom_point()+ geom_smooth() +   facet_wrap(~ month) + labs(x ="Country", y = "No of cases") + ggtitle("Month wise Death cases in Belarus, China(Hubei) & US")
+
+plot_grid(death_corona_all, death_corona_all_month)
+```
+
+<br></br>
+
+Summary of total cases of Belarus, China(Hubei) and US is shown below. In all three cases US is having the majority while Belarus having the minority. 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 17 : Summary of Total cases By Country "}
+values_all <- c(24873, 68134, 1369376, 6975, 63616, 232733, 1412, 4512, 82356)
+matrix1 <- matrix(values_all, nrow=3) 
+rnames <- c("Belarus", "China(Hubei)", "US")
+cnames <- c( "Total Confirmed", "Total Recovered", "Total Death")
+matrix_with_names <- matrix(values_all, nrow=3, dimnames=list(rnames, cnames))
+
+barplot(matrix_with_names,
+main = "Summary of total cases by country",
+xlab = "Type",
+ylab = "No of cases",
+col = c("red","green", "blue"), beside = TRUE
+)
+legend("topright",
+c("Belarus","China(Hubei)", "US"),
+fill = c("red","green", "blue")
+)
+
+```
+
+<br></br>
+
+#### 2.2.4 Comparison of Active Cases
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align = 'center', fig.cap = "Figure 18 : Comparison of cumulative of  Covid-19 active cases in Belarus, China and US "}
+library(dplyr)
+us_wideformat <- m2 %>% filter(country=="US") %>% pivot_wider(names_from = type, values_from=cases)
+
+us_cum <- us_wideformat %>%
+  mutate(cumulative_confirmed = cumsum(confirmed),
+  cumulative_recovered = cumsum(recovered),
+ cumulative_death= cumsum(death),
+active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+
+china_wideformat <- china_corona %>% pivot_wider(names_from = type, values_from=cases)
+
+china_cum <- china_wideformat %>%
+  mutate(cumulative_confirmed = cumsum(confirmed),
+  cumulative_recovered = cumsum(recovered),
+ cumulative_death= cumsum(death),
+active_cases = cumulative_confirmed - cumulative_recovered - cumulative_death)
+
+a4 <- bind_rows(belarus_cum, us_cum)
+a5 <-  bind_rows(a4, china_cum)
+
+
+active_all_plot <- ggplot(a5,
+       aes(x = date, 
+           y = active_cases,
+           col = country))+geom_point(alpha=1) + labs(x ="Date", y = "No of cases") + ggtitle("Cumulative of Active cases in Belarus, China(Hubei) & US")
+ggplotly(active_all_plot) 
+```
+
+<br/><br/>
+From the above figure its clearly indicates that active cases of US is increasing largely day by day. Belarus is showing minimum active cases compared to two countries. But when it reaching May, active cases of Belarus has increased than Hubei province.
+
+<br/><br/>
+
+## 3. Conclusions and Discussion
+
+### 3.1 Conclusions
+
+Belarus actually has one of the largest numbers of hospital beds in the world per 1,000 of the population. But due to absence of quarantine measures, its health system already crippled by corruption. Because of that its confirmed patients have increased rapidly. A total of 24,873 people have tested positive for COVID-19 during the period until May 12.. Over the entire period of the infection’s spread in the country, 142 patients with confirmed coronavirus infection have died. As of May 12, 6,975 patients earlier diagnosed with the novel coronavirus have recovered and have been discharged from hospitals.
+
+Highest number of new covid cases has reported on April 20 as 1485 patients in Belarus. But death cases seems to be little when compared to confirmed cases.
+
+At the very first stage Belarus did not impose any lockdowns. The World Health Organization (WHO) insistently recommended that the Belarusian authorities enhance social distancing and give up on mass events. If Belarus took immediate actions at early, the death count could be minimized. Because of not taking actions, confirmed cases of Belarus has increased than China, Hubei province later. In China, they have managed the situation very well. So the rapid growth of new cases have declined when it comes to May. US is showing highest rates for all confirmed, recovered and death cases. 
+
+<br/><br/>
+
+### 3.2 Discussion
+
+This report is based on the data available at the coronavirus package. For the comparison part China(Hubei) and US were selected. The first human cases of COVID-19, the disease caused by the novel coronavirus causing COVID-19, subsequently named SARS-CoV-2 were first reported by officials in Wuhan City, China, in December 2019. investigations by Chinese authorities have identified human cases with onset of symptoms in early December 2019. While some of the earliest known cases had a link to a wholesale food market in Wuhan, some did not. Many of the initial patients were either stall owners, market employees, or regular visitors to this market. 
+
+Later it began to spread all over the world affecting 213 countries and territories around the world and 2 international conveyances. Europe and North America saw the first major outbreaks in April but as they began to ease. North America has seen a rebirth of infections, mostly driven by new outbreaks in the US. Death rates as well as confirming rates of US have began to rise in approximately 30 states and territories.
+
+During the analysis process it was found that there was an negative value for recovered cases of Belarus. Normally negative cases can occur when there is a change in the counting methodology or data resource, updating new cases or due to errors in the raw data.  So when considering recovered cases it was replaced with zero, so it will satisfy positivity and discrete nature of the number of counts(>0)
+
+The active cases was calculated by taking the summation of each day with the previous one. Therefore, negative cases could occur when there is a drop in the cumulative number of cases with respect to the previous day. As the negative values replace with zero it avoids output of fraction values.
+
+<br/><br/>
+
+## 4. References
+
+Relevant information has taken from followings sites : 
+
+* <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Belarus#Government_response>
+* <https://en.wikipedia.org/wiki/Belarus>
+* <https://www.who.int/csr/sars/survival_2003_05_04/en/#:~:text=Heat%20at%2056%C2%B0C,(quick%20reduction)>
+* <https://tass.com/world/1168273>
+* <https://www.climatestotravel.com/climate/belaruse>
+* <https://www.belarus.by/en/about-belarus/climate-and-weather>
+* <https://foreignpolicy.com/2020/05/08/belarus-lukashenko-coronavirus-pandemic-lockdown-containment-economy-russia/>
+* <https://www.aljazeera.com/indepth/features/belarus-life-normal-ravaging-coronavirus-epidemic-200507104734893.html>
+* <https://en.wikipedia.org/wiki/Belarus#Industry>
+* <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Belarus#Government_response>
+
+

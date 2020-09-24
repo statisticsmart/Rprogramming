@@ -1,0 +1,544 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+author: "Nuwanthi Mannapperuma AS2017437"
+date: "7/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#install.packages("knitr")
+#install.packages("rmarkdown")
+#install.packages("coronavirus")
+```
+
+# COVID-19 in Iraq
+## Introduction
+Iraq, which occupies an area once home to some of the earliest known civilisations, has been a battleground for competing forces since the US-led ouster of President Saddam Hussein in 2003.Iraq has a population of 38 million.During the pandemic, Iraq reported its first suspected case of SARS-CoV-2 infections on 22 February, and the first case was confirmed on the 24th of February. [1]
+
+Iraq’s health sector appears to be among the least prepared to deal with a pandemic.The sector suffers from decades of under investment, war damage, poor management, corruption, and emigration of doctors. As a result, Iraq faces a dire shortage of skilled health professionals, hospital beds, and reliable medications.[11]
+
+By the 1st of June Iraq had 6,868 reported cases and it had a rise of 600 percent through June and by the 1st of July the number of confirmed cases were standing at  53,708. The Ministry of Health had then announced that hospitals were almost at full capacity, and that schools and universities will be converted into isolation units to cope with the ever-increasing number of cases.
+In addition to the direct impact the pandemic is having on people's health, thousands of people have been affected indirectly by the economic impacts of the lockdown[6]
+
+As of the 20^th^ of July 2020, the data are as follows,[4]
+
+* __Total Confirmed cases - 94,693__
+* __Total Recovered cases - 62,836__
+* __Total Active cases - 27,988__
+* __Total Deaths - 3,869__
+
+### Location 
+
+Iraq, officially the Republic of Iraq , is a country in Western Asia, bordered by **Turkey** to the north, **Iran** to the east, **Kuwait** to the southeast, **Saudi Arabia** to the south, **Jordan** to the southwest and **Syria** to the west.[Wikipedia](https://en.wikipedia.org/wiki/Iraq)
+
+#### Visualization of the  Geographical location of the country 
+
+```{r data filteration, include=FALSE}
+#filtering the data required for the analysis 
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+iraq_corona<-filter(coronavirus,coronavirus$country=='Iraq')
+iran_corona<-filter(coronavirus,coronavirus$country=='Iran')
+turkey_corona<-filter(coronavirus,coronavirus$country=='Turkey')
+kuwait_corona<-filter(coronavirus,coronavirus$country=='Kuwait')
+syria_corona<-filter(coronavirus,coronavirus$country=='Syria')
+jordan_corona<-filter(coronavirus,coronavirus$country=='Jordan')
+saudi_arabia_corona<-filter(coronavirus,coronavirus$country=='Saudi Arabia')
+
+```
+```{r world map, include=FALSE}
+#visualizing the location 
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data("wrld_simpl")
+
+p<-ggplot() +
+  geom_polygon(
+    data=wrld_simpl,
+    aes(x= long, y = lat, group = group), fill = "gray", color = "white"
+  ) +
+  coord_cartesian(xlim = c(-180,180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180,180,120)) +
+  scale_y_continuous(breaks = seq(-90,90,100))
+```
+```{r iraq in map, echo=FALSE}
+p + 
+  geom_point(data = iraq_corona, aes(x = long, y = lat), color = "red", size = 2) +
+  geom_point(data = iran_corona, aes(x = long, y = lat), color = "orange", size = 1) +
+  geom_point(data = turkey_corona, aes(x = long, y = lat), color = "orange", size = 1) +
+  geom_point(data = kuwait_corona, aes(x = long, y = lat), color = "orange", size = 1) +
+  geom_point(data = syria_corona, aes(x = long, y = lat), color = "orange", size = 1) +
+  geom_point(data = saudi_arabia_corona, aes(x = long, y = lat), color = "orange", size = 1)
+
+
+```
+
+*The location of Iraq is demonstrated by the red spot in the world map. The neighboring countries affected are shown in orange.*
+
+### Climate Conditions 
+
+Most of Iraq has a hot arid climate with subtropical influence. Summer temperatures average above 40 °C (104 °F) for most of the country and frequently exceed 48 °C (118.4 °F). Winter temperatures infrequently exceed 21 °C (69.8 °F) with maxima roughly 15 to 19 °C (59.0 to 66.2 °F) and night-time lows 2 to 5 °C (35.6 to 41.0 °F). Typically, precipitation is low; most places receive less than 250 mm (9.8 in) annually, with maximum rainfall occurring during the winter months. Rainfall during the summer is extremely rare, except in the far north of the country. The northern mountainous regions have cold winters with occasional heavy snows, sometimes causing extensive flooding.[Wikipedia](https://en.wikipedia.org/wiki/Iraq)
+
+### Lockdown Status 
+
+A nationwide lockdown and curfew was initially imposed on the 22^nd^ of March. The curfew was subsequently relaxed at the start of Ramadan, however the significant increase in new cases led to the reimposition of the curfew in late May. On June 14, Iraq started to partially remove the restrictions. As of now the curfew is planned to end in early August, after the Eid Al-Adha holiday.
+
+From the 6^th^ of July Iraq’s Higher Committee for Health and National Safety on Monday decided to,
+
+* Continue to impose a nationwide partial curfew between 7 PM and 6 AM from Sunday-Wednesday, and a full curfew from Thursday-Saturday.
+
+* Permit Iraqis to travel abroad, on the condition that they give an undertaking to self-quarantine at home for 14 days on their return to Iraq, and be tested for Covid-19 at the Iraqi border point of entry
+
+* All returning Iraqi nationals must undergo both clinical and rapid Covid-19 tests. Those who test negative, must self-quarantine at home for 14 days. Those who test positive or show symptoms of Covid-19, will be transferred to specialist hospitals
+
+* Close all private doctors’ surgeries, medical clinics and centres for two weeks, starting from 07/07/20 until 20/07/20.
+
+* Direct relevant authorities to strictly enforce official preventative health measures, including the mandatory wearing of face masks, and social distancing rules in shops, in all government and private-sector buildings and vehicles, and to hold to account those who break the rules [10]
+
+From the 19^th^ of July 2020, 
+
+* The curfew was planned to be lifted from 6:00am to 9:30pm from Sunday-Wednesday, from Thursday-Saturday curfew will be imposed the whole day. 
+
+* Restrictions on border crossings began to be removed gradually.
+
+* Malls and shopping centers are permitted to reopen with the compulsory face masks and social distancing rules.
+
+* Airports are said to reopen from the 23^rd^ of July. [9]
+
+### Actions taken by the government 
+
+The government of the republic of Iraq has implemented a range of measures to limit the spread of the virus such as closing borders, travel restrictions with regards to International travel (flights to and from Iraq were suspended) and public transport inside the country, closing schools and universities, authorities also banned all travel between the 3 Iraqi provinces[7] .A nationwide lockdown and curfew was introduced on the 22^nd^ of March.
+
+#### Steps taken to minimize the impact on Employment 
+
+* Waiver of penalties applicable to the late payment of the February 2020 social security contributions, which were due by the end of March 2020.
+
+* The Supreme Committee for Health and National Safety is introducing a cash transfer scheme, targeting workers in the private sector that do not receive salaries or benefits from the government. Each eligible individual is expected to receive 30,000 dinars each month, with an expected cost of around 300 billion dinars. [8]
+
+#### Steps taken to minimize the impact on the Economy
+* The Central Bank of Iraq has reduced its reserve requirement from 15 percent to 13 percent.[9]
+
+* The Central Bank has announced a moratorium on interest and principal payments by small and medium-sized enterprises through its directed lending initiative (the “one trillion ID” initiative), and encouraged banks to extend maturities of all loans as they deem appropriate. 
+
+* The Central Bank also encouraged the use of electronic payments to contain the transmission of the virus, and instructed vendors to eliminate commissions on such payments for the next six months. [8]
+
+#### Other steps taken 
+
+* To support the Ministry of Health's efforts to fight the COVID-19 pandemic, the Central Bank of Iraq has established a fund to collect donations from financial institutions with initial donations of 20 million dollars from the CBI itself and 5 million dollars from the Trade Bank of Iraq. 
+
+* The Supreme Committee for Health and National Safety is introducing a cash transfer scheme, targeting workers in the private sector that do not receive salaries or benefits from the government. Each eligible individual is expected to receive 30,000 dinars each month, with an expected cost of around 600 billion dinars over 2 months [8]
+
+## Exploratory Data Analysis
+
+### Visualisation of death, confirmed, recovered, active cases
+
+```{r overall cases, echo=FALSE, warning=FALSE, message=FALSE}
+# total corona cases in Iraq
+#coronavirus::update_dataset()
+iraq_corona %>% 
+  select(date,type,cases) %>% 
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  
+  mutate(confirmed_cases = cumsum(confirmed), 
+         deaths = cumsum(death),
+         recovered_cases = cumsum(recovered),
+         active_cases = cumsum(confirmed - death - recovered)) %>% 
+  mutate(active_cases = replace(active_cases, which(active_cases < 0), 0)) %>%
+  select(date, confirmed_cases, deaths, recovered_cases, active_cases)  %>%
+  filter(confirmed_cases > 0) %>%
+
+  pivot_longer(cols = c("confirmed_cases","deaths","recovered_cases", "active_cases"), 
+               names_to = "Type", values_to = "Cases") %>%
+  ggplot(aes(x = date,y= Cases,color= Type)) +
+  geom_line(size = 1) + 
+  ggtitle("Total reported covid-19 cases in Iraq") +
+  theme_minimal() + 
+  theme_update(plot.title = element_text(hjust = 0.5))
+
+
+
+```
+
+As we can see from the above plot, eventhough there is a exponential rise of confirmed cases, the number of recovered cases has also increased along with it.We can also see that the number of deaths are significantly low compared to the number of cases.
+
+```{r daily reported cases and deaths, echo=FALSE, warning=FALSE, message=FALSE}
+# corona update during past 24-hrs 
+iraq_corona %>% 
+  select(date,type,cases) %>% 
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  
+  mutate(confirmed, death) %>% 
+  select(date, confirmed, death)  %>%
+  filter(confirmed > 0) %>% 
+  #filter(date == Sys.Date() - 2) %>%
+  
+  pivot_longer(cols = c("confirmed","death"), names_to = "Type", values_to = "Cases") %>%
+  
+  ggplot(aes(x = date,y= Cases,fill= Type)) + 
+  #coord_flip() +
+  geom_col(position = "dodge") + 
+  ggtitle("Daily reported new covid-19 cases and deaths in Iraq")
+```
+
+This gives a better overview of how the daily cases were reported, theres a significant spike in cases through June. Eventhough the total cases have increased exponentially, currently it has changed its rate of increase. However the number of deaths has not been increasing with respect to the number of confirmed cases therefore we can assume that the healthcare measures have worked in controlling the fatality rate.
+
+```{r creating pivoted data, echo=FALSE, warning=FALSE, message=FALSE }
+coronavirus_pivot <- as_tibble(coronavirus) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA)) %>% 
+  mutate(cases = replace_na(cases,0))
+
+coronavirus_wide <- coronavirus_pivot %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>% 
+  group_by(date,country,province) %>% 
+  mutate(confirmed = sum(confirmed,na.rm=T),
+         death = sum(death,na.rm=T),
+         recovered = sum(recovered,na.rm=T)) %>% 
+  slice(n()) %>% ungroup() %>% 
+  mutate(active = confirmed - death - recovered) %>% 
+  mutate(active = replace(active,which(active<0),NA))
+
+coronavirus_pivot <- coronavirus_wide %>% 
+  pivot_longer(col = c("confirmed","death","recovered","active"),names_to = "type",values_to = "cases")
+
+piv_iraq <- coronavirus_pivot %>% filter(country == "Iraq")
+```
+
+
+```{r creating pie chart, echo=FALSE, warning=FALSE, message=FALSE }
+bar_data <- piv_iraq %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of Corona virus patients in Iraq as of 20th July 2020")
+
+rm(bar_data)
+```
+
+It is clear that more than half of the reported cases have recovered. But the fatality rate is relatively high.
+
+```{r table of data, echo=FALSE, warning=FALSE, message=FALSE}
+sig_dates <- lubridate::date(c("2020-02-24","2020-03-04","2020-03-09","2020-03-13","2020-04-04", "2020-05-01","2020-06-01","2020-07-01","2020-07-19"))
+table_data <- piv_iraq %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(cum_cases = cumsum(cases)) %>% 
+  ungroup()
+
+table_data %>% 
+  filter(date %in% sig_dates) %>% 
+  mutate(cum_cases = replace_na(cum_cases,0)) %>% 
+  select(date,type,cum_cases) %>% 
+  pivot_wider(names_from="type",values_from="cum_cases") %>% 
+  knitr::kable()
+
+rm(table_data)
+```
+
+This table includes data regarding some significant dates of how the Pandemic escalated in Iraq. The first positive case was reported on the 24th of February. The first 2 deaths were reported on the 3rd and 4th of March. THe first recovery was reported on the 9th of March. On 13 March, the Kurdish Regional Government imposed a two-day curfew in Erbil and Sulaymaniyah, which later evolved to become a complete lockdown of the entire region of the KRG on 4 April. This was due to a rise in cases which is said to be due to two funeral gatherings. However after the release of the restrictions in June, there came a high spike in cases. As we can clearly see from the above table the number of cases have increased drastically through June.Eventhough the restrictions were scheduled to be reduced in July,since, the total confirmed cases are still rising exponentially, the suspension that was put on international commercial flights was extended till 23nd of July.
+
+
+### Analysis of the Neighboring Countries 
+
+#### Iran
+
+On 19 February 2020, Iran reported its first confirmed cases of infections in Qom. The virus may have been brought to the country by a merchant from Qom who had travelled to China. [Wikipedia](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Iran)
+
+Iran is among the critically affected middle eastern countries by Covid-19. It has been recorded that over 260,000 people were infected by this deadly virus and claiming almost 14,000 lives as of the 16^th^ of July 2020. It is been notified, since the beginning of the outbreak, UNICEF has provided immense support towards Iran’s health sector by supplying personal protective equipment  (PPE) items such as aprons, gloves, goggles and surgical masks. It was informed by the state media that 100,000 nurses and 15,000 medical staff has been actively involved in the battle to keep the spread under control.
+
+A “second wave” of virus cases is now hitting Iran which faces a shortage of medical personnel and hospital beds. Following this, the government has instituted mandatory mask-wearing and has announced new restrictions for one week in Tehran. Based on this order, all schools and universities, restaurants, cafes, cultural facilities and beauty salons will be closed and a third of government employees in Tehran will work remotely.[9]
+
+
+```{r creating pie chart for Iran, echo=FALSE, warning=FALSE, message=FALSE }
+piv_iran <- coronavirus_pivot %>% filter(country == "Iran")
+
+bar_data <- piv_iran %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of coronavirus patients")
+
+rm(bar_data)
+```
+
+#### Jordan
+
+Jordan reported its first confirmed COVID-19 case on March 2, 2020. At the onset of the global epidemic, the authorities of the country had implemented many procedures to attempt to minimize the spread of the virus. Measures such as suspension of all international flights, the closure of all schools and universities, the closure of restaurants and archeological sites, the cancelation of all public events and gatherings, and quarantines. On March 17, the defense law was activated to enforce strict curfews, close businesses, and place restrictions on the movement of people within the country to counter the epidemic. The authorities also launched a public communication and awareness campaign to inform the public on examination and treatment facilities. The number of medical and nursing staff was increased in hospitals. The government has allowed only food and dairy industries and some export-oriented industries such as pharmaceuticals, potash and phosphates to continue some of their operations.[9]
+
+
+```{r creating pie chart for Jordan, echo=FALSE, warning=FALSE, message=FALSE }
+piv_jordan <- coronavirus_pivot %>% filter(country == "Jordan")
+
+bar_data <- piv_jordan %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of coronavirus patients in Jordan")
+
+rm(bar_data)
+```
+
+Jordan has a very low fatality rate.
+
+#### Kuwait
+
+Kuwait has been hit by two related shocks - the COVID-19 outbreak and sharp drop in oil prices.
+Kuwait’s first confirmed case was recorded on the 24th of February 2020.The government acted early, progressively tightening measures to contain the spread of the virus. These included suspending inbound commercial flights, closing schools and universities, banning public celebrations and gathering, suspending nonessential work in governmental entities, and eventually imposing a 24-hr curfew. The authorities also adopted a package of policy measures to cushion the social fallout from the pandemic and prevent the economic scarring, focusing on small- and medium-size enterprises and preserving employment.But unfortunately as of  mid-July there has been over 57,000 confirmed cases along with 402 deaths recorded in the country. Quick actions were taken to suspend all commercial flights as of 14th march and partial curfew was imposed on 22nd of March followed up with a full curfew by the 10th of May. All face to face learning was stopped and was decided to start back again in the month of August.[9]
+
+
+```{r creating pie chart for Kuwait, echo=FALSE, warning=FALSE, message=FALSE }
+piv_kuwait <- coronavirus_pivot %>% filter(country == "Iran")
+
+bar_data <- piv_kuwait %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of coronavirus patients")
+
+rm(bar_data)
+```
+
+#### Syria
+
+The first case of Corona virus in Syria was confirmed on the 22nd of March 2020. Out of the neighboring countries Syria was the last to get on board to the list of countries affected by the pandemic. The Iraq-Syria boarder was closed as early as the 2nd of March.But they were unfortunate as the number of cases are still growing while 26 new cases being reported on the 20th of July and that is the highest number os cases reported in a single day.
+
+```{r creating pie chart for Syria, echo=FALSE, warning=FALSE, message=FALSE }
+piv_syria <- coronavirus_pivot %>% filter(country == "Syria")
+
+bar_data <- piv_syria %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of coronavirus patients")
+
+rm(bar_data)
+```
+
+
+#### Turkey
+
+The first case of COVID-19 in Turkey was reported on the 11^th^ of March. The government adopted multiple containment measures to address the pandemic including: social distancing, curfews, travel bans along with quarantines for returning nationals, and the closures of schools/universities, stores, and entertainment venues. The Health Minister announced that the government will launch nationwide coronavirus antibody tests on June 15, covering some 153,000 randomly selected people across all 81 provinces.[9]
+
+```{r creating pie chart for Turkey, echo=FALSE, warning=FALSE, message=FALSE }
+piv_turkey <- coronavirus_pivot %>% filter(country == "Turkey")
+
+bar_data <- piv_turkey %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of coronavirus patients")
+
+rm(bar_data)
+```
+
+#### Saudi Arabia
+
+Saudi Arabia has also been hit by two shocks; one being the spread of COVID-19 and the second being the significant decline in oil prices. Government policy is responding to both these developments. The first case of COVID-19 was reported on the 2^nd^ of March 2020. The authorities have implemented a range of measures to limit the spread of the virus encompassing curfews; travel restrictions (including on international flights and internal public transportation and taxis); suspending prayers at mosques; closing all schools, universities, and shopping malls; suspending employee attendance at government and private workplaces (except for critical staff); and increasing testing. Further, early in April, the Ministry of Hajj called on countries to delay their bookings for the 2020 Hajj season. Mid-April, the authorities announced strict company guidelines including temporary housing accommodation for expatriate workers to help control the spread of the virus and on April 22 a repatriation program called “Auda” (or return) was launched online to facilitate the return of expatriates. On May 12, the government announced the building of two makeshift hospitals in Makkah to accommodate any potential surge in COVID-19 cases. High frequency indicators such as the PMI show a sharp slowing of activity in March-April and some recovery thereafter.[9]
+
+```{r creating pie chart for Saudi Arabia, echo=FALSE, warning=FALSE, message=FALSE }
+piv_saudi <- coronavirus_pivot %>% filter(country == "Saudi Arabia")
+
+bar_data <- piv_saudi %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from total reported cases",title="Breakdown of coronavirus patients")
+
+rm(bar_data)
+```
+
+### Comparison with the neighboring countries 
+
+```{r setting the variable of neighboring countries, echo=FALSE, warning=FALSE, message=FALSE}
+countries_compare <- c("Iraq","Iran","Kuwait","Syria","Jordan","Turkey","Saudi Arabia")
+```
+
+```{r comparison of confirmed cases, echo=FALSE, warning=FALSE, message=FALSE}
+# comparing the confirmed cases
+coronavirus %>%filter(country %in% countries_compare) %>%
+  select(date,country,cases,type) %>%
+  pivot_wider(names_from = c("type"),values_from = c("cases")) %>%
+  group_by(country) %>%
+
+  mutate(total_confirmed = cumsum(confirmed)) %>% 
+  filter(total_confirmed > 0) %>%
+  ungroup() %>%
+  ggplot(aes(x = date,y=total_confirmed, color = country)) + 
+  geom_line(size = 1) +
+  ggtitle("Comparing total confirmed cases in Neighboring Countries")
+
+```
+
+Compared to the neighboring countries,Iraq seems to be performing better when comparing the total number of reported cases. However we should not use this as a measure of comparison as the number also depends on the total population of the country.
+
+```{r comparison of confirmed cases since the first 30 cases were reported , echo=FALSE, warning=FALSE, message=FALSE}
+plot_data <- coronavirus_pivot %>% 
+  filter(type == "confirmed") %>%
+  filter(country %in% countries_compare) %>% 
+  group_by(country,date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  filter(total_cases >= 30) %>% 
+  mutate(days_since = date - min(date)) %>% 
+  ungroup()
+
+plot<-plot_data %>%
+  mutate(highlight = if_else(country == "Iraq",TRUE,FALSE)) %>% 
+  ggplot(aes(x = days_since,y=total_cases,color=country)) +
+  geom_line () + 
+  labs(title = "Total number of confirmed cases of all countries",
+       x = "Days since the 30th confirmed case",
+       y = "Total confirmed cases") +
+  scale_y_log10() +
+  theme(legend.position = "bottom")
+ggplotly(plot)
+rm(plot_data,plot)
+```
+
+Since the 30th confirmed case we can clearly see 2 spikes in the confirmed cases in Iraq, whereas other neighboring countries have had a single long spike in cases and managed to flatten the curve, but Iraq still has not managed to get the situation under control as we can see from the above graph.
+
+
+```{r comparison of confirmed cases and recovered cases , echo=FALSE, warning=FALSE, message=FALSE}
+plot_data <- coronavirus_pivot %>%
+  filter(country %in% countries_compare) %>% 
+  filter(type == "confirmed" | type == "recovered") %>%
+  group_by(date,country,type) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country,type) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  ungroup() %>% 
+  filter(total_cases > 0)
+  
+
+plot_data <- plot_data %>% 
+  pivot_wider(names_from = "type",values_from = "total_cases") %>% 
+  group_by(country,date) %>% 
+  mutate(recovered = sum(recovered,na.rm=T),
+         confirmed = sum(confirmed,na.rm=T)) %>% 
+  slice(n()) %>% 
+  filter(recovered > 1)
+
+plot<- plot_data %>% 
+  mutate(highlight = if_else(country == "Iraq",TRUE,FALSE)) %>%
+  ggplot(aes(x = confirmed,y=recovered,color=country)) +
+  geom_line() + 
+  geom_abline(slope=1,intercept = 0) +
+  scale_y_log10() + 
+  scale_x_log10() +
+  labs(title = "Confirmed cases and Recovered cases of the Neighboring countries",
+       x = "Number of confirmed cases",
+       y = "Number of recovered cases ") 
+  theme(legend.position = "bottom")
+ggplotly(plot)
+rm(plot_data,plot)
+```
+
+Considering the rate of recovery, Iraq seems to be performing better than other neighboring countries. However, as the number of confirmed cases increase, Kuwait, Turkey, Iran and Saudi Arabia also have seemed to perform better.
+
+
+## Conclusion and Discussion
+
+* Ending the lockdown period early has negatively affected the control of spread in Iraq. Therefore keeping the curfew intact until the health care system is able to take control of the situation might be favorable. However, it should be noted that the government will have to take extra steps in making all the services accessible for the people of the country in this period 
+
+* The lack of health care is also a possible cause as to why the situation is still not under control.
+
+The data in this report will only provide a broader picture of how the COVID-19 pandemic has affected Iraq until the 20th of July 2020. To give a better overview and an understanding about the future of the pandemic in Iraq more data regarding government support and other support given are required.
+
+## References 
+
+[1]"COVID-19 pandemic in Iraq", En.wikipedia.org, 2020. [Online]. Available: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Iraq. [Accessed: 20- Jul- 2020].
+
+[2]"COVID-19 pandemic in Iraq | Wikiwand", Wikiwand, 2020. [Online]. Available: https://www.wikiwand.com/en/COVID-19_pandemic_in_Iraq. [Accessed: 20- Jul- 2020].
+
+[3]"WHO EMRO | Early COVID-19 preparation saved lives in Iraq | Iraq-news | Iraq", Emro.who.int, 2020. [Online]. Available: http://www.emro.who.int/irq/iraq-news/early-covid-19-preparation-saved-lives-in-iraq.html. [Accessed: 20- Jul- 2020].
+
+[4]"Iraq Coronavirus: 94,693 Cases and 3,869 Deaths - Worldometer", Worldometers.info, 2020. [Online]. Available: https://www.worldometers.info/coronavirus/country/iraq/. [Accessed: 20- Jul- 2020].
+
+[5]"Population by Country (2020) - Worldometer", Worldometers.info, 2020. [Online]. Available: https://www.worldometers.info/world-population/population-by-country/. [Accessed: 20- Jul- 2020].
+
+[6]"Iraq: 600% rise in COVID-19 cases through June means urgent action is needed to slow the spread of the disease - Iraq", ReliefWeb, 2020. [Online]. Available: https://reliefweb.int/report/iraq/iraq-600-rise-covid-19-cases-through-june-means-urgent-action-needed-slow-spread-disease. [Accessed: 20- Jul- 2020].
+
+[7]"Iraq’s Crisis Cell extends curfew, announces additional measures to contain Covid-19 | Government of Iraq", Government of Iraq, 2020. [Online]. Available: https://gds.gov.iq/iraqs-crisis-cell-extends-curfew-announces-additional-measures-to-contain-covid-19/. [Accessed: 20- Jul- 2020].
+
+[8]"Iraq", KPMG, 2020. [Online]. Available: https://home.kpmg/xx/en/home/insights/2020/04/iraq-government-and-institution-measures-in-response-to-covid.html. [Accessed: 20- Jul- 2020].
+
+[9]"Policy Responses to COVID19", IMF, 2020. [Online]. Available: https://www.imf.org/en/Topics/imf-and-covid19/Policy-Responses-to-COVID-19#I. [Accessed: 20- Jul- 2020].
+
+[10]"Covid-19: Higher Committee for Health and National Safety announces new measures | Government of Iraq", Government of Iraq, 2020. [Online]. Available: https://gds.gov.iq/covid-19-higher-committee-for-health-and-national-safety-announces-new-measures/. [Accessed: 20- Jul- 2020].
+
+[11]"MITIGATING THE IMPACT OF COVID-19 IN IRAQ - EPIC - Enabling Peace in Iraq Center", EPIC - Enabling Peace in Iraq Center, 2020. [Online]. Available: https://enablingpeace.org/mitigating-the-impact-of-covid-19-in-iraq/. [Accessed: 20- Jul- 2020].

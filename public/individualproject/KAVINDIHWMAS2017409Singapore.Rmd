@@ -1,0 +1,412 @@
+---
+title: "Coronavirus Disease Situation Report of Singapore"
+author: "H.W.Melissa Kavindi_AS2017409"
+date: 
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Introduction**
+***
+
+Singapore is an island country off the southern tip of the Malay Peninsula in Southeast Asia. It is separated from Malaysia by the Straits of Johor, and from Indonesia's Riau Islands by the Singapore Strait. Singapore has a strategic location for Southeast Asian sea routes. The government system is a parliamentary republic; the chief of state is the president, and the head of government is the prime minister. Singapore has a highly development free market economy in which the economy is open and corruption-free. Singapore is a member of the Asia-Pacific Economic Cooperation (APEC), the Association of Southeast Asian Nations (ASEAN), and the Trans-Pacific Partnership (TPP).
+
+The COVID-19 pandemic in Singapore is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first case in Singapore was confirmed on 23 January. Early cases were primarily imported until local transmission began to develop in February and March. By late-March and April, COVID-19 clusters were detected at multiple dormitories for foreign workers, which soon contributed to an overwhelming proportion of new cases in the country. Singapore currently has the **third highest number of confirmed COVID-19 cases** in Southeast Asia, behind Indonesia and the Philippines.
+
+
+
+### Visualization of the location on world map
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+data(wrld_simpl)
+
+Singapore_corona <- coronavirus %>% filter(country == "Singapore")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+    geom_point(data = Singapore_corona, aes(x = long, y = lat), color = "red", size= 1)
+
+```
+
+### Climate condition in Singapore
+
+True to its Southeast Asian location, Singapore is characterised by a hot and humid climate. Located just 1 degree north of the equator, it quite naturally enjoys a tropical/equatorial climate. The island does not have clear-cut seasons like summer, spring, autumn and winter. The weather is warm and humid all year round. Rainfall is almost an everyday phenomenon, even during the non-monsoon period. These brief showers are usually quite refreshing, as they provide respite from the sun.
+
+Due to its geographical location and maritime exposure, Singapore’s climate is characterized by uniform temperature and pressure, high humidity and abundant rainfall. The average temperature is between 25 degrees Celsius and 31 degrees Celsius. Thunderstorms occur on 40% of all days. Relative humidity is in the range of 70% – 80%. April is the warmest month, January is the coolest month and November is the wettest month.
+
+### Lockdown status in Singapore
+
+On 3 April, Prime Minister Lee Hsien Loong announced a nationwide partial lockdown, euphemistically known as a circuit breaker, to contain the spread of COVID-19 in Singapore. These measures came after an increase of unlinked cases over the preceding month, as well as the risk of a huge cluster of infections. All non-essential workplaces closed from 7 April, with essential workplaces remaining open. All schools transitioned to home-based learning from 8 April. All food establishments were only allowed to offer take-away, drive-thru and delivery of food. In addition, the wearing of masks were no longer discouraged. These measures would initially lapse on 4 May.
+On 14 April, Minister for National Development Lawrence Wong made the wearing of masks compulsory when not at home with immediate effect, with fines and prosecution for offenders who refuse to do so.
+
+After discovering that the unknown number of cases was greater than expected, Prime Minister Lee Hsien Loong announced on 21 April an extension of the circuit breaker to 1 June. Existing measures were also tightened until 4 May initially, including shrinking the list of essential services, as well as restricting entry to certain hotspots like wet markets and some essential retail franchises going by the last digit of one's ID number.The Singapore franchise of McDonald's also shut all of its restaurants islandwide, as a response to a number of its employees being infected.
+
+Some restrictions were relaxed progressively in stages to prepare for the end of the circuit breaker on 1 June. Traditional Chinese medicine (TCM) shops and essential condo activities were allowed to reopen on 5 May, followed by businesses like home-based bakeries (HBBs), some food shops, barbers (only basic haircuts), manufacturing of confectionery, and laundry shops on 12 May. Schools resumed face-to-face lessons for smaller groups in graduating cohorts and those requiring urgent assistance on 19 May. At the same time, the Ministry of Health (MOH) mandated the use of SafeEntry contact-tracing system at all businesses and services from 12 May, and does not include "transient" locations like the MRT or parks, although people are encouraged to scan to assist in contact-tracing efforts. On 8 May, the MOH announced that all TCM shops are allowed to sell retail products again from 12 May, after receiving feedback from seniors that travelling to TCM medical halls was too far for them.
+
+
+### Actions taken by Singapore government
+
+* Closure of all non-assential workplaces.
+* Closure of all schools, preschools, education, enrichment and students care           centres except for essential care.
+* Closure and suspention of religious activities.
+* Restrictions on movement and gatherings.
+* Food establishments only allowed to offer takeaways, drive-thru and delivery          services.
+* Masks no longer discouraged, made compulsory on 14th April.
+* Closure of some essential shops that were made non-essential from 21st April
+   (some restrictions later lifted)
+   
+   
+### Progress of conducting PCR tests
+
+Singapore has the capability to do tens of thousands of Covid-19 tests daily, industry players said, noting that increased testing could be a key enabler for the country as it looks to gradually lift the circuit breaker measures.
+
+Currently, the country can do more than 8,000 polymerase chain reaction (PCR) tests a day, up from 2,900 at the start of July 2020.
+But if circuit breaker measures are to be loosened, testing must be scaled up substantially, so that any new cases can be detected quickly. And until a vaccine is found, testing will have to be done regularly.
+
+
+
+##  **Exploratory Data Analysis**
+***
+
+### 1. Number of deaths in Singapore due to COVID-19
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+death_Singapore_corona <- Singapore_corona %>% filter(type=="death")
+
+cum_deaths <- mutate(death_Singapore_corona, cumulative_death_sum = cumsum(cases))
+
+ggplot() + geom_col(data = death_Singapore_corona, aes(x=date, y = cases)) + ggtitle("Daily Covid-19 Deaths ")
+
+ggplot(cum_deaths, aes(x=date, y=cumulative_death_sum)) + geom_line(col = "red") + ggtitle("Total Covid-19 Deaths")
+
+```
+
+* The above figures represents daily and total deaths with coronavirus in Singapore.It is clear that the country brings one or more new deaths most of the days since the first recorded death in the end of the March 2020.
+
+### 2. Number of confirmed COVID-19 cases in Singapore
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_Singapore_corona <- Singapore_corona %>% filter(type=="confirmed")
+
+cum_confirmed <- mutate(confirmed_Singapore_corona, cumulative_confirmed_sum = cumsum(cases))
+
+ggplot() + geom_col(data = confirmed_Singapore_corona, aes(x=date, y = cases)) + ggtitle("Daily confirmed Covid-19 cases")
+
+ggplot(cum_confirmed, aes(x=date, y=cumulative_confirmed_sum)) + geom_line(col = "red") + ggtitle("Total confirmed Covid-19 cases")
+
+```
+
+* Above charts shown a increase of total confirmed counts. The number of confirmed cases is lower than the number of total cases. The main reason for this is limited testing. The total number of cofirmed cases has gone past 20,000 at the end of May.
+
+### 3. Number of recovered COVID-19 cases in Singapore
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_Singapore_corona <- Singapore_corona %>% filter(type=="recovered")
+
+cum_recovered <- mutate(recovered_Singapore_corona, cumulative_recovered_sum = cumsum(cases))
+
+ggplot() + geom_col(data = recovered_Singapore_corona, aes(x=date, y = cases)) + ggtitle("Daily recovered Covid-19 cases")
+
+ggplot(cum_recovered, aes(x=date, y=cumulative_recovered_sum)) + geom_line(col = "red") + ggtitle("Total recovered Covid-19 cases")
+
+```
+
+* More than 3000 patients with COVID-19 in Singapore have recovered in the time period (February to end of May). It can be seen that the daily recovery percentage is getting higher in the country.
+
+### 4. Number of Active COVID-19 cases in Singapore
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+active_Singapore <- mutate(confirmed_Singapore_corona, death = death_Singapore_corona$cases, recovered = recovered_Singapore_corona$cases, active_cases = (cases - death - recovered), active_cases_sum = cumsum(active_cases))
+
+ggplot() + geom_col(data = active_Singapore, aes(x=date, y=active_cases)) + ggtitle(" Daily active Covid-19 cases")
+
+ggplot(active_Singapore, aes(x=date, y=active_cases_sum)) + geom_line(color = "red") +  ggtitle(" Total active Covid-19  cases")
+
+```
+
+* Daily growth rate in the country appears a higher growth rate and shows a considerable drop in May.
+
+## Comparing the pandemic situation with neighbouring countries.
+
+Comparing the situation with the bordering countries is an extremely important factor when considering its relationships, national security, access to resourses and more. 
+The island's neighbouring countries include Thailand, Bangkok, Cambodia, Indonesia, the Philippines, and Malaysia. Here I'm iterested in some of the countries from the list.
+
+#### 1. Number of COVID-19 deaths in Singapore comparing with Malaysia.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+malaysia_corona <- coronavirus %>% filter(country == "Malaysia")
+death_malaysia_corona <- malaysia_corona %>% filter(type=="death")
+
+cum_deaths_malaysia <- mutate(death_malaysia_corona, cumulative_death_sum_malaysia = cumsum(cases))
+
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_malaysia, aes(x=date, y=cumulative_death_sum_malaysia, colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Malaysia")) + ggtitle("Total Covid-19 Deaths Singapore with Malaysia") 
+
+```
+
+It is clear that the total number of deaths rate has been increased in Malaysia comparing to Singapore.
+
+#### 2. Number of confirmed COVID-19 cases in Singapore comparing with Malaysia.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_malaysia_corona <- malaysia_corona %>% filter(type=="confirmed")
+
+cum_confirmed_malaysia <- mutate(confirmed_malaysia_corona, cumulative_confirmed_sum_malaysia = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x=date, y=cumulative_confirmed_sum, col = "green")) + geom_line(data = cum_confirmed_malaysia, aes(x=date, y=cumulative_confirmed_sum_malaysia, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Malaysia")) + ggtitle("Total Covid-19 confirmed cases Singapore with Malaysia")
+
+```
+
+Total number of confirmed COVID-19 cases were equal for two countries in the mid of the month April. Then Singapore shows higher growth when comparing with Malaysia.
+
+#### 3. Number of recovered COVID-19 cases in Singapore comparing with Malaysia.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_malaysia_corona <- malaysia_corona %>% filter(type=="recovered")
+
+cum_recovered_malaysia <- mutate(recovered_malaysia_corona, cumulative_recovered_sum_malaysia = cumsum(cases))
+
+ggplot() + geom_line(data = cum_recovered, aes(x=date, y=cumulative_recovered_sum, col = "green")) + geom_line(data = cum_recovered_malaysia, aes(x=date, y=cumulative_recovered_sum_malaysia, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Malaysia")) + ggtitle("Total Covid-19 recovered cases Singapore with Malaysia")
+
+```
+
+Both countries shows a development in recovering. Malaysia reached it before a month ago than Singapore.
+
+#### 4. Number of COVID-19 deaths in Singapore comparing with Indonesia.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+indonesia_corona <- coronavirus %>% filter(country == "Indonesia")
+death_indonesia_corona <- indonesia_corona %>% filter(type=="death")
+
+cum_deaths_indonesia <- mutate(death_indonesia_corona, cumulative_death_sum_indonesia = cumsum(cases))
+
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_indonesia, aes(x=date, y=cumulative_death_sum_indonesia,  colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Indonesia")) + ggtitle("Total Covid-19 Deaths Singapore with Indonesia") 
+
+```
+
+It seems to be Indonesia had more higher growth in total deaths.
+
+#### 4. Number of confirmed COVID-19 cases in Singapore comparing with Indonesia.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_indonesia_corona <- indonesia_corona %>% filter(type=="confirmed")
+
+cum_confirmed_indunesia <- mutate(confirmed_indonesia_corona, cumulative_confirmed_sum_indonesia = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x=date, y=cumulative_confirmed_sum, col = "green")) + geom_line(data = cum_confirmed_indunesia, aes(x=date, y=cumulative_confirmed_sum_indonesia, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Indonesia")) + ggtitle("Total Covid-19 confirmed cases Singapore with Indonesia")
+
+```
+
+It is clear that Singapore increases the confirmed cases when comparing to Indonesia.
+
+#### 6. Number of recovered COVID-19 cases in Singapore comparing with Indonesia.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_indonesia_corona <- indonesia_corona %>% filter(type=="recovered")
+
+cum_recovered_indonesia <- mutate(recovered_indonesia_corona, cumulative_recovered_sum_indonesia = cumsum(cases))
+
+ggplot() + geom_line(data = cum_recovered, aes(x=date, y=cumulative_recovered_sum, col = "green")) + geom_line(data = cum_recovered_indonesia, aes(x=date, y=cumulative_recovered_sum_indonesia, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Indonesia")) + ggtitle("Total Covid-19 recovered cases Singapore with Indonesia")
+
+```
+
+Both countries shows a similar pattern in recovering process.
+
+#### 7. Number of COVID-19 deaths in Singapore comparing with Thailand.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+thailand_corona <- coronavirus %>% filter(country == "Thailand")
+death_thailand_corona <- thailand_corona %>% filter(type=="death")
+
+cum_deaths_thailand <- mutate(death_thailand_corona, cumulative_death_sum_thailand = cumsum(cases))
+
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_thailand, aes(x=date, y=cumulative_death_sum_thailand,  colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Thailand")) + ggtitle("Total Covid-19 Deaths Singapore with Thailand") 
+
+```
+
+Thailand had more deaths than Singapore.
+
+#### 8. Number of confirmed COVID-19 cases in Singapore comparing with Thailand.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_thailand_corona <- thailand_corona %>% filter(type=="confirmed")
+
+cum_confirmed_thailand <- mutate(confirmed_thailand_corona, cumulative_confirmed_sum_thailand = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x=date, y=cumulative_confirmed_sum, col = "green")) + geom_line(data = cum_confirmed_thailand, aes(x=date, y=cumulative_confirmed_sum_thailand, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Thailand")) + ggtitle("Total Covid-19 confirmed cases Singapore with Thailand")
+
+```
+
+Confirmed COVID-19 cases were equal in the middle of the month April. Then Singapore shows a higher growth.
+
+#### 6. Number of recovered COVID-19 cases in Singapore comparing with Thailand.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_thailand_corona <- thailand_corona %>% filter(type=="recovered")
+
+cum_recovered_thailand <- mutate(recovered_thailand_corona, cumulative_recovered_sum_thailand = cumsum(cases))
+
+ggplot() + geom_line(data = cum_recovered, aes(x=date, y=cumulative_recovered_sum, col = "green")) + geom_line(data = cum_recovered_thailand, aes(x=date, y=cumulative_recovered_sum_thailand, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "Thailand")) + ggtitle("Total Covid-19 recovered cases Singapore with Thailand")
+
+```
+
+Singapore and Thailand represents similar pattern in recovering COVID-19 cases.
+
+## Comparing the pandemic situation with USA.
+
+As of June 24th in 2020, the U.S. had the most confirmed active cases and deaths in the world.In July its death rate was 419 per million people, the seventh-highest rate globally.
+
+#### 1. Number of COVID-19 deaths in Singapore comparing with USA.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+usa_corona <- coronavirus %>% filter(country == "US")
+death_usa_corona <- usa_corona %>% filter(type=="death")
+
+cum_deaths_usa <- mutate(death_usa_corona, cumulative_death_sum_usa = cumsum(cases))
+
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_usa, aes(x=date, y=cumulative_death_sum_usa,  colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "USA")) + ggtitle("Total Covid-19 Deaths Singapore with USA") 
+
+```
+
+#### 2. Number of confirmed COVID-19 cases in Singapore comparing with USA.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_usa_corona <- usa_corona %>% filter(type=="confirmed")
+
+cum_confirmed_usa <- mutate(confirmed_usa_corona, cumulative_confirmed_sum_usa = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x=date, y=cumulative_confirmed_sum, col = "green")) + geom_line(data = cum_confirmed_usa, aes(x=date, y=cumulative_confirmed_sum_usa, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "USA")) + ggtitle("Total Covid-19 confirmed cases Singapore with USA")
+
+```
+
+US reports more than 80000 deaths and sharp increase in confirmed cases with comparing to Singapore.
+
+## Comparing the pandemic situation with China.
+
+The COVID-19 pandemic originated with a cluster of mysterious, suspected pneumonia cases in the city of Wuhan in China. The pandemic has severely affected to the country and has recorded the highest number of COVID-19 infections in Europe.
+
+#### 1. Number of COVID-19 deaths in Singapore comparing with China.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+china_corona <- coronavirus %>% filter(country == "China") %>% group_by(date) 
+death_china_corona <- china_corona %>% filter(type=="death")
+
+cum_deaths_china <- mutate(death_china_corona, cumulative_death_sum_china = cumsum(cases))
+
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_china, aes(x=date, y=cumulative_death_sum_china, colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "China")) + ggtitle("Total Covid-19 Deaths Singapore with China") 
+
+```
+
+#### 2. Number of confirmed COVID-19 cases in Singapore comparing with China.
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_china_corona <- china_corona %>% filter(type=="confirmed")
+
+cum_confirmed_china <- mutate(confirmed_china_corona, cumulative_confirmed_sum_china = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x=date, y=cumulative_confirmed_sum, col = "green")) + geom_line(data = cum_confirmed_china, aes(x=date, y=cumulative_confirmed_sum_china, color="red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "China")) + ggtitle("Total Covid-19 confirmed cases Singapore with China")
+
+```
+
+China shows more number of deaths with comparing to Singapore but when considering the confirmed cases Singapore shows high growth when China doesnt shows any confirmed case.
+
+## Conclusions
+***
+
+* The country brings one or more new deaths daily.
+* Singapore has nearly 25,000 infections and only 15% of patients are deemed to have recovered.
+* Almost 20000 of Singapore COVID-19 patients are still being kept in isolation at hospitals and care facilities, equating to recovery rate(active cases).
+* In neighbouring Thailand, Indonesia and Malaysia has with just over 40, 1000 and 100 deaths respectively.
+* According to the comparison with China and USA it can be seen that Singapore shows less number of deaths and confirmed cases.
+* Finally we can conclude that the country has so far succeeded in limiting the toll from COVID-19 desease.
+
+
+## Discussion
+***
+
+We are still facing the global crisis of the COVID-19 pandemic also known as the coronavirus pandemic. It is an ongoing global pandemic caused by severe acute respiratory syndrome coronavirus. As a university student my  goal in this project is to provide my contribution, by analysing the data related to the country Singapore and help to communicate it. The report is written in R Markdown. The analysis represents total COVID-19 deaths, confirmed cases, recoveries and active cases in Singapore. As well as the comparison with neighbouring countries.(Malaysia, Indonesia and Thailand). And also the countries, China and USA which are severly affected by the coronavirus pandemic. Since I've used the cran version of the R dataset I'm not be able to update the dataset up-to-date. It is being updated every one or two months. By studing all the analysis factors which may have affects to the country situation, I can say that Singapore facing a very challenging situation to tackle a sharp increase in Coronavirus infection but had been a better way in handling the outbreak.
+
+## References
+***
+
+* https://hellor.netlify.app/
+
+* https://en.m.wikipedia.org/wiki/Coronavirus_disease_2019
+
+* https://en.m.wikipedia.org/wiki/2020_Singapore_circuit_breaker_measures 
+
+* https://govinsider.asia/inclusive-gov/singapore-creating-national-health-index/
+
+* https://www.worldometers.info/coronavirus/country/singapore/
+
+* https://rviews.rstudio.com/tags/coronavirus/
+
+* https://cran.r-project.org/web/packages/coronavirus/index.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

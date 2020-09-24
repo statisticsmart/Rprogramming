@@ -1,0 +1,453 @@
+---
+title: "Panama against COVID-19 pandemic"
+author: "Maleesha Panangala AS2017456"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE, echo=FALSE)
+library(tidyverse)
+library(coronavirus)
+library(patchwork)
+library(plotly)
+theme_set(theme_minimal())
+```
+# 1 Introduction
+
+## 1.1 History of Panama
+
+Around 18 after the discovery of American regions by Rodrigo de Bastidas of Spain,1500 Spanish settlers established their homes near the current Panama City.   
+For over 300 years, Panama was ruled by the Spanish until struggles for independence from Spain was successful in 1821. This effort was however overridden by them getting acquired by Colombia and ruled under Colombian government until 1903. Even after these efforts in gaining independence, there were multiple attempts of interference by the U.S after the uniqueness of Panama was realized. Finally in 1999, Panama gained full independence with the full control of Panama canal. 
+
+## 1.2 Where in the world map is it?
+
+Panama is a transcontinental country with its canal separating North and South America and is bordered by Costa Rica to the West, Colombia to the Southeast, the Caribbean Sea to the North, and the Pacific Ocean to the South. While having a population of around 4 million people, the capital of Panama; Panama City is the home for nearly half of it.
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+panama_corona <- coronavirus %>% filter(country == "Panama")
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = panama_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+## 1.3 What is it usually like there? 
+
+### 1.3.1 Climate condition
+
+Having a quite predictable weather pattern, Panama is an ultimate destination for a stress-free living.
+The dry season extends from January until mid-May and consists of cloudless skies, hot breezes and warm temperatures (Daytime temperature around 90F and night time temperature around 75F).
+The rainy season extends from mid-May to mid-December and consists of irregular rain showers throughout day and night (Temperature is lesser than dry season temperature levels by 10 to 15 degrees). As the days go by, the rainfall increases in amount accompanied by thunderstorms and lighting.   
+
+### 1.3.2 Living conditions
+
+There are five main cities in Panama that people decide to reside when they move in; Panama city, El Valle, Coronado, Pedasi, Boquete.
+The cost of living in Panama would depend on the region and the lifestyle (the minimum cost of living for a couple is lesser than $2000 a month).
+Panama has always welcomed facilitated international communities in moving in, mainly through residence programs where newly arriving people are given support in obtaining visas. 
+Thanks to the diverse population living in Panama, the locals are exposed to new kinds of food, activities and many more. 
+
+### 1.3.3 Economy 
+
+The GDP in Panama has been continuously increasing from 2004 surpassing its neighboring countries. Its growing economy has made it one of the leading countries Central America in terms of infrastructure. 
+Owning a stable government, being situated in a convenient shipping location, world banking and a prosperous outlook, Panama keeps making foreign investors interested in doing business and settling in. 
+
+### 1.3.4 What makes it so special?
+
+Apart from being a popular business destination, expats come for diverse reasons; adventure, quality retirement etc.    
+Panama is the full destination package catering to the interests of all people, may it be outdoor activities related to both warm and cold weathers, activities related to beaches and ocean, wildlife related activities or simply indoor activities like knitting, gardening and painting.Moreover, the country is blessed with friendly people who are eager to be friends regardless of age, gender or marital status.  
+
+## 1.4 How COVID-19 is affecting Panama right now? 
+
+As of July 19^th^ 2020, the data are as follows,
+
+* Total Confirmed cases - 52,261
+* Total Recovered cases - 27,494
+* Total Active cases - 23,696
+* Total Deaths - 1,071
+
+The new quarantine hours which were established on July^17th^ are currently in operation.Total quarantine began on Friday(17^th^) at 7.00pm and will carry on till Monday(20^th^) at 5.00am. 
+Movement restrictions are based on gender and ID number as follows,
+
+*based on gender*
+
+* Women : Monday and Wednesday, Friday until 7.00pm
+* Men : Tuesday and Thursday
+
+*based on the last digit of ID number*
+
+  * Last number is 7 – 6:30 – 8:30am
+  * Last number is 8 – 7:30 – 9:30am
+  * Last number is 9 – 8:30 – 10:30am
+  * Last number is 0 – 9:30 – 11:30am
+  * Last number is 1 – 12:30 – 2:30pm
+  * Last number is 2 – 1:30 – 3:30pm
+  * Last number is 3 – 2:30 – 4:30pm
+  * Last number is 4 – 3:30 – 5:30pm
+  * Last number is 5 – 4:30 – 6:30pm
+  * Last number is 6 – 5:30 – 7:30pm
+
+* Regardless of the ID number, elders over 60 years old are able to travel between 7.00am and 10.00am but however gender                restrictions still apply. 
+
+* Normal exceptions apply for holders of permission letters.
+
+* Parents are able to take one child per family outside near their home or in the social areas of their apartment building during the two-hour window of the accompanying parent.
+
+* Exercises such as bicycling, running, and skating are permissible if done within one kilometer of their home, with a mask, and inside their two-hour window.
+
+## 1.5 Timeline of Corona Virus and government response
+
+* 09/03/2020 - First confirmed Coronavirus patient in Panama
+* 13/03/2020 - **All cruise ship passengers banned from disembarking in Panama**
+* 22/03/2020 - **Suspension of all international commercial flights in and out of Panama**
+* 13/05/2020 - **Government opened 1^st^ economic block; fishing and industrial aquaculture, electronic commerce, mechanic workshops and general spare parts, plumbers, electricians, maintenance of elevators, air conditioners and ‘systems’, as well as pool maintenance and cleaning**
+* 01/06/2020 - 
+  * **Quarantine ended for all with movement based restrictions based on ID number and gender for all provinces except Panama city and Panama Oeste**
+  * **For Panama city and Panama Oeste quarantine and 2-hour movement windows replaced by curfew from 7.00pm to 5.00am, Monday to Sunday**
+  * **Government opened 2^nd^ economic block;public construction, mining of non-metals, industry, and religious sites, parks, social areas, and sporting areas will be allowed to operate at 25 percent capacity**
+
+* 02/06/2020 - **Ministry of health published a resolution stating that anyone leaving their residence must be wearing a mask that covers their nose and mouth.  Any individual not wearing a mask is subject to possible detention and fine**
+* 08/06/2020 
+  * **Quarantine of provinces of Panama and Panama Oeste ended with movement based restrictions based on gender and ID number**
+  * **National Immigration Service started a 90-day period for foreigners to submit application related to maintaining or adjusting their immigration status in Panama without having to incur fines**
+  
+* 17/06/2020 - **Extended the suspension of international commercial flights until July 22**
+* 17/07/2020 - **Ministry of Health established new quarantine hours for Panama city and Panama Oeste provinces**
+* 18/07/2020 - **Resume of humanitarian flights from July 8 onward**
+
+### Apart from the above actions, following general actions are also being taken by the government of Panama,
+
+* Children are allowed to move from 4.00pm to 7.00pm but with the accompaniment of parent, guardian or caretaker. 
+* The use of masks and social distancing is encouraged.  
+* social group activities, cultural events, festivals, visits to the beach, contact sports, or any other activity that violates social distancing is highly discouraged.
+* Preparation through stocking up medicine and food supplies needed to survive for an extended period of time is encouraged.  
+* The Panama Canal Authority (ACP) requires that ships coming from countries with a confirmed case and with a crew member exhibiting symptoms must notify the ACP at least 30 days before its arrival and of any crew changes within 14 days of arrival. In the event a crew member is a confirmed COVID-19 case, the vessel will not be permitted to transit and must quarantine for 14 days. Preventative measures for such ships include, but are not limited to:
+  * boarding of vessels by health authorities in order to investigate any cases.
+  * use of personal protective equipment, such as masks;
+holding the vessel in quarantine as a precautionary measure.
+
+# 2 Exploratory data analysis
+
+## 2.1 Overall cumulative  status
+(as of 18^th^ July 2020)
+
+Total confirmed cases as at 17^th^ July, 2020 was 51,408.
+
+```{r}
+coronavirus <- as_tibble(coronavirus) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA)) %>% 
+  mutate(cases = replace_na(cases,0))
+
+coronavirus_wide <- coronavirus %>%
+  pivot_wider(names_from = type,values_from = cases) %>% 
+  mutate(active = confirmed - death - recovered) %>% 
+  mutate(active = replace(active,which(active<0),NA))
+
+coronavirus <- coronavirus_wide %>% 
+  pivot_longer(col = c("confirmed","death","recovered","active"),names_to = "type",values_to = "cases")
+
+df <- coronavirus %>% filter(country == "Panama")
+
+sig_dates <- lubridate::date(c("2020-03-10","2020-03-13","2020-03-22","2020-06-01","2020-06-02", "2020-06-17"))
+```
+
+```{r}
+bar_data <- df %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(bar_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Type",y="Percentage from confirmed cases",title="Breakdown of coronavirus patients",subtitle="as of 2020-07-18")
+
+rm(bar_data)
+```
+
+
+Out of the cumulative number of confirmed cases, nearly half of it has recovered. 
+
+## 2.2 Total number of cases over time
+(as of 18^th^ July 2020)
+```{r}
+graph_data <- df %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(cum_cases = cumsum(cases)) %>% 
+  ungroup() 
+
+graph_data %>% 
+  ggplot(aes(x = date,y = cum_cases,fill = type)) + 
+  geom_col(show.legend = F) + 
+  # geom_label(data=graph_data %>% filter(date %in% significant_dates),
+  #            aes(x = date,y = cum_cases,label = paste(cum_cases)),
+  #            nudge_y = 2) +
+  # scale_y_log10() +
+  facet_wrap(~ type,nrow = 4) 
+rm(graph_data)
+```
+
+
+While the total confirmed cases are rising exponentially by day, the total death count that started from March 11^th^ has been kept under 2000 through precautionary measures implemented by the government. Even though the total active cases started off exponentially, currently it has changed its form into increasing at a decreasing speed. 
+
+## 2.3 Counts on significant dates
+```{r}
+table_data <- df %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(cum_cases = cumsum(cases)) %>% 
+  ungroup()
+
+table_data %>% 
+  filter(date %in% sig_dates) %>% 
+  mutate(cum_cases = replace_na(cum_cases,0)) %>% 
+  select(date,type,cum_cases) %>% 
+  pivot_wider(names_from="type",values_from="cum_cases") %>% 
+  knitr::kable()
+
+rm(table_data)
+```
+
+
+With the discovery of the first COVID-19 confirmed patient on 10^th^ of March, within three days, the Panama government took the first step in reducing new entries into the country. By 13^th^ of the same month, all cruise ship passengers were prohibited from disembarking in Panama. However rate of confirmed cases kept increasing even after prohibiting the entry of ships into the country, the government banned all international commercial flights in and out of Panama on 22^nd^. Despite the dangerously increasing confirmed cases by day, the economic activities were restarted by 1^st^ of June followed by strict protocols that were backed by law. But since, the total confirmed cases are still rising exponentially, the suspension that was put on international commercial flights was extended till 22^nd^ of July.
+
+## 2.4 Breakdown of daily cases through time
+
+```{r}
+plot_case_type_w_average <- function(type_needed,title,nudge_y_val = 100){
+graph_data <- df %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  filter(type == type_needed)
+
+mean_cases <- mean(graph_data$cases,na.rm = T)
+
+graph_data %>% 
+  mutate(highlight = if_else(cases > mean_cases,"Above Average","Below Average")) %>% 
+  ggplot(aes(x = date,y = cases)) +
+  geom_hline(yintercept = mean_cases) + 
+  geom_col(aes(fill = highlight)) +
+  geom_label(x = graph_data$date[20],y = mean_cases+nudge_y_val,label = paste("Average:",round(mean_cases,2))) +
+  theme(legend.position = "bottom") +
+  labs(title = title,fill = "")
+}
+```
+
+### 2.4.1 Confirmed cases
+
+```{r}
+plot_case_type_w_average("confirmed","Confirmed Cases") 
+```
+
+Despite the suspension of all commercial entries into the country, the daily confirmed cases have been increasing way above average from June onward. 1^st^ of June is when quarantine ended for all the provinces except Panama city and Panama Oeste. Therefore a major reason for this behavior **might** have been,
+
+* There had been a significant reduction in the daily confirmed cases,hence it might have led the authorities to believe that the country was ready to end its quarantine season when in reality there have been infected persons without symptoms.
+
+* Even though there have been many protocols involved when ending quarantine, a few being imposing movement restrictions based on ID number and gender, and not wearing masks and following social distancing measures finable,they have neither been followed properly by people nor monitored properly by respective authorities.
+  
+Currently, the daily confirmed cases have been decreasing by day for a week but nevertheless the overall pattern in still exponential. 
+
+### 2.4.2 Active cases
+
+```{r}
+plot_case_type_w_average("active","Active Cases") 
+```
+
+
+From June onward the daily active cases have been above average and around the mid of June it has hit an all time high.Then however, it has been reducing overall by day, explaining why the cumulative active cases graph was increasing at a decreasing speed. Fluctuations daily active cases cannot be interpreted solely, since reduction of active levels means that either daily recovery level or daily death level is rising. 
+
+### 2.4.3 Recovered cases
+```{r}
+plot_case_type_w_average("recovered","Recovered Cases")
+```
+
+
+By the end of July 18^th^ the average daily recovery rate is 153.6 while the average daily confirmed cases rate is 291.96. Even though this is an acceptable amount, Panama has achieved significant levels of recovery in the past months.
+
+### 2.4.4 Death cases
+```{r}
+plot_case_type_w_average("death","Deaths",nudge_y_val = 1) 
+```
+
+
+The number of daily deaths have gone staggeringly high by day and by mid July, it has reached an all time high. However, a thing to note is that, the death levels have shown this behavior after the quarantine ended on June 1^st^. A few of the reason **might** have been,
+
+* Due to the social inequality that is prevailing in Panama, residents living in poorer areas of Panama facing a hard time in adhering to social distancing protocols (having to use public transportation etc. and not being able to afford safer alternatives) 
+
+* The intensive care unit of the main public hospital was nearing its capacity by June itself hence the public health care system facing challenges in catering to the increasing levels of infected cases. 
+  
+## 2.5 Will the curve flatten anytime soon?
+
+```{r}
+plot_data <- df %>% 
+  filter(type == "confirmed") %>%
+  group_by(date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  filter(total_cases > 0)
+
+plot_data %>%
+  ggplot(aes(x = date,y=total_cases)) +
+  geom_line() + 
+  scale_y_log10() +
+  labs(title = "Total Confirmed Cases by day",
+       x = "Date",
+       y = "Total Confirmed Cases")
+
+rm(plot_data)
+```
+
+
+As of 18^th^ July,2020 the curve seems to be trending upwards even though the rate of increase is lowering. Hence it could be assumed that curve might not be flat anytime soon unless the government changes their strategy in fighting against the virus.
+
+**However a special point to address is that the curve has already come close to flattening in mid-May but due to the quarantine being ended by June 1^st^, the curve has started trending upwards. Hence it could be assumed that, if the quarantine period was prolonged, the Panama government might have been able to eradicate the virus completely since there were no international interference throughout the time**    
+
+## 2.6 Is Panama doing better or worse than its neighbours?
+
+### 2.6.1 Total confirmed cases of all neighbouring countries
+
+```{r}
+countries_compare <- c("Panama","Costa Rica","Colombia","Nicaragua","Guatemala","Venezuela","Ecuador","Mexico")
+```
+
+```{r}
+plot_data <- coronavirus %>% 
+  filter(type == "confirmed") %>%
+  filter(country %in% countries_compare) %>% 
+  group_by(country,date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  filter(total_cases >= 30) %>% 
+  mutate(days_since = date - min(date)) %>% 
+  ungroup()
+
+plot<-plot_data %>%
+  mutate(highlight = if_else(country == "Panama",TRUE,FALSE)) %>% 
+  ggplot(aes(x = days_since,y=total_cases,color=country)) +
+  geom_line () + 
+  labs(title = "Total number of confrmed cases of all countries",
+       x = "Days since the 30th confirmed case",
+       y = "Total confirmed cases") +
+  scale_y_log10() +
+  theme(legend.position = "bottom")
+ggplotly(plot)
+rm(plot_data,plot)
+```
+Compared to its neighboring countries, Panama seems to be performing better, but however if should be noted that the total population of Panama is around 4 million. Therefore Panama having 51,408 total confirmed cases with a population of 4 million people, is worse than Ecuador having only 76,495 confirmed cases for a population of around 17 million. Moreover, Ecuador seems to have lowered its rate of confirmed cases by day, in comparison with other countries. 
+However, Panama seems to be performing better than its immediate neighbors Costa Rica and Colombia, since their rate of increase of confirmed cases are increasing at a very higher rate in comparison to Panama.  
+
+### 2.6.2 Rate of recovery
+
+```{r}
+plot_data <- coronavirus %>%
+  filter(country %in% countries_compare) %>% 
+  filter(type == "confirmed" | type == "recovered") %>%
+  group_by(date,country,type) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country,type) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  ungroup() %>% 
+  filter(total_cases > 0)
+  
+
+plot_data <- plot_data %>% 
+  pivot_wider(names_from = "type",values_from = "total_cases") %>% 
+  group_by(country,date) %>% 
+  mutate(recovered = sum(recovered,na.rm=T),
+         confirmed = sum(confirmed,na.rm=T)) %>% 
+  slice(n()) %>% 
+  filter(recovered > 1)
+
+plot<- plot_data %>% 
+  mutate(highlight = if_else(country == "Panama",TRUE,FALSE)) %>%
+  ggplot(aes(x = confirmed,y=recovered,color=country)) +
+  geom_line() + 
+  geom_abline(slope=1,intercept = 0) +
+  scale_y_log10() + 
+  scale_x_log10() +
+  theme(legend.position = "bottom")
+ggplotly(plot)
+rm(plot_data,plot)
+```
+Considering the rate of recovery, Panama seems to be nearing to an acceptable level of recovery rate but Colombia and Mexico are performing better in that metric. However, it was seen from the previous graph that the rate of infection is also higher in these two countries.
+
+**Hence it can be assumed that although the rate of infection is high in Colombia and Mexico, the two countries may have ample health care capacity available to treat their infected residents and help them recover. This could be the reason that the a very high percentage of the infected patients are recovering in the two countries** 
+
+# 3. Conclusions and Recommendations
+
+* Due to the social inequality prevailing in the country, residents living in the poorer areas are unable to adhere to alternative measures when traveling, hence if the government implements a safer traveling solution for those who cannot afford it, the spread of the virus might get controlled.
+* The intensive care units of public hospitals of Panama are facing the risk of nearing capacity, therefore if government funding is available, more manpower and infrastructure would be available for use, thereby lessening the mortality rate.
+* Ending the quarantine period prematurely has negatively affected to every area of the country. Hence keeping the curfew intact until the health care system is able to take control of the situation might be favorable. However, it should be noted that the government will have to take extra steps in making all the services accessible and affordable for residents in this period.
+
+**In addition to the above, strategies from countries who are handling the spread  of virus quite efficiently also can be considered.**
+
+  * Swift surveillance, quarantine and social-distancing measures, such as the use of face masks and school closures, has helped to cut coronavirus transmission in Hong Kong immensely. 
+  * Poorer nations tend to take stricter measures early into the pandemic than richer nation since they need to act more cautiously in the aspect of their health care. This mentality has helped many countries in reducing the spread of the virus. 
+  * Continuous analysis of all available data including data related to health care capacity could help with deciding whether reopening services is unfavorable or not.
+  * Germany has stayed away from putting the whole nation in lockdown and has remained to implement lockdown measures only on target hotspots.
+  * Austrian government reserves the right to pull the “emergency brake” at any time and reverse the openings if the numbers demand it. 
+
+# 4. Discussion
+
+The given data is only enough to paint the broader picture on how the COVID-19 pandemic has affected Panama. To give useful predictions in government decision making aspect, data related to all areas of the country especially health care is required. 
+
+# 5. References
+
+1. [1]"Panama Coronavirus: 53,468 Cases and 1,096 Deaths - Worldometer", Worldometers.info, 2020. [Online]. Available: https://www.worldometers.info/coronavirus/country/panama/. [Accessed: 20- Jul- 2020].
+
+2. [2]T. Breeze, "Panama Will Re-Activate Economy in Six Phases Starting May 13th  - Bocas del Toro's Newspaper", Bocas del Toro's Newspaper, 2020. [Online]. Available: http://thebocasbreeze.com/may20/panama-reactivates-economy/. [Accessed: 20- Jul- 2020].
+
+3. [3]"Panama sees surge of coronavirus infections after reopening", Medicalxpress.com, 2020. [Online]. Available: https://medicalxpress.com/news/2020-06-panama-surge-coronavirus-infections-reopening.html. [Accessed: 20- Jul- 2020].
+
+4. [4]"Whose coronavirus strategy worked best? Scientists hunt top policies", Nature.com, 2020. [Online]. Available: https://www.nature.com/articles/d41586-020-01248-1. [Accessed: 20- Jul- 2020].
+
+5. [5]D. (www.dw.com), "Coronavirus: Germany eyes tougher lockdown measures during local outbreaks | DW | 16.07.2020", DW.COM, 2020. [Online]. Available: https://www.dw.com/en/germany-coronavirus-lockdowns/a-54198328. [Accessed: 20- Jul- 2020].
+
+6. [6]"Austria", KPMG, 2020. [Online]. Available: https://home.kpmg/xx/en/home/insights/2020/04/austria-government-and-institution-measures-in-response-to-covid.html. [Accessed: 20- Jul- 2020].
+
+7. [7]"COVID-19 pandemic in Panama", En.wikipedia.org, 2020. [Online]. Available: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Panama. [Accessed: 20- Jul- 2020].
+
+8. [8]"COVID-19 Panama Information | U.S. Embassy in Panama", U.S. Embassy in Panama, 2020. [Online]. Available: https://pa.usembassy.gov/covid-19-information/?fbclid=IwAR0tcE9pe7ZQ43w7rQn2AwwG1-c9GPy48dbc6ibE6W4qEjA4fUScG3UingM. [Accessed: 20- Jul- 2020].
+
+9. [9]"Panama", En.wikipedia.org, 2020. [Online]. Available: https://en.wikipedia.org/wiki/Panama. [Accessed: 20- Jul- 2020].
+
+10. [10]J. Ramesch, J. Ramesch and J. Ramesch, "Panama: Everything You Need to Know in 2020 | International Living", International Living, 2020. [Online]. Available: https://internationalliving.com/countries/panama/. [Accessed: 20- Jul- 2020].
+
+
+
+
+

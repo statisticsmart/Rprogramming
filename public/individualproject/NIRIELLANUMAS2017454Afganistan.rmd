@@ -1,0 +1,392 @@
+---
+title: "Afghanistan: Coronavirus Pandemic"
+author: "AS2017454"
+date: "7/17/2020"
+output: html_document
+---
+## 1. Introduction 
+
+```{r}
+library(coronavirus)
+data("coronavirus")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+afghanistan_corona<-coronavirus%>%filter(country=="Afghanistan")
+recover_Afghanistan_corona<-afghanistan_corona%>%filter(type=="recovered")
+```
+
+### Location of Afghanistan
+```{r location, echo=FALSE}
+data(wrld_simpl)
+p<-ggplot()+geom_polygon(data = wrld_simpl, aes(x=long, y = lat, group = group), fill= "gray",colour = "white")+coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+scale_x_continuous(breaks = seq(-180,180,120))+scale_y_continuous(breaks = seq(-90,90,100))
+p + geom_point(data = afghanistan_corona, aes(x=long, y=lat), colour = "red", size = 1)
+```
+
+
+Afghanisthan, with its arid continental climate, has four seasons: spring, summer, autumn and winter. Summers in southern and eastern Afghanistan can reach temperatures as high as 50 degrees Celsius, and in recent years the western part of northern Afghanistan and the central highlands have often experienced drought. In winter the temperature drops to around 20 degrees Celsius and in the hilly areas it is -25 degrees of Celsius or less. October and april also see heavy snowfall in the mountains. Irrigation and the agriculture depend on the melting of this snowy spring. Autumn is a prime time for lowland rainfall.
+
+
+  Afghanistan faced the Covid-19 challenge almost three months after the corna virus was first detected in China last December. As of June 1st, the number of Covid_19 patients had risen to 16,509. Afghanistan, which is currently at high risk due to Covid-19, is facing an economic recession. According to Biruni Institute, 80 million people have already lost their jobs. More than 80% of the population lives below the poverty line.
+  Many bussiness are at high risk due to the goverment's closure of the country to Covid-19 rule. There are a number of food, water and sanitation problems have arisen and the government is tring to rehabilitate the country by opening up areas other than the areas where the virus is most prevalent.
+  
+  With the development of the Covid-19 virus status on June 7, the Afghan government impossed a number of lows governing the corona. These include wearing face masks in public places, maintaining a social distance of two meters, banning meetings of more than ten people, keeping adults indoors and disinfacting offices frequently. If has also decided to close schools, universities, clubs and non-essential bussinesses at least until September. Inter-city and provincial bus services have been suspended and public transport has been restricted to a maximum of four people.
+  The Afghan government has allowed several airlines to resume operations by June 24, easing the country's complete shutdown lows. The Afghan goverment has also taken steps to open borders with Iran.
+  
+  
+## 2. Exploratory Data Analysis
+
+```{r}
+smp_size <- 252
+set.seed(340)
+train_ind <- sample(seq_len(nrow(afghanistan_corona)), size = smp_size)
+train <- afghanistan_corona[train_ind, ]
+test <- afghanistan_corona[-train_ind, ]
+summary(afghanistan_corona)
+ggplot(afghanistan_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+
+This chart shows that there has been a significant increase in the prevalence of corona virus in Afghanistan and not a siginificant increase in patient recovery. However, there has been no increase in the number of deaths.
+
+```{r}
+afghanistan_corona_1 <- train %>% pivot_longer(c(4,5,7), names_to = "Variable", values_to = "value")
+afghanistan_corona_1
+ggplot(afghanistan_corona_1,aes(x=date))+geom_histogram(colour="white")+facet_wrap(type~., ncol = 1)
+
+ggplot(afghanistan_corona_1, aes(x=date, fill=type))+geom_density()+facet_wrap(type~., ncol=1, scales = "free")
+```
+
+The above charts show the confrimation, mortality and recovery of patients corresponding to Covid-19 distribution in Afghanistan.
+
+
+### Prevalence of corona virus in Afghanistan compared to neighboring countries
+#### Identify new patients
+
+**Iran VS Afghanistan**
+```{r confirm1}
+confirm_Afghanistan_corona<-afghanistan_corona%>%filter(type=="confirmed")
+Iran_corona <- coronavirus %>% filter(country == "Iran")
+confirm_Iran_corona<-Iran_corona%>%filter(type=="confirmed")
+Afghan_Iran_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases, Iran=confirm_Iran_corona$cases)
+Afghan_Iran_confirm <- pivot_longer(Afghan_Iran_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_Iran_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+As this diagram shows, the identification of new Covid-19 patients from Iran is greater than from Afghanistan.
+
+
+**Pakistan VS Afghanistan**
+```{r}
+Pakistan_corona <- coronavirus %>% filter(country == "Pakistan")
+confirm_Pakistan_corona<-Pakistan_corona%>%filter(type=="confirmed")
+Afghan_Pakistan_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases,Pakistan=confirm_Pakistan_corona$cases)
+Afghan_Pakistan_confirm <- pivot_longer(Afghan_Pakistan_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_Pakistan_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+The identification of new Covid-19 infected in Pakistan is higher than the identification of new infected in Afghanistan.
+
+
+**Uzbekistan VS Afghanistan**
+```{r}
+Uzbekistan_corona <- coronavirus %>% filter(country == "Uzbekistan")
+confirm_Uzbekistan_corona<-Uzbekistan_corona%>%filter(type=="confirmed")
+Afghan_Uzbekistan_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases,Uzbekistan=confirm_Uzbekistan_corona$cases)
+Afghan_Uzbekistan_confirm <- pivot_longer(Afghan_Uzbekistan_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_Uzbekistan_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Recognition of new Covid-19 patients in Uzbekistan and Afghanistan will remain the same untill about the end of April, and by May, Afghanistan will have identified more Covid-19 patients than Uzbekistan.
+
+
+#### Recover of patients
+**Iran VS Afghanistan**
+```{r recover1}
+recover_Iran_corona<-Iran_corona%>%filter(type=="recovered")
+Afghan_Iran_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,Iran=recover_Iran_corona$cases)
+Afghan_Iran_recover <- pivot_longer(Afghan_Iran_recover, c(2, 3), "country", "value")
+ggplot(Afghan_Iran_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+According to this chart, the recovered of Covid-19 patients in Iran is higher than the recovered of Covid-19 patients in Afghanistan.
+
+
+**Pakistan VS Afghanistan**
+```{r}
+
+recover_Pakistan_corona<-Pakistan_corona%>%filter(type=="recovered")
+Afghan_Pakistan_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,Pakistan=recover_Pakistan_corona$cases)
+Afghan_Pakistan_recover <- pivot_longer(Afghan_Pakistan_recover, c(2, 3), "country", "value")
+ggplot(Afghan_Pakistan_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+According to this chart, the recovered patients in Pakistan is higher than the recovered patients in Afghanistan.
+
+**Uzbekistan VS Afghanistan**
+```{r}
+
+recover_Uzbekistan_corona<-Uzbekistan_corona%>%filter(type=="recovered")
+Afghan_Uzbekistan_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,Uzbekistan=recover_Uzbekistan_corona$cases)
+Afghan_Uzbekistan_recover <- pivot_longer(Afghan_Uzbekistan_recover, c(2, 3), "country", "value")
+ggplot(Afghan_Uzbekistan_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Although the recovery of patients in Uzbekistan is close to the same as in Afghanistan, the rate of patient recovery has been lower since mid-April.
+
+
+#### Distribution of deaths
+**Iran VS Afghanistan**
+```{r death1}
+death_Afghanistan_corona<-afghanistan_corona%>%filter(type=="death")
+death_Iran_corona<-Iran_corona%>%filter(type=="death")
+Afghan_Iran_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases, Iran=death_Iran_corona$cases)
+Afghan_Iran_death <- pivot_longer(Afghan_Iran_death, c(2, 3), "country", "value")
+ggplot(Afghan_Iran_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+The death toll from Covid_19 patients in Iran shows a faster increase than the death toll in Afghanistan. 
+
+
+**Pakistan VS Afghanistan**
+```{r}
+death_Pakistan_corona<-Pakistan_corona%>%filter(type=="death")
+Afghan_Pakistan_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases, Pakistan=death_Pakistan_corona$cases)
+Afghan_Pakistan_death <- pivot_longer(Afghan_Pakistan_death, c(2, 3), "country", "value")
+ggplot(Afghan_Pakistan_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Pakistan also shows higher Covid-19 morbidity compared to Afghanistan.
+
+**Uzbekistan VS Afghanistan**
+```{r}
+death_Uzbekistan_corona<-Uzbekistan_corona%>%filter(type=="death")
+Afghan_Uzbekistan_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases,Uzbekistan=death_Uzbekistan_corona$cases)
+Afghan_Uzbekistan_death <- pivot_longer(Afghan_Uzbekistan_death, c(2, 3), "country", "value")
+ggplot(Afghan_Uzbekistan_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Larger covid-19 patients die in Afghanistan compared to Uzbekistan.
+
+
+
+### Prevalence of corona virus in Afghanistan compared to Asia
+#### Identify new patients
+
+**Japan VS Afghanistan**
+```{r confirm2}
+confirm_Afghanistan_corona<-afghanistan_corona%>%filter(type=="confirmed")
+Japan_corona <- coronavirus %>% filter(country == "Japan")
+confirm_Japan_corona<-Japan_corona%>%filter(type=="confirmed")
+Afghan_Japan_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases, Japan=confirm_Japan_corona$cases)
+Afghan_Japan_confirm <- pivot_longer(Afghan_Japan_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_Japan_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+
+The identification of new Covid-19 patients in Japan has taken significantly higher than the identification of new patients in Afghanistan. By mid-May, more Covid-19 patients had been found in Afghanistan than in Japan.
+
+
+
+**Indonesia VS Afghanistan**
+```{r}
+Indonesia_corona <- coronavirus %>% filter(country == "Indonesia")
+confirm_Indonesia_corona<-Indonesia_corona%>%filter(type=="confirmed")
+Afghan_Indonesia_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases,Indonesia=confirm_Indonesia_corona$cases)
+Afghan_Indonesia_confirm <- pivot_longer(Afghan_Indonesia_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_Indonesia_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+
+According to this diagram, new Covid-19 patients are more likely to be found in Indonesia than in Afghanistan.
+
+
+**India VS Afghanistan**
+```{r}
+India_corona <- coronavirus %>% filter(country == "India")
+confirm_India_corona<-India_corona%>%filter(type=="confirmed")
+Afghan_India_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases,India=confirm_India_corona$cases)
+Afghan_India_confirm <- pivot_longer(Afghan_India_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_India_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+
+The incidence of new Covid-19 patents in India is also higher than in Afghanisan.
+
+#### Recover of patients
+**Japan VS Afghanistan**
+```{r recover2}
+recover_Japan_corona<-Japan_corona%>%filter(type=="recovered")
+Afghan_Japan_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,Japan=recover_Japan_corona$cases)
+Afghan_Japan_recover <- pivot_longer(Afghan_Japan_recover, c(2, 3), "country", "value")
+ggplot(Afghan_Japan_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+
+This chart shows that Covid-19 patients are more likelyto recover in Japan than at the recover.
+
+**Indonesia VS Afghanistan**
+```{r}
+
+recover_Indonesia_corona<-Indonesia_corona%>%filter(type=="recovered")
+Afghan_Indonesia_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,Indonesia=recover_Indonesia_corona$cases)
+Afghan_Indonesia_recover <- pivot_longer(Afghan_Indonesia_recover, c(2, 3), "country", "value")
+ggplot(Afghan_Indonesia_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Healing of Covid-19 patients in Indonesia shows a significant increase over Afghanistan.
+
+**India VS Afghanistan**
+```{r}
+
+recover_India_corona<-India_corona%>%filter(type=="recovered")
+Afghan_India_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan =recover_Afghanistan_corona$cases,India=recover_India_corona$cases)
+Afghan_India_recover <- pivot_longer(Afghan_India_recover, c(2, 3), "country", "value")
+ggplot(Afghan_India_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+The recovery of Covid-19 patients in India is also higher than in Afghanistan.
+
+
+
+#### Distribution of deaths
+**Japan VS Afghanistan**
+```{r death2}
+death_Afghanistan_corona<-afghanistan_corona%>%filter(type=="death")
+death_Japan_corona<-Japan_corona%>%filter(type=="death")
+Afghan_Japan_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases, Japan=death_Japan_corona$cases)
+Afghan_Japan_death <- pivot_longer(Afghan_Japan_death, c(2, 3), "country", "value")
+ggplot(Afghan_Japan_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+As shown in this diagram, Covid-19 mortality in Japan is significantly higher than Covid-19 patient deaths in Afghanistan.
+
+
+**Indonesia VS Afghanistan**
+```{r}
+death_Indonesia_corona<-Indonesia_corona%>%filter(type=="death")
+Afghan_Indonesia_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases, Indonesia=death_Indonesia_corona$cases)
+Afghan_Indonesia_death <- pivot_longer(Afghan_Indonesia_death, c(2, 3), "country", "value")
+ggplot(Afghan_Indonesia_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Indonesia also shows more Covid-19 deaths than Afghanistan.
+
+**India VS Afghanistan**
+```{r}
+death_India_corona<-India_corona%>%filter(type=="death")
+Afghan_India_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases,India=death_India_corona$cases)
+Afghan_India_death <- pivot_longer(Afghan_India_death, c(2, 3), "country", "value")
+ggplot(Afghan_India_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+According to this chart, Covid-19 deaths in India are higher than Covid-19 deaths in Afghanistan.
+
+### Prevalence of corona virus in Afghanistan compared to China
+#### Identify new patients
+**China VS Afghanistan**
+```{r confirm3}
+confirm_Afghanistan_corona<-afghanistan_corona%>%filter(type=="confirmed")
+China_corona <- coronavirus %>% filter(country == "China")
+confirm_China_corona<-China_corona%>%filter(type=="confirmed")
+Afghan_China_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases, China=confirm_China_corona$cases)
+Afghan_China_confirm <- pivot_longer(Afghan_China_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_China_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Prior to the Covid-19 outbreak in Afghanistan, the Covid-19 outbraek in China was high, and the Covid-19 outbreak in Afghanistan had surpassed that of China by May.
+
+
+#### Recover of patients
+**China VS Afghanistan**
+```{r recover3}
+recover_China_corona<-China_corona%>%filter(type=="recovered")
+Afghan_China_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,China=recover_China_corona$cases)
+Afghan_China_recover <- pivot_longer(Afghan_China_recover, c(2, 3), "country", "value")
+ggplot(Afghan_China_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Healing of Covid-19 patients in China is high, and the recovery of Covid-19 patients in Afghanistan is close to that of China by May.
+
+#### Distribution of deaths
+**China VS Afghanistan**
+```{r death3}
+death_Afghanistan_corona<-afghanistan_corona%>%filter(type=="death")
+death_China_corona<-China_corona%>%filter(type=="death")
+Afghan_China_death <- data.frame(date=death_Afghanistan_corona$date, Afghanstan=death_Afghanistan_corona$cases, China=death_China_corona$cases)
+Afghan_China_death <- pivot_longer(Afghan_China_death, c(2, 3), "country", "value")
+ggplot(Afghan_China_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+The Covid-19 death toll in China is higher than the Covid-19 death toll in Afghanistan until mid-April, after which the Covid-19 death toll in Afghanistan is higher than in China.
+
+
+### Prevalence of corona virus in Afghanistan compared to USA
+#### Identify new patients
+**USA VS Afghanistan**
+```{r confirm4}
+confirm_Afghanistan_corona<-afghanistan_corona%>%filter(type=="confirmed")
+USA_corona <- coronavirus %>% filter(country == "US")
+confirm_USA_corona<-USA_corona%>%filter(type=="confirmed")
+Afghan_USA_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases,USA=confirm_USA_corona$cases)
+Afghan_USA_confirm <- pivot_longer(Afghan_USA_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_USA_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Patients reporting in the United States is higher than that reported in Afghanistan.
+
+
+#### Recover of patients
+**USA VS Afghanistan**
+```{r recover4}
+recover_USA_corona<-USA_corona%>%filter(type=="recovered")
+Afghan_USA_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,USA=recover_USA_corona$cases)
+Afghan_USA_recover <- pivot_longer(Afghan_USA_recover, c(2, 3), "country", "value")
+ggplot(Afghan_USA_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+Healing of Covid-19 patients in the United States is higher than the cure of Covid-19 patients in Afghanistan.
+
+
+#### Distribution of deaths
+**USA VS Afghanistan**
+```{r death4}
+death_Afghanistan_corona<-afghanistan_corona%>%filter(type=="death")
+death_USA_corona<-USA_corona%>%filter(type=="death")
+Afghan_USA_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases, USA=death_USA_corona$cases)
+Afghan_USA_death <- pivot_longer(Afghan_USA_death, c(2, 3), "country", "value")
+ggplot(Afghan_USA_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+This graph shows a larger increase in Covid-19 deaths in the United States than the Covid-19 deaths in Afghanistan.
+
+
+## 3. Conclusions and Discussion
+
+
+According to the above infromation, the cure rate for Covid-19 patients in Afghanistan is higher than the recovery rate for Covid-19 patients in neighbouring countries Iran, Pakistan and Uzbekistan. In terms of Covid-19 deaths, Covid-19 deaths in Uzbekistan are lower than in Covid-19 deaths in Afghanistan. Thus, it can be concluded that the health service in Uzbekistan is at a better level than in Afghanistan. The incidence of patients in Uzbekistan is also lower than in Afghanistan. Thus,it appears in Uzbekistan has been able to control the spread of Covid-19 disease in Afghanistan.
+  The spread of corona virus in Iran and Pakistan is faster than the spread of corona virus in Afghanistan and the number of deaths is also higher than in Afghanistan. It can be concluded that Afghanistan has been able to control the spread of the corona virus more than Iran and Pakistan. But the recovery of patients in Afghanistan is lower than in Iran and Pakistan. This shows that medical facilities in Afghanistan are not as adequate for patients as in Iran and Pakistan.
+  
+  
+  The incidence and deaths of new Covid-19 infections inafghanistan appears to be lower compared to Asian countries such as Japan, Indonesia and India. As such Afghanistan has some control over the spread of corona virus compared to those countries. But it can be concluded that the medical facilities available in Afghanistan are not commensurate with the number of patients as the recovery of patients is lower in Afghanistan than in these countries.
+  
+  
+  In China, where the spread of corona virus began, the number of cases and deaths in now lower than in afghanistan, and the number of patients recovering is much higher than in Afghanistan. Meanwhile, compared to China, Afghanistan is hevily affected by covid-19. This may be due to the fact that China has a higher quality of healthcare and healthcare facilities compared to Afghanistan.
+  
+  The number of new Covid-19 patients and the number of deaths in Afghanistan are lower than in the United States, the world power. Therefore, Afghanistan has controlled the spread of the corona virus compared to the United States. But the recovery rate of Covid-19 patients in the United States in higher than in Afghanistan. This may be due to the advanced medical care and modern medical facilities available in the United States. But the United States has failed to control the spread of the virus. 
+  
+  
+  However, Afghanistan has been hit hard by Covid-19 and the spread of corona virus has been brought under control to some extent under poor health facilities relative to the number of patients.
+  
+
+## 4. Reference
+https://af.usembussy.gov
+www.orfonline.org
+www.xinhuanent.com
+https://www.aa.com.tr
+https://thestatesman.com

@@ -1,0 +1,214 @@
+---
+title: "Norway Coronavirus"
+author: "Dilan Samarasingha"
+date: "7/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+  library(coronavirus)
+  library(tidyverse)
+  library(magrittr)
+  library(ggplot2)
+  library(maptools)
+  library(tibble)
+  library(ggrepel)
+  library(png)
+  library(grid)
+  library(sp)
+  library(patchwork)
+knitr::opts_chunk$set(echo = TRUE)
+```
+ 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+  
+  norway_corona <- coronavirus %>% filter(country == "Norway")
+  recover_norway_corona <- coronavirus %>% filter(type == "recovered")
+```
+# 1.Introduction
+  
+  Norway is northern European country that occupies the western half of the Scandinavian peninsula. Oslo is a capital of Norway and Norway is a kingdom. Norway has a total area of 385,208 square kilometers and a population of 5,352,000. Following figure show Norway country in red dot.
+  
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+data(wrld_simpl) 
+ p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = norway_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+* Form Of Government :- Constitutional monarchy with one legislative house (Parliament[169].
+* Head Of State      :- Monarch (King Harald V)
+* Head Of Government :- Prime Minister-Erna Solberg
+* Monetary Unit      :- Norwegin krone
+
+Land
+
+  With the Barents Sea to the north, the Norwegian Sea and the North Sea to the west, and Skagerrak to the south, Norway has land boarders only to the east with Sweden, Findland and Russia.
+  
+Releif
+
+  Glaciation and other forces wore down the surface and created thick sandstone, conglomerate and limestone deposits known as sparagmite. Numerous extensive areas called penepalians, whose relief has been largely eroded away, also were formed.
+  
+Climate
+
+  More important are the southerly air currents brought in above these warm waters, especially during the winter. The mean annual temperature on the west coast is 45 Fahrenheit (7 Celsius) or 54 Fahrenheit (30 Celsius) above average for the latitude.
+  
+Lockdown Status
+
+  All the schools other than colleges and universities have reopened. Residents will continue to work from home, and major events are cancelled through at least june 15. 
+  Small businesses including hairdressers have been allowed to reopen, Reuters reports. Travel restrictions will likely remain in place through august 20.
+  
+Actions taken by the Government
+
+*  On 13 March the Government proposed a set of immediate measures to support jobs, help businesses in a very difficult liquidity situation and strengthen health services.
+*  On 15 March the Government announced two new loan and guarantee schemes with a combined volume of NOK 100 billion.
+*  Suspension of the tax on air passengers, for flights in the period from 1 January until 31 October 2020. Suspension of payments of aviation charges.
+*  Postponing deadlines for payment of value added tax, employer tax, advance tax for self-employed and companies, and several exercise taxes, including Carbondioxide.
+*  In addition, health and social services have been given permission to exceed their budgets.
+*  Includes increased tax revenue due to the extensions of the unemployment benefit scheme and new income protection schemes for self-employed and freelancers.
+  
+# 2.Exploratory Data Analysis
+
+ 
+   On 26 February 2020 the virus was confirmed to have spread to Norway. The number of cases increased rapidly during the month of March, thereby necessitating a number of safety measures aiming to acheive physical distancing to be introduced on 12 March. The first death attributed to Covide-19 was documented on the same day. As of 19th July 2020, the situation is as follows.
+  
+* Confirmed cases:- 9028
+* Active cases:- 635
+* Recovered:- 8138
+* Deaths:- 255
+  
+   I selected Sweden and Finland to compare with Norway because there are neighbouring countries.
+   
+   Confirmed Cases
+   
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+  norway_corona <- coronavirus %>% filter(country == "Norway")
+  confirmed_norway_corona <- norway_corona %>% filter(type=="confirmed")
+  #head(confirmed_norway_corona)
+  ggplot(confirmed_norway_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Norway: Daily Covid-19 Corfimed")
+  
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+sweden_corona <- coronavirus %>% filter(country == "Sweden")
+confirmed_sweden_corona <- sweden_corona %>% filter(type=="confirmed")
+#head(confirmed_sweden_corona)
+ggplot(confirmed_sweden_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Sweden: Daily Covid-19 Confirmed")
+
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+finland_corona <- coronavirus %>% filter(country == "Finland")
+confirmed_finland_corona <- finland_corona %>% filter(type=="confirmed")
+#head(confirmed_finland_corona)
+ggplot(confirmed_finland_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Finland: Daily Covid-19 Confirmed")
+
+```
+
+  From above figures Norway and Finland are pass the peak, and Sweden is coming towards the peak.
+  
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed3 <- data.frame(date = confirmed_finland_corona$date, Sweden=confirmed_sweden_corona$cases, Norway=confirmed_norway_corona$cases)
+confirmed3 <- pivot_longer(confirmed3,c(2,3),"country","value")
+ggplot(confirmed3, aes(x=date, y=value, colour=country)) + geom_line()
+```
+ 
+  When we compare Noraway and Sweden, Sweden is increasing rapidly.
+  
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed2 <- data.frame(date = confirmed_sweden_corona$date, Norway=confirmed_norway_corona$cases, Finland=confirmed_finland_corona$cases)
+confirmed2 <- pivot_longer(confirmed2,c(2,3),"country","value")
+ggplot(confirmed2, aes(x=date, y=value, colour=country)) + geom_line()
+
+```
+
+ Distribution of Confirmed cases of Finland and Norway are equal most likely.
+ 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed1 <- data.frame(date = confirmed_norway_corona$date, Sweden=confirmed_sweden_corona$cases, Finland=confirmed_finland_corona$cases)
+confirmed1 <- pivot_longer(confirmed1,c(2,3),"country","value")
+ggplot(confirmed1, aes(x=date, y=value, colour=country)) + geom_line()
+
+```
+ 
+   We can see confirmed cases of Finland and Sweden are totaly different.
+
+Recovery Cases
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+norway_corona <- coronavirus %>% filter(country == "Norway")
+recover_norway_corona <- norway_corona %>% filter(type=="recovered")
+#head(recover_norway_corona)
+p1 <- ggplot(recover_norway_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Norway: Daily Covid-19 Recoveries")
+
+sweden_corona <- coronavirus %>% filter(country == "Sweden")
+recover_sweden_corona <- sweden_corona %>% filter(type=="recovered")
+#head(recover_sweden_corona)
+p2 <- ggplot(recover_sweden_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Sweden: Daily Covid-19 Recoveries")
+
+finland_corona <- coronavirus %>% filter(country == "Finland")
+recover_finland_corona <- finland_corona %>% filter(type=="recovered")
+#head(recover_finland_corona)
+p3 <- ggplot(recover_finland_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Finland: Daily Covid-19 Recoveries")
+p1 + p2 + p3
+
+```
+
+ We can see from above figures maximum cases found at begining of April in Norway. Maximum cases can be found in Sweden and Finland are with respectively May and Middle of April.
+ 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ 
+recover3 <- data.frame(date = recover_finland_corona$date, Sweden=recover_sweden_corona$cases, Norway=recover_norway_corona$cases)
+recover3 <- pivot_longer(recover3,c(2,3),"country","value")
+ggplot(recover3, aes(x=date, y=value, colour=country)) + geom_line()
+
+```
+
+ When we campare recoveries of Norway and Sweden we can see Norway is incredibly small because their confirmed cases are too small than Sweden.
+ 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+recover2 <- data.frame(date = recover_sweden_corona$date, Norway=recover_norway_corona$cases, Finland=recover_finland_corona$cases)
+recover2 <- pivot_longer(recover2,c(2,3),"country","value")
+ggplot(recover2, aes(x=date, y=value, colour=country)) + geom_line()
+
+```
+
+ When we campare recoveries of Norway and Finland we can see Norway is incredibly small because their confirmed cases are too small than Finland.
+ 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+recover1 <- data.frame(date = recover_norway_corona$date, Sweden=recover_sweden_corona$cases, Finland=recover_finland_corona$cases)
+recover1 <- pivot_longer(recover1,c(2,3),"country","value")
+ggplot(recover1, aes(x=date, y=value, colour=country)) + geom_line()
+
+```
+
+ When we consider recoveries of Finland and Sweden, Clearly we can see Sweden has more recoveries than Finland.
+  
+# 3.Conclusions and Discussion
+
+Conclusion
+
+  In my opinion from the plots about confirmed cases in Norway, Sweden and Finland reasonably represenatative no. of confirmed cases is high in Sweden. At the current situation Sweden is facing in difficult period than other selected countries. But recoveries in Sweden is high to a considerable extent than others.    
+  
+Discussion
+
+  Despite differences in responses to COVID-19 in Norway, Sweden and the Finland, specially regarding confirmed casese and recoveries of the pandemic's impact on daily situation in their country. In addition casese in all three countries were using similar methods such as Rplots. In the three countries did not mention the any deaths and active cases. 
+  
+  
+# 4.References
+
+* <https://www.regjeringen.no/en/aktuelt/economic-measures-in-norway-in-response-to-covid-19/id2696858/>
+* <https://en.m.wikipedia.org/wiki/Norway>
+* <https://en.m.wikipedia.org/wiki/COVID-19_pandemic_in_Norway>
+* <https://www.britannica.com/place/Norway/Climate>

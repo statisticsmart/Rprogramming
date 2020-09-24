@@ -1,0 +1,645 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+author: "Janith Wanniarachchi AS2017567"
+bibliography: AS2017567_Australia.bib
+csl: ieee.csl
+output:
+  html_document:
+    df_print: paged
+    theme: lumen
+---
+
+```{r,warning= FALSE,message= FALSE,echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE,echo=FALSE,eval=T,fig.align = "center")
+library(tidyverse)
+library(coronavirus)
+library(patchwork)
+library(plotly)
+library(lubridate)
+theme_set(theme_minimal())
+```
+
+
+# Introduction
+
+##  Background
+
+> Australia, officially the Commonwealth of Australia, is a sovereign country comprising the mainland of the Australian continent, the island of Tasmania, and numerous smaller islands. It is the largest country in Oceania and the world's sixth-largest country by total area. The population of 26 million is highly urbanized and heavily concentrated on the eastern seaboard.Australia's capital is Canberra, and its largest city is Sydney. The country's other major metropolitan areas are Melbourne, Brisbane, Perth, and Adelaide. 
+
+From [Wikipedia](https://en.wikipedia.org/wiki/Australia)
+
+### The placement of Australia
+
+![](https://www.worldometers.info/img/maps/australia_physical_map.gif)
+
+Australia is a massive island surrounded by the Indian and Pacific Oceans. With over 34,218 kilometers of coastline and with a total area of 7,692,024 $km^2$, it has a wide variety of landscapes with tropical rain forests, mountain ranges and a desert in the center. The population density, 3.2 inhabitants per square kilometer, although a large proportion of the population lives along the temperate south-eastern coastline.[@australia_wikipedia] 
+
+The geographical positioning of the country gives 2 entrance ways in to the country mainly through either water or by air. Therefore the main sources of external visitors are mostly by flight or by Yachts (such as the Ruby Princess). 
+
+The climate condition in Australia during the time of corona virus was quite disturbed as there was a heatwave that spread through Australia whilst a flood was ravaging Queensland as well [@9news_nsw_heatwave_queensland_flood] , while all of this was preceded by a massive bush fire that damaged quite a lot of property and wildlife. 
+
+Amidst this, the geographical background of Australia has created many tourist attractions which are favored by even the locals. This played  a big part in the spreading of the virus and was a key component in the lock down stages as well, due to the fact that many people were present in beaches such as the Bondi beach during social distancing times [@9news_1], while after the lock down the beaches were reopened allowing a limited amount of people for a limited amount of activities [@9news_10]. 
+
+
+### How has Australia faced epidemics before?
+
+Considering the history of epidemics in Australia, Australia has survived 4 notable epidemics[@last_pandemics]
+
+__1918__: The Spanish flu did not reach Australia until 1919, partly because of strict maritime quarantine implemented by the government. It began in Victoria, spread to New South Wales then to the rest of Australia. By the end of 1919 (when the Australian population was just over 5 million), around 10,000 Australians, mostly young adults, had died of influenza. As in other countries, health services in Australia were greatly stretched during this time.[@ageing_history] 
+
+__1957__: Australia was one of the countries that implemented a vaccine program and it was part of the experience with the 1957 Asian flu that helped demonstrate the effectiveness of influenza vaccines.[@ageing_history] 
+
+__1968__: Hong Kong Flu mainly affected the elderly and spread between 1968 and 1970 in Australia[@ageing_history] 
+
+__2009__: In Australia during 2009, there were 37,636 cases of pandemic (H1N1) influenza 2009, including 191 associated deaths. The median age of those dying was 53 years, compared to 83 years for seasonal influenza. 
+[@ageing_history] 
+
+
+## What happened during the pandemic?
+
+Below is a timeline of all the key events that happened during the corona virus pandemic in Australia. The decisions made by the Australian Prime Minister Scott Morrison along with the decisions made by Premiers of two significant states are listed below. The reasoning behind selecting New South Wales and Victoria is due to the fact that they have the highest recorded number of confirmed cases.   
+*Nation wide events will be denoted by a (**C**) while New South Wales and Victoria events will be denoted by a (**NSW**) and (**VIC**)*
+
+### January to  March 2020
+
+January 23: (**C**) Screening of incoming flights started [@covid19_aus]    
+January 25: (**C**) The first confirmed case reported [@covid19_aus]      
+February 27: (**C**) Australian health sector emergency plan set [@covid19_aus]     
+March 12: 
+
+* (**C**) Corona virus declared a pandemic by WHO [@9news_2]  
+* (**C**) A stimulus package of 17.6Bn AUD is allocated [@covid19_aus]    
+*  (**NSW**) Up to 1.6 million people in NSW could be hit by the first wave of a statewide corona virus outbreak, health authorities warn, with up to 80,000 people likely to require intensive care simultaneously.[@9news_3]  
+
+
+March 17 : (**NSW**) Schools adopt social distancing measures, including cancelling assemblies, excursions, and travel, as well as some events and conferences [@9news_4]   
+March 20: (**C**) Borders were closed [@covid19_aus]     
+March 21: (**C**) Social Distancing rules were imposed [@covid19_aus]     
+March 22: 
+
+* (**C**) A second stimulus package of 66bn AUD [@covid19_aus]     
+* (**C**) Australia's Prime Minister Scott Morrison has recommended all Australians avoid non-essential travel as the government works to contain the outbreak of COVID-19. [@9news_1]    
+* (**NSW**) (**V**) New South Wales and Victoria are pushing ahead with a lock down of all non-essential activities, which will see schools, restaurants and most businesses close in the next 48 hours. [@9news_5]     
+
+March 23: (**C**) The prime minister ordered all restaurants, clubs, bars and many entertainment venues to close. [@9news_6]   
+March 24: 
+
+* (**C**) Australians have been banned from leaving the country [@9news_7]   
+* (**V**) Schools to be closed [@9news_8]   
+
+March 25: 
+
+* (**C**) National Covid 19 Coordination Commission was established [@covid19_aus] 
+* (**V**) Stage 2 Lock down imposed on Victoria [@vicgov_1]
+
+March 28: (**C**) New cases leveled out at 350 [@covid19_aus]     
+March 29: (**C**) Australians will no longer be able to gather in groups of more than two and people aged over 70 should self-isolate in their homes as part of new social distancing restrictions announced by Prime Minister Scott Morrison.
+Playgrounds, skate parks and outside gyms in public places have been added to a list of venue closures first announced by Mr Morrison last week in a bid to stop the spread of corona virus. [@9news_9]   
+March 30: (**C**) Economic support package of 30Bn AUD [@covid19_aus]  
+
+### April to Mid July 2020
+
+April 20: (**NSW**) Beaches in Sydney's south-east have reopened [@9news_10]
+
+May 2: (**NSW**) Lock down restrictions eased.NSW will from Friday allow two adults to visit another house for any reason, regardless of how many people live there.
+Young children are allowed to tag along with the adults, and there are currently no limitations on the purpose of a visit.
+Sydney's eastern beaches are also reopening to the public. Beauty salons will be allowed to open for retail purposes only. [@9news_11]
+
+May 8: (**C**) Prime Minister Scott Morrison addressed the media this afternoon following National Cabinet to announce the three-stage plan. [PDF](https://prod.static9.net.au/fs/e8cb19bb-ca0b-48e7-82b2-b644786124e3)
+
+May 11: (**C**) Some students across Australia will begin returning to school [@9news_12]
+
+June 1: (**NSW**)(**V**) Pubs, restaurants and cafes will be allowed to serve 50 customers in NSW, in a surprise lifting of restrictions. Outdoor gatherings allow up to 10 people in NSW. Weddings can now include 10 guests, in addition to the celebrant and the couple. [@9news_13] And religious gatherings can include up to 20 worshipers [@9news_14]
+
+June 20: (**V**) Victorian Government announced the re-tightening of restrictions on household gatherings following a spike in community transmitted cases over the previous week, reported to be mainly caused by family-to-family transmission in large household gatherings. From June 22, households can once again only have five visitors; and most easing of restrictions that were to take place were postponed [@abcnews]
+
+July 7: (**C**) Interstate border restrictions imposed.   
+
+July 8: (**V**) Stage 3 lock down imposed and will last for six weeks. Under the lock down residents cannot leave their home unless it is for care or medical reasons, shopping for essentials, work or study that cannot be done at home, and exercise. [@mcgowan_victoria_2020]
+
+July 14 : (**NSW**) New restrictions will force NSW pubs and clubs to drastically cut back their customer numbers after a nightmare weekend that saw the arrival of a second corona virus spike in Sydney. [@9news_15]
+
+
+### TL;DR 
+
+Going through the above timeline, it can be seen that Australian government has shifted the restrictions of lock down quite quickly and therefore to understand the changes of objectives, key decisions were identified below. 
+
+1. March 23: Lock down started  
+2. June 1: Lock down eased  
+3. June 20 Lock down put back in  
+
+From these and considering that the first confirmed case was in January 26. The following four phases can be identified.
+
+1. January 26 to March 24: Pre Lock down Phase
+2. March 24 to June 1: Lock down Phase
+3. June 1 to June 20: Post Lock down Phase
+4. June 20 to Today: Second Lock down Phase
+
+### Infographics
+
+Some infographics from local media are presented here to grasp an idea of the stages of lockdown and the restrictions that it presented.
+
+<center>![](https://imageresizer.static9.net.au/jvRo6Kz8ysqc98MIiYTQrn0-9Ks=/1600x0/https%3A%2F%2Fprod.static9.net.au%2Ffs%2F645662d1-8959-4cd6-93bc-49798731dd4e){width=250px}
+![](https://imageresizer.static9.net.au/9Ma3yaUqIleCUyBFPL1FZjilL4E=/1600x0/https%3A%2F%2Fprod.static9.net.au%2Ffs%2F6d6f6863-cd90-4daa-bd6c-6a7989a8cb66){width=250px}
+![](https://imageresizer.static9.net.au/DcdbdjdI9v09gWWKTLgXBl1Rr9o=/1600x0/https%3A%2F%2Fprod.static9.net.au%2Ffs%2F50ce7b00-508c-431c-9454-7d421dc5942e){width=250px}</center>
+
+# What does the data say
+
+The data presented below are valid only up to the date of July 20. The current situation might be quite different from what is depicted below. 
+
+```{r}
+coronavirus <- as_tibble(coronavirus) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA)) %>% 
+  mutate(cases = replace_na(cases,0))
+
+coronavirus_wide <- coronavirus %>%
+  pivot_wider(names_from = type,values_from = cases) %>% 
+  mutate(active = confirmed - death - recovered) %>% 
+  mutate(active = replace(active,which(active<0),NA))
+
+coronavirus <- coronavirus_wide %>% 
+  pivot_longer(col = c("confirmed","death","recovered","active"),names_to = "type",values_to = "cases")
+
+df <- coronavirus %>%
+  filter(country == "Australia") %>% 
+  left_join(tibble(province=c("Australian Capital Territory",
+                              "New South Wales","Northern Territory",
+                              "Queensland","South Australia",
+                              "Victoria","Western Australia"),
+                   province_short=c("ACT","NSW","NT","QL","SA","VIC","WA")),by=c("province")) %>% 
+  mutate(province = province_short) %>% 
+  select(-province_short)
+
+
+
+sig_dates <- lubridate::date(c("2020-01-26","2020-03-24",
+               "2020-06-01","2020-06-20","2020-07-20"))
+phase_1 <- lubridate::interval(lubridate::date("2020-01-26"),
+                               lubridate::date("2020-03-24"))
+phase_2 <- lubridate::interval(lubridate::date("2020-03-25"),
+                               lubridate::date("2020-06-01"))
+phase_3 <- lubridate::interval(lubridate::date("2020-06-02"),
+                               lubridate::date("2020-06-20"))
+phase_4 <- lubridate::interval(lubridate::date("2020-06-21"),
+                               lubridate::date("2020-07-19"))
+
+df <- df %>% 
+  filter(date >= "2020-01-26") %>% 
+  mutate(phase = case_when(
+    date %within% phase_1 ~ "Pre Lockdown",
+    date %within% phase_2 ~ "Lockdown",
+    date %within% phase_3 ~ "Post Lockdown",
+    date %within% phase_4 ~ "Second Lockdown"
+  ))
+  
+```
+
+## Overall big picture
+
+```{r}
+pie_data <- df %>% 
+  filter(type != "confirmed") %>% 
+  group_by(type) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  arrange(fraction) %>% 
+  mutate(type = factor(type,levels = .$type))
+
+ggplot(pie_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),color="white",nudge_y = 5) +
+  theme(legend.position = "bottom") +
+  labs(x = "Result",y="Percentage from total patients",title="Breakdown of corona virus patients")
+
+rm(pie_data)
+```
+
+Overall Australia has been performing well in keeping the fatality rate low and ensuring that nearly half the confirmed patients are recovered. However the active amount is still staggeringly high. 
+
+```{r}
+graph_data <- df %>% 
+  filter(date >= "2020-01-26") %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(cum_cases = cumsum(cases)) %>% 
+  ungroup() 
+
+graph <- graph_data %>% 
+  mutate(`Total Cases in Log Scale` = cum_cases) %>% 
+  ggplot(aes(x = date,y = `Total Cases in Log Scale`,fill = type)) + 
+  geom_col(show.legend = F) + 
+  # geom_label(data=graph_data %>% filter(date %in% sig_dates),
+  #            aes(x = date,y = cum_cases,label = paste(cum_cases)),
+  #            nudge_y = 2) +
+  scale_y_log10() +
+  facet_wrap(~ type,nrow = 4) 
+  
+ggplotly(graph,tooltip = c("x","y")) %>% layout(legend = list(orientation = "h",x = 0.4, y = -0.2)) 
+
+rm(graph_data)
+```
+
+The graph here shows that the number of confirmed cases had certain spikes in the data in the middle. Let's see if the lock down happened before or after that spike.
+
+```{r}
+graph_data <- df %>% 
+  filter(date >= "2020-01-26") %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(cum_cases = cumsum(cases)) %>% 
+  ungroup() %>% 
+  left_join(df %>% select(date,phase),by=c("date"))
+
+wrap_plots(map(unique(df$phase), function(x){
+  graph <- graph_data %>% 
+  filter(phase == x) %>% 
+  mutate(`Total Cases in Log Scale` = cum_cases) %>% 
+  ggplot(aes(x = date,y = `Total Cases in Log Scale`,color = type)) + 
+  geom_line(show.legend = F) + 
+  # geom_label(data=graph_data %>% filter(date %in% sig_dates),
+  #            aes(x = date,y = cum_cases,label = paste(cum_cases)),
+  #            nudge_y = 2) +
+  scale_y_log10() +
+  facet_wrap(~ type,nrow = 4) +
+  labs(title = x) 
+}),nrow = 1,ncol = 4)
+
+rm(graph_data)
+```
+
+According to the above graph it seems that the Lock down was imposed as the first wave had started to hit, and from the plateauing of the curve, it can be seen that the lock down has proven effective in keeping the virus at bay. Let's investigate each of these one by one. 
+
+```{r}
+plot_case_type_w_average <- function(type_needed,title,nudge_y_val = 100){
+graph_data <- df %>% 
+  filter(date >= "2020-01-26") %>% 
+  group_by(date,type) %>% 
+  summarize(cases = sum(cases,na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  filter(type == type_needed) %>% 
+  left_join(df %>% 
+              filter(date >= "2020-01-26" & type == type_needed) %>%
+              select(date,phase) %>% 
+              group_by(date,phase) %>% 
+              slice(n()),by=c("date"))
+
+mean_cases <- mean(graph_data$cases,na.rm = T)
+
+graph_data <- graph_data %>% 
+  mutate(highlight = if_else(cases > mean_cases,"Above Average","Below Average"))
+
+graph_data <- highlight_key(graph_data, ~phase)
+
+graph <- graph_data %>% 
+  ggplot(aes(x = date,y = cases)) +
+  geom_col(aes(fill = highlight)) +
+  geom_hline(yintercept = mean_cases)  + 
+  # geom_vline(xintercept = sig_dates) +
+  # geom_label(x = graph_data$date[20],y = mean_cases+nudge_y_val,label = paste("Average:",round(mean_cases,2))) # +
+   theme(legend.position = "bottom") +
+  labs(title = paste0(title," Average = ",round(mean_cases,2)))
+
+plotly <- ggplotly(graph,tooltip = c("x","y")) %>% layout(legend = list(orientation = "h",x = 0.4, y = -0.2))
+highlight( plotly, on = "plotly_hover", off = "plotly_deselect")
+# graph
+}
+```
+
+```{r}
+plot_case_type_w_average("confirmed","Confirmed Cases") 
+```
+
+```{r}
+plot_case_type_w_average("active","Active Cases") 
+```
+
+With the arrival of the virus in Australia,is has taken some time until the authorities have taken actions hence the daily confirmed cases level has reached a spike right before the lock down.
+After initiating the lock down the daily confirmed cases level has decreased overall but not before another significant spike. 
+
+<center>![](https://imageresizer.static9.net.au/TOjpQPv6FAaI6mhWZ6Yp2sMuhTw=/1600x0/https%3A%2F%2Fprod.static9.net.au%2Ffs%2Fdfd641d0-715e-4a7e-8b33-3ba5778f66f0){width=450px}</center>
+
+However, a possible explanation for this behavior may have been the major virus outbreak that occurred inside the yacht "Ruby Princess" which had arrived in Australia. The passengers were prohibited to disembark the vessel and were treated inside. However, after this, there have been favorable results in the daily confirmed cases level. 
+
+When the curfew was eased for a short time, the number of cases were only fluctuating by small amounts, but the negative effect of the curfew lift is seen by the daily case levels of the 2^nd^ lock down. Through the increasing levels of confirmed cases ,it could be assumed that the curfew lift has contributed to the spreading of the virus and the contaminated people showed symptoms only in the 2^nd^ lock down period.
+
+```{r}
+plot_case_type_w_average("death","Death Cases",nudge_y_val = 1) 
+```
+
+A remarkable observation that can be gleaned from this graph is that the number of deaths are much more higher during the lock down phase, while during the absence of a lock down the number of deaths reported are much lower. 
+This could also bring forward an observation that more people will feel obliged to go for the funerals of their deceased, which could increase the spreading of the virus even more. And by isolating themselves away from the deceased a significant effect will result on the mental health of the grieving individuals. 
+Therefore it would be a good measure to either bring contact tracing in funerals or to ensure that those who are to attend the funerals are self quarantined 14 days. 
+
+```{r}
+plot_case_type_w_average("recovered","Recovered Cases")
+```
+
+
+```{r}
+plot_data <- df %>% 
+  filter(type == "confirmed") %>%
+  group_by(date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  filter(total_cases > 0)
+
+plot<- plot_data %>%
+  ggplot(aes(x = date,y=total_cases)) +
+  geom_line() + 
+  scale_y_log10() +
+  labs(title = "Total Confirmed Cases by day",
+       x = "Date",
+       y = "Total Confirmed Cases in Log scale")
+ggplotly(plot)
+rm(plot_data)
+```
+
+This summarizes the trajectory of the confirmed cases as the it can be clearly seen that the total confirmed cases curve has flattened towards the lock down phase while it can be clearly seen that the second wave is fast approaching with a steep rise in the total confirmed cases. 
+
+
+```{r}
+plot_data <- df %>% 
+  filter(type == "confirmed") %>%
+  group_by(date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(total_cases = cumsum(cases))
+
+plot<- plot_data %>%
+  ggplot(aes(x = total_cases,y=cases)) +
+  geom_line() + 
+  labs(title = "Total Cases vs Daily Confirmed Cases",
+       x = "Total Confirmed Cases",
+       y = "Daily Confirmed Cases")
+ggplotly(plot,tooltip=c("x","y"))
+rm(plot_data)
+```
+
+The observations that can be gleaned from this, is that the rate of cases being confirmed is quite low towards the time when the total number of confirmed cases are approximately closer to 5,500.  
+
+## Analysis by states
+
+```{r}
+pie_data <- df %>% 
+  group_by(type,province) %>% 
+  summarize(total = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(province) %>% 
+  mutate(fraction = ( total * 100 )/sum(total)) %>% 
+  ungroup() %>% 
+  arrange(desc(fraction))
+
+# Make the plot
+ggplot(pie_data,aes(x = type,y = fraction,fill=type)) +
+  geom_col() +
+  geom_label(aes(label = paste0(round(fraction,2),"%")),nudge_y = 10,color="white") +
+  theme(legend.position = "none") +
+  facet_wrap(~ province,ncol = 2,nrow=4) +
+  labs(title = "Total cases by type and state", x= "",y = "Percentage")
+
+rm(pie_data)
+```
+
+The notable observations from this is that there are higher percentage of deaths in Northern Australia, while Victoria has the highest percentage of confirmed cases. 
+
+```{r}
+plot_data <- df %>% 
+  group_by(type,province) %>% 
+  summarize(total = sum(cases,na.rm=T)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(percentage = (total*100)/sum(total)) %>% 
+  ungroup()
+
+type_colors <- c("#F8766D","#53B400","#00B6EB","#A58AFF")
+names(type_colors) <- c("active","confirmed","death","recovered")
+
+patchwork::wrap_plots(map(unique(plot_data$type),function(x){
+  plot_data %>% 
+    filter(type== x) %>% 
+    arrange(desc(percentage)) %>% 
+    mutate(province = factor(province,levels = .$province)) %>% 
+    ggplot(aes(x = province,y = percentage,fill = type)) +
+    geom_col() + 
+    geom_label(aes(label = paste0(round(percentage,2),"%")),nudge_y = 30,color="white") + 
+    lims(y = c(0,100)) +
+    labs(y = "%",x = "") +
+    scale_fill_manual(values = c(type_colors[x])) +
+    theme(legend.position = "bottom") 
+}),nrow = 4,ncol = 1,guides = "collect") + plot_annotation(title = "Cases by state") & theme(legend.position = "bottom") 
+
+rm(plot_data)
+```
+
+Victoria has been leading forward with the amount of confirmed cases from all states. With regards to New South Wales has been leading with the highest number of deaths compared to other states, which could be due to the effect from the high number of deaths from Anglicare Newmarch House.  
+
+```{r}
+plot_data <- df %>% 
+  group_by(type,province) %>% 
+  summarize(total = sum(cases,na.rm=T)) %>% 
+  ungroup() %>% 
+  group_by(type) %>% 
+  mutate(percentage = (total*100)/sum(total)) %>% 
+  ungroup() %>% 
+  filter(type == "confirmed") %>% 
+  left_join(df %>% 
+              select(lat,long,province) %>%
+              group_by(province) %>% 
+              slice(n()),by=c("province"))
+#Map of Australia
+Australia<-map_data("world",region = c("Australia", "Australia:Tasmania"))
+Oz<-subset(Australia,long>110 & lat>-50 & long<155)
+ggplot(data=Oz, aes(x=long, y=lat)) +
+  geom_polygon(aes(group=group), colour="white", fill="lightblue") +
+  geom_point(data = plot_data,aes(x =long,y = lat,size = total,color=type),show.legend = F) +
+  geom_label(data = plot_data,aes(x = long,y = lat,
+                                  label = paste0(province,":",total)),size=2.4,nudge_y = -2,nudge_x = 2) +
+  theme_void() +
+  labs(title="Number of cases in states")
+rm(plot_data)
+```
+
+
+```{r}
+plot_case_type_w_average_provincial<-function(type_needed,province_needed,
+                                              title_needed,nudge_y_val) {
+  
+graph_data <- df %>% 
+    filter(province == province_needed & type == type_needed)
+mean_cases <- mean(graph_data$cases,na.rm = T)
+graph_data <- graph_data %>% 
+  mutate(highlight = if_else(cases > mean_cases,"Above Average","Below Average"))
+
+graph_data <- highlight_key(graph_data,~phase)
+graph <- graph_data %>% 
+  ggplot(aes(x = date,y = cases)) +
+  geom_col(aes(fill = highlight)) +
+  geom_hline(yintercept = mean_cases) + 
+  # geom_vline(xintercept = sig_dates) +
+  # geom_label(x = graph_data$date[20],y = mean_cases+nudge_y_val,label = paste("Average:",round(mean_cases,2))) +
+  theme(legend.position = "bottom") +
+  labs(title = paste0(title_needed," Average = ",round(mean_cases,2)),fill = "")
+# graph
+plotly <- ggplotly(graph,tooltip = c("x","y")) %>%  layout(legend = list(orientation = "h",x = 0.4, y = -0.2))
+highlight( plotly, on = "plotly_hover", off = "plotly_deselect")
+}
+```
+
+```{r}
+plot_case_type_w_average_provincial("confirmed","VIC","Confirmed cases in Victoria",10)
+```
+
+```{r}
+plot_case_type_w_average_provincial("confirmed","NSW","Confirmed cases in New South Wales",10)
+```
+
+New South Wales decision policy had been effective in holding back the second wave of the virus, while Victoria is performing poorly in this scenario. Even though Victoria had lesser confirmed cases during the first wave, it could be that interstate travel has brought forward more cases as the borders were closed only during the month of July.  
+
+It might have been the case that if the lock down was not eased for Victoria for a slightly longer time and the borders were shut off earlier on, the second wave might not have been brutally affecting towards the Victorians as it is now.
+
+## Comparison with other countries 
+
+Here we are comparing the effectiveness of Australia's virus prevention plan with regards to several other countries. First and foremost the top 5 countries with the most number of confirmed cases are picked. In addition 3 handpicked countries have been picked with regards to how effective their virus prevention plan is in general. [@gibney_whose_2020]
+
+```{r}
+countries_compare <- coronavirus %>% group_by(country) %>% 
+  filter(type == "confirmed") %>% 
+  summarize(total = sum(cases,na.rm=T)) %>% 
+  ungroup() %>% 
+  arrange(desc(total)) %>% 
+  head(5) %>% .$country %>% c("Australia","Germany","Austria","Haiti")
+```
+
+```{r}
+plot_data <- coronavirus %>% 
+  filter(type == "confirmed") %>%
+  filter(country %in% countries_compare) %>% 
+  group_by(country,date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  filter(total_cases >= 30) %>% 
+  mutate(days_since = date - min(date)) %>% 
+  ungroup()
+plot_data <- highlight_key(plot_data, ~country)
+plot<- plot_data %>%
+  ggplot(aes(x = days_since,y=total_cases,color=country)) +
+  geom_line() + 
+  labs(title = "Total number of confirmed cases of all the states",
+       x = "Days since the 30th confirmed case",
+       y = "Total confirmed cases in log scale") +
+  scale_y_log10() +
+  # scale_alpha_discrete(range=c(0.4,1),guide="none") +
+  theme(legend.position = "bottom")
+plotly<-ggplotly(plot,tooltip=c("x","y","country"))
+# plot
+highlight( plotly, on = "plotly_hover", off = "plotly_deselect")
+rm(plot_data)
+```
+
+Australia has so far proven to have taken control of the situation and kept it under control and as every other country is slowly succumbing into the second wave, Australia is slowly going up in the curve but at a slower rate than other countries. With regards to counties that have had stricter regulations such as Germany and Austria, Australia has been on par with them as well, as they plateaued at the same day since their 30^th confirmed case. Even though Haiti was known for initiating the lock down on the first confirmed case, they haven't spent a lot of days since the first confirmed case.
+
+```{r}
+plot_data <- coronavirus %>%
+  filter(country %in% countries_compare) %>% 
+  filter(type == "confirmed" | type == "recovered") %>%
+  group_by(date,country,type) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country,type) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  ungroup() %>% 
+  filter(total_cases > 0)
+  
+
+plot_data <- plot_data %>% 
+  pivot_wider(names_from = "type",values_from = "total_cases") %>% 
+  group_by(country,date) %>% 
+  mutate(recovered = sum(recovered,na.rm=T),
+         confirmed = sum(confirmed,na.rm=T)) %>% 
+  slice(n()) %>% 
+  filter(recovered > 1)
+plot_data <- highlight_key(plot_data, ~country)
+plot<- plot_data %>% 
+  ggplot(aes(x = confirmed,y=recovered,color=country)) +
+  geom_line() + 
+  scale_y_log10() + 
+  scale_x_log10() +
+  labs(title = "Confirmed and Recovered Cases of countries",
+       x = "Confirmed Cases in Log scale",
+       y="Recovered cases in Log Scale") +
+  geom_abline(slope = 1,intercept = 0) +
+  # scale_alpha_discrete(range=c(0.4,1),guide="none") +
+  theme(legend.position = "bottom")
+plotly<-ggplotly(plot,tooltip=c("x","y","country"))
+highlight( plotly, on = "plotly_hover", off = "plotly_deselect")
+rm(plot_data)
+```
+
+With regards to the ratio of recovered and confirmed patients, Australia has being quite close to the 1:1 ratio line with slight deviation in the middle. Countries that have had stricter regulations have shown no proven effect in their ability to get more patients recovered. 
+
+```{r}
+plot_data <- coronavirus %>% 
+  filter(type == "confirmed") %>%
+  filter(country %in% countries_compare) %>% 
+  group_by(country,date) %>% 
+  summarize(cases = sum(cases,na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  group_by(country) %>% 
+  mutate(total_cases = cumsum(cases)) %>% 
+  filter(total_cases >= 1) %>% 
+  filter(cases >= 1)
+  
+plot_data <- highlight_key(plot_data, ~country)
+
+plot<-plot_data %>%
+  ggplot(aes(x = total_cases,y=cases,color=country)) +
+  geom_line() + 
+  theme(legend.position = "bottom") + 
+  scale_x_log10() + 
+  scale_y_log10() +
+  #scale_y_continuous(scales::pseudo_log_trans(base=10)) +
+  #scale_x_continuous(scales::pseudo_log_trans(base=10)) +
+  # scale_alpha_discrete(range=c(0.3,1),guide="none") +
+  labs(title = "Total Cases vs Daily Confirmed Cases",
+       x = "Total Confirmed Cases in Log scale",
+       y = "Daily Confirmed Cases in Log scale")
+plotly<-ggplotly(plot,tooltip=c("x","y","country"))
+highlight( plotly, on = "plotly_hover", off = "plotly_deselect")
+rm(plot_data)
+```
+
+Compared to other countries Australia has done quite well in dropped the daily confirmed cases down low earlier on than other countries. 
+
+# Conclusions
+
+Overall the Australia government is having the situation under control, however careful attention should be paid towards the states of Victoria and Northern Australia as they are showing indicators of bringing more fatal cases in the long run. However with regards to other countries as mentioned earlier, Australia is doing remarkably well, even with many obstacles in their way such as bush fires, heatwaves, floods.  
+
+# Recommendations
+
+* Seeing from the timeline, and the decisions taken and the reasoning behind it, it is best in future pandemics to ensure that a budget package is dedicated to tourism and consequently to ensure that all the highly crowded tourist attractions are kept shut off during a pandemic.
+* Interstate border laws should be enforced earlier on in the lock down, or it would be better to ease lock down while keeping borders closed to contain the spread of the virus
+* As a country with only two modes of entry, more regulations should be put on yachts and methods of transport through waters. 
+* Easing of lock down should start considering more than just the flattening of confirmed cases or a drop in daily cases. A new metric that takes in to account of the percentage of people tested should take in to account to ensure that the virus is not dormant in the states. Furthermore, it takes time for people to adapt to the switching between lock down situations which might cause unrest and a slower return to lock down.
+* Even though the three step plan was announced to slowly move out of lock down the initial criteria for the very first step should be refined further.
+* Increments in the number of people that are allowed to gather should be done in small increments. 
+* As a country with a wide coastline regulations with regards to beaches should be more tighter and easing them even a little can affect the outcome heavily. 
+
+# Limitations
+
+Data on testing and hospital facilities could be helpful in identifying the effectiveness of the decisions taken. 
+
+There is also the case of readjustment of cases which has happened several times in the data, thereby resulting in negative cases. 
+
+This report only analyzed two states on the surface, and there could be more effects that can be seen when considering all states, yet they can be quite complicated and may make the analysis unnecessary complex. 
+
+# References
+
+

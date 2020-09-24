@@ -1,0 +1,923 @@
+
+---
+title: "COVID-19 Pandemic in the Republic of Ireland"
+author: "Rashmini Rathnaweera"
+date: "7/20/2020"
+output: html_document
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r, include =FALSE}
+setwd("E:/UNI/Lectures/Year 3/STA 326 2.0 PDA&R/Assignments/Individual Project")
+getwd()
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, comment = NA)
+```
+![](coronavirus-4914028_1920.jpg)
+
+# Abstract
+
+
+The COVID-19 pandemic has become a global health crisis that has affected countries across all continents in the world except Antarctica. Therefore, understanding the strategic responses related towards controlling the pandemic can be of much importance. This report is an exploratory analysis of the pandemic in Ireland by studying data from 01 January 2020 to 12 May 2020 and comparing it with neighboring countries as well as countries identified as of key importance with respect to COVID-19. The results of the analysis shows that compared to most countries, Ireland has reached a stable state and that too within a considerably shorter period of time. The main reason for this is the effective strategies implemented by the government along with complete lockdown. Ireland is currently in the stage of easing restrictions, coming out of complete lockdown through a five-phased road map. The effectiveness of this strategy and the impact to prevailing COVID-19 figures is yet to be determined. 
+
+
+**Keywords:** Ireland, COVID-19
+
+
+# 1. Background
+## 1.1. Introduction
+
+
+Corona Virus Disease, more commonly known as COVID – 19 is a virus originating from the Severe Acute Respiratory Syndrome (SARS) family of viruses. The symptoms of the disease being more or less similar to those of influenza (flu) or common cold makes it even more difficult to accurately diagnose it without further testing. The disease easily transmitted through direct contact with an infected person or through contaminated surfaces can be fatal in rare cases, yet no vaccine has been developed up to date.
+
+
+Outbreak of COVID – 19 was declared a Public Health Emergency of International Concern (PHEIC) by the World Health Organization (WHO) on 30 January 2020. The virus has spread across many countries and territories; Ireland being among the top 58 of these countries. Therefore, this report attempts to analyze the COVID – 19 related data of Ireland in order to communicate it to any parties of interest.
+
+
+```{r data, include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+head(coronavirus)
+tail(coronavirus)
+
+# filtering out Ireland data 
+ireland_corona <- coronavirus %>% filter(country == "Ireland")
+
+head(ireland_corona)
+tail(ireland_corona)
+
+```
+
+
+## 1.2. Location of Ireland
+
+
+
+The Republic of Ireland, officially named Ireland is an island in the North Atlantic. It occupies the greater part of the island lying west of Great Britain; from which it is separated by the North Channel, the Irish Sea and St. George’s Channel; making it the second largest island of the British Isles and third largest in Europe. 
+
+The geographical location of Ireland can be further understood through the following figure.
+
+
+```{r, fig.cap = "Geographical location of Ireland"}
+
+#mapping location of Ireland
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = ireland_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+
+```
+
+## 1.3. Climate Condition of Ireland
+
+
+Ireland’s climate can be classified as western maritime which is common among most Northwest European countries.
+
+This type of climatic condition is better known as oceanic climate; with mild climate, relatively narrow temperature range and few extremes of temperature (‘Oceanic Climate’, 2020). Ireland’s average temperature lies mainly between 3 to 4 degrees Celsius during cold seasons and 14 to 16 degrees Celsius during warm seasons.
+
+
+## 1.4. Demographics of Ireland
+
+
+Ireland has an overall population of approximately 4.8 million; its population rank being 124 based on the estimates published by the United Nations in the 2019 revision of World Population Prospects. An average person’s life expectancy at birth is estimated to be 81 years; 78.7 years and 83.5 years for male and female respectively when considered gender-wise. 
+
+According to the age distribution of the population, more than 50% of Ireland’s population is below 45 years; only a very small proportion of the population can be considered as senior citizens. The overall age structure of the population is as shown below. 
+
+ 
+```{r, fig.cap = "Breakdown of Population of Ireland by Age"}
+
+# plotting age breakdown of Ireland population
+library(ggplot2)
+library(scales) 
+
+age <- factor(c("Below 15", "15-29", "30-44", "45-59", "60-74", "75-84", "85 & Above"), levels = c("Below 15", "15-29", "30-44", "45-59", "60-74", "75-84", "85 & Above")) 
+
+percentage <- c(.208, .185, .226, .191, .132, .043, .015)
+df <- data.frame(age, percentage)
+
+ ggplot(df, aes(x= age)) + 
+    geom_bar(aes(y = ..percentage.., fill = factor(..x..)), stat="identity") +
+    geom_text(aes( label = scales::percent(..percentage..),
+                   y= ..percentage.. ), stat= "identity", vjust = -.5) +
+    labs(y = "Percentage", x = "Age Group", fill="Age Group") + scale_y_continuous(labels = scales::percent) + scale_fill_discrete(labels = age)                                   
+                                     
+```
+
+
+According to the settlement patterns, the geographical population distribution shows that only 37.3% of the total population is located in Rural Areas whilst the remaining 62.7% (nearly two-thirds of the total population) is located in Urban Areas, making urban areas very highly dense. The capital of Ireland, Dublin despite its actual land area is therefore the largest city in Ireland and most densely populated.
+
+The following map shows a more clear illustration of the geographical population distribution of Ireland based on the population per square kilometer.
+ 
+
+![Population Density Map of Ireland (Source: Wikipedia)](Population_Density.png)
+
+## 1.5. Lockdown status of the country
+
+
+The first COVID-19 patient of Ireland was recorded on 29 February 2020 and within 3 weeks had spread to all counties. Ireland began lockdown in 4 stages; by shutting down educational and cultural institutions then, bars and public houses followed by majority of businesses and amenities on 12 March, 15 March and 24 March respectively. Finally Ireland went into complete lockdown on 27 March by banning all non-essential travel and outside contact. 
+
+A roadmap to easing restrictions in Ireland that including five phases was declared by the government on 1 May 2020 and subsequently published online. The phases 1, 2, 3 and 4 being put to action on 18 May, 8 June, 29 June and 20 July respectively. All the restrictions were steadily alleviated but subject to many social distancing and health regulations for all fields; Community Health, Education & Childcare, Economic Activity & Work, Retail services & Commercial Activity, Cultural & Social Activities and Transport & Travel.
+
+
+
+## 1.6. Actions taken by the government
+
+
+The 2020 Irish general election took place on 8 February, to elect the 33rd Dáil Éireann (Assembly of Ireland – lower house) but the previous government of the 32nd Dáil remained in post during the initial several months of the pandemic. The Assembly sat with few member adhering to social distancing requirements. An emergency act was passed giving the state the power to detain people, restrict travel and keep people in their homes to control the virus's spread by the Legislature of Ireland (The President, Lower house and Upper House).
+
+**Preliminaries**
+
+The authorities of Ireland began to act well in advance to the reporting of the first COVID positive patient. The National Public Health Emergency Team (NPHET) were summoned and their first COVID-19 meeting was carried out on 27 January; within days of confirmation of Europe’s first case in France. Simon Harris, the then Minister of Health signed the *Infectious Diseases (Amendment) Regulations 2020* on 05 February. On 20 February. COVID-19 was added to the list of notifiable diseases legislated in Ireland among the list of diseases designated as “infectious diseases”.
+
+**Ireland legislation**
+
+Including the amendments mentioned above, further emergency legislations were passed as and when seen necessary by the state. The *Health Act 1947* was also amended by adding Statutory Instruments related to the COVID-19 pandemic.
+
+**National Publications**
+
+All COVID – 19 related information was made available to the public through many publications and the official state website (https://www.gov.ie/). 
+
+A few of these publications include;
+
+* National Action Plan - 16 March
+* Hospital Statistics of COVID-19 – 18 March 
+* A five- phased road map to easing lockdown restrictions – 1 May
+
+**Be on call for Ireland**
+
+The Health Service Executive (HSE) launched a recruitment campaign, asking both healthcare and non-healthcare professionals from all disciples who are not already working in the public health service to register to *be on call for Ireland* and provide an extra hand in order to control the pandemic. 
+
+**Operation Fortitude**
+
+The military of Ireland established a *Joint Task Force (JTF)* under *Operation Fortitude* on 19 March and operations began by 26 March through equipping the state with their naval vessels to support onshore testing in Irish cities. The Naval service then transferred their duties to the Army which was also executed as part of Operation Fortitude where along with health centers and hospitals, many games stadiums were repurposed as drive-through COVID-19 testing centers.
+
+**Social Welfare Advice**
+
+The Department of Employment Affairs and Social Protection set up a *COVID-19 Pandemic Unemployment Payment* and a *Temporary COVID-19 Wage Subsidy Scheme* by which employees and the self-employed who have lost their job on or after 13 March due to the pandemic are able to receive financial assistance. 
+
+Workers that are obliged to the self-isolation requirements are eligible to apply for enhanced illness benefit payment under the *Illness Benefit for COVID-19 absences* scheme.
+
+
+**COVID-19 Tracker app**
+
+The Health Service Executive released this free mobile tracker app that uses Bluetooth technology on 7 July as forms of assistance in controlling the pandemic. 
+
+The app is able to carry out the following functions;
+
+* Alert you if you have been in close contact with someone who has tested positive for COVID-19
+* Advise you on what to do to protect yourself and others
+* Alert other app users that you were in close contact with, if you test positive for COVID-19
+
+
+# 2. Exploratory Data Analysis 
+## 2.1. Structure of Data
+
+
+The data set used for this analysis is *The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset* which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+* Date
+* Country
+* Province/state; if available
+* Latitude of center of geographic region defined by country/province
+* Longtitude of center of geographic region defined by country/province
+* Type of reported case – confirmed, death, recovered
+* Number of cases on given date
+
+All records are available for the time period from 01 January 2020 to 12 May 2020. 
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+
+## 2.2. COVID-19 Statistics of Ireland
+
+According to the summary table of cases by types and month, it can be seen that highest percentages of confirmed cases, deaths as well as recoveries are during the month of April. The progress of the disease in the first few weeks after confirmation of first case (29 February) is comparatively slow with respect to the high acceleration in April. In spite of the fact that data only till mid of May is available, it can be safe to say that all proportions of the cases have comparatively reduced with respect to the previous month April. When compared with the April, there is yet a significant number of active cases within the island but a considerably high number of patients have also recovered. 
+
+
+```{r, fig.cap="Summary Table of cases by types and month"}
+library(tidyr)
+library(dplyr)
+
+#Extracting only the wanted data columns from the data set
+new_data <- ireland_corona %>% 
+  separate (date, into = c("Year", "Month", "Day"), sep = "-")
+
+new_data <- select(new_data, -c(Year, province, lat, long, country))
+
+
+# Renaming the months
+new_data <- new_data %>%
+  mutate(Month = if_else(Month=="01", "January", (
+    if_else(Month=="02", "February", 
+            if_else(Month=="03", "March", 
+                    if_else(Month=="04", "April", "May")
+          ))
+  ))
+           )
+
+# Extracting confirmed cases
+confirmed_cases <- new_data %>% 
+  filter(type == "confirmed")
+
+confirmed_total <- sum(confirmed_cases$cases)
+
+
+confirmed_cases<- confirmed_cases%>%
+  group_by(Month)%>%
+  summarise(Confirmed = sum(cases), `Confirmed Percentage` = round((sum(cases)/confirmed_total)*100 ,2))%>%
+    arrange(match(Month, c("January", "February", "March", "April", "May")))
+
+  
+# Extracting recovered cases  
+recovered_cases <- new_data %>% 
+  filter(type == "recovered")
+
+recovered_total <- sum(recovered_cases$cases)
+
+
+recovered_cases<- recovered_cases%>%
+  group_by(Month)%>%
+  summarise(Recovered = sum(cases), `Recovered Percentage` = round((sum(cases)/recovered_total)*100 ,2))%>%
+    arrange(match(Month, c("January", "February", "March", "April", "May")))
+
+  
+# Extracting death cases
+death_cases <- new_data %>% 
+  filter(type == "death")
+
+death_total <- sum(death_cases$cases)
+
+
+death_cases<- death_cases%>%
+  group_by(Month)%>%
+  summarise(Deaths = sum(cases), `Death Percentage` = round((sum(cases)/death_total)*100 ,2))%>%
+    arrange(match(Month, c("January", "February", "March", "April", "May")))
+
+  
+# Removing duplicate Month columns
+deaths <- select(death_cases,  -Month)
+recovered <- select(recovered_cases,-Month)
+
+total_cases <- cbind(confirmed_cases, deaths, recovered)
+  
+
+# Summary table of all types
+
+SumTab <- total_cases %>%
+  mutate(Active = cumsum(Confirmed) -cumsum(Deaths) -cumsum(Recovered))
+
+#obtaining output as table
+library(huxtable)
+
+TabSum <- hux(SumTab) %>% 
+  set_bold(row = 1, col = everywhere, value = TRUE) %>% 
+  set_all_borders(1)
+
+# Adding total column to final summary table
+TabSum <- insert_row(TabSum, c("Overall Total",23242, 100.00, 1488, 100.00, 17110, 100.00, 4644), after = 6, fill = NULL,copy_cell_props = TRUE)
+
+TabSum
+
+
+```
+*The percentages expressed in the above table are calculated with respect to the type of case (Confirmed/Deaths/Recovered)*
+
+
+
+The above summary table can be further understood through the graphical presentation of the distribution of COVID-19 cases shown below. The graph also shows that the number of active cases have relatively reduced with respect to the first few months of the disease. The causes to this can be seen as the comparative increase in deaths as well as the drastic increase in the recovered cases from mid-April onwards. It can be seen that from the month of May onwards, both the active cases as well deaths begin to stabilize without drastic fluctuations. 
+
+
+
+```{r}
+
+library(plotly)
+
+# plotting types of cases and total counts against time
+ireland_corona %>%  
+  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  mutate(active_total = cumsum(active),
+                recovered_total = cumsum(recovered),
+                death_total = cumsum(death)) %>%
+  plot_ly(x = ~ date,
+                  y = ~ active_total,
+                  name = 'Active', 
+                  fillcolor = 'royalblue4',
+                  type = 'scatter',
+                  mode = 'none', 
+                  stackgroup = 'one') %>%
+  add_trace(y = ~ death_total, 
+             name = "Death",
+             fillcolor = 'firebrick') %>%
+  add_trace(y = ~recovered_total, 
+            name = 'Recovered', 
+            fillcolor = 'seagreen4') %>%
+  layout(title = "Distribution of Covid-19 Cases in Ireland",
+         legend = list(x = 0.1, y = 0.9),
+         yaxis = list(title = "Number of Cases"), xaxis = list(title = "Date"))
+```
+
+ 
+## 2.3. Ireland vs. United Kingdom and France
+
+
+Ireland is situated very close to the United Kingdom and; France can also be considered as one of its neighboring countries, therefore this section elaborates the COVID-19 situation of Ireland when compared to its neighboring European countries; United Kingdom (UK) and France.
+
+![Source:Encyclopedia Britannica,Inc.](Location.png)
+
+
+It can be seen that COVID-19 cases were confirmed in UK and France before it was confirmed in Ireland. The daily confirmed cases of all 3 countries reached its peak in mid-April; France displaying a much drastic increase than the other countries. Yet, Ireland’s daily confirmed cases began to slowly reducing right after its peak but it can be seen as not the case in terms of both France and UK. Daily confirmed cases of both France and UK continuously keeps fluctuating and occasionally reaching peaks.  
+
+
+```{r, fig.cap="Comparison of Daily Confirmed Cases"}
+
+# filtering out new confirmed cases
+daily_confirmed <- coronavirus %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>%
+  dplyr::filter(type == "confirmed") %>%
+  dplyr::mutate(country = country) %>%
+  dplyr::group_by(date, country) %>%
+  dplyr::summarise(total = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  tidyr::pivot_wider(names_from = country, values_from = total) 
+
+
+# Plotting the new confirmed cases comparison
+daily_confirmed %>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~Ireland,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Ireland"
+  ) %>%
+    plotly::add_trace(
+    x = ~date,
+    y = ~France,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "France"
+  ) %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~`United Kingdom`,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "United Kingdom"
+  ) %>%
+    plotly::layout(
+    title = "",
+    legend = list(x = 0.1, y = 0.9),
+    yaxis = list(title = "Daily Confirmed Cases"),
+    xaxis = list(title = "Date"),
+    hovermode = "compare",
+    margin = list(
+      # l = 60,
+      # r = 40,
+      b = 10,
+      t = 10,
+      pad = 2
+    )
+  )
+
+
+
+```
+
+
+When comparing the number of deaths; it can be seen that in the case of both France and UK, deaths were reported from mid-March onwards and reached their peaks by April and this high death rate soon reduced for France but continued on for UK. Ireland reached its peak of deaths close to end of April which reduced soon afterwards yet the peak death rate did not exceed UK and France.  
+
+
+```{r, fig.cap="Comparison of Daily Deaths"}
+
+# filtering out daily deaths
+daily_deaths <- coronavirus %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>%
+  dplyr::filter(type == "death") %>%
+  dplyr::mutate(country = country) %>%
+  dplyr::group_by(date, country) %>%
+  dplyr::summarise(total = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  tidyr::pivot_wider(names_from = country, values_from = total) 
+
+
+# Plotting the daily deaths comparison
+
+daily_deaths %>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~Ireland,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Ireland"
+  ) %>%
+    plotly::add_trace(
+    x = ~date,
+    y = ~France,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "France"
+  ) %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~`United Kingdom`,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "United Kingdom"
+  ) %>%
+    plotly::layout(
+    title = "",
+    legend = list(x = 0.1, y = 0.9),
+    yaxis = list(title = "Daily Deaths"),
+    xaxis = list(title = "Date"),
+    hovermode = "compare",
+    margin = list(
+      # l = 60,
+      # r = 40,
+      b = 10,
+      t = 10,
+      pad = 2
+    )
+  )
+```
+
+
+A comparison of the three countries can be further understood by the graphical representation of confirmed cases and deaths shown below. It can be seen that UK has a higher proportion of confirmed cases that resulted in deaths when compared with Ireland and France. Ireland has a very low proportion of deaths with respect to the number of confirmed cases. 
+
+
+```{r, fig.cap="Comparison of Confirmed Cases and Deaths "}
+
+# plotting the case counts by type and country
+df_type <- coronavirus %>%
+    dplyr::filter(country == "Ireland" |
+    country == "France" |
+    country == "United Kingdom") %>%
+  dplyr::group_by(country, type) %>%
+  dplyr::summarise(total = sum(cases)) %>%
+  tidyr::pivot_wider(
+    names_from = type,
+    values_from = total
+  ) %>%
+  dplyr::mutate(unrecovered = confirmed - ifelse(is.na(death), 0, death)) %>%
+  dplyr::arrange(confirmed) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(country = trimws(country)) %>%
+  dplyr::mutate(country = factor(country, levels = country))
+
+plotly::plot_ly(
+  data = df_type,
+  x = ~country,
+  y = ~ confirmed,
+  type = "bar",
+  name = "Confirmed",
+  marker = list(color = "aquablue")
+) %>%
+  plotly::add_trace(
+    y = ~death,
+    name = "Death",
+    marker = list(color = "brickred")
+  ) %>%
+  plotly::layout(
+    barmode = "stack",
+    yaxis = list(title = "Total cases"),
+    xaxis = list(title = ""),
+    hovermode = "compare",
+    margin = list(
+      b = 10,
+      t = 10,
+      pad = 2
+    )
+  )
+
+
+```
+
+
+## 2.4. Ireland vs. United States of America and Taiwan
+
+
+When compared with the deaths per 100,000 population USA (42.29; this is below both UK – 67.99 and France - 45.00) is among the top most countries and Taiwan (0.03) is among the bottom most countries *(Source: John Hopkins University of Medicine)*. Therefore, this section elaborates Ireland’s position among the world’s high-ranking and low-ranking case scenarios of COVID-19; the Unites States of America and Taiwan. *All values reported are in the natural logarithmic scale in order to be able to graphically compare the countries*.
+
+
+The figure below shows the curves of total confirmed cases (log-scale) for each respective country. It can be seen that COVID-19 was confirmed within both USA and Taiwan way before it was confirmed in Ireland and up until end of February both USA and Taiwan had similar number of cases. By the beginning of March when cases began appearing in Ireland, the number of cases in USA began to drastically increase whilst the total confirmed cases in Taiwan began to stabilize. Taiwan maintained a very steady level of confirmed cases while the number of cases reported accelerated for the other two countries. Both Ireland and USA also reached a state where the curve begins to flatten (stabilize) by mid of April yet the point of flattening is comparatively very high in the case of USA. Therefore, it can be seen that Ireland was able to flatten its curve of total confirmed cases in a shorter period than USA.
+
+
+```{r, fig.cap="Comparison of Total Confirmed Cases"}
+
+# filtering out total confirmed cases
+cum_confirmed <- coronavirus %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>%
+  dplyr::filter(type == "confirmed") %>%
+  dplyr::mutate(country = country) %>%
+  dplyr::group_by(date, country) %>%
+  dplyr::summarise(total = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  tidyr::pivot_wider(names_from = country, values_from = total) %>%
+  mutate(US=log(cumsum(US)), Ireland=log(cumsum(Ireland)), `Taiwan*`=log(cumsum(`Taiwan*`)))
+
+
+# Plotting the toal cases comparison
+
+cum_confirmed %>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~Ireland,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Ireland"
+  ) %>%
+    plotly::add_trace(
+    x = ~date,
+    y = ~`Taiwan*`,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Taiwan"
+  ) %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~US,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "USA"
+  ) %>%
+    plotly::layout(
+    title = "",
+    legend = list(x = 0.1, y = 0.9),
+    yaxis = list(title = "Total Confirmed Cases"),
+    xaxis = list(title = "Date"),
+    hovermode = "compare",
+    margin = list(
+      # l = 60,
+      # r = 40,
+      b = 10,
+      t = 10,
+      pad = 2
+    )
+  )
+
+
+```
+
+
+When comparing the number of deaths of the 3 countries, it can be seen that deaths were reported in USA from the beginning of March and not reported in the other 2 countries up until mid-March. The number of deaths of Ireland accelerated very rapidly when compared to Taiwan which shows a relatively stable pattern. The number of deaths began to stabilize for both USA and Ireland by end of April yet again the point of flattening the curve is comparatively very high in the case of USA. Therefore, it can be seen that Ireland was able to flatten its curve of total deaths in a shorter period than USA. 
+
+
+```{r, fig.cap="Comparison of Total Deaths"}
+
+# filtering out cumulative deaths 
+cum_deaths <- coronavirus %>%
+  dplyr::filter(type == "death") %>%
+  dplyr::mutate(country = country) %>%
+  dplyr::group_by(date, country) %>%
+  dplyr::summarise(total = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  tidyr::pivot_wider(names_from = country, values_from = total) %>%
+  mutate(US=log(cumsum(US)), Ireland=log(cumsum(Ireland)), `Taiwan*`=log(cumsum(`Taiwan*`)))
+
+
+# Plotting the cumulative deaths comparison
+
+cum_deaths %>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~Ireland,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Ireland"
+  ) %>%
+    plotly::add_trace(
+    x = ~date,
+    y = ~`Taiwan*`,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "Taiwan"
+  ) %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~US,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "USA"
+  ) %>%
+    plotly::layout(
+    title = "",
+    legend = list(x = 0.1, y = 0.9),
+    yaxis = list(title = "Total Deaths"),
+    xaxis = list(title = "Date"),
+    hovermode = "compare",
+    margin = list(
+      # l = 60,
+      # r = 40,
+      b = 10,
+      t = 10,
+      pad = 2
+    )
+  )
+
+```
+
+
+# 3. Discussion
+
+The progress of COVID-19 of Ireland cannot be clearly understood by solely analyzing Ireland’s data, therefore a comparison of Ireland with countries of significance during the COVID-19 pandemic has been carried out in order to reach the final conclusions.
+
+
+Through the data analysis process it was recognized that there were negative values for confirmed cases of some countries, the main causes may be the fact that at preliminary stages of testing some patients may have been diagnosed as COVID-19 positive and later on diagnosed as negative. Therefore, the data was pre-processed before the actual analysis by coding the negative values as missing values. This is the reason as to why there are discontinuities in some line plots.
+
+
+In the case of comparison between USA and Taiwan; it was recognized that due to the immense value differences in the number of cases, when plotted on a graph the larger values dominated making it impossible to interpret the smaller values. As a solution to this, the natural logarithmic values were calculated for individual cases and the graphs were plotted taking the cumulative counts. 
+
+
+When compared to its neighboring countries although the reporting of the disease occurred for all countries in similar time periods, Ireland was able to control the situation and reach a much stable state than both UK and France who are yet to reach a steady state regarding the pandemic. USA has reached a stable state with respect to the number of confirmed cases and deaths yet when considering the time taken to be able to control the progress of the pandemic it can be seen that Ireland was able to respond within a shorter period of time. When comparing Ireland to Taiwan, it can be seen that it is still behind in its response and Taiwan has achieved much more progress. 
+
+
+
+| Country        | Population Density (per sqkm) | Proportion of Urban Population |Median Age |
+| -------------- |:-----------------------------:| :-----------------------------:|----------:|
+|   Ireland	     |               72	             |              62.7%	            |   38.2    |
+|     UK         |            	281	             |              83.2%	            |   40.5    |
+|    France	     |              119	             |              81.5%	            |   42.3    |  
+|     USA	       |               36	             |              82.8%	            |   38.3    |
+|    Taiwan	     |              673	             |              78.9%	            |   42.5    |
+Source: Worldometer
+
+
+COVID-19 is proved to be easily transmitted through contact and of higher risk to older people therefore, the following table will provide a much broader knowledge towards understanding the results of the data analysis of the comparison of countries. It can be seen that the median age of all countries are similar. Both UK and France have a higher proportion of urban population as well as a higher population density and this may be the cause as to why they both have high number of COVID-19 cases. USA has a very low population density than Ireland and yet has recorded a very high number of cases. Another important fact is that although Taiwan has a very large population density when compared to Ireland, it stands ahead of Ireland in the positive progress with COVID-19. The answer to all of the above discrepancies lie in the public health response adapted by each country.
+
+
+According to the John Hopkins University of Medicine, common public health responses for COVID-19 can be listed as follows;
+        1. Disease surveillance 
+        2. Testing 
+        3. Contact tracing and isolation (mass-quarantine or self-quarantine)
+        4. Medical care and related resources
+        5. Preparedness for next public health and infectious disease emergency
+        6. Mass fatality management
+
+The main objective of all the above responses is to finally flatten the endemic curve. The timeline of cumulative confirmed cases for Ireland is shown below along with the emphasized public health responses. Ireland’s stance on COVID-19 and its effectiveness as well as weaknesses are as discussed below. 
+
+```{r, include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+
+
+# filtering out confirmed cases from Ireland data set
+new_ireland <- ireland_corona %>%
+  filter(type == "confirmed") %>%
+  mutate (cumulative = cumsum(cases))
+
+tail(new_ireland)
+head(new_ireland)
+
+```
+
+
+The timeline of cumulative confirmed cases for Ireland is shown below along with the emphasized public health responses. Ireland’s stance on COVID-19 and its effectiveness can be further evaluated as discussed below. 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%',out.height='100%', fig.cap="Timeline of Confirmed Cases: Ireland"}
+
+library(flexdashboard)
+library(plotly)
+
+# plotting timeline of confirmed cases in Ireland
+plotly::plot_ly(data = new_ireland) %>%
+  plotly::add_trace(
+    x = ~date,
+    y = ~cumulative,
+    type = "scatter",
+    mode = "lines+markers",
+    name = "New cases",
+    line = list(color = "lightseagreen"),
+    marker = list(color = "lightseagreen")
+  ) %>%
+  plotly::add_annotations(
+    x = as.Date("2020-01-27"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-01-27"],
+    text = ~paste("NPHET summoned"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+  ) %>%
+   plotly::add_annotations(
+    x = as.Date("2020-02-05"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-02-05"],
+    text = ~paste("Infectious Diseases (Amendment) Regulations 2020"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+  ) %>%
+  plotly::add_annotations(
+    x = as.Date("2020-02-20"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-02-20"],
+    text = ~paste("COVID-19 enlisted as notifiable disease"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+  ) %>%
+  plotly::add_annotations(
+    x = as.Date("2020-02-29"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-02-29"],
+    text = ~paste("First case (Dublin Airport)"),
+    font = list(color = "red"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+    arrowcolor = "red",
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+  ) %>%
+    plotly::add_annotations(
+    x = as.Date("2020-03-19"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-03-19"],
+    text = ~paste("JTF operation fortitude established"),
+    font = list(color = "purple"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+     arrowcolor = "purple",
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+  ) %>%
+    plotly::add_annotations(
+    x = as.Date("2020-03-27"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-03-27"],
+    text = ~paste("Complete Lockdown"),
+    font = list(color = "red"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+    arrowcolor = "red",
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+  ) %>%
+   plotly::add_annotations(
+    x = as.Date("2020-05-01"),
+    y = new_ireland$cumulative[new_ireland$date=="2020-05-01"],
+    text = ~paste("Road Map to easing restrictions released"),
+    font = list(color = "red"),
+    textangle = 45,
+    xref = "x",
+    yref = "y",
+    arrowhead = 5,
+    arrowhead = 3,
+    arrowsize = 0.5,
+    arrowcolor = "red",
+    showarrow = TRUE,
+    ax = 90,
+    ay = -50
+   ) %>%
+   plotly::layout(
+    title = "",
+    yaxis = list(title = "Cumulative count"),
+    xaxis = list(title = "Date"),
+    legend = list(x = 0.1, y = 0.9),
+    hovermode = "compare"
+)
+
+
+```
+
+The main reason as to why Ireland was able to reach a stable in relatively shorter time is that even before the first positive patient was reported the government was well prepared by summoning the related parties as well as making legislation amendments. As the disease began progressing the government was also quick to act and begin lockdown phase-wise and finally opt for complete lockdown which in turn controlled the spread. Through *Be on call for Ireland* and *JTF Operation Fortitude* the deficiency of medical staff as well as other human resources was overcome and the government also invested in increasing hospital and nursing home facilities. 
+
+
+
+Amidst the great public health strategies, the reasons that Ireland was behind Taiwan was the initial lack of testing capacity; most test centers were shut down in the initial phases due to  shortages of testing kits. Ireland quickly overcame this shortage and surprisingly to the extent of having drive-through test centers; but the damage caused within that short time period is yet really immense. Another great advantage Taiwan had against COVID-19 was its strong *face mask culture* which was not initially familiar to other countries which resulted in extra time to implement such practices. Taiwan also began to self-produce their masks which was a great strategy to avoid panic buying.
+
+
+
+The data was available for the period from 01 January 2020 to 12 May 2020 only therefore interpretations regarding the more recent status of the countries cannot be made. In the case of Ireland, the country’s progress cannot be determined after it entered the phase of easing restrictions which can be of much importance. Therefore, it can be said that more accurate and preferable conclusions would have been possible if more recent data was available.
+
+
+
+# 4. Conclusions 
+
+
+In conclusion, it can be said that Ireland currently stands at a much favorable stage regarding the COVID-19 Pandemic when compared to most countries; despite it being significantly affected in the earlier months. The Government of Ireland has been able to apply many successful public health response strategies and stabilize the progress of the disease. The government being well-prepared for the pandemic along with great strategies such as **be on call for Ireland** and **JTF Operation Fortitude** made it easy to gain access to required medical and related resources. It is also on a great path towards contact tracing through the **COVID-19 Tracker App**. The main shortcomings that resulted in the high COVID-19 figures can be seen as the delay in testing due to shortage of test kits and being unaccustomed to a *face mask* culture. However, the long-term effectiveness of the government's public health strategies in completely mitigating the disease is yet to be seen.
+
+
+
+# 5. References
+
+* 2020 Irish General Election. 2020, Wikipedia, viewed 8 July 2020, <https://en.wikipedia.org/wiki/2020_Irish_general_election>
+
+
+* COVID-19 (Coronavirus). 2020, Government of Ireland, viewed 8 July 2020, <https://www.gov.ie/en/campaigns/c36c85-covid-19-coronavirus/>
+
+
+* Demographics of the Republic of Ireland. 2020, Wikipedia, viewed 8 July 2020, <https://en.wikipedia.org/wiki/Demographics_of_the_Republic_of_Ireland>
+
+
+
+* Easing the COVID-19 restrictions on 18 May (Phase 1). 2020, Government of Ireland, viewed 8 July 2020, <https://www.gov.ie/en/publication/ad5dd0-easing-the-covid-19-restrictions-on-may-18-phase-1/>
+
+
+
+* Easing the COVID-19 restrictions on 29 June (Phase 3). 2020, Government of Ireland, viewed 8 July 2020, <https://www.gov.ie/en/publication/d06271-easing-the-covid-19-restrictions-on-29-june-phase-3/>
+
+
+
+* Easing the COVID-19 restrictions on 8 June (Phase 2). 2020, Government of Ireland, viewed 8 July 2020, <https://www.gov.ie/en/publication/7ae99f-easing-the-covid-19-restrictions-on-june-8-phase-2/>
+
+
+
+* Fanning. R, Boland. H, Kay. S, Ranelagh. J, Edwards. R, 2020 Ireland, Encyclopedia Britannica, viewed 8 July 2020, <https://www.britannica.com/place/Ireland>
+
+
+* Hsieh. L, Child. J, 2020 What coronavirus success of Taiwan and Iceland has in common, The Conversation, viewed 19 July 2020, <https://theconversation.com/what-coronavirus-success-of-taiwan-and-iceland-has-in-common-140455> 
+
+
+* Ireland. 2020, World Health Organization, viewed 8 July 2020, <https://www.who.int/countries/irl/en/>
+
+
+* JTF ‘FORTITUDE’. 2020, Irish Defense Forces, viewed 8 July 2020, <https://www.military.ie/en/who-we-are/army/covid-19-joint-task-force-jtf-/>
+
+
+* Krispin. R, 2020 Coronavirus, GitHub, viewed 10 July 2020, <https://github.com/RamiKrispin/coronavirus>
+
+
+* MAPS & TRENDS Mortality Analyses. 2020, John Hopkins University of Medicine, viewed 18 July 2020, <https://coronavirus.jhu.edu/data/mortality>
+
+
+* Oceanic Climate. 2020, Wikipedia, viewed 8 July 2020, <https://en.wikipedia.org/wiki/Oceanic_climate>
+
+
+* Population: World. 2020, Worldmeter, viewed 18 July 2020, <https://www.worldometers.info/population/world/>
+
+
+* Soetewey. A, 2020 How to create a simple Coronavirus dashboard specific to your country in R, Stats and R, viewed 10 July 2020, <https://www.statsandr.com/blog/how-to-create-a-simple-coronavirus-dashboard-specific-to-your-country-in-r/>
+
+
+* Talagal. T, 2020 CoronaSriLanka, viewed 10 July 2020, <https://github.com/thiyangt/CoronaSriLanka>
+
+
+* Watson. C, 2020 Public Health Responses to COVID-19, John Hopkins University of Medicine, viewed 18 July 2020, <https://coronavirus.jhu.edu/covid-19-basics/understanding-covid-19/module-5-public-health-responses-to-covid-19#/>
+

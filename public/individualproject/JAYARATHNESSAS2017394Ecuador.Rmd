@@ -1,0 +1,457 @@
+---
+title: "Report of Ecuador's COVID-19 Situation"
+author: "AS2017394 - Sahan Jayarathne"
+date: "7/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Introduction
+***
+Ecuador is a country in northwestern South America, bordered by Colombia on the north, Peru on the east and south, and the Pacific Ocean on the west. Ecuador also includes the Galápagos Islands in the Pacific, about 1,000 kilometres (621 mi) west of the mainland. The capital and largest city is Quito.
+
+
+The COVID-19 pandemic in Ecuador is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was reported to have spread to Ecuador on 29 February 2020 when a woman in her 70s tested positive for the virus. Ecuador was described in April as emerging as a possible "epicentre" of the pandemic in Latin America, with the city of Guayaquil overwhelmed to the point where bodies were being left in the street. However, the country has now been eclipsed in number of confirmed cases by those of Brazil, Peru, and Chile.
+
+#### __Visualization of the location on world map__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+data(wrld_simpl)
+
+ecuador_corona <- coronavirus %>% filter(country == "Ecuador")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = ecuador_corona, aes(x = long, y = lat), color = "red", size= 1)
+```
+
+#### __Climate condition in Ecuador__
+
+The coastal lowlands in the western part of Ecuador are typically warm with temperatures in the region of 25 °C (77 °F). Coastal areas are affected by ocean currents and between January and April are hot and rainy.The weather in Quito is consistent with that of a subtropical highland climate. The average temperature during the day is 70 °F (21 °C), which generally falls to an average of 50 °F (10 °C) at night. The average temperature annually is 64 °F (17.8 °C). There are only really two seasons in the city: dry and wet. The dry season (winter) runs from June to September and the wet season (summer) is from October to May. As most of Ecuador is in the southern hemisphere, June to September is considered to be winter, 
+and winter is generally the dry season in warm climates. Spring, summer, and fall are generally the "wet seasons" while winter is the dry (with the exception of the first month of fall being dry).
+
+
+
+#### __Lockdown status of Ecuador__
+
+After confirming the first case on 29th February 2020 Ecuador waited till 16th of March to declare "State of Exception" for two month and then extended it till 13th August 2020.
+
+
+
+#### __Actions taken by the Ecuador government__
+
+* Declared state of exception to whole country. In the period of State of exception,
+
+  + No movement from 9pm to 5am, in effect from March 17, 2020
+  + In-person work is suspended from March 17 to 24, 2020 for all workers and employees of the public and private sector, etc....
+
+
+## Exploratory Data Analysis
+***
+
+#### __1. Visualization of deaths in Ecuador due to COVID-19__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+death_ecuador_corona <- ecuador_corona %>% filter(type == "death")
+
+cum_deaths <- mutate(death_ecuador_corona, cumulative_death_sum = cumsum(cases))
+
+ggplot() + 
+  geom_col(data = death_ecuador_corona, 
+           aes(x = date, y = cases)) + 
+  ggtitle("Ecuador: Daily Covid-19 Deaths")
+
+ggplot(cum_deaths, 
+       aes(x = date, y = cumulative_death_sum)) + 
+  geom_line(col = "red") + 
+  ggtitle("Ecuador: Total Covid-19 Deaths")
+
+```
+
+* Interpretation - After reporting first patient on end of February first death reported on end of April and we can see on total death graph there is an exponential growth in total deaths and on daily deaths chart we can see end of the May sudden spikes on daily deaths.
+
+
+#### __2. Visualization of daily confirmed cases in Ecuador__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_ecuador_corona <- ecuador_corona %>% filter(type == "confirmed")
+
+cum_confirmed <- mutate(confirmed_ecuador_corona, 
+                        cumulative_confirmed_sum = cumsum(cases))
+
+ggplot() + 
+  geom_col(data = confirmed_ecuador_corona, 
+           aes(x = date, y = cases)) + 
+  ggtitle("Ecuador: Daily Covid-19 cases")
+
+ggplot(cum_confirmed, 
+       aes(x = date, y = cumulative_confirmed_sum)) + 
+  geom_line() + 
+  ggtitle("Ecuador: Total Covid-19 Confirmed cases")
+
+```
+
+* Interpretation - On daily confirmed cases graph we can see almost 12000 cases were confirmed on end of April and negative cases on start of May. We can see there was a huge growth in confirmed cases. 
+
+
+#### __3. Visualization of daily recovered cases in Ecuador__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_ecuador_corona <- ecuador_corona %>% filter(type == "recovered")
+
+cum_recovered <- mutate(recovered_ecuador_corona, 
+                        cumulative_recovered_sum = cumsum(cases))
+
+ggplot() + 
+  geom_col(data = recovered_ecuador_corona, 
+           aes(x = date, y = cases)) + 
+  ggtitle("Ecuador: Daily Covid-19 recovered cases")
+
+ggplot(cum_recovered, 
+       aes(x = date, y = cumulative_recovered_sum)) + 
+  geom_line(color = "Blue") + 
+  ggtitle("Ecuador: Total Covid-19 Recovered cases")
+
+```
+
+* Interpretation - We can see there is a huge spike hittinf almost 1200 on daily reocovered cases chart on the very begining of May and as the dataset ends total recovered patients hits almost 3500
+
+#### __4. Visualization of Active cases in Ecuador due to COVID-19__
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+active_ecuador <- mutate(confirmed_ecuador_corona, 
+                         death = death_ecuador_corona$cases, 
+                         recovered = recovered_ecuador_corona$cases, 
+                         active_cases = (cases - death - recovered), 
+                         active_cases_cum = cumsum(active_cases))
+
+ggplot() + 
+  geom_col(data = active_ecuador, 
+           aes(x = date, y = active_cases)) + 
+  ggtitle("Ecuador: Daily Covid-19 active cases")
+
+ggplot(active_ecuador, 
+       aes(x = date, y = active_cases_cum)) + 
+  geom_line(color = "dark green") +  
+  ggtitle("Ecuador: Total Covid-19 active cases")
+
+```
+
+* Interpretation - Total active cases; almost likely the total recovered cases graph but it differ a bit.
+
+
+
+### __Comparing with neighboring countries__
+#### __1. Visualization of daily deaths Ecuador Vs Peru__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+peru_corona <- coronavirus %>% filter(country == "Peru")
+death_peru_corona <- peru_corona %>% filter(type == "death")
+
+cum_deaths_peru <- mutate(death_peru_corona, 
+                          cumulative_death_sum_peru = cumsum(cases))
+
+#ggplot() + geom_col(data = death_peru_corona, aes(x=date, y=cases), fill="red") + geom_col(data = death_ecuador_corona, aes(x=date, y=cases), fill="blue") + ggtitle("Ecuador Vs Peru daily Deaths")
+
+ggplot() + 
+  geom_line(data = cum_deaths, 
+            aes(x = date, y = cumulative_death_sum, colour = "Blue")) + 
+  geom_line(data = cum_deaths_peru, 
+            aes(x = date, y = cumulative_death_sum_peru, , colour = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Peru")) + 
+  ggtitle("Total Covid-19 Deaths Ecuador Vs Peru") 
+
+```
+  
+* Interpretation - As we see at the Ecuadro's deaths have started to grown from the mid March and Peru's deaths have started to grwon in end or March chart but, we can see total deaths were almost same at the end
+  
+  
+#### __2. Visualization of daily confirmed Ecuador Vs Peru__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_peru_corona <- peru_corona %>% filter(type == "confirmed")
+
+cum_confirmed_peru <- mutate(confirmed_peru_corona, 
+                             cumulative_confirmed_sum_peru = cumsum(cases))
+
+#ggplot() + geom_col(data = confirmed_peru_corona, aes(x=date, y=cases), fill="red") + geom_col(data = confirmed_ecuador_corona, aes(x=date, y=cases), fill="blue") + ggtitle("Ecuador Vs Peru daily confirmed cases")
+
+ggplot() + 
+  geom_line(data = cum_confirmed, 
+            aes(x = date, y = cumulative_confirmed_sum, col = "Blue")) + 
+  geom_line(data = cum_confirmed_peru, 
+            aes(x = date, y = cumulative_confirmed_sum_peru, color="red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Peru")) + 
+  ggtitle("Total Covid-19 confirmed cases Ecuador Vs Peru")
+
+```
+
+* Interpretation - On total confirmed cases in clearly we can see there is an exponential grwoth in confirmed cases in Peru but there is clearly no exponetial growth on Ecuador's confirmed cases and at the end there is a huge difference in Peru and Ecuador confirmed cases, when Peru passed almost 70000 cases but there in only atleast 30000 cases.
+  
+#### __3. Visualization of daily recovered Ecuador Vs Peru__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_peru_corona <- peru_corona %>% filter(type == "recovered")
+
+cum_recovered_peru <- mutate(recovered_peru_corona, 
+                             cumulative_recovered_sum_peru = cumsum(cases))
+
+#ggplot() + geom_col(data = recovered_peru_corona, aes(x=date, y=cases), fill="red") + geom_col(data = recovered_ecuador_corona, aes(x=date, y=cases), fill="blue") + ggtitle("Ecuador Vs Peru daily recovered cases")
+
+ggplot() + 
+  geom_line(data = cum_recovered, 
+            aes(x = date, y = cumulative_recovered_sum, col = "Blue")) + 
+  geom_line(data = cum_recovered_peru, 
+            aes(x = date, y = cumulative_recovered_sum_peru, color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Peru")) + 
+  ggtitle("Total Covid-19 recovered cases Ecuador Vs Peru")
+
+```
+
+* Interpretation - When comparing with Ecuador's total reocvered cases, Peru's reocovered cases are very high.
+
+
+#### __4. Visualization of Active cases in Ecuador Vs Peru__
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+active_peru <- mutate(confirmed_peru_corona, 
+                      death = death_peru_corona$cases, 
+                      recovered = recovered_peru_corona$cases, 
+                      active_cases_peru = (cases - death - recovered), 
+                      active_cases_peru_cum = cumsum(active_cases_peru))
+
+ggplot() + 
+  geom_line(data = active_ecuador, 
+            aes(x = date, y = active_cases_cum,color = "blue")) + 
+  geom_line(data = active_peru, 
+            aes(x = date, y = active_cases_peru_cum,color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Peru")) + 
+  ggtitle("Ecuador: Total Covid-19 active cases - Ecuador vs Peru")
+
+```
+
+* Interpretation - Peru's total active cases are gradually getting higher and when the begining of the mid May Peru's total active cases were almost 20000 more than Ecuador
+  
+#### __5. Visualization of daily deaths Ecuador Vs Chile__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+chile_corona <- coronavirus %>% filter(country == "Chile")
+
+death_chile_corona <- chile_corona %>% filter(type == "death")
+
+cum_deaths_chile <- mutate(death_chile_corona, 
+                           cumulative_death_sum_chile = cumsum(cases))
+
+#ggplot() + geom_col(data = death_chile_corona, aes(x=date, y=cases), fill="red") + geom_col(data = death_ecuador_corona, aes(x=date, y=cases), fill="blue") + ggtitle("Ecuador Vs Chile daily Deaths")
+
+ggplot() + 
+  geom_line(data = cum_deaths, 
+            aes(x = date, y = cumulative_death_sum, col = "Blue")) + 
+  geom_line(data = cum_deaths_chile, 
+            aes(x = date, y = cumulative_death_sum_chile, color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Chile")) + 
+  ggtitle("Total Covid-19 Deaths Ecuador Vs Chile")
+
+```
+
+* Interpretation - As we can see on Total deaths chart we can see Chile has very less deaths due to COVID - 19 
+  
+  
+#### __6. Visualization of daily confirmed Ecuador Vs Chile__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_chile_corona <- chile_corona %>% filter(type == "confirmed")
+
+cum_confirmed_chile <- mutate(confirmed_chile_corona, 
+                              cumulative_confirmed_sum_chile = cumsum(cases))
+
+#ggplot() + geom_col(data = confirmed_chile_corona, aes(x=date, y=cases), fill="red") + geom_col(data = confirmed_ecuador_corona, aes(x=date, y=cases), fill="blue") + ggtitle("Ecuador Vs Chile daily confirmed cases")
+
+ggplot() + 
+  geom_line(data = cum_confirmed, 
+            aes(x = date, y = cumulative_confirmed_sum, col = "Blue")) + 
+  geom_line(data = cum_confirmed_chile, 
+            aes(x = date, y = cumulative_confirmed_sum_chile, color="red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Chile")) + 
+  ggtitle("Total Covid-19 confirmed cases Ecuador Vs Chile")
+
+```
+  
+* Interpretation - At start both countries confirmed their confirmed cases almost at the same time and at the end we can see both countries as almost equal of total confirmed cases.
+  
+#### __7. Visualization of daily recovered Ecuador Vs Chile__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_chile_corona <- chile_corona %>% filter(type == "recovered")
+
+cum_recovered_chile <- mutate(recovered_chile_corona, 
+                              cumulative_recovered_sum_chile = cumsum(cases))
+
+#ggplot() + geom_col(data = recovered_chile_corona, aes(x=date, y=cases), fill="red") + geom_col(data = recovered_ecuador_corona, aes(x=date, y=cases), fill="blue") + ggtitle("Ecuador Vs Chile daily recovered cases")
+
+ggplot() + 
+  geom_line(data = cum_recovered, 
+            aes(x = date, y = cumulative_recovered_sum, col = "Blue")) + 
+  geom_line(data = cum_recovered_chile, 
+            aes(x = date, y = cumulative_recovered_sum_chile, color="red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Chile")) + 
+  ggtitle("Total Covid-19 recovered cases Ecuador Vs Chile")
+
+```
+
+* Interpretation - In total recovered cases we can see clearly there is very huge difference in recovered cases. Peru showing very big total recovered cases than Ecuador.
+
+
+#### __8. Visualization of Active cases in Ecuador Vs Chile__
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+active_chile <- mutate(confirmed_chile_corona, 
+                       death = death_chile_corona$cases, 
+                       recovered = recovered_chile_corona$cases, 
+                       active_cases_chile = (cases - death - recovered), 
+                       active_cases_chile_cum = cumsum(active_cases_chile))
+
+ggplot() + 
+  geom_line(data = active_ecuador, 
+            aes(x = date, y = active_cases_cum,color = "blue")) + 
+  geom_line(data = active_chile, 
+            aes(x = date, y = active_cases_chile_cum,color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "Chile")) + 
+  ggtitle("Ecuador: Total Covid-19 active cases - Ecuador vs Chile")
+
+```
+
+* Interpretation - When Ecuador' total active cases getting higher and higher, Chile's graph got almost flattened in mid April. Then at the end of April Chiles toal active cases are also getting higher positive linearly.
+
+### __Comparing with United States__
+
+United States was choose because of two reasons,
+
+* Neighboring continent
+* Current world top in COVID-19 cases
+
+#### __Visualization of total deaths Ecuador Vs USA__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+usa_corona <- coronavirus %>% filter(country == "US")
+
+death_usa_corona <- usa_corona %>% filter(type =="death")
+
+cum_deaths_usa <- mutate(death_usa_corona, 
+                         cumulative_death_sum_usa = cumsum(cases))
+
+ggplot() + 
+  geom_line(data = cum_deaths, 
+            aes(x = date, y = cumulative_death_sum, col = "Blue")) + 
+  geom_line(data = cum_deaths_usa, 
+            aes(x = date, y = cumulative_death_sum_usa, color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "USA")) + 
+  ggtitle("Total Covid-19 Deaths Ecuador Vs USA")
+
+```
+
+* Interpretation - When we look into the graph grwoth of USA death we can say it is positive linear growth and Ecuador's death count can be ignored
+
+#### __Visualization of total confirmed Ecuador Vs USA__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_usa_corona <- usa_corona %>% filter(type == "confirmed")
+
+cum_confirmed_usa <- mutate(confirmed_usa_corona, 
+                            cumulative_confirmed_sum_usa = cumsum(cases))
+
+ggplot() + 
+  geom_line(data = cum_confirmed, 
+            aes(x = date, y = cumulative_confirmed_sum, col = "Blue")) + 
+  geom_line(data = cum_confirmed_usa, 
+            aes(x = date, y = cumulative_confirmed_sum_usa, color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "USA")) + 
+  ggtitle("Total Covid-19 confirmed cases Ecuador Vs Chile")
+
+```
+
+* Interpretation - This graph also saying that USA's confirmed cases are growing positive linearly from mid March but Ecuador's cases are way less to consider.
+
+#### __Visualization of total recovered Ecuador Vs Chile__
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+recovered_usa_corona <- usa_corona %>% filter(type == "recovered")
+
+cum_recovered_usa <- mutate(recovered_usa_corona, 
+                            cumulative_recovered_sum_usa = cumsum(cases))
+
+ggplot() + 
+  geom_line(data = cum_recovered, 
+            aes(x = date, y = cumulative_recovered_sum, col = "Blue")) + 
+  geom_line(data = cum_recovered_usa, 
+            aes(x = date, y = cumulative_recovered_sum_usa, color = "red")) + 
+  scale_color_discrete(name = "Country", labels = c("Ecuador", "USA")) + 
+  ggtitle("Total Covid-19 recovered cases Ecuador Vs USA")
+
+```
+
+* Interpretation - A bit exponential growth in recovered cases in USA but in Ecuador as usual we cannot interpret the growth of the recovered cases when comparing to USA's recovered cases
+
+## Conclusions and Discussion
+***
+
+
+* Conclusions :-
+  + Ecuador couldn't control the spread of the virus
+  + Deaths due to virus grown exponentialy
+  + Recovering of the patients is bit satisfactory
+  + Active cases graph and Confirmed cases graph almost exactly same by shape but differ from values
+  + Comparing to Peru, Ecaudor is bit better when it comes to confirmed cases
+  + By mid of May Ecuador's total active cases are way less than Peru's total active cases
+  + Chile is way better when it comes to total deaths due to virus but same as the confirmed cases
+  + Chile's total active cases are less than Ecuador's total active cases
+  + Comparing to USA, Ecuador is way better in handling the outbreak.
+  + USA is still the top is cases
+  
+* Discussion :- The primary focus of this report is get a brief idea about the COVID-19 effect on Ecuador. All the visualizations and interpretations are done from the data upto 2020/05/12 (package ‘coronavirus’ version 0.2.0). Then we examined about the confirmed,deaths and recovered cases in Ecuador.On confirmed cases there is a negative cases reported. That might be an outlier or removing false positive cases. Then we looked at the active cases, because of the slow rate of deaths and recovered cases than confirmed cases still have much large number of active cases.After that we analyzied the data with the effect on neighboring countries such as Peru and Chile. After comparing with the neighboring countries we can say Chile is way better in handling the pandemic. Then we compared data with USA because current world most cases are found in USA and USA is in the neighboring continent. From all ow this we can say Ecuador is still a victim of COVID-19 outbreak.
+
+
+## References
+***
+
+1. https://www.wikipedia.org/
+2. https://www.google.com/
+3. https://www.blogdeasuntospublicos.com/ecuador-covid-19-measures-and-outlook/
+4. https://cran.r-project.org/web/packages/coronavirus/readme/README.html
+5. https://www.worldometers.info/coronavirus/
+6. https://stackoverflow.com/
+7. https://www.who.int/
+8. http://www.sci.sjp.ac.lk/vle/mod/forum/view.php?id=9862
+9. https://hellor.netlify.app/

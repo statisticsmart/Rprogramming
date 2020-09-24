@@ -1,0 +1,188 @@
+---
+title: "**Covid-19 Pandemic in Denmark**"
+author: "Y.R.Wanigarathne"
+output: html_document
+---
+
+
+## Introduction
+
+### Geography of Denmark
+
+Denmark is a north european country which is located southwest of Sweden and due south of Norway and bordered by the Germany. Denmark has 1419 offshore islands and 1701 km of coastal line. Denmark has a total land area of 42,924 squarre kilometers while having population of 5.8 million.
+
+```{r map, echo=FALSE , include=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(patchwork)
+
+
+data("coronavirus")
+data(wrld_simpl)
+denmark_corona <- coronavirus %>% filter(country == "Denmark")
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+```
+```{r map2,r figs,echo=FALSE , fig.cap= "Geographical position of Denmark", fig.align='center'}
+p +
+  geom_point(
+    data = denmark_corona, aes(x = 9.5018, y = 56.2639), color = "red", size
+    = 1
+  )
+
+```
+
+### Climate of Denmark
+
+People in Denmark experience temperate climate where the summers are relatively cool and winters are moderately cold. Denmark has a rainfall of 765mm per year. Summer of Denmark starts in June while the autumn starts in September. Winter of Denmark starts in December while the Spring starts in March.
+
+```{r , echo=FALSE, fig.cap="Highest and lowest termperaatures in Denmark (Source : https://en.wikipedia.org/wiki/Geography_of_Denmark)",fig.align='center'}
+knitr::include_graphics("climate.jpg")
+```
+
+### Political status of Denmark
+
+Head of the state of the Denmark is Her excellency queen Magrethe II. Government is headed by prime minister her excellency Mrs.Mette Frederiksen. Currently Mr.Magnus Heunicke is appointed as the Miniter for Health and Elderly affairs.
+
+```{r , echo=FALSE, fig.cap="Queen Magrethe II (Source : https://www.batimes.com.ar/news/world/argentina-to-welcome-queen-margrethe-ii-of-denmark-next-week.phtml)",fig.align='center', out.width="70%"}
+knitr::include_graphics("qm.jpeg")
+```
+
+
+### Covid-19 status od Denmark
+
+First confirmed Covid-19 case was reported on 27th of February 2020. The person was an editor of TV channel in Denmark who returned to Denmark after skiing in Italy. The second confirmed case was reported on 28th of February 2020 another man who returned from northern Italy after from a ski holiday. 3rd confirmed Covid-19 was reported on 29th of February. At 3rd of March 5 confirmed Covid-19 positive cases were reported. On 11th March which was 13 days from 1st confirmed case, there were 252 confirmed cases reported. Highest number of Covid-19 positive cases were reported on 3rd April which was 391. First death from Covid-19 was reported on 12th of March 2020. Highest number of deaths from Covid-19 was reported in 4th April which was 22. As of 16th of July 2020, there were total number of 13124 cases of Covid-19 positive cases while 12195 from it were able to revover. 610 of total deaths were reported due to Covid-19 as of 16th july.There were total of 319 Covid-19 active cases as of 16th of July.
+
+Lockdown of the Denmark started on 13th March 2020.All government workers engaged with non-essential work were ordered to stay home for two weeks while the government asked from private sector employers to allow their employees to stay home for the same period.New lockdown rules were imposed on 18th of March such as s hairdressers and nightclubs must be closed, restaurants can only serve take-away and no gatherings with more than 10 people. ON 23rd of March the government announced that the lockdown will be there for another 2 weeks until 13th of April. First phase of repopening of the country was happened on 15th April where the classes for students of 1-6 grades were started. Restaurants,cafes and hairdressers were reopened on 10th of May. This was not a fully reopen of the country where the rules like no larger gatherings were still in place.
+
+
+## Exploratory data analysis
+
+### Data analysis considering the cases of Denmark
+
+Data can be analyzed considering the confirmed cases,death cases and recovered cases. Using the coronavirus dataset, the analysis was performed. The data were obtained from the period of  22nd of January to 12th of May.
+
+##### 1.Confiremd cases
+
+ ```{r confirm, fig.align='center', echo=FALSE}
+confirm_denmark_corona <- denmark_corona %>% filter(type=="confirmed")
+ggplot(confirm_denmark_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Covid-19 Confirmed cases")
+ ```
+Using the above plot it can be seen that until the end of the February no confirmed case was reported. But in the 2nd week of March more than 150 cases per day reported.There was asignificant reduction of the confirmed cases in 3rd week of March. From 4th week of March to middle of 2nd week of April, the confirmed cases were significantly increased. On 7th of April the confirmed cases reached to the highest number recorded in Denmark to 391. As on the 1st week of may the confirmed cases were slowly decreased to a daily average of around 150 cases per day. On 12th of May, there were 78 confirmed cases reported.
+
+##### 2.Recovered cases
+
+ ```{r recover, fig.align='center', echo=FALSE}
+recover_denmark_corona <- denmark_corona %>% filter(type=="recovered")
+ggplot(recover_denmark_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Covid-19 recovered cases")
+ ```
+Using the above plot it can be seen that until the end of the March only few recovered cases were reported. But in the beginning of the 1st week of April the highest number of recoveries per day in Denmark of 894 recoveries were reported.Then there was a significant reduction of the recovered cases in the end of the 1st week to around 50 recoveries per day. From 2nd week of April to 4th week of April the recovered cases were significantly increased. On 18th of April 460 patients were recovered.From 4th week of April to 2nd week of May, there were around 150 recoveries per day on average.
+
+##### 3. Death cases
+
+ ```{r deth,fig.align='center', echo=FALSE}
+deth_denmark_corona <- denmark_corona %>% filter(type== "death")
+deth_denmark_corona <- deth_denmark_corona %>% mutate(cases = replace(cases, which(cases < 0), 6))
+ggplot(deth_denmark_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Covid-19 death cases")
+ ```
+Using the above plot it can be seen that until the 2nd week of March no death cases were reported. But on 12th of March 1 death were reported due to Covid-19.From 3rd week of March, the death cases significantly stated to increase.On 1st of April, the death cases reached to the highest value in Denmark to 22 cases.At the begging of the 3rd week of April the death cases were dropped to around 10 cases per day on average.At the beginning of the 2nd week of May the average number of deaths dropped to around 5 deaths per day. 
+
+### Data analysis considering the cases of border countries
+
+Germany,Norway and Sweden can be identified as the border countries of Denmark. Which 
+
+```{r , echo=FALSE, fig.cap="Border country map (Source : https://haraldgormssonbluetooth.weebly.com/denmark.html)",fig.align='center', out.width="60%"}
+knitr::include_graphics("map.png")
+```
+#### Germany VS Denmark
+ 
+ Confirmed cases,Recovered cases and death cases from Covid-19 in Germany and  Denmark can be display as follows.
+ 
+ ```{r,fig.align='center', echo=FALSE}
+ denmark_corona <- coronavirus %>% filter(country == "Denmark")
+ denmark_corona <- denmark_corona %>% mutate(cases = replace(cases, which(cases < 0), 6))
+ ggplot(denmark_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Covid-19 cases in Denmark")
+
+ germany_corona <- coronavirus %>% filter(country == "Germany")
+ggplot(germany_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Covid-19 cases in Germany")
+
+ ```
+When considering the cases of Germany and Denmark it can clearly see that the number of confirmed cases,recovered cases and death cases in Germany are nearly 10 times higher than that in Denmark.In both the countries confirmed cases were reported at the beginning of March and kept on increasing until the 2nd week of April. Then the reported confirmed cases were started to decrease.There were significant number of recovery cases reported earlier in Germany than Denmark .The maximum recovered patients per day from Covid-19 in Germany was 10219 while in Denmark it was 894. Highest number of deaths per day in Denmark was 22 while in Germany, it was 266. Denmark has a population of 5.806 million while in Germany it is 82.06 million. So it can conclude that considering the population of Germany and Denmark, both the countries were affected nearly the same effect and both the countries were able to control the pandemic in nearly the same way.
+
+#### Sweden VS Denmark
+ 
+ Confirmed cases,Recovered cases and death cases from Covid-19 in Sweden and  Denmark can be display as follows.
+ 
+ ```{r,fig.align='center', echo=FALSE}
+ denmark_corona <- coronavirus %>% filter(country == "Denmark")
+ denmark_corona <- denmark_corona %>% mutate(cases = replace(cases, which(cases < 0), 6))
+ ggplot(denmark_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Covid-19 cases in Denmark")
+
+ sweden_corona <- coronavirus %>% filter(country == "Sweden")
+ggplot(sweden_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Covid-19 cases in Sweden")
+
+ ```
+In both the countries confirmed cases were reported at the beginning of March.In Denmark, confirmed cases kept on increasing until the 2nd week of April and started to decrease.In Sweden, the confirmed cases kept on increasing until the 2nd week of April to a average cases of around 500 cases per day. Then the confirmed cases were move around the average of 500 until the 2nd week of May.It can clearly identify as a difference in Sweden and Denmark. The maximum recovered patients per day from Covid-19 in Sweden was 3069 while in Denmark it was 894. Highest number of deaths per day in Denmark was 22 while in Sweden, it was 115. Denmark has a population of 5.806 million while in Sweden it is 10.02 million. So that considering the population of Sweden and Denmark, even though the population is 2 times higher in Sweden than Denmark, the total number of confirmed cases and death cases were more than 4 times higher than that in Denmark.So it can conclude that Denmark was able to control the pandemic more accurately than in Sweden.
+
+#### Norway VS Denmark
+ 
+ Confirmed cases,Recovered cases and death cases from Covid-19 in Norway and  Denmark can be display as follows.
+ 
+ ```{r,fig.align='center', echo=FALSE}
+ denmark_corona <- coronavirus %>% filter(country == "Denmark")
+ denmark_corona <- denmark_corona %>% mutate(cases = replace(cases, which(cases < 0), 6))
+ ggplot(denmark_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Covid-19 cases in Denmark")
+
+ norway_corona <- coronavirus %>% filter(country == "Norway")
+ggplot(norway_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Covid-19 cases in Norway")
+
+ ```
+Confirmed patients were reported little earlier in Norway than in Denmark.In Norway Covid-19 patients were reported from the 4th week of February. By considering the two graphs of Norway and Denmark, it can clearly identify that the recovery rate from the Covid-19 is much lesser in Norway compared to Denmark. In Norway, the confirmed cases were kept on increasing until the 3rd week of March and started to decrease while in Denmark, confirmed cases kept on increasing until the 2nd week of April and started to decrease. The maximum recovered patients per day from Covid-19 in Norway was 19 while in Denmark it was 894. Highest number of deaths per day in Denmark was 22 while in Norway, it was 16. Denmark has a population of 5.806 million while in Norway it is 5.368 million. So that considering the population of Sweden and Denmark, the population is slightly less in Norway than in Denmark. Even though the number of confirmed cases were reported in a nearly same pattern as in Denmark, the number of recovered patients were very less in Norway.Deaths of Norway were reported in a nearly same pattern as in Denmark. As recovered patients indicate the effectiveness of the measurements taken by the the country to fight against the Covid-19 pandemic, it can clearly conclude that Denmark was able to control the pandemic more accurately than in Norway.
+
+
+## Conclusion and Discussion
+
+The Covid-19 Pandemic taught the world the importance of accurate decision making within less time. Countries took the accurate decision like imposing lockdown and imposing new rules to obtain social distancing were able to survive from the pandemic with relatively small loss. Denmark is an example for that type of countries.Denmark took early decision to lockdown down the country after 15 days of first Covid-19 patient reported. So that Denmark was able to recover 894 people at the beginning of April. This can be consider a huge achievement of Denmark.The highest number of deaths per day of Denmark due to Covid-19 was 22 which is significantly less than other developed countries. Even though Denmark managed the pandemic accurately than most of the other countries there were around 100 confirmed cases reported at the 2nd week of May where it was around 150 at= the end of April.It represents the dark side of the Covid-19 pandemic. The Covid-19 virus tend to spread faster than most other viruses found so far.
+
+The countries where the lockdown decision and other social distancing decision imposed after a significant time from the first reported case, suffered from large number of deaths per day and large number of confirmed cases per day.Germany took those little bit latter compared to Denmark and Norway. So there were higher number of deaths per day and reported cases per day.
+
+The data of the above analysis was limited from 27th of February to 12th of May 2020. So the confirmed,recovered and death cases within that period were taken to make conclusions of different countries. In Norway significant amount of recovered cases were reported after the 2nd week of May.This period is out of the period of the dataset. So the above analysis can be only to identify whether the particular country took rapid decisions to control the pandemic and fight against it as the recovered cases can be used as a method to identify the effectiveness of the measurements taken by a particular country to fight against the pandemic.When considering the countries like Norway, where the confirmed cases took significant time to recover, the measurements they took to fight against the pandemic as a country was not so effective compared to other countries.
+
+Throughout this project it was able to identify the how Denmark face the Covid-19 pandemic and what are the accurate decisions made by the officials of the Denmark to fight against the Covid-19 pandemic and effectiveness of those decisions by analyzing the Coronavisrus dataset. Further bordering countries of denmark were compared with Denmark to identify the impact from the Covid-19 pandemic to the region.By doing the analysis, it is identified that Denmark has fight against the Covid-19 pandemic more accurately than the other countries in the region.
+
+## References
+
+[1]	“STA 326 2.0: Online Helpdesk - 2020.” [Online]. Available: https://hellor.netlify.app/slides/onlinehelpdesk. [Accessed: 15-Jul-2020].<br/>
+[2]	“Assignment - Help file.” [Online]. Available: https://hellor.netlify.app/slides/coronavirus_assignment_help_file. [Accessed: 15-Jul-2020].<br/>
+[3]	B. Amundsen, “Very low mortality rate from coronavirus in Norway compared to other countries,” Mar. 2020.<br/>
+[4]	Elsevier, “Novel Coronavirus Information Center,” Elsevier Connect.<br/>
+[5]	Staff, “Updated: Norway announces first case of coronavirus,” thelocal.no, Feb. 2020.<br/>
+[6]	Information in Connection with the Coronavirus (COVID-19). Avinor, 2020.<br/>
+[7]	“Three more people have tested positive for coronavirus,” Nor. Inst. Public Heal.<br/>
+[8]	“Status koronavirus tirsdag 10. mars 2020,” Folkehelseinstituttet.<br/>
+[9]	“COVID-19 Dagsrapport søndag 15. mars 2020,” Folkehelseinstituttet.<br/>
+[10]	“COVID-19 pandemic in Norway - Wikipedia.” [Online]. Available: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Norway. [Accessed: 17-Jul-2020].<br/>
+[11]	Robert Koch-Institut: COVID-19-Dashboard. Robert Koch Institute.<br/>
+[12]	COVID-19 update: statistics and charts. Danish Health Authority (Sundhedsstyrelsen).<br/>
+[13]	“Denmark Population 2018 (Demographics, Maps, Graphs),” worldpopulationreview.com.<br/>
+[14]	“Geography of Denmark - Wikipedia.” [Online]. Available: https://en.wikipedia.org/wiki/Geography_of_Denmark. [Accessed: 17-Jul-2020].<br/>
+[15]	“COVID-19 pandemic in Sweden - Wikipedia.” [Online]. Available: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Sweden. [Accessed: 17-Jul-2020].<br/>
+[16]	“What you need-to know about the coronavirus outbreak in Sweden,” The Local.<br/>
+
+
+

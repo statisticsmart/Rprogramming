@@ -1,0 +1,815 @@
+---
+title: "**Corona Virus in Nigeria**"
+author: "Thanusiga Thanabalasingam"
+date: "7/17/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,include  = FALSE}
+library(ggplot2)
+library(plotly)
+```
+
+
+```{r,include  = FALSE}
+library(maptools)
+```
+
+
+```{r,include  = FALSE}
+library(tibble)
+```
+
+
+```{r,include = FALSE}
+library(tidyverse)
+```
+
+
+```{r,include = FALSE}
+library(ggrepel)
+```
+
+
+```{r,include = FALSE}
+library(png)
+```
+
+
+```{r,include = FALSE}
+library(grid)
+```
+
+
+```{r,include = FALSE}
+library(sp)
+```
+
+
+```{r,include = FALSE}
+library(magrittr)
+```
+
+
+```{r,include = FALSE}
+# plot location
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+unique(coronavirus$country)
+unique(coronavirus$type)
+
+nigeria_corona <- coronavirus %>% filter(country == "Nigeria")
+nigeria_corona
+data(wrld_simpl)
+plot(wrld_simpl)
+
+```
+
+## <span style="color: blue;">  **Nigeria Map** </span>
+```{r, echo=FALSE, message=FALSE, out.height="70%", out.width="50%"}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p +
+  geom_point(
+    data = nigeria_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+*Figure 01 : Nigeria*
+![](nigeria.jpg){width=35%}
+
+
+## <span style="color: blue;">  **Climate of Nigeria** </span>
+Generaly Nigeria has two seasons which are rainy season and dry seasons.it is wet and hot most of the year in the southeast of nigeria. In the southwest and farther island the climate is dry
+
+Figure 01 shows that the genaral Temperature in nigeria 2020 january-june
+
+![*Figure 02: Temperaature in Nigeria*](climate.png)
+
+In Nigeria, the climate is hot tropical during this corona period.
+
+### <span style="color: green;">  **Association between climate and Spread of corona** </span>
+
+  A Question was asked about above topic to Mr Wyns who is a  scientist,  specialises on climate change. he said that directly there is no association between climate change and spread of the COVID-19 disease.The corona virus causing COVID-19 was not caused by climate change and can be spread whether hot and humid or cold and dry. Even though it did not affect the spread of COVID-19, it could indirectly make the effects of a spreading.
+
+## <span style="color: blue;">  **Spread of Corona Virus in Nigeria** </span>
+
+  The first case of the coronavirus in sub-Saharan Africa has been confirmed in Nigeria.The patient is an Italian citizen who works in Nigeria and flew into the commercial city of Lagos from Milan on 25 February.
+  Mar 23, 2020 - Nigeria on Monday reported its first death from coronavirus as confirmed cases of infections in Africa's most populous nation climbed further.
+  
+<span style="color: orange;"> **COVID-19 Case Updates- 18th July 2020** </span>
+  
+- Total Number of Cases – 36,107
+-	Total Number Discharged – 14,938
+-	Total Deaths – 778
+-	Total Tests Carried out – 209,446
+
+
+
+## <span style="color: blue;">  **Lockdown Status in Nigeria** </span>
+<span style="color: #3182bd;">
+  most of the countries in th world announced lockdown to decrease the spread of COVID-19 by the end of March.
+ </span> 
+ <span style="color: #3182bd;">
+  President of Nigeria Muhammadu Buhari directed the cessation of all movements in Lagos and the FCT for an initial period of 14 days, which took effect from 11 pm on Monday, 30th March 2020.
+   </span> 
+ <span style="color: #3182bd;">
+  The movement restriction, which was extended by another two-weeks period, has been partially put on hold with some businesses commencing operations from May 4.
+   </span> 
+ <span style="color: #3182bd;">
+  On April 27th, 2020, Nigeria’s President, Muhammadu Buhari declared an overnight curfew from 8 pm to 6 am across the country, as part of new measures to contain the spread of the COVID-19.
+   </span> 
+ <span style="color: #3182bd;">
+  This comes along with the phased and gradual easing of lockdown measures in FCT, Lagos, and Ogun States, which took effect from Saturday, 2nd May 2020, at 9 am.
+   </span> 
+ <span style="color: #3182bd;">
+  On Monday, 29th June 2020 the federal government extended the second phase of the eased lockdown by 4 weeks and approved interstate movement outside curfew hours with effect from July 1, 2020.
+   </span> 
+
+  
+## <span style="color: blue;">  **Actions taken by Nigerian Government** </span>
+<span style="color:forestgreen;"> **The following instructions are given to public by Nigerian Government** </span>
+
+- Regularly and carefully wash your hands with soap and water, and use alcohol-based hand sanitizer.
+  
+- Maintain at least 1 & half meteres (5 feet) distance between yourself and anyone who is coughing or sneezing.
+
+- Persons with persistent cough or sneezing should stay home or keep a social distance, but not mix in crowd.
+
+- Make sure you and people around you, follow good respiratory hygiene, meaning cover your mouth and nose with a tissue or into your sleeve at the bent elbow or tissue when you cough or sneeze. Then dispose of the used tissue immediately.
+
+- Stay home if you feel unwell with symptoms like fever, cough and difficulty in breathing. Please call NCDC toll free number which is available day and night, for guidance- 0800-970000-10. Do not engage in self-medication 
+
+- Stay informed on the latest developments about COVID-19 through official channels on TV and Radio, including the Lagos State Ministry of Health, NCDC and Federal Ministry of Health.
+ 
+<span style="color: forestgreen;">  **The following picture shows taken the actions by Nigerian Government during the COVID-19 period** </span>
+
+Here, Green circles indicate public health policies; blue circle indicate social and economic policies
+
+![*Figure 03 : Actions taken by Nigerian Government*](nigeria_government.png)
+
+
+![*Figure 04 : hospital in Nigeria*](doctors.jpg){width=35%}
+![*Figure 05 :Funeral of a COVID-19 patient t*](funeral.png){width=35%}
+
+## <span style="color: blue;"> **Public Support** </span>
+![*Figure 04 : Road in Nigeria*](road.jpg){width=35%}
+![*Figure 04 : support to test in Nigeria*](army.jpg){width=35%}
+
+[*Figure 04 : Travelling in Nigeria*](public1.jpg){width=35%}
+
+
+
+# <span style="color: Green;"> **Data Analysis** </span>
+
+
+```{r,include = FALSE}
+recover_nigeria_corona<- nigeria_corona %>% filter(type=="recovered")
+recover_nigeria_corona                                            
+death_nigeria_corona<- nigeria_corona %>% filter(type== "death")
+death_nigeria_corona
+confirmed_nigeria_corona<- nigeria_corona %>% filter(type== "confirmed")
+confirmed_nigeria_corona
+recover_rate = nigeria_corona$ recovered /nigeria_corona$confirmed
+death_rate = nigeria_corona$death /nigeria_corona$ confirmed
+
+```
+
+
+```{r, echo = FALSE, out.width="50%", out.height="80%"}
+#plot details of nigera_corona
+ggplot(nigeria_corona, aes(x = date, y = cases, col = type)) + geom_line() + ggtitle("Nigeria: Daily Covid-19 all cases feb-may")
+
+ggplot(nigeria_corona, aes(x=date, y=cases, col= type)) + geom_line() + ggtitle("Nigeria: Daily Covid-19 confirmed, death and recovered cases")+ facet_wrap(~type)
+
+```
+```{r, include=FALSE}
+# cumulative cases by type
+df_daily <- nigeria_corona %>% 
+group_by(date, type) %>%
+  summarise(total = sum(cases, na.rm = TRUE)) %>%
+  pivot_wider(names_from = type,
+                     values_from = total) %>%
+  arrange(date) %>%
+  ungroup() %>%
+  mutate(active =  confirmed - death - recovered) %>%
+  mutate(confirmed_cum = cumsum(confirmed),
+                death_cum = cumsum(death),
+                recovered_cum = cumsum(recovered),
+                active_cum = cumsum(active))
+
+```
+
+```{r, echo=FALSE}
+# plot of cumulative number of cases
+plotly::plot_ly(data = df_daily,
+                x = ~ date,
+                y = ~ active_cum, 
+                name = "Active", 
+                type = "scatter",
+                mode = "lines", 
+                fillcolor = "blue") %>%
+  plotly::add_trace(y = ~ recovered_cum,
+                    name = "Recovered",
+                    fillcolor = "red" ) %>%
+  plotly::add_trace(y = ~ death_cum,
+                    name = "Death",
+                    fillcolor = "#110"
+                    ) %>%
+  plotly::layout(title = "Cumulative Number of cases",
+                 yaxis = list(title = "Cumulative Number of Cases"),
+                 xaxis = list(title = "Date"),
+                 legend = list(x = 0.1, y = 0.9),
+                 hovermode = "compare")
+
+```
+
+```{r, include=FALSE}
+#nearest countries details
+nigeria_nearest_countries <-coronavirus %>% 
+  dplyr::filter(country %in% c("Nigeria", "Benin", "Chad", "Niger", "Cameroon")) %>%
+  dplyr::group_by(country, type) %>%
+  dplyr::summarise(total_cases = sum(cases)) %>%
+  tidyr::pivot_wider(names_from = type, values_from = total_cases) %>%
+  dplyr::arrange(- confirmed) %>%
+  dplyr::filter(confirmed >= 25) %>%
+  dplyr::select(country = country, confirmed, recovered, death) %>%
+  dplyr::mutate(recover_rate = recovered*100 / confirmed,
+                death_rate = death*100 / confirmed)  
+
+USA_China_countries <-coronavirus %>% 
+  dplyr::filter(country %in% c("Nigeria","US", "China")) %>%
+  dplyr::group_by(country, type) %>%
+  dplyr::summarise(total_cases = sum(cases)) %>%
+  tidyr::pivot_wider(names_from = type, values_from = total_cases) %>%
+  dplyr::arrange(- confirmed) %>%
+  dplyr::filter(confirmed >= 25) %>%
+  dplyr::select(country = country, confirmed, recovered, death) %>%
+  dplyr::mutate(recover_rate = recovered*100 / confirmed,
+                death_rate = death*100 / confirmed)  
+
+
+
+```
+
+### <span style="color: purple;"> **Details of Nearest countries to Nigeria** </span>
+
+```{r, echo=FALSE}
+library(knitr)
+kable(nigeria_nearest_countries)
+```
+
+### <span style="color: purple;">**Compare with USA and China**  </span>
+
+```{r, echo=FALSE}
+kable(USA_China_countries)
+```
+
+### <span style="color: purple;">**Compare Death, Recoverd and Active cases with Nearest countries to Nigeria**  </span>
+```{r, echo=FALSE, warning= FALSE}
+
+library(coronavirus)
+library(plotly)
+library(tidyverse)
+library(tibble)
+confirmed_color <- "purple"
+active_color <- "#1f77b4"
+recovered_color <- "forestgreen"
+death_color <- "red"
+
+nearest_countries4 <-  filter(coronavirus, country %in% c("Nigeria", "Niger", "Benin", "Cameroon", "Chad"))
+
+nearest_countries4 <- nearest_countries4 %>% 
+  # dplyr::filter(date == max(date)) %>%
+  dplyr::group_by(country, type) %>%
+  dplyr::summarise(total = sum(cases)) %>%
+  tidyr::pivot_wider(names_from =  type, 
+                     values_from = total) %>%
+  dplyr::mutate(unrecovered = confirmed - ifelse(is.na(recovered), 0, recovered) - ifelse(is.na(death), 0, death)) %>%
+  dplyr::arrange(-confirmed)
+  
+
+df_daily <- coronavirus %>% 
+  dplyr::group_by(date, type) %>%
+  dplyr::summarise(total = sum(cases, na.rm = TRUE)) %>%
+  tidyr::pivot_wider(names_from = type,
+                     values_from = total) %>%
+  dplyr::arrange(date) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(active =  confirmed - death - recovered) %>%
+  dplyr::mutate(confirmed_cum = cumsum(confirmed),
+                death_cum = cumsum(death),
+                recovered_cum = cumsum(recovered),
+                active_cum = cumsum(active))
+
+
+
+
+plotly::plot_ly(data = nearest_countries4, 
+                x = ~ country, 
+                y = ~ unrecovered, 
+               
+                type = "bar", 
+                name = "Active",
+                marker = list(color = "green")) %>%
+  plotly::add_trace(y = ~ recovered, 
+                  
+                    name = "Recovered",
+                    marker = list(color = "blue")) %>%
+  plotly::add_trace(y = ~ death, 
+                   
+                    name = "Death",
+                    marker = list(color = "red")) %>%
+  plotly::layout(title = "",
+                 barmode = 'stack',
+                 yaxis = list(title = "Total Cases"),
+                 xaxis = list(title = "countries"),
+                 hovermode = "compare",
+                 annotations = list(text = "",
+                   xref = "paper",
+                   yref = "paper",
+                   showarrow = FALSE,
+                   x = 0.95,
+                   y = 1
+                 ),
+                 margin =  list(
+                   # l = 60,
+                   # r = 40,
+                   b = 10,
+                   t = 10,
+                   pad = 2
+                 ))
+
+
+```
+
+### <span style="color: purple;">**Compare confirmed cases with nearest countries to Nigeria using a plot**  </span>
+
+```{r, echo=FALSE}
+library(tidyverse)
+
+Nigeria_corana <- coronavirus %>% dplyr::filter(type == "confirmed", country == "Nigeria") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Nigeria = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Nigeria_corana$index <- 1:nrow(Nigeria_corana)
+
+
+Cameroon_corona <- coronavirus %>% dplyr::filter(type == "confirmed", country == "Cameroon") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Cameroon = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Cameroon_corona$index <- 1:nrow(Cameroon_corona)
+
+
+Niger_corona<- coronavirus %>% dplyr::filter(type == "confirmed", country == "Niger") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Niger = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Niger_corona$index <- 1:nrow(Niger_corona)
+
+Chad_corona <- coronavirus %>% dplyr::filter(type == "confirmed", country == "Chad") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Chad = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Chad_corona$index <- 1:nrow(Chad_corona)
+
+Benin_corona <- coronavirus %>% dplyr::filter(type == "confirmed", country == "Benin") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Benin = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Benin_corona$index <- 1:nrow(Benin_corona)
+
+
+
+
+nearest_countries_graph <- Nigeria_corana %>% 
+  dplyr::left_join(Niger_corona, by = "index") %>%
+  dplyr::left_join(Cameroon_corona, by = "index") %>%
+  dplyr::left_join(Chad_corona, by = "index") %>%
+  dplyr::left_join(Benin_corona, by = "index")
+ 
+plotly::plot_ly(data = nearest_countries_graph) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Nigeria,
+                    name = "Nigeria",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Niger,
+                    name = "Niger",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Benin,
+                    name = "Benin",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Chad,
+                    name = "Chad",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Cameroon,
+                    name = "Cameroon",  line = list(color = "orange", width = 2)) %>%
+ 
+  plotly::layout(yaxis = list(title = "Cumulative Positive Cases"),
+                 xaxis = list(title = "Days"),
+                 legend = list(x = 0.1, y = 0.5),
+                 hovermode = "compare")
+
+
+```
+
+### <span style="color: purple;">**Compare recovered cases with nearest countries to Nigeria**  </span>
+
+```{r, echo=FALSE}
+#compare recovered cases with nearest countries to Nigeria
+
+Nigeria_corana_recovered <- coronavirus %>% dplyr::filter(type == "recovered", country == "Nigeria") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Nigeria = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Nigeria_corana_recovered$index <- 1:nrow(Nigeria_corana_recovered)
+
+
+Cameroon_corona_recovered <- coronavirus %>% dplyr::filter(type == "recovered", country == "Cameroon") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Cameroon = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Cameroon_corona_recovered$index <- 1:nrow(Cameroon_corona_recovered)
+
+
+Niger_corona_recovered<- coronavirus %>% dplyr::filter(type == "recovered", country == "Niger") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Niger = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Niger_corona_recovered$index <- 1:nrow(Niger_corona_recovered)
+
+Chad_corona_recovered <- coronavirus %>% dplyr::filter(type == "recovered", country == "Chad") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Chad = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Chad_corona_recovered$index <- 1:nrow(Chad_corona_recovered)
+
+Benin_corona_recovered <- coronavirus %>% dplyr::filter(type == "recovered", country == "Benin") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Benin = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Benin_corona_recovered$index <- 1:nrow(Benin_corona_recovered)
+
+nearest_countries_recovered_graph <- Nigeria_corana_recovered %>% 
+  dplyr::left_join(Cameroon_corona_recovered, by = "index") %>%
+  dplyr::left_join(Niger_corona_recovered, by = "index") %>%
+  dplyr::left_join(Chad_corona_recovered, by = "index") %>%
+  dplyr::left_join(Benin_corona_recovered, by = "index")
+
+plotly::plot_ly(data = nearest_countries_recovered_graph) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Nigeria,
+                    name = "Nigeria",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Niger,
+                    name = "Niger",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Benin,
+                    name = "Benin",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Chad,
+                    name = "Chad",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Cameroon,
+                    name = "Cameroon",  line = list(color = "orange", width = 2)) %>%
+  
+  plotly::layout( yaxis = list(title = "Cumulative Recovered Cases"),
+                 xaxis = list(title = "Days"),
+                 legend = list(x = 0.1, y = 0.5),
+                 hovermode = "compare")
+```
+
+### <span style="color: purple;">**Compare dead cases with nearest countries to Nigeria**  </span>
+
+```{r, echo=FALSE}
+#compare dead cases with nearest countries to Nigeria
+Nigeria_corana_death <- coronavirus %>% dplyr::filter(type == "death", country == "Nigeria") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Nigeria = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Nigeria_corana_death$index <- 1:nrow(Nigeria_corana_death)
+
+
+Cameroon_corona_death <- coronavirus %>% dplyr::filter(type == "death", country == "Cameroon") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Cameroon = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Cameroon_corona_death$index <- 1:nrow(Cameroon_corona_death)
+
+
+Niger_corona_death<- coronavirus %>% dplyr::filter(type == "death", country == "Niger") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Niger = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Niger_corona_death$index <- 1:nrow(Niger_corona_death)
+
+Chad_corona_death <- coronavirus %>% dplyr::filter(type == "death", country == "Chad") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Chad = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Chad_corona_death$index <- 1:nrow(Chad_corona_death)
+
+Benin_corona_death <- coronavirus %>% dplyr::filter(type == "death", country == "Benin") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Benin = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Benin_corona_death$index <- 1:nrow(Benin_corona_death)
+
+nearest_countries_death_graph <- Nigeria_corana_death %>% 
+  dplyr::left_join(Cameroon_corona_death, by = "index") %>%
+  dplyr::left_join(Niger_corona_death, by = "index") %>%
+  dplyr::left_join(Chad_corona_death, by = "index") %>%
+  dplyr::left_join(Benin_corona_death, by = "index")
+
+plotly::plot_ly(data = nearest_countries_death_graph) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Nigeria,
+                    name = "Nigeria",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Niger,
+                    name = "Niger",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Benin,
+                    name = "Benin",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Chad,
+                    name = "Chad",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Cameroon,
+                    name = "Cameroon",  line = list(color = "orange", width = 2)) %>%
+  
+  plotly::layout( yaxis = list(title = "Cumulative dead Cases"),
+                 xaxis = list(title = "Days"),
+                 legend = list(x = 0.1, y = 0.5),
+                 hovermode = "compare")
+
+```
+
+### <span style="color: purple;">**Compare comfirmed with USA and China **  </span>
+
+```{r, echo=FALSE}
+# nigera_usa_china graph confirmed cases
+Nigeria_corana <- coronavirus %>% dplyr::filter(type == "confirmed", country == "Nigeria") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Nigeria = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Nigeria_corana$index <- 1:nrow(Nigeria_corana)
+
+
+USA_corona <- coronavirus %>% dplyr::filter(type == "confirmed", country == "US") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(US = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+USA_corona$index <- 1:nrow(USA_corona)
+
+
+China_corona<- coronavirus %>% dplyr::filter(type == "confirmed", country == "China") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(China = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+China_corona$index <- 1:nrow(China_corona)
+
+
+
+us_china_graph <- Nigeria_corana %>% 
+  dplyr::left_join(USA_corona, by = "index") %>%
+  dplyr::left_join(China_corona, by = "index")
+
+plotly::plot_ly(data = us_china_graph) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Nigeria,
+                    name = "Nigeria",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ US,
+                    name = "USA",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ China,
+                    name = "China",  line = list(width = 2)) %>%
+ 
+  plotly::layout(title = "Compare Confirmed cases of Nigeria with USA and China",
+                 yaxis = list(title = "Cumulative Confirmed Cases"),
+                 xaxis = list(title = "Days"),
+                 legend = list(x = 0.1, y = 0.5),
+                 hovermode = "compare"
+               )
+
+```
+
+### <span style="color: purple;">**Compare Recovered cases of Nigeria with USA and China**  </span>
+
+```{r,echo=FALSE}
+# nigera_usa_china graph recovered
+library(coronavirus)
+library(tidyverse)
+data(coronavirus)
+Nigeria_corana_recoverd<- coronavirus %>% 
+  dplyr::filter(type == "recovered", country == "Nigeria") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Nigeria = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Nigeria_corana_recoverd$index <- 1:nrow(Nigeria_corana_recoverd)
+
+
+USA_corona_recovered <- coronavirus %>% 
+  dplyr::filter(type == "recovered", country == "US") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(US = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+USA_corona_recovered$index <- 1:nrow(USA_corona_recovered)
+
+
+China_corona_recovered<- coronavirus %>% 
+  dplyr::filter(type == "recovered", country == "China") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(China = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+China_corona_recovered$index <- 1:nrow(China_corona_recovered)
+
+
+
+us_china_recovered_graph <- Nigeria_corana_recoverd %>% 
+  dplyr::left_join(USA_corona_recovered, by = "index") %>%
+  dplyr::left_join(China_corona_recovered, by = "index")
+
+plotly::plot_ly(data = us_china_recovered_graph) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Nigeria,
+                    name = "Nigeria",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ US,
+                    name = "USA",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ China,
+                    name = "China",  line = list(width = 2)) %>%
+  
+  plotly::layout(title = "compare Recovered cases of Nigeria with USA and China",
+                 yaxis = list(title = "Cumulative recovered Cases"),
+                 xaxis = list(title = "Days"),
+                 legend = list(x = 0.1, y = 0.5),
+                 hovermode = "compare")
+
+
+```
+
+### <span style="color: purple;">**Compare Dead cases of Nigeria with USA and China**  </span>
+
+```{r, echo=FALSE}
+# nigera_usa_china graph Death
+library(coronavirus)
+library(tidyverse)
+data(coronavirus)
+Nigeria_corana_death<- coronavirus %>% 
+  dplyr::filter(type == "death", country == "Nigeria") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(Nigeria = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+Nigeria_corana_death$index <- 1:nrow(Nigeria_corana_death)
+
+USA_corona_death <- coronavirus %>% 
+  dplyr::filter(type == "death", country == "US") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(US = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+USA_corona_death$index <- 1:nrow(USA_corona_death)
+
+
+China_corona_death<- coronavirus %>% 
+  dplyr::filter(type == "death", country == "China") %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(cases = sum(cases)) %>%
+  dplyr::arrange(date) %>%
+  dplyr::mutate(China = cumsum(cases)) %>%
+  dplyr::select(-cases, -date)
+China_corona_death$index <- 1:nrow(China_corona_death)
+
+
+
+us_china_death_graph <- Nigeria_corana_death %>% 
+  dplyr::left_join(USA_corona_death, by = "index") %>%
+  dplyr::left_join(China_corona_death, by = "index")
+
+plotly::plot_ly(data = us_china_death_graph) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ Nigeria,
+                    name = "Nigeria",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ US,
+                    name = "USA",  line = list(width = 2)) %>%
+  plotly::add_lines(x = ~ index,
+                    y = ~ China,
+                    name = "China",  line = list(width = 2)) %>%
+  
+  plotly::layout(title = "compare Dead cases of Nigeria with USA and China",
+                 yaxis = list(title = "Cumulative dead Cases"),
+                 xaxis = list(title = "Days"),
+                 legend = list(x = 0.1, y = 0.5),
+                 hovermode = "compare")
+
+
+```
+
+
+## <span style="color: #dd1c77;"> **Conclusion** </span>
+<span style="color: #c994c7;">
+ In Nigeria corona patients increased slowly from March mid. During April end to 
+  May start there is fluctuations in confirmed patients. After May first week 
+ confirmed patients were decreased.
+</span>
+<span style="color: #c994c7;">
+ Recover rate is 20.03 and death rate is 3.30 in Nigeria.
+</span>
+<span style="color: #c994c7;">
+ Nigeria has confirmed patients more than nearest countries such as Chad, Niger, Benin, Cameroon. 
+ But Comparatively (nearest countries) death rate of Nigeria and recover rate of Nigeria are low.     Therefore, active cases of Nigeria is very high (see bar chart)
+ </span>
+<span style="color: #c994c7;">
+ Recover rate of Nigeria is higher than recover rate of America at the same time China has a highest   recover rate.
+</span>
+
+## <span style="color: #de2d26;"> Discussion </span>
+- This dataset has data only from 2020-01-22 to 2020-05-12. So I don’t analyze after 2020-05-12 But mentioned the current status of Corona virus in Nigeria above under the heading “Spread of Corona Virus in Nigeria”. 
+- The picture of Climate data is not accurate. That is forecasted one. So there may any mistakes in temperatures 
+
+## <span style="color: red;"> References </span>
+
+1.  <https://thiyanga.netlify.app/post/covid19/>
+2.  <https://hellor.netlify.app/>
+3.  <https://nairametrics.com/2020/07/19/covid-19-update-in-nigeria>
+4.  <https://www.brookings.edu/blog/future-development/2020/07/02/how-well-has-nigeria-responded-to-covid-19/>
+5.  <https://bookdown.org/yihui/rmarkdown-cookbook/font-color.html>

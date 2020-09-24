@@ -1,0 +1,701 @@
+---
+title: "Coronavirus in Germany"
+author: "D.H.K Wilathgamuwage"
+date: "7/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, warning = FALSE)
+```
+
+```{r}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+```
+
+# **INTRODUCTION**
+
+### **Visualisation of the location**
+
+
+
+```{r}
+data(coronavirus)
+germany_corona <- coronavirus %>% filter(country == "Germany")
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = germany_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+**Figure 01: Visualisation of the location - Germany**
+
+Germany officially the Federal Republic of Germany is a country in central and western Europe, covering an area of 357,022 square kilometers. It borders Denmark to the north, Poland and the Czech Republic to east, Austria and Switzerland to the south and France, Belgium and the Netherlands to the west.Germany's climate is moderate and has generally no longer periods of cold or hot weather. Northern western and Coastal Germany have a maritime influenced climate which is characterized by warm summer and mild cloudily winter.German states and the federal government have reached an agreement on more targeted measures to address localized outbreaks of Corona virus. One significant change is that entire districts will no longer be required to lockdown in the case of a localized outbreak, while quarantine and lockdown measures will be tightly limited to only targeted hotspots.Due to the Corona virus crisis the German government has reduced the threshold for the minimum number of employees who have to work short-time from 30% to 10%.Overall Global Health Security index of Germany is 66. Germany ranked at 14th among global health security capabilities in 195 countries.
+
+
+
+# **EXPLORATORY DATA ANALYSIS**
+
+
+
+```{r}
+germany_corona <- coronavirus %>% filter(country == "Germany")
+summary(germany_corona)
+
+```
+
+
+**Table 01: Summary of Coronavirus data - Germany**
+
+
+```{r}
+totals = germany_corona %>% 
+  group_by(date, type) %>%
+  summarise ( cases = sum(cases))
+totals %>%
+  ggplot( aes(x = date, y = cases)) + geom_line() + facet_wrap(~type, ncol = 1, scales = "free_y")
+```
+
+
+**Figure 02: Time series plot of Coronavirus spread in Germany**
+
+
+```{r}
+confirm_germany_corona <- germany_corona %>% filter(type=="confirmed")
+summary(confirm_germany_corona)
+```
+ 
+ 
+**Table 02: Summary of confirmed cases data - Germany**
+
+
+```{r}
+ggplot(confirm_germany_corona, aes(x=date, y=cases)) +
+  geom_line(color = "Blue") + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 03: Time series plot of Confirmed Cases in Germany.**
+
+
+In **Figure 03**, Germany started out with a very high daily confirmed rate in March.Germany has managed to reduced it drastically within two months of coronavirus outbreak.
+
+
+```{r}
+death_germany_corona <- germany_corona %>% filter(type=="death")
+summary(death_germany_corona)
+
+```
+
+
+**Table 03: Summary of Death cases - Germany**
+
+
+```{r}
+ggplot(death_germany_corona, aes(x=date, y=cases)) +
+  geom_line(color = "Red") + labs(x = "Date", y = "Cases")
+```
+
+
+
+**Figure 04: Time series plot of Death Cases in Germany (Discontinuity represents missing values/ negative values)**
+
+
+In **Figure 04**, Germany started out with a very low death rate. But from March onwards the number of deaths per day has increassd steadly. However from mid April onwards the number of deaths per day has reduced slighly.
+
+
+```{r}
+recovery_germany_corona <- germany_corona %>% filter(type=="recovered")
+summary(recovery_germany_corona)
+
+```
+
+
+**Table 04: Summary of Recovered cases data set- Germany(Including negetive values)**
+
+
+```{r}
+death_germany_corona <- death_germany_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_germany_corona)
+```
+
+
+**Table 05: Summary of Recovered cases data set- Germany(Excluding negetive values)**
+
+
+```{r}
+ggplot(recovery_germany_corona, aes(x=date, y=cases)) +
+  geom_line(color = "Forestgreen") + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 05: Time series plot of Recovered Cases in Germany.**
+
+
+In **Figure 05**, Initially the total recovered count per day in Germany was relatively low.However Germany has recorded the highest recovered patients per day in April and it was more than 10000 patients. 
+
+
+
+```{r}
+select_germany_corona <- select(germany_corona, date, type, cases)
+
+```
+```{r}
+pw_germany_corona <- pivot_wider(select_germany_corona, names_from = type, values_from = cases)
+
+```
+```{r}
+final_pw_germany_corona <- pw_germany_corona %>%
+  mutate(active = confirmed - (death + recovered))
+```
+```{r}
+summary(final_pw_germany_corona)
+```
+
+
+**Table 06: Summary of Active cases data - Germany(Including negetive values)**
+
+
+```{r}
+active_germany_corona <- final_pw_germany_corona %>% mutate(active = replace(active, which(active < 0), NA))
+summary(active_germany_corona)
+```
+
+
+**Table 07: Summary of Active cases data - Germany(Excluding negetive values)**
+
+
+```{r}
+ggplot(active_germany_corona, aes(x=date, y = active )) +
+  geom_line(color = "Purple") + labs(x = "Date", y = "Cases")
+```
+
+
+**Figure 06: Time series plot of Active Cases in Germany (Discontinuity represents missing values/ negative values)**
+
+
+In **Figure 06**, Initially the daily active cases count in Germany was relatively high. However from April onwards the number of active cases per day has reduced slighly. 
+
+
+
+### Since Austria is a neighbouring country of Germany, Let's look at Conoravirus spread in Austria.
+
+
+## **AUSTRIA**
+
+
+```{r}
+austria_corona <- coronavirus %>% filter(country == "Austria")
+summary(austria_corona)
+```
+
+
+**Table 08: Summary of Coronavirus data - Austria**
+
+
+```{r}
+ggplot(austria_corona, aes(x=date, y=cases, col=type)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 07.1: Time series plot of Coronavirus spread in Austria**
+
+
+```{r}
+totals1 = austria_corona %>% 
+  group_by(date, type) %>%
+  summarise ( cases = sum(cases))
+totals1 %>%
+  ggplot( aes(x = date, y = cases)) + geom_line() + facet_wrap(~type, ncol = 1, scales = "free_y")
+```
+
+
+**Figure 07.2: Time series plot of Coronavirus spread in Austria**
+
+
+```{r}
+confirm_austria_corona <- austria_corona %>% filter(type=="confirmed")
+
+```
+
+
+
+```{r}
+select_austria_corona <- select(austria_corona, date, type, cases)
+
+```
+
+
+```{r}
+death_austria_corona <- austria_corona %>% filter(type=="death")
+
+```
+
+
+```{r}
+recovery_austria_corona <- austria_corona %>% filter(type=="recovered")
+
+
+```
+
+
+```{r}
+recovery_austria_corona <- recovery_austria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+```{r}
+pw_austria_corona <- pivot_wider(select_austria_corona, names_from = type, values_from = cases)
+
+```
+```{r}
+final_pw_austria_corona <- pw_austria_corona %>%
+  mutate(active = confirmed - (death + recovered))
+```
+```{r}
+summary(final_pw_austria_corona)
+
+```
+
+
+
+**Table 09:Smmary of Active cases data - Austria(Excluding negetive values)**
+
+
+```{r}
+active_austria_corona <- final_pw_austria_corona %>% mutate(active = replace(active, which(active < 0), NA))
+summary(active_austria_corona)
+```
+
+
+**Table 11: Summary of Active cases data - Austria(Excluding negetive values)**
+
+
+```{r}
+ggplot(active_austria_corona, aes(x=date, y = active )) +
+  geom_line(color = "Purple") + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 08: Time series plot of Active Cases in Austria (Discontinuity represents missing values/ negative values)**
+
+
+In **Figure 08**, Initially the daily active cases count in Austria was relatively high. However from April onwards the number of active cases per day has reduced drastically. 
+
+
+### Comparing Corona spread- Germany vs Austria
+
+
+```{r}
+germany_austria1 <- data.frame(date=death_germany_corona$date, GermanyDeaths = death_germany_corona$cases, AustriaDeaths = death_austria_corona$cases)
+
+germany_austria1 <- pivot_longer(germany_austria1, c(2, 3), "country", "value")
+
+ggplot(germany_austria1, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 09: Time series plot of Death Cases - Germany vs Austria** 
+
+
+In **Figure 09**, When compared with Germany, the total daily death case count in Austria was relatively low.However both Germany and Austria are finally starting to see an overall decline in death cases.
+
+
+```{r}
+germany_austria2 <- data.frame(date=death_germany_corona$date, GermanyRecovered = recovery_germany_corona$cases, AustriaRecovered = recovery_austria_corona$cases)
+
+germany_austria2 <- pivot_longer(germany_austria2, c(2, 3), "country", "value")
+
+ggplot(germany_austria2, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 10: Time series plot of Recovered Cases - Germany vs Austria**
+
+In **Figure 10**, When compared with Germany, the total daily recovered case count in Austria was relatively low.
+
+
+```{r}
+germany_austria3 <- data.frame(date=death_germany_corona$date, GermanyConfirmed = confirm_germany_corona$cases, AustriaConfirmed = confirm_austria_corona$cases)
+
+germany_austria3 <- pivot_longer(germany_austria3, c(2, 3), "country", "value")
+
+ggplot(germany_austria3, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 11: Time series plot of Confirmed Cases - Germany vs Austria**
+
+In **Figure 11**, When compared with Germany, the total daily confirmed case count in Austria was relatively low. However both Germany and Austria are finally starting to see an overall decline in confirmed cases.
+
+
+### Since France is a neighbouring country of Germany, Let's look at Conoravirus spread in France.
+
+
+## **FRANCE**
+
+
+```{r}
+france_corona <- coronavirus %>% filter(country == "France")
+summary(france_corona)
+```
+
+
+**Table 12: Summary of Coronavirus data - France**
+
+
+```{r}
+totals2 = france_corona %>% 
+  group_by(date, type) %>%
+  summarise ( cases = sum(cases))
+totals2 %>%
+  ggplot( aes(x = date, y = cases)) + geom_line() + facet_wrap(~type, ncol = 1, scales = "free_y")
+```
+
+
+**Figure 12: Time series plot of Coronavirus spread in France**
+
+
+```{r}
+confirm_france_corona <- france_corona %>% filter(type=="confirmed")
+
+```
+
+
+```{r}
+confirm_france_corona <- confirm_france_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+
+```{r}
+death_france_corona <- france_corona %>% filter(type=="death")
+
+
+```
+
+```{r}
+recovery_france_corona <- france_corona %>% filter(type=="recovered")
+
+```
+
+
+### Comparing Corona spread- Germany vs France
+
+
+```{r}
+germany_france <- data.frame(date=recovery_germany_corona$date, GermanyRecovered = recovery_germany_corona$cases, FranceRecovered = recovery_france_corona$cases)
+
+germany_france <- pivot_longer(germany_france, c(2, 3), "country", "value")
+
+ggplot(germany_france, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+
+**Figure 13: Time series plot of Recovered Cases - Germany vs Austria** 
+
+In **Figure 13**, When compared with Germany, the total daily death case count in France was relatively low.
+
+
+
+```{r}
+germany_france1 <- data.frame(date=death_germany_corona$date, GermanyDeaths = death_germany_corona$cases, FranceDeaths = death_france_corona$cases)
+
+germany_france1 <- pivot_longer(germany_france1, c(2, 3), "country", "value")
+
+ggplot(germany_france1, aes(x=date, y= value, colour=country)) + geom_line() + labs(title = "Figure 0: Corona Deaths - Germany vs France", x = "Date", y = "Cases")
+```
+
+
+**Figure 14: Time series plot of Death Cases - Germany vs France** 
+
+
+In **Figure 14**, When compared with Germany, the total daily death case count in France was relatively high.However both Germany and France are finally starting to see an overall decline in death cases.
+
+
+
+```{r}
+germany_france2 <- data.frame(date=confirm_germany_corona$date, GermanyConfirmed = confirm_germany_corona$cases, FranceConfirmed = confirm_france_corona$cases)
+
+germany_france2 <- pivot_longer(germany_france2, c(2, 3), "country", "value")
+
+ggplot(germany_france2, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 15: Time series plot of Confirmed Cases - Germany vs Austria** 
+
+In **Figure 15**, When compared with Germany, the total daily confirmed case count in France was aproximately similar.However both Germany and France are finally starting to see an overall decline in death cases.
+
+
+### Since coronavirus continues to be severe in US , Let's compare with US.
+
+
+## **US**
+
+```{r}
+us_corona <- coronavirus %>% filter(country == "US")
+summary(us_corona)
+```
+
+
+**Table 13: Summary of Coronavirus data - US**
+
+```{r}
+ggplot(us_corona, aes(x=date, y=cases, col=type)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 16.1: Time series plot of Coronavirus spread in US**
+
+```{r}
+totals3 = us_corona %>% 
+  group_by(date, type) %>%
+  summarise ( cases = sum(cases))
+totals3 %>%
+  ggplot( aes(x = date, y = cases)) + geom_line() + facet_wrap(~type, ncol = 1, scales = "free_y")
+```
+
+**Figure 16.2: Time series plot of Coronavirus spread in US**
+
+
+```{r}
+confirm_us_corona <- us_corona %>% filter(type=="confirmed")
+
+```
+
+```{r}
+death_us_corona <- us_corona %>% filter(type=="death")
+
+
+```
+
+```{r}
+recovery_us_corona <- us_corona %>% filter(type=="recovered")
+
+
+```
+
+```{r}
+recovery_us_corona <- recovery_us_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+```{r}
+select_us_corona <- select(us_corona, date, type, cases)
+
+```
+```{r}
+pw_us_corona <- pivot_wider(select_us_corona, names_from = type, values_from = cases)
+
+```
+```{r}
+final_pw_us_corona <- pw_us_corona %>%
+  mutate(active = confirmed - (death + recovered))
+```
+
+
+```{r}
+active_us_corona <- final_pw_us_corona %>% mutate(active = replace(active, which(active < 0), NA))
+```
+
+```{r}
+ggplot(active_us_corona, aes(x=date, y = active )) +
+  geom_line(color = "Purple") + labs( x = "Date", y = "Cases")
+```
+
+**Figure 17: Time series plot of Active Cases in US (Discontinuity represents missing values/ negative values)**
+
+
+### Comparing Corona spread- Germany vs US
+
+
+```{r}
+germany_us <- data.frame(date=recovery_germany_corona$date, GermanyRecovered = recovery_germany_corona$cases, USRecovered = recovery_us_corona$cases)
+
+germany_us <- pivot_longer(germany_us, c(2, 3), "country", "value")
+
+ggplot(germany_us, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 18: Time series plot of Recovered Cases - Germany vs US** 
+
+In **Figure 18**, When compared with Germany, the total daily recovered case count in US was relatively high.
+
+
+```{r}
+germany_us1 <- data.frame(date=death_germany_corona$date, GermanyDeaths = death_germany_corona$cases, USDeaths = death_us_corona$cases)
+
+germany_us1 <- pivot_longer(germany_us1, c(2, 3), "country", "value")
+
+ggplot(germany_us1, aes(x=date, y= value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 19: Time series plot of Death Cases - Germany vs US** 
+
+In **Figure 19**, When compared with Germany, the total daily death case count in US was very high.
+
+
+```{r}
+germany_us2 <- data.frame(date=confirm_germany_corona$date, GermanyConfirmed = confirm_germany_corona$cases, USConfirmed = confirm_us_corona$cases)
+
+germany_us2 <- pivot_longer(germany_us2, c(2, 3), "country", "value")
+
+ggplot(germany_us2, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+**Figure 20: Time series plot of Confirmed Cases - Germany vs US** 
+
+In **Figure 20**, When compared with Germany, the total daily confirmed case count in US was very high.
+
+
+### Since China is one of the most affected contries in the world, Let's compare with China.
+
+
+## **CHINA**
+
+
+```{r}
+china_corona <- coronavirus %>% filter(country == "China")
+summary(china_corona)
+```
+
+
+**Table 14: Summary of Coronavirus data - China**
+
+
+```{r}
+totals4 = china_corona %>% 
+  group_by(date, type) %>%
+  summarise ( cases = sum(cases))
+totals4 %>%
+  ggplot( aes(x = date, y = cases)) + geom_line() + facet_wrap(~type, ncol = 1, scales = "free_y")
+```
+
+
+```{r}
+confirm_china_corona <- china_corona %>% filter(type=="confirmed")
+
+```
+
+```{r}
+death_china_corona <- china_corona %>% filter(type=="death")
+
+
+```
+
+```{r}
+recovery_china_corona <- china_corona %>% filter(type=="recovered")
+
+```
+
+```{r}
+confirm_china_corona <- confirm_china_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+```{r}
+recovery_china_corona <- recovery_china_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+
+### Comparing Corona spread- Germany vs China
+
+
+```{r}
+germany_china <- data.frame(date=recovery_germany_corona$date, GermanyRecovered = recovery_germany_corona$cases, ChinaRecovered = recovery_china_corona$cases)
+
+germany_china <- pivot_longer(germany_china, c(2, 3), "country", "value")
+
+ggplot(germany_china, aes(x=date, y= value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 21: Time series plot of Recovered Cases - Germany vs China** 
+
+In **Figure 21**, China started out with very recovered rate. But from March onwards the recovered rate has fallen stedily.
+
+
+```{r}
+germany_china1 <- data.frame(date=death_germany_corona$date, GermanyDeaths = death_germany_corona$cases, ChinaDeaths = death_china_corona$cases)
+
+germany_china1 <- pivot_longer(germany_china1, c(2, 3), "country", "value")
+
+ggplot(germany_china1, aes(x=date, y= value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 22: Time series plot of Death Cases - Germany vs China** 
+
+In **Figure 22**, China started out with a very high death rate when compared with Germany and China has managed to reduce it drastically within few months of coronavirus outbreak except very high daily death cases in mid April.
+
+
+```{r}
+germany_china2 <- data.frame(date=confirm_germany_corona$date, GermanyConfirmed = confirm_germany_corona$cases, ChinaConfirmed = confirm_china_corona$cases)
+
+germany_china2 <- pivot_longer(germany_china2, c(2, 3), "country", "value")
+
+ggplot(germany_china2, aes(x=date, y=value, colour=country)) + geom_line() + labs( x = "Date", y = "Cases")
+```
+
+
+**Figure 23: Time series plot of Confirmed Cases - Germany vs China** 
+
+In **Figure 23**, China started out with a very high confirmed rate when compared with Germany and China has managed to reduce it drastically within few months of coronavirus outbreak. 
+
+
+
+# **CONCLUSION AND DISCUSSION**
+
+
+
+This results give the indication of the corona virus transmitted rapidly. In terms of the spread of coronavirus, initially Germany has constantly recorded high daily death, confirmed and acutal cases. According to Figure 02 and Figure 07 number of daily death, confirmed and actual cases are not only high but have been rising from day 1. Positive fact is that recovered cases are also going up. when compared with Austria and Frace, Germany has the highest number of death, active and confirm cases.However Germany has been on the decline of all the cases starting from May due to rapid control and responses by the German government.
+
+   When Germany compared with China, Germany has relatively high deaths and confirmed cases after month of May. However figure 21, 22 and 23 indicated that it was only because coronavirus outbreak started late in Germany. On the other hand in China ,there were an initial period when cases were rising. However from march onwards the death rate in China has fallen steadily.But deaths and confirmed cases in US has risen dramatically. Finally it's clear that daily cases are coming down, but not for US.
+   
+   One of the problems with comparing contries is that many of them report deaths in different ways. There have also been questions over whether official data from some contries can be trusted. Another issue is that contries could be at different stage of an outbreak. Here in this coronavirus package in R, there were some negetive values too. Updating false cases, error in counting and different reporting methodologies could be the reasons for that. In this report all the plots were drawn by excluding negetive values.
+   
+   Finally we can conclude that comparing Germany, Austria, US and China, China is the best in terms of tackling corona virus outbreak. Because it has the outbreak for the longest duration, but has manage to limit the case count the most.
+
+
+# **REFERENCES**
+
+
+(01)
+@book{10.5555/3086927,
+author = {Wickham, Hadley and Grolemund, Garrett},
+title = {R for Data Science: Import, Tidy, Transform, Visualize, and Model Data},
+year = {2017},
+isbn = {1491910399},
+publisher = {O’Reilly Media, Inc.},
+edition = {1st}
+}
+
+
+(02)- https://github.com/RamiKrispin/coronavirus
+
+(03)- https://hellor.netlify.app/schedule/R_Markdown

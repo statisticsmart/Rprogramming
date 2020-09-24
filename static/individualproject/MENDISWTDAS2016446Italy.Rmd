@@ -1,0 +1,257 @@
+---
+title: "Italy"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###Packages
+```{r ,message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+
+```
+
+#Introduction
+
+```{r, message=FALSE, warning=FALSE}
+data("coronavirus")
+italy_corona <- coronavirus %>% filter(country == "Italy")
+
+```
+
+This data analysis was carried out to identify the corona virus situation in the Italy.This italy_corona data set contain daily summary of corona virus data in Italy for 336 days.
+There are 3 variables
+
+|*Variable*     | *Description*|
+|      ---      |    ---    |
+|date           | Date in YYYY-MM-DD format |
+|type           | An indicator for the type of cases (confirmed, death, recovered) |
+|cases          | Number of cases on given date |
+
+###Type of variables
+ 
+Quantitative : cases \
+Qualitative  : date, type
+
+##Visualisation of Italy
+
+```{r ,message=FALSE, warning=FALSE}
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = italy_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+Italy is located in south-central Europe, and it is also considered a part of western Europe.
+
+Italy has a predominantly Mediterranean climate with mild, sometimes rainy winters and sunny, hot, and usually dry summers.Italy are cool and humid in the north and the mountainous zone.The summer can be quite hot in Italy, mainly in the south of the peninsula, with high nocturnal temperatures of usually 28-33°C, but sometimes even 40°C.
+
+Italy is one of the most corona positive cases reported country.
+According to Wikipedia ,
+"On 9 March 2020, the government of Italy under Prime Minister Giuseppe Conte imposed a national quarantine, restricting the movement of the population except for necessity, work, and health circumstances, in response to the growing pandemic of COVID-19 in the country."
+
+ AS well as government take following methods to reduce risk of Corona virus.
+ 
+* ban of non-essential travel
+* limitation of free movement, except in cases of necessity
+* ban of public events
+* closure of commercial and retail businesses, except essential goods sellers and banks
+* suspension of teaching in schools and universities
+* under-surveillance quarantine of infected persons
+* shutdown of all non-essential businesses and industries
+
+
+#Data Analysis
+
+First we look at the summary of the corona virus cases in Italy
+
+```{r, message=FALSE, warning=FALSE, comment=NA}
+summary(italy_corona)
+
+```
+ 
+
+```{r, message=FALSE, warning=FALSE}
+
+italy_corona$Month <- months(as.Date(italy_corona$date))
+
+recovered_italy_corona <- italy_corona %>% filter(type=="recovered")
+confirmed_italy_corona <- italy_corona %>% filter(type=="confirmed")
+death_italy_corona     <- italy_corona %>% filter(type=="death")
+
+
+```
+
+
+The data was collected from 2020-01-22 to 2020-05-12.
+In here number of minimum  recovered cases reported as -1.This gives the incorrect information so this can be a outlier for our data. Therefore for we can replace it as missing value.
+
+```{r, message=FALSE, warning=FALSE}
+recovered_italy_corona <- recovered_italy_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+
+
+* table 1- composition of the sample
+```{r, message=FALSE, warning=FALSE, comment=NA}
+library(tidyverse)
+library(data.table)
+italy_corona_new <- tibble(Month = c("January", "February", "March", "April", "May","Total"),
+                            confirmedTotal = c(2, 1126, 104664, 99671, 15753, 221216),
+                            confirmedPercentage = c(0.0009904, 0.509, 47.31, 45.05, 7.12, 100),
+                            RecoveredTotal = c(0, 47, 15383, 64871, 33094, 103395),
+                            RecoveredPercentage = c (0, 0.045, 14.87, 62.74, 32.007, 100),
+                            DeathTotal = c(0, 29, 12399, 13956, 2944,29328),
+                            DeathPercentage = c (0, 0.098, 42.27, 47.73, 10.03, 100))
+                            
+p <- setDT(italy_corona_new)
+p
+```
+ According to table 1 March reported the most number of corona virus cases.It was more than 47% from the total.The most of recovered cases and death cases were reported in April with 62.7%  and 47.3% percentage respectively. 
+
+
+* figure 01 - Distribution of confirmed ,recovered , death cases
+```{r, message=FALSE, warning=FALSE}
+
+library(patchwork)
+
+p1 <- ggplot(italy_corona, aes(x = italy_corona$type, y = italy_corona$cases, color=type)) +
+  geom_boxplot(outlier.size = 1, colour="black", width=0.1 ) + 
+  geom_violin(alpha = 0.2, fill = "blue", width = 1) +
+  xlab("Type") +
+  ylab("number of Corona cases") +
+  ggtitle("Distribution of corona cases by type")
+
+p2 <- ggplot(italy_corona, aes(x =cases, fill=type)) +
+   geom_density(alpha=0.5) +
+   xlab("Type") +
+   ylab("Corona cases") +
+   ggtitle("Distribution of corona cases by type")
+
+
+p1|p2
+
+```
+
+figure 1 shows that all  the type of corona cases positively distributed.As well as we can see deaths has bi modal distribution. 
+To visualize this distribution we can plot density plot.
+This figure also show that all the types are positively distributed and there is a bi model distribution for deaths.
+
+
+* figure 02 - Time series analysis of corona patients in Italy
+```{r}
+p1 <- ggplot(italy_corona,aes(date, cases, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Time series analysis-Italy")
+ 
+ggplotly(p1)
+
+```
+
+By figure 2, We can see number of corona virus patients started increase after March but in the beginning of the April it is getting lower.
+In May we can see that number of recovered cases showed sudden peaks.AS well as number of confirmed cases and number of deaths getting lower in may.
+After the middle of may number of confirmed cases shows some repeated pattern.The highest confirmed cases reported in 31st of March with 6557 cases and highest numnber of death reported in 27th of march with 919 deaths.
+
+
+
+
+Since Italy is one of the most corona cases reported country I choose India, USA and Saudi Arabia to comparison.
+
+```{r, message=FALSE, warning=FALSE}
+us_corona <- coronavirus %>% filter(country == "US")
+India_corona <- coronavirus %>% filter(country == "India")
+saudiArabia_corona <- coronavirus %>% filter(country == "Saudi Arabia")
+```
+
+* figure 03 - Time series analysis of corona patients in US and Italy
+```{r message=FALSE, warning=FALSE}
+p11 <- ggplot(us_corona,aes(date, cases, color = type)) +
+  geom_point() +
+  geom_line()+
+  ggtitle("Time series analysis-US")
+
+p1 / p11
+
+```
+
+While looking at both graphs we can see that corona virus outbreak in USA happened later than Italy.Both number of confirmed cases and number of death cases are higher in USA. AS well as number of confirmed cases getting lesser slowly.
+
+* figure 04 - Time series analysis of corona patients in India
+```{r message=FALSE, warning=FALSE}
+p12 <- ggplot(India_corona,aes(date, cases, color = type)) +
+  geom_point() +
+  geom_line()+
+  ggtitle("Time series analysis-India")
+
+p1 / p12
+
+```
+
+Figure 4 shows that Italy started to control the corona confirmed cases ,India began to confirm more corona cases.But number of death cases are lower than Italy.
+
+
+* figure 05 - Time series analysis of corona patients in Saudi Arabia
+```{r message=FALSE, warning=FALSE}
+p13 <- ggplot(saudiArabia_corona,aes(date, cases, color = type)) +
+  geom_point() +
+  geom_line()+
+  ggtitle("Time series- Saudi Arabia")
+
+p1 / p13
+```
+
+According to figure 5, Saudi Arabia started corona outbreak after April while Italy started after March.
+
+
+#Discussion and conclusion
+
+Since coronavirus package contain data about all the countries first we need to filter out Italy from the data set. \
+In Italy there is a recovered case that reported as -1. It is an Outlier for our analysis and also It is a incorrect information.This might be happened because there may be some changes in the counting methodology or data resources, Errors in raw data, updating new cases not on the day that they were counting.Since data are important in analysis we cannot remove the entire row that containing the negative value.We cannot replace it as zero because of zero is also a value in this analysis.Hence we changed it as missing value.  \ 
+After summarizing the data we can see that March reported most confirmed cases and April reported most number of deaths and recovered cases.Their lock down policies were introduced after 9th of March. So this might be the reason for increase of confirmed corona cases.Since there were no any social distancing measures, people may be interacted with each other without using proper health practices.  \
+In the distributions of each type they all are positively skewed but in death there is bi modal distribution.Lets think lock down as a indicator variable , like lockdwon is open or not. So both of them have 2 modes. I think this might be the reason for this bi modal. \
+When its come to the time series analysis number of confirmed cases and death cases decrease over the time. In may, recovered cases shows large spikes.The worst situation of corona in Italy came to under the control in May.Since there were travel ban , lock down and social distancing, they reduced corona virus spread. 
+In the beginning of middle of may we can see there is a repeated pattern in confirmed cases.We cannot say this as a seasonal pattern, because length of the seasonal pattern should be at least 1 year.In here we don't know the length of the pattern. \
+When it comes to the comparison with other countries, since Italy is one of the country that suffered major damage due to corona virus I choose USA, India and Saudi Arabia.Those 3 countries also suffered major damages. \
+USA shows the worst scene out of Italy, India Saudi Arabia and USA. At the nd of the may, there were morethan 20000 cases. Italy and USA keep decreasing after May but both India and Saudi Arabila still keep increasing corona virus confirmed cases.I think among those 4 countries Italy is in a best situation after April.
+
+
+
+
+
+###References
+ * https://internationalliving.com/countries/italy/climate-in-italy
+ 
+ * https://rpubs.com/Mihiretu1/Kebede
+ 
+ * https://link.springer.com/article/10.1007/s13337-020-00610-1
+
+ * https://github.com/RamiKrispin/coronavirus/issues/52
+

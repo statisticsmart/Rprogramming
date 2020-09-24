@@ -1,0 +1,390 @@
+---
+title: "2017433_Portugal"
+author: "Y.U.Madushani"
+date: "7/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### **1).Introduction of the country of Portugal**
+
+Portugal is a country in southwestern Europe on the Iberian Peninsula. The Atlantic archipelagos of Azores and Madeira are part of Portugal and occupy strategic locations along western routes to the Strait of Gibraltar. Portugal is bordered by Spain and the Atlantic Ocean. The geography is mountainous north of the Tagus River. The government system is a republic; the chief of state is the president, and the head of government is the prime minister. Portugal has a service-based mixed economy in which the government has privatized many state-controlled firms and liberalized areas of the economy. Portugal is a member of the European Union (EU).
+
+![](portugal.jpg){width=20%}
+ 
+####  **Visualization of the location**
+
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+portugal_corona <- coronavirus %>% filter(country == "Portugal")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = portugal_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+![](new.png){width=50%}
+
+
+
+####  **Climate condition**
+
+Portugal has a temperate maritime climate with hot summers and wet winters, affected by the Atlantic, Continental and Mediterranean influences.
+
+The climate also varies according to the altitude and proximity to the ocean. In the mountainous north, conditions are generally cooler and wetter while Lisbon, the Alentejo and Algarve regions have long, hot summers with temperatures up to 35–40ºC. The humidity diminishes as you move away from the coast and the interior areas are quite mild.
+
+Madeira has a pleasant sub-tropical climate year round and the Azores islands are a great place to visit in the warmer months, although winters can be windy and wet.
+
+
+####  **Lockdown status of the country**
+
+
+  The Portuguese government announced the end of a nationwide “state of calamity” Thursday(2020.07.16) but reintroduced lockdown restrictions for almost 700,000 people living around Lisbon, where the coronavirus is staging a tenacious resistance.
+
+The government reimposed lockdowns in the Lisbon satellite cities of Amadora and Odivelas, plus one outlying neighborhood of the capital itself and the worst-hit districts in the suburbs of Sintra and Loures.
+
+Over 697,000 residents in that strip of blue-collar districts north of Lisbon are again being told not to leave home except for work, food shopping or other essential trips. Gatherings of more than five people are banned.
+
+Costa is desperate to contain the outbreaks, which are hurting Portugal’s image as it struggles to relaunch the vital tourist trade.
+The government confirmed other rollback measures across the rest of greater Lisbon, including reducing the size of gatherings from 20 to 10, ordering shops and cafés to close by 8 p.m. and banning alcohol sales from gas stations.
+
+Policing is being stepped up, with fines of up to €5,000 for infringements of the rules.
+
+Alcohol consumption in public areas is banned across the country in an attempt to stop illegal parties blamed for spreading the virus among young people.
+
+Lisbon city council on Thursday also banned street markets, bringing an immediate halt to the twice-weekly Feira da Ladra flea market. The popular tourist attraction only reopened in May after two months of shutdown.
+
+Decisive action in the early stages of the pandemic helped Portugal dodge the devastation wrought by COVID-19 in much of western Europe. A state of emergency declared on March 18 was downgraded to a state of calamity on May 2, beginning a phased deconfinement.
+
+Under the new “state of alert,” which will apply to the country outside greater Lisbon from July 1, rules on social distancing and wearing face masks in stores and other spaces will be maintained, Costa said.
+
+With 151 coronavirus deaths per million citizens, Portugal’s mortality rate remains around a quarter of those in Spain or Italy, but the virus’ stubborn grip around Lisbon means Portugal’s rise in new infections is now among Europe’s fastest. Daily new cases have averaged above 300 for over a month.
+
+Denmark has excluded Portugal and Sweden from plans to reopen borders with other EU countries this weekend. According to the Times, the U.K. is also considering leaving Portugal off a list of countries where Brits can vacation without facing a two-week quarantine when they return.
+
+Portugal is lobbying hard to ensure that doesn’t happen. The U.K. is its biggest tourism market with British travelers accounting for 18 percent of the country’s €18.4 billion tourism earnings last year.
+
+Costa has claimed Portugal’s high infection rate can largely be explained by a testing program that is among the most extensive in Europe, with around 10 percent of the population tested.
+
+However, the pace of new cases forced the government to adopt the new measures north of Lisbon where the spread is highest among construction workers, cleaning staff, warehouse and factory employees.
+
+Authorities are also anxious to stem infections among young people keen to party even though bars and night clubs remain closed. Illegal gatherings this month triggered localized outbreaks in areas little-touched by the pandemic, including beach resorts on the southern Algarve and Alentejo coasts.
+
+
+####  **Action taken by the government**
+
+
+The Portuguese government announced on Tuesday, April 28, that it will begin to lift lockdown measures imposed to combat the spread of the coronavirus disease (COVID-19) from Sunday, May 3.
+
+Portuguese Prime Minister Antonio Costa had previously announced that inter-municipal travel will be restricted from Friday, May 1, through Sunday, May 3, amid the COVID-19 pandemic ahead of the Labor Day holiday on Friday. The government added that the existing restrictions will be reviewed every 15 days starting on Thursday, April 30.
+
+All nonessential movement of people and vehicles is prohibited; essential services will remain open. The regional government of Madeira has made it mandatory for all individuals to wear a mask from Wednesday, April 22, and has eased certain restrictions, resuming manufacturing and construction activities on Monday, April 20.
+
+The government extended an ongoing ban on all international flights outside of the European Union (EU) for an additional 30 days on Saturday, April 18. EU associated states, including Liechtenstein, Norway, Iceland, and Switzerland, as well as the UK, US, Venezuela, Canada, and South Africa, are exempt from the ban. Repatriation flights for Portuguese nationals and residents will also continue to operate. A border closure with Spain, which has been in place since Monday, March 16, will continue until Friday, May 15. Workers and goods traffic are allowed to travel across the border. Flights between the two countries will also remain suspended through May 15.
+
+As of Tuesday, April 28, there have been 24,027 confirmed cases of COVID-19 in Portugal and 924 associated fatalities. Further international spread of the disease is expected over the near term.
+
+####  **Other**
+
+**TAXATION**
+The Government has approved a flexibilization in the payment of taxes and social contributions, as follows:
+
+Postponement of the first Special Payment on Account of the Corporate Income Tax (CIT) from 31 March to 30 June 2020.
+Extension of the deadline for submission of the Model 22 declaration, and payment of the CIT due, from 31 May to 31 July 2020.
+Extension of 1st Payment on Account and of the Additional payment on Account (State Surcharge) from 31 July to 31 August 2020.
+The situations of infection or prophylactic isolation (quarantine) declared or determined by a health authority are considered sufficient conditions for the application of the figure of fair impediment in the fulfilment of tax reporting obligations, in relation to taxpayers or certified accountants.
+General meetings of commercial companies, associations or cooperatives that must take place by legal or statutory imposition may be held until June 30, 2020.
+ 
+
+Regarding VAT and withholding taxes for the second quarter of 2020, the government has decided to make tax payments more flexible for companies and the self-employed.
+
+ 
+Thus, payment obligations can be fulfilled in one of three ways: 
+
+immediate payment in the usual terms;
+payment in three monthly instalments without interest, or in six monthly instalments, with interest for late payment applicable to the last three.
+ 
+
+In addition, for payments in instalments it will not be necessary to provide any guarantee.
+
+ 
+
+These measures are intended for VAT payments under the monthly and quarterly regimes, and for the delivery to the State of the withholding of personal and corporate income tax" and "are applicable to self-employed workers and companies with turnover of up to 10 mio. Euros in 2018, or starting operations as of January 1, 2019.
+
+ 
+The remaining companies or self-employed workers may request the same flexibility in the payment of tax obligations in the second quarter, when there has been a decrease in turnover of at least 20 percent in the average of the three months prior to the month in which this obligation exists, compared to the same period of the previous year.
+
+ 
+
+**SOCIAL CONTRIBUTIONS**
+Regarding the social contributions due between March and May 2020, and to preserve employment, the Government has decided to reduce them to 1/3 in the months of March, April and May. The remaining amount for the months of May, June and July is settled as from the third quarter of 2020, in terms similar to the fractioned payment adopted for taxes payable in the second quarter. However, companies, if they so wish, may make immediate payment on the usual terms.
+
+ 
+This measure applies, immediately, to companies with up to 50 jobs. Companies with up to 250 jobs can access this mechanism of reduction and fractionation of contributions in the 2nd quarter of 2020, if they have recorded a drop in turnover of 20 percent or more.
+
+ 
+The Government has also decided to suspend for 3 months the foreclosure procedures related with the non-payment of taxes or social security contributions.
+
+ 
+
+**LABOUR**
+Contingency Plans
+The companies should implement internal Contingency Plans that should involve health and security services at work, the company, employees and their representatives, and should contain, in order to prevent contamination, rules such as: 
+
+Risk assessment on the impact that the proliferation of the virus may have on the company's production structure;
+Area of isolation and the circuits to it;
+Structure of responsibilities on information and communication duties related to the presence of the virus in the workplace;
+Provision of relevant contacts;
+Availability of useful equipment and products (masks, wipes, antiseptic solutions, use of sanitizing products, frequent hand washing and, at least, 20 seconds under water).
+ 
+
+These plans should be communicated to employees for their proper implementation and protection.
+
+ 
+
+**Infection situations**
+In cases where there is a suspicion of infection by Covid-19, one of three situations occurs:
+
+Directorate-General of Health (health authority) determines that the employee, regardless of whether he is a dependent or self-employed worker, must be isolated;
+The employer, after consulting his service of health and security in the workplace (internal, external or common), may determine to subject the employee to isolation;
+Option for remote work, as long as the employee is able to perform his/her work at distance.
+ 
+
+Necessity of the Employee’s Isolation by decision of the General Directorate of Health (DGS)
+If the DGS determines that the employee, regardless of being a dependent or self-employed worker, should be isolated. There is an equalization of the illness due to infection of Covid-19 with hospitalization, therefore, the person infected by Covid-19 will be entitled to a sickness benefit.
+
+
+
+
+### **2).Exploratory Data Analysis**
+
+
+* **All the cases in the world until month may**
+```{r}
+library(coronavirus)
+library(tidyverse)
+data("coronavirus")
+
+coronavirus %>% group_by(type) %>% summarise(sum(cases))
+```
+
+
+* **Data set of Portugal**
+
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(data.table)
+coronavirus = as.data.table(coronavirus)
+
+coronavirus[ country == "Portugal" ]
+```
+* **Scatter plot for the cases vs date in protugal**
+
+```{r}
+library(coronavirus)
+library(tidyverse)
+portugal <- coronavirus %>% filter (country == "Portugal")
+library(ggplot2)
+ggplot(portugal, aes(x = date, y = cases)) +
+  geom_point() 
+```
+
+Here we can see one outlier observation which value is negative.
+
+* **Maximum confirmed  cases in Portugal**
+
+```{r}
+portugal_Cases <- coronavirus %>% filter (country == "Portugal")
+subset(portugal_Cases, cases == max(cases))
+```
+
+* **Maximum Death in Portugal in last few months**
+
+
+```{r}
+portugal_Cases <- coronavirus %>% filter (country == "Portugal")
+  death_portugal  <- portugal_Cases %>% filter (type == "death")
+subset(death_portugal, cases == max(cases))
+```
+
+
+###  **Visualization of death cases**
+
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+portugal_corona <- coronavirus %>% filter(country == "Portugal")
+```
+
+```{r}
+death_portugal_corona <- portugal_corona %>% filter(type=="death")
+head(death_portugal_corona)
+ggplot(death_portugal_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Portugal: Daily Covid-19 death bodies")
+```
+
+###  **Visualization of confirmed cases**
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+portugal_corona <- coronavirus %>% filter(country == "Portugal")
+confirmed_portugal_corona <- portugal_corona %>% filter(type=="confirmed")
+summary(confirmed_portugal_corona)
+```
+```{r}
+
+confirmed_portugal_corona <- confirmed_portugal_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_portugal_corona)
+```
+
+```{r}
+ggplot(confirmed_portugal_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+Now input the missing value
+
+```{r}
+which(is.na(confirmed_portugal_corona$cases))
+
+```
+
+```{r}
+confirmed_portugal_corona$cases[102] = mean(c(confirmed_portugal_corona$cases[101], confirmed_portugal_corona$cases[103]))
+length(confirmed_portugal_corona$cases)
+
+```
+
+```{r}
+confirmed_portugal_corona$col <- as.factor(c(rep("black", 100),rep("red", 2), rep("black", 112-102)))
+summary(confirmed_portugal_corona)
+```
+
+```{r}
+ggplot(confirmed_portugal_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity()
+```
+
+
+
+
+
+
+###  **Visualization of recovered cases**
+
+```{r}
+recover_portugal_corona <- portugal_corona %>% filter(type=="recovered")
+head(recover_portugal_corona)
+ggplot(recover_portugal_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Portugal: Daily Covid-19 Recoveries")
+
+```
+
+```{r}
+head(portugal_corona)
+
+ggplot(portugal_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+
+
+
+
+
+### ** 3).Comparison with other country**
+
+### comparison with the nearest country of Spain 
+
+```{r}
+
+library(coronavirus)
+library(tidyverse)
+recover_us_corona <- coronavirus %>% filter(type == "recovered")
+
+recover_Portugal_corona <- coronavirus %>% filter(country=="Portugal" & type=="recovered")
+
+recover_Spain_corona <- coronavirus %>% filter(country=="Spain" & type=="recovered")
+
+Portugal_Spain <- data.frame(date=recover_us_corona$date, Portugal=recover_Portugal_corona$cases, Spain=recover_Spain_corona$cases)
+
+Portugal_Spain <- pivot_longer(Portugal_Spain, c(2, 3), "country", "value")
+
+ggplot(Portugal_Spain, aes(x=date, y=value, colour=country)) + geom_line() 
+
+
+
+
+```
+
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+ggplot(coronavirus, aes(x=date, y=cases)) + geom_line() + ggtitle("All Daily Covid-19 ")
+
+```
+ Here negative number of cases consider as the outlier.
+ 
+ 
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+select_countries <- coronavirus %>% filter (country == "Portugal" | country == "Spain" | country == "Gibraltar" | country == "Morocco" )
+library(ggplot2)
+ggplot(select_countries)+ geom_point(aes(x=date, y=cases, group=country, col=country))
+```
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+select_top_countries <- coronavirus %>% filter (country == "Portugal" | country == "China" | country == "United Kingdom" | country == "India" | country == "Brazil")
+library(ggplot2)
+ggplot(select_top_countries)+ geom_line(aes(x=date, y=cases, group=country, col=country))
+```
+ 
+ 
+###  **4).Conclusion and Discussion**
+
+Until the moth of May explored the data analysis.
+Maximum confirmed cases are recorded in 2020-04-10 and which value is 1516 and also maximum death cases is 37 and recorded in 2020-04-03.
+
+According to the all observed data covid19 cases in Portugal is less than other main countries of USA, China, India, United kingdom.But corona cases is higher than the near country of Morocco
+ 
+#### **References**
+
+* https://www.computerworld.com/article/2486425/business-intelligence-4-data-wrangling-tasks-in-r-for-advanced-beginners.html
+* https://stackoverflow.com/questions/24558328/how-to-select-the-row-with-the-maximum-value-in-each-group

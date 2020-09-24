@@ -1,0 +1,379 @@
+---
+title: "AS2017562-Moldova"
+author: "vinuri"
+date: "13/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### **Individual Project: Coronavirus country reports**
+### **Country          : Republic of Moldova**
+
+
+
+![](flag.png)
+
+<font size="3" > Moldova officially the Republic of Moldova  (Romanian: Republica Moldova), is a landlocked country in Eastern Europe. It is bordered by Romania to the west and Ukraine to the north, east, and south. The capital city is Chișinău.Moldova is a parliamentary republic with a president as head of state and a prime minister as head of government. It is a member state of the United Nations, the Council of Europe, the World Trade Organization (WTO), the Organization for Security and Cooperation in Europe (OSCE), the GUAM Organization for Democracy and Economic Development, the Commonwealth of Independent States (CIS), and the Organization of the Black Sea Economic Cooperation (BSEC). </font>
+
+#### **Capital and largest city**  : Chișinău
+
+#### **Health index of Moldova**
+
+* <font size="3" >  Total population (2016) 	                                                    : 4,060,000 </font>
+* <font size="3" >  Gross national income per capita (PPP international $, 2013)                  :	5,190 </font>
+* <font size="3" >  Life expectancy at birth m/f (years, 2016)                                    :	68/75 </font>
+* <font size="3" >  Probability of dying under five (per 1 000 live births, 2018)                 :	16 </font>
+* <font size="3" >  Probability of dying between 15 and 60 years m/f (per 1 000 population, 2016) :	241/95 </font>
+* <font size="3" >  Total expenditure on health per capita (Intl $, 2014)                         :	514 </font>
+* <font size="3" >  Total expenditure on health as % of GDP (2014)                                :	10.3 </font>
+
+
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+
+```
+
+#### **Location of Moldova** 
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+data(wrld_simpl)
+Moldova_corona <- coronavirus %>% filter(country == "Moldova")
+Moldova_location <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+Moldova_location +
+  geom_point(
+    data = Moldova_corona, aes(x = long, y = lat), color = "red", size
+    = 1)
+
+```
+
+
+#### **Administrative divisions** :
+<font size="3" > Moldova is divided into 32 districts (raioane, singular raion), three municipalities and two autonomous regions (Gagauzia and Transnistria).The final status of Transnistria is disputed, as the central government does not control that territory. 10 other cities, including Comrat and Tiraspol, the administrative seats of the two autonomous territories, also have municipality status.
+
+Moldova has 66 cities (towns), including 13 with municipality status, and 916 communes. Another 700 villages are too small to have a separate administration and are administratively part of either cities (41 of them) or communes (659). This makes for a total of 1,682 localities in Moldova, two of which are uninhabited.The largest city in Moldova is Chișinău with a population of 635,994 people.</font>
+
+
+
+#### **Climate** :
+<font size="3" > Moldova has a climate which is moderately continental; its proximity to the Black Sea leads to the climate being mildly cold in the autumn and winter and relatively cool in the spring and summer.</font>
+
+<font size="3" > The summers are warm and long, with temperatures averaging about 20 °C (68 °F) and the winters are relatively mild and dry, with January temperatures averaging −4 °C (25 °F). Annual rainfall, which ranges from around 600 mm (24 in) in the north to 400 mm (16 in) in the south, can vary greatly; long dry spells are not unusual. The heaviest rainfall occurs in early summer and again in October; heavy showers and thunderstorms are common. Because of the irregular terrain, heavy summer rains often cause erosion and river silting.</font>
+
+<font size="3" > The highest temperature ever recorded in Moldova was 41.5 °C (106.7 °F) on 21 July 2007 in Camenca. The lowest temperature ever recorded was −35.5 °C (−31.9 °F) on 20 January 1963 in Brătușeni, Edineț county.</font>
+
+#### **COVID-19 pandemic in Moldova**
+
+<font size="3" > The COVID-19 pandemic in Moldova is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached the Republic of Moldova on 7 March 2020, when a Moldovan woman that returned from Italy was tested positive for the novel coronavirus. As the number of infected people started to rise during the next days, on 17 March 2020 the Parliament declared the state of emergency for the entire territory of the Republic of Moldova for a period of 60 days (17 March - 15 May 2020). On 18 March 2020 the first death caused by COVID-19 was registered.By 10 April 2020, cases had been confirmed in all the regions of the country, including the Transnistrian region.On 15 May 2020, in the last day of the state of emergency declared by the Parliament on 17 March 2020, the Extraordinary National Commission of Public Health declared the state of emergency in public health for the entire territory of the Republic of Moldova for the period of 16 May - 30 June 2020.</font>
+
+#### **Lockdown status and actions taken by the government**
+
+<font size="3" > A Task Force was established at the initial phase of the epidemic. The MoHLSP elaborated a COVID-19 risk communication and community engagement plan covering travel advice, hand hygiene and respiratory etiquette, and physical distancing were issued early in the epidemic (February 2020).</font>
+
+<font size="3" > The MoHLSP coordinate and manages the main messages and communications related to COVID-19 and conduct two media briefings per day. The messages and health information are conveyed through most popular channels and tools: TV channels, radio stations, social media, social media influencers, NGOs, visuals in public places. </font>
+
+
+<font size="3" > In order to effectively monitor the COVID-19 pandemic and to better inform the general population, an online platform was launched on 20 March providing real-time data on cases. It was created with support from UNFPA, WHO, UN Resident Coordinator in the Republic of Moldova. </font>
+
+
+<font size="3" > An overall ban on public events and gatherings of more than 50 people started under this situation.Educational institutions have also been closed and regular studies have been substituted by distance learning.Recreational facilities (gyms, sports centres, swimming pools, fitness rooms, theatres, cinemas, concert halls, museums, shopping centres, restaurants and bars) have been closed and Stores other than grocery and pharmacies were closed. Employers were advised to review their working hours and implement working from home.</font>
+  
+
+<font size="3" > From 10 April, suspected COVID-19 cases have been isolated at home. All contacts are told to self-isolated at home with self-monitoring (taking their temperature three times per day and monitoring respiratory symptoms) and informing their primary care doctors (MoHLSP order from 26 February 2020). Self-isolation at home for 14 days was recommended for all contacts.</font>
+ 
+
+
+
+```{r, comment=NA, echo=FALSE}
+Moldova <- filter(coronavirus, country=="Moldova")%>% select(date,type,cases) %>% 
+  pivot_wider(names_from = type, values_from = cases)%>% mutate(active = confirmed - recovered - death)
+
+moldova_new <- Moldova %>% mutate(active= replace(active,which(active<0),NA))%>% 
+  pivot_longer(2:5, names_to="type", values_to = "cases", values_drop_na = TRUE )
+
+```
+
+
+
+```{r, comment=NA, echo=FALSE}
+ggplotly(ggplot(moldova_new,
+       aes(x = date, 
+           y = cases,
+           col = type))+
+  geom_line(size=1.2)+
+  labs(title = "Figure 01: COVID-19 cases in Moldova",
+       x ="Date of reporting",
+       y = "Total No.of cases")+ theme_minimal())
+```
+
+<font size="3" > Figure 01 shows daily confirmed, recovered, death and active cases in Moldova from Januaray to May.
+The number of active cases is calculated by excluding from confirmed cases the number of recoveries and deaths.</font>
+
+```{r, comment=NA, echo=FALSE}
+ggplot(moldova_new,
+       aes(x = date, 
+           y = cases,
+           col = type))+
+  geom_point()+
+  facet_grid(~type)+ggtitle("Figure 02: COVID-19 cases in Moldova")
+
+```
+
+<font size="3" > The chart clearly described distribution of COVID-19 in Republic of Moldova, from Mar 7 to May 2020 separetely.</font>
+
+
+```{r, comment=NA, echo=FALSE}
+confirmed_cases <- moldova_new %>% filter(type=="confirmed")
+ggplotly(ggplot(data=confirmed_cases, aes(x=date, y=cases)) +
+  geom_bar(stat="identity",colour ="black", fill="white" )+ theme_minimal()+
+  labs(title = "Figure 03: COVID-19 confirmed cases of Moldova",
+       x ="Date of reporting",
+       y = "No of confirmed cases per day"))
+  
+```
+
+<font size="3" > The first coronavirus case in the Republic of Moldova was reported on 8 March 2020.The highest number of daily confirmed cases was recored in April 14. It is 222 cases.
+The Ministry of Health, Labour and Social Protection of Moldova confirmed another two cases (the 2nd and the 3rd) of coronavirus in 10 March 2020.</font>
+
+
+
+```{r, comment=NA, echo=FALSE}
+death_cases <- moldova_new %>% filter(type=="death")
+ggplotly(ggplot(data=death_cases, aes(x=date, y=cases)) +
+  geom_bar(stat="identity",colour ="black", fill="white")+ theme_minimal()+
+  labs(title = "Figure 04: COVID-19 death cases of Moldova",
+       x ="Date of reporting",
+       y = "No of deaths per day"))
+```
+
+
+<font size="3" > The first death was confirmed on 18 March 2020. The second death was confirmed after 9 days of 1st death. The largest no of deaths in per day was reported on 09 May 2020.</font>
+
+
+
+```{r, comment=NA, echo=FALSE}
+recovered_cases <- moldova_new %>% filter(type=="recovered")
+ggplotly(ggplot(data=recovered_cases, aes(x=date, y=cases)) +
+  geom_bar(stat="identity",colour ="black", fill="white")+ theme_minimal()+
+  labs(title = "Figure 05: COVID-19 recovered cases of Moldova",
+       x ="Date of reporting",
+       y = "No of recoveries per day"))
+  
+```
+
+<font size="3" >The largest no of recovered in per day was reported on 29 April 2020.</font>
+
+
+
+```{r, comment=NA, echo=FALSE}
+active_cases <- moldova_new %>% filter(type=="active")
+ggplotly(ggplot(data=active_cases, aes(x=date, y=cases)) +
+  geom_bar(stat="identity",colour ="black", fill="white")+ theme_minimal()+
+  labs(title = "Figure 06: COVID-19 active cases of Moldova",
+       x ="Date of reporting",
+       y = "No of active cases per day"))
+  
+```
+
+<font size="3" >The largest no of active cases in per day was reported on 14 April 2020.</font>
+
+
+```{r, comment=NA, echo=FALSE}
+Monthely_total <- Moldova %>% 
+  separate(date, into=c("day", "month", "year"), sep="-")%>%
+  group_by(month) %>%  summarise(
+    confirmed_total=sum(confirmed),
+    death_total=sum(death),
+    recovered_total=sum(recovered),
+    active_total=sum(active)) %>% pivot_longer(2:5, names_to="type", values_to = "cases")                                  
+ggplot(data=Monthely_total, aes(x=month, y=cases, fill=type)) +
+  geom_bar(stat="identity", position = "stack", width = 0.2)+ 
+  scale_y_continuous() +theme_minimal()+
+  labs(title = "Figure 07: Monthly COVID-19 cases of Moldova",
+       x ="Month of reporting",
+       y = "Total no of cases")
+```
+
+
+<font size="3" >Accorging to the graph, lagrest number of confirmed cases, active cases, recovered cases were reported on 4th month.Death cases were reported after March month.</font>
+
+
+```{r,comment=NA, echo=FALSE}
+Moldova_cum_values <- Moldova %>% mutate(cumulative_values_confirmed =cumsum(confirmed),
+                                         cumulative_values_death =cumsum(death), cumulative_values_recovered =cumsum(recovered),
+                                         cumulative_values_active =cumsum(active))%>% 
+                                         select(date,cumulative_values_confirmed,cumulative_values_death,cumulative_values_recovered,cumulative_values_active)
+
+Moldova_cum_confirmed <- Moldova_cum_values %>% select(date,cumulative_values_confirmed)
+ggplotly(ggplot(data=Moldova_cum_confirmed, aes(x=date, y=cumulative_values_confirmed)) +
+  geom_bar(stat="identity", fill="white", colour="black" )+ theme_minimal()+
+    ggtitle("Figure 08: Cumulative values of confirmed cases upto 12 May 2020 in Moldova"))
+
+```
+
+
+<font size="3" >The above plot clearly shows how day to day confirmed cases are reported.As of May 20, total no of confirmed cases was 5154.</font> 
+
+```{r, comment=NA, echo=FALSE}
+Moldova_cum_death <- Moldova_cum_values %>% select(date,cumulative_values_death)
+ggplotly(ggplot(data=Moldova_cum_death, aes(x=date, y=cumulative_values_death)) +
+  geom_bar(stat="identity", fill="white", colour="black" )+ theme_minimal()+ 
+    ggtitle("Figure 09: Cumulative values of death cases up to 12 May 2020 in Moldova"))
+
+```
+
+<font size="3" >The above plot clearly shows how day to day death cases are reported.As of May 12, total no of death cases was 182.</font> 
+
+#### **Compare with Russia and Bulgaria**
+
+<font size="3" >Russia and Bulgaria have been selected to compare the COVID 19 pandemic in Moldova.This is beacuse all three been countries are located in Eastern Europe.</font>  
+
+
+```{r,comment=NA, echo=FALSE}
+Russia_Moldova_Bulgaria_corona <- filter(coronavirus, country %in% c("Moldova","Russia","Bulgaria"))
+Russia_Moldova_Bulgaria_confirmed <- filter(Russia_Moldova_Bulgaria_corona,type=="confirmed")
+ggplotly(ggplot(Russia_Moldova_Bulgaria_confirmed,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(size=1)+
+  geom_point()+
+  labs(title ="Figure 10: COVID-19 confirmed cases in Moldova,Bulgaria and Russia",
+       x ="Date of reporting",
+       y = "Total no of cases")+ theme_minimal() )
+```
+
+
+<font size="3" >According to the plot confirmed cases of Russia have been increased day to day clearly than two countries. There are 10899 confirmed cases was reported on 12 May in Russia. it is very large value compare with other two countries.</font> 
+
+
+
+```{r, comment=NA, echo=FALSE}
+Russia_Moldova_Bulgaria_recovered <- filter(Russia_Moldova_Bulgaria_corona,type=="recovered")
+ggplotly(ggplot(Russia_Moldova_Bulgaria_recovered,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(size=1)+
+  geom_point()+
+  labs(title = "Figure 11: COVID-19 recovered cases in Moldova,Bulgaria and Russia ",
+       x ="Date of reporting",
+       y = "Total no of cases")+ theme_minimal())
+```
+
+
+<font size="3" >According to the figure 11 recovered cases in Russia was larger than two other countries in this period. When 12 May 2020 Moldova was reported 89 cases.Bulgaria was reported 15 cases and 3711 cases was reported in Russia.</font> 
+
+
+
+```{r, comment=NA, echo=FALSE}
+Russia_Moldova_Bulgaria_death <- filter(Russia_Moldova_Bulgaria_corona,type=="death")
+ggplotly(ggplot(Russia_Moldova_Bulgaria_death,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(size=1)+
+  geom_point()+
+  labs(title = "Figure 12: COVID-19 death in Moldova,Bulgaria and Russia ",
+       x ="Date of reporting",
+       y = "Total no of cases")+ theme_minimal())
+```
+
+<font size="3" >In this period death cases in Russia have been increasing highly than two countries.Figure 12 shows clearly this situation.</font> 
+
+#### **Compare with United States**
+
+<font size="3" > Finally I would like to compare situation of COVID 19 in Moldova with United States. Because United States had the most confirmmed cases and deaths in the world.</font> 
+
+
+
+```{r, comment=NA, echo=FALSE}
+US_Moldova_corona <- filter(coronavirus, country %in% c("Moldova","US"))%>% select(date,type,cases,country)%>% 
+  pivot_wider(names_from = type, values_from = cases) %>% mutate(active = confirmed - recovered - death)
+
+US_Moldova_corona_new <- US_Moldova_corona %>% mutate(active= replace(active,which(active<0),NA))%>% 
+  pivot_longer(3:6, names_to="type", values_to = "cases", values_drop_na = TRUE )
+
+US_Moldova_corona_confirmed <- filter(US_Moldova_corona_new,type=="confirmed")
+ggplotly(ggplot(US_Moldova_corona_confirmed,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(size=1)+
+  geom_point()+
+  labs(title = "Figure 13: COVID-19 confirmed cases in Moldova and US",
+       x ="Date of reporting",
+       y = "Total no of cases") + theme_minimal())
+
+```
+
+<font size="3" >In this period confirmed cases in US have been increases more than in Moldova day to day. Figure 13 shows clearly this situation. US have been reported on 24 April largest number of confirmed cases in the time period.It is 34037 cases.  </font> 
+
+
+```{r, comment=NA, echo=FALSE}
+US_Moldova_corona_death <- filter(US_Moldova_corona_new,type=="death")
+ggplotly(ggplot(US_Moldova_corona_death,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_line(size=1)+
+  geom_point()+
+  labs(title = "Figure 14: COVID-19 death cases in Moldova and US",
+       x ="Date of reporting",
+       y = "Total no of cases") + theme_minimal())
+
+```
+
+<font size="3" >In this period death cases in US have been increased more than in Moldova.Figure 14 shows clearly this situation.</font> 
+
+
+
+
+#### **Conclusion**
+
+<font size="3" >Moldova is a landlocked country in Eastern Europe and it is divided into 32 districts. Moldova has a climate which is moderately continental; its proximity to the Black Sea leads to the climate being mildly cold in the autumn and winter and relatively cool in the spring and summer.
+
+When consider COVID 19 pandemic in Moldova the first coronavirus case was reported on 8 March 2020.
+During the period from March 8 to 12 May 2020, there have been 5154 confirmed cases of COVID 19 with 182 deaths.
+When consider monthely data, a large number of cases was reported in April.
+In the final stages, the situation of this pandemic have been compared with Russia,Bulgaria and United States. According to the information, the situation of United States was very dangoreous. All cases of United States have been increased more than other countries.</font> 
+
+#### **Discussion**
+<font size="3" >After analysing the data of Moldova, we can assumed that considerably affcet the COVID 19 pandemic on Moldova. And also United States have been reported most no of cases in the world.</font>  
+
+
+
+#### **References**
+
+*<font size="3" > COVID-19 pandemic in Moldova</font> 
+(https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Moldova)
+
+*<font size="3" > Moldova</font> 
+(https://en.wikipedia.org/wiki/Moldova)
+
+*<font size="3" > Republic of Moldova</font> 
+(https://covid19.who.int/region/euro/country/md)
+
+*<font size="3" > World Health Organization </font> 
+(https://www.who.int/countries/mda/en/)
+
+
+
