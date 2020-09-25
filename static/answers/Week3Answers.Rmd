@@ -233,10 +233,10 @@ library(patchwork)
 First you need to assign a name for each graph. Here, I use `q1` and `q2`.
 
 ```{r, fig.cap="Composition of species", fig.width=8, fig.height=4, fig.pos="H", comment=NA,fig.pos="H"}
-q1 <- qplot(x = Species, y = Sepal.Width, data = iris, geom = c("point","jitter","boxplot"), 
-      alpha = 0.5, colour = Species, main = "Distribution of Sepal.Width")
-q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("point","jitter","boxplot"), 
-      alpha = 0.5, colour = Species, main = "Distribution of Sepal.Length")
+q1 <- qplot(x = Species, y = Sepal.Width, data = iris, geom = c("jitter","boxplot"), 
+      alpha = 0.5, colour = Species, main = "Distribution of Sepal.Width") + geom_boxplot(outlier.size = NA) 
+q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("jitter","boxplot"), 
+      alpha = 0.5, colour = Species, main = "Distribution of Sepal.Length") + geom_boxplot(outlier.size = NA) 
 ```
 
 
@@ -287,14 +287,14 @@ qplot(x = Species, data = iris, geom = "bar", ylab = "Count",
 ## 2. Distribution of the features of sepal and petal by species
 
 ```{r, fig.cap="Distribution of features related to sepal and petal by species", fig.width=8, fig.height=6, fig.pos="H", comment=NA}
-q1 <- qplot(x = Species, y = Sepal.Width, data = iris, geom = c("point","jitter","boxplot"), 
-      alpha = 0.5, colour = Species, main = "(a) Distribution of Sepal Width")
-q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("point","jitter","boxplot"), 
-      alpha = 0.5, colour = Species, main = "(b) Distribution of Sepal Length")
-q3 <- qplot(x = Species, y = Petal.Width, data = iris, geom = c("point","jitter","boxplot"), 
-      alpha = 0.5, colour = Species, main = "(c) Distribution of Petal Width")
-q4 <- qplot(x = Species, y = Petal.Length, data = iris, geom = c("point","jitter","boxplot"), 
-      alpha = 0.5, colour = Species, main = "(d) Distribution of Petal Length")
+q1 <- qplot(x = Species, y = Sepal.Width, data = iris, geom = c("jitter","boxplot"), 
+      alpha = 0.5, colour = Species, main = "(a) Distribution of Sepal Width") + geom_boxplot(outlier.size = NA) 
+q2 <- qplot(x = Species, y = Sepal.Length, data = iris, geom = c("jitter","boxplot"), 
+      alpha = 0.5, colour = Species, main = "(b) Distribution of Sepal Length") + geom_boxplot(outlier.size = NA) 
+q3 <- qplot(x = Species, y = Petal.Width, data = iris, geom = c("jitter","boxplot"), 
+      alpha = 0.5, colour = Species, main = "(c) Distribution of Petal Width") + geom_boxplot(outlier.size = NA) 
+q4 <- qplot(x = Species, y = Petal.Length, data = iris, geom = c("jitter","boxplot"), 
+      alpha = 0.5, colour = Species, main = "(d) Distribution of Petal Length") + geom_boxplot(outlier.size = NA) 
 (q1|q2)/(q3|q4)
 ```
 
