@@ -4,49 +4,50 @@ title: Individual Projects
 
 
 
-|[Ireland](/individualproject/l1.html)    	|  [Ukraine](/individualproject/l1.html) 	|  [Australia](/individualproject/l1.html) 	|  [India](/individualproject/l1.html) 	| [Italy](/individualproject/l1.html) |
+|[Ireland](/individualproject/RATHNAWEERAHKRAS2017496Ireland.html)    	|  [Ukraine](/individualproject/AS2017430UKRAINEimages.html) 	|  [Australia](/individualproject/AS2017567_Australia.html) 	|  [India](/individualproject/DISSANAYAKAMHIAS2016357India.html) 	| [Italy](/individualproject/MENDISWTDAS2016446Italy.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Colombia](/individualproject/l1.html)    	|  [Iraq](/individualproject/l1.html) 	|  [Oman](/individualproject/l1.html) 	|  [Panama](/individualproject/l1.html) 	| [Romania](/individualproject/l1.html) |
+|[Colombia](/individualproject/FERNANDOWASAS2017367Colombia.html)    	|  [Iraq](/individualproject/MANNAPPERUMANDAS2017437Iraq.html) 	|  [Oman](/individualproject/MENDISTHAAS2017441OMAN.html) 	|  [Panama](/individualproject/PANANGALAMPAS2017456Panama.html) 	| [Romania](/individualproject/PUNNIYAMOORTHYSAS2017487Romania.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Moldova](/individualproject/l1.html)    	|  [Peru](/individualproject/l1.html) 	|  [Chile](/individualproject/l1.html) 	|  [Mexico](/individualproject/l1.html) 	| [Sweden](/individualproject/l1.html) |
+|[Moldova](/individualproject/VINURIHLAS2017562.html)    	|  [Peru](/individualproject/LANJALAWGIAS2016425Peru.html) 	|  [Chile](/individualproject/MADIRAWALATRAS2016431Chile.html) 	|  [Mexico](/individualproject/MENDISMCDAS2016448Mexico.html) 	| [Sweden](/individualproject/l1.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Egypt](/individualproject/l1.html)    	|  [Belgium](/individualproject/l1.html) 	|  [Belarus](/individualproject/l1.html) 	|  [UAE](/individualproject/l1.html) 	| [Israel](/individualproject/l1.html) |
+|[Egypt](/individualproject/GAMAGENMAS2017372Egypt.html)    	|  [Belgium](/individualproject/GAYATHRITLKAS2017373Belgium.html) 	|  [Belarus](/individualproject/ILANKOONIMTPKAS2017386Belarus.html) 	|  [UAE](/individualproject/KARUNARATHNEMMSSAS2017405UAE.html) 	| [Israel](/individualproject/SILVASKBDAS2017545Israel.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Denmark](/individualproject/l1.html)    	|  [Ghana](/individualproject/l1.html) 	|  [South Korea](/individualproject/l1.html) 	|  [Norway](/individualproject/l1.html) 	| [Malaysia](/individualproject/l1.html) |
+|[Denmark](/individualproject/WANIGARATHNEYRAS2017564Denmark.html)    	|  [Ghana](/individualproject/UMAJANAGHGAS2017560Ghana.html) 	|  [South Korea](/individualproject/WELIWATHTHAWDKKAS2017572SouthKorea.html) 	|  [Norway](/individualproject/SAMARASINGHAPGDSAS2017518Norway.html) 	| [Malaysia](/individualproject/AS2017412MALAYSIA.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Ireland](/individualproject/l1.html)    	|  [Ukraine](/individualproject/l1.html) 	|  [Australia](/individualproject/l1.html) 	|  [India](/individualproject/l1.html) 	| [Italy](/individualproject/l1.html) |
+
+|[UK](/individualproject/S.S.KumanayakeAS2016417UK.html)    	|  [Spain](/individualproject/AS2016422-spain.html) 	|  Pakistan - NA 	|  [Germany](/individualproject/WILATHGAMUWAGEDHKAS2016557Germany.html) 	| [Turkey](/individualproject/ABISHANYASAS2017307Turkey.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[UK](/individualproject/l1.html)    	|  [Spain](/individualproject/l1.html) 	|  [Pakistan](/individualproject/l1.html) 	|  [Germany](/individualproject/l1.html) 	| [Turkey](/individualproject/ABISHANYASAS2017307Turkey.html) |
+|[Saudi Arabia](/individualproject/BANDARAKGVVAS2017323Saudi-Arabia.html)    	|  [Bangladesh](/individualproject/AS2017334Bangladesh.html.html) 	|  [Canada](/individualproject/DEALWISARSAS2017340Canada.html) 	|  [Qatar](/individualproject/DESILVARPAS2017342Qatar.html) 	| [Ecuador](/individualproject/JAYARATHNESSAS2017394Ecuador.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Saudi Arabia](/individualproject/l1.html)    	|  [Bangladesh](/individualproject/l1.html) 	|  [Canada](/individualproject/l1.html) 	|  [Qatar](/individualproject/l1.html) 	| [Ecuador](/individualproject/l1.html) |
+|[Indonesia](/individualproject/AS2017400Indonesia.html.html)    	|  [Singapore](/individualproject/KAVINDIHWMAS2017409Singapore.html) 	|  [Portugal](/individualproject/MADUSHANIYUAS2017433Portugal.html) 	|  [Philippines](/individualproject/MIHINDUWGTAS2017444Philippines.html) 	| [Poland](/individualproject/MUNASINGHAHRKJIAS2017446Poland.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Indonesia](/individualproject/l1.html)    	|  [Singapore](/individualproject/l1.html) 	|  [Portugal](/individualproject/l1.html) 	|  [Philippines](/individualproject/l1.html) 	| [Poland](/individualproject/l1.html) |
+|[Switzerland](/individualproject/NANAYAKKARATNAS2017451.html) 	|  [Afghanistan](/individualproject/NIRIELLANUMAS2017454Afganistan.html) 	|  [Bolivia](/individualproject/l1.html) 	|  [Bahrain](/individualproject/SAMARASINGHEATAS2017519Bahrain.html) 	| [Armenia](/individualproject/SANDUNIMDTAS2017528Armenia.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Switzerland](/individualproject/l1.html)    	|  [Afghanistan](/individualproject/l1.html) 	|  [Bolivia](/individualproject/l1.html) 	|  [Bahrain](/individualproject/l1.html) 	| [Armenia](/individualproject/l1.html) |
+|[Kazakhstan](/individualproject/AS2017554Kazakhstan.html.html)    	|  [Japan](/individualproject/THILAKARATHNAAHNNAS2017555-Japan.html) 	|  [Guatemala](/individualproject/THILEESHANAHLSAS2017556Guatemala.html) 	|  [India](/individualproject/l1.html) 	| [China](/individualproject/AS2017360_China.html) |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+|[Brazil](/individualproject/ADIKARIAAMMAS2016306.html)    	|  [Russia](/individualproject/DEMELAS2016337Russia.html) 	|  [Kuwait](/individualproject/AS2017407_Kuwait.html) 	|[Nigeria](/individualproject/AS2017552-Nigeria.html)  	| NA 	|  
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Kazakhstan](/individualproject/l1.html)    	|  [Japan](/individualproject/l1.html) 	|  [Guatemala](/individualproject/l1.html) 	|  [India](/individualproject/l1.html) 	| [China](/individualproject/l1.html) |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Kuwait](/individualproject/l1.html)    	|  [Nigeria](/individualproject/l1.html) 	|  [NA](/individualproject/l1.html) 	|  [NA](/individualproject/l1.html) 	| [NA](/individualproject/l1.html) |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
+Acknowledgment: Teaching Associate Kalpani Perera for processing the files.
