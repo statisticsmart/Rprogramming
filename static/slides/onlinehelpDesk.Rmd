@@ -85,4 +85,3 @@ us_corona <- coronavirus %>% filter(country == "US")
 head(us_corona)
 ggplot(us_corona, aes(x=date, y=cases, col=type)) + geom_line()
 ```
-
