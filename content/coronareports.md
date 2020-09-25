@@ -4,7 +4,7 @@ title: Individual Projects
 
 
 
-|[Ireland](/individualproject/RATHNAWEERAHKRAS2017496Ireland.html)    	|  [Ukraine](/individualproject/AS2017430UKRAINEimages.html) 	|  [Australia](/individualproject/AS2017567_Australia.html) 	|  [India](/individualproject/DISSANAYAKAMHIAS2016357India.html) 	| [Italy](/individualproject/MENDISWTDAS2016446Italy.html) |
+|[Ireland](/individualproject/RATHNAWEERAHKRAS2017496Ireland.html)    	|  [Ukraine](/individualproject/AS2017430UKRAINE.html) 	|  [Australia](/individualproject/AS2017567_Australia.html) 	|  [India](/individualproject/DISSANAYAKAMHIAS2016357India.html) 	| [Italy](/individualproject/MENDISWTDAS2016446Italy.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
