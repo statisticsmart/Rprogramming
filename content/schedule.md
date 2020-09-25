@@ -192,4 +192,4 @@ Use the upgraded LMS at https://lms.fas.sjp.ac.lk to download video lectures.
 
 #### Discussions 
 
-[Discussion week questions](/discussions-.html)
+[Discussion week questions](/discussions.html)
