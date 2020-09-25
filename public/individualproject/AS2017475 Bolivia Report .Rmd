@@ -1,0 +1,286 @@
+---
+title: "AS2017475-Bolivia"
+author: "Siwranga Dineth"
+date: "17/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE, }
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Corona Virus Report on Bolivia
+
+##Introduction
+Bolivia is  in South American continent. Bolivia is bordered by Peru, Chile , Brazil , Paraguay and Argentina.
+The capital cities are Sucre and La Paz.
+
+Climate
+Bolivia has a temperature climate which changes dramatically. Semi tropical regions also can be observed.
+
+Health Status of Bolivia
+This is a country that fight against inequality and scarcity of resources so the health in Bolivia ranks nearly last in the western countries. Many suffer from malnutrition.
+The coronavirus was confirmed in Bolivia on 10th March 2020. By today 20th July 2020 there are deaths of 2049 of all the confirmed cases of 56,102.
+
+Government actions and lockdown of the country
+President Jeanine Áñez announced the following measures for the safety of the country.
+     1. All borders are closed.
+     2. Entry to Bolivia allowed only for Bolivian nationals and residents.
+     3. International flights are suspended.
+     4. Interdepartmental and interprovincial land are  transport suspended.
+
+An emergency operating committee was announced even before the first case was detected for this global threat.
+
+Other economical and social measures are also taken for the safety of the country.
+
+
+
+##### (1)Location Visualization
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+#data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Corona_Bolivia  <- coronavirus %>% filter(country == "Bolivia")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Corona_Bolivia , aes(x = long, y = lat), color = "black", size
+    = 1
+  )
+
+
+```
+
+
+------
+
+
+##Exploratory data analysis
+
+This data analysis is done through the data collected from later January to mid of May.
+
+
+
+```{r , echo=FALSE,warning=FALSE,message=FALSE}
+
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(knitr)
+Corona_Bolivia_Daily <- coronavirus %>% filter(country == "Bolivia")
+corona_compare <- filter(Corona_Bolivia_Daily,type %in%  c("confirmed","death","recovered"))
+
+```
+
+```{r , echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(corona_compare, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Bolivia Daily Corona Virus Data of Confirmed, Death, Recovered")
+
+```
+
+The first covid 19 patient in Bolivia was founded in the mid of March 2020. After that the virus has been spread among the community and confirmed cases was gradually rising. By the mid of May its more than 200 per day.
+The 1st death case was announced in later period of March and it is also increasing with the time.
+The patients are recovering in a  low rate.
+
+
+```{r , echo=FALSE,warning=FALSE,message=FALSE}
+Corona_Bolivia_Daily <- coronavirus %>% filter(country == "Bolivia")
+confirmed_corona <- Corona_Bolivia_Daily %>% filter(type=="confirmed")
+
+cumulative_confirmed <-mutate(confirmed_corona ,cumulative_confirmed_sum=cumsum(cases))
+ggplot(cumulative_confirmed, aes(x=date, y=cumulative_confirmed_sum)) + geom_line(col="blue" ) + ggtitle("Bolivia : Total Covid-19 Confirmed")
+```
+As the figure  shows the no of confirmed patients increased rapidly after the mid of April till the date we used to analyzed last.
+
+```{r  , echo=FALSE,warning=FALSE,message=FALSE}
+Corona_Bolivia_Daily <- coronavirus %>% filter(country == "Bolivia")
+Death_corona <- Corona_Bolivia_Daily %>% filter(type=="death")
+
+cumulative_death <-mutate(Death_corona ,cumulative_death_sum=cumsum(cases))
+ggplot(cumulative_death, aes(x=date, y=cumulative_death_sum)) + geom_line( col="red") + ggtitle("Bolivia : Total Covid-19 Deaths")
+```
+The no of total deaths are more than 150 by the mid of May as the graph depicts.
+
+```{r  , echo=FALSE,warning=FALSE,message=FALSE}
+Corona_Bolivia_Daily <- coronavirus %>% filter(country == "Bolivia")
+Recovered_Corona <- Corona_Bolivia_Daily %>% filter(type=="recovered")
+cumulative_recovered <-mutate(Recovered_Corona ,cumulative_recovered_sum=cumsum(cases))
+ggplot(cumulative_recovered, aes(x=date, y=cumulative_recovered_sum)) + geom_line(col="green" ) + ggtitle("Bolivia : Total Covid-19 Recovered")
+```
+
+
+```{r Corona_Bolivia , echo=FALSE,warning=FALSE,message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(tidyr)
+library(dplyr)
+Active_Corona_Bolivia <- Corona_Bolivia %>%  pivot_wider(names_from = type, values_from= cases)
+Active_Corona <- Active_Corona_Bolivia %>% mutate(active=confirmed-recovered-death)
+
+Sum_Active_Corona <- Active_Corona  %>% mutate(cumulative_active_cases= cumsum (active) ,
+     recovered_total = cumsum(recovered) ,death_total= cumsum(death))
+
+ggplot(Sum_Active_Corona , aes(x=date, y=cumulative_active_cases)) + geom_line() + ggtitle("Covid-19 Active cases in Bolivia")
+```
+The active number of patients are rising with the time continueosly.
+
+
+##Comparison
+
+Bolivia is a country which borders in north and east by Brazil, to the southeast by Paraguay, to the south by Argentina, to the southwest and west by Chile, and to the northwest by Peru.
+
+So here compared with the neighboring countries like Brazil, Argentina, Paraguay and US and China
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_country_comparison <- filter(coronavirus,country %in%  c("Argentina","Chilie","Paraguay","Bolivia"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+confirmed_count_comparison <-corona_country_comparison %>% filter(type == "confirmed")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(confirmed_count_comparison,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("Confirmed cases comparison with Argentina,Chilie,Paraguay")
+
+```
+
+The confirmed cases are comparatively higher than Paraguay and with Argentina, Brazil its low.
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_comparison_china_us<- filter(coronavirus,country %in% c("China","US","Bolivia","Brazil"))
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+by_date <- corona_comparison_china_us %>% group_by(date)
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+Corona_comparison_china_us2<- by_date%>% filter(type == "confirmed")
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(Corona_comparison_china_us2,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("confirmed case Comparison with China and US and Brazil")
+
+```
+
+When the number of cases are lowering in China the confirmed cases started to rise in  Bolivia but not as much as the neighbouring country Brazil which is the country where 2nd highest cases are announced  by July. As the figure shows the number of cases are really low compared to US.
+
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_country_comparison <- filter(coronavirus,country %in% c("Argentina","Chilie","Paraguay","Bolivia"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+confirmed_count_comparison <-corona_country_comparison %>% filter(type == "death")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(confirmed_count_comparison,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("death cases comparison with Argentina,Chilie,Paraguay")
+
+```
+
+Death cases are increasing with time rather than the increasement of Paraguay with neighbouring countries.
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_comparison_china_us_death<- filter(coronavirus,country %in% c("China","US","Bolivia","Brazil"))
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+by_date <- corona_comparison_china_us_death %>% group_by(date)
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+Corona_comparison_china_us2_death <- by_date%>% filter(type == "death")
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(Corona_comparison_china_us2_death,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("death case Comparison with China and US and Brazil")
+
+```
+
+With US and Brazil the number of deaths are really low but we can't clearly state with the
+Population density of the country.
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_country_comparison <- filter(coronavirus,country %in% c("Argentina","Chilie","Paraguay","Bolivia"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+recovered_count_comparison <-corona_country_comparison %>% filter(type == "recovered")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(recovered_count_comparison,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("Recovered cases comparison with Argentina,Chilie,Paraguay")
+
+```
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_comparison_china_us_recovered <- filter(coronavirus,country %in% c("China","US","Bolivia","Brazil"))
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+by_date <- corona_comparison_china_us_recovered %>% group_by(date)
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+Corona_comparison_china_us2_recovered <- by_date%>% filter(type == "recovered")
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(Corona_comparison_china_us2_recovered,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("recovered case Comparison with China and US and Brazil")
+
+```
+
+Recovering rate is same like  with the confirmed cases and death rate of the compared countries.
+
+##Conclusion and Discussion
+
+Bolivia is a country that is not much with health care facilities. When the first case was reported government took different steps to avoid the spread of virus.
+
+Since the health care facilities are poor and with the lockdown the people faced different many problems.
+With the time the new cases and no of deaths are increasing gradually.
+
+Scarcity of resources is the great problem they face.
+
+There were problems when plotting the graphs because of negative values and the availability of unnecessary data like provinces when comparing.
+
+
+##References
+
+https://hellor.netlify.app/
+
+https://www.r-graph-gallery.com/
+
+https://stackoverflow.com/questions/40833809/add-legend-to-geom-line-graph-in-r/40834306#40834306
+
+
+
+ 
+ 

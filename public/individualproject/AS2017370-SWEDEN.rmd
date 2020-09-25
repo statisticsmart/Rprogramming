@@ -1,0 +1,392 @@
+---
+title: "Report on Coronavirus - Sweden"
+author: "sakuni fonseka"
+date: "7/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Corona Virus Country Report
+
+This report is about the country Sweden on how they face the global crisis of the Covid-19 pandemic that is still there in the world.
+
+##      Brief introduction of the country : Sweden
+
+Sweden is a country in Europe continent with thousands of coastal islands and inland lakes. It boarders to Norway from west and north Finland to the east and connected with Denmark from Southeast. Stockholm is the capital city. It has a population of 10.3 million at 450,295 Square kilometres area.
+
+###   Fig (1) Location Visualization
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Sweden_corona <- coronavirus %>% filter(country == "Sweden")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Sweden_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+
+```
+
+<br>
+
+***
+
+###  Climate Condition :
+
+The climate is generally mild. Sweden often has warm continental summers due to its landmark . The climate and environment changes significantly from the south to north and Sweden faces cold and snowy winters mostly.
+The country faces with largely distinct four seasons.
+
+From February to July period in 2020 Sweden goes through Winter to Summer. July is a pleasant summer month for Sweden. While February is the coldest month July is the hottest month in Sweden.
+
+
+###   Lockdown status of the Country and Actions taken by the government :
+
+Sweden is a country that largely avoided imposing prohibitions. The government let the restaurants, gyms, shops  and schools to remain open ever since the coronavirus hits Europe. They conducts  an unorthodox, open air environment.
+
+Due to this thousands of people died than the neighbouring countries that imposed lockdown but economy fared a little better.
+The results they face are more likely to be US where it spreads in an alarming speed.
+In contrast government of Norway and Denmark opted for strict quarantine policies.
+Sweden now has the fifth-highest per capita death rate in the world than all of its neighbours' combined.
+
+
+###  Health status: 
+
+Health in Sweden is largely tax-funded. It enables that everyone has equal access to healthcare services.
+
+Sweden primarily offers healthcare and coronavirus tests for the people who need hospitalization.
+
+Sweden Covid-19 healthcare advice
+
+          1. Stay home if you feel unwell – even if you only have mild symptoms.
+          2. Avoid meeting elderly people.
+          3. If you live with someone who’s got a cold, you don’t have to stay home.
+          4. Clean your hands with soap or hand sanitiser.
+          5. Sneeze and cough into your elbow.
+          6. Avoid touching your face.
+          
+
+<br><br>
+***
+
+
+##   Exploratory data analysis
+<br>
+For the data analysis in this report the coronavirus package in r is used which has the collected from January to mid of May to the date it used.
+
+
+###    Data Analysis about the country
+
+
+Fig (2) & (3) Visualization of confirmed cases
+<br>
+
+```{r out.width=c('50%', '50%'), fig.show='hold', echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Sweden_corona <- coronavirus %>% filter(country == "Sweden")
+library(DT)
+datatable(Sweden_corona, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+confirmed_Sweden_corona <- Sweden_corona %>% filter(type=="confirmed")
+ggplot(confirmed_Sweden_corona, aes(x=date, y=cases)) + geom_line(col="blue") + ggtitle("Sweden: Daily Covid-19 Confirmed cases")
+
+cumulative_confirmed <-mutate(confirmed_Sweden_corona,cumulative_confirmed_sum=cumsum(cases))
+ggplot(cumulative_confirmed, aes(x=date, y=cumulative_confirmed_sum)) + geom_line(col="red") + ggtitle("Sweden: Total Covid-19 Confirmed")
+```
+```
+The first covid 19 patient in Sweden  was founded in 31st of January from a person who came from Wuhan. Then after only 26th Feb the community spread was observed . After that the virus spread among the community. By 12th May the number of active cases were more than 18000 resulting more than 3000 deaths and recovered about 4900.
+The two graphs show  that there's a rapid increase in confirmed cases where it was nearly 500 per day in the months of April and May.
+```
+
+<br>
+Fig (4) & (5) Visualization of death
+<br>
+```{r out.width=c('50%', '50%'), fig.show='hold', echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Sweden_corona <- coronavirus %>% filter(country == "Sweden")
+death_Sweden_corona <- Sweden_corona %>% filter(type=="death")
+ggplot(death_Sweden_corona, aes(x=date, y=cases)) + geom_line(col="blue") + ggtitle("Sweden: Daily Covid-19 Deaths")
+
+cumulative_deaths <-mutate(death_Sweden_corona,cumulative_death_sum=cumsum(cases))
+ggplot(cumulative_deaths, aes(x=date, y=cumulative_death_sum)) + geom_line(col="red") + ggtitle("Sweden: Total Covid-19 Deaths")
+```
+```
+The first death was announced in 11th March in Sweden. The no of total deaths were more than 3000  by the  mid of May.
+```
+
+Fig (6) & (7) Visualization of recovered patients
+
+```{r out.width=c('50%', '50%'), fig.show='hold', echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Sweden_corona <- coronavirus %>% filter(country == "Sweden")
+Recovered_Sweden_corona <- Sweden_corona %>% filter(type=="recovered")
+ggplot(Recovered_Sweden_corona, aes(x=date, y=cases)) + geom_line(col="blue") + ggtitle("Sweden: Daily Covid-19 recovery")
+
+cumulative_recoveries <-mutate(Recovered_Sweden_corona,cumulative_recovery_sum=cumsum(cases))
+ggplot(cumulative_recoveries, aes(x=date, y=cumulative_recovery_sum)) + geom_line(col="green") + ggtitle("Sweden: Total Covid-19 recovery")
+```
+
+```
+Though there's less no of recovered patients in April we can see that higher no of patients began to recover in the month of May.
+```
+
+Fig (8) Visualization of active cases 
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(tidyr)
+library(dplyr)
+
+Sweden_corona <- coronavirus %>% filter(country == "Sweden")
+Active_Sweden_corona <- Sweden_corona %>% pivot_wider(names_from = type, values_from= cases)
+
+Active_Sweden_corona2 <- Active_Sweden_corona %>% mutate(active=confirmed-recovered-death)
+
+Sum_Active_Sweden_corona <- Active_Sweden_corona2 %>% mutate(cumulative_active_cases= cumsum (active) ,
+     recovered_total = cumsum(recovered) ,death_total= cumsum(death))
+
+ggplot(Sum_Active_Sweden_corona , aes(x=date, y=cumulative_active_cases)) + geom_line(col="blue") + ggtitle("Sweden:  Covid-19 Active cases")
+
+```
+```
+The active number of patients were rising till  the end of April but there was a sudden fall in the beginning of May but it gradually increased after that again.
+```
+
+***
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+
+data(Sum_Active_Sweden_corona)
+tail(Sum_Active_Sweden_corona)
+
+```
+```
+By the table we can see cumulative active cases as of 12th May 2020 is 18988, recovered total is 4971 and death total is 3313.
+```
+
+***
+###     COMPARISON WITH OTHER COUNTRIES
+
+
+
+
+In this comparison section the neighbouring countries of Sweden, which are Norway from west and Denmark from southeast and US, China is considered.
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_country <- filter(coronavirus,country %in% c("Norway","Denmark","Sweden"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+confirmed_corona_country <-corona_country %>% filter(type == "confirmed")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(confirmed_corona_country,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("Confirmed cases comparison with neighboring countries")
+
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_US_and_Sweden <- filter(coronavirus,country %in% c("US","Sweden"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+confirmed_corona_country <- corona_US_and_Sweden %>% filter(type == "confirmed")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(confirmed_corona_country,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("confirmed cases comparison with US")
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_China <- filter(coronavirus,country %in% c("China","Sweden"))
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_China2 <- corona_China[,-2]
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_China3 <- corona_China2 %>% filter(type == "confirmed")
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(corona_China3,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("confirmed case Comparison with china")
+
+```
+
+```
+When the confirmed cases are considered with neighboring countries there was higher noticeable increasment in the number of patients rather than Norway and Denmark.
+With US and China comparison Sweden is no more near to the no of patients in US by the month of May and with China which is the country to report coronavirus patients, there's less number of patients in Sweden than China but Sweden has started to increase the confirmed patients when it was almost lower confirmed rate in China.
+
+```
+ <br>
+ Death comparison with other countries
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_neighboring_countries_and_Sweden <- filter(coronavirus,country %in% c("Denmark","Sweden","Norway"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+death_corona_country <- corona_neighboring_countries_and_Sweden %>% filter(type == "death")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(death_corona_country,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("death cases comparison with neighboring countries")
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_US_and_Sweden <- filter(coronavirus,country %in% c("US","Sweden"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+death_corona_country <- corona_US_and_Sweden %>% filter(type == "death")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(death_corona_country,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("death cases comparison with US")
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_China <- filter(coronavirus,country %in% c("China","Sweden"))
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_China2 <- corona_China[,-2]
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_China3 <- corona_China2 %>% filter(type == "death")
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(corona_China3,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("death cases Comparison with china")
+
+```
+```
+Even the number of deaths are comparatively high in Sweden than Norway and Denmark and with US and China the graphs are varying similar to confirmed patients of the country. The deaths per million of people cannot be stated definitely.
+```
+
+<br>
+
+ Recovered comparison with other countries
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_neighboring_countries_and_Sweden <- filter(coronavirus,country %in% c("Denmark","Sweden","Norway"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+recovered_corona_country <- corona_neighboring_countries_and_Sweden %>% filter(type == "recovered")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(recovered_corona_country,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("recovered cases comparison with neighboring countries")
+
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_US_and_Sweden <- filter(coronavirus,country %in% c("US","Sweden"))
+
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+recovered_corona_country <- corona_US_and_Sweden %>% filter(type == "recovered")
+```
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(recovered_corona_country,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("recovered cases comparison with US")
+
+```
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_China <- filter(coronavirus,country %in% c("China","Sweden"))
+
+```
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+corona_China2 <- corona_China[,-2]
+```
+
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+corona_China3 <- corona_China2 %>% filter(type == "recovered")
+```
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(corona_China3,aes(x=date,y=cases,col=country))+geom_line()+ggtitle("recovered cases Comparison with china")
+
+```
+```
+The no of recovered patients in Denmark is high in the month of April than Sweden but in May the recovery rate increased rapidly. With US comparison the recovered patients tally up with the confirmed patients. Of China it was similar like before.
+```
+<br>
+
+###   Conclusion and Discussion
+
+```
+Sweden is a country which had one of the most controversial responses to the pandemic where it was more opened than the neighbouring countries which may be the reason why more confirmed cases and deaths are reported in Sweden.
+The opening of the country had both pros and cons. Better mental health, ramping up ICU beds and also in economy they did not face much like UK where they had 25% shrink.
+Compared to neighbouring countries Sweden faced the pandemic in much harder way.
+
+When considering the limitations of project report,
+there were problems in installing packages where it spotted with error messages, difficulty of plotting the graphs because of negative values and the availability of unnecessary data to compare .
+```
+
+###   References
+
+
+```
+https://hellor.netlify.app/
+
+https://www.r-graph-gallery.com/
+
+
+https://www.cnbc.com/2020/07/17/how-sweden-fought-coronavirus-and-what-went-wrong.html
+
+https://stackoverflow.com/questions/
+
+```
+
+
+
+

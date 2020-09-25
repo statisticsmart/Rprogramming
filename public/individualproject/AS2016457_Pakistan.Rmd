@@ -1,0 +1,238 @@
+---
+title: "Corona virus of Pakistan"
+author: 
+date: 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+The outbreak of COVID-19 virus initiated in December 2019 in Wuhan, China. At the moment COVID-19 virus is rapidly spreading all the countries of the world. Pakistan also falling prey to COVID-19 epidemic. The first two confirmed COVID-19 cases have reported from Karachi on February 26, 2020 with estimated population of Pakistan as 204.65 million. Currently Pakistan has the third largest number of confirmed cases in Asia after India and Iran, and the 12th highest number of confirmed cases in the world. The number of deaths in the country and case fertility rate have remained relatively low compared to most other countries in Asia and the world. On 20 March, the first death was reported in Sindh. The patient was a 77 years old who had acquired the virus through local transmission.   
+Pakistan is located in southern Asia. Pakistan is bordered by the Arabian Sea to the south, Iran and Afghanistan to the west, Indian to the east and china to the north.
+
+ 
+
+```{r , echo=FALSE}
+library(coronavirus)
+```
+
+Pakistan is located in southern Asia. Pakistan is bordered by the Arabian Sea to the south, Iran and Afghanistan to the west, Indian to the east and china to the north.
+
+
+```{r coronaviru, echo=FALSE}
+data(coronavirus)
+```
+
+
+**Visualization of the location of Pakistan**
+```{r , include=FALSE}
+library(tidyverse)
+library(magrittr)
+pakistan_corona <- coronavirus %>% filter(country == "Pakistan")
+```
+                             
+```{r, echo=FALSE, message=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = pakistan_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+Pakistan has four seasons: a cool, dry winter from December through February; a hot, dry spring from March through May; the summer rainy season or south west monsoon period, from June through September; and the retreating monsoon period of October and November. The mean temperature during June is 38 0C (100 0F) in the plains, the highest temperatures can exceed 47 0C (117 0F). Pakistan recorded one of the highest temperature in the word, 53.7 0C (128.66 0F) on 28 May 2017. The dry, hot weather is broken occasionally by dust storms and thunderstorms that temporarily lower the temperature. Evenings are cool; the daily variation in temperature many be as much as 11 0C to 17 0C. Winters are cold with minimum mean temperatures in Punjab of about 40C (39 0F) in January. Since the COVID-19 pandemic first erupted in china this winter, hopes have lingered that outbreak would die down with the change of seasons. Experts are starting to see a small impact from rising temperature and humidity. It won’t stop pandemic, they say but it may help slow down the number of new infections. And the effects of weather may help to explain why parts of the tropics have not been hit quite as hard as temperature regions of the globe.
+The country was put under a nation-wide lockdown until 9 May, which was initiated on 1st April and later extended twice. Upon its end, the lockdown was eased in phases.
+
+
+## Data Analysis
+
+**Confirmed cases of Pakistan**
+
+```{r, include = FALSE }
+confirmed_pakistan_corona <- pakistan_corona %>% filter(type=="confirmed")
+head(confirmed_pakistan_corona)
+```
+```{r}
+ggplot(confirmed_pakistan_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Pakistan: Daily Covid-19 confirmed cases")
+
+```
+ 
+ Increment of Confirmed cases have been started from middle of March. There is a fluctuation and there is no continuously increment. But there is an upward trend. A huge increment has been begun in May. The highest COVID-19 confirmed cases of in a day have been reported above 2000 in May.The lowest COVID-19 confirmed cases of in a day have been reported above 500.
+                             
+                             
+**Recoveries of Pakistan**                            
+                             
+```{r , include= FALSE }
+recover_pakistan_corona <- pakistan_corona %>% filter(type=="recovered")
+```
+```{r}
+ggplot(recover_pakistan_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Pakistan: Daily Covid-19 Recoveries")
+
+```
+                             
+There is an upward trend of recoveries. Recoveries have been increased by last week of April as soon as increment of confirmed cases happen. Per day highest recoveries have been reported above 900 by middle of May. As well as lowest one is 0.
+
+
+**Deaths of Pakistan**
+
+```{r, include=FALSE }
+deaths_pakistan_corona <- pakistan_corona %>% filter(type=="death")
+```
+```{r}
+ggplot(deaths_pakistan_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Pakistan: Daily Covid-19 deaths")
+
+```
+
+ The increment of deaths have been begun by second week of April. The highest reported deaths in a day is 50 in May and the lowest is  than 10 in May.                         
+ 
+ **Active cases of Pakistan**
+                             
+```{r , include=FALSE}
+Pakistan_new_corona1 <- pakistan_corona %>% pivot_wider(names_from = "type" , values_from = "cases")
+head(Pakistan_new_corona1)
+```
+                             
+```{r, include=FALSE}
+Pakistan_new_corona <- Pakistan_new_corona1 %>% mutate(active_cases = confirmed -(death + recovered))
+head(Pakistan_new_corona)
+```
+        
+
+        
+                             
+```{r}
+ggplot(Pakistan_new_corona, aes(x=date, y=active_cases)) + geom_line() + ggtitle("Pakistan: Daily Covid-19 Active cases")
+```
+                             
+                             
+Daily active cases of corona virus has an upward trend and there are many cases of negative values since deaths and recoveries are higher than confirmed cases in a day. we can identify higher active cases since 1st week in May.
+
+### Comparisons of Neighboring Countries
+
+ **Confirmed cases**
+
+```{r, include=FALSE }
+China_Iran_India_pakistan <- filter(coronavirus, country %in% c("China", "Iran", "India","Pakistan"))
+head(China_Iran_India_pakistan)
+tail(China_Iran_India_pakistan)
+```
+
+```{r,include=FALSE}
+confirmed_China_Iran_India_pakistan <- China_Iran_India_pakistan %>% filter(type=="confirmed")
+head(confirmed_China_Iran_India_pakistan )
+```
+                             
+```{r}
+ggplot(confirmed_China_Iran_India_pakistan, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("China, Iran, India and pakistan: Daily Covid-19 Confirmed Cases")
+```
+                             
+Per day Confirmed cases in Pakistan is significantly less than China and Iran. There is a downward trend from middle of February in china but still there is an upward trend in Pakistan. Although per day number of confirmed cases of China is approximately 15000, in Pakistan number of confirmed cases is less than 2500. 
+Outbreak of COVID -19 has been started from March in Iran but COVID -19 outbreak in Pakistan has been started from middle of the march. There are lower confirmed cases in Pakistan than the Iran, China and India. The outbreak of COVID -19 has been started in same time period in India and Pakistan.   Although the variation of India is same as Pakistan, the number of confirmed cases per day is higher in India than Pakistan.
+ 
+ 
+ **Recoveries**                            
+```{r, include=FALSE }
+recoveries_China_Iran_India_pakistan <- China_Iran_India_pakistan %>% filter(type=="recovered")
+```
+                             
+                             
+```{r}
+ggplot(recoveries_China_Iran_India_pakistan, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("China, Iran, India and pakistan: Daily Covid-19 recoveries")
+```
+  
+Recoveries of Pakistan is in good condition as India, China and Iran. Since there is a huge confirmed cases in China and Iran compared to Pakistan, recoveries are also reported in highly. Per day recoveries of India  are significantly higher than Pakistan. 
+
+  
+  
+  
+**Deaths**                           
+```{r, include= FALSE }
+deaths_China_Iran_India_pakistan <- China_Iran_India_pakistan %>% filter(type=="death")
+```
+
+```{r}
+ggplot(deaths_China_Iran_India_pakistan, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("China, Iran, India and pakistan: Daily Covid-19 deaths")
+```
+
+The highest number of deaths in a day has been reported in China then Iran and after that India. However Pakistan is in good condition about the deaths compared to China, India and Iran.
+
+
+**Active cases**
+```{r, include=FALSE }
+four_countries_data <- China_Iran_India_pakistan %>% pivot_wider(names_from = "type" , values_from = "cases")
+head(four_countries_data)
+```
+
+```{r, include=FALSE }
+active_cases_China_Iran_India_pakistan <- four_countries_data %>% mutate(active_cases = confirmed -(death + recovered))
+head(active_cases_China_Iran_India_pakistan)
+```
+
+```{r}
+ggplot(active_cases_China_Iran_India_pakistan, aes(x=date, y=active_cases, col= country)) + geom_line() + ggtitle("China Iran India pakistan: Daily Covid-19 Active cases")
+```
+
+When we consider China and Iran there are many highly visible negative cases since deaths and recoveries more than confirmed cases in a day. But Pakistan has not highly visible negative cases compared to China and India. Active cases of Pakistan and India have same variation but India is highest than the Pakistan 
+
+
+## Conclusions
+
+ 
+* Increment of Confirmed cases have been started from middle of March. There is a fluctuation and there is no continuously increment in Pakistan. But there is an upward trend.
+
+* There is an upward trend of recoveries in Pakistan. Recoveries have been increased by last week of April as soon as increment of confirmed cases happen.
+
+* The increment of deaths have been begun by second week of April in Pakistan. The highest reported deaths in a day is 50 in May and the lowest is  than 10 in May.
+
+* Daily active cases of corona virus has an upward trend. we can identify higher active cases since 1st week in May.
+
+* Per day Confirmed cases in Pakistan is significantly less than China and Iran.  
+Outbreak of COVID -19 has been started from March in Iran but COVID -19 outbreak in Pakistan has been started from middle of the march. There are lower confirmed cases in Pakistan than the Iran, China and India. The outbreak of COVID -19 has been started in same time period in India and Pakistan.   Although the variation of India is same as Pakistan, the number of confirmed cases per day is higher in India than Pakistan.
+ 
+* Recoveries of Pakistan is in good condition as India, China and Iran. Per day recoveries of India  are significantly higher than Pakistan. 
+
+* The highest number of deaths in a day has been reported in China, then Iran and after that India. However Pakistan is in good condition about the deaths compared to China, India and Iran.
+
+* Active cases of Pakistan and India have same variation but India is highest than the Pakistan 
+
+
+
+## Discussion
+
+At the moment COVID-19 is a huge problem in the world. The incidence of COVID-19 has spread since travel to other parts of the world. Pakistan affected due to trade and travel with Iran and China. The government of Pakistan have to lock down the country for control outbreak of COVID-19. The first two confirmed COVID-19 cases have reported from Karachi on February 26, 2020 and spread highly. A huge increment has been begun in May.  In Pakistan has a hot, dry spring season from March through May and Experts are starting to see a small impact from rising temperature and humidity. The outbreak would die down with the change of seasons. In this study China, India and Iran were taken to compare with Pakistan since they are neighboring counties. As well as they have approximately same climates.  The outbreak of COVID-19 has begun same time period in India and Pakistan both countries. India is the most affected than the Pakistan. But variation of confirmed cases, deaths, recoveries and active cases all are same in Pakistan and India. 
+
+
+## References
+
+1. https://geology.com/word/Pakistan-satellite
+2. https://www.voanews.com/covid-19-pandemic/will-warmer-wather-slow-covid-19-spread
+3. countrystudies.us/pakistan/25.htm
+4. Muhammad Yousaf, Samiha Zahir, Muhammad Riaz, Sardar Muhammad Hussain, Kamal Shah (2020 May), Statistical Analysis of forecasting COVID-19 For upcoming month in Pakistan
+
+5. Khadijah Abid, Yashfika Abdul Bari, Maryam Younas, Sehar Tahir Javaid, Abira Imran (2020), Progress of COVID-19 epidemic  in Pakistan, Asia Pacific Journal of Public Health 00(0),
+
+
+

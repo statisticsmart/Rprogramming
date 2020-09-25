@@ -12,7 +12,7 @@ title: Individual Projects
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Moldova](/individualproject/VINURIHLAS2017562.html)    	|  [Peru](/individualproject/LANJALAWGIAS2016425Peru.html) 	|  [Chile](/individualproject/MADIRAWALATRAS2016431Chile.html) 	|  [Mexico](/individualproject/MENDISMCDAS2016448Mexico.html) 	| [Sweden](/individualproject/l1.html) |
+|[Moldova](/individualproject/VINURIHLAS2017562.html)    	|  [Peru](/individualproject/LANJALAWGIAS2016425Peru.html) 	|  [Chile](/individualproject/MADIRAWALATRAS2016431Chile.html) 	|  [Mexico](/individualproject/MENDISMCDAS2016448Mexico.html) 	| [Sweden](/individualproject/AS2017370-SWEDEN.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
@@ -25,7 +25,7 @@ title: Individual Projects
 
 
 
-|[UK](/individualproject/S.S.KumanayakeAS2016417UK.html)    	|  [Spain](/individualproject/AS2016422-spain.html) 	|  Pakistan - NA 	|  [Germany](/individualproject/WILATHGAMUWAGEDHKAS2016557Germany.html) 	| [Turkey](/individualproject/ABISHANYASAS2017307Turkey.html) |
+|[UK](/individualproject/S.S.KumanayakeAS2016417UK.html)    	|  [Spain](/individualproject/AS2016422-spain.html) 	|  [Pakistan](/individualproject/AS2016457_Pakistan.html) 	|  [Germany](/individualproject/WILATHGAMUWAGEDHKAS2016557Germany.html) 	| [Turkey](/individualproject/ABISHANYASAS2017307Turkey.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
@@ -37,7 +37,7 @@ title: Individual Projects
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
-|[Switzerland](/individualproject/NANAYAKKARATNAS2017451.html) 	|  [Afghanistan](/individualproject/NIRIELLANUMAS2017454Afganistan.html) 	|  [Bolivia](/individualproject/l1.html) 	|  [Bahrain](/individualproject/SAMARASINGHEATAS2017519Bahrain.html) 	| [Armenia](/individualproject/SANDUNIMDTAS2017528Armenia.html) |
+|[Switzerland](/individualproject/NANAYAKKARATNAS2017451.html) 	|  [Afghanistan](/individualproject/NIRIELLANUMAS2017454Afganistan.html) 	|  [Bolivia](/individualproject/AS2017475Bolivia.html) 	|  [Bahrain](/individualproject/SAMARASINGHEATAS2017519Bahrain.html) 	| [Armenia](/individualproject/SANDUNIMDTAS2017528Armenia.html) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 
