@@ -43,10 +43,14 @@ custom_js  = []
     # or
     #
     # path = "/img/your-example-logo.svg"
-    # alt = "Your example logo alt text"
-
+    # alt = "Your example logo alt text
     [languages.en.menu]
       [[languages.en.menu.main]]
         identifier = "schedule"
         name = "Schedule"
         url = "/schedule"
+
+      [[languages.en.menu.main]]
+        identifier = "archive"
+        name = "Archive"
+        url = "/archive"
