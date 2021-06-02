@@ -9,15 +9,15 @@ Here's your roadmap for the semester! (Tobegin - 2021)
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
 
-#### Week 1: Introduction to R and RStudio and R Programming basics
+#### Week 1: Introduction to R and RStudio and R Programming Basics
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
-|Slides    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| R-script | Problems 	| Answers |
+|[Slides](/slides/2021/l1_2021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 2: Data structures in R (Matrices, Arrays, List, Data Frame, Factors) 
+#### Week 2: Data Structures in R (Vector, Matrix, Array, Data Frame, List) 
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -27,7 +27,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-##### Individual assignment - 1 (5%) 🎓
+##### Individual Assignment - 1 (5%) 🎓
 
 ```{r class.source="watch-out"}
 Assignment: Individual assignment 1
@@ -52,14 +52,14 @@ Go to LMS. Deadline: TBA
 ----------------------------------------------------------------------------------
 
 
-#### Week 6: Introduction to the tidyverse data science workflow: Tibble, Factor, Pipe operator, Data import and export
+#### Week 6: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator, Data Import and Export
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 
-#### Week 7: Reproducible reporting with R Markdown
+#### Week 7: Reproducible Reporting with R Markdown
 
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
@@ -67,21 +67,21 @@ Go to LMS. Deadline: TBA
 
 
 
-#### Week 8: Data wrangling: Reshaping data
+#### Week 8: Data Wrangling: Reshaping Data
 
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 9: Data wrangling: Data manipulation
+#### Week 9: Data Wrangling: Data Manipulation
 
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-##### Individual assignment - 2 (10%) 🎓
+##### Individual Assignment - 2 (10%) 🎓
 
 ```{r class.source="watch-out"}
 Assignment: Individual assignment 2
@@ -101,7 +101,7 @@ Go to LMS. Deadline: TBA
 
 
 
-##### Individual project (25%) 🎓
+##### Individual Project (25%) 🎓
 
 ```{r class.source="watch-out"}
 Assignment: Individual Project
@@ -121,12 +121,12 @@ Go to LMS. Deadline: TBA
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 12: The inverse transform method and The method of Monte Carlo
+#### Week 12: The Inverse Transform Method and The Method of Monte Carlo
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 13: Hypothesis testing
+#### Week 13: Hypothesis Testing
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -137,7 +137,7 @@ Go to LMS. Deadline: TBA
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 15: Revision and ways to continue learning R no matter what you choose to be your next step
+#### Week 15: Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
