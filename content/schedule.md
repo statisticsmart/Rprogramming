@@ -2,14 +2,16 @@
 title: Schedule
 ---
 
-Here's your roadmap for the semester! (Tobegin - 2021)
+
+
+Here's your roadmap for the semester! (To begin - 2021)
 
 - <i class="fas fa-book-reader"></i> Readings should be completed ***before*** each class session
 - <i class="fas fa-laptop-code"></i> Assignments are due by 3:00 PM on the day they are due
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
 
-#### Week 1: Introduction to R and RStudio and R Programming Basics
+#### Week 1: Introduction to R, RStudio and R Programming Basics
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
