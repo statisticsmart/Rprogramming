@@ -1,0 +1,110 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "🎉 Introduction to R and RStudio and R Programming Basics"  
+author: 
+  - ""
+  - "Dr Thiyanga Talagala"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"))
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+# Today's menu
+
+.pull-left[
+- What is R?
+
+- Why R?
+
+- R and Rstudio.
+
+- Installing R and Rstudio?
+
+- Familiarize with RStudio interface.
+
+- R Studio cloud.
+
+- Using R as a calculator.
+
+- Basic vector operations.
+]
+
+.pull-right[
+<center><img src="salad.jpeg" height="500px"/></center>
+]
+
+---
+
+## What statistical software packages are you familiar with?
+
+
+---
+
+<!--You have already mastered Minitab. -->
+
+.pull-left[
+
+### Minitab - menu driven package
+
+<!--Minitab. Commonly used in: social science, marketing, education, sociology, ... Menu-driven statistical software-->
+
+]
+
+
+.pull-right[
+
+### R - scripting language
+
+
+
+]
+
+
+---
+class: center, middle
+
+# Thank you!
+
+Slides created via the R packages:
+
+[**xaringan**](https://github.com/yihui/xaringan)<br>
+[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
+
+The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
