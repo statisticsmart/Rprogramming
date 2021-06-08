@@ -74,6 +74,11 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 ## What statistical software packages are you familiar with?
 
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 30)
+```
+
 
 ---
 
@@ -149,7 +154,6 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 - Difficult to reproduce results.
 
-- Collaboration
 
 ]
 
@@ -172,8 +176,16 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 ## Pros
 
+- Useful for collaborative research.
+
+- Ideal for reproducible research
+
+
+
 
 ## Cons
+
+- The learning curve may be difficult at the start.
 
 
 ]
@@ -186,7 +198,7 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 - Free and open-source software package
 
-- Large community of users
+- A large online community that makes it fun to learn.
 
 - Latest cutting edge technology
 
@@ -539,6 +551,7 @@ class: inverse, center, middle
 
 # 1. Vectors
 
+
 ---
 
 ### Vectors
@@ -564,12 +577,24 @@ x <- c(5, 6, 3, 1 , 100) # example
 
 - assignment operator ('<-'), '=' can be used as an alternative.
 
-- `c()` function
+- `c()` function is used to create vector.
+
+
+---
+
+## Your turn
 
 .red[What will be the output of the following code?]
 
 ```r
+x <- c(5, 6, 3, 1 , 100) 
 y <- c(x, 500, 600)
+```
+
+```{r, echo=FALSE}
+#devtools::install_github("gadenbuie/countdown")
+library(countdown)
+countdown(minutes = 1L, seconds = 30)
 ```
 
 ---
@@ -659,12 +684,25 @@ typeof(vec2)
 vec2
 ```
 
+
+---
+
+# Your turn
+
+
 .red[Why does the below output NAs?]
 
 ```{r, comment=NA}
 x <- c("a", "b", "c")
 as.numeric(x)
 ```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
+
+
 
 ---
 
@@ -741,6 +779,11 @@ Method 2
 names(x2) <- NULL; x2
 ```
 
+
+---
+
+# Your turn
+
 .red[What will be the output of the following code?]
 
 ```r
@@ -748,6 +791,14 @@ v <- c(1, 2, 3)
 names(v) <- c("a")
 v
 ```
+
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 1L, seconds = 30)
+```
+
+
 ---
 
 # Simplifying vector creation: `:`
@@ -889,12 +940,23 @@ shortvec + longvec
 ```
 
 
+---
+
+# Your turn
+
 .red[What will be the output of the following code?]
 
 ```r
 first <- c(1, 2, 3, 4); second <- c(10, 100)
 first * second
 ```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 30)
+```
+
+
 ---
 
 # Other vector operations
