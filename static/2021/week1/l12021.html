@@ -3,9 +3,9 @@
   <head>
     <title>STA 326 2.0 Programming and Data Analysis with R</title>
     <meta charset="utf-8" />
-    <meta name="author" content="" />
     <meta name="author" content="Dr Thiyanga Talagala" />
-    <meta name="date" content="2021-06-02" />
+    <meta name="date" content="2021-06-08" />
+    <script src="l12021_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## 🎉 Introduction to R, RStudio and R Programming Basics
 ### 
 ### Dr Thiyanga Talagala
-### 2021-06-02
+### 2021-06-08
 
 ---
 
@@ -56,6 +56,24 @@ class: center, middle, inverse, title-slide
 
 ---
 
+### R Programming Language
+
+
+- R is a software environment for statistical computing and graphics.
+
+- Language designers: **R**oss Ihaka and **R**obert Gentleman at the University of Auckland, New Zealand.
+
+- Parent language: S
+
+- The latest R version 4.1.0 has been released on 2021 - 6 - 5.
+
+&lt;center&gt;&lt;img src="RobertandRoss.jpg" height="400px" /&gt;&lt;/center&gt;
+
+
+
+
+---
+
 
 &lt;!--You have already mastered Minitab. --&gt;
 
@@ -63,7 +81,10 @@ class: center, middle, inverse, title-slide
 
 ### Minitab - Menu driven software
 
+&lt;center&gt;&lt;img src="minitab.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
 &lt;!--Minitab. Commonly used in: social science, marketing, education, sociology, ... Menu-driven statistical software--&gt;
+
 
 ]
 
@@ -72,13 +93,70 @@ class: center, middle, inverse, title-slide
 
 ### R - Scripting language
 
-
+&lt;center&gt;&lt;img src="rstudiocode.png" height="400px" height="300px"/&gt;&lt;/center&gt;
 
 ]
 
 ---
 
-## R Programming Language
+
+.pull-left[
+
+### Menu driven software
+
+&lt;center&gt;&lt;img src="minitab.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
+&lt;!--Minitab. Commonly used in: social science, marketing, education, sociology, ... Menu-driven statistical software--&gt;
+
+
+
+]
+
+
+.pull-right[
+
+## Pros
+
+- Do not have to remember the commands.
+
+- User friendly.
+
+
+## Cons
+
+- Irritating if there are too many levels of menues to move around.
+
+- Difficult to reproduce results.
+
+- Collaboration
+
+]
+
+
+---
+
+
+&lt;!--You have already mastered Minitab. --&gt;
+
+.pull-left[
+
+### Scripting language
+
+&lt;center&gt;&lt;img src="rstudiocode.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
+]
+
+
+.pull-right[
+
+## Pros
+
+
+## Cons
+
+
+]
+
 
 
 ---
@@ -91,20 +169,1058 @@ class: center, middle, inverse, title-slide
 
 - Latest cutting edge technology
 
-- 
+---
+
+background-image: url('ricon.png')
+background-position: right
+background-size: contain
+
+## R 
+
+---
+background-image: url('rmac2.png')
+background-position: right
+background-size: contain
+
+## R environment - macOS
+
+---
+background-image: url('rmac1.png')
+background-position: right
+background-size: contain
+
+## R  environment - macOS
+---
+
+background-image: url('renv.png')
+background-position: right
+background-size: contain
+
+## R environment
+
+---
+background-image: url('rstudio1.png')
+background-position: right
+background-size: contain
+
+## The RStudio IDE
+---
+
+background-image: url('rstudio2.png')
+background-position: right
+background-size: contain
+
+## The RStudio IDE
+
+---
+background-image: url('airport.jpg')
+background-position: center
+background-size: cover
+
+.content-box-yellow[
+## R and RStudio
+]
+
+---
+class: inverse, center, middle
+
+# Create a new project
+
+---
+background-image: url('project1.png')
+background-position: center
+background-size: contain
+---
+
+background-image: url('project2.png')
+background-position: center
+background-size: contain
+---
+
+background-image: url('project3.png')
+background-position: center
+background-size: contain
+---
+
+background-image: url('project4.png')
+background-position: center
+background-size: contain
+---
+
+background-image: url('project5.png')
+background-position: center
+background-size: contain
+---
+
+background-image: url('project6.png')
+background-position: center
+background-size: contain
 
 
 ---
+
+class: inverse, center, middle
+
+# Basics of R programming
+
+
+---
+
+## R Console
+
+
+```r
+7+1
+```
+
+```
+[1] 8
+```
+
+
+
+
+```r
+rnorm(10) 
+```
+
+```
+ [1] -2.037058776  0.004335658  1.237837987 -0.229248343  1.706903193
+ [6]  0.087598592  0.176282829 -1.430183600 -0.814693480  0.544593022
+```
+
+
+---
+
+
+## Variable assignment
+
+
+```r
+a &lt;- rnorm(10)
+a
+```
+
+```
+ [1]  0.99548422  1.75778780 -0.63960857  1.17423506 -1.21889994 -0.19984902
+ [7]  1.55847272 -0.09836903  0.18672167 -0.34562337
+```
+
+--
+
+
+```r
+b &lt;- a*100
+b
+```
+
+```
+ [1]   99.548422  175.778780  -63.960857  117.423506 -121.889994  -19.984902
+ [7]  155.847272   -9.836903   18.672167  -34.562337
+```
+
+---
+
+
+
+# Data permanency
+
+- `ls()` can be used to display the names of the objects which are currently stored within R.
+
+- The collection of objects currently stored is called the **workspace**.
+
+
+```r
+ls()
+```
+
+```
+[1] "a" "b"
+```
+
+---
+
+## Remove objects
+
+- To remove objects the function `rm` is available
+
+
+    
+### Remove specific objects: `rm(x, y, z)`
+    
+    
+
+```r
+rm(a)
+ls()
+```
+
+```
+[1] "b"
+```
+
+### Remove all objects: `rm(list=ls())`
+
+
+```r
+rm(list=ls())
+ls()
+```
+
+```
+character(0)
+```
+
+---
+
+class: inverse, center, middle
+
+# Close the project
+
+
+---
+
+background-image: url('project7.png')
+background-position: center
+background-size: contain
+
+At the end of an R session, if **save**: the objects are written to a file called .RData in the current directory, and the command lines used in the session are saved to a file called .Rhistory
+
+---
+
+class: inverse, center, middle
+
+# When R is started at later time **from the same directory**.
+
+---
+
+background-image: url('p81.png')
+background-position: center
+background-size: cover
+
+
+---
+
+background-image: url('p82.png')
+background-position: center
+background-size: cover
+
+.pull-left[.full-width[.content-box-yellow[When R is started at later time **from the same directory** it reloads the **associated workspace** and **commands history.**]]]
+
+---
+
+background-image: url('project9.png')
+background-position: center
+background-size: cover
+
+--
+.pull-left[.full-width[.content-box-yellow[When R is started at later time **from the same directory** it reloads the **associated workspace** and **commands history.**]]]
+
+
+---
+
+## Comment your code
+
+- Each line of a comment should begin with the comment symbol and a single space: # . 
+
+
+```r
+rnorm(10) # This is a comment 
+```
+
+```
+ [1]  1.428493354 -0.258094361  0.328041195 -0.004621197  0.261448919
+ [6] -0.047998028  0.624327179 -0.043110318  1.890161569 -0.389631910
+```
+
+```r
+sum(1:10) # Summation of numbers from 1 to 10.
+```
+
+```
+[1] 55
+```
+
+---
+
+
+## Style Guide
+
+- Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.  -- Hadley Wickham
+
+
+```r
+sum(1:10)#Bad commenting style
+```
+
+```
+[1] 55
+```
+
+```r
+sum(1:10) # Good commenting style
+```
+
+```
+[1] 55
+```
+
+- Also, use commented lines of - and = to break up your file into easily readable sub-sections.
+
+```r
+# Read data ----------------
+
+# Plot data ----------------
+```
+
+To learn more read Hadley Wickham's [Style guide](http://adv-r.had.co.nz/Style.html).
+
+---
+
+## Objects in R
+
+
+1. .red[Data structures] are the ways of arranging data.
+
+    - You can create objects, using the left pointing arrow &lt;-
+--
+1. .red[Functions] tell R to do something.
+
+    - A function may be applied to an object.
+
+    - Result of applying a function is usually an object too.
+
+    - All function calls need to be followed by parentheses.
+
+
+```r
+a &lt;- 1:20 # data structure
+sum(a) # sum is a function applied on a
+```
+
+```
+[1] 210
+```
+
+```r
+help.start() # Some functions work on their own.
+```
+
+---
+
+
+## Getting help with functions and features
+
+- R has inbuilt help facility
+
+
+**Method 1**
+
+```r
+help(rnorm)
+```
+
+- For a feature specified by special characters such as `for`, `if`, `[[`
+
+```r
+help("[[")
+```
+
+- Search the help files for a word or phrase.
+
+```r
+help.search(‘weighted mean’) 
+```
+
+**Method 2**
+
+```r
+?rnorm
+```
+
+```r
+??rnorm
+```
+
+
+---
+
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
+## Data structures
+
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
+
+---
+
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
+## Data structures
+
+.content-box-yellow[Data structures differ in terms of,
+
+- Type of data they can hold
+
+- How they are created
+
+- Structural complexity
+
+- Notation to identify and access individual elements
+]
+
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
+---
+
+class: inverse, center, middle
+
+# 1. Vectors
+
+---
+
+### Vectors
+
+- Vectors are one-dimensional arrays that can hold numeric data, character data, or logical data.
+
+- Combine function c() is used to form the vector.
+
+- Data in a vector must only be one type or mode (numeric, character, or logical). You can’t mix modes in the same vector.
+
+
+**Vector assignment**
+
+
+```r
+vector_name &lt;- c(element1, element2, element3) # syntax
+
+```
+
+```r
+x &lt;- c(5, 6, 3, 1 , 100) # example
+```
+
+- assignment operator ('&lt;-'), '=' can be used as an alternative.
+
+- `c()` function
+
+.red[What will be the output of the following code?]
+
+```r
+y &lt;- c(x, 500, 600)
+```
+
+---
+
+# Types and tests with vectors
+
+
+
+```r
+first_vec &lt;- c(10, 20, 50, 70)
+second_vec &lt;- c("Jan", "Feb", "March", "April")
+third_vec &lt;- c(TRUE, FALSE, TRUE, TRUE)
+fourth_vec &lt;- c(10L, 20L, 50L, 70L)
+```
+
+
+To check if it is a 
+
+- vector: `is.vector()`
+
+
+```r
+is.vector(first_vec)
+```
+
+```
+[1] TRUE
+```
+
+
+- character vector: `is.character()`
+
+
+```r
+is.character(first_vec)
+```
+
+```
+[1] FALSE
+```
+---
+- double: `is.double()`
+
+
+```r
+is.double(first_vec)
+```
+
+```
+[1] TRUE
+```
+
+
+- integer: `is.integer()`
+
+
+```r
+is.integer(first_vec)
+```
+
+```
+[1] FALSE
+```
+
+- logical: `is.logical()`
+
+
+```r
+is.logical(first_vec)
+```
+
+```
+[1] FALSE
+```
+
+- length
+
+
+```r
+length(first_vec)
+```
+
+```
+[1] 4
+```
+---
+
+# Coercion
+
+Vectors must be homogeneous. When you attempt to combine different types they will be coerced to the most flexible type so that every element in the vector is of the same type.
+
+Order from least to most flexible
+
+`logical` --&gt; `integer` --&gt; `double` --&gt; `character`
+
+
+```r
+a &lt;- c(3.1, 2L, 3, 4, "GPA") 
+typeof(a) 
+```
+
+```
+[1] "character"
+```
+
+
+```r
+anew &lt;- c(3.1, 2L, 3, 4)
+typeof(anew) 
+```
+
+```
+[1] "double"
+```
+
+---
+
+### Explicit coercion
+
+Vectors can be explicitly coerced from one class to another using the `as.*` functions, if available. For example, `as.character`, `as.numeric`, `as.integer`, and `as.logical`.
+
+
+```r
+vec1 &lt;- c(TRUE, FALSE, TRUE, TRUE)
+typeof(vec1)
+```
+
+```
+[1] "logical"
+```
+
+```r
+vec2 &lt;- as.integer(vec1)
+typeof(vec2)
+```
+
+```
+[1] "integer"
+```
+
+```r
+vec2
+```
+
+```
+[1] 1 0 1 1
+```
+
+.red[Why does the below output NAs?]
+
+
+```r
+x &lt;- c("a", "b", "c")
+as.numeric(x)
+```
+
+```
+[1] NA NA NA
+```
+
+---
+
+### Explicit coercion (cont.)
+
+.pull-left[
+
+
+```r
+x1 &lt;- 1:3
+x2 &lt;- c(10, 20, 30)
+combinedx1x2 &lt;- c(x1, x2)
+combinedx1x2 
+```
+
+```
+[1]  1  2  3 10 20 30
+```
+
+
+
+
+```r
+class(x1)
+```
+
+```
+[1] "integer"
+```
+
+```r
+class(x2)
+```
+
+```
+[1] "numeric"
+```
+
+```r
+class(combinedx1x2)
+```
+
+```
+[1] "numeric"
+```
+
+]
+
+.pull-right[
+
+- If you combine a numeric vector and a character vector 
+
+
+```r
+y1 &lt;- c(1, 2, 3)
+y2 &lt;- c("a", "b", "c")
+c(y1, y2)
+```
+
+```
+[1] "1" "2" "3" "a" "b" "c"
+```
+
+]
+
+---
+
+# Name elements in a vector
+
+You can name elements in a vector in different ways. We will learn two of them.
+
+1. When creating it
+
+
+```r
+x1 &lt;- c(a=1991, b=1992, c=1993)
+x1
+```
+
+```
+##    a    b    c 
+## 1991 1992 1993
+```
+
+2. Modifying the names of an existing vector
+
+
+```r
+x2 &lt;- c(1, 5, 10)
+names(x2) &lt;- c("a", "b", "b")
+x2
+```
+
+```
+##  a  b  b 
+##  1  5 10
+```
+
+Note that the names do not have to be unique. 
+---
+
+# To remove names of a vector
+
+Method 1
+
+
+```r
+unname(x1); x1
+```
+
+```
+[1] 1991 1992 1993
+```
+
+```
+   a    b    c 
+1991 1992 1993 
+```
+
+Method 2
+
+
+```r
+names(x2) &lt;- NULL; x2
+```
+
+```
+[1]  1  5 10
+```
+
+.red[What will be the output of the following code?]
+
+```r
+v &lt;- c(1, 2, 3)
+names(v) &lt;- c("a")
+v
+```
+---
+
+# Simplifying vector creation: `:`
+
+1. colon `:` produce regular spaced ascending or descending sequences.
+
+
+```r
+ 10:16
+```
+
+```
+[1] 10 11 12 13 14 15 16
+```
+
+```r
+-0.5:8.5
+```
+
+```
+ [1] -0.5  0.5  1.5  2.5  3.5  4.5  5.5  6.5  7.5  8.5
+```
+---
+
+# Simplifying vector creation: `seq`
+
+2. sequence: `seq(initial_value, final_value, increment)`
+
+
+```r
+seq(1,11)
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10 11
+```
+
+```r
+seq(1, 11, length.out=5)
+```
+
+```
+[1]  1.0  3.5  6.0  8.5 11.0
+```
+
+```r
+seq(0, 11, by=2)
+```
+
+```
+[1]  0  2  4  6  8 10
+```
+
+---
+
+# Simplifying vector creation: `rep`
+
+3. repeats `rep()` 
+
+
+```r
+rep(9, 5)
+```
+
+```
+[1] 9 9 9 9 9
+```
+
+```r
+rep(1:4, 2)
+```
+
+```
+[1] 1 2 3 4 1 2 3 4
+```
+
+```r
+rep(1:4, each=2) # each element is repeated twice
+```
+
+```
+[1] 1 1 2 2 3 3 4 4
+```
+
+```r
+rep(1:4, times=2) # whole sequence is repeated twice
+```
+
+```
+[1] 1 2 3 4 1 2 3 4
+```
+
+```r
+rep(1:4, each=2, times=3)
+```
+
+```
+ [1] 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4
+```
+
+```r
+rep(1:4, 1:4)
+```
+
+```
+ [1] 1 2 2 3 3 3 4 4 4 4
+```
+
+```r
+rep(1:4, c(4, 1, 4, 2))
+```
+
+```
+ [1] 1 1 1 1 2 3 3 3 3 4 4
+```
+
+---
+
+## Logical operators
+
+.pull-left[
+
+- `&lt;=` less than or equal to
+
+- `&gt;=` greater than or equal to
+
+- `|` or
+
+- `&amp;` and
+
+- `&lt;` less than
+
+- `&gt;` greater than
+
+- `==` equal
+
+]
+
+
+.pull-right[
+
+
+```r
+c(1, 2, 3) == c(10, 20, 3)
+```
+
+```
+[1] FALSE FALSE  TRUE
+```
+
+
+```r
+c(1, 2, 3) != c(10, 20, 3)
+```
+
+```
+[1]  TRUE  TRUE FALSE
+```
+
+
+```r
+1:5 &gt; 3
+```
+
+```
+[1] FALSE FALSE FALSE  TRUE  TRUE
+```
+
+
+```r
+1:5 &lt; 3
+```
+
+```
+[1]  TRUE  TRUE FALSE FALSE FALSE
+```
+
+]
+
+---
+
+# Operators: `%in%` - in the set
+
+
+```r
+a &lt;- c(1, 2, 3)
+b &lt;- c(1, 10, 3)
+a%in%b
+```
+
+```
+[1]  TRUE FALSE  TRUE
+```
+
+
+```r
+x &lt;- 1:10
+y &lt;- 1:3
+x
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+y
+```
+
+```
+[1] 1 2 3
+```
+
+```r
+x %in% y
+```
+
+```
+ [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+
+```r
+y %in% x
+```
+
+```
+[1] TRUE TRUE TRUE
+```
+---
+## Vector arithmetic
+
+
+- operations are performed element by element. 
+
+
+```r
+c(10, 100, 100) + 2 # two is added to every element in the vector
+```
+
+```
+[1]  12 102 102
+```
+--
+- operations between two vectors
+
+
+```r
+v1 &lt;- c(1, 2, 3); v2 &lt;- c(10, 100, 1000)
+v1 + v2
+```
+
+```
+[1]   11  102 1003
+```
+--
+Add two vectors of unequal length
+
+
+```r
+longvec &lt;- seq(10, 100, length=10); shortvec &lt;- c(1, 2, 3, 4, 5)
+
+shortvec + longvec
+```
+
+```
+ [1]  11  22  33  44  55  61  72  83  94 105
+```
+
+
+.red[What will be the output of the following code?]
+
+```r
+first &lt;- c(1, 2, 3, 4); second &lt;- c(10, 100)
+first * second
+```
+---
+
+# Other vector operations
+
+- Please see the [cheatsheet](/pdf/baser.pdf).
+
+---
+
+# Missing values
+
+Use `NA` or `NaN` to place a missing value in a vector.
+
+
+```r
+z &lt;- c(10, 101, 2, 3, NA)
+is.na(z)
+```
+
+```
+[1] FALSE FALSE FALSE FALSE  TRUE
+```
+
+
+---
+
+
+
 class: center, middle
 
-# Thank you!
+## Thank you!
 
-Slides created via the R packages:
+Slides available at: hellor.netlify.app
 
-[**xaringan**](https://github.com/yihui/xaringan)&lt;br&gt;
-[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
 
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

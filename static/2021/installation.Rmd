@@ -1,0 +1,97 @@
+---
+title: "Download and Install R and RStudio (Mac)"
+subtitle: " "  
+author: 
+  - ""
+  - "Thiyanga Talagala"
+date: ''
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"))
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+class: inverse 
+
+# Steps
+
+### 1. Download R
+
+### 2. Download RStudio
+
+### 3. Install R 
+
+### 4. Install RStudio
+
+### 5. Test RStudio
+
+
+---
+class: inverse center middle
+
+Step 1
+
+## Download R
+
+---
+class: inverse center middle
+
+Step 2
+
+## Download RStudio
+
+---
+class: inverse center middle
+
+Step 3
+
+## Install R 
+
+---
+class: inverse center middle
+
+Step 4
+
+## Install RStudio 
+
+---
+class: inverse center middle
+
+Step 5
+
+## Test RStudio 

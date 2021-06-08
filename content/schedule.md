@@ -11,6 +11,7 @@ Here's your roadmap for the semester! (To begin - 2021)
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
 
+
 #### Week 1: Introduction to R, RStudio and R Programming Basics
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
