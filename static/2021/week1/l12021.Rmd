@@ -671,7 +671,7 @@ typeof(anew)
 
 ---
 
-### Explicit coercion
+# Explicit coercion
 
 Vectors can be explicitly coerced from one class to another using the `as.*` functions, if available. For example, `as.character`, `as.numeric`, `as.integer`, and `as.logical`.
 
@@ -706,7 +706,7 @@ countdown(minutes = 2L, seconds = 00)
 
 ---
 
-### Explicit coercion (cont.)
+# Explicit coercion (cont.)
 
 .pull-left[
 
@@ -749,14 +749,14 @@ You can name elements in a vector in different ways. We will learn two of them.
 
 1. When creating it
 
-```{r}
+```{r, comment=NA}
 x1 <- c(a=1991, b=1992, c=1993)
 x1
 ```
 
 2. Modifying the names of an existing vector
 
-```{r}
+```{r, comment=NA}
 x2 <- c(1, 5, 10)
 names(x2) <- c("a", "b", "b")
 x2
@@ -850,7 +850,7 @@ rep(1:4, c(4, 1, 4, 2))
 
 ---
 
-## Logical operators
+# Logical operators
 
 .pull-left[
 
@@ -914,7 +914,7 @@ x %in% y
 y %in% x
 ```
 ---
-## Vector arithmetic
+# Vector arithmetic
 
 
 - operations are performed element by element. 
