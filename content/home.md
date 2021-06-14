@@ -8,7 +8,7 @@ Course outline: [here](/courseoutline/R2020.pdf)
 
 Course webpage: hellor.netlify.app
 
-Course meeting time: Tuesday, 4.00pm - 6.00pm
+Course meeting time: Thursday, 10.15am - 12.00noon
 
 Location: Online
 
