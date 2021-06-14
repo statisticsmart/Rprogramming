@@ -4,7 +4,7 @@ title: STA 326 2.0 Programming and Data Analysis with R
 
 ## Course information
 
-Course outline: [here](/courseoutline/R2020.pdf)
+Course outline: [here](/courseoutline/STA326_2_Programming_and_Data_Analysis_with_R.pdf)
 
 Course webpage: hellor.netlify.app
 
