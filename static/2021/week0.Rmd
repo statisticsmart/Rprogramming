@@ -4,7 +4,7 @@ subtitle: "🎉 "
 author: 
   - ""
   - "Dr Thiyanga Talagala"
-date: '`r Sys.Date()`'
+date: 'Lecture 1: Getting Started'
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -68,7 +68,7 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
       
       - Statistical computing
       
-- Personal website: https://thiyanga.netlify.app/
+- Personal website: https://thiyanga.jb.app/
 ---
 
 ## Requirements
@@ -79,25 +79,48 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 ## Enrolment
 
-- Student must register at the beginning (the first week) of the semester and unfortunately cannot join after the second week.
+- Student must register at the beginning (week 1 - week 3) of the semester cannot join after the third week.
 
 ## Drop Course Policy
 
-- Last date to drop:
+- Last date to drop: week 7
 
 - You should inform the lecturer-in-charge through an email.
 
+---
+
+
+## Course website
+
+```{r, echo=FALSE}
+knitr::include_url("https://hellor.netlify.app/")
+```
+
+---
+
+## Course outline
+
+
+```{r, echo=FALSE}
+knitr::include_url("https://hellor.netlify.app/courseoutline/STA326_2_Programming_and_Data_Analysis_with_R.pdf")
+```
 
 
 ---
 
 ## Penalties for late submission of assignments
 
-- Each assignment writeup will indicate the deadline for on-time submission. The date and time of the deadline are firm.
+- Each assignment write-up will indicate the deadline for on-time submission. The date and time of the deadline are firm.
 
-- Submitting by the deadline earns the on-time bonus marks. The assignment writeup will specify the bonus if available.
+--
 
-- If you miss the deadline, there may be a grace period for late submissions. The assignment writeup will specify if there is a grace period and how long. You can make a late submission after the deadline and up to the end of the grace period. A penalty is applied for late submissions and the late submissions do not earn the on-time bonus. 
+- Submitting by the deadline earns the on-time bonus marks. The assignment write-up will specify the bonus if available.
+
+--
+
+- If you miss the deadline, there may be a grace period for late submissions. The assignment write-up will specify if there is a grace period and how long. You can make a late submission after the deadline and up to the end of the grace period. A penalty is applied for late submissions and the late submissions do not earn the on-time bonus. 
+
+--
 
 - Late submission penalty
 
@@ -140,18 +163,116 @@ Category C
 
 - Encourage good time-management.
 
-- Encouragement and appreciation of hardworking students.
+- Encouragement and appreciation of on time submission students.
 
 ---
 
+# Assignment
 
-class: center, middle
+## How to deal with emergencies like a computer breakdown?
 
-# Thank you!
+ - Please inform the lecturer-in-charge in advance.
 
-Slides created via the R packages:
+ - Submit handwritten assignment: Write the solution you would take if you have an access to a computer. You should write all necessary steps and give reasons wherever necessary and submit the assignment.
+ 
+ - You will be asked to submit the computer-based outputs at a later date.
 
-[**xaringan**](https://github.com/yihui/xaringan)<br>
-[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
 
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
+---
+
+## Help us to help you!
+
+.pull-left[
+![](week1/solo-houses_thumb.jpeg)
+]
+
+--
+
+.pull-right[
+
+- Use the LMS forum to ask questions.
+
+- Feel free to answer each others questions.
+
+- I will also provide answers.
+
+- Email ttalagala@sjp.ac.lk only for issues that are personal.
+
+- For details on consultation see course website.
+
+
+
+]
+
+---
+
+class: inverse, center, middle
+
+# Additional resources
+
+---
+
+## R Ladies 
+
+![](useR2019-Rladies.jpeg)
+
+---
+
+## R Ladies 
+
+```{r, echo=FALSE}
+knitr::include_url("https://rladies.org/")
+```
+
+---
+
+## R Ladies Colombo
+
+```{r, echo=FALSE}
+knitr::include_url("https://rladiescolombo.netlify.app/")
+```
+
+---
+
+## Other
+
+- Stack Overflow: question and answer website for professional and enthusiast programmers
+
+- Cousera
+
+- DataCamp
+
+- Udemy etc.
+
+---
+
+background-image: url('horse.png')
+background-position: center
+background-size: cover
+
+---
+background-image: url('job1.png')
+background-position: center
+background-size: cover
+
+---
+background-image: url('job2.png')
+background-position: center
+background-size: cover
+
+---
+background-image: url('job3.png')
+background-position: center
+background-size: cover
+
+---
+background-image: url('job4.png')
+background-position: center
+background-size: cover
+
+---
+
+class: inverse, center, middle
+
+
+# Buckle up - Let's get started.

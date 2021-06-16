@@ -74,10 +74,13 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 ## What statistical software packages are you familiar with?
 
+
+
 ```{r, echo=FALSE}
 library(countdown)
 countdown(minutes = 2L, seconds = 30)
 ```
+
 
 
 ---
@@ -198,9 +201,18 @@ countdown(minutes = 2L, seconds = 30)
 
 - Free and open-source software package
 
-- A large online community that makes it fun to learn.
+- A large online community that makes it fun to learn
 
 - Latest cutting edge technology
+
+- Easier to update analysis
+
+- Easier to reproduce analysis
+
+- Easier to collaborate with others
+
+- Easier to automate analysis
+
 
 ---
 
@@ -246,12 +258,27 @@ background-size: contain
 ## The RStudio IDE
 
 ---
-background-image: url('airport.jpg')
-background-position: center
-background-size: cover
 
-.content-box-yellow[
+background-image: url('airport.jpg')
+background-position: right
+background-size: contain
+
 ## R and RStudio
+
+---
+
+## R and RStudio
+
+.pull-left[
+
+![](airport.jpg)
+]
+
+.pull-right[
+> If R were **an airplane**, RStudio would be **the airport**, providing many, many supporting services that make it easier for you, the pilot, to take off and go to awesome places. Sure, you can fly an airplane without an airport, but having those runways and supporting infrastructure is a game-changer." 
+
+> Julie Lowndes
+
 ]
 
 ---
@@ -331,17 +358,53 @@ b <- a*100
 b
 ```
 
+--
+
+```{r, comment=NA}
+c <- "corona"
+c
+```
+
+---
+
+## Case sensitivity
+
+
+R is case sensitive. The following are all different.
+
+```r
+corona
+
+Corona
+
+CORONA
+
+```
+
+
 ---
 
 # Working directory
+
+To check your current working directory
 
 ```r
 getwd()
 ```
 
+To change the working directory
+
+```r
+setwd("/Users/thiyanga/sta326")
+```
+
+---
+
 
 
 # Data permanency
+
+- All variables are kept in the workspace.
 
 - `ls()` can be used to display the names of the objects which are currently stored within R.
 
@@ -388,8 +451,18 @@ background-image: url('project7.png')
 background-position: center
 background-size: contain
 
-At the end of an R session, if **save**: the objects are written to a file called .RData in the current directory, and the command lines used in the session are saved to a file called .Rhistory
+---
 
+.pull-left[
+
+![](project7.png)
+]
+
+.pull-right[
+
+At the end of an R session, if you click**save**: the objects are written to a file called **.RData** in the current directory, and the command lines used in the session are saved to a file called **.Rhistory**
+
+]
 ---
 
 class: inverse, center, middle
@@ -533,13 +606,18 @@ background-size: contain
 
 ---
 
-background-image: url('dataStructures.png')
-background-position: center
-background-size: contain
+
 
 ## Data structures
 
-.content-box-yellow[Data structures differ in terms of,
+.pull-left[
+
+![](dataStructures.png)
+
+]
+
+.pull-right[
+Data structures differ in terms of,
 
 - Type of data they can hold
 
@@ -595,7 +673,9 @@ x <- c(5, 6, 3, 1 , 100) # example
 
 ```r
 x <- c(5, 6, 3, 1 , 100) 
+x
 y <- c(x, 500, 600)
+y
 ```
 
 ```{r, echo=FALSE}
