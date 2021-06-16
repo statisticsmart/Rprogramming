@@ -91,7 +91,7 @@ countdown(minutes = 2L, seconds = 30)
 
 - Parent language: S
 
-- The latest R version 4.1.0 has been released on 2021 - 6 - 5.
+- R is a **functional programming language**. However, R system includes some support for object-oriented programming.
 
 <center><img src="RobertandRoss.jpg" height="400px" /></center>
 
@@ -333,6 +333,12 @@ b
 
 ---
 
+# Working directory
+
+```r
+getwd()
+```
+
 
 
 # Data permanency
@@ -448,6 +454,7 @@ sum(1:10) # Good commenting style
 ```
 
 To learn more read Hadley Wickham's [Style guide](http://adv-r.had.co.nz/Style.html).
+
 
 ---
 

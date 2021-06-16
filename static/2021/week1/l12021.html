@@ -54,7 +54,7 @@ class: center, middle, inverse, title-slide
 
 ## What statistical software packages are you familiar with?
 
-<div class="countdown" id="timer_60c7072b" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60c9a776" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -70,7 +70,7 @@ class: center, middle, inverse, title-slide
 
 - Parent language: S
 
-- The latest R version 4.1.0 has been released on 2021 - 6 - 5.
+- R is a **functional programming language**. However, R system includes some support for object-oriented programming.
 
 &lt;center&gt;&lt;img src="RobertandRoss.jpg" height="400px" /&gt;&lt;/center&gt;
 
@@ -297,8 +297,8 @@ rnorm(10)
 ```
 
 ```
- [1] -0.2675165  0.2930332  0.9053863 -0.1518607 -0.9697154 -0.4507364
- [7]  1.2685915  2.3435406 -0.6652201 -1.0152768
+ [1]  0.48850420 -0.27501250  0.16775392 -0.07260402  0.04345637 -0.70020132
+ [7]  0.12284231 -0.28755687  1.22951444  0.10069485
 ```
 
 
@@ -314,8 +314,8 @@ a
 ```
 
 ```
- [1] -0.3286928  0.9691317 -1.2566296  1.5286809  0.4836368  1.8135247
- [7]  1.3748227 -0.6961884  0.5761849 -1.6134730
+ [1] -0.31654225 -0.93920204 -0.30837581 -0.04394636  0.94562303 -0.28227423
+ [7]  0.63098616 -0.23301653 -1.48335881 -0.90088063
 ```
 
 --
@@ -327,11 +327,17 @@ b
 ```
 
 ```
- [1]  -32.86928   96.91317 -125.66296  152.86809   48.36368  181.35247
- [7]  137.48227  -69.61884   57.61849 -161.34730
+ [1]  -31.654225  -93.920204  -30.837581   -4.394636   94.562303  -28.227423
+ [7]   63.098616  -23.301653 -148.335881  -90.088063
 ```
 
 ---
+
+# Working directory
+
+```r
+getwd()
+```
 
 
 
@@ -441,8 +447,8 @@ rnorm(10) # This is a comment
 ```
 
 ```
- [1]  1.40062578 -0.49658773 -0.55327896 -1.24584778  0.41152157  0.06598117
- [7]  0.25880390  0.17294059 -1.57534994  1.18247027
+ [1]  0.03293180  1.20218597 -1.04283973  0.28291575 -0.33472764 -0.05706749
+ [7] -1.03188725 -1.10315589  0.79136631 -1.29012629
 ```
 
 ```r
@@ -486,6 +492,7 @@ sum(1:10) # Good commenting style
 ```
 
 To learn more read Hadley Wickham's [Style guide](http://adv-r.had.co.nz/Style.html).
+
 
 ---
 
@@ -633,7 +640,7 @@ x &lt;- c(5, 6, 3, 1 , 100)
 y &lt;- c(x, 500, 600)
 ```
 
-<div class="countdown" id="timer_60c70370" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60c9a86e" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -801,7 +808,7 @@ as.numeric(x)
 [1] NA NA NA
 ```
 
-<div class="countdown" id="timer_60c7052f" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60c9a5da" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -950,7 +957,7 @@ v
 ```
 
 
-<div class="countdown" id="timer_60c70448" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60c9a5fb" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -1236,7 +1243,7 @@ first &lt;- c(1, 2, 3, 4); second &lt;- c(10, 100)
 first * second
 ```
 
-<div class="countdown" id="timer_60c70424" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60c9a702" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
