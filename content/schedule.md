@@ -16,7 +16,7 @@ Here's your roadmap for the semester! (To begin - 2021)
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
-|[Slides](/2021/week1/l12021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| R-script | Problems 	| Answers |
+|[Slides](/2021/week1/l12021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| [R-script](/rscript/rscript1.R) | [Problems](/tutorial2021/Tutorial1.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
