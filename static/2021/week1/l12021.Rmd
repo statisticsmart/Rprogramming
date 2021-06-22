@@ -30,6 +30,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+<style type="text/css">
+.remark-slide-content {
+    font-size: 25px;
+}
+</style>
+
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
 #style_duo_accent(
