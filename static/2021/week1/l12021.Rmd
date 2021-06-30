@@ -7,7 +7,7 @@ author:
 date: '2021 June 17'
 output:
   xaringan::moon_reader:
-    css: xaringan-themer.css
+    css: [xaringan-themer.css, custom.css]
     nature:
       slideNumberFormat: "%current%"
       highlightStyle: github
@@ -459,16 +459,13 @@ background-size: contain
 
 ---
 
-.pull-left[
 
 ![](project7.png)
-]
 
-.pull-right[
 
-At the end of an R session, if you click**save**: the objects are written to a file called **.RData** in the current directory, and the command lines used in the session are saved to a file called **.Rhistory**
+At the end of an R session, if you click **save**: the objects are written to a file called **.RData** in the current directory, and the command lines used in the session are saved to a file called **.Rhistory**
 
-]
+
 ---
 
 class: inverse, center, middle
@@ -488,7 +485,7 @@ background-image: url('p82.png')
 background-position: center
 background-size: cover
 
-.pull-left[.full-width[.content-box-yellow[When R is started at later time **from the same directory** it reloads the **associated workspace** and **commands history.**]]]
+.pull-left[.full-width[.content-box-yellow[**When R is started at later `time from the same directory` it reloads the `associated workspace` and `commands history.`**]]]
 
 ---
 
@@ -497,7 +494,7 @@ background-position: center
 background-size: cover
 
 --
-.pull-left[.full-width[.content-box-yellow[When R is started at later time **from the same directory** it reloads the **associated workspace** and **commands history.**]]]
+.pull-left[.full-width[.content-box-yellow[**When R is started at later `time from the same directory` it reloads the `associated workspace` and `commands history.`**]]]
 
 
 ---
@@ -565,7 +562,7 @@ help.start() # Some functions work on their own.
 ---
 
 
-## Getting help with functions and features
+### Getting help with functions and features
 
 - R has inbuilt help facility
 
@@ -581,7 +578,6 @@ help(rnorm)
 ```r
 help("[[")
 ```
-
 - Search the help files for a word or phrase.
 
 ```r
@@ -593,7 +589,6 @@ help.search(‘weighted mean’)
 ```r
 ?rnorm
 ```
-
 ```r
 ??rnorm
 ```
@@ -718,6 +713,9 @@ is.vector(first_vec)
 is.character(first_vec)
 ```
 ---
+
+.pull-left[
+
 - double: `is.double()`
 
 ```{r, comment=NA}
@@ -737,11 +735,32 @@ is.integer(first_vec)
 is.logical(first_vec)
 ```
 
+]
+
+.pull-right[
 - length
 
 ```{r, comment=NA}
 length(first_vec)
+
 ```
+
+
+
+]
+
+---
+
+## Mathematical operations
+
+```{r, comment=NA}
+sum(first_vec)
+mean(first_vec)
+summary(first_vec)
+```
+
+**More about `functions`: week 3.**
+
 ---
 
 # Coercion
@@ -933,6 +952,18 @@ rep(1:4, each=2) # each element is repeated twice
 
 rep(1:4, times=2) # whole sequence is repeated twice
 
+
+```
+
+---
+
+# Simplifying vector creation: `rep` (cont.)
+
+**Write the output of the following codes.**
+
+Your turn: 
+
+```{r, eval=FALSE}
 rep(1:4, each=2, times=3)
 
 rep(1:4, 1:4)
@@ -940,6 +971,12 @@ rep(1:4, 1:4)
 rep(1:4, c(4, 1, 4, 2))
 
 ```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
 
 ---
 
@@ -986,7 +1023,7 @@ c(1, 2, 3) != c(10, 20, 3)
 
 ---
 
-# Operators: `%in%` - in the set
+## Operators: `%in%` - in the set
 
 ```{r, comment=NA}
 a <- c(1, 2, 3)
@@ -995,10 +1032,8 @@ a %in% b
 ```
 
 ```{r, comment=NA}
-x <- 1:10
-y <- 1:3
-x
-y
+x <- 1:10; y <- 1:3
+x; y
 x %in% y
 
 ```
@@ -1007,7 +1042,7 @@ x %in% y
 y %in% x
 ```
 ---
-# Vector arithmetic
+### Vector arithmetic
 
 
 - operations are performed element by element. 
@@ -1027,7 +1062,6 @@ Add two vectors of unequal length
 
 ```{r, comment=NA}
 longvec <- seq(10, 100, length=10); shortvec <- c(1, 2, 3, 4, 5)
-
 shortvec + longvec
 
 ```
