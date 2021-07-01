@@ -35,15 +35,15 @@
   --code-font-family: 'Source Code Pro';
   --code-font-is-google: 1;
   --base-font-size: 20px;
-  --text-font-size: 1rem;
-  --code-font-size: 0.9rem;
+  --text-font-size: 2rem;
+  --code-font-size: 1rem;
   --code-inline-font-size: 1em;
-  --header-h1-font-size: 2.75rem;
-  --header-h2-font-size: 2.25rem;
+  --header-h1-font-size: 2.5rem;
+  --header-h2-font-size: 2.0rem;
   --header-h3-font-size: 1.75rem;
 
   /* Colors */
-  --text-color: #657b83;
+  --text-color: #000000;
   --header-color: #dc322f;
   --background-color: #fdf6e3;
   --link-color: #b58900;
@@ -65,12 +65,12 @@ html {
 
 body {
   font-family: var(--text-font-family), var(--text-font-family-fallback), var(--text-font-base);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--text-color);
 }
 h1, h2, h3 {
   font-family: var(--header-font-family), var(--header-font-family-fallback);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--header-color);
 }
 .remark-slide-content {

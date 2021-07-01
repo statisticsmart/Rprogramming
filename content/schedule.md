@@ -24,7 +24,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 2: Data Structures in R (Vector, Matrix, Array, Data Frame, List) 
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides](/slides/l22021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices)	|  [Cheat sheet]((/cheatsheets/baser.pdf)) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 3: Functions in R 
