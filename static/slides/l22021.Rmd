@@ -181,6 +181,19 @@ myvec[myvec > 3]
 
 ---
 
+## vector subsetting - special cases
+
+```{r, comment=NA}
+myvec[0]
+```
+
+```{r, comment=NA}
+myvec[]
+myvec
+```
+
+---
+
 
 - Extract elements present in vector `a` from `myvec` (cont.).
 

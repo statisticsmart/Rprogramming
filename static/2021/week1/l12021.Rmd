@@ -1134,6 +1134,9 @@ Use `NA` or `NaN` to place a missing value in a vector.
 ```{r, comment=NA}
 z <- c(10, 101, 2, 3, NA)
 is.na(z)
+
+y <- c(10, 101, 2, 3, NaN)
+is.na(y)
 ```
 
 
