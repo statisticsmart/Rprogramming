@@ -90,7 +90,7 @@ c(1, 2, 3, 4, 5, 5, 4, 3, 2, 1)
 c(1:5, 5:1)
 ```
 
-<div class="countdown" id="timer_60e410e7" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e5617d" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -320,10 +320,58 @@ class: inverse, center, middle
 3. Using the function `rep` , create the below sequence 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4
 
 
-<div class="countdown" id="timer_60e41084" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e55ecf" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
+---
+
+## Changing values of a vector
+
+.pull-left[
+
+```r
+covid &lt;- c(100, 30, 40, 50, -1, 100)
+covid
+```
+
+```
+[1] 100  30  40  50  -1 100
+```
+
+```r
+covid[1] &lt;- 50000
+covid
+```
+
+```
+[1] 50000    30    40    50    -1   100
+```
+
+]
+
+--
+.pull-right[
+
+
+```r
+covid[covid &lt; 0] &lt;- 0
+covid
+```
+
+```
+[1] 50000    30    40    50     0   100
+```
+
+```r
+covid[c(1, 2)] &lt;- c(1000, 10000)
+covid
+```
+
+```
+[1]  1000 10000    40    50     0   100
+```
+]
 
 ---
 background-image: url('horse.png')
@@ -451,6 +499,43 @@ matrix_with_names
 R1 10 30
 R2 20 40
 ```
+
+---
+
+## `class` function on vectors vs matrices
+
+.pull-left[
+
+### with vectors
+
+
+```r
+vec &lt;- 1:10
+class(vec)
+```
+
+```
+[1] "integer"
+```
+
+
+]
+
+.pull-right[
+
+### with matrices
+
+
+```r
+mat &lt;- matrix(1:10, ncol=5)
+class(mat)
+```
+
+```
+[1] "matrix" "array" 
+```
+
+]
 
 ---
 
@@ -656,7 +741,7 @@ background-image: url('paper.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_60e412c6" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e56168" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -674,9 +759,71 @@ background-image: url('slr.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_60e4101d" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e55f46" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
+
+---
+
+
+.pull-left[
+
+## Logical operators with matrices
+
+
+```r
+a &lt;- matrix(c(1:12), nrow = 3, ncol = 4) 
+a &gt; 10
+```
+
+```
+      [,1]  [,2]  [,3]  [,4]
+[1,] FALSE FALSE FALSE FALSE
+[2,] FALSE FALSE FALSE  TRUE
+[3,] FALSE FALSE FALSE  TRUE
+```
+
+```r
+b &lt;- matrix(1:4, ncol=4)
+```
+
+
+```r
+a &gt; b # Error 
+```
+
+]
+
+.pull-right[
+
+## %in% operator
+
+
+```r
+b %in% a
+```
+
+```
+[1] TRUE TRUE TRUE TRUE
+```
+
+```r
+a %in% b
+```
+
+```
+ [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+```r
+class(a %in% b)
+```
+
+```
+[1] "logical"
+```
+]
+
 
 ---
 
@@ -850,7 +997,7 @@ matrix(1:20, ncol=5)
 [4,]    4    8   12   16   20
 ```
 
-<div class="countdown" id="timer_60e41175" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e56160" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1252,7 +1399,7 @@ background-image: url('datafr.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_60e41253" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e55e22" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1355,7 +1502,7 @@ Use	the	R	dataset	“iris”	to	answer	the	following	questions:
 
 5. Select rows 10 to 20 with only the Species, Petal.Width and Petal.Length.
 
-<div class="countdown" id="timer_60e41134" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e560b6" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1371,7 +1518,7 @@ cont.
 8. How many rows in the iris dataset have `Petal.Length` larger than 5 and `Sepal.Width` smaller than 3?
 
 
-<div class="countdown" id="timer_60e41197" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_60e560b0" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 ---

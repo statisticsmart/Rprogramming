@@ -233,6 +233,31 @@ library(countdown)
 countdown(minutes = 3L, seconds = 00)
 ```
 
+---
+
+## Changing values of a vector
+
+.pull-left[
+```{r, comment=NA}
+covid <- c(100, 30, 40, 50, -1, 100)
+covid
+covid[1] <- 50000
+covid
+```
+
+]
+
+--
+.pull-right[
+
+```{r, comment=NA}
+covid[covid < 0] <- 0
+covid
+covid[c(1, 2)] <- c(1000, 10000)
+covid
+
+```
+]
 
 ---
 background-image: url('horse.png')
@@ -315,6 +340,35 @@ cnames <- c("C1", "C2")
 matrix_with_names <- matrix(values, nrow=2, dimnames=list(rnames, cnames))
 matrix_with_names
 ```
+
+---
+
+## `class` function on vectors vs matrices
+
+.pull-left[
+
+### with vectors
+
+```{r, comment=NA}
+vec <- 1:10
+class(vec)
+
+```
+
+
+]
+
+.pull-right[
+
+### with matrices
+
+```{r, comment=NA}
+mat <- matrix(1:10, ncol=5)
+class(mat)
+
+```
+
+]
 
 ---
 
@@ -466,6 +520,39 @@ background-size: contain
 library(countdown)
 countdown(minutes = 5L, seconds = 00)
 ```
+
+---
+
+
+.pull-left[
+
+## Logical operators with matrices
+
+```{r, comment=NA}
+a <- matrix(c(1:12), nrow = 3, ncol = 4) 
+a > 10
+b <- matrix(1:4, ncol=4)
+
+```
+
+```{r, comment=NA, eval=FALSE}
+a > b # Error 
+```
+
+]
+
+.pull-right[
+
+## %in% operator
+
+```{r, comment=NA}
+
+b %in% a
+a %in% b
+class(a %in% b)
+```
+]
+
 
 ---
 

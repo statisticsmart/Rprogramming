@@ -1092,15 +1092,28 @@ c(10, 100, 100) + 2 # two is added to every element in the vector
 v1 <- c(1, 2, 3); v2 <- c(10, 100, 1000)
 v1 + v2
 ```
+
 --
-Add two vectors of unequal length
+
+- Add two vectors of unequal length (length of the longer is an integer multiple of the length of the shorter vector)
 
 ```{r, comment=NA}
 longvec <- seq(10, 100, length=10); shortvec <- c(1, 2, 3, 4, 5)
-shortvec + longvec
+longvec + shortvec 
 
 ```
 
+---
+
+- Add two vectors of unequal length (length of the longer is not an integer multiple of the length of the shorter vector)
+
+```{r, comment=NA}
+# gives a warning message when the length of the longer is not an integer multiple of the length of the shorter vector.
+svec <- c(1, 2, 3)
+longvec + svec
+```
+
+![](console.png)
 
 ---
 
@@ -1117,6 +1130,8 @@ first * second
 library(countdown)
 countdown(minutes = 2L, seconds = 30)
 ```
+
+
 
 
 ---
