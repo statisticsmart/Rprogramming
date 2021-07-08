@@ -992,6 +992,19 @@ rep(1:4, times=2) # whole sequence is repeated twice
 
 ---
 
+
+# Simplifying vector creation: `rep`
+
+```{r, comment=NA}
+virus <- rep(c("delta", "gamma"), times=3)
+virus
+virus <- rep(c("delta", "gamma"), times=3, length.out=5)
+virus
+```
+
+
+---
+
 # Simplifying vector creation: `rep` (cont.)
 
 **Write the output of the following codes.**
