@@ -958,6 +958,8 @@ countdown(minutes = 1L, seconds = 30)
 
 -0.5:7.5
 
+7.5: -0.5
+
 -0.5:7.3
 
 ```
@@ -969,6 +971,8 @@ countdown(minutes = 1L, seconds = 30)
  class(10:16)
 
 class(-0.5:7.5)
+
+class(7.5:-0.5)
 
 class(-0.5:7.3)
 
@@ -982,6 +986,8 @@ class(-0.5:7.3)
 2. sequence: `seq(initial_value, final_value, increment)`
 
 ```{r, comment=NA}
+seq(0.5, 8)
+
 seq(1,11)
 
 seq(1, 11, length.out=5)
