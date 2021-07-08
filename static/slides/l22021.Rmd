@@ -4,7 +4,7 @@ subtitle: "🛠️ Data Structures in R"
 author: 
   - ""
   - "Dr Thiyanga Talagala"
-date: '2021 July 1'
+date: ''
 output:
   xaringan::moon_reader:
     css: [xaringan-themer.css, custom2.css]
@@ -667,6 +667,12 @@ dim1 <- c("A1", "A2"); dim2 <- c("B1", "B2", "B3"); dim3 <- c("c1", "c2", "c3", 
 z <- array(1:24, c(2, 3, 4), dimnames = list(dim1, dim2, dim3))
 z
 ```
+
+---
+
+
+![](applicationarray.png)
+
 
 ---
 
