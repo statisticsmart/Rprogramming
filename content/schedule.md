@@ -27,16 +27,16 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l22021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices)	|  [Cheat sheet]((/cheatsheets/baser.pdf)) 	| R-script | [Problems](https://thiyangt.github.io/rworkbook/matrices-arrays-data-frames.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 3: Functions in R 
+#### Week 3-4: Functions in R 
 
-|[Slides - 1](/slides/l32021.html)    	|  [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides - 1](/slides/l32021.html)    	|  [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions) [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html) 	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 
-#### Week 4: Writing Functions in R 
+#### Week 5: Writing Functions in R 
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|Slides    	|  [Reading - 2.4]((https://rstudio-education.github.io/hopr/basics.html#functions))  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ##### Individual Assignment - 1 (5%) 🎓
