@@ -29,7 +29,14 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 3: Functions in R 
 
-|[Slides - 1](/slides/l32021.html)    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides - 1](/slides/l32021.html)    	|  [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+
+#### Week 4: Writing Functions in R 
+
+|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ##### Individual Assignment - 1 (5%) 🎓
@@ -43,11 +50,6 @@ Assignment: Individual assignment 1
 Go to LMS. Deadline: TBA
 
 ```
-
-#### Week 4: Writing Functions in R 
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 5: Control Structures 
 
