@@ -380,6 +380,18 @@ class: inverse, center, middle
 
 # Matrix: subsetting
 
+.pull-left[
+
+```{r, comment=NA}
+matrix1
+
+```
+
+
+]
+
+.pull-right[
+
 `matraix_name[i, ]` gives the ith row of a matrix
 
 ```{r, comment=NA}
@@ -393,6 +405,9 @@ matrix1[, 2]
 ```
 
 
+]
+
+
 
 ---
 
@@ -400,6 +415,17 @@ matrix1[, 2]
 
 
 `matraix_name[i, j]` gives the ith row and jth column element
+
+.pull-left[
+
+```{r, comment=NA}
+matrix1
+```
+
+
+]
+
+.pull-right[
 
 ```{r, comment=NA}
 matrix1[1, 2]
@@ -409,6 +435,123 @@ matrix1[1, 2]
 ```{r, comment=NA}
 matrix1[1, c(1, 2)] 
 ```
+
+]
+
+---
+
+**Beware!**
+
+.pull-left[
+
+```{r, comment=NA}
+
+amat <- matrix(10:90, 3, 3); amat
+
+bmat <- amat[1:2,]; bmat
+class(bmat)
+
+
+```
+
+]
+
+
+
+
+
+--
+
+.pull-right[
+
+```{r, comment=NA}
+
+cmat <- amat[1,]; cmat
+class(cmat)
+
+dmat <- amat[, 1]; dmat
+class(dmat)
+
+
+```
+
+
+
+]
+
+---
+**drop = FALSE**
+
+.pull-left[
+
+```{r, comment=NA}
+cmat <- amat[1,]; cmat
+class(cmat)
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+cmat <- amat[1, , drop = FALSE]; cmat
+class(cmat)
+```
+
+]
+
+
+
+
+---
+
+## Diagonal elements
+
+.pull-left[
+
+```{r, comment=NA}
+a <- matrix(1:9, ncol=3)
+a
+
+```
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+diag(a)
+
+```
+
+
+]
+
+---
+
+## Replacing elements in a matrix
+
+.pull-left[
+```{r, comment=NA}
+a <- matrix(1:9, ncol=3)
+a
+
+a[1, 1] <- 100
+a
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+diag(a) <- 0
+a
+```
+
+
+]
 
 ---
 

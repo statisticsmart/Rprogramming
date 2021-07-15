@@ -29,14 +29,11 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 #### Week 3-4: Functions in R 
 
-|[Slides - 1](/slides/l32021.html)    	|  [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions) [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html) 	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides - 1](/slides/l32021.html)    	|  [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions) 	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-
-#### Week 5: Writing Functions in R 
-
-|Slides    	|  [Reading - 2.4]((https://rstudio-education.github.io/hopr/basics.html#functions))  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides - 2](/slides/l42021.html)  	|  [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ##### Individual Assignment - 1 (5%) 🎓
@@ -51,7 +48,7 @@ Go to LMS. Deadline: TBA
 
 ```
 
-#### Week 5: Control Structures 
+#### Week 5:  Writing Functions in R  and Control Structures 
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
