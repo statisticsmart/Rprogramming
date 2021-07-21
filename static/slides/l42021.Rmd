@@ -295,6 +295,14 @@ a
   - **r** prefix for the **random** number generator
 
 - Example: `dnorm`, `pnorm`, `qnorm`, `rnorm`
+
+
+---
+
+background-image: url('dis.jpeg')
+background-position: center
+background-size: contain
+
 ---
 
 ### Illustration with Standard normal distribution
@@ -409,6 +417,37 @@ ggplot(data = dat, mapping = aes(x = x, y = y)) +
     geom_area(stat = "function", fun = dnorm, fill = "blue", xlim = c(-4, 0))+
    geom_segment(aes(x = 0, y = 0.398, xend = 0, yend = 0), size=1, color="red", arrow = arrow(length = unit(0.5, "cm")),)
     
+```
+
+]
+
+---
+
+### Binomial distribution
+
+.pull-left[
+
+```{r, comment=NA}
+dbinom(2, size=10, prob=0.2)
+
+a <- dbinom(0:10, size=10, prob=0.2)
+a
+cumsum(a)
+
+
+
+
+
+```
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+qbinom(0.6, size=10, prob=0.2)
+
 ```
 
 ]
@@ -630,7 +669,7 @@ class: duke-green, center, middle
 
 ---
 
-**Assignment 1: Individual**
+**Your turn**
 
 Find about the following variants of apply family functions in R **`lapply()`**, **`sapply()`**, **`vapply()`**, **`mapply()`**, **`rapply()`**, and **`tapply()`** functions.
 
@@ -706,6 +745,89 @@ data(mozzie)
 ```
 
 ---
+
+## Data Visualization with R
+
+.pull-left[
+
+```{r, comment=NA}
+
+boxplot(mpg ~ cyl, data = mtcars,   
+        xlab = "Quantity of Cylinders",  
+        ylab = "Miles Per Gallon",   
+        main = "Boxplot Example",  
+        notch = TRUE,   
+        varwidth = TRUE,   
+        col = c("green","yellow","red"),  
+        names = c("High","Medium","Low")  
+)  
+
+
+
+```
+
+
+
+]
+
+
+.pull-right[
+
+
+```{r, comment=NA}
+counts <- table(mtcars$gear)
+barplot(counts, main="Car Distribution",
+   xlab="Number of Gears")
+```
+
+
+
+]
+
+---
+
+.pull-left[
+
+```{r, comment=NA, echo=FALSE}
+library(tidyverse)
+x <- runif(10000, -1, 1)
+y <- runif(10000, -1, 1)
+fx <- x^2 + y^2
+coly <- ifelse(fx <= 1, 1, 0)
+coly <- as.factor(coly)
+pidf <- data.frame(x=x, y=y, coly=coly)
+# without coord_equal()
+ggplot(pidf, aes(x=x, y=y, col=coly)) + geom_point() +
+scale_colour_manual(values = c("#e7298a", "#1b9e77")) +  theme(legend.position = "none")
+
+```
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA, echo=FALSE}
+
+ggplot(pidf, aes(x=x, y=y, col=coly)) + geom_point() +
+scale_colour_manual(values = c("#e7298a", "#1b9e77")) + coord_equal() +  theme(legend.position = "none")
+```
+
+
+
+]
+
+---
+
+## mozzie
+
+```{r, comment=NA}
+head(mozzie)
+```
+
+
+
+---
 ## Data Visualization with `qplot`
 
 ## plot vs qplot
@@ -751,6 +873,23 @@ qplot(Colombo, Gampaha, data=mozzie,
       size=Year)
 ```
 ]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie, 
+      size=Year, alpha=0.5)
+```
+]
+
 
 ---
 
@@ -908,6 +1047,49 @@ qplot(factor(Year), Colombo, data=mozzie,
 ```{r, comment=NA, fig.height=6}
 qplot(factor(Year), Colombo, data=mozzie,
       geom=c("jitter", "boxplot")) # geom="point"-default
+```
+]
+
+---
+
+.pull-left[
+
+```{r, comment=NA, fig.height=3, echo=FALSE}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="jitter")
+```
+
+```{r, comment=NA, fig.height=3, echo=FALSE}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="boxplot")
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+]
+
+---
+
+.pull-left[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot"),
+      outlier.shape = NA) # geom="point"-default
 ```
 ]
 

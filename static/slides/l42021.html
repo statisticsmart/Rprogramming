@@ -123,7 +123,7 @@ mean(na.rm = FALSE, mydata)
 
 
 ```
-[1] 4761.736
+[1] 4761.699
 ```
 
 ⚠️ Even though it works, do not change the order of the arguments too much.
@@ -142,7 +142,7 @@ mean(mydata, trim=0)
 ```
 
 ```
-[1] 4761.736
+[1] 4761.699
 ```
 
 ```r
@@ -150,7 +150,7 @@ mean(mydata) # Default value for trim is 0
 ```
 
 ```
-[1] 4761.736
+[1] 4761.699
 ```
 
 ]
@@ -163,7 +163,7 @@ mean(mydata, trim=0.1)
 ```
 
 ```
-[1] -0.1216918
+[1] -0.07266144
 ```
 
 
@@ -172,7 +172,7 @@ mean(mydata, tr=0.1) # Partial Matching
 ```
 
 ```
-[1] -0.1216918
+[1] -0.07266144
 ```
 
 ]
@@ -345,6 +345,14 @@ a
   - **r** prefix for the **random** number generator
 
 - Example: `dnorm`, `pnorm`, `qnorm`, `rnorm`
+
+
+---
+
+background-image: url('dis.jpeg')
+background-position: center
+background-size: contain
+
 ---
 
 ### Illustration with Standard normal distribution
@@ -455,6 +463,57 @@ qnorm(0.5)
 
 ---
 
+### Binomial distribution
+
+.pull-left[
+
+
+```r
+dbinom(2, size=10, prob=0.2)
+```
+
+```
+[1] 0.3019899
+```
+
+```r
+a &lt;- dbinom(0:10, size=10, prob=0.2)
+a
+```
+
+```
+ [1] 0.1073741824 0.2684354560 0.3019898880 0.2013265920 0.0880803840
+ [6] 0.0264241152 0.0055050240 0.0007864320 0.0000737280 0.0000040960
+[11] 0.0000001024
+```
+
+```r
+cumsum(a)
+```
+
+```
+ [1] 0.1073742 0.3758096 0.6777995 0.8791261 0.9672065 0.9936306 0.9991356
+ [8] 0.9999221 0.9999958 0.9999999 1.0000000
+```
+
+
+]
+
+.pull-right[
+
+
+```r
+qbinom(0.6, size=10, prob=0.2)
+```
+
+```
+[1] 2
+```
+
+]
+
+---
+
 ### Standard Normal Distribution: rnorm
 
 .pull-left[
@@ -482,7 +541,7 @@ sort(random_numbers) ## sort the numbers then it is easy to map with the graph
 
 .pull-right[
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-17-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-19-1.png" width="100%" /&gt;
 
 ]
 
@@ -731,7 +790,7 @@ class: duke-green, center, middle
 
 ---
 
-**Assignment 1: Individual**
+**Your turn**
 
 Find about the following variants of apply family functions in R **`lapply()`**, **`sapply()`**, **`vapply()`**, **`mapply()`**, **`rapply()`**, and **`tapply()`** functions.
 
@@ -808,6 +867,93 @@ data(mozzie)
 ```
 
 ---
+
+## Data Visualization with R
+
+.pull-left[
+
+
+```r
+boxplot(mpg ~ cyl, data = mtcars,   
+        xlab = "Quantity of Cylinders",  
+        ylab = "Miles Per Gallon",   
+        main = "Boxplot Example",  
+        notch = TRUE,   
+        varwidth = TRUE,   
+        col = c("green","yellow","red"),  
+        names = c("High","Medium","Low")  
+)  
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-28-1.png" width="100%" /&gt;
+
+
+
+]
+
+
+.pull-right[
+
+
+
+```r
+counts &lt;- table(mtcars$gear)
+barplot(counts, main="Car Distribution",
+   xlab="Number of Gears")
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-29-1.png" width="100%" /&gt;
+
+
+
+]
+
+---
+
+.pull-left[
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-30-1.png" width="100%" /&gt;
+
+
+]
+
+.pull-right[
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-31-1.png" width="100%" /&gt;
+
+
+
+]
+
+---
+
+## mozzie
+
+
+```r
+head(mozzie)
+```
+
+```
+# A tibble: 6 x 28
+     ID  Year  Week Colombo Gampaha Kalutara Kandy Matale `Nuwara Eliya` Galle
+  &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt; &lt;int&gt;  &lt;int&gt;          &lt;int&gt; &lt;int&gt;
+1     1  2008    52      15       7        1    11      4              0     0
+2     2  2009     1      44      23        5    16     21              2     0
+3     3  2009     2      39      19       11    42      9              1     2
+4     4  2009     3      57      23       12    28      3              2     1
+5     5  2009     4      53      24       19    32     20              2     2
+6     6  2009     5      29      17       10    21      6              0     3
+# … with 18 more variables: Hambantota &lt;int&gt;, Matara &lt;int&gt;, Jaffna &lt;int&gt;,
+#   Kilinochchi &lt;int&gt;, Mannar &lt;int&gt;, Vavuniya &lt;int&gt;, Mulative &lt;int&gt;,
+#   Batticalo &lt;int&gt;, Ampara &lt;int&gt;, Trincomalee &lt;int&gt;, Kurunagala &lt;int&gt;,
+#   Puttalam &lt;int&gt;, Anuradhapura &lt;int&gt;, Polonnaruwa &lt;int&gt;, Badulla &lt;int&gt;,
+#   Monaragala &lt;int&gt;, Ratnapura &lt;int&gt;, Kegalle &lt;int&gt;
+```
+
+
+
+---
 ## Data Visualization with `qplot`
 
 ## plot vs qplot
@@ -818,7 +964,7 @@ data(mozzie)
 plot(mozzie$Colombo, mozzie$Gampaha)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-26-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-33-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -827,7 +973,7 @@ plot(mozzie$Colombo, mozzie$Gampaha)
 qplot(Colombo, Gampaha, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-27-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-34-1.png" width="100%" /&gt;
 ]
 ---
 ## Data Visualization with `qplot`
@@ -838,7 +984,7 @@ qplot(Colombo, Gampaha, data=mozzie)
 qplot(Colombo, Gampaha, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-28-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-35-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -848,7 +994,7 @@ qplot(Colombo, Gampaha, data=mozzie,
       colour=Year)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-29-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-36-1.png" width="100%" /&gt;
 ]
 ---
 ## Data Visualization with `qplot`
@@ -859,7 +1005,7 @@ qplot(Colombo, Gampaha, data=mozzie,
 qplot(Colombo, Gampaha, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-30-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-37-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -869,8 +1015,31 @@ qplot(Colombo, Gampaha, data=mozzie,
       size=Year)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-31-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-38-1.png" width="100%" /&gt;
 ]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie)
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-39-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+
+```r
+qplot(Colombo, Gampaha, data=mozzie, 
+      size=Year, alpha=0.5)
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-40-1.png" width="100%" /&gt;
+]
+
 
 ---
 
@@ -882,7 +1051,7 @@ qplot(Colombo, Gampaha, data=mozzie,
 qplot(Colombo, Gampaha, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-32-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-41-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -892,7 +1061,7 @@ qplot(Colombo, Gampaha, data=mozzie,
       geom="point")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-33-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-42-1.png" width="100%" /&gt;
 ]
 
 
@@ -905,7 +1074,7 @@ qplot(Colombo, Gampaha, data=mozzie,
 qplot(ID, Gampaha, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-34-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-43-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -915,7 +1084,7 @@ qplot(ID, Gampaha, data=mozzie,
       geom="line")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-35-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-44-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -927,7 +1096,7 @@ qplot(ID, Gampaha, data=mozzie,
 qplot(ID, Gampaha, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-36-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-45-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -937,7 +1106,7 @@ qplot(ID, Gampaha, data=mozzie,
       geom="path")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-37-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-46-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -951,7 +1120,7 @@ qplot(Colombo, Gampaha, data=mozzie,
       geom="line")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-38-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-47-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -961,7 +1130,7 @@ qplot(Colombo, Gampaha, data=mozzie,
       geom="path")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-39-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-48-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -974,7 +1143,7 @@ qplot(Colombo, Gampaha, data=mozzie,
       geom=c("line", "point"))
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-40-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-49-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -985,7 +1154,7 @@ qplot(Colombo, Gampaha, data=mozzie,
       geom=c("path", "point"))
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-41-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-50-1.png" width="100%" /&gt;
 ]
 ---
 
@@ -997,7 +1166,7 @@ qplot(Colombo, Gampaha, data=mozzie,
 boxplot(Colombo~Year, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-42-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-51-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -1008,7 +1177,7 @@ qplot(factor(Year), Colombo, data=mozzie,
       geom="boxplot")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-43-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-52-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -1023,7 +1192,7 @@ qplot(factor(Year), Colombo, data=mozzie,
       geom="boxplot")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-44-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-53-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -1033,7 +1202,7 @@ qplot(factor(Year), Colombo, data=mozzie,
 qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-45-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-54-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -1046,7 +1215,7 @@ qplot(factor(Year), Colombo, data=mozzie,
       geom="point")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-46-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-55-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -1057,7 +1226,7 @@ qplot(factor(Year), Colombo, data=mozzie,
       geom="jitter") # geom="point"-default
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-47-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-56-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -1071,7 +1240,7 @@ qplot(factor(Year), Colombo, data=mozzie,
       geom="jitter")
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-48-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-57-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -1082,7 +1251,53 @@ qplot(factor(Year), Colombo, data=mozzie,
       geom=c("jitter", "boxplot")) # geom="point"-default
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-49-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-58-1.png" width="100%" /&gt;
+]
+
+---
+
+.pull-left[
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-59-1.png" width="100%" /&gt;
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-60-1.png" width="100%" /&gt;
+
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-61-1.png" width="100%" /&gt;
+]
+
+---
+
+.pull-left[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-62-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+
+
+```r
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot"),
+      outlier.shape = NA) # geom="point"-default
+```
+
+&lt;img src="l42021_files/figure-html/unnamed-chunk-63-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -1096,7 +1311,7 @@ qplot(factor(Year), Colombo, data=mozzie,
 qplot(Colombo, data=mozzie)
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-50-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-64-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -1106,7 +1321,7 @@ qplot(Colombo, data=mozzie)
 qplot(Colombo, data=mozzie, geom="density") 
 ```
 
-&lt;img src="l42021_files/figure-html/unnamed-chunk-51-1.png" width="100%" /&gt;
+&lt;img src="l42021_files/figure-html/unnamed-chunk-65-1.png" width="100%" /&gt;
 ]
 
 
