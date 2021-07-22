@@ -610,6 +610,11 @@ class: inverse, center, middle
   
   - $P(X \geq 10)$.
   
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
+  
   
 ---
 
@@ -619,10 +624,20 @@ class: inverse, center, middle
     
   - Exactly 8 of the messages involve a text message.
   
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
+  
 ---
 
 
 **Q6** Generate 20 random values from a Poisson distribution with mean 10 and calculate the mean. Compare your answer with others.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
 
 ---
 
@@ -685,6 +700,11 @@ Calculate the row and column wise standard deviation of the following matrix
 ```{r, echo=FALSE, comment=NA}
 matrix(1:20, ncol=4)
 
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 3L, seconds = 00)
 ```
 
 ---
