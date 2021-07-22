@@ -423,6 +423,29 @@ ggplot(data = dat, mapping = aes(x = x, y = y)) +
 
 ---
 
+## Normal distribution: `norm`
+
+.pull-left[
+
+![](norm.png)
+
+]
+
+
+.pull-left[
+
+```{r, comment=NA}
+pnorm(3)
+
+pnorm(3, sd=1, mean=0)
+
+pnorm(3, sd=2, mean=1)
+```
+
+]
+
+---
+
 ### Binomial distribution
 
 
