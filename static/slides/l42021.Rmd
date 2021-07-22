@@ -425,7 +425,6 @@ ggplot(data = dat, mapping = aes(x = x, y = y)) +
 
 ### Binomial distribution
 
-.pull-left[
 
 ```{r, comment=NA}
 dbinom(2, size=10, prob=0.2)
@@ -441,16 +440,20 @@ cumsum(a)
 ```
 
 
-]
+---
 
-.pull-right[
+
+
 
 ```{r, comment=NA}
-qbinom(0.6, size=10, prob=0.2)
+cumsum(a)
+
+pbinom(0:10, size=10, prob=0.2)
+
+qbinom(0.4, size=10, prob=0.2)
 
 ```
 
-]
 
 ---
 
