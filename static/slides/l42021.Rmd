@@ -832,6 +832,19 @@ barplot(counts, main="Car Distribution",
 
 ---
 
+Default R installation: graphics package
+
+```{r, comment=NA, echo=FALSE}
+library(dplyr)
+ls("package:graphics")
+```
+
+
+---
+
+![](qplot.png)
+---
+
 .pull-left[
 
 ```{r, comment=NA, echo=FALSE}
@@ -864,6 +877,14 @@ scale_colour_manual(values = c("#e7298a", "#1b9e77")) + coord_equal() +  theme(l
 ]
 
 ---
+
+background-image: url('qplottheory.png')
+background-position: center
+background-size: contain
+
+
+---
+
 
 ## mozzie
 
