@@ -374,7 +374,7 @@ pnorm(0)
 
 .pull-right[
 
-```{r, echo=FALSE, fig.cap="Standard normal probability density function: dnorm(0)", fig.height=7}
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: pnorm(0)", fig.height=7}
 library(ggplot2)
 x <- seq(-4, 4, length=200)
 y <- 1/sqrt(2*pi)*exp(-x^2/2)
@@ -406,7 +406,7 @@ qnorm(0.5)
 
 .pull-right[
 
-```{r, echo=FALSE, fig.cap="Standard normal probability density function: dnorm(0)",  fig.height=7}
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: qnorm(0.5)",  fig.height=7}
 library(ggplot2)
 x <- seq(-4, 4, length=200)
 y <- 1/sqrt(2*pi)*exp(-x^2/2)
