@@ -33,7 +33,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-|[Slides - 2](/slides/l42021.html)  	|  [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html)  	|  Cheat sheet 	| R-script | Problems 	| [Answers]((/answers/Week3Answers.pdf)) |
+|[Slides - 2](/slides/l42021.html)  	|  [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html)  	|  Cheat sheet 	| R-script | Problems 	| [Answers](/answers/Week3Answers.pdf) |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ##### Individual Assignment - 1 (5%) 🎓
