@@ -367,6 +367,34 @@ out # or return(out)
 
 ---
 
+## Function with single line
+
+.pull-left[
+
+### Mathod 1
+
+```r
+cal_sqrt <- function(x){
+
+x^2
+
+}
+```
+
+]
+
+.pull-right[
+
+### Method 2
+
+```r
+cal_sqrt <- function(x) x^2
+```
+
+]
+
+---
+
 ### Function body (Cont.)
 
 - Place spaces around all operators such as =, +, -, <-, etc. 
@@ -906,6 +934,35 @@ library(countdown)
 countdown(minutes = 10L, seconds = 00)
 ```
 
+---
+
+## Problem 4
+
+Write a function compute z-score value of a A/L Mathematics student given the marks of the student. Assume
+
+mean(Mathematics) = 60, sd(Mathematics) = 10,
+
+mean(Chemistry) = 45, sd(Chemistry) = 20,
+
+mean(Physics) = 55, sd(Physics) = 5.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 5L, seconds = 00)
+```
+
+
+---
+background-image: url('PAGE-05.jpeg')
+background-position: center
+background-size: contain
+
+
+---
+
+## Local variables vs Global variables
+
+in-class discussion using R Demo
 
 ---
 
