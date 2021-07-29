@@ -7,7 +7,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
+```{r, comment=NA, message=FALSE}
 library(lubridate)
 library(tidyverse)
 ```

@@ -65,6 +65,7 @@ style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "4
 
 .pull-right[
 <center><img src="baking.jpeg" height="500px"/></center>
+
 ]
 
 ---
@@ -889,27 +890,6 @@ class: inverse, center, middle
 
 ## Problem 1
 
-Write a function to calculate the median.
-
-help:
-
-```{r, comment=NA}
-5%%2
-
-4%%2
-```
-
-Note: Do not use the built-in function `median` inside your function.
-
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 8L, seconds = 00)
-```
-
----
-
-## Problem 2
-
 Write a function to calculate the correlation coefficient
 
 $$r=\frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2\sum_{i=1}^n(y_i-\bar{y})^2}}$$
@@ -923,7 +903,7 @@ countdown(minutes = 8L, seconds = 00)
 
 ---
 
-## Problem 3
+## Problem 2
 
 Write a function to generate 100 random numbers from a normal distribution and plot the distribution of the random numbers. Your function should display the generated random numbers and the corresponding plot.
 
@@ -936,7 +916,7 @@ countdown(minutes = 10L, seconds = 00)
 
 ---
 
-## Problem 4
+## Problem 3
 
 Write a function compute z-score value of a A/L Mathematics student given the marks of the student. Assume
 
@@ -966,6 +946,32 @@ in-class discussion using R Demo
 
 ---
 
+
+## Problem 4
+
+Write a function to calculate the median.
+
+help:
+
+```{r, comment=NA}
+5%%2
+
+4%%2
+```
+
+Note: Do not use the built-in function `median` inside your function.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 8L, seconds = 00)
+```
+
+---
+class: inverse, center, middle
+
+# Next week: control structures
+
+---
 class: center, middle
 
 ## Thank you!
