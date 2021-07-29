@@ -50,7 +50,7 @@ Go to LMS. Deadline:
 
 #### Week 6:  Writing Functions in R  
 
-|[Slides](l52021.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19] )  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides](/slides/l52021.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19] )  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ----------------------------------------------------------------------------------
