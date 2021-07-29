@@ -564,7 +564,7 @@ rescale_minmax <-
 ### Step 3: Tell R that you are writing a function
 
 ```r_
-rescale_minmax <- function() # Arguments/inputs should be defined inside ()
+rescale_minmax <- function(x) # Arguments/inputs should be defined inside ()
 
 ```
 ---
@@ -572,7 +572,7 @@ rescale_minmax <- function() # Arguments/inputs should be defined inside ()
 ### Step 4: Curly braces define the start and the end of your work
 
 ```r
-rescale_minmax <- function(){
+rescale_minmax <- function(x){
 
 # Task
 
