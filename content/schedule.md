@@ -57,7 +57,7 @@ Go to LMS. Deadline: Thursday, 22 July 2021, 10:00 AM
 
 #### Week 7:  Control structures
 
-|Slides    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ----------------------------------------------------------------------------------

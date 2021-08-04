@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 326 2.0 Programming and Data Analysis with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga Talagala" />
+    <script src="l62021_files/header-attrs/header-attrs.js"></script>
+    <link href="l62021_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <script src="l62021_files/xaringanExtra_fit-screen/fit-screen.js"></script>
+    <link href="l62021_files/countdown/countdown.css" rel="stylesheet" />
+    <script src="l62021_files/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="custom2.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STA 326 2.0 Programming and Data Analysis with R
+## 🔩 Control Structures in R
+### 
+### Dr Thiyanga Talagala
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 30px;
+
+}
+&lt;/style&gt;
+
+
+
+
+
+
+
+### Today's menu
+
+**Control structures (loops/ conditional executions)**
+
+.pull-left[
+
+
+
+if, else
+
+for
+
+while
+
+repeat
+
+break
+
+next
+
+switch
+
+
+
+]
+
+.pull-right[
+
+
+
+&lt;top&gt;&lt;img src="forloop.jpeg" height="400px"/&gt;&lt;/top&gt;
+
+
+]
+
+
+---
+class: inverse, center, middle
+
+# Conditional executions control the flow of the execution.
+---
+background-image: url(ifloop.jpeg)
+background-size: cover
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+Draw a star on star shaped cookies and draw a heart of heart shape cookies.
+
+.tr[
+
+]]
+
+
+---
+background-image: url(ifloop.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## if-else
+
+.tr[
+
+
+
+]]
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+Draw a star on star shaped cookies and draw a heart of heart shape cookies.
+
+.tr[
+
+]]
+
+---
+
+.pull-left[
+
+# if-else
+
+```r
+if (condition) {
+    # do something
+} else {
+    # do something else
+}
+
+```
+
+]
+
+.pull-right[
+
+Example
+
+
+```r
+test_even_odd &lt;- function(x){
+  if (x %% 2 == 0){
+    print("even number")
+  } else {
+    print("odd number")
+  }
+}
+```
+
+
+
+```r
+test_even_odd(5)
+```
+
+```
+[1] "odd number"
+```
+
+```r
+test_even_odd(6)
+```
+
+```
+[1] "even number"
+```
+
+]
+---
+
+# `ifelse`: vectorization with `ifelse`
+
+```r
+ifelse(condition, TRUE condition output, FALSE condition output)
+
+```
+
+Example
+
+
+```r
+test_even_odd_v2 &lt;- function(x){
+  
+  ifelse(x %% 2 == 0, "even number", "odd number")
+  
+}
+```
+
+
+```r
+test_even_odd_v2(5)
+```
+
+```
+FALSE [1] "odd number"
+```
+
+```r
+test_even_odd_v2(c(1,6))
+```
+
+```
+FALSE [1] "odd number"  "even number"
+```
+
+---
+
+## Difference between `if, else` and `ifelse`
+
+.pull-left[
+**`if, else`**
+
+
+```r
+test_even_odd &lt;- function(x){
+  if (x %% 2 == 0) {
+    print("even number")
+  } else {
+    print("odd number")
+  }
+}
+```
+
+
+```r
+test_even_odd(5)
+```
+
+```
+FALSE [1] "odd number"
+```
+
+```r
+test_even_odd(c(1,6))
+```
+
+```
+FALSE [1] "odd number"
+```
+
+]
+
+.pull-right[
+
+**`ifelse`**
+
+
+```r
+test_even_odd_v2 &lt;- function(x){
+  ifelse (x %% 2 == 0, "even number", "odd number")
+}
+
+test_even_odd_v2(5)
+```
+
+```
+FALSE [1] "odd number"
+```
+
+```r
+test_even_odd_v2(c(1,6))
+```
+
+```
+FALSE [1] "odd number"  "even number"
+```
+
+
+]
+
+---
+
+# Nested if-else
+
+- Multiple conditions
+
+
+
+```r
+grade_marks &lt;- function(marks){
+  
+  if (marks &lt; 20) {
+    "D"
+  } else if (marks &lt;= 50) {
+    "C"
+  } else if (marks &lt;= 60) {
+    "B"
+  } else {
+    "A"
+  }
+}
+
+grade_marks(75)
+```
+
+```
+[1] "A"
+```
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+Write a function to count the number of even numbers in a vector.
+
+<div class="countdown" id="timer_610a5c53" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">08</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+R for Data Science-Exercises 9.4.4 - Q2
+
+&lt;iframe src="https://r4ds.had.co.nz/functions.html" width="100%" height="400px"&gt;&lt;/iframe&gt;
+
+Help:
+
+`lubridate::now()` and `lubridate::hour()`
+
+<div class="countdown" id="timer_610a5aed" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+background-image: url(forloop.jpeg)
+background-size: cover
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Decorate 50 cookies with jam.
+
+.tr[
+
+]]
+
+
+---
+
+background-image: url(forloop.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## for
+
+.tr[
+
+
+
+]]
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Decorate 50 cookies with jam.
+
+.tr[
+
+]]
+
+---
+
+# `for` loop
+
+- execute a block of code a specific number of times or until the end of a sequence.
+
+
+```r
+for (i in 1:5) {
+  print(i*100)
+}
+```
+
+```
+[1] 100
+[1] 200
+[1] 300
+[1] 400
+[1] 500
+```
+
+
+---
+
+```r
+continents &lt;- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
+
+for (i in continents) {
+  print(continents[i])
+}
+
+for (i in 1:4) {
+  print(continents[i])
+}
+
+for (i in seq(continents)) {
+  print(continents[i])
+}
+
+for (i in 1:4)  print(continents[i])
+```
+
+
+```
+[1] "Asia"
+[1] "EU"
+[1] "AUS"
+[1] "NA"
+[1] "SA"
+[1] "Africa"
+```
+
+---
+
+background-image: url(ifloop.jpeg)
+background-size: cover
+
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+Draw a star on star shaped cookies and draw a heart of heart shape on the first 20 cookies.
+
+.tr[
+
+]]
+
+
+---
+
+background-image: url(ifloop.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## nested loops
+
+.tr[
+
+
+
+]]
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+Draw a star on star shaped cookies and draw a heart of heart shape on the first 20 cookies.
+
+.tr[
+
+]]
+
+---
+
+## Nested loops
+
+
+```r
+a &lt;- 1:10
+
+testfun &lt;- function(x){
+for (x in 1:5) {
+  
+   if (x %% 2 == 0) {
+    print("even number")
+  } else {
+    print("odd number")
+  }
+  
+}}
+
+testfun(a)
+```
+
+```
+[1] "odd number"
+[1] "even number"
+[1] "odd number"
+[1] "even number"
+[1] "odd number"
+```
+
+---
+
+# Nested loops
+
+
+```r
+mat &lt;- matrix(1:6, ncol=2)
+mat
+```
+
+```
+     [,1] [,2]
+[1,]    1    4
+[2,]    2    5
+[3,]    3    6
+```
+
+```r
+for (i in 1:3) {
+  for (j in 1:2) {
+    print(mat[i, j])
+  }
+}
+```
+
+```
+[1] 1
+[1] 4
+[1] 2
+[1] 5
+[1] 3
+[1] 6
+```
+
+---
+
+background-image: url(cookie9.jpeg)
+background-size: cover
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Taste the cookies one by one until you find the star shaped cookie.
+
+.tr[
+
+]]
+
+
+---
+
+background-image: url(cookie9.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## while
+
+.tr[
+
+
+
+]]
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Taste the cookies one by one until you find the star shaped  cookie.
+
+.tr[
+
+]]
+
+---
+
+# while
+
+.pull-left[
+
+
+```r
+i &lt;- 1 # initial value
+
+while (i != 10) {
+  
+  print(i)
+  i &lt;- i + 1 # increment
+  
+}
+```
+
+```
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+```
+]
+
+.pull-right[
+
+
+```r
+i &lt;- 1 # initial value
+
+while (i &lt; 10) {
+  
+  print(i)
+  i &lt;- i + 1 # increment
+  
+}
+```
+
+```
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+```
+]
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+
+---
+
+Can you guess the output?
+
+
+```r
+i &lt;- 1 # initial value
+
+while (i == 10) {
+  
+  print(i)
+  i &lt;- i + 1 # increment
+  
+}
+```
+
+
+<div class="countdown" id="timer_610a5aed" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+
+---
+
+background-image: url(cookie9.jpeg)
+background-size: cover
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Taste the cookies one by one until you find the strawberry flavour cookie.
+
+.tr[
+
+]]
+
+
+---
+
+background-image: url(cookie9.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## repeat-break
+
+.tr[
+
+
+
+]]
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Taste the cookies one by one until you find the strawberry flavour cookie.
+
+.tr[
+
+]]
+
+
+---
+
+
+
+background-image: url(cookie9.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## repeat-break
+
+.tr[
+
+
+
+]]
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Taste the cookies one by one until 8.00am
+
+.tr[
+
+]]
+
+
+---
+
+# repeat and break
+
+- Iterate over a block of code multiple number of times. 
+
+-  No condition check in repeat loop to exit the loop. 
+
+- The only way to exit a repeat loop is to call break. 
+
+---
+
+## repeat and break
+
+.pull-left[
+
+Example 1
+
+
+```r
+x &lt;- 5
+
+repeat {
+  print(x)
+  x = x+1
+  if (x == 10){
+    break
+  }
+}
+```
+
+```
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+```
+]
+
+--
+.pull-right[
+
+Example 2
+
+
+```r
+set.seed(1)
+
+repeat {
+ x&lt;-runif(1, 5, 10)
+ print(x)
+ if(x &lt; 6.1){
+   break
+ }
+}
+```
+
+```
+[1] 6.327543
+[1] 6.860619
+[1] 7.864267
+[1] 9.541039
+[1] 6.00841
+```
+]
+
+---
+background-image: url(decorating-2702974_1920.jpg)
+background-size: cover
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Skip the cracked muffins and decorate the rest.
+
+.tr[
+
+]]
+
+---
+
+background-image: url(decorating-2702974_1920.jpg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## next
+
+.tr[
+
+
+
+]]
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Skip the cracked muffins and decorate the rest.
+
+.tr[
+
+]]
+
+
+---
+
+# Next
+
+
+```r
+for(i in 1:10) {
+  if(i &lt;= 5) {
+  next # Skip the first 5 iterations
+  }
+print(i)
+}
+```
+
+```
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+```
+
+---
+
+
+background-image: url(switch.jpeg)
+background-size: cover
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Green base - roses, small - dots, etc..
+
+.tr[
+
+]]
+
+
+---
+
+
+background-image: url(switch.jpeg)
+background-size: cover
+
+.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+
+## switch
+
+.tr[
+
+
+
+]]
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+
+Green base - roses, small - dots, etc..
+
+.tr[
+
+]]
+
+
+
+---
+
+# switch 
+
+When you want a function to do different things in different
+circumstances, then the switch function can be useful.
+
+
+```r
+feelings &lt;- c("sad", "afraid")
+
+for (i in feelings){
+  print(
+  switch(i,
+  happy = "I am glad you are happy",
+  afraid = "There is nothing to fear",
+  sad = "Cheer up",
+  angry = "Calm down now"
+  ))
+}
+```
+
+```
+[1] "Cheer up"
+[1] "There is nothing to fear"
+```
+
+---
+class: center, middle
+
+## Thank you!
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
