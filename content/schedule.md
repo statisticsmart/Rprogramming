@@ -44,7 +44,7 @@ Assignment: Individual assignment 1
 
 ```diff
 
-Go to LMS. Deadline: 
+Go to LMS. Deadline: Thursday, 22 July 2021, 10:00 AM
 
 ```
 
@@ -57,7 +57,7 @@ Go to LMS. Deadline:
 
 #### Week 7:  Control structures
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|Slides    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ----------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ Assignment: Individual assignment 2
 
 ```diff
 
-Go to LMS. Deadline: TBA
+Go to LMS. Deadline: Monday, 09 August 2021, 3:00 PM
 
 ```
 
