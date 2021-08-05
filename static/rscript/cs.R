@@ -1,9 +1,11 @@
-## With return without return
+## With return without return --------
 add_numbers <- function(x, y){
   x+y # output last line
   
 }
 add_numbers(2, 3)
+
+#-------------------------------------
 
 mul_numbers <- function(x, y){
   return(x*y) # output 
@@ -12,6 +14,8 @@ mul_numbers <- function(x, y){
 }
 mul_numbers(2, 3)
 
+#-------------------------------------
+
 modifymul_numbers <- function(x, y){
   x*y 
   x+y # output 
@@ -19,6 +23,7 @@ modifymul_numbers <- function(x, y){
 }
 modifymul_numbers(2, 3)
 
+#-------------------------------------
 
 ## zscore_al - global vs local variables
 cal_zscore <- function(math, phy, chem){
@@ -39,12 +44,10 @@ cal_zscore <- function(math, phy, chem){
 cal_zscore(10, 5, 30)
 
 
-
-
+#-------------------------------------
 
 ## R for Data Science-Exercises 19.4.4 - Q2
 library(lubridate)
-
 greeter <- function(time = now()) {
   
   htime <- lubridate::hour(time)
@@ -62,6 +65,8 @@ greeter <- function(time = now()) {
 greeter(now())
 greeter("2021-08-05 06:57:22 +0530")
 
+
+#-------------------------------------
 ##
 #Write a for loop that iterates over the 
 #numbers 1 to 4 and prints the squared of each 
@@ -70,6 +75,8 @@ greeter("2021-08-05 06:57:22 +0530")
 for(i in 1:4){
   print(i^2)
 }
+
+#-------------------------------------
 
 ## Write a function to count the number of 
 ## even numbers in a vector.
@@ -102,6 +109,8 @@ count_even(1:10)
  }
 count
 
+#-------------------------------------
+
 #Write a function to print random numbers from the 
 #standard normal distribution but stops (breaks) 
 #if you get a number bigger than 1.
@@ -114,6 +123,8 @@ repeat {
     break
   }
 }
+
+#-------------------------------------
 
 # Using next adapt the loop from last 
 #exercise so that doesn’t print negative numbers.
@@ -132,6 +143,7 @@ repeat {
   }
 }
 
+#-------------------------------------
 
 ## switch illustration
 
