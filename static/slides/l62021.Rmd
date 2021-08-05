@@ -669,32 +669,6 @@ Taste the cookies one by one until you find the strawberry flavor cookie.
 ---
 
 
-
-background-image: url(cookie9.jpeg)
-background-size: cover
-
-.bg-yellow.b--dark-yellow.ba.bw2.br3.shadow-5.ph4.mt5[
-
-## repeat-break
-
-.tr[
-
-
-
-]]
-
-
-.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
-
-Taste the cookies one by one until 8.00am
-
-.tr[
-
-]]
-
-
----
-
 # repeat and break
 
 - Iterate over a block of code multiple number of times. 
@@ -790,7 +764,7 @@ Skip the cracked muffins and decorate the rest.
 
 ---
 
-# Next
+# next
 
 ```{r, comment=NA}
 for(i in 1:10) {
