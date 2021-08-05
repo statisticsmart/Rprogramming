@@ -364,35 +364,37 @@ for (i in 1:5) {
 
 
 ---
-```{r, comment=NA, eval=FALSE}
+
+```{r, comment=NA}
 
 continents <- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
 
-for (i in continents) {
-  print(continents[i])
-}
+```
+
+.pull-left[
+```{r, comment=NA}
 
 for (i in 1:4) {
   print(continents[i])
 }
 
-for (i in seq(continents)) {
-  print(continents[i])
-}
 
 for (i in 1:4)  print(continents[i])
 
 ```
 
-```{r, echo=FALSE, comment=NA}
-continents <- c("Asia", "EU", "AUS", "NA", "SA", "Africa")
+]
+
+.pull-right[
+```{r, comment=NA}
+
 for (i in seq(continents)) {
   print(continents[i])
 }
 
 ```
 
-
+]
 ---
 
 class: inverse, center, middle
@@ -863,6 +865,45 @@ for (i in feelings){
 }
 
 ```
+
+---
+.pull-left[
+
+## Single element - working
+
+```{r, comment=NA}
+x <- "a"
+v <- switch(x, "a" = "apple",
+               "b" = "banana",
+               "c" = "cherry")
+v
+```
+
+## Multiple elements - not working
+
+```{r, eval=FALSE}
+switch(c("a", "b"), "a" = "apple", # not working
+       "b" = "banana",
+       "c" = "cherry")
+```
+
+]
+
+.pull-right[
+
+## Multiple element - use `for` loop
+
+```{r, eval=FALSE}
+vect <- c("a", "b")
+for(i in seq(vect)){
+print(switch(i, "a" = "apple", # not working
+       "b" = "banana",
+       "c" = "cherry"))
+}
+```
+
+]
+
 
 ---
 class: center, middle
