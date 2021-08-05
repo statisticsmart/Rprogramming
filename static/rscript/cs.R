@@ -1,3 +1,27 @@
+#-------------------------------------
+
+## zscore_al - global vs local variables
+cal_zscore <- function(math, phy, chem){
+  mean.maths <- 60
+  sd.math <<- 10
+  mean.chem <- 45
+  sd.chem <- 20
+  mean.phy <- 55
+  sd.phy <- 5
+  
+  z.m <- (math-mean.maths)/sd.math
+  z.p <- (phy-mean.phy)/sd.phy
+  z.c <- (chem-mean.chem)/sd.chem
+  
+  (z.m+z.p+z.c)/3
+}
+
+cal_zscore(10, 5, 30)
+
+sjp <- 4
+sjp
+
+
 ## With return without return --------
 add_numbers <- function(x, y){
   x+y # output last line
@@ -23,25 +47,7 @@ modifymul_numbers <- function(x, y){
 }
 modifymul_numbers(2, 3)
 
-#-------------------------------------
 
-## zscore_al - global vs local variables
-cal_zscore <- function(math, phy, chem){
-  mean.maths <- 60
-  sd.math <- 10
-  mean.chem <- 45
-  sd.chem <- 20
-  mean.phy <- 55
-  sd.phy <- 5
-  
-  z.m <- (math-mean.maths)/sd.math
-  z.p <- (phy-mean.phy)/sd.phy
-  z.c <- (chem-mean.chem)/sd.chem
-  
-  (z.m+z.p+z.c)/3
-}
-
-cal_zscore(10, 5, 30)
 
 
 #-------------------------------------
@@ -52,9 +58,9 @@ greeter <- function(time = now()) {
   
   htime <- lubridate::hour(time)
   
-  if (5 < htime | htime <= 12) {
+  if (5 < htime & htime <= 12) {
     print("Good morning")
-  } else if ( 12 < htime | htime < 18) {
+  } else if ( 12 < htime & htime < 18) {
     print("Good afternoon")
   } else {
     print("Good evening")
@@ -62,8 +68,9 @@ greeter <- function(time = now()) {
   
 }
 
+greeter()
 greeter(now())
-greeter("2021-08-05 06:57:22 +0530")
+greeter("2021-08-05 18:57:22 +0530")
 
 
 #-------------------------------------
