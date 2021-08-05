@@ -106,7 +106,7 @@ background-image: url(ifloop.jpeg)
 background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
-Draw a star on star shaped cookies and draw a heart of heart shape cookies.
+Draw a star on star-shaped cookies and draw a heart on heart-shaped cookies.
 
 .tr[
 
@@ -129,7 +129,7 @@ background-size: cover
 
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
-Draw a star on star shaped cookies and draw a heart of heart shape cookies.
+Draw a star on star-shaped cookies and draw a heart on heart-shaped cookies.
 
 .tr[
 
@@ -273,16 +273,8 @@ class: inverse, center, middle
 
 ---
 
-Write a function to count the number of even numbers in a vector.
 
-```{r, echo=FALSE}
-library(countdown)
-countdown(minutes = 8L, seconds = 00)
-```
-
----
-
-R for Data Science-Exercises 9.4.4 - Q2
+R for Data Science-Exercises 19.4.4 - Q2
 
 ```{r, echo=FALSE}
 knitr::include_url('https://r4ds.had.co.nz/functions.html')
@@ -297,14 +289,37 @@ library(countdown)
 countdown(minutes = 10L, seconds = 00)
 ```
 
+
 ---
+
+## if
+
+
+```{r, comment=NA}
+check.negative <- function(x){
+
+  if (x < 0 ) {
+  print("X is negative")
+  }
+
+}
+```
+
+```{r, comment=NA}
+check.negative(-10)
+check.negative(10)
+```
+
+
+---
+
 
 background-image: url(forloop.jpeg)
 background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Decorate 50 cookies with jam.
+For the first 50 cookies, fill the center of cookies with jam.
 
 .tr[
 
@@ -328,7 +343,7 @@ background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Decorate 50 cookies with jam.
+For the first 50 cookies, fill the center of cookies with jam.
 
 .tr[
 
@@ -377,7 +392,26 @@ for (i in seq(continents)) {
 
 ```
 
+
 ---
+
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+Write a for loop that iterates over the numbers 1 to 4 and prints the squared of each number using `print()`.
+
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 3L, seconds = 00)
+```
+
+
+---
+
 
 background-image: url(ifloop.jpeg)
 background-size: cover
@@ -385,7 +419,7 @@ background-size: cover
 
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
-Draw a star on star shaped cookies and draw a heart of heart shape on the first 20 cookies.
+For the first 50 cookies, draw a star on star-shaped cookies and draw a heart on heart-shaped cookies.
 
 .tr[
 
@@ -409,7 +443,8 @@ background-size: cover
 
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
-Draw a star on star shaped cookies and draw a heart of heart shape on the first 20 cookies.
+
+For the first 50 cookies, draw a star on star-shaped cookies and draw a heart on heart-shaped cookies.
 
 .tr[
 
@@ -454,12 +489,28 @@ for (i in 1:3) {
 
 ---
 
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+Write a function to count the number of even numbers in a vector.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 8L, seconds = 00)
+```
+
+
+---
+
 background-image: url(cookie9.jpeg)
 background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Taste the cookies one by one until you find the star shaped cookie.
+Taste the cookies one by one until you find the star-shaped cookie.
 
 .tr[
 
@@ -484,7 +535,7 @@ background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Taste the cookies one by one until you find the star shaped  cookie.
+Taste the cookies one by one until you find the star-shaped cookie.
 
 .tr[
 
@@ -565,12 +616,23 @@ class: inverse, center, middle
 
 ---
 
+Generate the first `n` numbers of the Fibonacci Sequence using while loop.
+
+0 1 1 2 3 5 ...
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 4L, seconds = 00)
+```
+
+
+---
 background-image: url(cookie9.jpeg)
 background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Taste the cookies one by one until you find the strawberry flavour cookie.
+Taste the cookies one by one until you find the strawberry flavor cookie.
 
 .tr[
 
@@ -595,7 +657,7 @@ background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Taste the cookies one by one until you find the strawberry flavour cookie.
+Taste the cookies one by one until you find the strawberry flavor cookie.
 
 .tr[
 
@@ -681,6 +743,14 @@ repeat {
 ]
 
 ---
+
+##  Your turn
+
+1. Write a function to print random numbers from the standard  normal distribution but stops (breaks) if you get a number bigger than 1.
+
+2. Using next adapt the loop from last exercise so that doesn’t print negative numbers.
+
+---
 background-image: url(decorating-2702974_1920.jpg)
 background-size: cover
 
@@ -739,7 +809,7 @@ background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Green base - roses, small - dots, etc..
+Green base - roses, small - dots, medium - stars, ...
 
 .tr[
 

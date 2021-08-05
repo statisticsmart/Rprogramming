@@ -60,6 +60,14 @@ Go to LMS. Deadline: Thursday, 22 July 2021, 10:00 AM
 |[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
+
+
+
+#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator, Data Import and Export
+
+|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
 ----------------------------------------------------------------------------------
 
 ##### Individual Assignment - 2 (10%) 🎓
@@ -70,17 +78,9 @@ Assignment: Individual assignment 2
 
 ```diff
 
-Go to LMS. Deadline: Monday, 09 August 2021, 3:00 PM
+Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 ```
-
-
-#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator, Data Import and Export
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-
 
 
 
