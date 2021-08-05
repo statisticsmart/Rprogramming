@@ -1,3 +1,47 @@
+## With return without return
+add_numbers <- function(x, y){
+  x+y # output last line
+  
+}
+add_numbers(2, 3)
+
+mul_numbers <- function(x, y){
+  return(x*y) # output 
+  x+y
+  
+}
+mul_numbers(2, 3)
+
+modifymul_numbers <- function(x, y){
+  x*y 
+  x+y # output 
+  
+}
+modifymul_numbers(2, 3)
+
+
+## zscore_al - global vs local variables
+cal_zscore <- function(math, phy, chem){
+  mean.maths <- 60
+  sd.math <- 10
+  mean.chem <- 45
+  sd.chem <- 20
+  mean.phy <- 55
+  sd.phy <- 5
+  
+  z.m <- (math-mean.maths)/sd.math
+  z.p <- (phy-mean.phy)/sd.phy
+  z.c <- (chem-mean.chem)/sd.chem
+  
+  (z.m+z.p+z.c)/3
+}
+
+cal_zscore(10, 5, 30)
+
+
+
+
+
 ## R for Data Science-Exercises 19.4.4 - Q2
 library(lubridate)
 
@@ -30,6 +74,7 @@ for(i in 1:4){
 ## Write a function to count the number of 
 ## even numbers in a vector.
 
+#Method 1
 count_even <- function(x){
   
   cnt <- 0
@@ -46,6 +91,16 @@ count_even <- function(x){
   cnt
 }
 count_even(1:10)
+
+# Method 2
+ x <- c(2, 5, 6, 7, 8, 10)
+ count <- 0
+ 
+ for (val in x){
+   
+  if(val %% 2 ==0) count = count + 1
+ }
+count
 
 #Write a function to print random numbers from the 
 #standard normal distribution but stops (breaks) 
