@@ -65,7 +65,7 @@ Go to LMS. Deadline: Thursday, 22 July 2021, 10:00 AM
 
 #### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator, Data Import and Export
 
-|Slides    	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
+|[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 ----------------------------------------------------------------------------------
