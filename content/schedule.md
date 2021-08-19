@@ -99,11 +99,11 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 🖥️ **R Labwork**
 
-[Rmarkdown_practical_lesson1.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
+[Rmarkdown_practical_lesson_21.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
 
 [sampleimage.png](/rscripts/rmarkdown_labwork/sampleimage.png)
 
-[Output: Rmarkdown_practical_lesson1.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
+[Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
 
 
 
