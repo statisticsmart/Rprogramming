@@ -63,7 +63,7 @@ Go to LMS. Deadline: Thursday, 22 July 2021, 10:00 AM
 
 
 
-#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator, Data Import and Export
+#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
 
 |[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -83,8 +83,31 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 ```
 
 
+#### Week 9: Data Import and Export
 
-#### Week 8: Reproducible Reporting with R Markdown
+**Flip-style**
+
+|[Slides](/slides/l82021.html)     	|  [Reading - Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	| Videos - LMS | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+#### Week 9: Reproducible Reporting with R Markdown
+
+
+|[Slides](/slides/l92021.html)  	|  [Reading-Ch27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) 	| [Reference Guide](/cheatsheets/rmarkdown-reference.pdf)  | Video Clips - LMS 	| Problems |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+🖥️ **R Labwork**
+
+[Rmarkdown_practical_lesson1.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
+
+[sampleimage.png](/rscripts/rmarkdown_labwork/sampleimage.png)
+
+[Output: Rmarkdown_practical_lesson1.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
+
+
+
+#### Week 10: Data Wrangling: Reshaping Data and Data Manipulation
 
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
@@ -92,23 +115,9 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 
 
-#### Week 9: Data Wrangling: Reshaping Data
+#### Week 11: The Grammar of Graphics 
 
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-
-#### Week 9: Data Wrangling: Data Manipulation
-
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-
-
-
-#### Week 10: The Grammar of Graphics
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -127,7 +136,7 @@ Go to LMS. Deadline: TBA
 
 ```
 
-#### Week 11:  Regression Analysis with R
+#### Week 12:  Regression Analysis with R
 
 
 
