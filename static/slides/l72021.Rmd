@@ -568,6 +568,8 @@ as.list(tbl[1, ])
 df$y
 
 df[["y", exact = FALSE]]
+
+df[["y", exact = TRUE]]
 ```
 
 ]
@@ -581,6 +583,8 @@ tbl$y
 
 
 tbl[["y", exact = FALSE]]
+
+tbl[["y", exact = TRUE]]
 
 ```
 
@@ -638,7 +642,7 @@ class: duke-orange, middle, center
 
 
 ---
-### Factors
+**factor**
 
 - A vector that is used to store categorical variables.
 
