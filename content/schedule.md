@@ -87,7 +87,7 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 **Flip-style**
 
-|[Slides](/slides/l82021.html)     	|  [Reading - Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	| Videos - LMS | Problems 	| Answers |
+|[Slides](/slides/l82021.html)     	|  [Reading - Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	| [Demo 1](https://www.youtube.com/watch?v=i-tshXv6lTg&t=381s) [Demo 2](https://www.youtube.com/watch?v=3pW3wZ-Dprg) [Demo-3](https://www.youtube.com/watch?v=K58J7EvGXDA)| Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
