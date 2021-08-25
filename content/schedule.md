@@ -2,7 +2,10 @@
 title: Schedule
 ---
 
+
 ## 2021
+
+![](sta3262_hexSticker.png)
 
 Here's your roadmap for the semester! 
 
@@ -109,10 +112,15 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 #### Week 10: Data Wrangling: Reshaping Data and Data Manipulation
 
+#### Reshaping Data
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides](/slides/l102021.html)    	|  [Reading-R4DS Ch 12](https://r4ds.had.co.nz/tidy-data.html)   	|  [Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	| R-script | [Problems-R4DS Ch 12 Exercises](https://r4ds.had.co.nz/tidy-data.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
+#### Data Manipulation
+
+| Slides   	|  [Reading-R4DS Ch5](https://r4ds.had.co.nz/transform.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-R4DS Ch5 Exercises](https://r4ds.had.co.nz/transform.html)	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
 
 #### Week 11: The Grammar of Graphics 
