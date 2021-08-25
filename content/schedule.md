@@ -5,7 +5,7 @@ title: Schedule
 
 ## 2021
 
-![](sta3262_hexSticker.png)
+![](https://github.com/statisticsmart/Rprogramming/blob/master/static/hexsticker/sta3262_hexSticker.png)
 
 Here's your roadmap for the semester! 
 
