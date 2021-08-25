@@ -119,7 +119,7 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 #### Data Manipulation
 
-| Slides   	|  [Reading-R4DS Ch5](https://r4ds.had.co.nz/transform.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-R4DS Ch5 Exercises](https://r4ds.had.co.nz/transform.html)	| Answers |
+| [Slides]((/slides/l112021.html) )   	|  [Reading-R4DS Ch5](https://r4ds.had.co.nz/transform.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-R4DS Ch5 Exercises](https://r4ds.had.co.nz/transform.html)	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
 
