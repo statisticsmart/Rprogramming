@@ -63,7 +63,7 @@ h3, #TOC&gt;ul&gt;ul&gt;li {
 ]
 
 .pull-right[
-&lt;center&gt;&lt;img src="reshape_cake.jpeg" height="600px"/&gt;&lt;/center&gt;
+&lt;center&gt;&lt;img src="recake.png" height="600px"/&gt;&lt;/center&gt;
 ]
 
 ---
@@ -603,8 +603,7 @@ tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA)); tbl
 --
 
 ```r
-tbl %&gt;% separate(input, 
-*c("Input1", "Input2", "Input3"))
+tbl %&gt;% separate(input, c("Input1", "Input2", "Input3"))*\
 ```
 
 
@@ -651,29 +650,13 @@ projects
 ```
 ]
 
-.pull-right[
 
 
-```r
-projects %&gt;% unite("Location", c("State", "Country"))
-```
-
-```
-# A tibble: 4 x 2
-  Location  Cost
-  &lt;chr&gt;    &lt;dbl&gt;
-1 LA_USA    1000
-2 CO_USA   11000
-3 VIC_AUS  20000
-4 NSW_AUS  30000
-```
-
-]
 
 ---
  `unite()`
 
-.pull-left[
+
 
 
 ```
@@ -701,9 +684,21 @@ projects %&gt;% unite("Location", c("State", "Country"))
 4 NSW_AUS  30000
 ```
 
-]
+---
+ `unite()`
 
-.pull-right[
+
+```
+# A tibble: 4 x 3
+  Country State  Cost
+  &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
+1 USA     LA     1000
+2 USA     CO    11000
+3 AUS     VIC   20000
+4 AUS     NSW   30000
+```
+
+
 ```r
 projects %&gt;% unite("Location", c("State", "Country"),
 *                   sep="-")
@@ -719,7 +714,7 @@ projects %&gt;% unite("Location", c("State", "Country"),
 3 VIC-AUS  20000
 4 NSW-AUS  30000
 ```
-]
+
 
 ---
 # `separate`  vs  `unite`
