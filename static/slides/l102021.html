@@ -550,10 +550,11 @@ df %&gt;% separate(x, c("Text1", "Text2"))
 ---
 `separate()`
 
-
+.pull-left[
 
 ```r
-tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA)); tbl
+tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA))
+tbl
 ```
 
 ```
@@ -565,12 +566,14 @@ tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA)); tbl
 3 a-b c
 4 &lt;NA&gt; 
 ```
+]
 
 --
-
+.pull-right[
 
 ```r
-tbl %&gt;% separate(input, c("Input1", "Input2"))
+tbl %&gt;% 
+  separate(input, c("Input1", "Input2"))
 ```
 
 ```
@@ -582,7 +585,7 @@ tbl %&gt;% separate(input, c("Input1", "Input2"))
 3 a      b     
 4 &lt;NA&gt;   &lt;NA&gt;  
 ```
-
+]
 ---
  `separate()`
 
@@ -605,7 +608,7 @@ tbl &lt;- tibble(input = c("a", "a b", "a-b c", NA)); tbl
 --
 
 ```r
-tbl %&gt;% separate(input, c("Input1", "Input2", "Input3"))*\
+tbl %&gt;% separate(input, c("Input1", "Input2", "Input3"))
 ```
 
 

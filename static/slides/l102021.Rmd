@@ -431,17 +431,20 @@ df %>% separate(x, c("Text1", "Text2"))
 ---
 `separate()`
 
-
+.pull-left[
 ```{r, comment=NA}
-tbl <- tibble(input = c("a", "a b", "a-b c", NA)); tbl
+tbl <- tibble(input = c("a", "a b", "a-b c", NA))
+tbl
 ```
+]
 
 --
-
+.pull-right[
 ```{r, comment=NA}
-tbl %>% separate(input, c("Input1", "Input2"))
+tbl %>% 
+  separate(input, c("Input1", "Input2"))
 ```
-
+]
 ---
  `separate()`
 
@@ -453,7 +456,7 @@ tbl <- tibble(input = c("a", "a b", "a-b c", NA)); tbl
 --
 
 ```r
-tbl %>% separate(input, c("Input1", "Input2", "Input3"))*\
+tbl %>% separate(input, c("Input1", "Input2", "Input3"))
 ```
 
 ```{r, comment=NA, echo=FALSE}
