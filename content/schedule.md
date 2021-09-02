@@ -126,10 +126,33 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 #### Week 11: The Grammar of Graphics 
 
 
+|[Slides](/slides/l122021.html)     	| [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf)  	| R-script | [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+##### Makeup assignments - 1 and 2 🎓
+
+```{r class.source="watch-out"}
+Assignment 1: geom_*
+
+Assignment2: Do the analysis of assignment 2 using tidyverse
+```
+
+```diff
+
+Assignment 1: 9 Sep 2021
+
+Assignment 2: 6 Sep 2021
+
+```
+
+
+#### Week 12:  Regression Analysis with R
+
+
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
 
 
 ##### Individual Project (25%) 🎓
@@ -143,13 +166,6 @@ Assignment: Individual Project
 Go to LMS. Deadline: TBA
 
 ```
-
-#### Week 12:  Regression Analysis with R
-
-
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 #### Week 12: The Inverse Transform Method and The Method of Monte Carlo
