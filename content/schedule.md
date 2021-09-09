@@ -110,7 +110,7 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 
 
 
-#### Week 10: Data Wrangling: Reshaping Data and Data Manipulation
+#### Week 10-11: Data Wrangling: Reshaping Data and Data Manipulation
 
 #### Reshaping Data
 
@@ -123,7 +123,7 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
 
-#### Week 11: The Grammar of Graphics 
+#### Week 12: The Grammar of Graphics 
 
 
 |[Slides](/slides/l122021.html)     	| [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf)  	| R-script | [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
@@ -133,21 +133,21 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 ##### Makeup assignments - 1 and 2 🎓
 
 ```{r class.source="watch-out"}
-Assignment 1: geom_*
+Assignment 1: Data Visualization with geom_*
 
-Assignment2: Do the analysis of assignment 2 using tidyverse
+Assignment2: Do the analysis of assignment 2 using the tidyverse.
 ```
 
 ```diff
 
-Assignment 1: 9 Sep 2021
+Assignment 1: 16 Sep 2021
 
-Assignment 2: 6 Sep 2021
+Assignment 2: 14 Sep 2021
 
 ```
 
 
-#### Week 12:  Regression Analysis with R
+#### Week 13:  Regression Analysis with R
 
 
 
@@ -168,20 +168,16 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 12: The Inverse Transform Method and The Method of Monte Carlo
+#### Week 14: The Inverse Transform Method and The Method of Monte Carlo
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 13: Hypothesis Testing
+#### Week 15: Hypothesis Testing
 
 |Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 14: Functionals
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 #### Week 15: Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
