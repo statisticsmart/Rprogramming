@@ -153,7 +153,7 @@ Assignment 2: 14 Sep 2021
 
 
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides](/slides/l132021.html)    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)   	|  Cheat sheet 	| R-script | [Problems](/problems/Regression.html)  	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
