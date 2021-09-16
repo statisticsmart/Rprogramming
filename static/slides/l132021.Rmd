@@ -216,14 +216,14 @@ ggplot(Prestige_1, aes(x=value)) + geom_histogram(colour="white") +
 
 
 
-```{r, comment=NA, message=FALSE, warning=FALSE}
+```{r, comment=NA, message=FALSE, warning=FALSE, out.height="80%"}
 ggplot(Prestige_1, aes(x=value, fill=variable)) + geom_density() + 
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 ---
 
 
-```{r, comment=NA, message=FALSE, warning=FALSE}
+```{r, comment=NA, message=FALSE, warning=FALSE, out.height="80%"}
 ggplot(Prestige_1, aes(y = value, x = type, fill = type)) + geom_boxplot() + 
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
@@ -240,7 +240,7 @@ ggplot(aes(y=value, x=type, fill=type)) + geom_boxplot() +
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
-```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE, out.height="70%"}
 Prestige_1 %>%
   filter(is.na(type) == FALSE) %>%
 ggplot(aes(y = value, x = type, fill = type)) + geom_boxplot() + 
@@ -250,7 +250,7 @@ ggplot(aes(y = value, x = type, fill = type)) + geom_boxplot() +
 ---
 
 
-```{r, comment=NA, message=FALSE, warning=FALSE}
+```{r, comment=NA, message=FALSE, warning=FALSE, out.height="70%"}
 Prestige_1 %>%
   filter(is.na(type) == FALSE) %>%
 ggplot(aes(x = value, y = type, fill = type)) + geom_boxplot() + 
@@ -1166,7 +1166,7 @@ Method 2
 ```{r, comment=NA, message=FALSE, warning=FALSE}
 library(modelr)
 test <- test %>% add_predictions(model4)
-test
+head(test, 4)
 ```
 ---
 

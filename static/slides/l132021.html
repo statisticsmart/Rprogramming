@@ -357,7 +357,7 @@ ggplot(Prestige_1, aes(x=value, fill=variable)) + geom_density() +
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
-![](l132021_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+&lt;img src="l132021_files/figure-html/unnamed-chunk-11-1.png" height="80%" /&gt;
 ---
 
 
@@ -367,7 +367,7 @@ ggplot(Prestige_1, aes(y = value, x = type, fill = type)) + geom_boxplot() +
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
-![](l132021_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+&lt;img src="l132021_files/figure-html/unnamed-chunk-12-1.png" height="80%" /&gt;
 
 
 ---
@@ -381,7 +381,7 @@ ggplot(aes(y=value, x=type, fill=type)) + geom_boxplot() +
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
-![](l132021_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+&lt;img src="l132021_files/figure-html/unnamed-chunk-13-1.png" height="70%" /&gt;
 
 ---
 
@@ -394,7 +394,7 @@ ggplot(aes(x = value, y = type, fill = type)) + geom_boxplot() +
   facet_wrap(variable ~., ncol=1, scales = "free")
 ```
 
-![](l132021_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+&lt;img src="l132021_files/figure-html/unnamed-chunk-14-1.png" height="70%" /&gt;
 ---
 
 
@@ -1573,52 +1573,20 @@ Method 2
 ```r
 library(modelr)
 test &lt;- test %&gt;% add_predictions(model4)
-test
+head(test, 4)
 ```
 
 ```
-                          education income women prestige census type id
-gov.administrators            13.11  12351 11.16     68.8   1113 prof  1
-general.managers              12.26  25879  4.02     69.1   1130 prof  2
-mining.engineers              14.64  11023  0.94     68.8   2153 prof 10
-surveyors                     12.39   5902  1.91     62.0   2161 prof 11
-vocational.counsellors        15.22   9593 34.89     58.3   2391 prof 19
-physicians                    15.96  25308 10.56     87.2   3111 prof 24
-nursing.aides                  9.45   3485 76.14     34.9   3135   bc 28
-secretaries                   11.59   4036 97.51     46.0   4111   wc 35
-bookkeepers                   11.32   4348 68.24     49.4   4131   wc 37
-shipping.clerks                9.17   4761 11.37     30.9   4153   wc 40
-telephone.operators           10.51   3161 96.14     38.1   4175   wc 45
-sales.clerks                  10.05   2594 67.82     26.5   5137   wc 52
-service.station.attendant      9.93   2370  3.69     23.3   5145   bc 54
-real.estate.salesmen          11.09   6992 24.44     47.1   5172   wc 56
-policemen                     10.93   8891  1.65     51.6   6112   bc 59
-farm.workers                   8.60   1656 27.75     21.5   7182   bc 68
-textile.labourers              6.74   3485 39.48     28.8   8278   bc 75
-machinists                     8.81   6686  4.28     44.2   8313   bc 77
-electronic.workers             8.76   3942 74.54     50.8   8534   bc 82
-masons                         6.60   5959  0.52     36.2   8782   bc 92
-                          log.income.     pred
-gov.administrators           9.421492 67.26199
-general.managers            10.161187 71.33086
-mining.engineers             9.307739 71.56331
-surveyors                    8.683047 57.67687
-vocational.counsellors       9.168789 72.27901
-physicians                  10.138876 84.14602
-nursing.aides                8.156223 35.60007
-secretaries                  8.303009 42.73588
-bookkeepers                  8.377471 42.49606
-shipping.clerks              8.468213 35.79196
-telephone.operators          8.058644 36.60012
-sales.clerks                 7.860956 33.09309
-service.station.attendant    7.770645 33.60911
-real.estate.salesmen         8.852522 46.22149
-policemen                    9.092795 49.75274
-farm.workers                 7.412160 25.50358
-textile.labourers            8.156223 26.05783
-machinists                   8.807771 39.56685
-electronic.workers           8.279443 34.34687
-masons                       8.692658 30.68619
+                   education income women prestige census type id log.income.
+gov.administrators     13.11  12351 11.16     68.8   1113 prof  1    9.421492
+general.managers       12.26  25879  4.02     69.1   1130 prof  2   10.161187
+mining.engineers       14.64  11023  0.94     68.8   2153 prof 10    9.307739
+surveyors              12.39   5902  1.91     62.0   2161 prof 11    8.683047
+                       pred
+gov.administrators 67.26199
+general.managers   71.33086
+mining.engineers   71.56331
+surveyors          57.67687
 ```
 ---
 
