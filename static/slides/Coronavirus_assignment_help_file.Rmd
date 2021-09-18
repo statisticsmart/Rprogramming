@@ -1,6 +1,5 @@
 ---
 title: "Assignment - Help file"
-date: "26/06/2020"
 output: html_document
 ---
 
@@ -62,7 +61,7 @@ usa_corona <- coronavirus %>% filter(country == "US")
 3. Extract recovered cases in the USA
 
 ```{r, comment=NA, message=FALSE}
-recover_usa_corona <- usa_corona %>% filter(type=="recovered")
+recover_usa_corona <- usa_corona %>% filter(type=="confirmed")
 head(recover_usa_corona)
 ```
 
