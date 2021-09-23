@@ -131,6 +131,12 @@ Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
 |[Slides](/slides/l122021.html)     	| [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf)  	| R-script | [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
+Perform EDA on palmerpenguins using ggplot2
+
+```r
+library(palmerpenguins)
+data(package = 'palmerpenguins')
+```
 
 ##### Makeup assignments - 1 and 2 🎓
 
@@ -165,31 +171,26 @@ Assignment: Individual Project
 
 ```diff
 
-Go to LMS. Deadline: TBA
+Go to LMS. Deadline: 28 September 2021, 3.00PM (IST)
 
 ```
 
 
-#### Week 14: The Inverse Transform Method and The Method of Monte Carlo
+#### Week 14: Hypothesis Testing
 
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-#### Week 15: Hypothesis Testing
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
+|[Slides](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 
-#### Week 15: Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
-
-|Slides    	|  Reading  	|  Cheat sheet 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
+#### Week 14: Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
 
 
 |[Recap](/slides/recap.pdf)   	|  
 |:-:	|
 
+|[Julia Silge](https://www.youtube.com/channel/UCTTBgWyJl2HrrhQOOc710kA)|
+|:-:	|
 
+|[TidyTuesday](https://www.youtube.com/user/safe4democracy/videos)|
+|:-:	|
