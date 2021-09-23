@@ -186,7 +186,7 @@ Go to LMS. Deadline: 28 September 2021, 3.00PM (IST)
 #### Week 14: Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
 
 
-|[Recap](/slides/recap.pdf)   	|  
+|[Recap](/slides/recap2021.pdf)   	|  
 |:-:	|
 
 |[Julia Silge](https://www.youtube.com/channel/UCTTBgWyJl2HrrhQOOc710kA)|
