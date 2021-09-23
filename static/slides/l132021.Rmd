@@ -747,6 +747,7 @@ model2 <- lm(prestige ~ income + education, data=train)
 summary(model2)
 ```
 ---
+
 # Model 2: prestige ~ education +  `income` (cont.)
 ```{r, comment=NA}
 model2_fitresid <- augment(model2)
@@ -852,7 +853,11 @@ summary(model3)
 
 ```{r, comment=NA}
 model3_fitresid <- augment(model3)
+model3_fitresid
 ```
+
+
+---
 
 If the variables used to fit the model are not included in data, then no .resid column will be included in the output.
 
@@ -1132,7 +1137,7 @@ $Y = \beta_0 + \beta_1x_{1} + \beta_2x_{2} +  \beta_3x_{3} +  \beta_4x_{4} + \ep
 
 ## What is the overall adequacy of the model?
 
-$H0: \beta_1= \beta_2 = \beta_3 = \beta_4$
+$H0: \beta_1= \beta_2 = \beta_3 = \beta_4 = 0$
 
 $H1: \beta_j \neq 0 \text{ for at least one } j, j=1, 2, 3, 4$
 
