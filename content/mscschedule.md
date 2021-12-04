@@ -27,7 +27,7 @@ To participate in the lectures, please bring a laptop with R and RStudio install
 
 
 
-|Slides   	|  Reading(https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| [R-script](/rscript/rscript1.R) | Problems [Exercise 1](https://thiyangt.github.io/rworkbook/index.html) [Exercise 2](https://thiyangt.github.io/rworkbook/intro.html)	| Answers: Tutorial discussion |
+|Slides   	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| [R-script](/rscript/rscript1.R) | Problems [Exercise 1](https://thiyangt.github.io/rworkbook/index.html) [Exercise 2](https://thiyangt.github.io/rworkbook/intro.html)	| Answers: Tutorial discussion |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
