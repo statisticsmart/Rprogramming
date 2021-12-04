@@ -1,5 +1,5 @@
 ---
-title: "STA 326 2.0 Programming and Data Analysis with R"
+title: "STA 517 3.0 Programming and Statistical Computing with R"
 subtitle: "🎉 Introduction to R, RStudio and R Programming Basics"  
 author: 
   - ""
@@ -94,7 +94,7 @@ countdown(minutes = 2L, seconds = 30)
 
 - R is a **functional programming language**. However, R system includes some support for object-oriented programming.
 
-<center><img src="RobertandRoss.jpg" height="400px" /></center>
+<center><img src="RobertandRoss.jpg" height="250px" /></center>
 
 
 
@@ -453,7 +453,7 @@ background-size: contain
 
 
 ![](project7.png)
-
+---
 
 At the end of an R session, if you click **save**: the objects are written to a file called **.RData** in the current directory, and the command lines used in the session are saved to a file called **.Rhistory**
 
@@ -575,6 +575,7 @@ help("[[")
 ```r
 help.search(‘weighted mean’) 
 ```
+---
 
 **Method 2**
 
