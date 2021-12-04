@@ -21,8 +21,10 @@ output:
 ---
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+#devtools::install_github("hadley/emo")
 library(emo)
 ```
+
 
 # Data import with readr
 
