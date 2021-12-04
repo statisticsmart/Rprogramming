@@ -49,6 +49,11 @@ custom_js  = []
         identifier = "schedule"
         name = "Schedule"
         url = "/schedule"
+        
+      [[languages.en.menu.main]]
+        identifier = "mscschedule"
+        name = "MSc-Schedule"
+        url = "/schedule"
 
       [[languages.en.menu.main]]
         identifier = "archive"

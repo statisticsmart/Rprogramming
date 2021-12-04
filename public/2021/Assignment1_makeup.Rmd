@@ -1,0 +1,33 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment 1 (makeup)
+
+Select a `geom_*` function from the list here https://hellor.netlify.app/slides/l122021.html#46. Make sure that your selected `geom_*` is not explained in any lecture slides. Your submission should include followings
+
+1. Brief explanation of the `geom_*`
+
+2. A ggplot to  demonstrate the application of the selected geom_*
+
+3. R codes and outputs
+
+## Example
+
+**geom_polygon**
+
+`geom_polygon` can be used to draw boundaries for different regions.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(maps)
+library(tidyverse)
+world <- map_data("world")
+AUS <- world %>% filter(region == "Australia")
+ggplot(AUS) + 
+   geom_polygon(aes(x = long, y = lat, group = group))
+```
