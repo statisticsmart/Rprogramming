@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 326 2.0 Programming and Data Analysis with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga Talagala" />
+    <script src="l12021msc_files/header-attrs/header-attrs.js"></script>
+    <link href="l12021msc_files/countdown/countdown.css" rel="stylesheet" />
+    <script src="l12021msc_files/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# STA 326 2.0 Programming and Data Analysis with R
+## 🎉 Introduction to R, RStudio and R Programming Basics
+### 
+### Dr Thiyanga Talagala
+
+---
+
+
+
+
+
+
+# Today's menu
+
+.pull-left[
+- What is R?
+
+- Why R?
+
+- R and Rstudio.
+
+- Installing R and Rstudio?
+
+- Familiarize with RStudio interface.
+
+- R Studio cloud.
+
+- Using R as a calculator.
+
+- Basic vector operations.
+]
+
+.pull-right[
+&lt;center&gt;&lt;img src="salad.jpeg" height="500px"/&gt;&lt;/center&gt;
+]
+
+---
+
+## What statistical software packages are you familiar with?
+
+
+
+<div class="countdown" id="timer_61ab72b8" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+
+
+---
+
+### R Programming Language
+
+
+- R is a software environment for statistical computing and graphics.
+
+- Language designers: **R**oss Ihaka and **R**obert Gentleman at the University of Auckland, New Zealand.
+
+- Parent language: S
+
+- R is a **functional programming language**. However, R system includes some support for object-oriented programming.
+
+&lt;center&gt;&lt;img src="RobertandRoss.jpg" height="400px" /&gt;&lt;/center&gt;
+
+
+
+
+---
+
+
+&lt;!--You have already mastered Minitab. --&gt;
+
+.pull-left[
+
+### Minitab - Menu driven software
+
+&lt;center&gt;&lt;img src="minitab.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
+&lt;!--Minitab. Commonly used in: social science, marketing, education, sociology, ... Menu-driven statistical software--&gt;
+
+
+]
+
+
+.pull-right[
+
+### R - Scripting language
+
+&lt;center&gt;&lt;img src="rstudiocode.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
+]
+
+---
+
+
+.pull-left[
+
+### Menu driven software
+
+&lt;center&gt;&lt;img src="minitab.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
+&lt;!--Minitab. Commonly used in: social science, marketing, education, sociology, ... Menu-driven statistical software--&gt;
+
+
+
+]
+
+
+.pull-right[
+
+## Pros
+
+- Do not have to remember the commands.
+
+- User friendly.
+
+
+## Cons
+
+- Irritating if there are too many levels of menues to move around.
+
+- Difficult to reproduce results.
+
+
+]
+
+
+---
+
+
+&lt;!--You have already mastered Minitab. --&gt;
+
+.pull-left[
+
+### Scripting language
+
+&lt;center&gt;&lt;img src="rstudiocode.png" height="400px" height="300px"/&gt;&lt;/center&gt;
+
+]
+
+
+.pull-right[
+
+## Pros
+
+- Useful for collaborative research.
+
+- Ideal for reproducible research
+
+
+
+
+## Cons
+
+- The learning curve may be difficult at the start.
+
+
+]
+
+
+
+---
+
+## Why learn R?
+
+- Free and open-source software package
+
+- A large online community that makes it fun to learn
+
+- Latest cutting edge technology
+
+- Easier to update analysis
+
+- Easier to reproduce analysis
+
+- Easier to collaborate with others
+
+- Easier to automate analysis
+
+
+---
+
+background-image: url('ricon.png')
+background-position: right
+background-size: contain
+
+## R 
+
+---
+background-image: url('rmac2.png')
+background-position: right
+background-size: contain
+
+## R environment - macOS
+
+---
+background-image: url('rmac1.png')
+background-position: right
+background-size: contain
+
+## R  environment - macOS
+---
+
+background-image: url('renv.png')
+background-position: right
+background-size: contain
+
+## R environment
+
+---
+background-image: url('rstudio1.png')
+background-position: right
+background-size: contain
+
+## The RStudio IDE
+---
+
+background-image: url('rstudio2.png')
+background-position: right
+background-size: contain
+
+## The RStudio IDE
+
+---
+
+background-image: url('airport.jpg')
+background-position: right
+background-size: contain
+
+## R and RStudio
+
+---
+
+## R and RStudio
+
+.pull-left[
+
+![](airport.jpg)
+]
+
+.pull-right[
+&gt; If R were **an airplane**, RStudio would be **the airport**, providing many, many supporting services that make it easier for you, the pilot, to take off and go to awesome places. Sure, you can fly an airplane without an airport, but having those runways and supporting infrastructure is a game-changer." 
+
+&gt; Julie Lowndes
+
+]
+
+---
+class: inverse, center, middle
+
+# Create a new project
+
+---
+background-image: url('project1.png')
+background-position: center
+background-size: cover
+---
+
+background-image: url('project2.png')
+background-position: center
+background-size: cover
+---
+
+background-image: url('project3.png')
+background-position: center
+background-size: cover
+---
+
+background-image: url('project4.png')
+background-position: center
+background-size: cover
+---
+
+background-image: url('project5.png')
+background-position: center
+background-size: cover
+---
+
+background-image: url('project6.png')
+background-position: center
+background-size: cover
+
+
+---
+
+class: inverse, center, middle
+
+# Basics of R programming
+
+
+---
+
+## R Console
+
+
+```r
+7+1
+```
+
+```
+[1] 8
+```
+
+
+
+
+```r
+rnorm(10) 
+```
+
+```
+ [1] -1.40511266 -1.13719237  0.34209382  2.41609114  0.36378257 -0.32164160
+ [7]  0.83844725  0.02093523  0.84996476  0.81020692
+```
+
+
+---
+
+
+## Variable assignment
+
+
+```r
+a &lt;- rnorm(10)
+a
+```
+
+```
+ [1]  1.18691245  0.08328954 -0.41963793 -0.65670537  0.49847054  0.66276850
+ [7]  0.80383067  0.91023194  1.49788670  0.22347135
+```
+
+--
+
+
+```r
+b &lt;- a*100
+b
+```
+
+```
+ [1] 118.691245   8.328954 -41.963793 -65.670537  49.847054  66.276850
+ [7]  80.383067  91.023194 149.788670  22.347135
+```
+
+--
+
+
+```r
+c &lt;- "corona"
+c
+```
+
+```
+[1] "corona"
+```
+
+---
+
+## Case sensitivity
+
+
+R is case sensitive. The following are all different.
+
+```r
+corona
+
+Corona
+
+CORONA
+
+```
+
+
+---
+
+# Working directory
+
+To check your current working directory
+
+```r
+getwd()
+```
+
+To change the working directory
+
+```r
+setwd("/Users/thiyanga/sta326")
+```
+
+---
+
+
+
+# Data permanency
+
+- All variables are kept in the workspace.
+
+- `ls()` can be used to display the names of the objects which are currently stored within R.
+
+- The collection of objects currently stored is called the **workspace**.
+
+
+```r
+ls()
+```
+
+```
+[1] "a" "b" "c"
+```
+
+---
+
+## Remove objects
+
+- To remove objects the function `rm` is available
+
+
+    
+### Remove specific objects: `rm(x, y, z)`
+    
+    
+
+```r
+rm(a)
+ls()
+```
+
+```
+[1] "b" "c"
+```
+
+### Remove all objects: `rm(list=ls())`
+
+
+```r
+rm(list=ls())
+ls()
+```
+
+```
+character(0)
+```
+
+---
+
+class: inverse, center, middle
+
+# Close the project
+
+
+---
+
+background-image: url('project7.png')
+background-position: center
+background-size: contain
+
+---
+
+
+![](project7.png)
+
+
+At the end of an R session, if you click **save**: the objects are written to a file called **.RData** in the current directory, and the command lines used in the session are saved to a file called **.Rhistory**
+
+
+---
+
+class: inverse, center, middle
+
+# When R is started at later time **from the same directory**.
+
+---
+
+background-image: url('p81.png')
+background-position: center
+background-size: cover
+
+
+---
+
+background-image: url('p82.png')
+background-position: center
+background-size: cover
+
+.pull-left[.full-width[.content-box-yellow[**When R is started at later `time from the same directory` it reloads the `associated workspace` and `commands history.`**]]]
+
+---
+
+background-image: url('project9.png')
+background-position: center
+background-size: cover
+
+--
+.pull-left[.full-width[.content-box-yellow[**When R is started at later `time from the same directory` it reloads the `associated workspace` and `commands history.`**]]]
+
+
+---
+
+## Comment your code
+
+- Each line of a comment should begin with the comment symbol and a single space: # . 
+
+
+```r
+rnorm(10) # This is a comment 
+```
+
+```
+ [1]  0.9261683  0.6221119 -0.7709436 -1.1876052  1.1633972  0.6817871
+ [7]  0.3110528 -0.4376057  0.1807138  0.6948591
+```
+
+```r
+sum(1:10) # Summation of numbers from 1 to 10.
+```
+
+```
+[1] 55
+```
+
+---
+
+
+## Style Guide
+
+- Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread.  -- Hadley Wickham
+
+
+```r
+sum(1:10)#Bad commenting style
+```
+
+```
+[1] 55
+```
+
+```r
+sum(1:10) # Good commenting style
+```
+
+```
+[1] 55
+```
+
+- Also, use commented lines of - and = to break up your file into easily readable sub-sections.
+
+```r
+# Read data ----------------
+
+# Plot data ----------------
+```
+
+To learn more read Hadley Wickham's [Style guide](http://adv-r.had.co.nz/Style.html).
+
+
+---
+
+## Objects in R
+
+
+1. .red[Data structures] are the ways of arranging data.
+
+    - You can create objects, using the left pointing arrow &lt;-
+--
+1. .red[Functions] tell R to do something.
+
+    - A function may be applied to an object.
+
+    - Result of applying a function is usually an object too.
+
+    - All function calls need to be followed by parentheses.
+
+
+```r
+a &lt;- 1:20 # data structure
+sum(a) # sum is a function applied on a
+```
+
+```
+[1] 210
+```
+
+```r
+help.start() # Some functions work on their own.
+```
+
+---
+
+
+### Getting help with functions and features
+
+- R has inbuilt help facility
+
+
+**Method 1**
+
+```r
+help(rnorm)
+```
+
+- For a feature specified by special characters such as `for`, `if`, `[[`
+
+```r
+help("[[")
+```
+- Search the help files for a word or phrase.
+
+```r
+help.search(‘weighted mean’) 
+```
+
+**Method 2**
+
+```r
+?rnorm
+```
+```r
+??rnorm
+```
+
+
+---
+
+background-image: url('dataStructures.png')
+background-position: center
+background-size: contain
+
+## Data structures
+
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
+
+---
+
+
+
+## Data structures
+
+.pull-left[
+
+![](dataStructures.png)
+
+]
+
+.pull-right[
+Data structures differ in terms of,
+
+- Type of data they can hold
+
+- How they are created
+
+- Structural complexity
+
+- Notation to identify and access individual elements
+]
+
+.footer-note[.tiny[.green[Image Credit: ][venus.ifca.unican.es](http://venus.ifca.unican.es/Rintro/dataStruct.html)]]
+
+---
+
+class: inverse, center, middle
+
+# 1. Vectors
+
+
+---
+
+### Vectors
+
+- Vectors are one-dimensional arrays that can hold numeric data, character data, or logical data.
+
+- The function `c` is used to form  vectors. `c` stands for concatenate.
+
+- Data in a vector must only be one type or mode (numeric, character, or logical). You can’t mix modes in the same vector.
+
+
+**Vector assignment**
+
+
+```r
+vector_name &lt;- c(element1, element2, element3) # syntax
+
+```
+
+```r
+x &lt;- c(5, 6, 3, 1 , 100) # example
+```
+
+- assignment operator ('&lt;-'), '=' can be used as an alternative.
+
+- `c()` function is used to create vector.
+
+
+---
+
+## Your turn
+
+.red[What will be the output of the following code?]
+
+```r
+x &lt;- c(5, 6, 3, 1 , 100) 
+x
+y &lt;- c(x, 500, 600)
+y
+```
+
+<div class="countdown" id="timer_61ab7513" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+---
+
+# Types and tests with vectors
+
+
+
+```r
+first_vec &lt;- c(10, 20, 50, 70)
+second_vec &lt;- c("Jan", "Feb", "March", "April")
+third_vec &lt;- c(TRUE, FALSE, TRUE, TRUE)
+fourth_vec &lt;- c(10L, 20L, 50L, 70L)
+```
+
+
+To check if it is a 
+
+- vector: `is.vector()`
+
+
+```r
+is.vector(first_vec)
+```
+
+```
+[1] TRUE
+```
+
+
+- character vector: `is.character()`
+
+
+```r
+is.character(first_vec)
+```
+
+```
+[1] FALSE
+```
+---
+
+.pull-left[
+
+- double: `is.double()`
+
+
+```r
+is.double(first_vec)
+```
+
+```
+[1] TRUE
+```
+
+
+- integer: `is.integer()`
+
+
+```r
+is.integer(first_vec)
+```
+
+```
+[1] FALSE
+```
+
+- logical: `is.logical()`
+
+
+```r
+is.logical(first_vec)
+```
+
+```
+[1] FALSE
+```
+
+
+
+]
+
+.pull-right[
+- length
+
+
+```r
+length(first_vec)
+```
+
+```
+[1] 4
+```
+
+&gt; **Compare `first_vec &lt;- c(10, 20, 50, 70)` and `fourth_vec &lt;- c(10L, 20L, 50L, 70L)`**
+
+
+```r
+is.double(fourth_vec)
+```
+
+```
+[1] FALSE
+```
+
+
+
+```r
+is.integer(fourth_vec)
+```
+
+```
+[1] TRUE
+```
+
+
+
+]
+
+---
+
+## Mathematical operations
+
+
+```r
+sum(first_vec)
+```
+
+```
+[1] 150
+```
+
+```r
+mean(first_vec)
+```
+
+```
+[1] 37.5
+```
+
+```r
+summary(first_vec)
+```
+
+```
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   10.0    17.5    35.0    37.5    55.0    70.0 
+```
+
+**More about `functions`: week 3.**
+
+---
+
+# Coercion
+
+Vectors must be homogeneous. When you attempt to combine different types they will be coerced to the most flexible type so that every element in the vector is of the same type.
+
+Order from least to most flexible
+
+`logical` --&gt; `integer` --&gt; `double` --&gt; `character`
+
+
+```r
+a &lt;- c(3.1, 2L, 3, 4, "GPA") 
+typeof(a) 
+```
+
+```
+[1] "character"
+```
+
+
+```r
+anew &lt;- c(3.1, 2L, 3, 4)
+typeof(anew) 
+```
+
+```
+[1] "double"
+```
+
+---
+
+# Explicit coercion
+
+Vectors can be explicitly coerced from one class to another using the `as.*` functions, if available. For example, `as.character`, `as.numeric`, `as.integer`, and `as.logical`.
+
+
+```r
+vec1 &lt;- c(TRUE, FALSE, TRUE, TRUE)
+typeof(vec1)
+```
+
+```
+[1] "logical"
+```
+
+```r
+vec2 &lt;- as.integer(vec1)
+typeof(vec2)
+```
+
+```
+[1] "integer"
+```
+
+```r
+vec2
+```
+
+```
+[1] 1 0 1 1
+```
+
+
+---
+
+# Your turn
+
+
+.red[Why does the below output NAs?]
+
+
+```r
+x &lt;- c("a", "b", "c")
+as.numeric(x)
+```
+
+```
+[1] NA NA NA
+```
+
+<div class="countdown" id="timer_61ab71fd" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+
+
+---
+
+# Explicit coercion (cont.)
+
+
+
+```r
+x1 &lt;- 1:3
+x2 &lt;- c(10, 20, 30)
+combinedx1x2 &lt;- c(x1, x2)
+combinedx1x2 
+```
+
+```
+[1]  1  2  3 10 20 30
+```
+
+
+
+
+```r
+typeof(x1)
+```
+
+```
+[1] "integer"
+```
+
+```r
+typeof(x2)
+```
+
+```
+[1] "double"
+```
+
+```r
+typeof(combinedx1x2)
+```
+
+```
+[1] "double"
+```
+
+
+---
+
+# Explicit coercion (cont.)
+
+.pull-left[
+
+
+```r
+x1 &lt;- 1:3
+x2 &lt;- c(10, 20, 30)
+combinedx1x2 &lt;- c(x1, x2)
+combinedx1x2 
+```
+
+```
+[1]  1  2  3 10 20 30
+```
+
+
+
+
+```r
+class(x1)
+```
+
+```
+[1] "integer"
+```
+
+```r
+class(x2)
+```
+
+```
+[1] "numeric"
+```
+
+```r
+class(combinedx1x2)
+```
+
+```
+[1] "numeric"
+```
+
+]
+
+.pull-right[
+
+- If you combine a numeric vector and a character vector 
+
+
+```r
+y1 &lt;- c(1, 2, 3)
+y2 &lt;- c("a", "b", "c")
+c(y1, y2)
+```
+
+```
+[1] "1" "2" "3" "a" "b" "c"
+```
+
+]
+
+---
+
+# Name elements in a vector
+
+You can name elements in a vector in different ways. We will learn two of them.
+
+1. When creating it
+
+
+```r
+x1 &lt;- c(a=1991, b=1992, c=1993)
+x1
+```
+
+```
+   a    b    c 
+1991 1992 1993 
+```
+
+2. Modifying the names of an existing vector
+
+
+```r
+x2 &lt;- c(1, 5, 10)
+names(x2) &lt;- c("a", "b", "b")
+x2
+```
+
+```
+ a  b  b 
+ 1  5 10 
+```
+
+Note that the names do not have to be unique. 
+---
+
+# To remove names of a vector
+
+Method 1
+
+
+```r
+unname(x1); x1
+```
+
+```
+[1] 1991 1992 1993
+```
+
+```
+   a    b    c 
+1991 1992 1993 
+```
+
+Method 2
+
+
+```r
+names(x2) &lt;- NULL; x2
+```
+
+```
+[1]  1  5 10
+```
+
+
+---
+
+# Your turn
+
+.red[What will be the output of the following code?]
+
+```r
+v &lt;- c(1, 2, 3)
+names(v) &lt;- c("a")
+v
+```
+
+
+<div class="countdown" id="timer_61ab71ad" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+
+---
+
+# Simplifying vector creation: `:`
+
+1. colon `:` produce regular spaced ascending or descending sequences.
+
+.pull-left[
+
+```r
+ 10:16
+```
+
+```
+[1] 10 11 12 13 14 15 16
+```
+
+```r
+-0.5:7.5
+```
+
+```
+[1] -0.5  0.5  1.5  2.5  3.5  4.5  5.5  6.5  7.5
+```
+
+```r
+7.5: -0.5
+```
+
+```
+[1]  7.5  6.5  5.5  4.5  3.5  2.5  1.5  0.5 -0.5
+```
+
+```r
+-0.5:7.3
+```
+
+```
+[1] -0.5  0.5  1.5  2.5  3.5  4.5  5.5  6.5
+```
+]
+
+.pull-right[
+
+
+```r
+ class(10:16)
+```
+
+```
+[1] "integer"
+```
+
+```r
+class(-0.5:7.5)
+```
+
+```
+[1] "numeric"
+```
+
+```r
+class(7.5:-0.5)
+```
+
+```
+[1] "numeric"
+```
+
+```r
+class(-0.5:7.3)
+```
+
+```
+[1] "numeric"
+```
+
+]
+---
+
+# Simplifying vector creation: `seq`
+
+2. sequence: `seq(initial_value, final_value, increment)`
+
+
+```r
+seq(0.5, 8)
+```
+
+```
+[1] 0.5 1.5 2.5 3.5 4.5 5.5 6.5 7.5
+```
+
+```r
+seq(1,11)
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10 11
+```
+
+```r
+seq(1, 11, length.out=5)
+```
+
+```
+[1]  1.0  3.5  6.0  8.5 11.0
+```
+
+```r
+seq(0, 11, by=2)
+```
+
+```
+[1]  0  2  4  6  8 10
+```
+
+---
+
+# Simplifying vector creation: `rep`
+
+3. repeats `rep()` 
+
+
+```r
+rep(9, 5)
+```
+
+```
+[1] 9 9 9 9 9
+```
+
+```r
+rep(1:4, 2)
+```
+
+```
+[1] 1 2 3 4 1 2 3 4
+```
+
+```r
+rep(1:4, each=2) # each element is repeated twice
+```
+
+```
+[1] 1 1 2 2 3 3 4 4
+```
+
+```r
+rep(1:4, times=2) # whole sequence is repeated twice
+```
+
+```
+[1] 1 2 3 4 1 2 3 4
+```
+
+---
+
+
+# Simplifying vector creation: `rep`
+
+
+```r
+virus &lt;- rep(c("delta", "gamma"), times=3)
+virus
+```
+
+```
+[1] "delta" "gamma" "delta" "gamma" "delta" "gamma"
+```
+
+```r
+virus &lt;- rep(c("delta", "gamma"), times=3, length.out=5)
+virus
+```
+
+```
+[1] "delta" "gamma" "delta" "gamma" "delta"
+```
+
+
+---
+
+# Simplifying vector creation: `rep` (cont.)
+
+**Write the output of the following codes.**
+
+Your turn: 
+
+
+```r
+rep(1:4, each=2, times=3)
+
+rep(1:4, 1:4)
+
+rep(1:4, c(4, 1, 4, 2))
+```
+
+<div class="countdown" id="timer_61ab749b" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+
+---
+
+# Logical operators
+
+.pull-left[
+
+- `&lt;=` less than or equal to
+
+- `&gt;=` greater than or equal to
+
+- `|` or
+
+- `&amp;` and
+
+- `&lt;` less than
+
+- `&gt;` greater than
+
+- `==` equal
+
+]
+
+
+.pull-right[
+
+
+```r
+c(1, 2, 3) == c(10, 20, 3)
+```
+
+```
+[1] FALSE FALSE  TRUE
+```
+
+
+```r
+c(1, 2, 3) != c(10, 20, 3)
+```
+
+```
+[1]  TRUE  TRUE FALSE
+```
+
+
+```r
+1:5 &gt; 3
+```
+
+```
+[1] FALSE FALSE FALSE  TRUE  TRUE
+```
+
+
+```r
+1:5 &lt; 3
+```
+
+```
+[1]  TRUE  TRUE FALSE FALSE FALSE
+```
+
+]
+
+---
+
+## Operators: `%in%` - in the set
+
+
+```r
+a &lt;- c(1, 2, 3)
+b &lt;- c(1, 10, 3)
+a %in% b
+```
+
+```
+[1]  TRUE FALSE  TRUE
+```
+
+
+```r
+x &lt;- 1:10; y &lt;- 1:3
+x; y
+```
+
+```
+ [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```
+[1] 1 2 3
+```
+
+```r
+x %in% y
+```
+
+```
+ [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+
+```r
+y %in% x
+```
+
+```
+[1] TRUE TRUE TRUE
+```
+---
+### Vector arithmetic
+
+
+- operations are performed element by element. 
+
+
+```r
+c(10, 100, 100) + 2 # two is added to every element in the vector
+```
+
+```
+[1]  12 102 102
+```
+--
+- operations between two vectors
+
+
+```r
+v1 &lt;- c(1, 2, 3); v2 &lt;- c(10, 100, 1000)
+v1 + v2
+```
+
+```
+[1]   11  102 1003
+```
+
+--
+
+- Add two vectors of unequal length (length of the longer is an integer multiple of the length of the shorter vector)
+
+
+```r
+longvec &lt;- seq(10, 100, length=10); shortvec &lt;- c(1, 2, 3, 4, 5)
+longvec + shortvec 
+```
+
+```
+ [1]  11  22  33  44  55  61  72  83  94 105
+```
+
+---
+
+- Add two vectors of unequal length (length of the longer is not an integer multiple of the length of the shorter vector)
+
+
+```r
+# gives a warning message when the length of the longer is not an integer multiple of the length of the shorter vector.
+svec &lt;- c(1, 2, 3)
+longvec + svec
+```
+
+```
+ [1]  11  22  33  41  52  63  71  82  93 101
+```
+
+![](console.png)
+
+---
+
+# Your turn
+
+.red[What will be the output of the following code?]
+
+```r
+first &lt;- c(1, 2, 3, 4); second &lt;- c(10, 100)
+first * second
+```
+
+<div class="countdown" id="timer_61ab74b9" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div>
+
+
+
+
+---
+
+# Other vector operations
+
+- Please see the [cheatsheet](/pdf/baser.pdf).
+
+---
+
+# Missing values
+
+Use `NA` or `NaN` to place a missing value in a vector.
+
+
+```r
+z &lt;- c(10, 101, 2, 3, NA)
+is.na(z)
+```
+
+```
+[1] FALSE FALSE FALSE FALSE  TRUE
+```
+
+```r
+y &lt;- c(10, 101, 2, 3, NaN)
+is.na(y)
+```
+
+```
+[1] FALSE FALSE FALSE FALSE  TRUE
+```
+
+
+---
+
+
+
+class: center, middle
+
+## Thank you!
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

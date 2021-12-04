@@ -28,7 +28,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 
 
-|Slides   	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| [R-script](/rscript/rscript1.R) | Problems [Exercise 1](https://thiyangt.github.io/rworkbook/index.html) [Exercise 2](https://thiyangt.github.io/rworkbook/intro.html)	| Answers: Tutorial discussion |
+|[Slides-1](/2021/week0msc.html)  [Slides-2](/2021/week1/l12021msc.html)   	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| [R-script](/rscript/rscript1.R) | Problems [Exercise 1](https://thiyangt.github.io/rworkbook/index.html) [Exercise 2](https://thiyangt.github.io/rworkbook/intro.html)	| Answers: Tutorial discussion |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
