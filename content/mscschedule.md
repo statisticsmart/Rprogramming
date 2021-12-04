@@ -11,16 +11,17 @@ Here's your roadmap for the semester!
 - <i class="fas fa-book-reader"></i> Readings should be completed ***before*** each class session
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
-Course outline: [Click here]()
+📝 Course outline: [Click here](/msc/STA_517_3_0_Programming_and_Data_Analysis_with_R_MSc_2020.pdf)
 
 
 #### Week 0: R and RStudio Installation
 
 Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :clap:
 
-To participate in the lectures, please bring a laptop with R and RStudio installed. 
+**To participate in the lectures, please bring a laptop with R and RStudio installed.** 
 
-[Click here to view the installation guideline](https://r4fun.netlify.app/blog/topic1/)
+|💻 [Click here to view the installation guideline](https://r4fun.netlify.app/blog/topic1/)|
+|:-:	|
 
 
 #### Week 1: Introduction to R, RStudio and R Programming Basics
