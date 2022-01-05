@@ -1,0 +1,4 @@
+---
+title: Individual Projects 2021
+---
+

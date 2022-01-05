@@ -1,5 +1,5 @@
 ---
-title: Individual Projects
+title: Individual Projects 2020
 ---
 
 
