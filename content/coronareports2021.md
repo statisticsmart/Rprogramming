@@ -5,7 +5,7 @@ title: Individual Projects 2021
 | 	|  	|  	|   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| [Cambodia](/individualproject2021/Shashini/AS2018471/AS2018471Cambodia.html)[Cambodia-Rmd](/individualproject2021/Shashini/AS2018471/AS2018471Cambodia.Rmd)	|  	|  	|   |  |
+| [Cambodia](/individualproject2021/Shashini/AS2018471/AS2018471Cambodia.html) [Cambodia-Rmd](/individualproject2021/Shashini/AS2018471/AS2018471Cambodia.Rmd)	|  	|  	|   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 | 	|  	|  	|   |  |
