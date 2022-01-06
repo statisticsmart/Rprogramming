@@ -1,0 +1,529 @@
+---
+title: "Covid Cases Analysis - Netherlands"
+author: "Tharusha Nonis AS2018472"
+output: html_document
+---
+
+```{r setup, include=FALSE }
+knitr::opts_chunk$set(echo = FALSE , warning = FALSE , message = FALSE ,comment = NA)
+```
+
+
+ 
+
+
+```{r results= "hide"}
+library(sta3262)
+library(coronavirus)
+library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(skimr)
+library(plyr)
+library(gganimate)
+library(gifski)
+library(ggplot2)
+library(plotly)
+library(lubridate)
+
+data(coronavirus)
+head(coronavirus) #O
+tail(coronavirus)  #O
+glimpse(coronavirus) #O
+skim(coronavirus) #
+
+X<- coronavirus %>% mutate(cases.abs =abs(cases))
+Y<-X %>% pivot_wider(names_from = type, values_from = cases.abs)
+Y
+RScoronavirus<-Y
+RScoronavirus #new data set with all 3 tyoes as three sperate columns with positive figures and including NAs
+
+sum(is.na(RScoronavirus$confirmed)) #O
+
+unique(RScoronavirus$province)
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~Netherland~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#confirmed all countries
+
+
+Confirmed_corona <- select(RScoronavirus,date,country,confirmed)
+#confirmed Netherlands
+Confirmed_corona_Netherlands <- select(RScoronavirus,date,country,confirmed) %>%filter(country=="Netherlands")
+Confirmed_corona_Netherlands[is.na(Confirmed_corona_Netherlands)]<-0
+Confirmed.Netherlands<-aggregate(Confirmed_corona_Netherlands["confirmed"], by=Confirmed_corona_Netherlands["date"], sum, na.rm=TRUE)
+class(Confirmed.Netherlands)
+Confirmed.Netherlands
+
+
+#recovered netherlands
+Recovered_corona_Netherlands <- select(RScoronavirus,date,country,recovered) %>%filter(country=="Netherlands")
+Recovered_corona_Netherlands[is.na(Recovered_corona_Netherlands)]<-0
+Recovered.Netherlands<-aggregate(Recovered_corona_Netherlands["recovered"], by=Recovered_corona_Netherlands["date"], sum, na.rm=TRUE)
+Recovered.Netherlands
+
+
+#death_netherlands
+Death_corona_Netherlands <- select(RScoronavirus,date,country,death) %>%filter(country=="Netherlands")
+Death_corona_Netherlands[is.na(Death_corona_Netherlands)]<-0
+Death.Netherlands<-aggregate(Death_corona_Netherlands["death"], by=Death_corona_Netherlands["date"], sum, na.rm=TRUE)
+Death.Netherlands
+
+
+
+#active netherland
+
+ NA1<- left_join(Confirmed.Netherlands, Recovered.Netherlands, by= "date")
+NetherlandsALL <- left_join(NA1,Death.Netherlands, by = "date")
+NetherlandsALL <- mutate(NetherlandsALL, active.daily= (confirmed-(recovered+death)))
+NetherlandsALL[,"active"] <- cumsum(NetherlandsALL$active.daily)
+
+Active.Netherlands<- NetherlandsALL %>% select(date,active)
+
+```
+
+<p align="center">
+![](https://i1.wp.com/tnc.news/wp-content/uploads/2020/04/website-se-7things.png?resize=1200%2C580&ssl=1)
+
+</p>
+
+
+
+# **1. Introduction**
+
+
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/1280px-Flag_of_the_Netherlands.svg.png){height=15%, width=15%}
+
+\
+**Country** &nbsp;- Netherlands\
+**Capital** &nbsp;- Amersrtordam\
+**Continent** &nbsp;- Europe\
+**Population** &nbsp;- 17,134,872 people\
+**Offical Language** &nbsp;- Dutch\
+
+The Netherlands is a country located in Northwestern Europe. The country bears a massive population density. Even though the population is growing drastically, with a high percentage over age 65, Amsterdam has managed to secure its position as one of the liveliest centres of international youth culture.
+
+Netherlands is enriched with an advanced economy, proving that the land size is no longer a bottleneck for the economic persistence of a country. In 2020 GDP per capita (Gross Domestic Product per capita) was reported to be 52,304 USD, and the country stays among the top 15 countries on the world’s GDP per capita rankings. It is not only the economy that amazes the world but also the Dutch health system. Netherlands is regularly rated top among the nations that have the most exemplary healthcare systems.\
+
+It has been one and half years since that entire world started struggling with Covid 19. Even the powerful developed countries went through a pretty hectic time with their health and economy due to the rapid spread of the corona pandemic. Undoubtedly, it is clear that every regime of each country is doing their level best to mitigate the threat and move ahead. This analysis focuses on discussing the past and prevailing situation of pandemics and how the Netherlands has managed to deal with it so far. 
+
+
+### **1.1 Location**
+
+```{r Loaction}
+Location<- RScoronavirus%>% filter(country=="Netherlands")
+Nlocation<-subset(Location,long>0)
+graph<-plot_geo(Nlocation, lat=~lat, lon=~long,marker = list(color = "fuchsia"),
+    type = 'scattermapbox')%>% layout(title= "World Map Location of Netherlands") %>%layout(
+    mapbox = list(
+      style = 'open-street-map',
+      zoom =2.5))
+graph
+
+
+```
+
+### **1.2 Climate Condition of Netherlands**
+
+![](https://dutchreview.com/wp-content/uploads/DutchReview_rain.jpg){height=60%, width=60%}
+
+Even in its name, it is reflected that what it is meant to be located beneath the actual sea level. Netherlands is below its sea level. Netherland is famous for a moderate oceanic climate influenced by North sea and Atlantic Ocean. Coastal areas experience more sunlight than the rest of the country.
+
+Nevertheless, Rain is common throughout the year, and no dry seasons have ever been experienced so far. The coast is constantly exposed to heavy rain showers right after the summer and during autumn. Daytime temperature is reported to vary between 17°C – 20°C, while it varies between 2°C-6°C in winter. Anyhow, the north end of the country experiences relatively a lower temperature compared to the southern part. 
+
+| **Year**  | **Lowest Average Temperature(Celcius)** |       
+|-------|-------------------------------------|
+| 1962  | 6.7                                 |
+| 1955  | 6.8                                 |
+| 1917  | 6.9                                 |
+| 1958  | 7                                   |
+| 1941  | 7                                   |
+\
+
+| Year | Highest Average Temperature (Celcius) |
+|------|---------------------------------------|
+| 2007 | 11.7                                  |
+| 2014 | 11.2                                  |
+| 2018 | 11.1                                  |
+| 2011 | 11                                    |
+| 2009 | 10.8                                  |
+
+Source https://www.knmi.nl/home
+
+Even though the average values of temperature in coldest winters and warmest springs declared a decent set of figures. As the coldest day ever measured, 27 January 1942 was reported to be -27.4°C. Average annual rainfall is around 790mm. However, People used to complain about the weather of Netherlands because of its unpredictability.  
+\
+For global warming and corresponding climatic changes, rising sea level has been a crucial challenge for entire Dutch territory for decades. Climate change also causes numerous issues in public health as well. According to the Dutch health institute (RIVM)  when persistent hot weather is being experienced for a time, people are likely to get infectious diseases and allergies. 
+
+
+### **1.3 Lockdown status of the country**
+
+![](https://cdn.vox-cdn.com/uploads/chorus_asset/file/22261295/GettyImages_1230764004.jpg){heigh=60%, width=60%}
+
+Even now inside the country Covid 19 is an ongoing pandemic. It was reported that virus was confirmed to spread to Netherlands on 27th of Feb 2020. Around March the confirmed covid cases amount started increasing to a considerable extent. Consequently People were asked to work from home and all the universities, sport events and physical meetings over 100 were forbidden. 
+
+
+#### Related News
+
+* Euro news stated a news that a few groups in Netherlands were violently protesting against COVID !9 restrictions. This news was published  on 13th of September 2021.
+[Source: Euro News](https://www.euronews.com/2021/09/13/dutch-authorities-investigate-images-of-covid-19-protesters-in-nazi-clothing)
+
+* Vaccination became compulsory to bars, resturents and other venues. It was reported that Dutch protesters march through the Hague against “corona Pass”. This news was stated on 28th of September 2021
+[Source: The Guardian](https://www.theguardian.com/world/2021/sep/25/dutch-protesters-march-through-the-hague-against-corona-pass)
+
+
+
+### **1.4 Actions taken by the state regime**
+
+
+#### **2020**
+
+* As the first Covid rise took place in Netherlands in March 2020 along with deaths, Government and RIVM encouraged everyone to work from as much as possible. Further it was stated that all physical encounters over 100 people are forbidden as well. As a result, of that all Dutch universities would suspend all physical teachings until 1st of April.
+
+* 13th of March state regime cancelled all flights from China, Iran, Italy and South Korea ; The countries with highest covid cases reported for two weeks.
+
+* When the country is hit by the second covid wave, from oct 14, a partial lockdown was imposed due to the drastic rise of covid cases reported in recent weeks.
+Once again, cafes, restaurants and bars were to be closed.
+
+* As the December of 2020 started, it was announced that wearing masks are compulsory to everyone
+
+#### **2021**
+
+* After Christmas 2020 European countries started vaccination, Netherlands were looking forward to starting vaccination on 8th of January 2021. By 9th of January 30,000 health care workers were fully vaccinated. By 26th of January over 173000 people were able to be vaccinated. 
+
+* On 23th of January A curfew was introduced by government. Curfew was imposed between 9pm to 4.30 pm. However, curfew exclusion was also introduced for argent works and essential trips such as medical emergencies, essential jobs and deliveries.
+
+* 5th of June Covid restrictions were lifted up and a number of new cases increased extremely. Therefore, regime reintroduced the restrictions.   
+
+
+
+```{r results= "hide"}
+#confirmed between countries
+#Belgium
+countries_vec1<-RScoronavirus %>% select(date,country,confirmed,death,recovered)%>% filter (country=="Belgium") 
+countries_vec1[is.na(countries_vec1)]<-0
+Belgium<-aggregate(countries_vec1[ ,3:5], FUN="sum", by=list(as.Date(countries_vec1$date)))
+
+#Romania
+countries_vec2<- RScoronavirus %>% select(date,country,confirmed,death,recovered)%>%
+  filter(country=="Romania")
+countries_vec2[is.na(countries_vec2)]<-0
+Romania<- aggregate(countries_vec2[,3:5], FUN = "sum", by= list(as.Date(countries_vec2$date)))
+Romania
+
+
+#czechia
+countries_vec3<- RScoronavirus %>% select(date,country,confirmed,death,recovered)%>%
+  filter(country=="Czechia")
+ countries_vec3[is.na(countries_vec3)]<-0
+ Czechia<- aggregate(countries_vec3[,3:5], FUN = "sum", by= list(as.Date(countries_vec3$date)))
+
+#Greeze
+countries_vec4<- RScoronavirus %>% select(date,country,confirmed,death,recovered)%>%
+  filter(country=="Greece")
+ countries_vec4[is.na(countries_vec4)]<-0
+ Greece<- aggregate(countries_vec4[,3:5], FUN = "sum", by= list(as.Date(countries_vec4$date)))
+ Greece$recovered[Greece$Group.1=="2020-12-04"]<-0
+Greece
+
+ #Final
+BelgiumALL<-mutate(Belgium, active.daily= (confirmed= (death+recovered)))
+BelgiumALL                 
+ BelgiumALL[,"active"]<-cumsum(BelgiumALL$active.daily)
+
+RomaniaALL<-mutate(Romania, active.daily= (confirmed= (death+recovered)))
+RomaniaALL                 
+ RomaniaALL[,"active"]<-cumsum(RomaniaALL$active.daily)   
+   
+CzechiaALL<-mutate(Czechia, active.daily= (confirmed= (death+recovered)))
+CzechiaALL
+CzechiaALL[,"active"]<-cumsum(CzechiaALL$active.daily)
+ 
+GreeceALL<-mutate(Greece, active.daily= (confirmed= (death+recovered)))
+GreeceALL
+GreeceALL[,"active"]<-cumsum(GreeceALL$active.daily)
+ 
+    #`~~~~~~~~~~~~~~~~~~~~~~~~~~~Recovered~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+
+```
+
+# 2. **Analysis**
+
+
+
+```{r Netherland all}
+library(kableExtra)
+NetherlandsALL %>%kbl() %>% kable_paper() %>% 
+  add_header_above(c("Covid19 Statistics Netherlands"= 6)) %>%scroll_box(width = "100%", height = "300px")
+
+```
+
+
+### **Netherland daily confirmed Covid cases**
+
+We can clearly see the rice caused by the second Covid wave by which Netherlands was hit mid of July 2020.When the 2020 comes to end ,in December the highest confirmed covid case rate was measured.  Then the next drastic rise can be seen in 2021 in the month of July. This was caused due to the lift up of prevailing covid restrictions in June.  
+```{r}
+
+#nETHERLAND cOnfired cases
+Fig.Nether.conf<- plot_ly(Confirmed.Netherlands,x=~date, y=~confirmed, name='Cases confirmed', type='scatter',mode='marker',color=I("#FFC300")) %>% layout(title = 'Netherland Covid Cases Reported Daily Basis-Figure 1', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))
+Fig.Nether.conf
+```
+
+
+
+```{r}
+library(vtable)
+st(Confirmed.Netherlands)
+```
+
+\
+
+### **Netherland daily recovered Covid cases**
+
+
+When the vaccination programs are being continuously executed we can see the rise of recovered cases respectively. Though April stated a massive number of active cases, Netherlands managed to come with the highest number of recovered cases in the same month as well
+
+```{r}
+Fig.Nether.rec<- plot_ly(Recovered.Netherlands,x=~date, y=~recovered, name='Cases recovered', type='scatter',mode='marker',color=I("#21FC48")) %>% layout(title = 'Netherland Covid Recovered Cases Reported Daily Basis-Figure 2', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))
+Fig.Nether.rec
+
+st(Recovered.Netherlands)
+```
+
+
+
+
+### **Netherland daily Covid death cases**
+
+The fact that is clearly seen here is that when the country faced a new threat it was quite challenging to handle and come up with solutions since the threat is new. But when moving ahead they have been able to mitigate the risk pretty decently. Though the amount of confirmed cases rised, Netherlands could manage to keep the death count pretty low.
+
+```{r}
+Fig.Nether.death<- plot_ly(Death.Netherlands,x=~date, y=~death, name='Deaths', type='scatter',mode='marker',color=I("#FC3121")) %>% layout(title = 'Netherland Covid Deaths Reported Daily Basis-Figure 3', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Deaths'))
+Fig.Nether.death
+
+st(Death.Netherlands)
+```
+
+
+
+```{r results="hide"}
+
+#Figure netherland Active cases
+
+```
+### **Netherland total active cases**
+```{r Fig.Nether.Active}
+Fig.Nether.Active<- plot_ly(Active.Netherlands,x=~date, y=~active, mode='markers',color=I("#FC21DC")) %>% layout(title = 'Netherland Covid Active cases-Figure 4', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Active'))
+Fig.Nether.Active
+```
+
+## 2.2 Local Comparison
+
+
+### **Comparison between confirmed and deaths**
+
+
+```{r}
+fig.N.con.death <- plot_ly(NetherlandsALL, x = ~date, y = ~confirmed, name = 'Confirmed', type = 'scatter', mode = 'lines', color=I("#FFC300"))
+
+fig.N.con.death <-fig.N.con.death%>% add_trace( y = ~death, name = 'Death', type = 'scatter', mode = 'lines', color=I("#FC3121"))%>% layout(title = 'Local comparison-Figure 5', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))%>% layout(autosize = F, width = 1000, height = 500) 
+fig.N.con.death
+```
+
+
+
+
+### **Comparison between death and recovered**
+
+
+
+```{r}
+fig.N.dea.rec<- plot_ly(NetherlandsALL, x = ~date, y = ~recovered, name = 'Recovered', type = 'scatter', mode = 'lines', color=I("#21FC48"))
+
+fig.N.dea.rec <-fig.N.dea.rec%>% add_trace( y = ~death, name = 'Death', type = 'scatter', mode = 'lines', color=I("#FC3121"))%>% layout(title = 'Local comparison-Figure 6', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))%>% layout(autosize = F, width = 1000, height = 500) 
+fig.N.dea.rec
+```
+
+
+
+
+
+
+```{r results="hide"}
+
+#neth
+date.<-c(select(NetherlandsALL,date))
+con.neth<-c(select(NetherlandsALL,confirmed))
+rec.neth<-c(select(NetherlandsALL,recovered))
+dea.neth<-c(select(NetherlandsALL,death))
+act.neth<-c(select(NetherlandsALL,active))
+
+#betgium
+con.bel<-c(select(BelgiumALL,confirmed))
+rec.bel<-c(select(BelgiumALL,recovered))
+dea.bel<-c(select(BelgiumALL,death))
+act.bel<-c(select(BelgiumALL,active))
+
+#Czech
+con.cze<-c(select(CzechiaALL,confirmed))
+rec.cze<-c(select(CzechiaALL,recovered))
+dea.cze<-c(select(CzechiaALL,death))
+act.cze<-c(select(CzechiaALL,active))
+
+#greeece
+con.gre<-c(select(GreeceALL,confirmed))
+rec.gre<-c(select(GreeceALL,recovered))
+dea.gre<-c(select(GreeceALL,death))
+act.gre<-c(select(GreeceALL,active))
+
+#romania
+con.rom<-c(select(RomaniaALL,confirmed))
+rec.rom<-c(select(RomaniaALL,recovered))
+dea.rom<-c(select(RomaniaALL,death))
+act.rom<-c(select(RomaniaALL,active))
+
+
+####confirmed comparison
+confirmed.compared<-data.frame(date.,con.bel,con.cze,con.gre,con.neth,con.rom)
+colnames(confirmed.compared)<-c('date','Belgium','Czechia','Greece','Netherlands','Romania')
+confirmed.compared
+
+recovered.compared<-data.frame(date.,rec.bel,rec.cze,rec.gre,rec.neth,rec.rom)
+colnames(recovered.compared)<-c('date','Belgium','Czechia','Greece','Netherlands','Romania')
+recovered.compared
+
+death.compared<-data.frame(date.,dea.bel,dea.cze,dea.gre,dea.neth,dea.rom)
+colnames(death.compared)<-c('date','Belgium','Czechia','Greece','Netherlands','Romania')
+death.compared
+
+active.compared<-data.frame(date.,act.bel,act.cze,act.gre,act.neth,act.rom)
+colnames(active.compared)<-c('date','Belgium','Czechia','Greece','Netherlands','Romania')
+active.compared
+
+```
+
+
+## **2.3 Comparison with other countries**
+
+
+
+```{r}
+st(confirmed.compared)
+```
+
+
+### **Confirmed Cases**
+
+```{r}
+####confirmed comparison
+fig.comfirmed.all <- plot_ly(confirmed.compared, x = ~date, y = ~Belgium, name = 'Belgium', type = 'scatter', mode = 'lines', color=I("Blue"))
+fig.comfirmed.all <-fig.comfirmed.all%>% add_trace( y = ~Czechia, name = 'Czechia', type = 'scatter', mode = 'lines', color=I("brown"))
+fig.comfirmed.all <-fig.comfirmed.all%>% add_trace(y = ~Greece, name = 'Greeze', type = 'scatter', mode = 'lines', color=I("black"))
+fig.comfirmed.all <-fig.comfirmed.all%>% add_trace( y = ~Romania, name = 'Romania', type = 'scatter', mode = 'lines', color=I("pink"))
+fig.comfirmed.all <-fig.comfirmed.all%>% add_trace(y = ~Netherlands, name = 'Netherlands', type = 'scatter', mode = 'markers+lines', color=I("yellow")) %>% layout(title = 'Daily Confirmed Cases Comparison Among Five Selected Countries-Figure 7', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))%>% layout(autosize = F, width = 1000, height = 500) 
+fig.comfirmed.all
+
+
+```
+
+
+
+### **Recovered Cases**
+
+```{r rECOVERED COMPARISON}
+
+#rECOVERED COMPARISON
+fig.recovered.all <- plot_ly(recovered.compared, x = ~date, y = ~Belgium, name = 'Belgium', type = 'scatter', mode = 'lines', color=I("Blue"))
+
+fig.recovered.all <-fig.recovered.all%>% add_trace( y = ~Czechia, name = 'Czechia', type = 'scatter', mode = 'lines', color=I("brown"))
+
+fig.recovered.all <-fig.recovered.all%>% add_trace(y = ~Greece, name = 'Greeze', type = 'scatter', mode = 'lines', color=I("black"))
+
+fig.recovered.all<-fig.recovered.all%>% add_trace( y = ~Romania, name = 'Romania', type = 'scatter', mode = 'lines', color=I("pink"))
+
+fig.recovered.all <-fig.recovered.all%>% add_trace(y = ~Netherlands, name = 'Netherlands', type = 'scatter', mode = 'markers+lines', color=I("yellow")) %>% layout(title = 'Daily Recovered Cases Comparison Among Five Selected Countries-Figure 8', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))%>% layout(autosize = F, width = 1000, height = 500) 
+
+fig.recovered.all
+```
+
+### **Death Cases**
+```{r Death compared}
+
+#Death compared
+fig.death.all <- plot_ly(death.compared, x = ~date, y = ~Belgium, name = 'Belgium', type = 'scatter', mode = 'lines', color=I("Blue"))
+
+fig.death.all <-fig.death.all%>% add_trace( y = ~Czechia, name = 'Czechia', type = 'scatter', mode = 'lines', color=I("brown"))
+
+fig.death.all <-fig.death.all%>% add_trace(y = ~Greece, name = 'Greeze', type = 'scatter', mode = 'lines', color=I("black"))
+
+fig.death.all<-fig.death.all%>% add_trace( y = ~Romania, name = 'Romania', type = 'scatter', mode = 'lines', color=I("pink"))
+
+fig.death.all <-fig.death.all%>% add_trace(y = ~Netherlands, name = 'Netherlands', type = 'scatter', mode = 'markers+lines', color=I("yellow")) %>% layout(title = 'Daily Deaths Comparison Among Five Selected Countries-Figure 9', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))%>% layout(autosize = F, width = 1000, height = 500) 
+
+fig.death.all
+```
+
+
+
+
+
+### **Active Cases**
+
+```{r Active comparison}
+#Death compared
+fig.active.all <- plot_ly(active.compared, x = ~date, y = ~Belgium, name = 'Belgium', type = 'scatter', mode = 'lines', color=I("Blue"))
+
+fig.active.all <-fig.active.all%>% add_trace( y = ~Czechia, name = 'Czechia', type = 'scatter', mode = 'lines', color=I("brown"))
+
+fig.active.all <-fig.active.all%>% add_trace(y = ~Greece, name = 'Greeze', type = 'scatter', mode = 'lines', color=I("black"))
+
+fig.active.all<-fig.active.all%>% add_trace( y = ~Romania, name = 'Romania', type = 'scatter', mode = 'lines', color=I("pink"))
+
+fig.active.all<-fig.active.all%>% add_trace(y = ~Netherlands, name = 'Netherlands', type = 'scatter', mode = 'lines', color=I("yellow")) %>% layout(title = 'Active Cases Comparison Among Five Selected Countries-Figure 10', xaxis = list(title = 'Date'), yaxis = list(title = 'Number of Cases'))
+
+fig.active.all
+```
+
+In the previous comparisons though it seemed that Netherland managed to conrol the situation, the plot wich indicates total active cases condradicts that. Here Netherlands is recognied to be the only country in which still confirmed cases are increasing. 
+
+
+
+# 3. **Discussion and Conclusions**
+Looking over to the actions taken by the Dutch government it is evident that they  were taking all the necessary actions to mitigate the situation. But several collapses and wrong decisions taken during the time when corona virus was likely to settle down lead to a drastic increase of active cases. The vaccination program has been able to mitigate the risk by a massive amount. When looking over to figures, which are shown after January 2021, it can be clearly acknowledged. 
+In order to handle the vaccination program pretty efficiently all the health sector works were given prior to native citizens. Though the plotted statistics still indicates an increasing move of active cases, Government has been successfully able to reduce the amount of death cause by Covid 19. 
+Comparing to the other Europe countries selected in the analysis Netherlands has failed to manage its daily-confirmed Covid cases rate. It might be because of the lack of support given by the people. Even now it was reported that anti covid restrictions protests are being conduced on streets against the state regime. 
+
+# 4. **References**
+
+* 27 09 2021. [Online]. Available: https://www.worldometers.info/gdp/gdp-per-capita/.
+M. Willem, "www.britannica.com," Updated 24.09.2021. [Online]. Available: https://www.britannica.com/place/Netherlands/Economy. [Accessed 28 09 2021].
+
+* wise.com, 27 09 2021. [Online]. Available: https://wise.com/us/blog/healthcare-system-in-the-netherlands.
+
+* https://www.theguardian.com/world/2021/sep/25/dutch-protesters-march-through-the-hague-against-corona-pass
+
+* https://www.euronews.com/2021/09/13/dutch-authorities-investigate-images-of-covid-19-protesters-in-nazi-clothing
+
+* iamexpat. [Online]. Available: https://www.iamexpat.nl/expat-info/the-netherlands/dutch-weather. [Accessed 25 09 2021].
+
+* KMNI. [Online]. Available: https://www.knmi.nl/nederland-nu/klimatologie/lijsten/seizoensextremen/zomer. [Accessed 22 09 2021].
+
+* eatheronline. [Online]. Available: https://www.weatheronline.co.uk/reports/climate/The-Netherlands.htm. [Accessed 24 09 2021].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

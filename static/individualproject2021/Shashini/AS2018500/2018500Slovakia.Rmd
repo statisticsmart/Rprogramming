@@ -1,0 +1,507 @@
+---
+title: "**COVID-19 Pandemic Situation in Slovakia**"
+author: "Manoj Priyashad (AS2018500)"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## **About COVID-19**
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. 
+![](GettyImages-1283428488-1320x880.jpg) 
+
+
+## **Brief introduction of Slovakia**
+
+
+### Background
+Slovakia is a landlocked country in Central Europe. Neighboring countries include Austria, Czech Republic, Hungary, Poland, and Ukraine. The geography of Slovakia is known for its mountains, with the Carpathian Mountains extending across most of the northern half of the country. The government system is a parliamentary democracy; the chief of state is the president, and the head of government is the prime minister. Slovakia has a mixed economic system in which there is a variety of private freedom, combined with centralized economic planning and government regulation. Slovakia is a member of the European Union (EU).
+
+
+
+### Visualization of the location
+Slovakia is a landlocked country located in Eastern Europe. Comparatively, it is about twice the size of the state of New Hampshire with a total area of 48,845 sq km (18,859 sq mi). Slovakia shares boundaries with Poland (on the N ), Ukraine (on the E ), Hungary (on the S ), and Austria and the Czech Republic (on the W ), and has a total boundary length of 1,355 km (842 mi). Slovakia's capital city, Bratislava, is located on the southwestern border of the country.
+
+```{r, message=FALSE, warning=FALSE}
+
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+slovakia_corona <- coronavirus %>% filter(country == "Slovakia")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+p <- ggplot()+ 
+  geom_polygon(data = wrld_simpl, 
+               aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+
+p + geom_point(
+  data =slovakia_corona, aes(x = long, y = lat), color = "red" , size = 1
+)
+
+
+
+```
+
+### Climate condition of Slovakia
+The climate of the Slovakia can be described as typical European continental influenced climate with warm, dry summers and fairly cold winters. January is the coldest month with daytime temperatures usually around zero, but in some cases winter months can be very cold with temperatures far below zero and strong, cold northeasterly winds, called Bora, especially in the mountainous regions. Heavy snowfall or even snowstorms are also possible on some days there; the yearly average number of days with snow is less than 40 in the low-land regions and up to 120 days in the mountainous regions of Slovakia.
+![](winter.jpg)
+
+In summer daytime temperatures reach 20-25°C, but sometimes quite higher, 30°C or more. In most of the time is dry weather with sunny spells, although sometimes heavy Thunderstorms can occur at the end of the day, especially in the mountainous regions. July is the warmest month with an average Temperature of 22°C. Annual Precipitation varies from 400 mm in the southern lowland areas, and up to 1000 mm in the mountainous regions.
+
+The weather is best May-September, when days are warm and the nights are cool, although it rains more in Spring than in summer. Autumn and Winter are usually a little chilly and wet, sometimes snowy and often foggy, especially in the mountainous regions.
+
+### Lock-down status of Slovakia
+Foreigners who have entered the Schengen area legally may enter Slovakia through its internal borders with Austria, Czechia, Hungary or Poland, as well as through internal air borders (border crossings at airports in Slovakia for flights from within the Schengen Area) under the condition of compliance with quarantine measures in accordance with the current Public Health Authority Decree. 
+
+The following persons can enter Slovakia via its external border (border with Ukraine as well as air borders for flights from outside the Schengen Area) under the condition of compliance with quarantine measures:
+
+* persons related to a Slovak citizen or to a temporary/permanent resident in Slovakia, i.e. spouse,    minor child, parent of a minor child, 
+* persons with a valid residence in Slovakia and holders of a national visa issued by the embassy of the  Slovak Republic,
+* persons who by meeting conditions stipulated by law are not required to obtain a temporary residence for up to 90 days from the beginning of their stay in Slovakia (temporary residence types: study, employment, special activity, research and development, a person with long-term residence status in another member state). The purpose of their stay must be demonstrated by credible documents when entering Slovakia.
+* persons who meet conditions for exemptions specified in Art. 6 - 8 of the valid Public Health Authority   Decree (e.g. transiting persons, persons providing care of close relatives),
+* residents of Albania, Armenia, Australia, Azerbaijan, Bosnia and Herzegovina, Brunei, Canada, Japan, Jordan, New Zealand, Qatar, Moldova, Saudi Arabia, Serbia, Singapore, South Korea, Ukraine, China (special administrative regions of China: Hong Kong, Macau), Kosovo, Taiwan,
+* persons who have received the last recommended dose of one of the COVID-19 vaccines authorized in the EU no later than 14 days before entering the EU+ region. (Pfizer/BioNTech [Comirnaty], Moderna, AstraZeneca, Johnson & Johnson [Janssen])
+EU citizens and their family members.
+
+### Actions taken by the government
+The measures of the Government of the Slovak Republic, the Chief Hygienist of the Slovak Republic and the Ministry of Health of the Slovak Republic were in accordance with the commitments of the Slovak Republic to respect and protect the right to health and life; to ensure, that the public health system has sufficient staff members, protection equipment and materials to provide health care for all people.
+Based on the designed scenarios of the impact of the COVID-19 pandemic, the most vulnerable groups at risk, the tools to prevent an increase in mortality and a decrease in quality of life were identified. The groups most at risk of COVID-19 include following: elderly people, homeless people, people at risk of domestic violence, families with children living in poverty, people with disabilities and marginalized communities.
+
+* Exemption of wages from social and health contributions and from income tax
+
+ * The exemption of wages from social and health contributions and from income tax for employees who cannot work because of government measures. The measure is aimed at employers who have had to close down their businesses or have lost orders due to the government's decision.
+
+* Simplification of the conditions and procedure for granting aid for job maintenance also for small and medium-sized enterprises
+
+ * The aid for job maintenance is regulated by Section 50k of the Act on Employment Services.Currently there is no legal entitlement to the aid. The aid may be granted to an employer who has maintained jobs despite lasting and serious operational reasons specified in a written agreement with the employee representatives. After an agreement with the Office of Labour, Social Affairs and Family, the employer will temporarily restrict their business activities in such a way that the employees will not be assigned work in the amount of at least 6% and at most 40% of the specified weekly working time (i.e. the employees will work only 3 days a week).
+
+ * The monthly amount of the aid is set as 50% of the employee's wage compensation, but not more than 60% of the average wage of an employee in the Slovak economy for the first to third quarter of the calendar year preceding the calendar year in which the aid is granted.
+
+ * The aid is granted for a maximum of 12 months. The aid is granted for the days during which the employee received wage compensation, up to a maximum of 120 days in total, if the agreement on granting the aid was concluded for a period of 12 months. If the agreement was concluded for a shorter period, the total number of days for which the aid is granted is reduced proportionally.
+
+
+ * The companies must have at least three employees, must not be employment agencies, or be active in certain specified areas, such as arms trading.
+
+* Changes in the conditions for claiming the nursing benefit (care for a family member)
+
+ * A so-called "special inability to work" should be introduced. If one parent claims this, he or she is entitled to 80% of the average wage. From the first day, the nursing benefit would be paid by the Social Insurance Company.
+
+ * If the child has only one parent or if both parents work in the healthcare sector or in 24-hour companies, the introduction of a voucher worth EUR 600 is being considered. The voucher should cover the monthly expenses of a babysitter.
+
+ * The Social Insurance Company has also informed that, in accordance with the decision of the competent authorities on the closure of schools, it will grant the nursing benefit for the care of a child until the age of 11 even for more than 10 days.
+
+
+## **Exploratory Data Analysis**
+
+Following outputs are given the summary of the Slovakia coronavirus data. The 1773 observations are taken from 22 January 2020. There are 45 obsevations ommitted because they are missing values. Also data set is contained with missing values and they are converted to the positive values.
+
+```{r, message=FALSE, warning=FALSE}
+
+slovakia_corona$cases <- abs(slovakia_corona$cases) # convert minus values to positive values
+new_slovakia_corona <- filter(slovakia_corona, cases >= 0) # remove NA values
+
+head(new_slovakia_corona)
+summary(new_slovakia_corona)
+
+confirmed_cases_slovakia <- new_slovakia_corona %>%  filter(type=="confirmed")
+
+recovered_cases_slovakia <- new_slovakia_corona %>% filter(type=="recovered")
+
+death_cases_slovakia <- new_slovakia_corona %>% filter(type=="death")
+
+
+
+```
+
+### Figure 1
+
+
+```{r}
+ggplot(new_slovakia_corona,
+       aes(x=cases, y=type, fill=type, col=type))+
+  geom_boxplot(outlier.shape = NA, alpha=0.2) +
+  geom_jitter(aes(col=type)) + ggtitle("Daily confirmed, death and recovered  cases in Slovakia")
+
+```
+
+This figure shows that daily confirmed, death and recovered cases in Slovakia. Number of confirmed cases are larger than other two cases. Slovakia has considerable recoveries. Slovakia has small amount of death cases than confirmed cases. 
+
+
+
+
+
+### Figure 2
+
+```{r}
+
+ggplot(confirmed_cases_slovakia, aes(x=date, y=cases)) + geom_line(color="purple") + ggtitle(" Daily Covid-19 Confirmed cases in Slovakia")
+
+
+```
+
+
+This figure shows that daily Covid-19 confirmed cases in Slovakia. Confirmed cases are increased speedly in the middle of the plot and start tail and end tail cases are less than the middle part cases. Confirmed cases are normally distributed.   
+
+
+
+
+### Figure 3
+
+```{r}
+
+ggplot(death_cases_slovakia, aes(x=date, y=cases)) + geom_line(color="forestgreen") + ggtitle(" Daily Covid-19 Death cases in Slovakia")
+
+
+```
+
+This figure shows that daily Covid-19 death cases in Slovakia. Death cases are increased highly in the middle part of the plot. All aaily death cases are less than 200. End part cases are decreased and that is positive sign to Slovakia people.
+
+
+
+
+### Figure 4
+
+```{r}
+
+ggplot(recovered_cases_slovakia, aes(x=date, y=cases)) + geom_line(color="red") + ggtitle("slovakia: Daily Covid-19 Recovered cases in Slovakia")
+
+
+```
+
+This figure shows that daily Covid-19 recovered cases in Slovakia. This figure also shows the middle part cases are increased highly. Especially end values are equal to zero.
+
+
+
+
+
+
+### Figure 5
+
+```{r}
+
+
+ggplot(new_slovakia_corona,
+       aes(x = date ,
+           y = cases,
+           col= type))+
+  geom_point() + ggtitle("Daily confirmed, death and recovered cases in Slovakia")
+
+
+
+```
+
+
+### Fiure 6
+
+```{r, message=FALSE, warning=FALSE}
+
+
+ggplot(new_slovakia_corona,
+       aes(x = date ,
+           y = cases ,
+           col = type )) +
+  geom_point() +
+  facet_wrap( ~ type) +
+  stat_smooth(method = "lm", se = T, col ="red") 
+
+
+```
+
+
+This figures show that daily Covid-19 confirmed cases, death cases and recovered cases in Slovakia. In this figure can be identified differences between three types of cases.From the beginng to middle of the graph(figure 5) can be identified confirmed cases and recovered cases are equal but end part of that graph, recovered cases equal to zero. therefore there are huge difference between confirmed cases and recovered cases. Throughout this graph, death cases are very small. Therefore Slovakia has a small amount of death cases than confirmed cases.
+
+
+
+
+
+
+
+### Summary of the Covid-19 confirmed, death, recovered and active cases
+
+Following outputs are given the summary of the Covid-19  confirmed, death, recovered and active cases in Slovakia. In here confirmed, death, recovered and active cases are given by columnwise. Active cases are calculated by using (active cases = confirmedcases - (death cases + recovered cases)) this equation. The 561 obsevations are taken and NA values are removed.
+
+
+
+```{r}
+slovakia_corona_new <- new_slovakia_corona %>%  pivot_wider( names_from = type, values_from = cases) # pivot wider format is considered
+
+
+slovakia_data <- slovakia_corona_new[!is.na(slovakia_corona_new$recovered), ]
+slovakia_data
+
+slovakia_data_with_active <- slovakia_data %>% mutate(active = cumsum(confirmed) - (cumsum(death) + cumsum(recovered))) 
+head(slovakia_data_with_active)
+tail(slovakia_data_with_active)
+summary(slovakia_data_with_active)
+
+
+
+```
+
+
+### Figure 7
+
+```{r}
+
+
+ggplot(slovakia_data_with_active, aes(x=date, y=active)) + geom_line(color="brown") + ggtitle("slovakia: Daily Covid-19 active cases")
+
+
+```
+
+
+This figure shows that daily Covid-19 active cases in Slovakia. In the begining of this graph, small amount of active cases are occured. But the consider about middle and end part of that graph we can identify active cases are increased highly.
+
+
+
+
+### Figure 8
+
+```{r}
+
+slovakia_covid_longer <- pivot_longer(slovakia_data_with_active, col=6:9, names_to = "type", values_to = "cases")
+
+
+ggplot(slovakia_covid_longer,
+       aes(x=cases, y=type, fill=type, col=type))+
+  geom_boxplot(outlier.shape = NA, alpha=0.2) +
+  geom_jitter(aes(col=type)) + ggtitle("Daily confirmed, death, recovered and active cases in Slovakia")
+
+
+
+```
+
+
+
+### Figure 9
+ 
+```{r}
+
+slovakia_covid_longer <- pivot_longer(slovakia_data_with_active, col=6:9, names_to = "type", values_to = "cases")
+
+
+ggplot(slovakia_covid_longer,
+       aes(x = date ,
+           y = cases,
+           col= type))+
+  geom_jitter(size=0.5) +  ggtitle("Daily confirmed, death, recovered and active cases in Slovakia")
+
+
+
+
+```
+
+
+Figure 8 and figure 9 show that daily confirmed, death, recovered and active cases in Slovakia. No of active cases are higher than the other three cases throughout the figure 8 & 9. It means daily confirmed cases are larger than death cases and recovered cases.
+
+
+
+### **Comparison with other countries**
+
+Austria, Hungary and Ukraine are the near countries to Slovakia. Aslo these countries have approximately same climate conditions and economy and other facilities therefore they are get to compare with Slovakia.
+
+### Visualization of the locations
+
+![](countries.jpeg)
+
+### Summary of the data of Slovakia, Austria, Ukraine and Hungary
+
+```{r}
+
+slovakia_and_countries <- filter(coronavirus, country =="Slovakia" |country =="Austria" |country == "Hungary"|country == "Ukraine" )
+slovakia_and_countries$cases <- abs(slovakia_and_countries$cases) # minus values convert to positive
+
+                         
+summary(slovakia_and_countries)
+
+```
+
+```{r}
+
+confirmed_near_countries <- slovakia_and_countries %>% filter(type == "confirmed")
+death_near_countries <- slovakia_and_countries %>% filter(type == "death")
+recovered_near_countries <-slovakia_and_countries %>% filter(type == "recovered")
+```
+
+### Figure 10
+
+```{r}
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Confirmed cases in Slovakia, Austria, Ukraine and Hungary")
+```
+
+This figure shows that daily Confirmed cases in Slovakia, Austria, Ukraine and Hungary. Slovakia has the least daily confirmed cases throughout the graph. Ukraine has the most daily confirmed cases throughout the figure.  Daily confirmed cases in Hungary, Slovakia and Austria ara less than 10000. 
+
+
+
+
+
+### Figure 11
+
+
+```{r}
+
+
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Death cases in Slovakia, Austria, Ukraine and Hungary ")
+
+```
+
+
+This figure shows that daily death cases in Slovakia, Austria, Ukraine and Hungary. Slovakia has the least daily death cases throughout the graph. Ukraine has the most daily death cases throughout the figure.  Daily death cases in Hungary, Slovakia and Austria ara less than 350. In the middle part of the graph shows, death cases are increased speedly.
+
+
+
+
+### Figure 12
+
+
+```{r, message=FALSE, warning=FALSE}
+
+ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Recovered cases in Slovakia, Austria, Ukraine and Hungary")
+
+```
+
+
+This figure shows that daily recovered cases in Slovakia, Austria, Ukraine and Hungary. Slovakia has the least daily recovered cases throughout the graph. Ukraine has the most daily recovered cases throughout the figure.  Daily recovered cases in Hungary, Slovakia and Austria ara less than 10000. In the middle part of the graph shows, recovered cases are increased speedly all the countries.
+
+
+
+
+### Figure 13
+
+
+```{r, message=FALSE, warning=FALSE}
+
+ggplot(slovakia_and_countries, aes(date, cases,colour = country)) + geom_path(size=0.5) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in Slovakia,Austria,Ukraine,Hungary")
+
+
+
+
+```
+
+
+
+
+
+### Summary of the total no.of confirmed, death, recovered cases in Slovakia,Austria,Ukraine,Hungary
+
+```{r}
+
+slovakia_and_countries <-slovakia_and_countries %>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+summary(slovakia_and_countries)
+
+```
+
+### Figure 14
+
+```{r, message=FALSE, warning=FALSE}
+
+ggplot(slovakia_and_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases in Slovakia,Austria,Ukraine,Hungary")
+
+```
+
+This figure shows that daily total no.of confirmed, death, recovered cases  in Slovakia,Austria,Ukraine,Hungary. Total no. of confirmed and recovered cases of Ukraine are higher than other countries.Total no.of confirmed, death, recovered cases in Slovakia,Austria,Ukraine,Hungary are highly increased day by day. we cannot get more details about total no of death cases in this figure. Therefore we need to get another figure to explain it.
+
+
+
+### Figure 15
+
+```{r}
+
+ggplot(subset(slovakia_and_countries,type == "death"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of death cases in Slovakia, Austria, Ukraine and Hungary")
+ 
+
+
+
+```
+
+This figure shows that  total no.of death cases in Slovakia, Austria, Ukraine and Hungary. Ukaine has the most total no. of death cases by compare with other countries. Slovakia and Austria have less total  no of total death cases
+
+
+
+## **Discussion**
+
+In this analysis discuss about the COVID-19 pandemic situation in Slovakia. The data set is loaded by coronavirus dataset given in the package R. Slovakia dataset is obtained by coronavirus dataset. The data set has few minus values and NA values for cases. Then convert minus values to positive values and NA values are removed from the data set. Then consider about Slovakia Covid siyuation. In figure 1, it can be seen that daily confirmed cases are higher than other two cases. In figure 2, it can be seen, before July 2020 there are less number of confirmed cases occured but after July 2020 no of confirmed cases are increased. In figure 4 it can be seen , after February 2021 accidently daily recovered cases are decreased and most prabably they are equal to zero.   
+To find the active cases, another data set is get. In this data set confirmed cases, death cases and recovered cases are  in columnwise by using pivot_wider command. Get active values by using following equation(theoritically).
+
+    Active cases = Confirmed cases - (Death cases + Recovered cases)
+Active cases should be always positive therefore cummilative sum of above cases should be considered in R markdown format.In figure 7, it can be seen after July 2020 active cases are increased rapidly.
+Slovakia is compared with other countries also. Those countries are selected due to a specific unique reasons. The selected countries are Austria, Ukraine and Hungary. Slovakia and these three countries are Central Europion countries. These countries have approximately same climate condition. Economy condition, geographical condition and geopolitics are same among these countries. Vaccination programs are also conducted appromately equal among countries. Therefore Austria, Ukraine and Hungary are considered to compare with Slovakia Covid-19 situation.The data set is obtained by coronavirus dataset but it happened to see some negative cases and null values. The all unusual observations are re-coded as a different manner.Then convert minus values to positive values and NA values are removed from the data set.
+When comparing with the other countries the no.of corona patients in Slovakia is really small which is almost negligible with the countries Ukraine and Hungary. Althogh they both have high confirmed and recovered cases than Slovakia.
+          
+
+## **Conclusions**
+
+Coronavirus disease is identified in December 2019 in Wuhan, Hubei. it the present, It is increased rapidly throughout the world.In conclusion, this study shows how COVID-19 virus affected to Slovakia, how the virus spread with time. In the Slovakia daily Covid death cases are less than daily confirmed cases. Slovak government has controled covid situation in better way becase at the middle of the time period covid 19 confirmed cases and death cases are increased speedly but at the end of the time period confirmed cases and death cases are decreased.In this situation, social distances, clean hands often, wear a mask, maintain safe distance from others are some of steps that a person can reduce the chance of being infected or spreading COVID-19.And also it is helpful for future epidemic cotrol.    
+
+Slovakia COVID-19 spread is compared with  Austria, Ukraine and Hungary. Reasons for selecting those countries are mentioned in discussion.Acoording to comparison of near countries, Ukraine has the heighest daily confirmed, death and recovered cases. Slovakia Covid 19 situation is good. Because compare with other three countries Slovakia has the least daily confirmed and daily death cases.In figure 15 can be identified total no of death cases in  countries.according to that data Ukraine death cases are higher than other three countries. Total no of death cases in Slovakia is less than other countries. But corona situation can be changed anytime therefore slovakia government should pay more attention to prevent this disese.  The actual number of cases and deaths can be different from these data. These are recorded data by the hospitals and medical centers. 
+
+
+
+
+
+## **References**
+
+https://slovake.eu/en/intro/slovakia
+
+https://globaledge.msu.edu/countries/slovakia
+
+https://en.wikipedia.org/wiki/Slovakia
+
+https://www.weatheronline.co.uk/reports/climate/Slovakia.htm#
+
+https://www.nationsencyclopedia.com/Europe/Slovakia-LOCATION-SIZE-AND-EXTENT.html#ixzz77MiemtrH
+
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/slovakia/
+https://korona.gov.sk/en/
+
+https://wiki.unece.org/display/CTRBSBC/Slovakia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

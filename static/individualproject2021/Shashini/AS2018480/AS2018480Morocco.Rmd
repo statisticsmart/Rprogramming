@@ -1,0 +1,367 @@
+---
+title: "Analysis on the COVID-19 pandemic in Morocco"
+author: "Lakna Perera"
+date: "9/22/2021"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r, include = FALSE}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(visdat)
+library(plotly)
+library(patchwork)
+library(gganimate)
+library(knitr)
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+```
+
+
+```{r, echo = FALSE, results = 'hide'}
+# Extract data for Morocco
+data(coronavirus)
+morocco <- coronavirus %>% filter(country == "Morocco")
+str(morocco)
+summary(morocco)
+```
+```{r, echo = FALSE, fig.show  = 'hide'}
+visdat::vis_dat(morocco)
+```
+
+```{r, echo = FALSE, results = 'hide'}
+# We can clearly see there are missing values in the data set
+
+morocco %>% filter(is.na(morocco$cases) == TRUE) %>%
+summary(missing_data)
+```
+```{r, echo = FALSE}
+# Remove time period that contains missing values
+morocco <- morocco %>% filter(date >= "2020-01-22" & date <= "2021-08-04")
+```
+
+
+```{r, echo=FALSE}
+knitr::include_graphics("image1.jpg")
+```
+
+### **1 Introduction**
+
+<div style = "text-align: justify;" >This study analyze the reported coronavirus cases in Morocco under the categories of confirmed, deaths and recovered. 
+The progress of the vaccination process in Morocco is also analzed under this study. Also the contribution of the Morocco government in controlling the pandemic situation and effectiveness of the actions taken by the the government against the rapid trasmission of the virus is discussed in this report.</div>
+
+### **1.1 Coronavirus**
+
+<div style = "text-align: justify;" >Corona virus disease which is commonly called as COVID-19 is the ongoing pandemic
+which is still spreading around the world. It is a contagious disease caused by
+"Severe Acute Respiratory Syndrome Corona Virus 2" which is abbreviated as "SARS-CoV-2".
+Corona virus is a large family of viruses which can cause illness ranging from common cold 
+to more severe diseases such as multi-oragan failure and Pneumonia. SARS-CoV-2 is the seventh virus from the corona virus family which was identified as a virus that can cause death for human.</div>
+
+<div style = "text-align: justify;" >The center of this ongoing coronavirus outbreak is the city of Wuhan in Hubei province of central China. 
+After lots of scientific investigations the Huanan seafood market was identified as the braking point of this 
+ongoing pandemic where SARS-Cov-2 crossed the species barrier from an unknown sourse of animal to human. 
+According to the reports of WHO the first case was reported on 31st December 2019 as a case of Pneumonia from an unkown disease. On 13th January Thailand reported their first coronavirus case which is also the first case of coronavirus that was reported outside the boarders of China. Now according to the updated situation reports on Covid-19 21st September 2021, there are 228 million of confirmed cases, over 4.6 million of deaths in 221 countries around the world.</div> 
+
+### **1.2 Location of Morocco**
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align = 'center'}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(data = wrld_simpl,
+               aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = morocco, aes(x = long, y = lat), color = "red", size = 1)
+```
+
+### **1.3 Introduction about the country**
+
+<div style = "text-align: justify;" >Morocco is a country in Nothern Africa. Morocco spans for a area of 446,550 km^2, with population of aroud 37 million. Demographically Morocco can be considered as a country with majority of young people. The population under each age groups with respect to total population is given in the following table.</div>
+
+|  Age Group  |  Percentage  | 
+| :--------: |:--------:| 
+| under 15   | 27% | 
+| 15 - 24  | 18% |  
+| 25 - 54  | 42%  |   
+| 55 - 64  | 7%  | 
+| 65 and above  | 6%  | 
+
+### **1.4 Climate condition**
+
+<div style = "text-align: justify;" >Morocco borders Western Sahara to the south, Atlantic Ocean to the west and Mediterranean Sea to the north. Therefore Morocco's climate shows a significant variation when traveling from north to southern part. The yearly rainfall and the temperature variations throught the year are strongly influenced by the Atlantic Ocean, Western Sahara and Mediterranean Sea.</div>
+
+<div style = "text-align: justify;" >Generally the rainy season of the country falls between October and November with an annual rainfall of 1200 mm. The winter season falls between November and April with a snow fall in Northern areas of the country. In Southern areas the temperature is relatively high and the coastal areas experience Mediterranean climate with mild wet winters and hot summers. Mean annual temperature of Morocco is 17.5$^\circ$c.</div>
+
+### **1.5 Lockdown status in the country**
+
+<div style = "text-align: justify;" >According to the data of WHO, Morocco is now in the 37^th place from the cumulative values of total confirmed cases. The first case of Covid-19 in Morocco was confirmed on 2nd March 2020.On the same day the second case was reported. The outbreak widened to 109 cases within only twenty days since the first case was reported. The first death due to Covid-19 in Morocco was reported on 10th March 2020, 89 year old woman who was reported as the second confirmed case in the country.</div>
+
+<div style = "text-align: justify;" >As the Covid-19 cluster widens, the government decided to suspend all the passenger flights and ferries from Algeria on 13th March 2020. On the following day, they suspended flights from other countries including Spain, France, Italy and China. On 20th March 2020, the government announced a state of medical emergency from 20 March until 20 April 2020. The government restriction which was imposed from 20 March included travel restrictions, curfews, complete shutdown of schools and universities. After a long period of state emergency, on 9th June 2020, government decided to ease the restrictions.</div>
+
+<div style = "text-align: justify;" >The situation in the country was under control until the second half of July. The cases stared to rise up again more rapidly. Therefore, on 27th July 2020, government imposed partial lockdown restricting the exits for several cities which was considered as red areas.</div>
+
+<div style = "text-align: justify;" >There were only few cases reported since the last few months (from February to end of June) but with the transmission of new deadly variants such as Delta new waves of cases appeared in Morocco. Therefore, government declared a state of emergency on 23rd August to remain in effect until 31st October 2021. </div>
+
+### **1.6 Actions taken by the government**
+
+<div style = "text-align: justify;" >With the widening outbreak of Covid-19 inside the country, the government declared state of emergency in order to stop the rapid transmission of coronavirus inside the country. From the initial lockdown they restricted all the unessential movements only allowing the residents to go out from their premises just to buy food and medicine. Although curfews are imposed, they make exceptions for the people who are working in supermarkets, pharmacies, banks, gas stations, telecommunication companies and  in health sector in order to maintain all the essential services regularly.</div>
+
+<div style = "text-align: justify;" >The government announced lockdown and extensions for previously imposed lockdowns for four times. On 7th April 2020, the government enforced all the citizens on the mandatory use of face masks in public areas emphasizing that those who do not follow the guidelines are at risk of being jailed or fined. To prevent the spreading of the virus and to encourage citizens to wear face masks the Ministry of Health issued a joint statement with the companies and industrial firms to provide their employees with protective face masks in order to improve their quality. construction of the first field hospital was completed on 2nd March 2020 to host the Covid-19 patients.</div>
+
+<div style = "text-align: justify;" >On 11 May 2020, the ministry of health launched a new app to trace Covid – 19 cases inside the country. In order to upgrade the health infrastructure and to support the affected economic sector, the King of the Morocco King Mohammed VI created an emergency fund which is now increased up to 1 billion dollars.</div>
+
+<div style = "text-align: justify;" >With the beginning of the vaccination program around the world Morocco also started their vaccination program on 28 January 2021. Currently there are 4 vaccines which are clinically approved for use in Morocco. Those are Sputnik V, Oxford / AstraZeneca, Covishield and Sinopharm. Morocco achieves a highest Covid-19 vaccination rate when comparing with other African countries. According to the vaccination data of WHO in Morocco the government has given 39.5 million doses of vaccines to their citizens. There are 17.9 million of fully vaccinated people and it is 49.2% from the total population.</div>
+
+### **2 Exploratory Data Analysis**
+
+### **2.1 Reported Covid-19 cases in Morocco**
+
+<div style = "text-align: justify;" >For this analysis we have considered the reported data collected by the John Hopkins University Center for System Science and Engineering which contains daily confirmed cases, deaths and recovered cases of coronavirus in the world. Due to the unavailability of some data, we have considered the time period of 22nd of January 2020 to 4th of August 2021.</div>
+
+```{r, echo = FALSE}
+# Time series plot
+ggplot(morocco, aes(x = date, y = cases, color = type)) + 
+        geom_line() +
+        facet_grid(type~., scales = "free_y") +
+        theme_classic() +
+        labs(title = "Covid-19 cases reported in Morocco", 
+           x = "Date", 
+           y = "Number of cases",
+           subtitle = "Time period : 2020/01/22 - 2021/08/04",
+           caption = "Figure 1") +
+       theme(plot.title = element_text(hjust = 0.5),
+             plot.subtitle = element_text(hjust = 0.5),
+             plot.caption = element_text(hjust = 0.5, size = 15)) +
+       scale_color_manual(values = c(confirmed = "#963e80", death = "#ff0000", recovered = "#5be3b1")) 
+```
+
+<div style = "text-align: justify;" >As in figure 1, the distribution of the reported cases along the time period shows rapid increment in the reported cases in the period of July 2020 to February 2021. Also in the past few months Morocco shows a significance increase in the reported coronavirus cases since the mid of June 2021.</div>
+
+```{r, echo = FALSE}
+# Bar chart for total cases by type 
+morocco %>%
+  group_by(type) %>% 
+  summarise(total_cases = sum(cases)) %>% 
+  plot_ly() %>%
+  add_bars(x = ~type, y = ~total_cases, color = ~type)  %>%
+  add_text(
+    text = ~scales::comma(total_cases), x = ~type, y = ~total_cases, 
+    textposition = "top middle",
+    cliponaxis = FALSE) %>%
+  layout(title = "Total corona cases reported in Morocco",
+         xaxis = list(title = "Type"),
+         yaxis = list(title = "Total cases"),
+         annotations = list(text = "Figure 2", 
+                            xanchor = "left",yanchor = "bottom", 
+                            xref = "paper", yref = "paper", x = 0.01, y = -0.1, 
+                            showarrow = FALSE,  
+                            font = list(size = 15, color = "black") ))
+```
+
+<div style = "text-align: justify;" >When considering the total cases it can be seen that majority of the infected people were recovered. And the death count is low compared to confirmed and recovered.</div>
+
+<!-- Use this to get summary measures, including active cases.-->
+```{r, echo = FALSE}
+# Get the active Covid-19 cases in Morocco 
+morocco <- morocco %>%
+  pivot_wider(names_from = "type", values_from = "cases") %>% 
+  mutate(active = cumsum(confirmed) - cumsum(recovered) - cumsum(death)) %>%
+  pivot_longer(6:9, names_to = "type", values_to = "cases")
+```
+
+```{r, echo = FALSE}
+# Summary statistics
+summary_data <- morocco %>% 
+                group_by(type) %>%
+                summarise(total = sum(cases),
+                          max = max(cases),
+                          mean = mean(cases), 
+                          sd = sd(cases))
+                summary_data %>%
+                kable(col.names = c("Type", "Total", "Maximum", "Mean", "sd"),
+                      caption = "Table 1")
+```
+
+<div style = "text-align: justify;" >As in the table 1 there were 6455382 of active Covid-19 patients in Morocco at the date of August 4th. The maximum number of confirmed cases in a day is 10603 and the maximum number of deaths reported in a day is 92. In Morocco approximately 1164 people get infected and 17 people die on each day because of coronavirus on average.</div>
+
+```{r, echo = FALSE}
+morocco %>% 
+  ggplot(aes(x = date, y = cases, color = type)) +
+   geom_line() +
+   geom_point() +
+   theme_classic() +
+   labs(title = "Covid-19 cases reported in Morocco", 
+           x = "Date", 
+           y = "Number of cases",
+           caption = "Figure 3") +
+       theme(plot.title = element_text(hjust = 0.5),
+             plot.caption = element_text(hjust = 0.5, size = 15)) +
+   transition_reveal(date) 
+
+```
+
+### **2.2 Comparison with other countries**
+
+<div style = "text-align: justify;" >We have considered two countries Algeria and Portugal that are geographically close to Morocco. Figure 4 shows the total reported Covid-19 cases in Algeria, Morocco and Portugal. This shows Morocco has higher number of reported cases with compared to Algeria which is also an Northern African country. However, Covid-19 situation in Portugal is much more critical than Morocco and Algeria.</div>
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+coronavirus <- coronavirus %>% 
+  filter(date >= "2020-01-22" & date <= "2021-08-04")
+
+# Get data for other countries.
+df1 <- coronavirus %>% 
+  filter(country %in% c("Morocco", "Portugal", "Algeria")) %>%
+  group_by(country, type) %>% 
+  summarise(total_cases = sum(cases))
+  
+df1 %>%  plot_ly() %>%
+  add_bars(x = ~country, y = ~total_cases, color = ~type)  %>%
+  layout(title = "Reported cases in Algeria, Morocco and Portugal",
+         xaxis = list(title = "Country"),
+         yaxis = list(title = "Total cases"),
+         annotations = list(text = "Figure 4", 
+                            xanchor = "left",yanchor = "bottom", 
+                            xref = "paper", yref = "paper", x = 0.01, y = -0.1, 
+                            showarrow = FALSE,  
+                            font = list(size = 15, color = "black") ))
+  
+```
+
+
+```{r, echo = FALSE, warning = FALSE}
+# Get data for other countries and get active cases.
+df2 <- coronavirus %>% group_by(country) %>% 
+  pivot_wider(names_from = "type", values_from = "cases") %>%
+  mutate(active = cumsum(confirmed) - cumsum(recovered) - cumsum(death)) %>%
+  filter(country == c("Morocco", "Algeria", "Portugal")) 
+
+```
+
+<div style = "text-align: justify;" >Figure 5 show the rate of change in the active cases in Algeria, Morocco and Portugal. Even though Morocco has less reported cases than Portugal, this shows a higher rate of increment in the active cases for the period from mid June 2021. This also confirms the previous results of Covid-19 analysis in Morocco.</div>
+
+```{r, echo = FALSE}
+# Compare active cases : rate of change
+df2 %>%  plot_ly() %>%
+  add_lines(x = ~date, y = ~log(active), color = ~country) %>%
+  layout(title = "Comparison of active cases with other countries",
+    xaxis = list(title = "Date"),
+    yaxis = list(title = "Active cases (log scale)"),
+    annotations = list(text = "Figure 5", 
+                            xanchor = "left",yanchor = "bottom", 
+                            xref = "paper", yref = "paper", x = 0.01, y = -0.1, 
+                            showarrow = FALSE,  
+                            font = list(size = 15, color = "black") ))
+
+```
+
+### **2.3 Vaccination Process**
+
+<div style = "text-align: justify;" >According to WHO, Morocco has a successful vaccination process compared to other African countries. Morocco has already fully vaccinated 45.72% of their total population and 55.17% has taken atleast one dose of the vaccine.</div>
+
+```{r, echo = FALSE}
+data(covid19_vaccine)
+
+vaccine_data <- covid19_vaccine %>% filter(date == max(date), !is.na(population))
+df1 <- vaccine_data %>% 
+  filter(country_region %in% c("Algeria","Morocco", "Portugal")) %>%
+  mutate(partially_vaccinated_ratio = people_partially_vaccinated / population,
+         fully_vaccinated_ratio = people_fully_vaccinated / population)
+
+p <- list()
+p[[1]] <-  plot_ly(data = df1,
+                   y = ~ country_region,
+                   x = ~ round(100 * fully_vaccinated_ratio, 2),
+                   color = ~country_region,
+                   orientation = "h",
+                   type = "bar") %>%
+  layout(title = "Percentage of Vaccineted Population by Country",
+         xaxis = list(ticksuffix = "%")) %>%
+  add_annotations(text = "Fully vaccinated",
+                  xref = "paper",
+                  yref = "paper",
+                  x = 0.3,
+                  y = 0.01,
+                  align = "left",
+                  showarrow = FALSE)
+
+p[[2]] <-  plot_ly(data = df1,
+                   y = ~ country_region,
+                   x = ~ round(100 * partially_vaccinated_ratio, 2),
+                   color = ~country_region,
+                   orientation = "h",
+                   showlegend = FALSE,
+                   type = "bar") %>%
+  layout(title = "Figure 6    Percentage of Vaccineted Population by Country",
+         xaxis = list(title = "", ticksuffix = "%")) %>%
+  add_annotations(text = "Partially vaccinated",
+                  xref = "paper",
+                  yref = "paper",
+                  x = 0.7,
+                  y = 0.01,
+                  align = "right",
+                  showarrow = FALSE)
+  
+subplot(p, nrows = 1, margin = 0.06)
+```
+
+### **3 Conclusion**
+
+<div style = "text-align: justify;" >According to the data of the Novel Coronavirus collected by the John Hopkins University, Morocco has 653,286 total number of confirmed Covid-19 cases and 10,015 total deaths cauesed by the Covid-19 virus for the period 22nd January 2020 to 4th of August 2021. However, the situation of the pandemic could be crucial in Morocco, since the results show an increasing rate for the reported active cases in the country. The results show that the virus is spreading rapidly in  Morocco since the mid of June with compared to other countries like Algeria and Portugal. Therefore, government should take necessary actions to restrict the travels and  control the transmission of the virus from infected people. In Morocco 45.72% of the total population has been vaccinated and 55.17% of the total population has been taken at least one dose of the vaccine. Compared to other North African  countries Algeria, Morocco has a successful vaccination program.</div>
+
+### **References**
+
+* Coronavirus. Who.int. (2021). Retrieved 24 September 2021, from <https://www.who.int/health-topics/coronavirus#tab=tab_1>.
+
+* Yuen, K. S., Ye, Z. W., Fung, S. Y., Chan, C. P., & Jin, D. Y. (2020). SARS-CoV-2 and
+COVID-19: The most important research questions. Cell & bioscience, 10, 40.
+
+* Swearingen, W. D. , Miller, . Susan Gilson , Barbour, . Nevill , Brown, . L. Carl and Laroui, . Abdallah (2021, September 17). Morocco. Encyclopedia Britannica. <https://www.britannica.com/place/Morocco>
+
+* World Bank Climate Change Knowledge Portal. Climateknowledgeportal.worldbank.org. (2021). Retrieved 24 September 2021, from <https://climateknowledgeportal.worldbank.org/country/morocco/climate-data-historical>.
+
+* Hekking, M. (2021). COVID-19: Morocco Declares State of Emergency. https://www.moroccoworldnews.com/. Retrieved 25 September 2021, from <https://www.moroccoworldnews.com/2020/03/296213/covid-19-morocco-declares-public-health-emergency>.
+
+* Morocco: Authorities to restrict access to major cities amid spike in COVID-19 cases from July 27 /update 23. GardaWorld. (2021). Retrieved 25 September 2021, from <https://www.garda.com/crisis24/news-alerts/363566/morocco-authorities-to-restrict-access-to-major-cities-amid-spike-in-covid-19-cases-from-july-27-update-23>.
+
+* Morocco – COVID19 Vaccine Tracker. Covid19.trackvaccines.org. (2021). Retrieved 28 September 2021, from <https://covid19.trackvaccines.org/country/morocco/>.
+
+* COVID-19: Morocco starts vaccinating people aged 65+. Aa.com.tr. (2021). Retrieved 28 September 2021, from <https://www.aa.com.tr/en/africa/covid-19-morocco-starts-vaccinating-people-aged-65-/2143314>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

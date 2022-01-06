@@ -1,0 +1,329 @@
+---
+title: "Covid 19 Pandemic in URUGUAY"
+author: "AS2018519"
+date: "9/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+# Introduction
+<div align="center">
+![](OIP.jpg)
+
+</diV>
+
+
+COVID 19 or SARS-Cov-2 is a virus that first known case was identified in **Wuhan, China**. The disease has since spread worldwide, leading to an ongoing pandemic.When we consider about *Uruguay*, it is a country that have been affected by this virus.
+
+
+
+```{r}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+uruguay_corona <- coronavirus %>% filter(country == "Uruguay")
+```
+
+
+
+# Uruguay
+
+
+Uruguay is a south american country officially known as Oriental Republic of Uruguay. It is bound to Argentina, Brazil and Atlantic Ocean. Capital of Uruguay is Montevideo. Uruguay covers 176000 square kilometers of area approximately. population of Uruguay is estimated as 3.51
+million.
+
+
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = uruguay_corona, aes(x = -55.7658, y =  -32.5228), color = "red", size
+    = 2
+  )
+```
+
+
+
+## Climate Condition
+
+
+Uruguay has a climate that relatively mild and fairly uniform nationwide. Most of the country has a humid subtropical climate. Uruguay has a largely uniform temperature throughout the year.
+
+
+
+## Lock down status
+
+
+Nowadays Uruguay has not lock down there country. There are no restrictions on intercity or interstate travel. Public transports are operating but masks are required for public transports. Taxis and uber are generally limited to three passengers at a time.But Uruguay's airports and borders are closed to nonresident foreigners.
+
+
+
+## Actions taken by the Government
+
+
+Government of Uruguay has stated to vaccinate citizens to preclude the virus. Sinovac, Pfizer BioNtec and AstraZenica are the available vaccines in Uruguay. Every individual who having the NIC in Uruguay can signup for vaccinations on the official Uruguayan government website. 
+Additionally in Uruguay masks are required in all indoor public spaces. Covid 19 tests are generally available through insurance companies. And also negative covid 19 test required to enter Uruguay and health screening are procedures in placed at airports and other ports of entry.
+
+
+
+# Exploring Data Analysis
+
+
+considering about past data from 2020.01.22 to present we can come up with following graphical illustrations. 
+
+
+
+```{r}
+uruguay_corona$cases <- replace(uruguay_corona$cases, which(uruguay_corona$cases < 0), NA)
+```
+
+```{r}
+library(dplyr)
+library(zoo)
+
+uruguay_corona <- transform(uruguay_corona, cases = na.locf(cases))
+```
+
+```{r}
+confirmed_uruguay_corona <- uruguay_corona %>% filter(type == "confirmed")
+
+ggplot(confirmed_uruguay_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Uruguay: Daily Covid-19 confiremed")
+```
+
+
+Above graph shows the confirmed number of corona patients that recorded in Uruguay daily. According to data 2021 is the year that corona effected mostly in Uruguay. Beginning of the year we can see a increase of corona patients and it has decreased in February. In March number of patients has increase again but more than earlier time. In April it has came to the peak and then deceased again. After August it almost became a flatted line.
+
+
+
+```{r}
+recovered_uruguay_corona <- uruguay_corona %>% filter(type == "recovered")
+
+ggplot(recovered_uruguay_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Uruguay: Daily Covid-19 Recovered")
+```
+
+
+Daily recovered rate of Uruguay is almost following the same pattern as confirmed data. Highest number of recovered patients has reported in mid of April as same as Confirmed.
+
+
+
+```{r}
+death_uruguay_corona <- uruguay_corona %>% filter(type == "death")
+
+ggplot(death_uruguay_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Uruguay: Daily Covid-19 death")
+```
+
+
+Patter of daily death rate also following confirmed and recovered rates.
+we can clearly say that when number of corona confirmed patients increase 
+then number of deaths cases increse too.
+
+
+```{r}
+ggplot(uruguay_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Uruguay: Confirmed, Death and Recovered cases")
+```
+
+
+When comparing number of confirmed patients, number of recovered patients and number of deaths in daily basis, proportion of confirmed patients and recovered patients are almost same. And in Uruguay, covid 19 death cases are in least value. We can also see it in following graph.
+
+
+
+
+```{r}
+ggplot(uruguay_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Uruguay: Confirmed, Death and Recovered cases")
+```
+
+```{r}
+uruguay_corona <-  uruguay_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(uruguay_corona, aes(date, cum_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Total no.of confirmed, death, recovered cases in Uruguay")
+
+```
+
+
+When we consider about total no confirmed, recovered and death cases we can see that from the beginning of 2021 recordings of corona patients has increased. That increment has originated until July. After that line has flatted as like as before 2021.It means at that time periods covid 19 spreading has under control.
+
+
+
+```{r}
+new_uruguay_corona_summary <- cbind(confirmed_uruguay_corona,"confirmed"=confirmed_uruguay_corona$cases, "recovered"=recovered_uruguay_corona$cases, "death"=death_uruguay_corona$cases)
+total_list <- select(new_uruguay_corona_summary, c(-type,-cases))
+```
+
+```{r, echo=FALSE}
+updated_list <- total_list %>% mutate(cumulative_cases=cumsum(confirmed)) %>% mutate(cumulative_recovered=cumsum(recovered)) %>% mutate(cumulative_death=cumsum(death))
+```
+
+```{r}
+updated_list$active <- (updated_list$cumulative_cases) - (updated_list$cumulative_recovered + updated_list$cumulative_death)
+```
+
+```{r}
+ggplot(updated_list, aes(x=date, y=active)) + geom_path(size=1) + labs(title = "Uruguay: daily active cases")
+```
+
+
+Consider about Active cases in Uruguay, it has decreased after the first seven months. 
+
+
+
+
+## Comparing with neighorhood countries...
+
+
+Argentina and Brazil are the nearest countries to Uruguay. Uruguay sharing its border with those two countries. Because those countries are in same landing borders it is very necessary to consider about covid 19 situations 
+Argentina and Brazil.
+
+
+
+```{r include=FALSE}
+near_countries <- filter(coronavirus, country == "Argentina"|country =="Brazil"|country =="Uruguay")
+count(near_countries,country)
+```
+
+```{r}
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Confirmed cases in Argentina, Brazil and uruguay ")
+```
+
+
+Comparing about nearest countries Uruguay has been maintained few daily covid 19 confirmed cases. In this region Brazil has the highest number of confirmed patients in daily basis. 
+
+
+
+```{r}
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Death cases in Argentina, Brazil and Uruguay")
+```
+
+
+Uruguay has maintained their daily death count lower than other two countries. Compare with Brazil and Argentina it is negligible. Brazil has the highest number of deaths daily.
+
+
+
+```{r}
+ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Recovered cases in Argentina, Brazil and Uruguay")
+
+```
+
+
+Daily Recovery cases in Uruguay is only few but daily confirmed cases are very small value compare to other countries. 
+
+
+
+```{r}
+ggplot(near_countries, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in Argentina, Brazil and Uruguay")
+```
+
+
+Considering about Uruguay, it has negligible daily confirmed cases, recovery cases and death cases compare to other two countries. 
+
+
+
+```{r include=FALSE}
+count(near_countries, type)
+near_countries <- near_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+```
+
+```{r}
+ggplot(subset(near_countries,type == "confirmed"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of confirmed cases in Argentina, Brazil and Uruguay")
+
+```
+
+
+Total number of confirmed corona patients in Uruguay is less than other two countries.Brazil has the highest total number of confirmed corona patients. 
+
+
+```{r}
+ggplot(subset(near_countries,type == "death"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of death cases in near counties")
+```
+
+
+Lowers numbers of total death cases are reported in Uruguay among these three countries. Brazil has the highest number of total deaths.
+
+
+
+```{r}
+ggplot(subset(near_countries,type == "recovered"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of recovered cases in near counties")
+```
+
+
+Graph of total recovery cases is same as other two graphs. Brazil has the highest total number of recovered cases and Uruguay has the lowest number of recovered cases while both of these countries has highest and lowest total 
+number of confirmed cases.
+
+
+
+```{r}
+ggplot(near_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases in South America")
+```
+
+
+Above graph also confirm that Uruguay has the lowest total number of confirmed, recovered and death cases among their neighbor countries.
+
+
+
+# Discussion and Conclution
+
+
+Covid 19 is a world pandemic situation  that entire world had to face. Uruguay also so has to gone through that disaster. Year 2020, Uruguay has success fully control spreading of this virus. But beginning of 2021 corona Virus had risen all over the country. Uruguay government has control it within two months. But unluckily at from mid of march this pandemic situation has risen up again. In April of that year Uruguay had it maximum number of daily confirmed covid cases, daily death cases and also daily active covid cases. Luckily at those time period maximum daily recovered cases had also occurred. After mid of April, incidence of corona patients has decreased for short time period.Within a month, in May there was a increment of occurring corona Patients. from May to June reporting of corona patients had quickly increased. After June this situation has fall.When it comes to August daily reported corona confirmed cases curve had almost flatted. Hence the wrost pandemic situation has cleared after August.
+Daily Covid recovery cases and daily covid death cases curves are also behave like this. At January,April and June we can see peaks of recovered cases and death cases curves. At April there are maximum number of daily recovered patients and also maximum number of daily death cases. 
+According to above graphs we can clearly see that Uruguay had faced Three Covid waves and 2nd one is the most tragical one. And present time Uruguay has control Covid spreading.   
+
+When we Consider about neighbor countries we can see that Uruguay was under control. Total umber of corona patients in Uruguay is really small and negligible with Brazil and Argentina. Even they have same land border Uruguay has protect there country relative to other nearest countries. we can see that Brazil has faced most tragical situation with high confirmed covid cases and death cases. Even compare to Uruguay Argentina also has some critical condition. Compare to their neighborhood countries Uruguay has kept flatted curves.
+
+Finally we can say that Uruguay government, health workers and citizens has conrol covid 19 virus to some extent than other countries. 
+
+
+
+# References
+ 
+ 
+   * https://en.wikipedia.org/wiki/Uruguay
+   * https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Uruguay
+   * https://cd.usembassy.gov/covid-19-information
+
+

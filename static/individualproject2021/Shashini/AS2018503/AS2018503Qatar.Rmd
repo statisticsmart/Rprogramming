@@ -1,0 +1,480 @@
+---
+title: "The Impact of COVID 19 on Qatar"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<center>
+![Qatar](https://image.shutterstock.com/image-vector/qatar-flag-260nw-107328506.jpg){width=20%} </center>
+
+
+
+
+
+AS2018503
+
+
+# **1.Introduction**
+
+
+<center>
+![Qatar](https://previews.123rf.com/images/efesenko84/efesenko841804/efesenko84180400032/99022364-doha-qatar-february-13-2018-al-the-beautiful-park-with-lush-palms-and-ornamental-bushes-on-corniche-.jpg){width=50%} </center>
+
+<font size = "3">
+ **Visualization of the country**
+</font>
+
+  Qatar officially the State of Qatar, is a country located in Western Asia and the richest country in the World. Its lies on the Persian Gulf in eastern Arabia, north of Saudi Arabia and the United Arab Emirates. 
+
+  It is located in the Western of Asia, Qatar Peninsula on the northeastern coast of the Arabian Peninsula. It covers 11,586 square kilometers of land, making it the 164th largest nation in terms of land area. Qatar map also shows that it is one of the smallest counties of the Middle East. 
+
+  However, it shares its international boundary with Saudi Arabia in the south, rest of three sides; it is surrounded by the Persian Gulf. Furthermore, a strait of the Persian Gulf divides Qatar from its nearby island nation of Bahrain. The government type of Qatar is an emirate government. In addition, its legal system composed of Islamic (or Sharia) and civil law codes in a discretionary system of law. Furthermore, it is being controlled by the Emir. 
+
+  Doha is the capital city of Qatar. It has a population of 644,799, Doha is located on the central-east portion of Qatar, bordered by the Persian Gulf on its coast. It's lies between latitue of 25.28 and longitude of 51.52. 
+
+
+
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 1 : Location in the word map",fig.align='center'}
+library(coronavirus)
+
+library(tidyverse) 
+library(magrittr)
+qatar_corona <- coronavirus %>% filter(country == "Qatar")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble) 
+library(tidyverse) 
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl) 
+
+p <- ggplot() + 
+  geom_polygon( data = wrld_simpl, 
+            aes(x = long, y = lat, group = group), fill = "gray", colour = "white" ) + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + 
+scale_x_continuous(breaks = seq(-180, 180, 120)) + 
+scale_y_continuous(breaks = seq(-90, 90, 100)) 
+
+p + geom_point( data = qatar_corona, aes(x = long, y = lat), color = "red", size = 1) 
+ 
+
+```
+
+
+
+
+<font size = "3">
+ **Climate conditions in Qatar**
+</font>
+
+
+<center>
+![Qatar](https://www.weather-atlas.com/weather/images/climate/7/7/1825677-500-temperature-c-en.gif){width=50%} </center>
+
+The climate of Qatar is desert, with very mild winters, and very hot and sunny summers. Being a small and flat country, it has a uniform climate throughout the territory. Basically, there are two main seasons: a cooler season from December to February, and a hot season from April to October, within which we can distinguish a very hot period from May to mid-October. March and November are transitional months, warm but without excesses. In Doha, the capital, the daily average temperature ranges from 18.5 degrees Celsius (65 °F) in January to 37 °C (99 °F) in July.
+
+
+<center>
+![Summer in Qatar](https://seasonsyear.com/sites/default/files/images/asia/Qatar-summer-2.jpg ){width=50%}
+
+
+
+</center>
+
+
+
+<center>
+![Winter in Qatar](https://www.thepeninsulaqatar.com/uploads/2019/04/01/post_main_cover_fit//f4dc56c2452b0f64acb7def5cb0723054fb0d3f4.jpg){width=50%}
+
+
+
+</center>
+
+
+
+<font size = "3">
+ **Lockdown status and action taken by the country**
+</font>
+
+The COVID-19 pandemic in Qatar is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first case in Qatar was confirmed on 27 February 2020. On February 29, Qatar reported its first confirmed case of Coronavirus (COVID-19). The patient was a 36 year old Qatari male who had been evacuated out of Iran on a government chartered plane.  On March 9, Qatar announced a closure of all schools and universities until further notice and placed a travel ban on 15 countries  :  China, Egypt, India, Iran, Iraq,  Italy, Lebanon, Nepal, Pakistan, the Philippines, South Korea, Sri Lanka, Syria, Bangladesh and Thailand. As of 24 September 2021, there are 1521 active cases under treatment, 236,123 confirmed cases, 233,998 recovered cases and 604 deaths. A total of 2,632,271 people have been tested in the country and 4,686,559 peoples were vaccinated. Qatar was not in lockdown states now. The reported number of deaths in Qatar has been low relative to number of reported cases which may be in part due to the countries adequate healthcare system and the fact that a high proportion of residents are young and healthy.
+
+<center>
+![PCR tests](https://static.toiimg.com/thumb/msid-77754419,width-1200,height-900,resizemode-4/.jpg){width=50%}
+
+
+
+</center>
+
+
+
+<center>
+![Qatar peoples in Coronavirus pandemic](https://www.vmcdn.ca/f/files/glaciermedia/import/lmp-all/1550350-73b2b934fd08c19dfc6ac5d84f0710707db09f76.jpg){width=50%}
+
+
+
+</center>
+
+
+
+# **2. Exploratory Data Analysis**
+
+##### **The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Data set**
+
+**Description**
+
+Daily summary of the Coronavirus (COVID-19) cases by state/province.
+
+**Usage**
+
+coronavirus
+
+**Format**
+
+A data frame with 7 variables.
+
+date
+
+  - Date in YYYY-MM-DD format.
+
+province
+
+  - Name of province/state, for countries where data is provided split across multiple      provinces/states.
+
+country
+
+  - Name of country/region.
+
+lat
+
+  - Latitude of center of geographic region, defined as either country or, if available,  province.
+
+long
+
+  - Longitude of center of geographic region, defined as either country or, if available,   province.
+
+type
+
+  - An indicator for the type of cases (confirmed, death, recovered).
+
+cases
+
+  - Number of cases on given date.
+
+**Details**
+
+The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province.
+
+**Source**
+
+Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website.
+
+#####  **Summery measures of Qatar coronavirus data set before cleaning** 
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE,fig.align='center'}
+qatar_corona <- as_tibble(qatar_corona)
+summary(qatar_corona)
+
+
+```
+
+The data was collected from 2020.01.22 to 2021.09.18. Here we can get idea about data set.then number of minimum recovered cases was reported as -39 and it was error.So this can be a outlier for our data.Therefore it was replaced as missing value.
+
+furthermore there was 45 missing values in recovered cases. It also gives incorrect information for our analysis. Therefore they were replaced as mean value of recovered cases.
+
+#####  **Summery measures of Qatar coronavirus data set after cleaning**
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.align='center'}
+
+
+qatar_corona <- as_tibble(qatar_corona)
+qatar_corona <- qatar_corona %>% select(-c(province))
+
+qatar_corona_wider<-qatar_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+qatar_corona_wider$recovered <- replace(qatar_corona_wider$recovered,qatar_corona_wider$recovered<0,NA)
+
+qatar_corona_wider$recovered[is.na(qatar_corona_wider$recovered)] <-mean(qatar_corona_wider$recovered,na.rm = TRUE)
+qatar_corona_wider$recovered <- round(qatar_corona_wider$recovered,digits = 0)
+
+qatar_corona_wider <- qatar_corona_wider %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+qatar_corona_wider$active <- replace(qatar_corona_wider$active,qatar_corona_wider$active<0,NA)
+
+
+
+summary(qatar_corona_wider)
+
+```
+
+According to these summaries, data cleaning process was completed successfully
+
+### **Daily confirmed cases in Qatar** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 2 : Plot of daily confirmed cases in Qatar", fig.align='center', out.width='100%'}
+library(plotly)
+c <- ggplot(qatar_corona_wider, aes(x=date, y=confirmed))+geom_path(size=0.5)
+ggplotly(c)
+
+
+```
+
+According to this confirmed cases plot it shows the highest number of confirmed cases between May and June 2020 and after that it shows sharp decrease till January 2020.Then it is slightly increases and sharp decrease again. But in present situation  reported confirmed cases is low.
+
+
+### **Daily recovered cases in Qatar** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 3 : Plot of daily recovered cases in Qatar", fig.align='center', out.width='100%'}
+
+r <- ggplot(qatar_corona_wider, aes(x=date, y=recovered))+geom_path(size=0.5)
+ggplotly(r)
+```
+
+similarly figure 3, highest number of recovered cases 5235 reported in 30th of May 2020 and after that it shows sharp decrease. After the mid of July it goes low level and it is slightly increases and sharp decrease again. But in present situation  reported confirmed cases is low.
+
+
+### **Daily death cases in Qatar** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 4 : Plot of daily death cases in Qatar", fig.align='center',out.width='100%'}
+
+d <- ggplot(qatar_corona_wider, aes(x=date, y=death ))+geom_path(size=0.5)
+ggplotly(d)
+```
+
+According to this plot highest number of deaths 10 was reported on 16 th and 25 th of April 2021. Around the month July of 2020 there were five or six number of deaths per day.Between the period of July 2020 and March 2021 average reported death acse is 1.
+
+### **Active cases in Qatar** 
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE,fig.cap="Figure 5 : Plot of daily death cases in Qatar", fig.align='center',out.width='100%'}
+
+a <-ggplot(qatar_corona_wider, aes(x=date, y=active))+geom_path(size=0.5)
+ggplotly(a)
+
+```
+
+similarly figure 3 and figure 4 highest number of active cases reported in the period MAy and June 2020 and April 2021. In this month Qatar showed low active cases.
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 6 : Plot of cases acording to the types", fig.align='center',out.width='100%'}
+
+p1 <- ggplot(qatar_corona, aes(x=date, y=cases,col=type))+geom_path(height=3000) + facet_grid(~type)
+ggplotly(p1)
+
+
+```
+
+This is the summary of type of cases. Death was showed in a line because it is very law and highest death number is 10.
+
+##### **Time series plot of corona cases in Qatar**
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 7 : Plot of cases acording to the types", fig.align='center',out.width='100%'}
+
+p2 <- ggplot(qatar_corona, aes(x=date, y=cases,color=type), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) 
+
+ggplotly(p2)
+
+```
+
+## **Comparison corona cases with the countries close to Qatar**
+
+### **Location of the countries close to Qatar in the word map** 
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE,fig.cap="Figure 8 : Location of the countries close to Qatar in the word map", fig.align='center',out.width='100%'}
+p <- ggplot() + 
+  geom_polygon( data = wrld_simpl, 
+            aes(x = long, y = lat, group = group), fill = "gray", colour = "white" ) + coord_cartesian(xlim = c(40, 60), ylim = c(15, 35)) + 
+scale_x_continuous(breaks = seq(40, 40, 60)) + 
+scale_y_continuous(breaks = seq(15, 35, 35)) 
+
+p + geom_point( data = qatar_corona, aes(x = long, y = lat), color = "red", size = 1) + geom_text(aes(x=coronavirus$long,y=coronavirus$lat,label=coronavirus$country))
+
+new_countries <-subset.data.frame(coronavirus,(15<lat & lat<35),(40<long & long<60))
+```
+
+Here I use Saudi Arabia,United Arab Emirates, Bahrain and Kuwait as close countries. Those 4 countries are situated very close to Qatar.
+
+<center>
+![Qatar](https://slideplayer.com/slide/9350563/28/images/7/Middle+East%3A+Population+Density.jpg){width=50%} </center>
+
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE,}
+ 
+Saudi_Arabia_corona <- coronavirus %>% filter(country == "Saudi Arabia")
+Saudi_Arabia_corona <- as_tibble(Saudi_Arabia_corona)
+Saudi_Arabia_corona<-Saudi_Arabia_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+Saudi_Arabia_corona <- Saudi_Arabia_corona %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+
+Kuwait_corona <- coronavirus %>% filter(country == "Kuwait")
+Kuwait_corona <- as_tibble(Kuwait_corona)
+Kuwait_corona<-Kuwait_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+Kuwait_corona <- Kuwait_corona %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+
+Bahrain_corona <- coronavirus %>% filter(country == "Bahrain")
+Bahrain_corona <- as_tibble(Bahrain_corona)
+Bahrain_corona<-Bahrain_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+Bahrain_corona <- Bahrain_corona %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+United_Arab_Emirates_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+United_Arab_Emirates_corona  <- as_tibble(United_Arab_Emirates_corona )
+United_Arab_Emirates_corona <-United_Arab_Emirates_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+United_Arab_Emirates_corona  <- United_Arab_Emirates_corona  %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+
+```
+
+
+### **Comparison of daily confirmed cases** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 9 : Comparison of daily confirmed cases", fig.align='center', out.width='100%'}
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,confirmed))
+Bahrain <- Bahrain_corona %>% select(c(date,country,confirmed))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,confirmed) )                     
+Kwait <- Kuwait_corona %>% select(c(date,country,confirmed))
+qatar <-qatar_corona_wider %>% select(c(date,country,confirmed))
+
+confirmed_comparison <- bind_rows(Saudi_Arabia,Bahrain) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(Kwait) %>% bind_rows(qatar)
+
+library(plotly)
+p3 <- ggplot(confirmed_comparison, aes(x=date, y=confirmed,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) 
+
+ggplotly(p3)
+
+```
+
+According to this plot we can say that corona virus outbreak of United Arab emirates happened later than Qatar.It is one or two confirmed cases. After that Kuwait and Bahrain countries showed confirmed corona cases. Saudi Arabia and Qatar corona confirmed cases were reported after that. Consider the whole plot Saudi Arabia and United Arab emirates have highest confirmed cases density than other countries.Kuwait has middle level of confirmed cases till January of 2021 and it was increased till July and now it is decreasing. Bahrain has low level of confirmed cases till January of 2021 and started slightly increased with highest cases in July.Now it is decreasing. Qatar has highest confirmed cases around July 2021 and it is decreasing.However Qatar and Bahrain have lowest reported confirmed cases due to others.This is because these two countries are smaller than others.Saudi Arabia and United Arab emirates shows highest cases because of the high population.
+
+### **Comparison of daily recovered cases** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 10 : Comparison of daily recovered cases", fig.align='center', out.width='100%'}
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,recovered))
+Bahrain <- Bahrain_corona %>% select(c(date,country,recovered))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,recovered))
+Kuwait <- Kuwait_corona %>% select(c(date,country,recovered))
+qatar <-qatar_corona_wider %>% select(c(date,country,recovered))
+
+recovered_comparison <- bind_rows(Saudi_Arabia,Bahrain) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(Kuwait) %>% bind_rows(qatar)
+p4 <- ggplot(recovered_comparison, aes(x=date, y=recovered,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) 
+ggplotly(p4)
+```
+
+This plot is similar to above figure 9. Because confirmed cases is similar fo recovered cases after some period of begining this pandemic situation. So  Saudi Arabia and United Arab emirates corona recovered cases were reported highest than others. Kuwait,Bahrain and Qatar corona recovered cases are going slightly similar.
+
+### **Comparison of daily death cases** 
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE,fig.cap="Figure 11 : Comparison of daily death cases", fig.align='center', out.width='100%'}
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,death))
+Bahrain <- Bahrain_corona %>% select(c(date,country,death))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,death))
+Kuwait <- Kuwait_corona %>% select(c(date,country,death))
+qatar <-qatar_corona_wider %>% select(c(date,country,death))
+
+death_comparison <- bind_rows(Saudi_Arabia,Bahrain) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(Kuwait) %>% bind_rows(qatar)
+p5 <- ggplot(death_comparison, aes(x=date, y=death,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5)
+
+ggplotly(p5)
+```
+
+According to this plot  Saudi Arabia is reporting highest death cases among this countries. it shows their peak cases around July of 2020 and present situation. United Arab emirates shows their highest death cases when passing January of 2021. Bahrain shows their highest death cases near to July of 2021. All other time periods they shows slightly similar death cases except Saudi Arabia.
+
+### **Comparison of daily active cases** 
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE,fig.cap="Figure 12 : Comparison of daily active cases", fig.align='center', out.width='100%'}
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,active))
+Bahrain <- Bahrain_corona %>% select(c(date,country,active))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,active))
+Kuwait <- Kuwait_corona %>% select(c(date,country,active))
+qatar <-qatar_corona_wider %>% select(c(date,country,active))
+
+active_comparison <- bind_rows(Saudi_Arabia,Bahrain) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(Kuwait) %>% bind_rows(qatar)
+p6 <- ggplot(active_comparison, aes(x=date, y=active,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5)
+
+ggplotly(p6)
+```
+
+According to this plot Saudi Arabia shows their highest active cases above 60000 between July and August 2021. But after that it shows sharp decrease till January 2020. Qatar shows their highest active cases before months of July 2020 and April 2021 . Kuwait shows their highest active cases in the month July 2021 and it shows slightly increase since January 2021.  Bahrain shows their highest active cases before the month July 2021. United Arab Emirates shows their highest active cases close to January 2021.But other country's cases are not high like Saudi Arabia and in range 40000 cases.
+
+# **3.Discussion**
+
+Coronavirus data set is a large data set with 498132 observations of 7 variables.
+  
+  - date-the day that the data were recorded.
+  
+  - province- the province that country was stated
+  
+  - country
+  
+  - lat - latitude of the country. This is same for all rows which specified in each country
+  
+  - lat - longitude of the country. This also is same for all rows which specified in each country
+  
+  - type - type of the reported cases(confirmed,recovered,death)
+  
+  - cases - Number of cases on  given date
+  
+It is an daily updated data set.According to my analysis I study about Qatar. There are three main steps of the data analysis process. They are data cleaning, data analyzing and interpreting the results.So firstly I filtered Qatar data of coronavirus by filtering. Filtered data set have 1818 observations and 7 variables. It has one minus value(-39) in recovered cases.That is an impossible case. This might be happen because there may be some changes in the counting process or data resources, error in raw data,missing new updates etc. We don't know anything about this value.We can't get its absolute value also because it may be give wrong results. Since data are important we cant remove it from the data set.We can not replace it with zero because zero also a important value in this case. But I think replacing "NA" is better than other methods.Furthermore my Qatar data set have 45 "NA" values in recovered cases. For better analysis it should clean this "NA"values also. We can remove those dates from data set. But I think replacing "NA" values with mean value of the recovered cases is the best option to clean this data set fairly. In my data set whole province column is missing. so it is not useful for my analysis then I remove it and got the cleaned data set.
+
+Consider the types of confirmed cases analysis of Qatar in figure 2, it shows the highest confirmed cases in May and June 2020 and April and May 2021. Those months Qatar has their hot season. December to February period is cooler season. In cooler season reported confirmed cases are very law than hot season. That means the coronavirus is highly transmission in Qatar during the hot season. According to the figure 3 recovered cases also showing the same pattern in confirmed cases. First confirmed cases is reported on 29 th of February and fist 6 recovered cases are reported on 20 th of March 2020.So these two have some related pattern in the plot and same as data. Its because of recovered cases depend on confirmed cases. According to the figure 4 all the period of this data set Qatar recorded highest cases of death is 10. So it it can be said that Qatar is well controlled this pandemic situation. However highest death cases are reported also in hot season. According to the figure 5, It shows active cases in Qatar.It is get using following equation.
+
+<p style="text-align:center;">
+  <font size = "2">
+  active= cumsum(confirmed) - cumsum(death) - cumsum(recovered)
+  </font>
+  </p>
+  
+  
+It gives all the active cases till to select day. Qatar showed their highest number of active cases in the period MAy and June 2020 and April 2021. In present, Qatar showed low active cases.But active cases are depend on all other 3 cases and it is not the cases fo each day. that means all active corona patients count  in previous dates  According to this plots we can say that in the present Qatar is well controlled with coronavirus. The other period also Qatar did not shows high peaks with corona cases. In hot season shows some increase of corona cases because the peoples are busy with their works in this  period.
+
+<center>
+![Qatar](https://inetsgi.com/images/668/images/06673982.PNG){width=30%} </center>
+
+The progress of COVID 19 of Qatar can not be clearly understood by solely analyzing Qatar's data. Therefore a comparison of Qatar with some of middle east countries of significance during this period has been carried out in order to reach the final conclusions. Here I got 4 countries for that and those are Saudi Arabia,United Arab Emirates, Bahrain and Kuwait. When compared to its neighboring countries although the reporting of the disease occurred for all countries in similar time period. According to the all 4 comparison plots highest case density is shows from Saudi Arabia. Because Saudi Arabia is a large country when comparing others.Unit Arab Emirates also a big country.Bahrain is quit like  same size with Qatar. Kuwait is larger than Qatar and Bahrain. So when comparing this countries we should be careful about that. So when comparing these cases Qatar and Saudi Arabia shows their highest peaks on May, June and July 2020. Other three show their highest peaks between February and July 2021. But in the present Saudi Arabia shows increase of their confirmed cases. That mean their coronavirus control is not successful.But other countries shows less confirmed cases in present that means all these countries well controlling coronavirus In this data set we have most recent data. So therefore we can get more accurate and preferable data about controlling coronavirus.
+
+
+# **4.Conclusion**
+
+
+In Conclusion it can be say that Qatar currently states in good stage regarding coronavirus pandemic. Their confirmed cases were lower than others. Their highest death cases also very low in all the time period we considered.Their highest cases were reported in hot season than cooler season. The Government of Qatar has been able to apply many successful public health response strategies and stabilize the progress of the disease. The government been well prepared for the pandemic along. They make a rule, if not use face mask then three year jail period for all. So the peoples in Qatar also given their best to avoid this pandemic. 
+
+
+# **5.Reference**
+
+  - R Markdown: The Definitive Guide - https://bookdown.org/yihui/rmarkdown/
+  
+  - R for Data Science - https://r4ds.had.co.nz
+
+  - https://rmd4sci.njtierney.com/figures-tables-captions-.html
+
+  - https://www.journaldev.com/39695/replace-in-r
+  
+  - https://www.tutorialspoint.com/how-to-convert-negative-values-in-an-r-data-frame-to-positive-values
+
+  - https://bookdown.org/yihui/rmarkdown/html-document.html
+  
+  - https://bookdown.org/yihui/rmarkdown/html-document.html
+
+  - https://plotly.com/r/getting-started/
+
+  - https://hellor.netlify.app/home/
+  - Julia Silge You tube channel - https://www.youtube.com/channel/UCTTBgWyJl2HrrhQOOc710kA
+  - tydy Tuesday David Robinson - https://www.youtube.com/user/safe4democracy/videos
+
+  - https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd
+BY John Duke Anthony | See All Contributors Last Updated: Sep 25, 2021 | View Edit History
+https://www.britannica.com/place/Qatar
+
+

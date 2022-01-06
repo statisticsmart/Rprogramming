@@ -1,0 +1,337 @@
+---
+title : STA 326 2.0 Programming and Data Analysis with R
+author: "W.K.M.Sanjana"
+date  : "28/09/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**AS2018530**
+
+<p align="center">
+<img src="AS2018530_SouthKorea.jpg" width="100%"/>
+
+</p>
+
+<body style = "background-color:cornsilk">
+ 
+<!--font: frutiger -->
+
+
+# <span style="color:darkblue">**1. Introduction**</span>
+
+## <span  style="color:midnightblue">1.1 Background</span>
+
+South Korea,officially the Republic of Korea is a country in East Asia,consisting the southern part of the Korean Peninsula,and sharing a land border with North Korea.About 25 million people,around half of the country's population of 51 million,live in the Seoul Capital Area.
+
+South Korea is a developed country and rank as the seventh-highest country on the Human Development Index(HDI) in the Asia-Pacific region.It is a member of OECD's Development Assistance Committee,the G20 and the Paris Club.Its economy ranks as the world's tenth-largest by nominal GDP.
+
+South Korea's health system is centered on hospital-based care.The number of hospital beds per capita 12, beds per 1000 population,is two times higher than the average in Organization of Economic Cooperation and Development(OECD) countries.The country excels not only in hospital capacity but also in interactions with doctors,with an OECD-leading 16.6 consultations annually per capita.Although some critics suggest that South Korea's health system is overly dependent on secondary or tertiary facilities instead of primary facilities,this extra capacity enabled hospitals to respond quickly to COVID-19 without sacrificing care for non-COVID-19 patients.
+
+
+## <span style="color:midnightblue">1.2 Visualization of the location</span>
+
+```{r, include=FALSE,echo=FALSE}
+
+rm(list = ls()) # remove objects
+library(coronavirus)
+data(coronavirus) # covid-19 data set
+head(coronavirus)
+
+unique(coronavirus$country)
+library(tidyverse)
+library(magrittr)
+southKorea_corona <- coronavirus %>% filter(country == "Korea, South")
+
+```
+
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "light blue"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = southKorea_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+
+
+## <span style="color:midnightblue">1.3 Climate condition</span>
+
+Unlike many other Asian destinations, South Korean weather is fairly straightforward and easy to understand. There are only minimal regional variations throughout the country, and the year divides neatly into four distinct seasons.
+
+   1. Spring - Typically lasting from April to June, with average daily temperatures a pleasant 15 - 18°C.
+    
+   2. Summer - The brief summer lasts from July to August and is the hottest time of the year in South Korea. Temperatures may range between 23°C and 30°C but this is also the wettest time of the year, with the monsoon rains bringing half of the country’s annual rainfall during these months.
+    
+   3. Autumn  - (September~November) is the best time of A year in south Korea.The weather will be cooler and dryer, but it will be still sunny and warm.
+    
+   4. Winter - Falling between December and March, the long winter is freezing cold but relatively dry, and certainly charming. 
+
+
+The first domestic confirmed case of the coronavirus disease (COVID-19) was identified in the Republic of Korea on
+20 January 2020. By 16 February, 30 new confirmed cases due to foreign inflows or local community transmission had
+been identified, the route of infection was not traceable for all these cases.
+On 17 February, the 31st confirmed person (later named as a “super-communicator”) was diagnosed in Daegu City.
+A full-scale epidemiological investigation started for the believers of a religious sect in Daegu where the supercommunicator belonged to. Multiple confirmed cases related to super-communicator, and first death occurred in
+20 February. The number of confirmed cases continued to increase thereafter, resulting in up to 1,062 cases
+per day (2 March).
+On 6 April, although the number of new confirmed cases decreased to fewer than 50 (47) per day, many cases of group
+infection occurred mainly in entertainment facilities during the holiday season starting on 30 April.
+On 12 August, as a confirmed case occurred in a church in Seoul, the number of related confirmed patients, including
+visitors, prayers, and family members of the churchgoers, increased to about 200 in 4 days. As a large number of
+confirmed patients occurred in the greater metropolitan area of Seoul, the government upgraded social distancing level
+to the second stage only in the capital area, but the number of confirmed cases per day remained in the hundreds.
+On 20 September, the number of new confirmed cases per day again declined to fewer than 100 people, and showed a
+decreasing trend compared to August. However, because of concerns that the number of confirmed cases may increase
+again starting from the major holiday (Thanksgiving Day) scheduled from 30 September to 4 October, the disease
+control authorities monitored the trend without lowering the level of quarantine stage.
+
+  • First confirmation     : 20 January 2020
+  
+  • Cumulative confirmation: 23,611 (as of 27 September 2020)
+  
+  • Cumulative deaths      : 401 (as of 27 September 2020)
+  
+  • Fatality rate          : 1.70% (as of 27 September 2020)
+  
+
+
+## <span style="color:midnightblue">1.4 Government Action for COVID-19</span>
+
+The Republic of Korea’s response to COVID-19 has been among the most effective in the world. By combining aggressive testing with early isolation and treatment of those who test positive, Korea has lowered its infection rate while avoiding the need to lock down entire cities. The government reorganized hospitals to prevent infection, effectively distributed face masks and will cover all COVID-related medical costs. After peaking at about 800 new cases per day in March, Korea had only 14 on April 28.
+
+
+# <span style="color:darkblue">2. **Exploratory Data Analysis**</span>
+
+## <span style="color:midnightblue">2.1 Structure of the Data Set</span>
+
+The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset
+
+  + Description - Daily summary of the Coronavirus (COVID-19) cases by state/province.
+
+  + Usage      - coronavirus
+
+  + Format     - A data frame with 7 variables.
+
+  + date       - Date in YYYY-MM-DD format.
+
+  + province   - Name of province/state, for countries where data is provided split across multiple provinces/states.
+
+  + country    - Name of country/region.
+
+  + lat        - Latitude of center of geographic region, defined as either country or, if available, province.
+
+  + long        - Longitude of center of geographic region, defined as either country or, if available, province.
+
+  + type        - An indicator for the type of cases (confirmed, death, recovered).
+
+  + cases      - Number of cases on given date.
+
+  + Details    - The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province.
+
+  + Source     - Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website.
+
+
+All records are available for the time period from 2020-01-22 to 2021-09-18 in coronavirus data set.
+
+###  <span style="color:midnightblue">2.1.1 Summarization of south korea data set</span>
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE}
+summary(southKorea_corona)
+
+```
+
+The data of coronavirus in south korea was collected from 2020-01-22  to 2021-09-18. In here number of minimum recovered cases reported as -17.This gives the incorrect information because cases can not be negative value.so this can be a outlier for our data. Therefore for we can replace it as missing value.And here there are 45 NA's.
+
+
+## <span style="color:midnightblue">2.2 Visualization of death, confirmed, recovered, active cases</span>
+
+### <span style="color:midnightblue">2.2.1 Confirmed cases in South Korea</span>
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE}
+
+library(plotly)
+library(ggplot2)
+
+confirmed_cases <- filter(southKorea_corona, type == "confirmed")  %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+p10 <- ggplot(confirmed_cases,aes(x=date,y=cases),na.rm = TRUE) + geom_path(size=1) + labs(title = "Confirmed cases in South Korea")
+
+ggplotly(p10)
+
+```
+
+Above graph shows the confirmed number of corona patients in south korea in daily. It shows that number of confirmed Corona patients has been increasing since August 2020.
+
+### <span style="color:midnightblue">2.2.2 Death cases in South Korea</span>
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE}
+
+death_cases <- filter(southKorea_corona, type == "death") %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p9 <- ggplot(death_cases,aes(x=date,y=cases),na.rm = TRUE) + geom_path(size=1) + labs(title = "Death cases in South Korea")
+
+ggplotly(p9)
+
+
+```
+
+Above graph shows the death number of corona patients in South Korea in daily. This graph also shows there were sudden increasing from december 2020 to february 2021 of number of death patients.
+
+### <span style="color:midnightblue">2.2.3 Recovered cases in South Korea</span>
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE}
+
+recovered_cases <- filter(southKorea_corona, type == "recovered")
+
+recovered_cases <- recovered_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p8 <- ggplot(recovered_cases,aes(x=date,y=cases),na.rm = TRUE) + geom_path(size=1) + labs(title = "Recovered cases in South Korea")
+ggplotly(p8)
+
+
+```
+
+Above graph shows the recovered number of corona patients in South Korea in daily. This graph also shows there were sudden increasing from december 2020 to July 2021 of number of recovered patients.
+
+
+### <span style="color:midnightblue">2.2.4 Confirmed,Death and Recovered cases in South Korea</span>
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE,warning=FALSE}
+
+southKorea_corona <- southKorea_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p7 <- ggplot(southKorea_corona, aes(x = date, y = cases, colour = type),na.rm = TRUE) + geom_path(size=1) + 
+  labs(title="Confirmed, Death and Recovered cases in South Korea")
+
+ggplotly(p7)
+
+
+```
+
+Above graph shows the number of confirmed, death and recovered corona patients in south Korea in daily in the same graph. The graph also shows that the number of confirmed and recovered cases have relatively reduced with respect to the first few months of the disease. There is no increasing or decreasing seems to be in number of death cases.
+
+## <span style="color:midnightblue">2.3 Comparison with other countries</span>
+
+
+```{r,eval=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(120, 180), ylim = c(10, 45)) +
+  scale_x_continuous(breaks = seq(120, 120,180)) +
+  scale_y_continuous(breaks = seq(10,45,45))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 2
+  ) + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+
+near_countries <- subset.data.frame(coronavirus, ( 10< lat & lat < 45) & (120 < long & long < 180) )
+
+```
+
+South Korea is situated very close to the Japan and China.Therefore Japan and China can also be considered as South Korea's neighboring countries. Therefore,this section amplifies the COVID-19 situation of South Korea when compared to its neighboring Japan and China.
+
+### <span style="color:midnightblue">2.3.1 South Korea vs. China and Japan</span>
+
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE,warning=FALSE}
+
+library(plotly)
+library(ggplot2)
+confirmed <- filter(coronavirus,country %in% c("Korea, South","China","Japan"), type == "confirmed")
+
+p2 <- ggplot(confirmed,aes(x=date,y=cases,colour= country),na.rm = TRUE) + geom_path(size=1) + labs(title = "Confirmed cases in South Korea vs China and Japan")
+
+ggplotly(p2)
+
+```
+
+Above graph can be seen that COVID-19 cases were confirmed in China and Japan before it was confirmed in South Korea.Compared to the Japan, South Korea has done quite well in dropped the daily confirmed cases down low earlier on than Japan.And also Compared to The China, the number of confirmed daily patients in South Korea was initially lower than in china,after that its comparable cases have increased.
+
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE,warning=FALSE}
+
+library(plotly)
+library(ggplot2)
+death <- filter(coronavirus,country %in% c("Korea, South","China","Japan"), type == "death")  %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+p3 <- ggplot(death,aes(x=date,y=cases,colour= country),na.rm = TRUE) + geom_path(size=1) + labs(title = "Death cases in South Korea vs China and Japan")
+
+ggplotly(p3)
+
+```
+
+Above graph can be seen that COVID-19 deaths have been high since January 2021 compared to China and South Korea.
+
+```{r,eval=TRUE, echo=FALSE,message=FALSE,warning=FALSE}
+
+library(ggplot2)
+
+compared_Country <- coronavirus %>% filter(country == c("China","Japan","Korea, South")) %>% filter(type == c("confirmed","death")) %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p4 <-ggplot(data = compared_Country, aes(x = country, y = cases, fill = type),na.rm = TRUE) + geom_bar(stat = "identity",Position = position_dodge()) + 
+  labs(title="Confirmed vs. Death cases in China,Japan and South Korea") 
+
+ggplotly(p4)
+
+```
+
+
+Considering the above graph,the number of death cases is much higher than the number of confirmed cases in china,Japan and south Korea.
+
+## <span style="color:darkblue">3. **Conclusion**</span>
+
+regarding the COVID-19 Pandemic when compared to neighboring countries, despite it being significantly affected in the earlier months. The Government of South Korea has been able to apply many successful public health response strategies and stabilize the progress of the disease. The worst situation of corona in South Korea came to after august 2020.Because there were number of confirmed corona patients have increased in South Korea.
+
+## <span style="color:darkblue"> 4. **References**</span>
+
+
+  1. Oh J, Lee JK, Schwarz D, Ratcliffe HL, Markuns JF, Hirschhorn LR. National response to COVID-19 in the Republic of Korea and lessons learned for other countries.[online]. https://www.tandfonline.com/doi/full/10.1080/23288604.2020.1753464. Accessed September 26, 2021.
+  
+  2. 2021 Asian Development Bank.Assessment of COVID-19 Response in the Republic of Korea.[online]. https://www.adb.org/sites/default/files/publication/691441/assessment-covid-19-response-republic-korea.pdf. Accessed September 26, 2021.
+  
+  3. Yan Holtz,The R Graph Gallery.[online]. https://www.r-graph-gallery.com/288-animated-barplot-transition.html. Accessed September 26, 2021.
+  
+  4. Rcolor.[online]. http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf. Accessed September 26, 2021.
+  
+   5. Rick Strahl,Getting Images into Markdown Documents and weblog Posts with Markdown Monster.[online]. https://medium.com/markdown-monster-blog/getting-images-into-markdown-documents-and-weblog-posts-with-markdown-monster-9ec6f353d8ec. Accessed September 27,2021.
+   
+   6. How do I center an image in the README.md file on GitHub?.[online]. https://stackoverflow.com/questions/12090472/how-do-i-center-an-image-in-the-readme-md-file-on-github. Accessed September 27,2021.
+   
+   7. Swip,Font style,[online]. https://www.swipe.to/markdown/fonts/. Accessed September 27,2021.
+  
+</body>

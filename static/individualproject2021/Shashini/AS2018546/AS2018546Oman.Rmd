@@ -1,0 +1,372 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+<p style="text-align:center:">
+<font size = "10">
+**The Impact of COVID 19 on Oman**
+</font>
+</p>
+
+### AS2018546
+
+# **1.Introduction**
+
+<center>
+![Oman](https://cdn.britannica.com/09/61509-050-EB149D2D/Muscat-Oman.jpg){width=50%}</center>
+
+Oman is a country in Southwest Asia on the coast of the Arabian Sea, Gulf of Oman, and the Persian Gulf. Neighboring countries include Saudi Arabia, United Arab Emirates, and Yemen.
+The Sultanate of Oman can be described as Dubai’s lesser-known and more traditional cousin. It is a stunning country with dramatical geography and architecture. They have around 1,700km (1,000 miles) of unspoilt beaches full of exotic sea life, staggering mountain ranges and plenty of beautiful nature reserves to visit and enjoy.
+
+Strategically located at the mouth of the Persian Gulf, Oman is boarded by the United Arab Emirates (UAE) to the northwest, Saudi Araba to the west and Yemen in the southwest. It also shares marine borders with Iran and Pakistan to the north and northeast respectively.
+
+* Quick Facts:
+    * Capital: Muscat
+    * Population: 4.6 million (Muscat: 25,000)
+    * Area: 309,500 sq. km (119, 500 sq. miles)
+    * Languages: Arabic (official), English
+    * Religion: Islam & Muslim 
+    * Currency: Oman Rial (OMR)
+    * Demonym: Omani
+    * Time zone: Gulf Standard Time (GST) (UTC +4hours)
+    * Working week: Sunday - Thursday
+    * Drive on the: Right
+* Calling Code: +968
+Source: UN World Bank
+Oman is the oldest independent state in the Arab world and continues to be one of the more traditional counties within the Gulf region - although they have beautifully balanced their traditional past with modernisation and development. Until the late 1970’s Oman was one of the most isolated countries in the world.
+
+
+Oman has a strategic location on the Arabian Peninsula adjacent to the Strait of Hormuz, a vital transit point for crude oil. The geography of Oman is mountainous and arid. 
+
+Oman’s capital, Muscat is a port that sits on the Gulf of Oman surrounded by mountains and desert. With the history dating back to antiquity, it mixes high-rises and upscale shopping malls with clifftop landmarks such as the 16th-century Portuguese forts, Al Jalali and Mirani, looming over Muscat Harbour.
+
+The government system is a monarchy; the chief of state and head of government is the sultan and prime minister. Oman is a member of the League of Arab States (Arab League) and the Gulf Cooperation Council (GCC).
+Since the turn of the millennium, Oman has been focused on driving economic growth and in 2007 they gained status as a high-income economy by the World Bank.
+Tourism is the fastest growing sector of the Omani economy, which has been aided by Oman’s status as the 74th most peaceful country in the world in the latest Global Peace Index.
+
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 1 : Location in the word map", fig.align='center'}
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+oman_corona <- coronavirus %>% filter(country == "Oman")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+
+p<- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y= lat, group=group), fill ="gray", colour="white") +
+  coord_cartesian(xlim = c(-180,180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180,180,120))+
+  scale_y_continuous(breaks = seq(-90,90,100))
+
+
+p + geom_point(data = oman_corona, aes(x=long, y=lat), color = "red",size=1,)
+
+
+```
+
+###  Climate condition in Oman
+
+The Climate of Oman can be described as subtropical dry, hot desert climate with low annual rainfall, very high temperatures in summer and a big difference between maximum and minimum temperatures, especially in the inland areas. Summer (June to September) is very low rainfall.
+
+Like the rest of the Persian Gulf, Oman generally has one of the hottest climates in the world—with summer temperatures in Muscat and northern Oman averaging 30 to 40 °C (86.0 to 104.0 °F).Oman receives little rainfall, with annual rainfall in Muscat averaging 100 mm (3.9 in), occurring mostly in January. In the south, the Dhofar Mountains area near Salalah has a tropical-like climate and receives seasonal rainfall from late June to late September as a result of monsoon winds from the Indian Ocean, leaving the summer air saturated with cool moisture and heavy fog.Summer temperatures in Salalah range from 20 to 30 °C (68.0 to 86.0 °F)—relatively cool compared to northern Oman.
+
+The mountain areas receive more rainfall, and annual rainfall on the higher parts of the Jabal Akhdar probably exceeds 400 mm (15.7 in). Low temperatures in the mountainous areas leads to snow cover once every few years. Some parts of the coast, particularly near the island of Masirah, sometimes receive no rain at all within the course of a year. The climate is generally very hot, with temperatures reaching around 54 °C (129.2 °F) (peak) in the hot season, from May to September. Drought and limited rainfall contribute to shortages in the nation's water supply. Maintaining an adequate supply of water for agricultural and domestic use is one of Oman's most pressing environmental problems, with limited renewable water resources.
+
+ 
+### Lockdown status and action taken by the country
+
+The COVID-19 pandemic in Oman is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Oman on 24 February 2020 when two citizens tested positive for COVID-19 after returning from Iran.As of 26 September  2021, the total number of cases registered in the sultanate is 303551, of which 295,168 have recovered and 4,093 have died.Initially, the majority of the cases and deaths occurred in the expatriate community. By July 2020, as the pandemic entered its fourth month in the country, the majority of the cases and deaths had occurred among the citizens.
+
+Muscat continues to be the most affected governorate with the highest number of confirmed cases at over 149,383 and 1,354 deaths,and accounted for 76% of the total cases in the country by early June 2020, with the majority of the cases being in the expatriate community.On 10 April, the entire governorate was put under lockdown until 22 April,this was extended twice,with the lockdown being lifted on 29 May.
+
+Starting 13 June 2020, lockdowns were imposed in the governorate of Dhofar, the wilayat of Masirah, the wilayat of Duqm and the areas of Jebel Akhdar and Jebel Shams until 3 July 2020.Various national level lockdowns and movement bans have since been imposed over the course of the pandemic so far.
+
+As per directives issued by Sultan Haitham bin Tariq, COVID-19 tests and treatment were initially made free for all communities of the sultanate, including expatriates.As of August 2021, Oman has vaccinated a total of 66% of its populations in terms of both first and second doses administered.
+
+
+<center>
+![Oman](https://middleeastaffairs.net/wp-content/uploads/2020/06/f3625054-0855-4895-b541-17f8009cd698_16x9_600x338.jpg){width=50%}</center>
+
+
+# **2. Exploratory Data Analysis**
+
+###  **Summery measures of Oman coronavirus data set** 
+
+summary of the conavirus cases in Oman
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 2 : Summery measures of Oman coronavirus data set"}
+oman_corona <-as_tibble(oman_corona)
+oman_corona <-oman_corona %>% select(-c(province))
+summary(oman_corona)
+library(skimr)
+skim(oman_corona)
+```
+
+The data was collected from 2020.01.22 to 2021.09.18. Here we can get idea about data set.
+
+There was 45 missing values in recovered cases. it also gives incorrect information for our analysis. Therefore they were replaced as mean value of recovered cases.
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 2 : Summery measures of Oman coronavirus data set"}
+
+
+oman_corona <- as_tibble(oman_corona)
+
+oman_corona_wider<-oman_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+
+oman_corona_wider$recovered[is.na(oman_corona_wider$recovered)] <-mean(oman_corona_wider$recovered,na.rm = TRUE)
+oman_corona_wider$recovered <- round(oman_corona_wider$recovered,digits = 0)
+
+oman_corona_wider <- oman_corona_wider %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+oman_corona_wider$active <- replace(oman_corona_wider$active,oman_corona_wider$active<0,0)
+
+summary(oman_corona_wider)
+
+library(skimr)
+skim(oman_corona)
+
+
+```
+
+According to these summaries, data cleaning process was completed sucessfully
+
+
+### **Daily confirmed cases in Oman** 
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 2 : Plot of daily confirmed cases in Oman", fig.align='center', out.width='100%'}
+library(plotly)
+c <- ggplot(oman_corona_wider, aes(x=date, y=confirmed))+geom_path(size=0.5)
+ggplotly(c)
+
+
+```
+
+According to this confirmed cases plot shows that the highest number of confirmed cases reported within 2021.01 and 2021.07. 
+
+### **Daily recovered cases in Oman** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 3 : Plot of daily recovered cases in Oman", fig.align='center', out.width='100%'}
+
+r <- ggplot(oman_corona_wider, aes(x=date, y=recovered))+geom_path(size=0.5)
+ggplotly(r)
+
+```
+
+similarly figure 2, highest number of recovered cases reported within 2020.01 and 2020 07 period. After that peried decreases the recovered cases and between the period 2021.01 and 2021.07 it was slightly increased. But in present situation it is low.
+
+### **Daily death cases in Oman** 
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 4 : Plot of daily death cases in Oman", fig.align='center', out.width='100%'}
+
+d <- ggplot(oman_corona_wider, aes(x=date, y=death ))+geom_path(size=0.5)
+ggplotly(d)
+
+```
+
+According to this plot highest number of deaths were reported in 2021.01 to 2021.07 period and it was 255.
+
+### **Active cases in Omanr** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 5 : Plot of daily death cases in Oman", fig.align='center', out.width='100%'}
+
+a <-ggplot(oman_corona_wider, aes(x=date, y=active))+geom_path(size=0.5)
+ggplotly(a)
+
+```
+
+According to this plot highest number of active cases were reported in the period 2020.01 to 2020.08 and 2021.02 to 2021.08
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 6 : Plot of cases acording to the types", fig.align='center', out.width='100%'}
+
+p1 <- ggplot(oman_corona, aes(x=date, y=cases,col=type))+geom_path(height=3000) + facet_grid(~type)
+ggplotly(p1)
+
+
+```
+
+
+### Time series analysis of corona patients in Oman
+
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 7 : Plot of cases acording to the types", fig.align='center', out.width='115%'}
+
+p1 <- ggplot(oman_corona, aes(x=date, y=cases,color=type), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) + ggtitle("Time series plot of corona cases in Oman ")
+
+ggplotly(p1)
+
+```
+## **Comparison corona cases with the countries close to Oman**
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 8 : Location of the countries close to Oman in the word map", fig.align='center', out.width='100%'}
+p <- ggplot() + 
+  geom_polygon( data = wrld_simpl, 
+            aes(x = long, y = lat, group = group), fill = "gray", colour = "white" ) + coord_cartesian(xlim = c(40, 60), ylim = c(15, 35)) + 
+scale_x_continuous(breaks = seq(40, 40, 60)) + 
+scale_y_continuous(breaks = seq(15, 35, 35)) 
+
+p + geom_point( data = oman_corona, aes(x = long, y = lat), color = "red", size = 1) + geom_text(aes(x=coronavirus$long,y=coronavirus$lat,label=coronavirus$country))
+
+new_countries <-subset.data.frame(coronavirus,(15<lat & lat<35),(40<long & long<60))
+```
+
+
+
+
+Here I use Saudi Arabia,United Arab Emirates and Yemen as close countries. Those 3 countries are very close to Oman.
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.align='center'}
+ 
+Saudi_Arabia_corona <- coronavirus %>% filter(country == "Saudi Arabia")
+Saudi_Arabia_corona <- as_tibble(Saudi_Arabia_corona)
+Saudi_Arabia_corona<-Saudi_Arabia_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+Saudi_Arabia_corona <- Saudi_Arabia_corona %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+
+Yemen_corona <- coronavirus %>% filter(country == "Yemen")
+Yemen_corona <- as_tibble(Yemen_corona)
+Yemen_corona<-Yemen_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+Yemen_corona <-Yemen_corona %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+
+United_Arab_Emirates_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+United_Arab_Emirates_corona  <- as_tibble(United_Arab_Emirates_corona )
+United_Arab_Emirates_corona <-United_Arab_Emirates_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+United_Arab_Emirates_corona  <- United_Arab_Emirates_corona  %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+```
+
+
+
+### **Comparison of daily confirmed cases** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 9 : Comparison of daily confirmed cases", fig.align='center', out.width='115%'}
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,confirmed))
+Yemen <- Yemen_corona %>% select(c(date,country,confirmed))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,confirmed) )                     
+oman <-oman_corona_wider %>% select(c(date,country,confirmed))
+
+confirmed_comparison <- bind_rows(Saudi_Arabia) %>% bind_rows(Yemen) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(oman)
+library(plotly)
+p3 <- ggplot(confirmed_comparison, aes(x=date, y=confirmed,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) + ggtitle("Time series plot of confirmrd cases in Oman")
+
+ggplotly(p3)
+
+```
+
+According to this plot oman shows that the highest confirmed cases density than other countries.saudi arabia and united arab emirates have next highest  confirmed cases  density.
+
+### **Comparison of daily recovered cases** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 10 : Comparison of daily recovered cases", fig.align='center', out.width='115%'}
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,recovered))
+Yemen <- Yemen_corona %>% select(c(date,country,recovered))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,recovered))
+oman <-oman_corona_wider %>% select(c(date,country,recovered))
+
+recovered_comparison <- bind_rows(Saudi_Arabia) %>% bind_rows(Yemen) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(oman)
+p4 <- ggplot(recovered_comparison, aes(x=date, y=recovered,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) + ggtitle("Time series plot of comparison of recovered cases ")
+
+ggplotly(p4)
+```
+
+This plot is similar to above figure 9. Because confirmed cases is similar fo recovered cases after some period of begining this pandemic situation. So Saudi Arabia corona recovered cases were reported highest than others.
+
+### **Comparison of daily death cases** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 11 : Comparison of daily death cases", fig.align='center', out.width='115%'}
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,death))
+Yemen <- Yemen_corona %>% select(c(date,country,death))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,death))
+oman <-oman_corona_wider %>% select(c(date,country,death))
+
+death_comparison <- bind_rows(Saudi_Arabia) %>% bind_rows(Yemen) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(oman) 
+p5 <- ggplot(death_comparison, aes(x=date, y=death,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) + ggtitle("Time series plot of comparison of death cases ")
+
+ggplotly(p5)
+```
+
+According to this plot Oman is reporting highest death cases anong this countries It shows their peak cases around July of 2021 and present situation. Saudi Arabia shows their highest death Cases when passing July of 2020 and present situation . United Arab Emirates  shows their highest death cases near to February  of 2021. All other time periods they shows slightly similar death cases except Oman.
+
+### **Comparison of daily active cases** 
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 12 : Comparison of daily active cases", fig.align='center', out.width='115%' }
+
+Saudi_Arabia <- Saudi_Arabia_corona %>% select(c(date,country,active))
+Yemen <- Yemen_corona %>% select(c(date,country,active))
+United_Arab_Emirates <- United_Arab_Emirates_corona %>% select(c(date,country,active))
+oman <-oman_corona_wider %>% select(c(date,country,active))
+
+active_comparison <- bind_rows(Saudi_Arabia) %>% bind_rows(Yemen) %>% bind_rows(United_Arab_Emirates) %>% bind_rows(oman) 
+p6 <- ggplot(active_comparison, aes(x=date, y=active,color=country), is.na=FALSE)+geom_point(size=0.5) + geom_line(size=0.5) + ggtitle("Time series plot of comparison of active cases ")
+
+ggplotly(p6)
+```
+
+According to this plot Saudi Arabia shows their highest active cases above 60000 between June and August 2020. But after that it shows sharp decrease till January 2021. Oman shows their highest active cases before months of July 2020 and July 2021 .Yemen shows their highest active cases before the month April 2021. United Arab Emirates shows their highest active cases close to January 2021.But other country's cases are not high like Saudi Arabia and in range 20000 - 300000 cases.
+
+# **3.Discussion **
+
+According to my analysis I study about Oman. There are three main steps of the data analysis process. They are data cleaning, data analyzing and interpreting the results.So firstly I filtered Oman data of coronavirus by filtering. Filtered data set have 1818 observations and 7 variables.
+That variables are,
+
+* date
+* province
+* country
+* lat - latitude of the country.
+* lat - longitude of the country. 
+* type -(confirmed,recovered,death)
+* cases - Number of cases on  given date
+    
+Furthermore my Oman data set have 45 "NA" values in recovered cases. For better analysis it should clean this "NA"values also. We can remove those dates from data set. But I think replacing "NA" values with mean value of the recovered cases is the best option to clean this data set fairly. In my data set whole province column is missing. so it is not useful for my analysis then I remove it and got the cleaned data set.
+
+Consider the types of confirmed cases analysis of Oman in figure 2, it shows the highest confirmed cases in June and October 2020 and March to June 2021.According to the figure 3 recovered cases also showing the same pattern in confirmed cases. First confirmed 2 cases are reported on 24 th of February and fist  recovered cases are reported on 29 th of February 2020.So these two have some related pattern in the plot and same as data. Its because of recovered cases depend on confirmed cases.According to the figure 4 all the period of this data set Oman recorded highest cases of death is 255.
+
+According to the figure 5, It shows active cases in Oman.Oman showed their highest number of active cases in the period May to August 2020 and March to July 2021. In present, Oman showed low active cases.But active cases are depend on all other 3 cases and it is not the cases fo each day. that means all active corona patients count  in previous dates  According to this plots we can say that in the present Oman is well controlled with coronavirus. The other period also Oman did not shows high peaks with corona cases.
+
+The progress of COVID 19 of Oman can not be clearly understood by solely analyzing Oman's data. Therefore a comparison of Oman with some of middle east countries of significance during this period has been carried out in order to reach the final conclusions. Here I got 3 countries for that and those are Saudi Arabia,United Arab Emirates, Yemen. When compared to its neighboring countries although the reporting of the disease occurred for all countries in similar time period. According to the all 4 comparison plots highest case density is shows from Saudi Arabia. Because Saudi Arabia is a large country when comparing others.Yemen is  same size with Oman. United Arab Emirates is smaller than Oman. So when comparing this countries we should be careful about that. So when comparing these cases Qatar and Saudi Arabia shows their highest peaks on May, June and July 2020.  But in the present Saudi Arabia shows increase of their confirmed cases. That mean their coronavirus control is not successful.But other countries shows less confirmed cases in present that means all these countries well controlling coronavirus In this data set we have most recent data. So therefore we can get more accurate and preferable data about controlling coronavirus.
+
+# **4.Conclusion**
+
+Considering the data used for the analysis, it appears that the corona of Oman will expand more rapidly in 2021 than in 2020.  By 2020, the number of confirmed cases and deaths has increased.  The disease is spreading rapidly in Oman from 2021.04 to 2021.08.  By the end of 2020, the daily death toll in Oman has begun to rise.  Oman seems to have been able to reduce these deaths again by 2021.01 due to the efforts of the government and the people to control the disease.  Unfortunately, by April, there will be a more rapid outbreak than ever before, and Oman is now in control of the situation, with fewer reported cases and fewer daily deaths.
+Compared to neighboring Yemen, Saudi Arabia, and the United Arab Emirates, Oman appears to have survived the outbreak in the early stages of the epidemic.  But at present those countries seem to have very well controlled disease.  Yemen has been under strict control since its inception, so the number of Yemen infections per day and the number of deaths per day are lower than in the other three countries.
+
+In Conclusion it can be say that Oman currently states in good stage regarding coronavirus pandemic. Their confirmed cases were lower than others.The Government of Oman has been able to apply many successful public health response strategies and stabilize the progress of the disease. The government been well prepared for the pandemic along. They make a rule. So the peoples in Oman also given their best to avoid this pandemic. 
+
+
+# **5.Reference**
+
+* https://en.wikipedia.org/wiki/Oman#Climate
+* https://www.reuters.com/world/middle-east/oman-extends-nightly-covid-19-lockdown-2021-07-29/
+* https://en.m.wikipedia.org/wiki/COVID-19_pandemic_in_Oman
+* https://www.pdfdrive.com/r-for-data-science-import-tidy-transform-visualize-and-model-data-e147380255.html
+* https://www.r-graph-gallery.com/287-smooth-animation-with-tweenr.html
+* R Markdown: The Definitive Guide - https://bookdown.org/yihui/rmarkdown/
+  

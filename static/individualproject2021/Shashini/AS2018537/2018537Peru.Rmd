@@ -1,0 +1,929 @@
+---
+title: "**An Overview of the COVID-19 Pandemic Situation in Peru.**"
+author: "AS2018537 - N.I.M.B. Senanayaka"
+date: "9/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# **1. Introduction**  
+  
+  Peru is a country in western South America. It is the third largest country in South America, it measures about 1,285,216 square kilometers. Lima, the capital city of Peru is the country's commercial and industrial center. There are 196 provinces in Peru which are grouped into 25 regions except for Lima province which does not belong to any of the regions. Official language in Peru is Spanish while co-official languages are Quechua, Aymara and Indigenous languages. The money used in Peru is known as Sol, where one Sol is equal to 0.22 sterling pounds. Peru is famous for its cities, architectural wonders and also natural wonders. Peru is a multicultural  nation, filled with traditions, a unique gastronomy and vast natural reserves. We can find 12 UNESCO World Heritage sites in Peru. Machu Picchu which is one of the world's seven wonders in situated in Peru. Peru is home to 84 of the planet's 117 life zones.  
+
+
+```{r fig.align='center', dev='png', fig.cap='Figure 1: Peru Flag', fig.topcaption=TRUE,  out.height='30%', out.width='30%'}
+knitr::include_graphics("C:/Users/User/Desktop/peru_flag.png")
+```
+
+## **1.1 Visualization of the location of Peru**  
+  
+
+```{r message=FALSE, fig.cap='Figure 2: Location of Peru on the world map', fig.topcaption=TRUE, fig.align='center'}
+
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+peru_corona <- coronavirus %>% filter(country == "Peru")
+library(ggplot2)
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white" 
+  ) + 
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + 
+  scale_x_continuous(breaks = seq(-180, 180, 120)) + 
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+
+peru <- p + geom_point(
+  data = peru_corona, aes(x = long, y = lat), color = 'red', size = 2
+) 
+
+peru
+
+```
+
+  Peru belongs to South American continent. Peru shares its international boundaries with Ecuador and Columbia in the north, Brazil in the east, Bolivia in the south-east and Chile in the south and Pacific ocean lies throughout the western side.  
+  
+ 
+## **1.2 Climate condition in Peru**
+
+  Peru's position which is closer to the equator makes it a tropical country. Although Peru's seaboard is situated well within the tropical zone it does not show an equatorial climate.  
+  
+### **1.2.1 Three Climatic areas in Peru** 
+  Peru has a large variation of temperature. The country has 28 of the world's 32 climates. Peru can be roughly divided into three climatic areas,  
+  
+  1. *The Pacific coast.*  
+  Lima, vibrant capital of Peru is located almost halfway along the extensive Peruvian coast that stretches from Chile in the south to Ecuador in the north. Lima is one of the driest capitals in the world With an average less than one inch of rainfall per day. The cold Humboldt Current that runs along almost of the Peruvian and Chilean coast moderates the heat of the tropical sun, but at the same time produces high humidity with clouds and mist. The northern city of Trujillo, located halfway between Lima and the Ecuador border, offers a spring climate in year around with almost zero precipitation. 
+  
+  2. *Andean Highlands*  
+  In the mountains temperature is directly related to altitude. The high altitude city of Cusco, the ancient Inca Capital can be known as representatives of this climatic zone. Two different distinct seasons are visible they are dry season and rainy season. Temperatures in the mountains do not vary largely throughout the year. Solar radiation is stronger in at high altitudes. The southern city of Arequipa sites at an altitude of about 8,000 feet with over 300 days of blue skies and sunshine in the year.  
+    
+  3. *Eastern Lowlands*  
+  The Peruvian Amazon rain-forest is the largest area of the country, which comprises with about 60% of Peru. It extends from east of the Andes to the boarders with Ecuador, Colombia, Brazil and Bolivia. The climates here is hot and rainy all year round. 
+  
+
+### **1.2.2 Seasons in Peru**          
+  There are 4 seasons in Peru namely Spring, Summer, Autumn and Winter. The climatic conditions in the relevant seasons in the capital city Lima are as below. As stated in Seasons of the Year, (n.d.).
+  
+  * Spring in the months of September with Max average t°: +19 °C (66 °F), Min average t°: +14 °C (57 °F) and Precipitation: 0 mm (0"), October with Max average t°: +20 °C (68 °F), Min average t°: +15 °C (59 °F) and Precipitation: 0 mm (0") and November with Max average t°: +22 °C (72 °F), Min average t°: +16 °C (61 °F) and Precipitation: 0 mm (0")  
+
+  * Summer in the months of December with Max average t°: +24 °C (75 °F), Min average t°: +17 °C (63°F) and Precipitation: 0.5 mm (0.02"), January with Max average t°: +26 °C (79 °F), Min average t°: +19 °C (66 °F) and Precipitation: 1 mm (0.03") and February with Max average t°: +26 °C (79 °F), Min average t°: +19 °C (66 °F) and Precipitation: 0.5 mm (0.02")  
+    
+   * Autumn in the months of March with Max average t°: +26 °C (79 °F), Min average t°: +19 °C (66 °F) and Precipitation: 0.5 mm (0.02"), April with Max average t°: +24 °C (75 °F), Min average t°: +17 °C (63 °F) and Precipitation: 0 mm (0") and May with Max average t°: +22 °C (72 °F), Min average t°: +16 °C (61 °F) and Precipitation: 0.5 mm (0.02")  
+  
+  * Winter in the months of June with Max average t°: +19 °C (66 °F), Min average t°: +15 °C (59 °F) and Precipitation: 1 mm (0.03"), July with Max average t°: +18 °C (64 °F), Min average t°: +14 °C (57 °F) and Precipitation: 2 mm (0.08") and August with Max average t°: +18 °C (64 °F), Min average t°: +14 °C (57 °F) and Precipitation: 2 mm (0.08")  
+  
+  
+## **1.3 Lock-down status in Peru**  
+  
+```{r fig.align='center', dev='png', fig.cap='Figure 3: Indigenous people in Peru during COVID-19 pandemic', fig.topcaption=TRUE, out.height='30%', out.width='50%'}
+knitr::include_graphics("C:/Users/User/Desktop/peru_people.png")
+```  
+#
+
+  Peru is facing a curfew situation as on 21^rd^ September 2021. On September 17^th^ 2021 the Government of Peru extended the COVID-19 health emergency for 30 days from 1^st^ October 2021 to 31^st^ October 2021. The government of Peru announced an extension of regional alert levels and movement restrictions through October 3^rd^ 2021.  
+  
+  The Government of Peru indicates that it will reevaluate and adjust these public health measures every three weeks. Under those measures all regions are categorized to Moderate, High, Very high or Extreme with corresponding restriction level.  
+  
+  The majority attractions which include Machu Picchu and Inca Trail are open with a limited capacity according to the region they are situated in.  
+  
+  Restaurants are open limited indoor capacity depending on the risk in the region they are situated in.  
+  
+
+## **1.4 Actions taken by the government in COVID-19 situation**  
+  
+  
+```{r fig.align='center', dev='png', fig.cap='Figure 4: Image of Corona Virus', fig.topcaption=TRUE, out.height='40%', out.width='40%'}
+knitr::include_graphics("C:/Users/User/Desktop/corona_virus_image.png")
+```  
+#  
+  The government has extended the COVID-19 health emergency until 31^st^ October 2021 and movement restrictions until 3^rd^ October 2021. 
+  
+  Peruvians, resident foreigners and non-resident foreigners entering Peruvian national territory must present a molecular test with Negative results (within 72 hours) prior to boarding an incoming flight to Peru, according to health regulations. But a proof of vaccination is not required.  
+  
+### **1.4.1 COVID-19 Testing**  
+  
+  Peru is reporting 873 new infections on average each day, 9% o the peak. The highest daily average was recorded on April 9^th^ until now.  
+  
+  Peru provides test for COVID-19 in the country. The facility is available in private hospitals, laboratories and Peruvian Ministry of Health (MINSA).  
+    
+  Persons who show symptoms of COVID-19 should dial the toll-free number 113 and also they can use WhatsApp number or email address provided by the Peruvian Ministry of Health.  
+
+### **1.4.2 COVID-19 Vaccination**  
+  
+  The vaccination process in Peru is in a good condition. By 23^rd^ September 2021,  Peru has administered at least 23,478,943 doses of COVID-19 vaccines assuming every person needs 2 doses.  
+    
+  During the week 12^th^ September 2021 to 18^th^ September 2021 Peru averaged about 294,051 doses administered each day.    
+  
+  
+  In Peru from 3^th^ January 2020 to 5:06pm CEST, 22 September 2021. (World Health Organization, (23^rd^ September 2021)).    
+  Confirmed cases - 2,167,652  
+  Deaths - 199,036  
+As of 16^th^ September 2021, q total of 22,778,732 vaccine doses have been administered. (World Health Organization, (23^rd^ September 2021)).  
+  
+  
+## **1.5 Economy in Peru**  
+  
+  Peru has developing mixed economy based largely on services, manufacturing, agriculture and mining. Peru economy is supported by natural resources most specially depends on silver mining and copper mining. Silver and Copper makes about 60% of Peru's total exports. Agriculture, banking, manufacturing and retail service also play a huge role in developing Peru economy.  
+  
+  Peru has a wealth of mineral resources namely silver, gold, copper, iron, lead, zinc, bismuth, phosphates and manganese. The biggest export in Peru is copper.  
+    
+  Peru is a rich with beautiful natural resources, historical and architectural sites so tourism is also very common in Peru.  
+  
+
+## **1.6 Health Sector in Peru**  
+   
+   Peru has a decentralized health care system administered by 5 entries,  
+   
+   1. The Ministry of Health (MINSA)  
+   It provides health services for 60% of the population.  
+   2. EsSalud  
+   It provides health services for 30% of the population.  
+   3. The Armed Forces (FFAA)  
+   4. National Police (PNP)  
+   5. Private Sector  
+   Those three engage in fulfilling the remaining 10%.  
+  
+  The system contains multiple providers of services and insurance, often performing functions with a high degree of overlap and little coordination. Health workers often work several with several jobs in multiple sectors.  
+  
+  Health workers play a major role in controlling the world hazard COVID-19, Doctors, nurses and all the people working in health sector perform well to overcome the pandemic.  
+  
+    
+    
+    
+# **2. Exploratory Data Analysis**  
+
+  The below mentioned summary gives a basic idea about the COVID-19 situation in Peru.  
+  
+  
+```{r message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+library(magrittr)
+library(skimr)
+
+class(peru_corona)
+as_tibble(peru_corona)
+tbl_df(peru_corona)
+class(peru_corona)
+
+skim(peru_corona, cases)
+summary(peru_corona)
+
+negative_values <- peru_corona %>% filter(cases < 0)
+negative_values
+
+# replacing negative cases with NA
+
+peru_corona_data <- peru_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+peru_corona_data
+
+cases_with_NA <- peru_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(peru_corona_data)
+
+# province is NA for all entries, country, lat and long are same for all entries.
+
+# selecting only the variables needed for the analysis
+
+peru_covid19 <- select(peru_corona_data, c("date", "country", "type", "cases"))
+peru_covid19
+
+summary(peru_covid19)
+
+```
+
+
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+
+peru_covid19_by_type <- peru_covid19 %>% 
+  pivot_wider(names_from = type, values_from = cases)
+
+summary(peru_covid19_by_type) 
+
+peru_covid19_by_type_new <- peru_covid19_by_type %>% 
+  mutate(active=(confirmed-recovered-death))
+
+peru_covid19_by_type_new
+
+peru_covid19_by_type_new_1 <- peru_covid19_by_type_new %>% 
+  pivot_longer(3:6, names_to="type", values_to="cases")
+
+peru_covid19_by_type_new_negative <- peru_covid19_by_type_new_1 %>% filter(cases < 0)
+peru_covid19_by_type_new_negative
+
+# larger negative values were  resulting in the recovered column, might be due to the situation where more people recover and die on some days than confirmed
+
+# Most probably at the start of the pandemic, there might be a time period where lot of confirmed cases were recorded but none were recovered or sometimes it might be some very low death and recovered cases so then with the data available in this data set they might be included as recovered cases and sometimes death cases.
+
+# replacing negative cases with NA
+
+peru_covid19_new_data <- peru_covid19_by_type_new_1 %>% 
+  mutate(cases = replace(cases, which(cases<0), NA))
+peru_covid19_new_data
+
+cases_with_NA <- peru_covid19_new_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(peru_covid19_new_data)
+
+```
+```{r message=FALSE, warning=FALSE}
+
+peru_data_all_types <- peru_covid19_new_data %>% 
+  pivot_wider(names_from=type, values_from=cases)
+
+summary(peru_data_all_types)
+
+```
+  
+  According  to the above summary, we can see the mean recover cases is higher than the mean recover cases is the highest.  
+  
+  
+      
+## **2.1 Visualizing  the behavior of COVID-19 cases in Peru** 
+
+  The following are some graphical illustrations showing how the COVID-19 confirmed cases, deaths, recovered cases and active cases behaved during the previous time period.   
+  
+  
+```{r message=FALSE, warning=FALSE}
+
+library(ggplot2)
+
+ggplot(peru_covid19_new_data, 
+       aes(x=cases, y=type, fill=type, col=type)) +
+   geom_boxplot(outlier.shape=NA, alpha=0.05) + geom_jitter(aes(col=type)) +
+  ggtitle("Figure 5: Peru: Active cases, Confirmed cases, Deaths and Recovered cases")
+
+```
+  
+  The above plot describes that number of confirmed cases, number of recovered cases and number of active cases were high compared to the number of deaths.  
+    
+  
+  Following plots show how the confirmed cases, deaths, recovered cases and active cases vary with time.  
+  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_covid19_new_data %>% 
+  ggplot(aes(x=date, y=cases, fill="type")) +
+ geom_line(aes(col=type)) + facet_wrap(type~. ,nrow=4, scale="free") +
+  ggtitle("Figure 6: Peru: Daily Active cases, Confirmed cases, Deaths and Recovered cases") 
+
+```   
+
+  From the above graph we can identify that,  
+  
+  * The number of active cases starts by showing an increasing trend but later most of the cases were missing.   
+  * The number of daily COVID-19 confirmed cases were nearly zero by the beginning of 2020, and then showing increasing trends and decreasing trends. By now we can see that the number of daily confirmed cases are very low compared to other values. The decreasing trend starts from around July 2021.  
+  * The deaths were nearly zero by the beginning of 2020. Then the number of deaths show increasing and decreasing trends in various time periods. By now the number of deaths is very low compared to the higher values, the decreasing trend starts from around July 2021.  
+  * The number of daily recovered cases were zero in around January 2020 but starts increasing and decreasing. According to the graph we can see some lower values in around January 2021 but again it increases. However the number of recovered cases are lower comparatively in the past few days the decreasing pattern starts from about July 2021.  
+
+ 
+ 
+```{r warning=FALSE, messsage=FALSE, results='hide'}
+
+peru_covid19_new <- peru_covid19_new_data %>% 
+  mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_covid19_new
+
+# since we can not find cumulative with with NA terms, we replaced NA with zero
+
+```    
+  
+```{r message=FALSE, warning=FALSE}     
+
+peru_covid19_new_by_type <- select(peru_covid19_new, -c("country")) %>% 
+  pivot_wider(names_from = type, values_from = cases)
+
+peru_covid19_1 <- peru_covid19_new_by_type %>% 
+  mutate(cumulative_confirmed=cumsum(confirmed), cumulative_death=cumsum(death), cumulative_recovered=cumsum(recovered), cumulative_active=cumsum(active))   
+
+peru_covid19_2 <- select(peru_covid19_1, -(active:recovered))
+
+peru_cumulative_cases <- peru_covid19_2 %>% 
+  pivot_longer(cols=c(4:7), names_to = "type", values_to = "cumulative_cases")
+
+
+ggplot(peru_cumulative_cases,
+       aes(date, cumulative_cases, color=type)) + 
+  geom_line(size=1) + ggtitle("Figure 7: Peru: Cumulative Active cases, Confirmed cases, Deaths and Recovered cases")
+
+```
+  
+  From the above plot we can identify that the cumulative recovered cases is a bit lower than cumulative confirmed cases, they vary in a similar manner. The cumulative deaths is very low when compared to cumulative confirmed and cumulative recovered. The cumulative active cases very in between cumulative deaths and cumulative recovered.  
+  
+  
+    
+## **2.2 Comparing the COVID-19 situation in Peru with other countries**  
+   
+  By comparing the COVID-19 pandemic situation in Peru with some other countries we can see how Peru is performing in controlling the pandemic situation compared to other countries. For this purpose we can select some countries which are near to Peru, we can select few countries which were highly affected with the pandemic and then we can further select some countries which performed very well during the pandemic situation. Comparison can also be done by selecting some countries which are equal in population to Peru.  
+  Here we consider the comparison under confirmed cases, deaths and recovered cases only.  
+  
+  
+### **2.2.1 Comparing the COVID-19 situation in Peru with nearby countries**    
+  
+  Peru is bordered by Bolivia, Brazil, Chile, Colombia and Ecuador. Since COVID-19 is a huge pandemic which spreads rapidly, it is better to compare with bordering countries. Here we select Bolivia, Colombia, Chile and Ecuador for comparisons.  
+  
+  **Population in Peru is around 33,553,902**  
+  **Population in Bolivia is around 11,874,692**  
+  **Population in Colombia is around 51,567,073**  
+  **Population in Chile is around 19,322,371**  
+  **Population in Ecuador is around 17,983,382**  
+  
+  We can see that the population in Peru and other selected four neighboring countries are varying and none is very close to that of Peru.
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+
+bolivia_corona <- coronavirus %>% filter(country =="Bolivia")
+summary(bolivia_corona)
+
+colombia_corona <- coronavirus %>% filter(country =="Colombia")
+summary(colombia_corona)
+
+chile_corona <- coronavirus %>% filter(country =="Chile")
+summary(chile_corona)
+
+ecuador_corona <- coronavirus %>% filter(country =="Ecuador")
+summary(ecuador_corona)
+
+# if we find negative or NA cases so necessary adjustments should be done.
+
+# Working with COVID-19 in Bolivia
+
+negative_values <- bolivia_corona %>% filter(cases < 0)
+negative_values
+
+bolivia_corona_data <- bolivia_corona %>% 
+  mutate(cases = replace(cases, which(cases<0), NA))
+bolivia_corona_data
+
+cases_with_NA <- bolivia_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(bolivia_corona_data)
+
+# province is NA for all entries, country, lat and long are same for all entries.
+
+# selecting only the variables needed for the analysis
+
+bolivia_covid19 <- select(bolivia_corona_data, c("date", "country", "type", "cases"))
+bolivia_covid19
+
+summary(bolivia_covid19)
+
+bolivia_covid19_by_type <- bolivia_covid19 %>% 
+  pivot_wider(names_from = type, values_from = cases)
+
+summary(bolivia_covid19_by_type)
+
+# Working with COVID-19 in Colombia
+
+negative_values <- colombia_corona %>% filter(cases < 0)
+negative_values
+
+colombia_corona_data <- colombia_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+colombia_corona_data
+
+cases_with_NA <- colombia_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(colombia_corona_data)
+
+# province is NA for all entries, country, lat and long are same for all entries.
+
+# selecting only the variables needed for the analysis
+
+colombia_covid19 <- select(colombia_corona_data, c("date", "country", "type", "cases"))
+colombia_covid19
+
+summary(colombia_covid19)
+
+colombia_covid19_by_type <- colombia_covid19 %>% 
+  pivot_wider(names_from = type, values_from = cases)
+
+summary(colombia_covid19_by_type)
+
+# Working with COVID-19 in Chile
+
+negative_values <- chile_corona %>% filter(cases < 0)
+negative_values
+
+chile_corona_data <- chile_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+chile_corona_data
+
+cases_with_NA <- chile_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(chile_corona_data)
+
+# province is NA for all entries, country, lat and long are same for all entries.
+
+# selecting only the variables needed for the analysis
+
+chile_covid19 <- select(chile_corona_data, c("date", "country", "type", "cases"))
+chile_covid19
+
+summary(chile_covid19)
+
+chile_covid19_by_type <- chile_covid19 %>% 
+  pivot_wider(names_from = type, values_from = cases)
+
+summary(chile_covid19_by_type)
+
+# Working with COVID-19 in Ecuador
+
+negative_values <- ecuador_corona %>% filter(cases < 0)
+negative_values
+
+ecuador_corona_data <- ecuador_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+ecuador_corona_data
+
+cases_with_NA <- ecuador_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(ecuador_corona_data)
+
+# province is NA for all entries, country, lat and long are same for all entries.
+
+# selecting only the variables needed for the analysis
+
+ecuador_covid19 <- select(ecuador_corona_data, c("date", "country", "type", "cases"))
+ecuador_covid19
+
+summary(ecuador_covid19)
+
+ecuador_covid19_by_type <- ecuador_covid19 %>% 
+  pivot_wider(names_from = type, values_from = cases)
+
+summary(ecuador_covid19_by_type)
+
+```
+  
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+
+peru_bolivia <- union(peru_covid19, bolivia_covid19)
+peru_bolivia
+
+peru_bolivia_colombia <- union(peru_bolivia, colombia_covid19)
+peru_bolivia_colombia
+
+peru_bolivia_colombia_chile <- union(peru_bolivia_colombia, chile_covid19)
+peru_bolivia_colombia_chile
+
+peru_bolivia_colombia_chile_ecuador <- union(peru_bolivia_colombia_chile, ecuador_covid19)
+peru_bolivia_colombia_chile_ecuador
+
+```
+  
+  The following plot shows how the cumulative confirmed cases in Peru and selected neighboring countries vary with time.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_bolivia_colombia_chile_ecuador_confirmed <- peru_bolivia_colombia_chile_ecuador %>% 
+  filter(type == "confirmed")
+   
+peru_bolivia_colombia_chile_ecuador_confirmednew <- peru_bolivia_colombia_chile_ecuador_confirmed %>% mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_bolivia_colombia_chile_ecuador_group_conf <- peru_bolivia_colombia_chile_ecuador_confirmednew %>% group_by(country)
+  
+peru_bolivia_colombia_chile_ecuador_group_conf_cum <- peru_bolivia_colombia_chile_ecuador_group_conf %>% mutate(confirmed_cumulative=cumsum(cases))
+
+ggplot(peru_bolivia_colombia_chile_ecuador_group_conf_cum,
+       aes(date, confirmed_cumulative, color=country)) + 
+  geom_line(size=1) + ggtitle("Figure 8: Peru and nearby countries: Cumulative confirmed cases")
+
+```
+  
+  From the above plot we can see that the cumulative confirmed cases in Peru is very high compared to Bolivia and Ecuador. The slopes for Bolivia and Ecuador are roughly same but the slope for Peru is different from those two countries. The slope for Chile and Peru ar roughly equal. The highest confirmed cases is recorded in Colombia.  
+      
+      
+  The following plot shows how the deaths in Peru and selected neighboring countries vary with time.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_bolivia_colombia_chile_ecuador_death <- peru_bolivia_colombia_chile_ecuador %>% 
+  filter(type == "death")
+   
+peru_bolivia_colombia_chile_ecuador_deathnew <- peru_bolivia_colombia_chile_ecuador_death %>% mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_bolivia_colombia_chile_ecuador_group_dea <- peru_bolivia_colombia_chile_ecuador_deathnew %>% group_by(country)
+  
+peru_bolivia_colombia_chile_ecuador_group_dea_cum <- peru_bolivia_colombia_chile_ecuador_group_dea %>% mutate(death_cumulative=cumsum(cases))
+
+ggplot(peru_bolivia_colombia_chile_ecuador_group_dea_cum,
+       aes(date, death_cumulative, color=country)) + 
+  geom_line(size=1) + ggtitle("Figure 9: Peru and nearby countries: Cumulative deaths")
+
+```
+  
+  According to the plot we can identify that the cumulative daily deaths in Peru is the highest. Chile, Bolivia and Ecuador are varying is an equal range, and comparatively low when compared to Peru and also there slopes are roughly equal. Colombia is the country which shows the second highest cumulative deaths.  
+
+    
+       
+  The following plot shows how the recovered cases in Peru and neighboring countries vary with time.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_bolivia_colombia_chile_ecuador_recovered <- peru_bolivia_colombia_chile_ecuador %>% 
+  filter(type == "recovered")
+   
+peru_bolivia_colombia_chile_ecuador_recoverednew <- peru_bolivia_colombia_chile_ecuador_recovered %>% mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_bolivia_colombia_chile_ecuador_group_rec <- peru_bolivia_colombia_chile_ecuador_recoverednew %>% group_by(country)
+  
+peru_bolivia_colombia_chile_ecuador_group_rec_cum <- peru_bolivia_colombia_chile_ecuador_group_rec %>% mutate(recovered_cumulative=cumsum(cases))
+
+ggplot(peru_bolivia_colombia_chile_ecuador_group_rec_cum,
+       aes(date, recovered_cumulative, color=country)) + 
+  geom_line(size=1) + ggtitle("Figure 10: Peru and nearby countries: Cumulative recovered cases")
+
+```
+  
+  From the above plot we can see that the cumulative recovered cases in Bolivia and Ecuador very equally but the cumulative of confirmed cases in Peru is larger comparatively. The slope for Bolivia cumulative recovered cases and Ecuador recovered cases are also varying equally. The slope for cumulative recovered cases in Peru and Chile vary roughly equally. The highest cumulative confirmed cases is recorded from Colombia.  
+  
+  
+  
+### **2.2.2 Comparing the COVID-19 situation in Peru with countries which have the population roughly equal to the population of Peru**  
+  
+  Iraq, Afghanistan, Poland, Canada, Morocco, Uzbekistan, Malaysia and Ghana are some countries which have the population roughly varying in an equal range of the population in Peru. Here we select the COVID-19 situation in Iraq, Morocco, Poland and Malaysia to compare with Peru COVID-19 situation.  
+  
+
+  **Population in Peru is around 33,553,902**  
+  **Population in Iraq is around 41,385,461**  
+  **Population in Morocco is around 37,462,813**  
+  **Population in Poland is around 37,795,564**  
+  **Population in Malaysia is around 32,890,426**  
+  
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+  
+Iraq_corona <- coronavirus %>% filter(country =="Iraq")
+summary(Iraq_corona) 
+
+negative_values <- Iraq_corona %>% filter(cases < 0)
+negative_values
+
+Iraq_corona_data <- Iraq_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+Iraq_corona_data
+
+cases_with_NA <- Iraq_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(Iraq_corona_data)
+
+Iraq_covid19 <- select(Iraq_corona_data, c("date", "country", "type", "cases"))
+Iraq_covid19
+
+summary(Iraq_covid19)
+
+Morocco_corona <- coronavirus %>% filter(country =="Morocco")
+summary(Morocco_corona) 
+
+negative_values <- Morocco_corona %>% filter(cases < 0)
+negative_values
+
+Morocco_corona_data <- Morocco_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+Morocco_corona_data
+
+cases_with_NA <- Morocco_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(Morocco_corona_data)
+
+Morocco_covid19 <- select(Morocco_corona_data, c("date", "country", "type", "cases"))
+Morocco_covid19
+
+summary(Morocco_covid19)
+
+Poland_corona <- coronavirus %>% filter(country =="Poland")
+summary(Poland_corona) 
+
+negative_values <- Poland_corona %>% filter(cases < 0)
+negative_values
+
+Poland_corona_data <- Poland_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+Poland_corona_data
+
+cases_with_NA <- Poland_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(Poland_corona_data)
+
+Poland_covid19 <- select(Poland_corona_data, c("date", "country", "type", "cases"))
+Poland_covid19
+
+summary(Poland_covid19)
+
+Malaysia_corona <- coronavirus %>% filter(country =="Malaysia")
+summary(Malaysia_corona) 
+
+negative_values <- Malaysia_corona %>% filter(cases < 0)
+negative_values
+
+Malaysia_corona_data <- Malaysia_corona %>% mutate(cases = replace(cases, which(cases<0), NA))
+Malaysia_corona_data
+
+cases_with_NA <- Malaysia_corona_data %>% filter(is.na(cases))
+cases_with_NA
+
+summary(Malaysia_corona_data)
+
+Malaysia_covid19 <- select(Malaysia_corona_data, c("date", "country", "type", "cases"))
+Malaysia_covid19
+
+summary(Malaysia_covid19)
+
+```
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+
+peru_Iraq <- union(peru_covid19, Iraq_covid19)
+peru_Iraq
+
+peru_Iraq_Morocco <- union(peru_Iraq, Morocco_covid19)
+peru_Iraq_Morocco
+
+peru_Iraq_Morocco_Poland <- union(peru_Iraq_Morocco, Poland_covid19)
+peru_Iraq_Morocco_Poland
+
+peru_Iraq_Morocco_Poland_Malaysia <- union(peru_Iraq_Morocco_Poland, Malaysia_covid19)
+peru_Iraq_Morocco_Poland_Malaysia
+
+```
+   
+  The following plot shows how the confirmed cases in Peru, Iraq, Morocco, Poland and Malaysia vary with time.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_Iraq_Morocco_Poland_Malaysia_confirmed <- peru_Iraq_Morocco_Poland_Malaysia %>% 
+  filter(type == "confirmed")
+   
+peru_Iraq_Morocco_Poland_Malaysia_confirmednew <- peru_Iraq_Morocco_Poland_Malaysia_confirmed %>% mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_Iraq_Morocco_Poland_Malaysia_group_conf <- peru_Iraq_Morocco_Poland_Malaysia_confirmednew %>% group_by(country)
+  
+peru_Iraq_Morocco_Poland_Malaysia_group_conf_cum <- peru_Iraq_Morocco_Poland_Malaysia_group_conf %>% mutate(confirmed_cumulative=cumsum(cases))
+
+ggplot(peru_Iraq_Morocco_Poland_Malaysia_group_conf_cum,
+       aes(date, confirmed_cumulative, color=country)) + 
+  geom_line(size=1) + ggtitle("Figure 11: Cumulative confirmed cases in Peru and selected other countries")
+
+```
+  
+  From the above plot we can see that the cumulative confirmed cases in Poland is high compared to other, it starts increasing rapidly after around January 2021. The next highest cumulative confirmed cases is shown by Peru, it is showing the highest cumulative confirmed cases first then Poland beats Peru and comes to highest position. Morocco is a country which is showing the cumulative confirmed cases lower after around January 2021. The slope of cumulative confirmed cases in Iraq starts is increasing rapidly after around January 2021. Malaysia is the country which starts showing a rapid increase of confirmed cases after around December 2021.  
+  
+      
+       
+  The following plot shows how the deaths in Peru, Iraq, Morocco, Poland and Malaysia vary with time.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_Iraq_Morocco_Poland_Malaysia_death <- peru_Iraq_Morocco_Poland_Malaysia %>% 
+  filter(type == "death")
+   
+peru_Iraq_Morocco_Poland_Malaysia_deathnew <- peru_Iraq_Morocco_Poland_Malaysia_death %>% mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_Iraq_Morocco_Poland_Malaysia_group_dea <- peru_Iraq_Morocco_Poland_Malaysia_deathnew %>% group_by(country)
+  
+peru_Iraq_Morocco_Poland_Malaysia_group_dea_cum <- peru_Iraq_Morocco_Poland_Malaysia_group_dea %>% mutate(death_cumulative=cumsum(cases))
+
+ggplot(peru_Iraq_Morocco_Poland_Malaysia_group_dea_cum,
+       aes(date, death_cumulative, color=country)) + 
+  geom_line(size=1) + ggtitle("Figure 12: Cumulative deaths in Peru and selected other countries")
+
+```
+  
+  According to the plot we can identify that the cumulative deaths in Peru is the highest when compared to Iraq, Malaysia, Morocco and Poland. Malaysia is the country which has shown the cumulative deaths very close to zero up-to around July 2021, But by now the cumulative deaths in Peru is increasing rapidly. The cumulative deaths in Poland seems to show a constancy after around May 2021. The cumulative deaths in Iraq and Morocco seems to vary equally.  
+  
+        
+  The following plot shows how the recovered cases in Peru, Iraq, Morocco, Poland and Malaysia vary with time.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_Iraq_Morocco_Poland_Malaysia_recovered <- peru_Iraq_Morocco_Poland_Malaysia %>% 
+  filter(type == "recovered")
+
+peru_Iraq_Morocco_Poland_Malaysiarecoverednew <- peru_Iraq_Morocco_Poland_Malaysia_recovered %>% mutate(cases = replace(cases, is.na(cases), 0))
+
+peru_Iraq_Morocco_Poland_Malaysia_group_rec <- peru_Iraq_Morocco_Poland_Malaysiarecoverednew %>% group_by(country)
+  
+peru_Iraq_Morocco_Poland_Malaysia_group_rec_cum <- peru_Iraq_Morocco_Poland_Malaysia_group_rec %>% mutate(recovered_cumulative=cumsum(cases))
+
+ggplot(peru_Iraq_Morocco_Poland_Malaysia_group_rec_cum,
+       aes(date, recovered_cumulative, color=country)) + 
+  geom_line(size=1) + ggtitle("Figure 13: Cumulative recovered cases in Peru and selected other countries")
+
+```
+  
+  From the above plot we can see that the cumulative recovered cases in Poland is the highest after around January 2021. Peru was the country which showed the highest cumulative recovered cases up-to around January 2021 then Poland beats Peru. Morocco starts showing a constancy in the cumulative recovered cases after around January 2021. When compared to other four countries Peru is showing a higher value for cumulative recovered cases.  
+  
+  
+## **2.3 Condition of the COVID-19 vaccination process in Peru**  
+   
+  With the COVID-19 pandemic vaccination is one of the most important actions needed to be taken in order to save the lives of people.  
+  
+  Here is a graphical representation of the COVID-19 vaccination process in Peru.  
+```{r message=FALSE, warning=FALSE, results='hide'}
+  
+data(covid19_vaccine) 
+
+head(covid19_vaccine)
+
+peru_vaccination <- covid19_vaccine %>%
+  filter(country_region=="Peru")
+
+head(peru_vaccination)
+ 
+peru_vaccination_data <- select(peru_vaccination, -c(1, 6:18))
+
+head(peru_vaccination_data)
+ 
+```
+  
+```{r message=FALSE, warning=FALSE}
+  
+summary(peru_vaccination_data)
+
+```
+  From the above summary we can see that Peru has started the vaccination program on 9^th^ February 2021. By now they are in the vaccination process.  
+  
+```{r message=FALSE, warning=FALSE}
+
+peru_vaccination_processs <- peru_vaccination_data %>%
+  pivot_longer(2:4,
+names_to="vaccination", 
+values_to="count") 
+
+vaccination_group <- peru_vaccination_processs %>% group_by(vaccination)
+  
+peru_vaccination_process_cumulative <- vaccination_group %>% mutate(vaccination_cumulative=cumsum(count))
+
+ggplot(peru_vaccination_process_cumulative,
+       aes(date, vaccination_cumulative, color=vaccination)) + 
+  geom_line(size=1) + ggtitle("Figure 14: Peru: Vaccination process")
+
+```   
+  
+  From the above graph we can see that Peru shows an increase in doses administered, people fully vaccinated and also people partially vaccinated. But by looking at the graph we can see that fully vaccination count is lower than partially vaccinated count.  
+  
+  
+### **2.3.1 Comparing the COVID-19 vaccination process in Peru with the countries leading the worldwide vaccine roll-out**   
+  
+  Israel, United Arab Emirates, Chile, United Kingdom and United States of America are the five countries which lead the worldwide vaccine roll-out.  
+  Israel is the country which is on top by now. Israel is vaccinating its population quicker than any other country. (Velocity Global, (31^st^ March 2021)).  
+  
+  So we select Israel and compare with Peru to see the behavior of the vaccination Process.  
+  
+   **Population in Peru is around 33,553,902**  
+   **Population in Israel is around 8,827,872**  
+  
+  The population in Peru is higher than the population in Israel (nearly 4 times higher).  
+  
+  
+  The following graph shows how the cumulative of doses administered in Peru and Israel vary with time.  
+  
+```{r message=FALSE, warning=FALSE, results='hide'}
+
+israel_vaccination <- covid19_vaccine %>%
+  filter(country_region=="Israel")
+
+head(israel_vaccination)
+ 
+israel_vaccination_data <- select(israel_vaccination, -c(6:18))
+
+head(israel_vaccination_data)
+  
+summary(israel_vaccination_data)
+
+# no any negative or NA cases recorded
+
+peru_vaccination_data_1 <- select(peru_vaccination, -c(6:18))
+
+peru_israel <- union(peru_vaccination_data_1, israel_vaccination_data)
+
+peru_israel 
+
+```
+  
+
+```{r message=FALSE, warning=FALSE}
+
+peru_israel_new <- peru_israel %>% 
+  pivot_longer(3:5,
+                names_to="vaccination", 
+                values_to="count")
+
+peru_israel_doses_administered <- peru_israel_new %>% 
+  filter(vaccination == "doses_admin")
+
+peru_israel_doses_administered_group <- peru_israel_doses_administered %>% group_by(country_region)
+  
+peru_israel_doses_administered_group_cumulative <- peru_israel_doses_administered_group %>% mutate(doses_administered_cumulative=cumsum(count))
+
+
+ggplot(peru_israel_doses_administered_group_cumulative ,
+       aes(date,doses_administered_cumulative, color=country_region)) + 
+  geom_line(size=1) + ggtitle("Figure 15: Cumulative doses administered in Peru and Israel") 
+
+```
+  From the above graph we can see that Israel has started the dose administration earlier than Peru. And the cumulative of doses administered is also increasing rapidly than that of Peru. Even the population in Peru is about 4 times higher than that of Israel, Israel has administered a higher cumulative of doses.  
+  
+  
+  The following graph shows how the cumulative count of people fully vaccinated vary with time.  
+  
+```{r}
+
+peru_israel_fully_vaccinated <- peru_israel_new %>% 
+  filter(vaccination == "people_fully_vaccinated")
+
+peru_israel_fully_vaccinated_group <- peru_israel_fully_vaccinated %>% group_by(country_region)
+  
+peru_israel_fully_vaccinated_group_cumulative <- peru_israel_fully_vaccinated_group %>% mutate(fully_vaccinated_cumulative=cumsum(count))
+
+
+ggplot(peru_israel_fully_vaccinated_group_cumulative ,
+       aes(date, fully_vaccinated_cumulative, color=country_region)) + 
+  geom_line(size=1) + ggtitle("Figure 16: Cumulative people who are fully vaccinated in Peru and Israel") 
+
+```
+  
+  From this graph we can see that the cumulative of people fully vaccinated in Peru is lower than that of Israel. Even the population in Peru is about 4 times higher than that of Israel the cumulative count of people fully vaccinated is lower. The slope of the curve in Israel is steeper than that of Peru until around July, it gives some some evidence that Israel has done the vaccination faster than Peru. 
+  
+
+
+# **3. Conclusions**  
+   
+  * In the COVID-19 pandemic in Peru the death rate is comparatively low compared to getting recovered and most of the people who were confirmed as COVID-19 positive have recovered. We can see that from figure 5 and 7. 
+  * When compared with the nearby countries Peru records a lower cumulative confirmed cases but the cumulative death is highest. So we can conclude that Peru is having a higher trend for the death of people than other neighboring countries.  
+  
+  * When compared with countries with population roughly equal we can conclude that Peru is having a highest death rate. And also the cumulative confirmed and recovered is also high.  
+  * Peru is in the vaccination process but by now they give their attention to partially vaccination than fully vaccination.  
+  * **Though the death count in Peru is lower compared recovered cases, we can not conclude Peru is performing well during the pandemic because when compared to neighboring countries and countries which have roughly equal population the death count is higher.**  
+  * When compared with Israel, the country which is doing the fastest vaccination, we can conclude Peru is very slow in vaccination process.  
+
+# **4. Recommendations**  
+  
+  In order to overcome this deadly pandemic Peru should increase the vaccination process. And aware the public in the country about the pandemic. Strengthen the health sector and also make necessary rules and regulations to save country's people. 
+  
+
+#### **MESSAGE** 
+  *During this COVID-19 pandemic the responsibility of the whole human kind is to obey the health rules and regulations and stay safe. Get COVID-19 vaccines. Keep social distancing and wear proper quality face masks.*  
+<p style="text-align:center;">*Protect ourselves, loved ones and whole society.*</p>  
+
+```{r fig.align='center', dev='png', out.height='20%', out.width='30%'}
+knitr::include_graphics("C:/Users/User/Desktop/stay_safe.png")
+``` 
+ 
+  
+# **5. Discussion**
+  
+  Based on this available data we can just touch the outline of the pandemic situation. To do the analysis province wise or district wise we need more information and i so we are able to give useful predictions to government authorities and force them to take necessary adjustments. 
+  
+  **When calculating the active cases it was identified that more than 300 active cases became negative and those were replaced with NA and zero according to the situation.**  
+  
+  **Larger negative values were  resulting in the recovered column, it might be due to the situation where more people recover and die on some days than confirmed count. Or else most probably at the start of the pandemic, there might be a time period where lot of confirmed cases were recorded but none were recovered or sometimes it might be some very low death and recovered cases so then with the data available in this data set they might be included as recovered cases and sometimes death cases**
+
+
+  
+# **6. References**  
+  * Britannica (n.d.). Peru,  retrieved from: https://www.britannica.com/place/Peru  
+  * Google Arts and Culture (n.d.). Peru,  retrieved from https://artsandculture.google.com/entity/provinces-of-peru/m05m99n?hl=en  
+  * Seasons of the Year (n.d.). Seasons in Peru,
+  retrieved from: https://seasonsyear.com/Peru  
+  * Internatinal Living (n.d.). PERU,  retrieved from: https://internationalliving.com/countries/peru/peru-weather-and-climate/  
+  * World Health Organization (23^rd^ September 2021). Peru,  retrieved from: https://covid19.who.int/region/amro/country/pe [accessed on 24^rd^ September 2021] 
+  * U.S. Embassy in Peru (n.d.). COVID-19 Information,  retrieved from: dromhttps:/pe.usembassy.gov/covid-19-information/  
+  * REUTERS COVID-19 TRACKER (n.d.). Peru,  retrieved from: https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/peru  
+  * worldometer.  retrieved from: https://www.worldometers.info/world-population/ [accessed on 26^th^ September 2021] 
+  * RamiKrispin. covid19_vaccine,  retrieved from: https://githhub.com/RamiKrispin/coronavirus/blob/master/vingettes/covid19_vaccine  
+  * Velocity Global (31^st^ March 2021). These Five Countries Lead the Worldwide Vaccine Rollout,  retrieved from: https://velocityglobal.com/blog/five-countries-vaccinating-fastest/  
+  
+
+<p style="text-align:center;">_**END**_</p>  
+
+
+
+
+
+
+
+
+

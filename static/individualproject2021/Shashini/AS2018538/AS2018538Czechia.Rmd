@@ -1,0 +1,423 @@
+---
+title: "AS2018538Czechia"
+author: "Promudith Senanayake"
+date: "9/24/2021"
+output:  html_document
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r include=FALSE}
+#Include devtools
+#devtools::install_github("thiyangt/sta3262")
+
+```
+
+
+```{r include=FALSE}
+#Load Package
+library(sta3262)
+```
+
+
+```{r include=FALSE}
+#Finding my country
+get_individual_project_country("AS2018538")
+```
+
+```{r include=FALSE}
+#Install Coronavirus package
+devtools::install_github("RamiKrispin/coronavirus")
+```
+```{r include=FALSE}
+library(coronavirus)
+
+update_dataset()
+```
+
+
+```{r include=FALSE}
+data(coronavirus)
+```
+
+
+
+```{r include=FALSE}
+head(coronavirus)
+```
+
+
+
+```{r include=FALSE}
+tail(coronavirus)
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+?coronavirus
+```
+
+
+```{r include=FALSE}
+unique(coronavirus$country)
+```
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+
+
+```{r include=FALSE}
+Czechia_corona <- coronavirus %>% filter(country == "Czechia")
+```
+
+
+```{r include=FALSE}
+recover_Czechia_corona <- Czechia_corona %>% filter(type=="confirmed")
+head(recover_Czechia_corona)
+```
+
+
+
+```{r include=FALSE}
+ggplot(recover_Czechia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Czechia: Daily Covid-19 Recoveries")
+```
+
+
+
+# COVID-19 Pandemic in the Republic of Czechia
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+
+```{r echo=FALSE}
+#install.packages("jpeg")
+knitr::include_graphics("Czechia1.jpg")
+```
+
+# Abstract
+The COVID-19 pandemic in mainland China is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). China was the first country to experience an outbreak of the disease, the first to impose drastic measures in response (including lockdowns and face mask mandates), and one of the first countries to bring the outbreak under control.
+Available information on Czechia and Slovakia indicates that the level of municipal fiscal imbalance as the result of the Covid-19 crisis is not proportional to the situation on the central level, and municipal financial resources are not commensurate with their responsibilities as outlined by the constitution and the law. Because the reaction of the central government in both countries to this situation has been inadequate, municipalities will face problems with service delivery in some areas, especially in culture and sport.
+# Background
+COVID-19 infections are increasing in Czech Republic, with 491 new infections reported on average each day. That’s 4% of the peak — the highest daily average reported on October 28.
+
+There have been 1,690,288 infections and 30,454 coronavirus-related deaths reported in the country since the pandemic began.
+
+## Introduction
+
+In the spring months of 2020, an epidemic of respiratory disease broke out,
+which was named COVID-19. In a short time, it affected almost all countries of the
+world, so the World Health Organization called it a pandemic. The increase in the
+number of infected and dead, along with the lack of effective equipment – a simple
+type of face mask or a complex type of ventilator – led to governments taking hard
+measures.
+Teaching at all types of schools, including universities, was cancelled. Closed
+shops with the exception of food shops, drugstores, pharmacies and petrol stations,
+a ban on all mass sports and other events, including masses and religious ceremonies, a ban on flights, international train and bus connections, and the closure of
+borders and quarantine in individual countries have had significant social and economic consequences. Large industrial corporations stopped producing, tourism was
+basically non-existent.
+
+## Location
+Czech Republic, also called Czechia, country located in central Europe. It comprises the historical provinces of Bohemia and Moravia along with the southern tip of Silesia, collectively often called the Czech Lands. In 2016 the country adopted the name “Czechia” as a shortened, informal name for the Czech Republic.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Czechia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+
+
+
+
+
+
+
+
+## Climate Condition  of Czechia
+The climate in the Czech Republic is moderately continental, with cold winters, during which the temperature is often below freezing, and warm summers, during which nights remain cool.
+Precipitation is fairly frequent, but it's not abundant in most of the country, amounting to around 400/500 millimeters (15/20 inches) per year. However, being scarcer in the winter months (when plants are at rest) and more abundant in late spring and summer, it is generally sufficient for agriculture. The only moderately rainy areas are found in the Sudetes Range, where precipitation exceeds 1,000 mm (40 in) per year, at the foot of the same mountain range (in Ostrava, precipitation reaches 850 mm or 33.5 inches per year), and in the south-west, along the border with Germany and Austria.
+
+During winter, from December to February, in Prague and in the other Czech cities, temperatures hover around freezing (0 °C or 32 °F) or just below, the weather is often dull and cloudy, and light snowfalls can occur. On the contrary, outbreaks of cold from Russia can bring intense frosts, with temperatures dropping to -20/-25 °C (-4/-13 °F) in the worst moments.
+
+In spring, from March to May, the weather is unstable, and the first warm days alternate with the return of cold weather: frosts and snowfalls can still occur in April, especially in the first part of the month. There's usually a turning point in the second half of May, when the maximum temperatures regularly reach or exceed 18/20 °C (64/68 °F), and the weather becomes enjoyable.
+
+Summer, from June to August, is usually warm. There is a moderate amount of sunny days, during which showers or thunderstorms can erupt in the afternoon. Even in mid-summer, there can be cool and rainy days, with highs around 20 °C (68 °F), but also hot periods, during which the temperature may exceed 30 °C (86 °F) for a few days. However, temperatures are usually pleasant, with highs around 22/24 °C (72/75 °F) and lows around 12/13 °C (54/55 °F).
+
+Autumn, which goes from September to November, is initially pleasant in the first half of September, and then becomes progressively more cloudy and cold, with fairly frequent rains.
+
+## Demographics of Czechia
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(RCzechia)
+library(ggplot2)
+library(dplyr)
+library(czso)
+
+src <- czso::czso_get_table("SLDB-VYBER") %>% 
+   select(uzkod, obyvatel = vse1111) %>% 
+   mutate(obyvatel = as.numeric(obyvatel)) 
+
+okresni_data <- RCzechia::okresy("low") %>% # data shapefile
+  inner_join(src, by = c("KOD_OKRES" = "uzkod")) 
+    # key for data connection - note the use of inner (i.e. filtering) join
+
+# report results
+ggplot(data = okresni_data) +
+  geom_sf(aes(fill = obyvatel), colour = NA) +
+  geom_sf(data = republika("low"), color = "gray30", fill = NA) +
+  scale_fill_viridis_c(trans = "log", labels = scales::comma) +
+  labs(title = "Czech population",
+       fill = "population\n(log scale)") +
+  theme_bw() +
+  theme(legend.text.align = 1,
+        legend.title.align = 0.5)
+```
+
+
+
+
+
+
+
+COVID-19 infections are increasing in Czech Republic, with 491 new infections reported on average each day. That’s 4% of the peak — the highest daily average reported on October 28.
+
+There have been 1,690,288 infections and 30,454 coronavirus-related deaths reported in the country since the pandemic began.
+
+## Lockdown status of the country
+
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces and international borders in order to contain the spread of the virus.
+Information regarding entry to other countries is the responsibility of the embassies in the countries of destination and the Ministry of Foreign Affairs. Quarantine measures and RT-PCR test conditions are the responsibility of the Ministry of Health. 
+The activities of diplomatic missions of the Czech Republic are gradually resumed. Depending on the epidemiological situation, the conditions for entry into the Czech Republic will also be gradually relaxed. More detailed information regarding the stay of third country nationals in the Czech Republic 
+
+
+
+
+## Actions taken by the government
+
+As of August 23rd, 2021 in accordance with the full vaccination certificate coming into effect, anti-epidemic measures will be eased also for vaccinated third country citizens, under the condition that the third country citizen has been vaccinated by a vaccine approved by European Medicine Agency (EMA) or by its equivalent. Vaccinated persons must be holders of a certificate on completed vaccination course against COVID-19, whose template is published in the list of recognised certificates on the website of the Ministry of the Health of the Czech Republic. Without the obligation to meet other epidemiological measures, vaccinated persons travelling from countries for which an implementing act in accordance with the European Union regulation on EU digital COVID certificates was adopted may also enter the territory of the Czech Republic. These persons can newly travel to the Czech Republic for any reason and at the same time, they can benefit from visa services at Czech embassies that are fully available again. This shall not apply to countries with an extreme risk of COVID-19, in which the visa services are still limited to certain type of titles.
+
+As of July 31st, 2021, the Ministry of Health updated the Protective Measure regarding the conditions of entry into the Czech Republic.
+Children between 6 to 12 years of age travelling from the countries with a high or a very high risk of COVID-19 transmission may undergo RT-PCR immediately after their arrival in the Czech Republic and finish self-isolation by obtaining of a negative test result. This age group also does not need to be tested before arrival to the Czech Republic any more. An updated measure also newly enable to accept applications for long-term visas and long-term residence permits for the purpose of study pursuant to § 64 para. a) of Act No. 326/1999 Coll., on the stay of foreigners in the territory of the Czech Republic and on the amendment of certain acts as amended (study in accredited study programmes at a university for the academic / school year 2021/2022) in the countries with extreme risk of COVID-19 transmission.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Czechia_corona <- as.data.frame(Czechia_corona)
+head(Czechia_corona)
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+tail(Czechia_corona)
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+summary(Czechia_corona)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(recover_Czechia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Czechia: Daily Covid-19 Recoveries")
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+death_Czechia_corona <- Czechia_corona %>% filter(type=="death")
+head(death_Czechia_corona)
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(death_Czechia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Czechia: Daily Covid-19 death")
+
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Czechia_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Czechia")
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Czechia_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Confirmed, Death and Recovered cases in Czechia")
+```
+
+
+
+Above graph shows the no.of confirmed, death and recovered corona patients in Colombia in daily bais in the same graph. This graph implies that recovery of the corona patients has started after 2020-07. And also it shows that no.of patients recovery in a day has  increased than the no.of patients confirming with corona in a day which implies that  situation has controlled by the country.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Czechia_corona <-  Czechia_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(Czechia_corona, aes(date, cum_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Total no.of confirmed, death, recovered cases in Czechia")
+```
+Above graph implies that the total no.of confirmed cases has increased exponentially since mid of 2021. The increment of total no.of patients recovered from corona is not as total no.of patients confirmed with corona. There is a small gap between total no.of confirmed patiets with recovered patients therefore it can be concluded that  the country has   medical facility in the country.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Czechia_corona_spread <- spread(select(Czechia_corona, 1,6,8), key = type, value = cum_cases)
+
+Czechia_corona_spread$per_confirmed <- (Czechia_corona_spread$confirmed / Czechia_corona_spread$confirmed)*100
+Czechia_corona_spread$per_death <- (Czechia_corona_spread$death / Czechia_corona_spread$confirmed)*100
+Czechia_corona_spread$per_recovered <- (Czechia_corona_spread$recovered / Czechia_corona_spread$confirmed)*100
+
+Czechia_corona_gather <- gather(Czechia_corona_spread, key = "type_1" , value = "Per_cum_with_confirmed",5:7)
+
+Czechia_corona <- cbind.data.frame(Czechia_corona,select(Czechia_corona_gather, 5,6))
+Czechia_corona[is.na(Czechia_corona)] <- 0
+
+ggplot(Czechia_corona, aes(date, Per_cum_with_confirmed , colour = type)) + geom_path(size=1) +
+  labs(title = "Percentage of total death, recovered cases with confirmed cases in Czechia")
+```
+
+
+
+
+
+## Comparing Countries in same continent
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(dplyr)
+library(RCzechia)
+library(leaflet)
+library(czso)
+
+# metrika pro mapování - uchazeči za říjen
+metrika <- czso::czso_get_table("250169r20") %>% 
+   filter(obdobi == "20201031" & vuk == "NEZ0004")
+
+podklad <- RCzechia::obce_polygony() %>% # obce_polygony = municipalities in RCzechia package
+  inner_join(metrika, by = c("KOD_OBEC" = "uzemi_kod")) %>% # linking by key
+  filter(KOD_CZNUTS3 == "CZ071") # Olomoucký kraj
+
+pal <- colorNumeric(palette = "viridis",  domain = podklad$hodnota)
+
+leaflet() %>% 
+  addProviderTiles("Stamen.Toner") %>% 
+  addPolygons(data = podklad,
+              fillColor = ~pal(hodnota),
+              fillOpacity = 0.75,
+              color = NA)
+```
+
+
+
+
+## Discussion
+The very specific situation of Europe, where all countries signed the European Charter of Local Self-Government (Charter) is that the current situation of local public finance can be systematically evaluated according to two concrete benchmarks defined by the Charter and its explanatory documentation, which require that the level of municipal fiscal imbalance due to Covid-19 should be proportional to the situation on the central level and that the municipalities need adequate financial resources of their own available, commensurate with the responsibilities provided for by the constitution and the law.
+
+The analysis above indicates that both principles of the Charter are endangered in Czechia and Slovakia during the Covid-19 crisis. Concerning proportionality, the situation in Czechia still remains a bit unclear, but with a high probability that the difference between increased costs and decreased revenues will not be covered. In Slovakia, the current valid decision is just to provide cheap loans. Such governmental decisions would mean that the financial “losses” of municipalities due to Covid-19 would be disproportional, especially for very small municipalities and municipalities with city transport or other large municipal companies or municipalities located in attractive tourism areas, with a higher impact on the local level than on the central level.
+
+Concerning adequacy, the core problem is already apparent in both countries – without the necessary (and valid) financial help from the central level, the capacity of local governments to address the full scale of their own responsibilities is in danger. Both Czech and Slovak governments have been criticised by the “Monitoring of the European Charter of Local Self-Government” reports prepared by the Council of Europe for “the difficult financial situation in some local authorities” (Congress, 2016, p. 2). Leaving municipalities without specific support to cope with Covid-19 consequences would mean that in a short-term perspective Czech and Slovak municipalities will not have financial resources commensurate with their responsibilities, and cuts in the “least painful” areas will be necessary.
+The existing reactions of some local governments indicate that (together with cuts in investment expenditures) most of the costs of this difference will be shifted to non-profit providers of local services (delivering local services under different public-private partnerships arrangements), creating important long-term risks and consequences. This impact will be most visible in social services, culture, and sport areas according to the interviews.
+
+
+## Conclusions
+In conclusion, it can be said that Czechia currently stands at a much favorable stage regarding the COVID-19 Pandemic when compared to most countries; despite it being significantly affected in the earlier months. The Government of Czechia has been able to apply many successful public health response strategies and stabilize the progress of the disease. The government being well-prepared for the pandemic along with great strategies such as be on call for Czechia. The graphs show that  Czechia republic's rate of  patients who effected with covid-19 and the recovered rate is quite high soo the government decisions are quite effective.
+
+
+## References
+* United Nations, Department of Economic and Social Affairs, Population Division. World Population Prospects: The 2015 Revision. (Medium variant)
+* United Nations, Department of Economic and Social Affairs, Population Division. World Population Prospects: The 2019 Revision. (Medium variant)
+* United Nations, Department of Economic and Social Affairs (2013). Trends in International Migrant Stock: Migrants by * Destination and Origin (United Nations database, POP/DB/MIG/Stock/Rev.2013
+* Boden, T.A., G. Marland, and R.J. Andres. 2016. Global, Regional, and National Fossil-Fuel CO2 Emissions. Carbon Dioxide Information Analysis Center, Oak Ridge National Laboratory, U.S. Department of Energy, Oak Ridge, Tenn., U.S.A. doi 10.3334/CDIAC/00001_V2016
+* 1959-2013 estimates for fossil fuels are from the Carbon Dioxide Information Analysis Center (CDIAC) at Oak Ridge National Laboratory. http://cdiac.ornl.gov/trends/emis/meth_reg.html.
+* 2014 and 2015 estimates are preliminary and are based on energy statistics published by BP (data in red). https://www.bp.com/content/dam/bp/pdf/energy-economics/statistical-review-2016/bp-statistical-review-of-world-energy-2016-full-report.pdf
+* https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/czech-republic/
+* Jordan RE, Adab P, Cheng KK. Covid-19: risk factors for severe disease and death. BMJ 2020; 368.
+DOI:10.1136/bmj.m1198.
+* Lawton G. Why are men more likely to get worse symptoms and die from covid-19? New Scientist.
+2020; published online April 16. https://www.newscientist.com/article/2240898-why-are-menmore-likely-to-get-worse-symptoms-and-die-from-covid-19/ (accessed April 24, 2020).
+* Zhou F, Yu T, Du R, et al. Clinical course and risk factors for mortality of adult inpatients with
+COVID-19 in Wuhan, China: a retrospective cohort study. The Lancet 2020; 395: 1054–62.
+* Case A, Paxson C. Sex differences in morbidity and mortality. Demography 2005; 42: 189–214.
+ 5Di Lego V, Di Giulio P, Luy M. Gender Differences in Healthy and Unhealthy Life Expectancy. In:
+ Jagger C, Crimmins EM, Saito Y, De Carvalho Yokota RT, Van Oyen H, Robine J-M, eds. International
+ Handbook of Health Expectancies. Cham: Springer International Publishing, 2020: 151–72.
+ 6Global Health 5050. COVID-19 sex-disaggregated data tracker.
+ https://globalhealth5050.org/covid19/ (accessed April 19, 2020).
+* Onder G, Rezza G, Brusaferro S. Case-Fatality Rate and Characteristics of Patients Dying in Relation
+ to COVID-19 in Italy. JAMA 2020; 323: 1775–6.
+* Dowd JB, Andriano L, Brazel DM, et al. Demographic science aids in understanding the spread and
+ fatality rates of COVID-19. PNAS 2020; published online April 16. DOI:10.1073/pnas.2004911117.
+*  Riccardo F, Ajelli M, Andrianou X, et al. Epidemiological characteristics of COVID-19 cases in Italy
+ and estimates of the reproductive numbers one month into the epidemic. medRxiv 2020; :
+ 2020.04.08.20056861.
+*  Dudel C, Riffe T, Acosta E, van Raalte AA, Myrskyla M. Monitoring trends and differences in
+ COVID-19 case fatality rates using decomposition methods: Contributions of age structure and agespecific fatality.      medRxiv 2020; published online April 8. DOI:10.1101/2020.03.31.20048397.
+* Ichino A, Calzolari G, Mattozzi A, Rustichini A, Zanella G, Anelli M. Transition steps to stop
+ COVID-19 without killing the world economy. VoxEU.org. 2020; published online March 25.
+ https://voxeu.org/article/transition-steps-stop-covid-19-without-killing-world-economy (accessed
+ May 13, 2020).
+* Eurostat. Employment by sex, age and economic activity (from 2008 onwards, NACE Rev. 2).
+*2020. https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=lfsq_egan2&lang=en (accessed
+ April 24, 2020).
+* Barbieri T, Basso G, Scicchitano S. Italian Workers at Risk during the COVID-19 Epidemic.
+ Rochester, NY: Social Science Research Network, 2020 DOI:10.2139/ssrn.3572065.
+*  Wenham C, Smith J, Morgan R. COVID-19: the gendered impacts of the outbreak. The Lancet
+  2020; 395: 846–8.
+* OECD. The Pursuit of Gender Equality: An Uphill Battle. Paris, 2017
+* https://koronavirus.mzcr.cz/en/recognition-of-vaccination-certificates-from-other-countries/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

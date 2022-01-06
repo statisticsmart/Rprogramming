@@ -1,0 +1,453 @@
+---
+title: "Covid-19 Analysis of Italy"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+![Figure 01 : Flag of Italy](https://cdn.countryflags.com/thumbs/italy/flag-400.png){#id .class width=25% height=25%}
+
+
+
+
+```{r,comment=NA,echo=FALSE,eval=FALSE}
+  
+# Individual Project of AS2018490
+
+library(devtools)
+devtools::install_github("thiyangt/sta3262",force = TRUE)
+library(sta3262)
+get_individual_project_country("AS2018490")
+
+
+
+
+
+
+
+
+```
+
+
+#### Visualization of Italy
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+library(coronavirus)
+library(tidyverse)
+
+library(magrittr)
+
+italy_corona <- coronavirus %>% filter(country == "Italy")
+
+
+new_italy_corona <- italy_corona %>% filter(cases >= 0) # Remove negative cases
+
+
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+
+
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x = long,y = lat, group = group), fill = "gray", colour= "white") + coord_cartesian(xlim = c(-180,180),ylim =c(-90,90)) + scale_x_continuous(breaks = seq(-180,180,120)) + scale_y_continuous(breaks = seq(-90,90,100))
+
+p + geom_point(data =new_italy_corona,aes(x =long, y =lat), color = "red",size =1)
+
+
+
+
+```
+
+
+  * Figure 02: Placement of country Italy in world map.
+  
+  
+
+ Italy or Italia is European country located in mid Europe beside Asia ,Africa and Mediterranean sea.
+ 
+
+#### Climate change of Italy
+
+![Figure 03 : Climate change according to geography](https://upload.wikimedia.org/wikipedia/commons/c/ca/Climates_of_Italy.PNG){#id .class width=50% height=50%}
+
+
+ According to geography Italy is lies on temperate zone.In Italy, there different types of climate
+
+  * Mediterranean Csa
+  * Humid Subtropical Cfa
+  * Oceanic Cfb
+  * Mountains(Alpine zone)
+  
+  Most northerly,the Alpine zone, has a continental mountain climate but temperature is lower than usual and rainfall higher than usual.Average temperature is 7.4 Celsius and average rainfall 660mm.Permanent snow line(Valle d'Aosta) is at 3110 meters and Julian Alps has 2545 meters snow line which is lower than Valle d' Aosta.In autumn and late winter hot dry wind flow from Switzerland and Austria.Rain falls in the summer higher than spring and autumn.Average temperature in January is coldest month in Italy which has temperature near to freezing point.(0 Celsius) During winter fog is common in central area.
+  
+  
+  
+#### Lock Down State of Italy
+
+
+![Figure 04 : Empty street of Italy](https://assets.weforum.org/editor/responsive_large_webp_ipw5h2nPMWH5pWJ4KE1KbRK6FetzNq-UEbClX2guwT8.webp){#id .class width=50% height=50%}
+
+
+ Due to severe COVID-19 situation government of Italy imposed a national lock down or quarantine in 9th of March 2020, restricting movement of population except for necessity such as work and health circumstances.Goal of this lock down is containing the outbreak of COVID-19in Italy.In lock down times in Italy ban of non-essential travel,limitation of free movement,except in cases of necessity, ban of public events, closure of commercial and retail businesses,except essential goods sellers and banks, suspension of teaching in schools and universities,shutdown of all non-essential businesses and
+industries (23 March–3 May) major. according to internet resource about 60 million people quarantined from Italian population. This lock down is ended 18 May 2020 is about  2 months, 1 week and 2 days.After that minor lock down appear in Italy but again 2021, 3 days severe lock down imposed again.
+
+
+#### Action take by government of Italy
+
+ Italy was the first European democracy to be hit by the Covid-19 pandemic.Italy government's response especially in the first wave was quit confused and inadequate one. Since that Italy gradually falls into public health crisis which lead to national covid lock down between in March and May. Before lock down appear Italy faces first highest covid 19 death rate of worldwide which lead to world's attention.Prime minister Giuseppe Conte faced greatest challenge of health crisis during that time.Firstly government of Italy used to reduce death rate provincial lock downs.According provincial lock down Lombardy, Emilia-Romagna, Vento, Piedmont, Marche, Lodi, Pauda provinces were under lock down in late February. But government Italy couldn't bear their death rate. Since that government of Italy imposed whole country lock down at 9th of March 2020 which lead to almost 2 months to end.
+ 
+ 
+ During second wave(autumn 2020 in Italy) mini lock downs were imposed by government of Italy. After several mini lock downs Italy faced severe health crisis again. Since that government of Italy faced severe lock down in Ester of 2021 which ended up three days because of impact country Economy.
+ 
+ 
+ 
+#### Impact of Covid 19 to Italy
+
+
+![Figure 05 : Doctor treated old age patient](https://assets.weforum.org/editor/responsive_large_webp_7cU591Xf2HUjXepQLgE5_S3yDn5vM3ZuNkZ8HiVvpyg.webp){#id .class width=50% height=50%}
+
+
+ Major impact of Italy covid 19 health crisis, which lead to higher death rate. According to higher death rate, most of people above 60 years death rate increased. According to most senior adult were most impacted age group of Italian society.Secondly impacted factor of covid 19 is Economy.Due severe lock downs almost around 2 months, Italian economy got down. Hence that government of Italy decided to ended up whole country lock downs and had decided to mini lock downs take place. 
+ 
+ Since Italy is historical country and famous for food it is major travel destination to worldwide.Because of health crisis and major lock downs tourism industry broken down and which lead to huge lose of Economy.The Ehrenberg Bank revised its forecast for the Italian economic growth in 2020 from -0.3% before the lock down to -1.2%.During lock downs hard hit sectors are hospitality, food service, retail, art, entertainment and transport sectors, altogether making up
+around 23 percent of the country's gross domestic product.During the lock downs in early 2020, emissions of nitrogen dioxide, or NO2, fell drastically in
+northern Italy, most likely as a result of fewer diesel engines in operation.
+
+
+ During lock downs other most impacted factor is mental health. Italian are most entertainment social people. During lock down social gathering banned. Since that mental health of country of depressed one. Hence that most peoples habit changed to eating non healthy foods(junk foods), heavily usage of social media platforms, addicted to computer or video games and domestic violence.Since that facing health issues, facing suicide, relationship got broke affected to mental health. Hence Italian government decided to placed entertainment such as playing music, singing song in home etc and catholic sermons broadcast  got world attention. 
+ 
+ 
+## Exploratory Data Analysis.
+  
+#### Explore confirm cases through 2020 to present
+ 
+```{r, comment=NA, echo=FALSE}  
+
+confirmed_italy_corona <- new_italy_corona %>% filter(type =="confirmed")
+
+ggplot(confirmed_italy_corona,aes(x=date,y=cases)) + geom_line() + ggtitle("Italy:Daily Covid-19 confirms")
+
+```
+  
+  * Figure 06:Time series plot of daily covid 19 confirms of Italy
+  
+  
+  
+  According daily confirm cases through 2020 to present maximum confirm cases(40902) recorded in end of 2020.This time series graph shows sinusoidal pattern after October 2020.There are five peak in this plot.During major lock downs(March 2020, Ester 2021) covid 19 confirm cases get lower than usual time.
+  
+  
+#### Explore death cases Through 2020 to present
+
+```{r, comment=NA, echo=FALSE}
+death_italy_corona <- new_italy_corona %>% filter(type =="death")
+
+
+
+ggplot(death_italy_corona,aes(x=date,y=cases)) + geom_line() + ggtitle("Italy:Daily Covid-19 Deaths")
+
+
+
+```
+ 
+
+  * Figure 07: Time series plot of daily covid 19 deaths 
+  
+  
+  
+  According to this time series plot there is there are four peaks.Highest death rate(993) is around late 2020. This plot shows sinusoidal pattern through out 2020 to present but it shows lowest death rate around 1st lock down of Italy.
+  
+
+```{r, comment=NA, echo=FALSE}
+recover_italy_corona <- new_italy_corona %>% filter(type =="recovered")
+
+
+ggplot(recover_italy_corona,aes(x=date,y=cases)) + geom_line() + ggtitle("Italy:Daily Covid-19 Recovery cases")
+
+```
+
+  * Figure 08: Time series plot of Daily covid 19 recovery cases
+  
+  
+
+
+ According to this plot there are 5 peaks.Highest recovered rate is around July 2021 which 53704. Furthermore this plot also shows sinusoidal pattern after October 2020.
+ 
+#### Explore data by year
+
+##### Explore data by year 2020
+ 
+```{r, comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+
+library(magrittr)
+
+library(tibbletime)
+library(dplyr)
+
+Italy_corona_year2020 <- new_italy_corona %>% filter(date >= as.Date('2020-01-22') & date <= as.Date('2020-12-31'))
+
+ggplot(Italy_corona_year2020, aes(x=date,y=cases, color=type)) + geom_line() + geom_point() # plot of death,confirmed ,recovered cases vs time 2020
+
+ 
+```
+
+  * Figure 09 : Plot of daily covid 19 confirmed cases, death cases and 
+                recovered cases in 2020
+                
+                
+
+ Through year 2020 most confirm cases and recovered cases were showed in late part of year.(October 2020 to December 2020 ) Death cases of 2020 is lower than 10000 deaths daily. But death cases also show minor peak around November to December 2020.
+
+
+##### Explore data by year 2021
+
+```{r,comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+Italy_corona_year2021 <- new_italy_corona %>% filter(date >= as.Date('2021-01-01') & date <= as.Date('2021-12-31'))
+
+
+ggplot(Italy_corona_year2021, aes(x=date,y=cases, color=type)) + geom_line() + geom_point()  # plot of death,confirmed ,recovered cases vs time 2021
+
+
+```
+ 
+ * Figure 10 : Plot of daily covid 19 confirmed cases, death cases and                        recovered cases in 2021
+ 
+ 
+
+ According to this plot confirm cases and recovered cases were showed sinusoidal pattern till October 2021. Also death rate is near to zero and it showed quite constant value through out year 2021.
+ 
+#### Compare  Death cases VS confirmed cases using Scatter plot
+ 
+ 
+```{r,comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+pivot_new_italy_corona <- new_italy_corona %>% pivot_wider(names_from = type, values_from = cases) # pivot wider
+
+pivot_new_italy_corona1 <- pivot_new_italy_corona %>% mutate(newconfirmed = log(confirmed/7657))
+
+
+pivot_new_italy_corona2 <- pivot_new_italy_corona1 %>% mutate(newdeath = log(death/215.4))
+
+pivot_new_italy_corona3 <- pivot_new_italy_corona2 %>% mutate(newrecovered = log(recovered/7415.9)) # make new 3 columns newconfirmed, newdeath, newrecovered
+
+library(ggpubr)
+
+ggscatter(pivot_new_italy_corona3, x = "newconfirmed", y = "newdeath",
+          add = "reg.line", cof.int = TRUE, 
+          cor.coef =TRUE, cor.method = "pearson", xlab = "log(confirmed/mean)",
+          ylab = "log(death/mean)" ) # correlation plot log(recovered/mean) vs log(confirmed/mean) data in Italy
+
+
+```
+
+
+  * Figure 11 : Scatter plot of log(death/mean) vs log(confirmed/mean)
+  
+  
+  
+
+ According to this plot logarithmic death compare with logarithmic confirmed cases. According data death cases vs confirmed cases quite lead to to erroneous data. Since that it compare according to two variables.
+ 
+ 
+
+  
+   *log(daily death cases/mean death cases)*
+
+   *log(daily confirmed cases/ mean confirmed cases)*
+
+
+
+
+ According to this variables gives fair scatter plot of death rate VS confirmed rate of Italy.According to this plot showed that correlation between above mention variables are 0.73 which is near to 1. Hence that there is strong relationship in between death rate VS confirmed rate.
+ 
+ 
+#### Compare Recovered cases VS Confirmed cases
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+ggscatter(pivot_new_italy_corona3, x = "newconfirmed", y = "newrecovered",
+          add = "reg.line", cof.int = TRUE, 
+          cor.coef =TRUE, cor.method = "pearson", xlab = "log(confirmed/mean)",
+          ylab = "log(recovered/mean)" ) # correlation plot log(recovered/mean) vs log(confirmed/mean) data in Italy
+
+
+```
+  
+  
+  * Figure 12: Scatter plot of log(recovered/mean) vs log(confirmed/mean)
+  
+  
+  
+  
+
+ According to this plot another new variable established.which is,
+
+*log(daily recovered cases/ mean recovered cases)*
+
+ Then this plot shows that 0.78 correlation in between recovered rate VS confirmed rate. Which means there is strong relationship in between recovered rate VS confirmed rate.
+ 
+ 
+#### Compare Countries confirm,death, recovered cases.
+
+#####Area Time Series Plot 
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+compair_corona <- filter(coronavirus,country %in% c("Italy","US","India","Brazil","China"))
+
+New_compair_corona <- compair_corona %>% filter(cases >= 0)
+
+ggplot(New_compair_corona,aes(x=date,y=cases,col = country)) + geom_line() + ggtitle("Daily Covid-19 confirms")
+
+
+```
+
+ * Figure 13: Area plot of US,Italy,India,Brazil
+ 
+ 
+
+According to this plot most area covered by  country US(confirm cases). along that India and Brazil second mostly area covered(confirm cases).There little area covered by Italy. According to that that Italy has lowest confirmed cases than Us , Brazil and and India.
+
+##### Scatter plot of death vs confirmed cases of each country
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+pivot_compair_coronabytype <- New_compair_corona %>% pivot_wider(names_from = type, values_from = cases) # pivot wider
+
+ggplot(pivot_compair_coronabytype,aes(x=confirmed, y=death,col = country)) + geom_point() + geom_smooth(method = "loess",se = F) +
+  xlim(c(0,500000)) + ylim(c(0,8000)) +
+  labs(subtitle = "death vs confirmed", y="death", x="confirmed",title = "Scatterplot of death vs confirmed by country")
+
+
+
+```
+
+  
+  * Figure 14: Scatter plot of death vs confirmed by country
+  
+  
+  
+  
+According to that linearity of death Vs confirmed increased by Italy,Us, India and Brazil. Brazil's most confirmed cases tend to be death cases.Also Italy's most confirmed cases not tend to be death.
+
+#### Scatter plot of Recovered VS Confirmed Cases
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(pivot_compair_coronabytype,aes(x=confirmed, y=recovered,col = country)) + geom_point() + geom_smooth(method = "loess",se = F) +
+  xlim(c(0,500000)) + ylim(c(0,500000)) +
+  labs(subtitle = "recovered vs confirmed", y="recovered", x="confirmed",title = "Scatterplot of recovered vs confirmed by country")
+
+
+```
+ 
+  * Figure 15 : Scatter plot of recovered vs confirmed by country
+  
+  
+  
+ 
+ According to this plot recovered Vs confirmed increased by Brazil, Italy,US and India. Since that Brazil shows lowest recovery rate along with confirm. Italy also shows lower recovery rate along with confirm.
+
+
+
+
+## Discussion
+
+ In this Analysis main focus is **Analyzing country Italy data set 2020 to present**. According to main focus area, it divided into sub focus several sub focus areas. Which are,
+
+  1. Analyzing time series data according to country Italy.
+  2. Compare death vs confirmed. 
+  3. Compare recovered vs confirmed.
+  4. Compare several country data according to 1st ,2nd and 3rd                     condition.(Italy, Us, India, Brazil)
+  
+  To obtain general analysis of data, raw data should turn into well reshape data according to the main focus.There are seven variables in **coronavirus** data set. They are,
+  
+  * date
+  * province
+  * country
+  * latitude
+  * longitude
+  * type 
+  * number of cases
+
+
+  There is one quantitative variable. Which is number of cases. and also there are two qualitative variables. Which are country and type of case.firstly reshape data according to country Italy. According to the data set of Italy, there are  outliers.(mostly negative cases and NA cases) Since that both negative cases and NA cases were removed because both cases lead erroneous plot and erroneous conclusion. According to negative cases, can get absolute value of negative cases but there could be typo errors since that negative cases should neglected. Also this data set doesn't predict any trend since that putting mean value for NA cases doubtful one. Since that it should also remain as neglected  data.
+  
+ According to 1st sub focus area figure 06,07 and 08 show time series data about Country Italy daily Covid 19 confirmed cases, death cases and recovered cases respectively.According figure 06 1st quota(January to July 2020) has relatively less covid 19 confirms cases because of lock down in  Italy. Also 2nd quota ( July to December 2020) has highest peak of covid 19 confirms of Italy.According to 3rd quota figure 06 relatively less covid 19 confirm cases than 2nd quota because of ester 2021 lock down. According to 4th quota has relatively lower confirm cases than 3rd and 4th quota but relatively higher than 1st quota.
+ 
+ 
+ According to figure 7 death cases shows relatively less amount of deaths(below 250) around July to October 2020. And also there are relatively less amount deaths(below 250) around July  to October 2021. According to that Summer season of Italy lowest death rate. This may can be happen to temperature difference in between winter season and summer season. According to figure 08 higher amount recovery cases obtained in end of 2020 to present. This may happen due to covid 19 vaccination program.
+ 
+ 
+ According to figure 9 and 10 yearly analysis available. According to compare of figure 9 and 10 year 2021 has relatively less covid 19 confirm cases and death cases.
+ 
+ 
+ According to figure 11  death cases vs confirmed cases has linear relationship.(correlation = 0.73) And also figure 12 has compare recovered cases vs confirmed cases. That one shows that strong linear relationship in between recovered cases and confirmed cases.
+ 
+ According to figure 13 area plot shows that Italy covid 19 confirm cases shows relatively less amount confirm cases than US, India and Brazil.According to figure 14 death cases vs confirmed cases each country shows huge variety of each country but according to data points of Brazil confirm cases tend to be death cases. According that figure Italy confirmed cases are not tend to be death cases. According to figure 15 most recovered cases reported in India but Italy relatively less recovered cases than Us and India.
+ 
+ 
+#### Pros and Cons of data Analysis
+
+
+  * In this data set of Italy column for province available. But all of them are not available. Since that provincial data analysis could not conducted.
+  
+  * NA cases leaded to be error because there is no past data available covid 19 cases since that there is no pattern of data cannot be predictable and still it is questionable or doubtful thing.
+ 
+ * Covid 19 is disease of infected by virus since that it also dependent upon lots of biological factor such as,
+  * Ethnicity
+  * age
+  * Sexual Orientation 
+  * Disability
+  
+  
+## Conclusions
+
+  * Lock downs of Italy shows effectiveness to lower death rate of Italy.
+  
+  * Confirmed cases are vary according to temperature of country. Italy shows higher confirmed cases during fall to winter of Italy and lowest confirmed cases are recorded in summer of both year 2020 and 2021. Since covid 19 disease is base on flu and cold  symptoms cold temperature has huge impact of to covid 19 of Italy.
+  
+  * According to compare analysis of each country, Italy has lowest confirmed cases. But this it is depend upon country population and other biological factor. There could be error due to that factors.
+  
+  * According to figure 14  Italy has lowest death rate than India, US and Brazil. But also according to figure 15
+  recovered rate quite low than other country compared.
+  
+  * Temperature of country huge impacted factor to covid 19 of Italy. And also seasonal events like  Christmas impacted to covid 19 somehow.
+  
+  
+## References
+
+  * http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+
+  * https://cran.r-project.org/web/packages/tibbletime/vignettes/TT-01-time-based-filtering.html
+
+  * https://www.easyitalianlanguage.com/italian-lifestyle-culture/
+
+  * https://www.britannica.com/place/Italy/Daily-life-and-social-customs
+
+  * https://www.statista.com/statistics/1104084/current-coronavirus-infections-in-italy-by-status/
+
+
+
+ 
+  
+
+ 
+ 
+  
+  
+  
+
