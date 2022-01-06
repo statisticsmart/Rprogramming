@@ -8,7 +8,13 @@ title: Individual Projects 2021
 | [Cambodia](/individualproject2021/Shashini/AS2018471/AS2018471Cambodia.html) [Cambodia-Rmd](/individualproject2021/Shashini/AS2018471/AS2018471Cambodia.Rmd)	|  [Netherlands.html](/individualproject2021/Shashini/AS2018472/2018472Netherands.html) [Netherlands-Rmd](/individualproject2021/Shashini/AS2018472/2018472Netherands.rmd)	| [Sweden.html](/individualproject2021/Shashini/AS2018475/2018475Sweden.html) [Sweden-Rmd](/individualproject2021/Shashini/AS2018475/2018475Sweden.rmd) 	| [Kuwait.html](/individualproject2021/Shashini/AS2018478/2018478.html) [Kuwait-Rmd](/individualproject2021/Shashini/AS2018478/2018478.Rmd)   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| [Morocco.html](/individualproject2021/Shashini/AS2018480/2018480Morocco.html) [Morocco-Rmd](/individualproject2021/Shashini/AS2018480/2018480Morocco.Rmd) 	| [Malaysia.html](/individualproject2021/Shashini/AS2018484/2018484MALAYSIA.html) [Malaysia-Rmd](/individualproject2021/Shashini/AS2018484/2018484MALAYSIA.Rmd) 	|  [Uzbekistan.html](/individualproject2021/Shashini/AS2018485/2018484Uzbekistan.html) [Uzbekistan-Rmd](/individualproject2021/Shashini/AS2018485/2018484Uzbekistan.Rmd)	|  [Serbia.html](/individualproject2021/Shashini/AS2018486/2018486.html) [Serbia-Rmd](/individualproject2021/Shashini/AS2018486/2018486.Rmd)	 |  |
+| [Morocco.html](/individualproject2021/Shashini/AS2018480/2018480Morocco.html) [Morocco-Rmd](/individualproject2021/Shashini/AS2018480/2018480Morocco.Rmd) 	| [Malaysia.html](/individualproject2021/Shashini/AS2018484/2018484MALAYSIA.html) [Malaysia-Rmd](/individualproject2021/Shashini/AS2018484/2018484MALAYSIA.Rmd) 	|  [Uzbekistan.html](/individualproject2021/Shashini/AS2018485/2018484Uzbekistan.html) [Uzbekistan-Rmd](/individualproject2021/Shashini/AS2018485/2018484Uzbekistan.Rmd)	|  [Serbia.html](/individualproject2021/Shashini/AS2018486/2018486.html) [Serbia-Rmd](/individualproject2021/Shashini/AS2018486/2018486.Rmd)	 | [Italy.html](/individualproject2021/Shashini/AS2018490/2018490Italy.html) [Italy-Rmd](/individualproject2021/Shashini/AS2018490/2018490Italy.Rmd) |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+| [Turkey.html](/individualproject2021/Shashini/AS2018493/2018493TURKEY.html) [Turkey-Rmd](/individualproject2021/Shashini/AS2018493/2018493TURKEY.Rmd)	| [Solvakia.html](/individualproject2021/Shashini/AS2018500/2018500Slovakia.html) [Solvakia-Rmd](/individualproject2021/Shashini/AS2018500/2018500Slovakia.Rmd) 	| [Bolivia.html](/individualproject2021/Shashini/AS2018501/2018501Bolivia.html) [Bolivia-Rmd](/individualproject2021/Shashini/AS2018501/2018501Bolivia.Rmd) 	|  [Costarica.html](/individualproject2021/Shashini/AS2018502/2018502COSTA_RICA.html) [Costarica-Rmd](/individualproject2021/Shashini/AS2018502/2018502COSTA_RICA.Rmd) | [Qatar.html](/individualproject2021/Shashini/AS2018503/2018503Qatar.html) [Qatar-Rmd](/individualproject2021/Shashini/AS2018503/2018503Qatar.Rmd) |
+|:-:	|:-:	|:-:	|:-:	|:-:	|
+
+| [Ecuador.html](/individualproject2021/Shashini/AS2018507/2018507Ecuador.html) Ecuador-Rmd NA	| [Angola.html](/individualproject2021/Shashini/AS2018508/2018508angola.html) [Angola-Rmd](/individualproject2021/Shashini/AS2018508/2018508angola.Rmd) 	|  [Finland.html](/individualproject2021/Shashini/AS2018514/AS2018514FINLAND.html) [Finland-Rmd](/individualproject2021/Shashini/AS2018514/2018514FINLAND.Rmd)	| [Israel.html](/individualproject2021/Shashini/AS2018516/2018516Israel.html) [Israel-Rmd](/individualproject2021/Shashini/AS2018516/2018516Israel.Rmd)  | [India.html](/individualproject2021/Shashini/AS2018517/2018517INDIA.html) [India-Rmd](/individualproject2021/Shashini/AS2018517/2018517INDIA.Rmd) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 | 	|  	|  	|   |  |
@@ -56,9 +62,4 @@ title: Individual Projects 2021
 | 	|  	|  	|   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
-
-| 	|  	|  	|   |  |
-|:-:	|:-:	|:-:	|:-:	|:-:	|
-
+Note: Students' project submissions. Each file's content is the responsibility of the respective student.
