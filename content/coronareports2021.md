@@ -62,5 +62,5 @@ title: Individual Projects 2021
 | 	|  	|  	|   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-Note: Students' project submissions. Each file's content is the responsibility of the respective student. Some submissions include extractions from the Wikipedia website.
+Note: Students' project submissions. Each file's content is the responsibility of the respective student. Some submissions include extractions from the Wikipedia website and other sources.
 
