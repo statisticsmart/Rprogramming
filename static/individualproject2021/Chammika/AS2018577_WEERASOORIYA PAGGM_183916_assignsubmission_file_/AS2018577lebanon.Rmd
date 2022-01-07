@@ -1,0 +1,337 @@
+---
+title: "STA 326 2.0/ ASP 454 2.0 Programming and Data ANalysis with R"
+author: "Gayan AS2018577"
+date: "9/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+---
+<center>
+## Lebanon with Coronavirus Cases
+
+
+![](https://www.countryflags.com/wp-content/uploads/lebanon-flag-png-large.png){width=40%}
+![](https://www.worldatlas.com/r/w768/upload/26/ca/db/lb-01.jpg){width=27%}
+</center>
+
+**Lebanon**, country located on the eastern shore of the Mediterranean Sea; it consists of a narrow strip of territory and is one of the world’s smaller sovereign states. The capital is Beirut.
+Though Lebanon, particularly its coastal region, was the site of some of the oldest human settlements in the world—the Phoenician ports of Tyre (modern Ṣūr), Sidon (Ṣaydā), and Byblos (Jubayl) were dominant centres of trade and culture in the 3rd millennium BCE—it was not until 1920 that the contemporary state came into being. In that year France, which administered Lebanon as a League of Nations mandate, established the state of Greater Lebanon. Lebanon then became a republic in 1926 and achieved independence in 1943.
+Lebanon shares many of the cultural characteristics of the Arab world, yet it has attributes that differentiate it from many of its Arab neighbours. Its rugged, mountainous terrain has served throughout history as an asylum for diverse religious and ethnic groups and for political dissidents. Lebanon is one of the most densely populated countries in the Mediterranean area and has a high rate of literacy. Notwithstanding its meagre natural resources, Lebanon long managed to serve as a busy commercial and cultural centre for the Middle East.
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018577")
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+unique(coronavirus$country)
+library(tidyverse)
+library(magrittr)
+coronavirus
+coronavirus1=subset(coronavirus,select = -province)
+coronavirus2=drop_na(coronavirus1)
+
+
+lebanon_corona <- coronavirus2 %>% filter(country == "Lebanon")
+recover_lebanon_corona <- lebanon_corona %>% filter(type=="confirmed")
+
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE, fig.align = 'center'}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = lebanon_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+Lebanon sharing boards to the north and east with Syrian Arab Republic, and to the south with Israel/Palestinian Territory. The country possesses four distinct zones from west to east including the coastal plain, the Mount Lebanon Range, the Bekaa Valley and the Anti Lebanon range that forms its boarder with Syria. Lebanon is a mountainous country with approximately half of its landscape lying at an altitude of over 900m (3000ft).For its relatively diminutive size, Lebanon offers a surprisingly diverse landscape from the fertile Bekaa Valley to the snow capped peaks of the Anti Lebanon and cedar forest of Mount Lebanon. The famous ceder tree grow high in the mountains, while the lower slopes are cultived with grapes, apricots, plums, peaches, figs, olives and barley, often on terraces painstakingly cut out from the mountainsides. On the coastal plain, citrus fruit, bananas and vegetable are also grown.
+
+<center>
+![Climate and geography of Lebanon](https://www.worldtravelguide.net/wp-content/uploads/2017/03/Think-Lebanon-Beirut-635840812-ramzihachicho-copy.jpg){width=50%}
+
+</center>
+
+There are sharp local contrasts in the country’s climatic conditions. Lebanon is included in the Mediterranean climatic region, which extends westward to the Atlantic Ocean. Winter storms formed over the ocean move eastward through the Mediterranean, bringing precipitation at that season; in summer, however, the Mediterranean receives little or no precipitation. The climate of Lebanon is generally subtropical and is characterized by hot, dry summers and mild, humid winters. Mean daily maximum temperatures range from the low 90s F (low 30s C) in July to the low 60s F (mid-10s C) on the coast and low 50s F (low 10s C) in Al-Biqāʿ in January. Mean minimum temperatures in January are in the low 50s F on the coast and the mid-30s F (about 2 °C) in Al-Biqāʿ. At 5,000 feet (1,524 metres), the elevation of the highest settlements, these are reduced by about 15 °F (8 °C).
+
+Nearly all precipitation falls in winter, averaging 30 to 40 inches (750 to 1,000 mm) on the coast and rising to more than 50 inches (1,270 mm) in higher altitudes. Al-Biqāʿ is drier and receives 15 to 25 inches (380 to 640 mm). On the higher mountaintops, this precipitation falls as heavy snow that remains until early summer.
+
+
+<center>
+### The current covid situation in Lebanon
+
+![](https://www.euromesco.net/wp-content/uploads/2020/06/LEBANON-Demonstrators-take-part-in-a-protest-against-the-growing-economic-hardship-1280x440.jpg){width=70%}
+
+</center>
+
+Lebanon has confirmed cases of COVID-19 within its borders.  At present, businesses and public institutions in Lebanon are operating under regular business hours and no restrictions on capacity.   There are no limits on attendance for religious services.  There is no current government mandate for mask wearing but individual private and commercial establishments may have their own requirements.  Beirut Rafic Hariri International Airport remains open. All air travelers over age 12 arriving in Beirut are required to undergo PCR testing upon arrival.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+lebanon_corona <- coronavirus2 %>% filter(country == "Lebanon")
+lebanon_corona_c <- lebanon_corona %>% filter(type == "confirmed")
+lebanon_corona_d <- lebanon_corona %>% filter(type == "death")
+lebanon_corona_r <- lebanon_corona %>% filter(type == "recovered")
+q=abs(lebanon_corona_r$cases)
+lebanon_corona_r$cases1=q
+```
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggplot(lebanon_corona_c, aes(x=date, y=cases)) + geom_line() + 
+  ggtitle("                              Lebanon: Daily Covid-19 confirmed cases")
+```
+
+According to the Lebanon data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of patients was 6154 reported on 2021-01-15. The total number of patients is 617662.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggplot(lebanon_corona_d, aes(x=date, y=cases)) + geom_line() + 
+  ggtitle("                              Lebanon: Daily Covid-19 death cases")
+```
+According to the Lebanon data framework of death cases, the data is spread from 22-01-2020 to 18-09-2021. The highest number of death cases was 351 reported on 2021-01-30. The total number of death cases is 8232.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggplot(lebanon_corona_r, aes(x=date, y=cases)) + geom_line() + 
+  ggtitle("                              Lebanon: Daily Covid-19 recovered cases")
+```
+According to the Lebanon data framework of recovered cases, the data is spread from 22-01-2020 to 14-08-2021. The highest number of recovered cases was 12635 reported on 2021-02-14. The total number of recovered cases is 537653.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+
+newl=merge(x= lebanon_corona_r, y= lebanon_corona_d, by= 'date', all.x= T)
+newl$allc=newl$cases.x+newl$cases.y
+new_a=merge(x= lebanon_corona_c, y= newl, by= 'date', all.x= T)
+new_a=drop_na(new_a)
+
+new_a$active=new_a$cases-new_a$allc
+
+#lebanon_active= lebanon_corona_r$cases+lebanon_corona_d$cases
+#q=abs(lebanon_corona_r$cases)
+#lebanon_corona_r$cases1=q
+#dfla=data.frame(lebanon_active)
+#dfla=drop_na(dfla)
+#dfla1=lebanon_corona_c$cases-dfla
+#dfla1=drop_na(dfla1)
+#lebanon_corona$active=dfla1
+
+
+#Active cases  
+data.frame(new_a$active, c=cumsum(new_a$active))
+
+c=cumsum(new_a$active)
+data.frame(c)       
+```
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+plot(c,type="l",xlab ="Days",ylab = "Cases",main 
+     ="Active Cases Lebanon")
+```
+
+<center>
+# Covid Distribution between China and Lebanon
+
+![](https://apicms.thestar.com.my/uploads/images/2021/06/04/1172825.jpg){width=40%}
+![](https://voxeu.org/sites/default/files/image/FromMay2014/huang23marchfig2.png){width=38%}
+</center>
+
+**CoronaVirus and China**
+
+Coronavirus disease, originated at Wuhan city of China in early December 2019 has rapidly widespread with confirmed cases in almost every country across the world and has become a new global public health crisis. The etiological agent was designated as Severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was originated in bats and human transmission primarily occurs through direct, indirect, or close contact with infected people through infected secretions such as respiratory secretions, saliva or through respiratory droplets that are expelled when an infected person coughs, sneezes, or speaks. The World Health Organization coined the term COVID-19 and declared this novel coronavirus disease as a pandemic on March 11, 2020. The virus is highly contagious and the incubation period ranges between 2-14 days. The virus infects the human respiratory epithelial cells by binding through Angiotensin-Converting Enzyme 2 (ACE2) receptors. Many infected people are either asymptomatic or develop a mild respiratory illness. The major clinical symptoms of the disease are fever, non-productive cough, fatigue, malaise, and breathlessness. Severe illness such as pneumonia, acute respiratory distress syndrome (ARDS), and death occurs in the elderly and patients with comorbid conditions. The case fatality rate is estimated to be 2-3%. The rapid surge was observed in new cases and COVID-19 related deaths outside of China since the beginning of March-2020. As of June 8, 2020 more than 7 million confirmed cases and > 400 thousand deaths were reported from 213 countries and territories. The disease is mainly diagnosed by the detection of viral RNA in nasopharyngeal swab or Broncho-alveolar lavage (BAL) by polymerase chain reaction reverse transcriptase-polymerase chain reaction (RT-PCR). Treatment is basically symptomatic and supportive. Several vaccines are still under various stages of clinical trials. Remdesivir was the first antiviral drug approved for treatment but its efficacy is yet to be determined. At present preventive measures such as contact, droplet, and airborne precautions are the main strategy to control the spread of the disease.
+
+**show the spread of the Covid virus in China Where the covid virus started  and Lebanon**
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+China_corona <- coronavirus2 %>% filter(country == "China")
+China_corona_c <- China_corona %>% filter(type == "confirmed")
+China_corona_d <- China_corona %>% filter(type == "death")
+China_corona_r <- China_corona %>% filter(type == "recovered")
+q=abs(China_corona_r$cases)
+China_corona_r$cases1=q
+```
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_c, col = "red") +
+  geom_line(data = China_corona_c, col = "blue")+
+  ggtitle("             Confirmed cases between China and Lebanon")
+ggp 
+```
+The line in China is shown in blue and the line in Lebanon is shown in red.According to the China data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of patients was 14840 reported on 2020-02-13. The total number of patients is 107909. Although the virus started in China, the number of patients there is lower than in Lebanon.
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases1)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_r, col = "red") +
+  geom_line(data = China_corona_r, col = "blue")+
+  ggtitle("             Recovered cases between China and Lebanon")
+ggp 
+```
+The line in China is shown in blue and the line in Lebanon is shown in red.According to the China data framework, the data is spread from 22-01-2020 to 04-08-2021. The highest number of patients was 3418 reported on 2020-02-22. The total number of patients is 99228.
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_d, col = "red") +
+  geom_line(data = China_corona_d, col = "blue")+
+  ggtitle("             Death cases between China and Lebanon")
+ggp 
+```
+The line in China is shown in blue and the line in Lebanon is shown in red.According to the China data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of death cases was 1290. The total number of death cases is 4849.
+<center>
+
+# Covid Distribution between Israel and Lebanon
+
+![](https://media-cldnry.s-nbcnews.com/image/upload/newscms/2021_29/3493289/210722-israel-covid-mb-1828.jpg){width=40%}
+![](https://ichef.bbci.co.uk/news/1632/idt2/idt2/42a33753-c165-4fd5-b700-0b97d4e8a07b/image/816){width=49.5%}
+</center>
+**The reason Israel is used for this analysis is that it is the closest country to Lebanon.**
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+Israel_corona <- coronavirus2 %>% filter(country == "Israel")
+Israel_corona_c <- Israel_corona %>% filter(type == "confirmed")
+Israel_corona_d <- Israel_corona %>% filter(type == "death")
+Israel_corona_r <- Israel_corona %>% filter(type == "recovered")
+```
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_c, col = "red") +
+  geom_line(data = Israel_corona_c, col = "green")+
+  ggtitle("             Confirmed cases between Israel and Lebanon")
+ggp 
+```
+The line in Israel is shown in green and the line in Lebanon is shown in red. According to the Israel data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of patients was 22291 reported on 2021-09-08. The total number of patients is 1220397.
+
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_r, col = "red") +
+  geom_line(data = Israel_corona_r, col = "green")+
+  ggtitle("             Recovered cases between Israel and Lebanon")
+ggp 
+```
+The line in Israel is shown in green and the line in Lebanon is shown in red. According to the Israel data framework, the data is spread from 22-01-2020 to 04-08-2021. The highest number of recovered was 18322 reported on 2021-02-06. The total number of patients is 854888.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_d, col = "red") +
+  geom_line(data = Israel_corona_d, col = "green")+
+  ggtitle("             Death cases between Israel and Lebanon")
+ggp 
+```
+</center>
+The line in Israel is shown in green and the line in Lebanon is shown in red.According to the China data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of death cases was 101 reported on 2021-01-20. The total number of death cases is 4849.
+
+
+# Covid Distribution between Libiya and Lebanon
+
+![](https://ichef.bbci.co.uk/news/976/cpsprodpb/14C5D/production/_112558058_gettyimages-1192958120.jpg){width=40%}
+![](https://www.drishtiias.com/images/uploads/1598434219_image3.jpg){width=35%}
+</center>
+**The population is approximately the same between Libya and Lebanon.**
+
+*Lebanon population is 6825445 and Libya population is 6871292*
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+Libya_corona <- coronavirus2 %>% filter(country == "Libya")
+Libya_corona_c <- Libya_corona %>% filter(type == "confirmed")
+Libya_corona_d <- Libya_corona %>% filter(type == "death")
+Libya_corona_r <- Libya_corona %>% filter(type == "recovered")
+```
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_c, col = "red") +
+  geom_line(data = Libya_corona_c, col = "magenta")+
+  ggtitle("             Confirmed cases between Libya and Lebanon")
+ggp 
+```
+The line in Libya is shown in magenta and the line in Lebanon is shown in red. According to the Libya data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of patients was 4322 reported on 2021-08-01. The total number of patients is 329824.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_r, col = "red") +
+  geom_line(data = Libya_corona_r, col = "magenta")+
+  ggtitle("             Recovered cases between Libya and Lebanon")
+ggp 
+```
+The line in Libya is shown in magenta and the line in Lebanon is shown in red. According to the Libya data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of recovered was 9594 reported on 2021-09-12. The total number of recovered cases is 195639.
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_d, col = "red") +
+  geom_line(data = Libya_corona_d, col = "magenta")+
+  ggtitle("             Death cases between Libya and Lebanon")
+ggp 
+```
+The line in Libya is shown in magenta and the line in Lebanon is shown in red. According to the China data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of death cases was 53 reported on 2021-04-04. The total number of death cases is 4490.
+<center>
+
+# Covid Distribution between USA and Lebanon
+![](https://c.files.bbci.co.uk/AD04/production/_111929244_mask_usa_976getty.jpg){width=40%}
+![](https://media-cldnry.s-nbcnews.com/image/upload/newscms/2020_45/3426307/cover2x1_31.png){width=43%}
+</center>
+**The largest number of cases and deaths so far have been reported from the United States. Consider the distribution between America and Lebanon**
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+USA_corona <- coronavirus2 %>% filter(country == "US")
+USA_corona_c <- USA_corona %>% filter(type == "confirmed")
+USA_corona_d <- USA_corona %>% filter(type == "death")
+USA_corona_r <- USA_corona %>% filter(type == "recovered")
+q=abs(USA_corona_r$cases)
+USA_corona_r$cases1=q
+```
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_c, col = "red") +
+  geom_line(data = USA_corona_c, col = "gold")+
+  ggtitle("             Confirmed cases between USA and Lebanon")
+ggp 
+```
+The line in USA is shown in gold and the line in Lebanon is shown in red. According to the USA data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of patients was 302959 reported on 2021-12-11. The total number of patients is 42050638.
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases1)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_r, col = "red") +
+  geom_line(data = USA_corona_r, col = "gold")+
+  ggtitle("             Recovered cases between USA and Lebanon")
+ggp 
+```
+The line in USA is shown in gold and the line in Lebanon is shown in red. According to the Libya data framework, the data is spread from 22-01-2020 to 04-08-2021. The highest number of recovered was 150267 reported on 2021-12-11. 
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggp <- ggplot(NULL, aes(x=date, y=cases)) +    # Draw ggplot2 plot based on two data frames
+  geom_line(data = lebanon_corona_d, col = "red") +
+  geom_line(data = USA_corona_d, col = "gold")+
+  ggtitle("             Death cases between USA and Lebanon")
+ggp 
+```
+The line in USA is shown in magenta and the line in Lebanon is shown in red. According to the China data framework, the data is spread from 22-01-2020 to 18-09-2021. The highest number of death cases was 4460 reported on 2021-01-12. The total number of death cases is 673472.
+
+## Conclusions and Discussion
+```{r, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
+new_df1 <- data.frame(size=rep(lebanon_corona_c$date, lebanon_corona_c$cases), sample="lebanon")
+new_df2 <- data.frame(size=rep(Libya_corona_c$date, Libya_corona_c$cases), sample="Libya")
+new_df3 <- data.frame(size=rep(USA_corona_c$date, USA_corona_c$cases), sample="USA")
+#new_df4 <- data.frame(size=rep(Israel_corona_c$date, Israel_corona_c$cases), sample="Israel")
+#new_df5 <- data.frame(size=rep(China_corona_c$date, China_corona_c$cases), sample="China")
+all_sample <- rbind(new_df1, new_df2,new_df3)
+```
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.align = 'center'}
+ggplot(data=all_sample, aes(x=size)) + geom_density(aes(colour=sample))
+```
+The covidvirus, which originated in Wuhan, China, has grown rapidly in Lebanon. The highest number of patients in Lebanon was reported in February 2021. The highest number of deaths was reported in early March 2021.
+The United States has the highest Covid-19 distribution among the 5 countries. Populations similar between Lebanon and Libya but more widespread in Lebanon. But shows a greater density of patients in Lebanon. The largest number of deaths has been reported from the United States.Although the spread of the virus has decreased in Libya, China, and the United States, the spread of the virus has increased in Lebanon in recent times.
+
+
+## References
+<https://www.britannica.com/place/Lebanon/Climate>
+<https://www.worldtravelguide.net/guides/middle-east/lebanon/weather-climate-geography/>
+<https://lb.usembassy.gov/covid-19-information//>

@@ -1,0 +1,826 @@
+---
+title: "COVID-19 Pandemic in Republic of India"
+author: "Udeshi Salgado "
+date: "09/28/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment=NA, message=FALSE, warning=FALSE)
+# AS2018517
+# M.U.P. Salgado
+# STA 326 2.0 - Programming and Data Analysis with R
+# Assignment 03
+```
+
+```{r, out.width = "150%"}
+knitr::include_graphics ("Image_01.jpg")
+```
+
+```{r}
+#Packages
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(GGally)
+library(dplyr)
+library(spData)
+library(magrittr)
+library(ggmap)
+library(scales)
+library(zoo)
+library(sp)
+library(rgdal)
+library(leaflet)
+```
+
+```{r}
+# Data Cleaning - India
+india_corona <- coronavirus %>% filter(country == "India")
+india_corona <- india_corona[, !names(india_corona) %in% c("province", "country", "lat", "long")]
+india_corona <- india_corona[india_corona$date<= "2021-07-31", ]
+india_corona$cases <- abs(india_corona$cases)
+india_corona_wide_format <-india_corona %>% 
+  pivot_wider(names_from = type, values_from = cases)
+# To remove NA cases, considered  the period between 2020-01-21 to 2021-07-31
+india_corona_wide_format <- india_corona_wide_format[india_corona_wide_format$date<= "2021-07-31", ]
+india_corona_wide_format$active <- cumsum(india_corona_wide_format$confirmed - india_corona_wide_format$death - india_corona_wide_format$recovered)
+india_corona_wide_format$closed <- india_corona_wide_format$recovered + india_corona_wide_format$death
+india_corona_long_format <- india_corona_wide_format %>%
+  pivot_longer(2:5, names_to = "type", values_to = 'cases')
+
+```
+### Abstract
+<div align="justify">The COVID-19 pandemic is a global health crisis and the greatest challenge World has faced since World War Two. The virus has spread to every continent except Antarctica. Therefore, multiple strategies would be highly necessary to handle the current outbreak; these include computational modeling, statistical tools, and quantitative analyses to control the spread as well as the rapid development of a new treatment.
+This report is an exploratory analysis of the pandemic in India by studying data from 01 January 2020 to 31 July 2021 and comparing it with top 5 countries with highest confirmed and death cases as well as neighboring countries.
+The results of the analysis shows that compared to most countries, India has failed to reach a stable state due to the lack of coordination between different health agencies and the government.
+By the end of July, India has begun to increase the number of cases again, gaining a possibility to reach a third wave. 
+
+Keywords: India, COVID-19
+</div>
+
+### 1. Background
+#### 1.1. Introduction
+<div align="justify">Coronavirus disease 2019, commonly known as a COVID-19 is a contagious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The COVID-19 pandemic, which originated in the city of Wuhan, China, has quickly spread to various countries, with many cases having been reported worldwide. 
+The World Health Organization (WHO) declared a Public Health Emergency of International Concern on 30 January 2020, and a pandemic on 11 March 2020.
+Since 2021, variants of the virus have emerged and become dominant in many countries, with the Delta, Alpha and Beta variants being the most virulent.
+
+COVID-19 symptoms range from unnoticeable to life-threatening.
+The disease transmits when people breathe in air contaminated by droplets and small airborne particles and transmission can also occur, rarely, via contaminated surfaces or fluids.
+Several vaccines have been approved and distributed in various countries, which have initiated mass vaccination campaigns since December 2020.
+Other recommended preventive measures include social distancing, wearing face masks in public, ventilation and air-filtering, covering one's mouth when sneezing or coughing, hand washing, disinfecting surfaces, and quarantining people exposed or symptomatic. 
+
+Currently, 221 Countries and Territories around the world have reported a total of 233,189,062 confirmed cases of the coronavirus COVID-19 and a death toll of 4,771,760 deaths.
+India is also among the top 5 countries with highest confirmed and death cases and is ranked second.
+This study aims to evaluate COVID – 19 related data of India in order to disseminate it to any interested parties.
+
+</div>
+
+#### 1.2. Location of India
+<div align="justify">Republic of India is a country in South Asia, which is the seventh-largest country by area with a total area of 3,287,263 square kilometers (1,269,219 sq mi). 
+India is situated north of the equator between 8°4' north to 37°6' north latitude and 68°7' east to 97°25' east longitude. On the south, India projects into and is bounded by the Indian Ocean—in particular, by the Arabian Sea on the west, the Lakshadweep Sea to the southwest, the Bay of Bengal on the east, and the Indian Ocean proper to the south. 
+It shares land borders with Pakistan to the west; China, Nepal, and Bhutan to the north; and Bangladesh and Myanmar to the east. In the Indian Ocean, India is in the vicinity of Sri Lanka and the Maldives; its Andaman and Nicobar Islands share a maritime border with Thailand, Myanmar and Indonesia. 
+
+The geographical location of India can be further understood through the following Figure 01.
+
+</div>
+
+```{r, fig.cap="Figure 01", fig.align = 'left'}
+# Get an Italy shapefile
+download.file(url = 'http://biogeo.ucdavis.edu/data/diva/adm/IND_adm.zip', 
+              destfile = 'india.zip')
+unzip(zipfile = 'india.zip')
+
+india <- readOGR('IND_adm0.shp')
+
+leaflet(india, options = leafletOptions(
+            attributionControl=FALSE)) %>%
+  addPolygons() %>%
+  addTiles() 
+```
+
+#### 1.3. Climate Condition of India
+<div align="justify">India features as a land of multiple climatic conditions. The different territories of the country experience varying climates as per their locations, varied topography, and other physiographic factors.
+
+India hosts six major climatic sub types, ranging from arid deserts in the west, alpine tundra and glaciers in the north, and humid tropical regions supporting rain forests in the southwest and the island territories.Many regions have starkly different microclimates, making it one of the most climatically diverse countries in the world.
+
+According to the meteorological department, six decisive factors influence the climate of India. These factors are: </div>
+
+  1. Himalayan mountains
+  2. Latitude
+  3. Surface distance from the sea
+  4. Land and water distribution
+  5. Relief
+  6. Altitude
+
+<div align="justify">In addition to the above, climatic conditions of India are highly dependent upon the wind flow, rainfall and temperature, eventually influencing seasons and discerning the dynamics of wetness and dryness.As per the historical geography of India, tectonic vibrations of its territorial plate led to this varying climate in different parts of the country. In fact, there are four major and broad climatic conditions in India:</div>
+
+  1. Tropical wet
+  2. Tropical dry
+  3. Subtropical humid
+  4. Montane
+
+<div align="justify">India consists of four seasons namely; winter (January and February), summer (March, April and May), monsoon (rainy) season (June to September), and a post-monsoon period (October to December). 
+
+Altogether, the climate in India is multifarious and vivid. It entirely depends upon the location of a particular region and its placement near the mountains, sea-coasts of the desert.
+</div>
+
+#### 1.4. Demographics of India
+<div align="justify">India is the second most populated country in the world with nearly a fifth of the world's population. According to the 2019 revision of the World Population Prospects the population stood at 1,352,642,280. An average person’s life expectancy at birth is estimated to be 69.42 years; 67.4 years and 70.3 years for male and female respectively when considered gender-wise.
+
+According to the age distribution of the population, India has more than 50% of its population below the age of 25 and more than 65% below the age of 35; only a very small proportion of the population can be considered as senior citizens. The overall age structure of the population is as shown by Figure 02.
+
+</div>
+
+```{r, fig.cap="Figure 02", fig.align = 'left', out.width = "100%"}
+age_group <- c("0-9","10-14","15-19","20-24", "25-44", "45-64", "65-79","80+", "No Stated")
+popu <- c(238763954, 124846858, 100215890,	89764132, 284008819, 139166661, 41066824, 8038718,2738472)
+india_population <- data.frame(age_group, popu)
+fig_02 <- ggplot(data=india_population,  aes(x=age_group, y=popu*100/sum(popu), label = scales::percent(popu/sum(popu)), fill=age_group)) + 
+  geom_bar(stat = "identity") + 
+  geom_col(position = 'dodge') + 
+  geom_text( vjust = 0) + 
+  scale_y_continuous(labels = scales::percent)+
+  labs( title = "Propotions of Indian Total Population by Age Groups.", x= "Age Group", y= "Population Percentage") + 
+  coord_flip() +
+  theme_dark()+
+  scale_fill_brewer(type = 'seq', palette = 'BuPu')
+fig_02
+  
+```
+
+<div align="justify">India has 641,000 inhabited villages and 72.2 percent of the total population reside in these rural areas. India's 27.8 percent urban population lives in more than 5,100 towns and over 380 urban agglomerations. In the decade of 1991–2001, migration to major cities caused rapid increase in urban population.The five states of Uttar Pradesh, Maharashtra, Bihar, West Bengal and Madhya Pradesh account for almost half (47.90%) of the total Indian population.
+
+Figure 03 shows a more clear illustration of the geographical population distribution of India based on the population per square kilometer.</div>
+
+```{r, fig.cap="Figure 03 (Source: Wikipedia)", fig.align = 'left', out.width = "50%"}
+knitr::include_graphics ("Image_02.png")
+```
+
+
+#### 1.5. Lockdown status of the country
+<div align="justify">The first cases of COVID-19 in India were reported on 30 January 2020 in three towns of Kerala, among three Indian medical students who had returned from Wuhan, the epicenter of the pandemic.Lockdowns were announced in Kerala on 23 March, and in the rest of the country on 25 March. Infection rates started to drop in September, along with the number of new and active cases.On 24 March, India announced a total lockdown for 3 weeks with 519 confirmed cases and 9 deaths reported in the country. All non-critical businesses and services were ordered closed except for hospitals, grocery stores, and pharmacies, and there was a "total ban" on leaving the home for non-essential purposes. All public transport was suspended. Beginning 20 April, agricultural businesses and stores selling farming supplies were allowed to resume operation, as well as public works programs, cargo transport, and banks and government centers distributing benefits. Phase 3 and 4 of the lockdown extended till 31 May, with incremental relaxations and changes. The country began a phased lifting of restrictions on 8 June(Unlock 1.0). This phased lifting of restrictions continued in a series of "unlocks" which extended into November 2020.
+
+A second wave beginning in March 2021 was much more devastating than the first, formulating a new COVID-19 variant DELTA, with shortages of vaccines, hospital beds, oxygen cylinders and other medical supplies in parts of the country. On 30 April 2021, India became the first country to report over 400,000 new cases in a 24-hour period by leading the world in new and active cases. Cities in Maharashtra such as Amravati and Nagpur started imposing curfew restrictions and lockdown measures in late February and early to mid-March 2021. On 4 April, Maharashtra imposed a weekend lockdown and night curfew among other restrictions. By early to mid-May, 35 of 36 of India's states and union territories had some form of state-wide and localized restriction. The second wave of the pandemic in India has seen no nationwide lockdown. Phased unlocking was announced starting June in Delhi, Tamil Nadu, Maharashtra, Uttar Pradesh and a number of other states.
+
+The timeline of cumulative confirmed cases for India is shown by Figure 04, highlighting the lockdown situation, the impact of the COVID-19 waves, the actions taken by the government, the vaccination procedures and the public health response.
+
+</div>
+
+
+```{r, fig.cap="Figure 04", fig.align = 'left', out.width = "100%"}
+a <- list(
+  x = "2020-01-30",
+  y = 1,
+  text = "1st Case - Kerala",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=65
+)
+b <- list(
+  x = "2020-03-12",
+  y = 73,
+  text = "1st Death",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=65
+)
+
+d <- list(
+  x = "2020-03-25",
+  y = 657,
+  text = "1st Nationwide Lockdown",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=65
+)
+
+
+e <- list(
+  x = "2020-05-01",
+  y = 37257,
+  text = "Extension of Nationwide Lockdown",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=65
+)
+
+f <- list(
+  x = "2020-05-30",
+  y = 181827,
+  text = "Relaxation of Lockdown Restrictions",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=65
+)
+
+g <- list(
+  x = "2020-06-08",
+  y = 265928,
+  text = "Unlock 1.0",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=65
+)
+
+h <- list(
+  x = "2021-01-16",
+  y = 10561701,
+  text = "Vaccination Phase 01: Targeting health and frontline workers",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=45
+)
+
+i <- list(
+  x = "2021-03-01",
+  y = 11128243,
+  text = "Vaccination Phase 02: Targeting 60+ years old's",
+  showarrow = TRUE,
+  aarrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=45
+)
+
+j <- list(
+  x = "2021-04-01",
+  y = 12306847,
+  text = "Vaccination opened for everyone above 45",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=45
+)
+
+k <- list(
+  x = "2021-05-01",
+  y = 19561173,
+  text = "Vaccination Phase 03: Targeting all eligible adults(18+)",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 50,
+  ay = -40,
+  textangle=45
+)
+
+l <- list(
+  x = "2021-04-09",
+  y = 13209642,
+  text = "Surpassd 1 million active cases",
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=45
+)
+
+m <- list(
+  x = "2021-04-30",
+  y = 19168685,
+  text = "400,000 new cases and over 3500 deaths in one day",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=45
+)
+
+n <- list(
+  x = "2021-07-02",
+  y = 30506078,
+  text = "Reached 400,000 Deaths",
+  showarrow = TRUE,
+  arrowhead = 4,
+  arrowsize = 1.5,
+  ax = 20,
+  ay = -40,
+  textangle=45
+)
+
+wave_col <- c("#2ca25f", "#d95f0e")
+india_corona_confirmed <- india_corona_long_format %>% filter(type == "confirmed")
+india_corona_confirmed$cum_cases <- cumsum(india_corona_confirmed$cases)
+india_corona_confirmed$wave <- c(rep("wave_1", 377), rep("wave_2",180))
+
+fig_04 <- plot_ly() %>% 
+  add_trace(data = india_corona_confirmed,
+            y = ~cum_cases,
+            x = ~date,
+            color = ~wave,
+            colors = wave_col,
+            type = "scatter",
+            mode = "lines")
+fig_04 <- fig_04 %>% layout(annotations = a) 
+fig_04 <- fig_04 %>% layout(annotations = b) 
+fig_04 <- fig_04 %>% layout(annotations = d) 
+fig_04 <- fig_04 %>% layout(annotations = e) 
+fig_04 <- fig_04 %>% layout(annotations = f) 
+fig_04 <- fig_04 %>% layout(annotations = g) 
+fig_04 <- fig_04 %>% layout(annotations = h) 
+fig_04 <- fig_04 %>% layout(annotations = i) 
+fig_04 <- fig_04 %>% layout(annotations = j) 
+fig_04 <- fig_04 %>% layout(annotations = k) 
+fig_04 <- fig_04 %>% layout(annotations = l)
+fig_04 <- fig_04 %>% layout(annotations = m) 
+fig_04 <- fig_04 %>% layout(annotations = n) 
+fig_04 <- fig_04 %>% layout( title= "Timeline of cumulative confirmed cases for India", xaxis =list(title='Date'), yaxis = list(title='Cumulative Confirmed Cases'))
+fig_04
+
+```
+
+
+
+#### 1.6. Actions taken by the government
+<div align="justify">In the beginning, corona virus cases in India happened due to the abroad connection rather than transmission within the country. The first three infection cases occurred on 30th January and 3rd February in Kerala as they returned from Wuhan China. Within a month later on 3rd March, two more cases were reported where one patient had a travel history from Italy while the other in Hyderabad visited Dubai. On the very same day, few other cases were observed in Jaipur.The plague thus turned India upside down, registering lakhs of deaths in the brutal second wave. However, the Indian Government has responded to the threat and taken stringent actions to detect, treat and reduce the transmission of the virus.
+
+Here are some key steps taken by the Indian Government to fight the deadly virus.
+
+</div>
+
+##### Precautionary steps
+<div align="justify">Many Indian states have initiated night curfews from around 10 pm to 5/6 am to battle the raging second wave. Curfews essentially curb the unnecessary movement of people. States like Maharashtra have also brought back the e-pass system for efficient crowd control. Only people in extreme emergencies will be issued the pass for inter-district or inter-state travel. Moreover, some state governments have also made it mandatory for traveling passengers to carry a negative RT-PCR test when entering the states. With such stringent guidelines, people will be discouraged from getting out a lot, which is the ultimate counter-attack against the virus.
+</div>
+
+##### Lockdown
+<div align="justify">On 22 March, the Government of India announced complete lockdown in 82 districts in 22 states and the Union Territories of the country where confirmed cases were reported.On 30 May, it was announced that lockdown restrictions were to be lifted from then onwards, while the ongoing lockdown would be further extended till 30 June for only the containment zones. 
+</div>
+
+##### Travel and entry restrictions
+<div align="justify">On 3 March 2020, the Indian government stopped issuing of new visas. Previously issued visas for the nationals of Iran, South Korea, Japan, and Italy were suspended.
+All visas were suspended on 13 March, except for diplomatic and other official visas, as well as the visa-free travel for Overseas Citizens of India. Indians returning from COVID-affected countries were asked to be quarantined for 14 days.These measures were expanded to citizens from Europe, Gulf countries and Asian countries including Malaysia on 17–18 March.
+</div>
+
+
+##### Vaccination steps
+<div align="justify">India began its vaccination program on 16 January 2021 with AstraZeneca vaccine (Covishield) and the indigenous Covaxin. Later, Sputnik V and the Moderna vaccine was approved for emergency use too. As of 17 August 2021, the country had administered over 550 million vaccine doses.Since May 2021, vaccination is open for all Indians aged 18 and above. So far, over 25% of Indians have received the vaccine, with over 7% being fully vaccinated.
+</div>
+
+##### Legal announcements
+<div align="justify">On 11 March 2020, India announced that all states and UTs should invoke provisions of Section 2 of the Epidemic Diseases Act, 1897.On 14 March, the union government declared the pandemic as a "notified disaster" under the Disaster Management Act, 2005, enabling states to spend a larger part of funds from the State Disaster Response Fund to fight the virus.
+</div>
+
+##### Evacuations
+<div align="justify">The Ministry of External Affairs under Minister Subrahmanyam Jaishankar, Air India, the Indian Air Force and the Indian Navy have been successful in evacuating many Indian nationals and certain foreign nationals from the virus-affected areas. The Government of India began a mega evacuation of distressed Indian citizens from across the globe called "Vande Bharat Mission" in early May. It deployed several commercial jets, military transport planes and naval warships in what is set to be one of the biggest-ever peacetime repatriation exercise in history. In the first phase, around 14,800 citizens stranded in 13 countries would be brought back by 64 flights.
+</div>
+
+##### Zonal classification
+<div align="justify">The Government Divided the entire nation into three zones – Green Zone, Red Zone, Orange Zone. Relaxations would be allowed accordingly.</div>
+
+  + Red zone (Hotspots) – districts with high doubling rate and high number of active cases
+  + Orange zone (Non-hotspots) – districts with fewer cases
+  + Green zone – districts without confirmed cases or without new cases in last 21 days
+
+
+##### Improving supplies
+<div align="justify">To combat the oxygen shortage, the Central Government also devised an oxygen quota for all states. It also urged India’s steelmakers to ramp up oxygen production at their plants. The state-owned Steel Authority of India supplied about 35,000 tons of oxygen by mid-April itself. 
+</div>
+
+##### Financial steps
+<div align="justify">In an effort to secure the life of front-line public health workers, the Government has launched the Pradhan Mantri Garib Kalyan insurance scheme. This policy covers the families of those who have lost their lives on COVID-19 related duty.
+</div>
+
+### 2. Exploratory Data Analysis
+#### 2.1. Structure of Data
+<div align="justify">The data set used for this analysis is The 2019 Novel coronavirus COVID-19 (2019-nCoV) Dataset which provides epidemic and the vaccination efforts by country. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) coronavirus.
+
+The coronavirus dataset contains the daily summary of coronavirus cases worldwide. All cases are recorded according to the following variables;</div>
+
+  + Date
+  + Country
+  + Province/state; if available
+  + Latitude of center of geographic region defined by country/province
+  + Longtitude of center of geographic region defined by country/province
+  + Type of reported case – confirmed, death, recovered
+  + Number of cases on given date
+
+<div align="justify"> Furthermore, covid19_vaccine dataset contains the daily summary of global vaccination data. All vaccination data are recorded according to the following variables;</div>
+
+  + Date
+  + date
+  + doses_admin
+  + uid - Country code
+  + people_partially_vaccinated
+  + people_fully_vaccinated
+  + report_date_string
+  + population
+  + lat - Latitude
+  + long - Longitude
+
+<div align="justify">All records are available for the time period from 01 January 2020 to September 2021.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.</div>
+
+
+#### 2.2. COVID-19 Statistics of India
+
+<div align="justify">COVID-19 Statistics shows an overall big picture of how India as a country faced COVID-19 epidemic. With respect to the graphical representation of the distribution of COVID-19 cases reported in India, it emphasized that the India suffered from two COVID-19 waves which is clearly shown in Figure 05.
+</div>
+```{r, fig.cap="Figure 05", fig.align = 'left', out.width = "100%"}
+fig_05 <- ggplot(india_corona, aes(x=date, y=cases, color=type)) +
+  geom_line()  + 
+  scale_y_continuous(labels = label_number(suffix = "K", scale = 1e-3)) + 
+  scale_color_brewer(type = 'qual', palette = 'Dark2') +
+  labs(title="India: Distribution of COVID-19 Cases", x="Date", y="No of Cases")
+ggplotly(fig_05)
+```
+
+<div align="justify"> It is clearly visible  that the 1st wave starts from beginning of February 2020 and ended within a year(February 2021). After that, confirmed cases began to increase in mid of March 2021, leading country to the second wave which made a severe damage. Furthermore, Figure 05 indicates that the there's no huge time gap between Confirmed cases and Recovered cases lines, implying a positive sign that the recovery rate of the Country is high. 
+
+More over, Figure 06 represents the distribution of COVID-19 cases based on type of cases, separately providing a detailed idea about each single cases.
+</div>
+
+```{r, fig.cap="Figure 06", fig.align = 'left', out.width = "100%"}
+cases_mean <- india_corona_long_format %>% 
+  group_by(type) %>% 
+  summarize(mean_val = mean(cases))
+fig_06 <- ggplot(india_corona_long_format, aes(x=date, y=cases, fill=type)) +
+  geom_bar(stat = 'identity')  + 
+  scale_y_continuous(labels = label_number(suffix = "K", scale = 1e-3)) + 
+  scale_fill_brewer(type = 'qual', palette = 'Dark2') +
+  geom_hline(data= cases_mean, aes(yintercept=mean_val), colour="black") +
+  facet_grid(type~., scales = "free") +
+  labs(title="India: Distribution of COVID-19 Categorized by Cases", x="Date", y="No of Cases")
+ggplotly(fig_06)
+```
+<div align="justify"> All four graphs shows the same distribution indicating peaks and troughs at the same time period. And also it is emphasized that all four graphs indicates COVID-19 cases more than respective average values during the first and second wave time duration. 
+
+Even though, Figure 05 shows a lower death cases, variations of death cases can be clearly identified by Figure 06. In here, 10th May 2021, an outlier which indicates 7374 deaths can be clearly identified by Figure 06. Moreover, graph indicates the variation of countries' active cases which shows a similar distribution as others.
+
+Recovery rate and death rate are important to determine a country’s development towards controlling coronavirus.
+The recovery rate is calculated as a percentage of the cumulative number of cases recovered daily divided by the cumulative number of daily closed cases.
+Similarly, death rate is calculated as a percentage of the cumulative number of daily death cases divided by the cumulative number of daily closed cases.
+
+Figure 07 shows a comparison of daily recovery and death rate of India.
+</div>
+
+```{r, fig.cap="Figure 07", fig.align = 'left', out.width = "100%"}
+# Calculation of Closed Cases
+india_corona_wide_format$closed <- india_corona_wide_format$recovered + india_corona_wide_format$death
+india_corona_long_format <- india_corona_wide_format %>%
+  pivot_longer(2:5, names_to = "type", values_to = 'cases')
+india_corona_rate <- data.frame(date = india_corona_wide_format$date, recovery_rate = 100*cumsum(india_corona_wide_format$recovered)/cumsum(india_corona_wide_format$closed),
+                                death_rate = 100*cumsum(india_corona_wide_format$death)/cumsum(india_corona_wide_format$closed) )
+india_corona_rate_long <- india_corona_rate %>%
+  pivot_longer(2:3, names_to = "type", values_to = "rate")
+fig_07 <- ggplot(na.omit(india_corona_rate_long), aes(x=date, y=rate, color=type)) +
+  geom_line()  + 
+  scale_color_brewer(type = 'qual', palette = 'Dark2') +
+  labs(title="Daily Recovery and Death Rate of India ", x="Date", y="Rate(%)")
+ggplotly(fig_07)
+```
+
+<div align="justify">It can be shown that the recovery rate of India is inversely proportional to the death rate of India. At the beginning of 2020 there will be fluctuations in both recovery rate and death rate curves, and after August 2020 both rates will be stable. 
+
+A case fatality rate indicates how severe a disease is and also measures how effective treatments are, on average.
+A case fatality can be calculated, dividing the number of COVID-19 deaths in a population by the total number of COVID-19 cases and multiply by 100.
+The lower the case fatality rate, the better.
+If more people die from a disease, the case fatality rate increases.
+
+Figure 08 represents India's Case Fatality Rate due to the COVID-19.
+</div>
+
+```{r, fig.cap="Figure 08", fig.align = 'left', out.width = "100%"}
+india_corona_wide_format$case_fatality <- round(100*cumsum(india_corona_wide_format$death)/cumsum(india_corona_wide_format$confirmed),2)
+india_corona_wide_format[is.na(india_corona_wide_format)]=0
+fig_08 <- ggplot(india_corona_wide_format, aes(x=date, y=case_fatality)) +
+  geom_line(size=1, color= "#756bb1") +
+  labs(title= "Case Fatality Rate of India", x="Date", y="Case Fatality Rate(%)")
+ggplotly(fig_08)
+
+```
+
+<div align="justify">According to the Figure 08, case fatality rate of India increases during the first wave and after August 2020, it is started to decline indicating a positive impression.
+
+Figure 09 represents the India's vaccination situation comparing with daily confirmed cases as follows;
+</div>
+
+```{r, fig.cap="Figure 09", fig.align = 'left', out.width = "100%"}
+df <- covid19_vaccine %>% 
+  filter(date == max(date),
+         !is.na(population))
+
+df <- df %>% 
+  mutate(fully_vaccinated_ratio = people_fully_vaccinated / population) %>%
+  arrange(- fully_vaccinated_ratio)
+
+india_vac <- covid19_vaccine %>% 
+  filter(country_region == "India")
+
+india_cases <- coronavirus %>% 
+  filter(country == "India", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "India") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+
+# Normalization
+india_cases <- india_cases %>%
+  mutate(cases_normalized = (cases - min(cases)) / (max(cases) - min(cases)),
+         people_fully_vaccinated_normilized = (people_fully_vaccinated - min(people_fully_vaccinated, na.rm = TRUE)) / 
+           (max(people_fully_vaccinated, na.rm = TRUE) - 
+              min(people_fully_vaccinated, na.rm = TRUE)))
+
+
+india_cases <- india_cases[india_cases$date<= "2021-07-31",]
+plot_ly(data = na.omit(india_cases),
+        x = ~ date,
+        y = ~ cases_normalized,
+        type = "scatter",
+        mode = "line",
+        name = "Daily Cases (Normalized)") %>%
+  add_lines(x = ~ date,
+            y = ~ people_fully_vaccinated_normilized,
+            name = "Fully Vaccinated - Aggregate (Normalized)") %>%
+  layout(title = "India - Daily New Cases vs. Total Vaccinated Population (Normalized)",
+         legend = list(orientation = 'h'),
+         yaxis = list(title = "Normalized Daily Cases/Total Vaccinated"),
+         xaxis = list(title = "Date"),
+         margin = list(b = 60))
+
+```
+
+<div align="justify">Figure 09 shows that India started its vaccination process in early 2021, and it is reasonable to argue that the vaccination may be the main reason for the declining number of confirmed cases after mid-May.
+</div>
+
+```{r}
+# Data Cleaning for comparisons with other countries
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+coronavirus <- coronavirus[, !names(coronavirus) %in% c("province", "lat", "long")]
+coronavirus <- coronavirus[coronavirus$date<= "2021-07-31", ]
+coronavirus$cases <- abs(coronavirus$cases)
+
+# India
+india_corona <- coronavirus %>% filter(country == "India")
+india_confirmed <- india_corona %>% filter(type == "confirmed")
+india_death <- india_corona %>% filter(type == "death")
+
+# Top 5 Countries
+# US
+us_corona <- coronavirus %>% filter(country == "US")
+us_confirmed <- us_corona %>% filter(type == "confirmed")
+us_death <- us_corona %>% filter(type == "death")
+
+# Handling UK data with Provinces
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+uk_corona <- uk_corona[, !names(uk_corona) %in% c("province", "lat", "long")]
+uk_corona$cases <- abs(uk_corona$cases)
+uk_corona$cases[is.na(uk_corona$cases)] =0
+uk_corona.confirmed <- uk_corona %>% filter(type == "confirmed")
+uk_corona.death <- uk_corona %>% filter(type == "death")
+uk_corona.confirmed<-aggregate(uk_corona.confirmed["cases"], by=uk_corona.confirmed["date"], sum)
+uk_corona.confirmed<-uk_corona.confirmed[uk_corona.confirmed$date<= "2021-07-31",]
+uk_corona.death<-aggregate(uk_corona.death["cases"], by=uk_corona.death["date"], sum)
+
+# Brazil
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+brazil_confirmed <- brazil_corona %>% filter(type == "confirmed")
+brazil_death <- brazil_corona %>% filter(type == "death")
+
+# Russia
+russia_corona <- coronavirus %>% filter(country == "Russia")
+russia_confirmed <- russia_corona %>% filter(type == "confirmed")
+russia_death <- russia_corona %>% filter(type == "death")
+
+# Combining - Confirmed Cases
+top5_confirmed <- data.frame(Date = india_confirmed$date, India = india_confirmed$cases, US = us_confirmed$cases, UK = uk_corona.confirmed$cases, Brazil = brazil_confirmed$cases, Russia = russia_confirmed$cases)
+top5_confirmed <- top5_confirmed %>% 
+  pivot_longer(2:6, names_to = "Country", values_to = 'Cases')
+
+# Combining - Death Cases
+top5_death <- data.frame(Date = india_confirmed$date, India = india_death$cases, US = us_death$cases, UK = uk_corona.death$cases, Brazil = brazil_death$cases, Russia = russia_death$cases)
+top5_death <- top5_death %>% 
+  pivot_longer(2:6, names_to = "Country", values_to = 'Cases')
+
+
+# Neighboring Countries
+neighboring_corona <- coronavirus %>% filter(country == c("India", "Sri Lanka", "Pakistan"))
+#Taking log cases 
+neighboring_corona$cases <- log(neighboring_corona$cases)
+# Replacing Infinite values with NA
+neighboring_corona$cases[is.infinite(neighboring_corona$cases)== TRUE] <- NA
+# Taking pivot wide format
+neighboring_corona_wide <- neighboring_corona %>%
+  pivot_wider(names_from = type, values_from = cases)
+
+
+```
+
+#### 2.3. COVID-19 Statistics of India
+##### 2.3.1 India Vs Top 5 COVID-19 Confirmed and Death Cases Countries
+<div align="justify">221 Countries and Territories around the world have reported a total of 231,991,085 confirmed cases of the coronavirus COVID-19 that originated from Wuhan, China, and a death toll of 4,753,176 deaths. Among them, United States, India, Brazil, United Kingdom and Russia reports the highest number of COVID-19 confirmed and death cases.
+
+The daily confirmed cases comparison of the above mentioned Top 5 countries is shown by Figure 10;
+</div>
+
+```{r, fig.cap="Figure 10", fig.align = 'left', out.width = "100%"}
+fig_10 <- ggplot(top5_confirmed, aes(x=Date, y=Cases, color=Country)) +
+  geom_line()  + 
+  scale_y_continuous(labels = label_number(suffix = "K", scale = 1e-3)) + 
+  scale_color_brewer(type = 'qual', palette = 'Dark2') +
+  labs(title="Comparision of India Vs Top 5 Confirmed Cases Countries ", x="Date", y="Daily Confirmed Cases")
+ggplotly(fig_10)
+
+```
+
+<div align="justify"> It can be seen that COVID-19 cases were confirmed in other four countries before it was confirmed in India. Furthermore, India is the country that has faced least number of COVID-19 waves compared to other 4, while United States shows the highest number of COVID-19 waves. Even though, India indicates the highest number of confirmed cases during it's second wave compared to other countries, becoming the country with highest number of confirmed cases in a single day.
+
+The daily death cases comparison of the above mentioned Top 5 countries is shown by Figure 11;
+</div>
+
+```{r, fig.cap="Figure 11", fig.align = 'left', out.width = "100%"}
+fig_11 <- ggplot(top5_death, aes(x=Date, y=Cases, color=Country)) +
+  geom_line()  + 
+  scale_y_continuous(labels = label_number(suffix = "K", scale = 1e-3)) + 
+  scale_color_brewer(type = 'qual', palette = 'Dark2') +
+  labs(title="Comparision of India Vs Top 5 Death Cases Countries ", x="Date", y="Daily Death Cases")
+ggplotly(fig_11)
+
+```
+<div align="justify">It can be seen that number of COVID-19 death cases were reported in other four countries before it was reported in India. Furthermore, India indicates the highest number of death cases during it's second wave compared to other countries.
+</div>
+
+
+##### 2.3.2 India Vs Neighboring Countries
+<div align="justify">India is situated very close to the Pakistan and Sri Lanka which can be considered as the its neighboring countries. This section elaborates the COVID-19 situation of India when compared to its neighboring Pakistan and Sri Lanka.
+</div>
+  
+```{r, fig.cap="Figure 12 (Source: ResearchGate)", fig.align = 'left', out.width = "50%"}
+knitr::include_graphics ("Image_03.png")
+```
+
+<div align="justify">Figure 13 illustrates a comparison of confirmed cases and recovered cases between India and its neighboring countries.
+</div>
+
+```{r, fig.cap="Figure 13", fig.align = 'left', out.width = "100%"}
+fig_13 <- ggplot(na.omit(neighboring_corona_wide), aes(x=confirmed, y=recovered, color=country))+
+  geom_line() + 
+  scale_y_continuous(expand = c(0, 0), limits = c(-0.1, 15)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-0.1, 15)) +
+  scale_color_brewer(type = 'qual', palette = 'Dark2') +
+  labs(title="Confirmed Vs Recovered Cases of India and Neighboring Countries ", x="Confirmed Cases in Log Scale", y="Recovered Cases in Log Scale")
+ggplotly(fig_13)
+
+```
+
+<div align="justify">Since the population densities of India and its neighbors are not the same, log translation was used to provide better interpretations. Figure 13 illustrates that all 3 countries shows a positive increasing trend, implying daily confirmed cases increases along with daily recovered cases. Moreover, it can be identified that the recovering rate of India is less than that rate of both Sri Lanka and Pakistan in the beginning.
+
+Figure 14 illustrates a comparison of confirmed cases and death cases between India and its neighboring countries.
+</div>
+
+```{r, fig.cap="Figure 14", fig.align = 'left', out.width = "100%"}
+fig_14 <- ggplot(na.omit(neighboring_corona_wide), aes(x=confirmed, y=death, color=country)) +
+  geom_line() + 
+  scale_y_continuous(expand = c(0, 0), limits = c(-0.1, 15)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-0.1, 15)) +
+  scale_color_brewer(type = 'qual', palette = 'Dark2') +
+  labs(title="Confirmed and Death Cases of India Vs Neighboring Countries ", x="Confirmed Cases in Log Scale", y="Death Cases in Log Scale")
+ggplotly(fig_14)
+
+```
+
+<div align="justify">As can be seen in Figure 14, which is similar to Figure 13 with a positive increasing trend, indicating that the daily confirmed cases of all three countries increase with the daily death cases. Furthermore, it can noticed that the death cases of Sri Lanka kept constant in the beginning and then starts to increase. Even though, India shows a high increasing rate of death cases compared to confirmed cases in the beginning.
+
+The COVID-19 vaccines produce protection against the disease, as a result of developing an immune response to the SARS-Cov-2 virus. Developing immunity through vaccination means there is a reduced risk of developing the illness and its consequences. Therefore, vaccinated population percentage of a country is another important factor of identifying the COVID-19 situation in the country.
+
+Figure 15 indicates the vaccination percentage of 3 countries.
+</div>
+
+```{r, fig.cap="Figure 15", fig.align = 'left', out.width = "150%"}
+india_vaccine <- covid19_vaccine %>% filter(country_region == "India")
+india_vaccine[is.na(india_vaccine)]=0
+india_vaccine <- india_vaccine %>%
+  select(date, people_fully_vaccinated, people_partially_vaccinated, population)
+sl_vaccine <- covid19_vaccine %>% filter(country_region == "Sri Lanka")
+sl_vaccine[is.na(sl_vaccine)]=0
+pakistan_vaccine <- covid19_vaccine %>% filter(country_region == "Pakistan")
+pakistan_vaccine[is.na(pakistan_vaccine)]=0
+total_fully_vaccinated <- c(max(india_vaccine$people_fully_vaccinated), 
+                     max(sl_vaccine$people_fully_vaccinated), 
+                     max(pakistan_vaccine$people_fully_vaccinated) )
+total_partial_vaccinated <- c(max(india_vaccine$people_partially_vaccinated), 
+                     max(sl_vaccine$people_partially_vaccinated), 
+                     max(pakistan_vaccine$people_partially_vaccinated) )
+popu <- c(1380004385, 21413249, 220892340)
+country <- c("India", "Sri Lanka", "Pakistan")
+vaccination <- data.frame(country, total_fully_vaccinated, total_partial_vaccinated, popu)
+vaccination <- vaccination%>%
+  pivot_longer(2:3, names_to = "type_of_vaccination", values_to = 'total_vac')
+y <- ggplot(vaccination, aes(x=type_of_vaccination, y=100*total_vac/popu, fill=type_of_vaccination)) +
+  geom_bar(stat = 'identity')  + 
+  scale_fill_brewer(type = 'qual', palette = 'Dark2') +
+  facet_wrap(~country) +
+  labs(title="COVID-19 Vaccination Status: Neibhoring Country Comparision", x="Type of Vaccination", y="Percentage") + 
+  theme(axis.text.x = element_text(angle = 45))
+y
+```
+
+<div align="justify">It can be seen that Sri Lanka shows a highest percentage of fully and partially vaccinated population compared to India and Pakistan.
+</div>
+
+### 3. Discussion
+<div align="justify"> The analysis shows that there is no doubt that India has failed to stop the spread of the corona virus.
+
+COVID-19 Summary statistics of India indicate that India has experienced two COVID waves and can be identified that the peak of the second wave is surprisingly higher than the first wave. 
+During the 1st wave, the central government of India imposed a nationwide lockdown on March 25, 2020, resulting a well-controlled infection rate.
+Even though, second wave caused a sever damage and classified a new COVID variant as Delta plus. Furthermore, India reported the highest number of death and confirmed cases during 2nd wave, becoming the first country to report over 400,000 new cases in a 24-hour period.
+Moreover, recovery and death rate of India show an inverse relationship and case fatality rate of India begins to decline indicating a positive impression.
+India has started its vaccination program in the beginning of year 2021 and half of the population is partially vaccinated. 
+This may be the main reason for the declining number of confirmed cases after mid-May.
+By the end of July, India has begun to increase the number of cases again, gaining a possibility to reach a third wave.
+
+It is difficult to understand the progress of India’s COVID-19 alone by analyzing Indian data alone. Therefore, a comparison with significance countries has been carried out in order to reach reasonable final conclusions.
+
+India was first compared to top 5 countries with highest confirmed and death cases namely, United States, Brazil, United Kingdom and Russia. It was identified that India shows the least no of waves compared to other four countries. India has well controlled its 1st wave when compared to other four countries, even though failed to adequately prepare for the second wave of coronavirus infections.
+
+Moreover, India was compared with neighboring countries; Pakistan and Sri Lanka.
+Since the population densities of these countries are different, log transformation is considered to provide better interpretations. All 3 countries show a positive increasing trend of death and recovered cases along with the daily confirmed cases. Furthermore, it can be identified that India reports more recovered and death cases in the beginning.
+Partial and total population vaccination percentages were compared and it was identified that the India has a less vaccination percentage compared to other two countries.
+
+The data was taken for the period from 01 January 2020 to 31 July 2021 due to the unavailability of the counts of recovered cases in month of August and September 2021 and interpretations regarding the more recent status of the countries cannot be made.
+</div>
+
+### 4. Conclusion
+<div align="justify">In conclusion, it can be said that India has failed to reach a stable state due to the lack of coordination between different health agencies and the government. Furthermore, by the end of July, India has begun to increase the number of cases again, gaining a possibility to reach a third wave. It would be hard to handle the current outbreak without multiple strategies such as computational modeling, statistical tools, and quantitative analyses to control the spread as well as the rapid development of a new treatment.
+</div>
+
+### 5. References
+<div align="justify">
+Data Flair, 2021. Climate of India – Climatic Conditions and Seasons of India. [Online] 
+Available at: https://data-flair.training/blogs/climate-of-india/
+[Accessed 25 September 2021].
+
+Krispin, R., 2021. gitHub. [Online] 
+Available at: https://github.com/RamiKrispin/coronavirus
+[Accessed 25 September 2021].
+
+NEBRASKA MEDICINE, 2021. How to calculate COVID-19 stats for your area. [Online] 
+Available at: https://www.nebraskamed.com/COVID/how-to-calculate-covid-19-stats-for-your-area
+[Accessed 25 September 2021].
+
+Office of the Registrar General & Census Commissioner, India, 2021. Age Structure And Marital Status. [Online] 
+Available at: https://censusindia.gov.in/census_and_you/age_structure_and_marital_status.aspx
+[Accessed 25 September 2021].
+
+Wikipedia, 2021. Climate of India. [Online] 
+Available at: https://en.wikipedia.org/wiki/Climate_of_India
+[Accessed 25 September 2021].
+
+Wikipedia, 2021. COVID-19. [Online] 
+Available at: https://en.wikipedia.org/wiki/COVID-19
+[Accessed 25 September 2021].
+
+Wikipedia, 2021. COVID-19 pandemic. [Online] 
+Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic
+[Accessed 25 September 2021].
+
+Wikipedia, 2021. COVID-19 pandemic in India. [Online] 
+Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_India
+[Accessed 25 September 2021].
+
+Wikipedia, 2021. List of states and union territories of India by population. [Online] 
+Available at: https://en.wikipedia.org/wiki/List_of_states_and_union_territories_of_India_by_population
+
+[Accessed 25 September 2021].
+worldometer, 2021. Countries where COVID-19 has spread. [Online] 
+Available at: https://www.worldometers.info/coronavirus/countries-where-coronavirus-has-spread/
+[Accessed 25 September 2021].
+
+</div>
+

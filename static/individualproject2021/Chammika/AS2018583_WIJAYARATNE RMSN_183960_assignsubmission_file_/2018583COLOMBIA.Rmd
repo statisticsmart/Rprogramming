@@ -1,0 +1,661 @@
+---
+title: "COLOMBIA"
+author: "Shayani Wjayarathne-AS2018583"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, comment=NA)
+```
+
+
+```{r, include=FALSE}
+# Installation of required packages.
+library(bslib)
+library(coronavirus)
+library(tidyverse)
+library(skimr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+```
+
+```{r, include=FALSE}
+head(coronavirus)
+class(coronavirus)
+my_country <- coronavirus %>% filter(country == "Colombia")
+head(my_country)
+class(my_country)
+as_tibble(my_country)
+```
+
+# Introduction
+
+On 12 January 2020, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, which had been reported to the WHO on 31 December 2019. By early February 2020, the global death toll for COVID-19 had already exceeded that of SARS of 2003. Although the case fatality ratio for COVID-19 was much lower than SARS of 2003, COVID-19 was more contagious; this was known by March 2020.
+
+ 
+
+# Location of Colombia
+
+Colombia, officially Republic of Colombia, Spanish República de Colombia, country of northwestern South America. Its 1,000 miles (1,600 km) of coast to the north are bathed by the waters of the Caribbean Sea, and its 800 miles (1,300 km) of coast to the west are washed by the Pacific Ocean. The country is bordered by Panama, which divides the two bodies of water, on the northwest, by Venezuela and Brazil on the east, and by Peru and Ecuador on the south. It is more than twice the size of France and includes the San Andrés y Providencia archipelago, located off the Nicaraguan coast in the Caribbean, some 400 miles (650 km) northwest of the Colombian mainland. The population is largely concentrated in the mountainous interior, where Bogotá, the national capital, is situated on a high plateau in the northern Andes Mountains.
+[See more about Colombia](https://www.britannica.com/place/Colombia)
+
+
+```{r,echo=FALSE, out.width="150%", out.height="150%"}
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) +
+  labs(x = "Longitude",
+       y = "Latitude")
+
+p +
+  geom_point(
+    data = my_country, aes(x = long, y = lat), color = "red", size
+    = 2
+  ) 
+```
+
+
+
+
+# Climate and Average Weather in Colombia
+
+Most parts of Colombia are affected by tropical climates, this is characterized by quite high temperatures throughout the year and fairly high amounts of rainfall, especially along the western coastal areas. On the high plains to the east of the mountains there is quite a bit of rain, especially in the western part. As you move more eastwards, the amounts of precipitation decreases significantly. The far northeast of Colombia is the driest, here there is a combination of a warm desert climate and a warm steppe climate. Also on the border with Ecuador, in southwestern Colombia, you will find a mix of a warm desert climate, a warm steppe climate and a warm sea climate.
+
+Large elevation differences in Colombia causes the temperature per height to drop. The low-lying areas have an average annual temperature of 24 degrees Celsius (75 degrees Fahrenheit) inland and along the coastal areas in the west, going up to about 28 degrees Celsius (82° F) along the coast in the north and northeast. The areas that are between a thousand and two thousand meters (3280-6560 ft) have an average annual temperature of 16 to 19 degrees Celsius (61-66° F). The peaks above 4000 meters (13120 ft) are even freezing, with eternal snow in many places.
+
+The seasons in Colombia are mostly determined by the precipitation pattern. The north has a rainy season that runs from May to November and is relatively dry in the other months. The wet coast along the Pacific ocean has no real rainy season, here it rains a lot throughout the year. In the Amazon region in southern Colombia, the seasons are reversed. The period June to September here is less wet than the rest of the year, but the amounts of rain are still quite high in these 'dry' months.
+
+As you can see it is not so easy to name a period as the best travel time. Colombia has such a great diversity in rainfall patterns that the best travel periods vary each part of Colombia. If you look at the climate charts, the period December to March wins as the best travel time. For large parts of Colombia, this is considered the driest period.
+
+# Lockdown Status of Colombia
+
+The virus was confirmed to have reached Colombia on 6 March 2020. From 17 March to 1 September 2020, Colombia denied entry to those who were not Colombian citizens, permanent residents or diplomats, and from 30 September 2020 through 2 June 2021, a negative PCR test result issued within 96 hours prior to departure was required to enter the country by air. Sea borders reopened on 1 December 2020. Land and river borders with four neighboring countries reopened on 19 May 2021, while those with Venezuela remained closed.
+
+On 6 March 2020, the Ministry of Health and Social Protection confirmed Colombia's first case of coronavirus, a 19-year-old female patient who recently travelled to Milan, Italy.
+
+On 13 March 2020, three new cases were reported, one in Bogotá, one in Palmira and the other in Villavicencio. President Iván Duque announced that as of 16 March, entry to Colombia will be restricted for visitors who have been in Europe or Asia within the past 14 days. Colombian citizens and residents who have been in Europe or Asia can be admitted into the country, but must undergo a 14-day self-quarantine as a precaution.
+
+On the morning of 17 March, Colombia's Health Ministry confirmed 8 more cases. Later the same day, they confirmed another 10 cases, bringing the total to 75. Cartagena's mayor extended the curfew, which previously applied only to the tourist city center from 10:00 p.m. to 4:00 am, to the whole city from 6:00 p.m. to 4:00 a.m. during weekdays, and for 24 hours during weekends. Bogotá mayor Claudia López, announced a mandatory isolation drill for the extended weekend, from 20 to 23 March.
+
+On 30 August 2021, the World Health Organization (WHO) named lineage B.1.621 Mu variant and designated it as a variant of interest (VOI). Mu was first detected in Colombia in January 2021 and was also the most extended variant in the country, accounting for 39% of sequences identified and 53% of infections according to the National Health Institute (INS).
+
+![Infographic- March to December 2020](infor.png)
+
+# Government and institution measures in response to COVID-19
+
+### From the Ministry of Labor
+
+  * Channels of communication with the Health Authorities in order to report suspected cases of COVID-19 in a timely manner. As well as the obligation for workers and contractors to follow the guidelines issued by authorities regarding the preparation, response and care for these types of cases.
+Follow-up of guidelines. Compliance with the protocols determined by the Ministry of Social Protection regarding the preparation, response and care of cases with COVID-19.
+
+  * Implementation of internal actions. Companies duty to train their employees regarding hand washing; provision of soaps and disinfectants and disposable towels; provision of personal protection elements; reinforcement of cleaning measures in workplaces, especially of devices frequently used by workers (such as telephones, printers).
+  
+  * In case a Company has employees arriving from China, they must comply with a series of special obligations during the first 14 days after arriving in Colombia, such as: working from your home; reduction of face to face meetings; in the event that there are meetings, they must be held in ventilated spaces and must maintain distance from attendees; relocation in case of customer service.
+  
+### From the Ministry of Health and Social Protection
+
+* To minimize negative health effects in the public and private sector:
+   * Promote permanent hand washing and disinfection of workspaces.
+   * Provide clear and timely information on measures taken.
+   * Employees and public officials must report any suspected symptoms or contact with a diagnosed person.
+   * Provide training for the prevention of coronavirus.
+   * Inform the health secretary or territorial health directorate about cases where there is suspicion of COVID-19.
+* Temporary and exceptional preventive measures:
+   * Authorize telecommuting work to those who have arrived from any country with incidences of coronavirus cases, as well as to those who have come in contact with patients diagnosed with COVID-19 and to those who suspect they have the virus.
+   * Implement flexible work hours.
+   * Decrease the number of face-to-face meetings.
+   * Avoid crowded areas or places.
+   
+### From the Ministry of Health and The Ministry of Commerce
+
+* For those responsible for places or events that have a high influx of people and for the community in general:
+  * Report all prevention measures, symptoms and diagnosed through all media sources used to promote the event.
+  * Promote the use of the CoronAPP.
+  * Have antiseptic gel available.
+  * Have toiletries in the bathrooms on site.
+  * Train and inform workers regarding the disease, its prevention, diagnosis,
+risk detection measures as well as how to manage it within the event.
+  * Verify the use personal barrier protection elements.
+  * Shopping centers: disinfect and clean all common areas.Disinfection of all Internet and communication areas. 
+
+# COVID-19 Vaccination in Colombia
+
+![](colombia-vac.jpg)
+
+The COVID-19 vaccination program in Colombia is an ongoing effort of mass immunization put in place by the Colombian government in order to respond to the ongoing COVID-19 pandemic. The COVID-19 virus was confirmed to have reached Colombia on 6 March 2020. Colombia's preparation and readiness for a vaccine program allowed it to join the first group of countries who received vaccines through COVAX. The first vaccine in Colombia was given to a nurse on 17 February 2021. As of 18 September 2021, 38,442,061 vaccine doses have been administered across the country, 13,327,902 people have received two doses and 2,809,166 people have been vaccinated with single-dose vaccines, for a total of 16,137,068 fully vaccinated people.
+
+```{r, include=FALSE}
+my_country <- as_tibble(my_country)
+my_country_colombia <- my_country %>% select(-c("province", "long", "lat"))
+skim(my_country_colombia)
+```
+
+
+
+```{r, include=FALSE}
+Colombia_1 <- my_country_colombia %>%
+  pivot_wider(names_from = "type", values_from = "cases")
+
+skim(Colombia_1)
+ggplot(Colombia_1, aes(x = confirmed))+ geom_boxplot()
+ggplot(Colombia_1, aes(x = death))+ geom_boxplot()
+ggplot(na.omit(Colombia_1), aes(x = recovered))+ geom_boxplot()
+```
+
+
+```{r, include=FALSE}
+# Removing missing values.
+na_colombia <- Colombia_1[!is.na(Colombia_1$recovered), ]
+```
+
+
+```{r, include=FALSE}
+colom <- na_colombia[(na_colombia$recovered >= 0), ] # Removing the minus value.
+```
+
+```{r, include=FALSE}
+Colombia_2 <- colom[!(colom$recovered == max(colom$recovered)), ] # Removing the outlier.
+```
+
+
+
+```{r, include=FALSE}
+Colombia_active_cases <- Colombia_2 %>% mutate(
+  cum_confirmed = cumsum(confirmed), cum_death = cumsum(death), cum_recovered = cumsum(recovered), active = cum_confirmed - (cum_death + cum_recovered)
+  )
+```
+
+
+```{r, include=FALSE}
+Colombia_wider <- Colombia_active_cases %>% 
+  select(-c(6,7,8))
+```
+
+```{r, include=FALSE}
+Colombia_longer <- Colombia_wider %>% 
+  pivot_longer(3:6, names_to = "type", values_to = "cases")
+```
+
+# Data Visualization
+
+The format of the coronavirus data set is as follows:
+It is a dataframe with 7 variables.
+
+ 1.  date - Date in YYYY-MM-DD format.
+ 
+ 2.  province - Name of province/state, for countries where data is provided split across multiple provinces/states.
+ 
+ 3.  country - Name of country/region.
+ 
+ 4.  lat - Latitude of center of geographic region, defined as either country or, if available, province.
+ 
+ 5.  long - Longitude of center of geographic region, defined as either country or, if available, province.
+ 
+ 6.  type - An indicator for the type of cases (confirmed, death, recovered).
+ 
+ 7.  Number of cases on given date.
+  
+ The data corresponding to Colombia was extracted from the coronavirus data set.Though the original data set contains data from 2020-01-22 to 2021-09-18, the data visualization was done upto 2021-08-04 as there were missing values in recovered cases last 45 days.
+
+ Active cases are defined as the number of confirmed cases minus the number of recovered cases and deaths. It is the number of cases still considered to be infectious.
+
+```{r, include=FALSE}
+# Data set for column chart
+col_char <- Colombia_active_cases %>% summarise(
+  death = max(cum_death) * 100 / max(cum_confirmed),
+  recovered = max(cum_recovered) * 100 / max(cum_confirmed),
+  active = last(active) * 100 / max(cum_confirmed)
+)
+
+col_longer <- col_char %>% pivot_longer(1:3, names_to = "type", values_to = "percentage")
+```
+
+
+
+```{r, echo=FALSE, fig.cap= "Figure 01: Active, death and recovered cases of Colombia"}
+ggplot(col_longer, aes(x = "", y = percentage, fill = type)) +
+  geom_col(color = "black") +
+  geom_label(aes(label = c("2.5%","95.7%","1.8%")), color = c(1, "black", "white"),
+            position = position_dodge(width = 0.8),
+            show.legend = FALSE) +
+  guides(fill = guide_legend(title = "type")) +
+  scale_fill_viridis_d() +
+  coord_polar(theta = "y") + 
+  theme_void() +
+  labs(title = "Active-Death-Recovered cases as a percentage of total cases")
+```
+
+
+The above figure shows the overall big picture of the cases in Colombia, as of 4th August 2021. It can be clearly observed that more than 95% of the total cases are recovered cases. The death rate is considerably low with respect to the total cases. 
+
+
+
+## Active-Confirmed-Recovered-Death cases in 2021
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap="Figure 02: Active-Confirmed-Recovered-Death cases in 2021"}
+colombia_2021 <- Colombia_longer %>% filter(date >= "2021-01-01")
+
+gr2 <- ggplot(colombia_2021, aes(x = date, y = cases, col = type))+
+  geom_line()+
+  facet_wrap(~type, ncol = 1, scales = "free_y")+
+  theme_minimal() 
+ggplotly(gr2)
+```
+
+Same pattern can be observed in all four cases thoughout the time period. Though the number of active, confirmed, recovered and death cases has increased from April to july, it has started to decrease from the begining of July.
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap="Figure 03: Cumulative of confirmed-death-recovered cases in 2021"}
+cum_cases <- Colombia_active_cases %>%
+  filter(date >= "2021-01-01") %>%
+  select(c(1,2,6,7,8)) %>%
+  pivot_longer(c(3, 4, 5), names_to = "cum_type", values_to = "cases")
+
+cum_plot <- ggplot(cum_cases, aes(x = date, y = cases, col = cum_type))+
+  geom_line()+
+  scale_x_date(date_labels = "%b", date_breaks = "months")+
+  labs(title = "Cumulative of confirmed-death-recovered cases in 2021",
+       x = "Month",
+       y = "Cumulative number of cases" ) +
+  theme(legend.title = element_blank())
+
+ggplotly(cum_plot)
+```
+
+Figure 03 describes how the total number of confirmed, recovered and death cases has increased in 2021. Confirmed cases and recovered cases show a steep rise. The confirmed cases have been increased from 1638616 to 4798801. However, Colombia has able to maintaine their death cases low compared to the confirmed cases. 
+
+```{r, echo=FALSE}
+Colombia_wider_2021 <- Colombia_wider %>% filter(date >= "2021-01-01")
+```
+
+## Confirmed Cases
+
+#### Average = 8584.617
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap= "Figure 04: Daily confirmed cases"}
+above.avg <-mean(Colombia_wider$confirmed) < Colombia_wider$confirmed 
+
+plot2 <- ggplot(Colombia_wider, aes(x = date, y = confirmed, colour = above.avg)) +
+  geom_col() +
+  geom_hline(aes(yintercept = mean(confirmed))) +
+  labs(x = "Date",
+       y = "Confirmed cases")
+
+ggplotly(plot2)
+
+```
+
+According to the above figure most of the confirmed cases in 2021 are above the average confirmed cases(8585), compared to the confirmed cases in 2020. Usually, at the begining of a pandemic the cases are very low. And gradualy it begins to increase the number of cases.The highest number of confirmed cases were reported on 26 th of June with 33594 cases.In February 2021, Colombia has maintained their confirmed cases below the average.
+
+## Deaths
+
+#### Average =  217.0966
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap="Figure 05: Daily deaths"}
+Above.avg <- mean(Colombia_wider$death) < Colombia_wider$death 
+
+plot1 <- ggplot(Colombia_wider, aes(x = date, y = death, colour = Above.avg)) +
+  geom_col() +
+  geom_hline(aes(yintercept = mean(death))) +
+  labs(x = "Date",
+       y = "Deaths")
+ggplotly(plot1) 
+
+```
+
+Figure 05 shows the daily deaths in Colombia. From April 2020, it shows a severe increase in death cases. Colombia has reported the highest number of death cases on 22nd of June with 720 deaths.Though the deaths in the middle of 2020 has incresed above the average deaths, at the end of the year it has decreased.  
+
+
+## Recovered Cases
+
+#### Average = 8214.576
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap="Figure 06: Daily Recovered Cases"}
+above_avg <- mean(Colombia_wider$recovered) < Colombia_wider$recovered 
+
+plot3 <-ggplot(Colombia_wider, aes(x = date, y = recovered, colour = above_avg )) +
+  geom_col() +
+  geom_hline(aes(yintercept = mean(recovered))) +
+  labs(x = "Date",
+       y = "Recovered cases")
+
+ggplotly(plot3)
+
+```
+
+The recovered cases are very low at the begining. Highest number of recovered cases are obseved on 6th of July 2021 with 37904 recovered cases.
+
+## Active Cases
+
+#### Average = 78360.59
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap="Figure 07: Daily Active Cases"}
+Above_avg <- mean(Colombia_wider$active) < Colombia_wider$active 
+
+plot4 <- ggplot(Colombia_wider, aes(x = date, y = active, colour = Above_avg )) +
+  geom_col() +
+  geom_hline(aes(yintercept = mean(active))) +
+  labs(x = "Date",
+       y = "Active cases")
+
+ggplotly(plot4)
+
+```
+
+Figure 07 highlights three major increments in active cases. This might be representing the first, second and third waves of the corona virus pandemic in Colombia. Highest number of active cases were reported in June 2021 with 209089 cases. Fluctuations daily active cases cannot be interpreted solely, since reduction of active levels means that either daily recovery level or daily death level is rising. 
+
+
+```{r, echo=FALSE, fig.cap="Figure 08: Total cases vs daily confirmed cases"}
+Colombia_confirmed <- Colombia_active_cases %>%
+  select(c("confirmed", "cum_confirmed")) 
+
+gr5 <- ggplot(Colombia_confirmed, aes(cum_confirmed, confirmed)) +
+  geom_line(col = "royalblue4") +
+  labs(title = "Total cases vs daily confirmed cases",
+        x = "Total cases",
+        y = "Daily confirmed cases")
+
+ggplotly(gr5)
+```
+
+The above figure explains how daily confirmed cases change with total confirmed cases. Three main increments cab be clearly observed.
+
+```{r, echo=FALSE}
+Colombia_cases <- coronavirus %>% 
+  filter(country == "Colombia", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "Colombia") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+```
+
+```{r, echo=FALSE}
+Colombia_cases <- Colombia_cases %>%
+  mutate(cases_normalized = (cases - min(cases)) / (max(cases) - min(cases)),
+         people_fully_vaccinated_normilized = (people_fully_vaccinated - min(people_fully_vaccinated, na.rm = TRUE)) / 
+           (max(people_fully_vaccinated, na.rm = TRUE) - 
+              min(people_fully_vaccinated, na.rm = TRUE)))
+```
+
+```{r, echo=FALSE, fig.cap="Figure 09: Colombia - Daily New Cases vs. Total Vaccinated Population (Normalized)"}
+plot_ly(data = Colombia_cases,
+        x = ~ date,
+        y = ~ cases_normalized,
+        type = "scatter",
+        mode = "line",
+        name = "Daily Cases (Normalized)") %>%
+  add_lines(x = ~ date,
+            y = ~ people_fully_vaccinated_normilized,
+            name = "Fully Vaccinated - Aggregate (Normalized)") %>%
+  layout(title = "Colombia - Daily New Cases vs. Total Vaccinated Population (Normalized)",
+         legend = list(orientation = 'h'),
+         yaxis = list(title = "Normalized Daily Cases/Total Vaccinated"),
+         xaxis = list(title = ""),
+         margin = list(b = 60))
+```
+
+The COVID-19 vaccination program in Colombia is an ongoing effort of mass immunization put in place by the Colombian government in order to respond to the ongoing COVID-19 pandemic. The orange line shows the people who have fully vaccinated. It is clearly observed that at the end June, the daily cases are decreasing. That may be because of the vaccination program going in Colombia. Though the above figure 09 represents the fully vaccinated people, there are people who are partially vaccinated. Hence, the daily cases might be more lower in future.
+
+```{r, echo=FALSE}
+df <- covid19_vaccine %>% 
+  filter(date == max(date),
+         !is.na(population))
+```
+
+```{r, echo=FALSE}
+df <- df %>% 
+  mutate(fully_vaccinated_ratio = people_fully_vaccinated / population) %>%
+  arrange(- fully_vaccinated_ratio)
+
+```
+
+```{r fig.height=6, fig.width=8, include=FALSE}
+
+top_20 <- df %>% 
+  slice_head(n = 20) %>%
+  arrange(fully_vaccinated_ratio) %>%
+  mutate(country = factor(country_region, levels = country_region))
+  
+plot_ly(data = top_20,
+        y = ~ country,
+        x = ~ round(100 * fully_vaccinated_ratio, 2),
+        text = ~ paste(round(100 * fully_vaccinated_ratio, 1), "%"),
+        textposition = 'auto',
+        orientation = "h",
+        type = "bar") %>%
+  layout(title = "Percentage of Fully Vaccineted Population - Top 20 Countries",
+         yaxis = list(title = ""),
+         xaxis = list(title = "Percentage", ticksuffix = "%"))
+```
+
+
+```{r fig.height=5, fig.width=10, echo=FALSE, fig.cap="Figure 10: Percentage of Fully Vaccinated Population by countries in South American continent"}
+continent_df <- df %>%
+  filter(!is.na(continent_name),
+         !is.na(fully_vaccinated_ratio))
+b <-table(continent_df$continent_name)
+
+  d <- NULL
+  
+  d <- continent_df %>% 
+    filter(continent_name == "South America") %>% 
+    slice_head(n = 20) %>%
+    arrange(fully_vaccinated_ratio) %>%
+    mutate(country = factor(country_region, levels = country_region))
+  
+          plot_ly(data = d,
+          y = ~ country,
+          x = ~ round(100 * fully_vaccinated_ratio, 2),
+          text = ~ paste(round(100 * fully_vaccinated_ratio,1), "%"),
+          textposition = "auto",
+          orientation = "h",
+          showlegend = FALSE,
+          type = "bar") %>%
+    layout(title = "Percentage of Fully Vaccinated Population by countries in South American continent",
+           yaxis = list(title = ""),
+           xaxis = list(title = "Percentage", ticksuffix = "%"))
+  
+```
+
+Figure 10 expains the percentage of fully Vaccinated Population by countries in South American continent. Highest percentage is shown by Uruguay. Colombia is in the 6th position with a percentage of 31.3%. Venezuela has the lowest percentage.
+
+```{r, include=FALSE}
+unique(coronavirus$country)
+```
+
+```{r, echo=FALSE}
+near_colombia <- c("Colombia", "Brazil", "Peru", "Chile", "Guyana", "Argentina", "Ecuador")
+countries <- coronavirus %>%
+  filter(country %in% near_colombia ) %>%
+  select(date, country, type, cases)
+```
+
+```{r, echo=FALSE}
+# Making the minus vales as plus values.
+countries$cases <- abs(countries$cases)
+```
+
+
+```{r, echo=FALSE}
+countries_wider <- countries %>%
+  pivot_wider(names_from = "type", values_from = "cases")
+
+
+countries_wider <- countries_wider %>%
+  group_by(country) %>%
+  arrange(country, date)
+```
+
+```{r, echo=FALSE}
+# Removing the rows with missing values.
+Countries_clean <- countries_wider[!is.na(countries_wider$recovered), ]
+```
+
+```{r, echo=FALSE}
+Countries_1 <- Countries_clean %>% 
+  mutate(cum_confirmed = cumsum(confirmed)) 
+```
+
+```{r, echo=FALSE, fig.cap="Figure 11: Comparison of confirmed cases with nearby countries"}
+
+Countries_com <- Countries_1  %>% 
+  filter(cum_confirmed >=30) %>%
+  mutate(no_of_days = date - min(date))
+
+gr6 <- ggplot(Countries_com, aes(no_of_days, cum_confirmed, col = country)) +
+  geom_line()+
+  scale_y_log10()+
+  labs(title = "Comparision with nearby countries",
+       x = "No of days since 30th confirmed case",
+       y = "Cumulative confirmed cases in log_scale")
+
+ggplotly(gr6)
+```
+
+Figure 11 compares the cumulative confirmed cases of Colombia with neighboring countries. If the population of the above countries are compared, Brazil has the highest population. Colombia has the second highest population in the south American continent. Guyana has the lowest population.And it shows the lowest cumulative confirmed cases. Hence, it shows reasonable values in cumulative confirmed cases when the countries are compared with their population.
+
+
+
+```{r, echo=FALSE, fig.cap="Figure 12: Death Percentage in each country with respect to their total confirmed cases"}
+countries_death <- Countries_1 %>%
+  mutate(cum_death = cumsum(death), cum_confirmed = cumsum(confirmed)) %>%
+  summarise(total_death = max(cum_death), total_confirmed = max(cum_confirmed)) %>%
+  mutate(percentage = total_death * 100 / total_confirmed)
+
+countries_bar2 <- ggplot(countries_death, aes(country, percentage, fill = country)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Death Percentage")
+
+ggplotly(countries_bar2)
+```
+
+When it comes death percentage, Colombia shows a lower percentage compared to Peru, Ecuador and Brazil. Peru shows the highest death percentage of 9.3%. Lowest percentage value is indicated by Argentina. The above plot was depicted with respect to the total confirmed cases of each country. 
+
+```{r, echo=FALSE}
+continents_1 <- c("Colombia","Spain", "Sri Lanka", "US", "South Africa", "Japan", "Germany")
+
+continents <- coronavirus %>%
+  filter(country %in% continents_1 ) %>%
+  select(date, country, type, cases)
+
+continents$cases <- abs(continents$cases)
+
+countries_wider <- continents %>%
+  pivot_wider(names_from = "type", values_from = "cases")
+
+countries_wider <- countries_wider %>%
+  group_by(country) %>%
+  arrange(country, date)
+
+conti_clean <- countries_wider[!is.na(countries_wider$recovered), ]
+
+```
+
+
+
+
+
+```{r, echo=FALSE, fig.cap="Figure 13: Comparison of confirmed cases with countries in other continents"}
+continents_2 <- conti_clean %>% 
+  mutate(cum_confirmed = cumsum(confirmed)) %>%
+  filter(cum_confirmed >=30) %>%
+  mutate(no_of_days = date - min(date))
+
+gr7 <- ggplot(continents_2, aes(no_of_days, cum_confirmed, col = country)) +
+  geom_line()+
+  scale_y_log10()+
+  labs(title = "Comparison of confirmed cases with countries in other continents",
+       x = "No of days since 30th confirmed case",
+       y = "Total confirmed cases in log scale")
+
+ggplotly(gr7)
+```
+
+According to figure 13, highest cumulative confirmed cases are shown by US with 35399460. That may be because US has the highest population with respect to the countries depicted above. Colombia shows the second highest cumulative cases with 4815063 cases. Sri Lanka shows the lowest confirmed cases. 
+
+```{r, echo=FALSE, fig.cap="Figure 14: Comparison of deaths with countries in other continents"}
+continents_5 <- conti_clean %>% 
+  mutate(cum_death = cumsum(death))
+
+continents_death <- continents_5 %>%
+  mutate(cum_death = cumsum(death), cum_confirmed = cumsum(confirmed)) %>%
+  summarise(total_death = max(cum_death), total_confirmed = max(cum_confirmed)) %>%
+  mutate(percentage = total_death * 100 / total_confirmed)
+
+continents_bar <- ggplot(continents_death, aes(country, percentage, fill = country)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Death Percentage")
+
+ggplotly(continents_bar)
+```
+
+When it comes to death percentage, Colombia shows the second highest death percentage of 2.5%. South Africa shows the highest death percentage. And Sri Lanka has able to maintain the death percentage at a lower value of 1.4%. The above plot was depicted with respect to the total confirmed cases of each country. 
+
+```{r, echo=FALSE}
+continents_3 <- conti_clean %>%
+  mutate(cum_recovered = cumsum(recovered), cum_confirmed = cumsum(confirmed))
+```
+
+```{r , echo=FALSE, fig.cap="Figure 15: Confirmed cases vs recovered cases"}
+gr8 <- ggplot(continents_3, aes(x = cum_confirmed, y = cum_recovered, col = country)) +
+  geom_line()+
+  geom_abline(aes(intercept = 0, slope = 1))+
+  scale_x_log10()+
+  scale_y_log10()+
+  labs(title = "Confirmed cases vs recovered cases",
+       x = "Total confimed cases in log scale",
+       y = "Total recovered cases in log scale")
+ 
+ggplotly(gr8) 
+```
+
+When the rate of recovery is considered, Colombia seems to be nearing to an acceptable level of recovery rate. Even Sri Lanka and Japan also performing really well. 
+
+
+# Discussion
+
+The report is based on the coronavirus data set. Is consists of 195 countries. The data related to Colombia was extracted from the coronavirus data set. 
+Exactly 45 missing values in recovered cases were identified. Dates corresponding to the missing values are 2021-08-05 to 2021-09-18. In order to carry out the analysis all the data related to those 45 days were removed from the data set of Colombia.
+Also a minus value was indicated in the summary statistics. It was omitted from the data set. Furthermore, during the analysis process it was found that there was an outlier for recovered cases of Colombia. All the data related to that date was omitted.
+2021 was a tough time for Colombia compared to 2020. No lockdowns were imposed in 2021. That may be a reason for the increase of covid-19 cases. Also the variant spreading might be different from time to time.
+When selecting countries to compare with Colombia, 6 neighboring countries and 6 countries which are located in other continents were selected. Though the comparison was carried out country wise, there are many other factors that could affect the performance of the country towards the covid-19. Some of them are country's economy, population density, climate, religion and many more. 
+
+# Recommendations
+ *  Promote social distancing and self-care among the population.
+ *  Continue strengthening the health care system.
+ *  Increase testing and contact tracing.
+ *  Set up and announce a reopening plan contingent on the pandemic status. 
+ *  Extend economic support programs in time and in beneficiaries.
+
+# References
+
+ 1.  weather-and-climate, accessed 24 September 2021, <https://weather-and-climate.com/average-monthly-Rainfall-Temperature-Sunshine-in-Colombia>
+ 2.  COVID-19 vaccination in Colombia, accessed 24 September 2021, <https://en.wikipedia.org/wiki/COVID-19_vaccination_in_Colombia> 
+ 3.  colombia-government-and-institution-measures-in-response-to-covid, accessed 25 September 2021, <https://home.kpmg/xx/en/home/insights/2020/04/colombia-government-and-institution-measures-in-response-to-covid.html>  
+ 4.  Latest Measures Taken by the Colombian Government regarding COVID-19, accessed 25 September 2021, <https://knowledge.leglobal.org/corona/country/colombia/latest-measures-taken-by-the-colombian-government-regarding-covid-19/>
+ 5.  COVID-19 in Colombia: Impact and Policy Responses, accessed 25 September 2021, <https://www.cgdev.org/publication/covid-19-colombia-impact-and-policy-responses>
+ 6.  Countries in South America by population (2021), accessed 25 September 2021, <https://www.worldometers.info/population/countries-in-south-america-by-population/>
+ 7.  Colombia, accessed 25 September 2021, <https://www.britannica.com/place/Colombia>
+ 8.  Responding to COVID-19, accessed 26 September 2021, <https://www.gavi.org/covid19?gclid=CjwKCAjw-sqKBhBjEiwAVaQ9a8Th6iNc7d3eW0LT0qfbK_oO-yVMezfXHuoCoPrqaTHZ0DMzdl-R7hoCmVgQAvD_BwE>
+ 9.  Foreign travel advice Colombia, accessed 26 September 2021, <https://www.gov.uk/foreign-travel-advice/colombia>
+ 10.  Colombia: Coronavirus Pandemic Country Profile, accessed 27 September 2021, <https://ourworldindata.org/coronavirus/country/colombia>

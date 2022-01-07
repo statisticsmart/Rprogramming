@@ -1,0 +1,355 @@
+---
+title: "Corona Virus in Mozambique"
+author: "M.R.M. Tharik"
+output: 
+  html_document:
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(lubridate)
+library(plotly)
+library(tidyverse)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+
+myCountry <- get_individual_project_country("AS2018552")
+myData <- coronavirus %>% filter(country == myCountry)
+myData <- arrange(myData,date)
+widerPivotData = myData %>% pivot_wider(names_from =type, values_from = cases )
+summary(myData)
+```
+
+
+
+## Mozambique
+
+Mozambique is officially known as the Republic of Mozambique. Between the first and fifth centuries AD, Bantu speaking peoples arrived to the present day Mozambique from farther North and West.Nothern Mozambique lies within the monsoon trade winds of the Indian Ocean. Between the 7th and 11th centuries a series of Swahili ports were built which eventually established the Swahili culture and language. After the colonization of Portugese in the early 17th century MOzambique has converted to a different culture. Today the officially spoken language in Mozambique is Portugese. Countries population is arround 29 million with majority being the Bantu people.Mozambique is a member of the United Nations, the African Union, the commonwealth of NAtions, the Organization of the Islamic Cooperation, the community of Portugese Language Countries, the non-aligned Movement , the southern African development Community and is and observer at Las Francophonie.
+
+## Location
+```{r visualization, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+
+
+mozambique_map <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "grey"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+mozambique_map +
+  geom_point(
+    data = myData, aes(x = long, y = lat), color = "red", size
+    = 3
+  )
+```
+
+
+
+
+
+
+## Climate in Mozambique
+
+Mozambique has a tropical to sub-tropical climate and experiences two seasons: a cool and dry season from April to September and a hot and
+humid season between October and March. Temperatures are warmer near the coast and southern lowland regions compared to the higher,
+inland regions. Mozambique is often affected by natural disasters, including droughts and floods associated with the El Niño Southern Oscillation.
+
+## Steps taken by Mozambique Gorvernment
+
+* As of September 26, Mozambique has had 150,530 confirmed COVID-19 cases and 1,909 deaths. A total of 146,554 individuals have recovered from the disease.
+
+* On September 7, 2020 Mozambique transitioned from a State of Emergency (SOE) to a State of Public Calamity (SOPC). The SOPC will continue indefinitely at the red alert level while the risk of spreading COVID-19 exists in Mozambique.
+
+* President Nyusi announced new measures to mitigate the spread of COVID-19 in Mozambique. These apply to diplomats as well as Mozambican residents and took effect at midnight on Monday, August 16, 2021.
+
+### All measures noted in Decree 50/2021 from July 16 (ref MN) are maintained for an additional 30 days:
+
+* In the Greater Maputo area and all provincial capitals there is a curfew in place from 10 p.m. to 4 a.m. every night. The curfew also applies in Manhiça, Chokwe, Maxixe, Gondola, Moatize, Mocuba, Nacala, Montepuez, Massinga and Guruè
+* All passengers arriving in Mozambique must present a negative PCR test administered 72 hours before departure, even if they hold proof of vaccination. This requirement also applies to children over 5 years old.
+* The validity of PCR tests for short cross-border trips is now only 7 days.
+* All documents that expire during this period, with the exception of passports, are now valid until August 30.
+* In-person classesin primary, secondary and higher education are suspended for 30 days in the greater Maputo metropolitan area, including Manhiça, and in Xai-Xai, Inhambane city, Beira, Chimoio, Tete city and Dondo.
+* Pre-school education is suspended for 30 days nationwide.
+* The night curfew is in effect from 9 pm to 4 am and applies to all provincial capitals, all cities, all municipalities and all towns.
+* All religious services and celebrations, and conferences and meetings are suspended.
+* The use of theaters, casinos, cinemas and concert halls is prohibited.
+* All private social events are prohibited, regardless of where they take place, except for civil and religious wedding ceremonies, which must not exceed 20 people, and festivities associated with weddings are prohibited.
+* Meetings in public and private institutions must not exceed 15 people in closed places and 30 people in open places and must not exceed 50 percent capacity.
+* State meetings or events are permitted for up to 80 people when duly justified.
+* The number of participants permitted at wakes and funerals is reduced to 20 people, except in cases where there was death by COVID, where the maximum number of participants is 10.
+Museums, galleries and the like may remain open but are limited to 20 percent capacity.
+* Public swimming pools are closed, except for hotels, which may be used only by hotel guests and up to 20 percent capacity.
+* The training of competitive teams is prohibited, but national teams with international commitments may continue to train.
+* Large and medium-sized multipurpose gyms are closed.
+Public institutions are open from 8:00 am to 2:00 pm, except for essential services, and the private sector is encouraged to follow the same measures.
+* Shopping centers are open from 9:00 am to 4:00 pm from Monday to Saturday and from 9:00 am to 1:00 pm on Sundays and public holidays.
+* Bottle stores are open from 9:00 am to 1:00 pm from Monday to Saturday and are closed on Sundays and public holidays.
+Restaurants, take-aways and home delivery services are open from 6:00 am to 6:00 pm.
+* The stalls for the sale of food products are open from 6:00 am to 5:00 pm, but the ban on the sale of alcoholic beverages from stalls remains.
+* Bakeries and pastry shops are open from 5:00 am to 6:00 pm.
+* The Ministry of Transport and Communications must define the maximum capacity in the different means of transport.
+
+### The following are new measures which began at midnight August 16, 2021 for a period of 30 days (although they may be revised after a period of 15 days):
+
+1. In places where face-to-face classes are suspended, in-person exams are authorized, in strict compliance with COVID-19 prevention measures.
+2. Suspension of in-person classes in the towns of Vilankulo and Massinga, and the city of Maxixe (in Inhambane province).
+
+### These measures are in addition to the prior measures already in place, some of which include:
+
+* All incoming travelers must present a negative test for COVID-19.
+* All persons displaying respiratory symptoms or fever must stay home.
+* Discos, bars and stalls selling alcoholic beverages will remain closed.
+* Teleworking is recommended, in particular for people at higher risk.
+
+### COVID-19 Vaccine Information:
+
+* Has the government of Mozambique approved a COVID-19 vaccine for use? Yes
+* Are vaccines available in Mozambique for U.S. citizens to receive? No
+* Which vaccines are available in Mozambique?
+* Mozambique has received a limited supply of various vaccines. 
+* The U.S. government does not plan to provide COVID-19 vaccinations to private U.S. citizens overseas. 
+* The Government of Mozambique announced its vaccine strategy on March 5, 2020. The plan is to vaccinate 16.8 million Mozambicans, currently excluding children under 15 and pregnant women. The strategy did not name the specific vaccines that are approved for use in Mozambique.
+
+### Entry and Exit Requirements:
+
+* Are U.S. citizens permitted to enter? Yes
+
+* Non-Mozambican citizens, including U.S. citizens, who have a valid DIRE (residence permit) and/or required visa(s) are able to enter Mozambique, subject to the COVID-19 testing requirement below, without seeking specific authorization from the Ministry of Interior.
+
+* Tourists: For travelers arriving for tourism purposes only, visas are available upon arrival with proof of a return ticket and hotel booking. Please be aware that U.S. citizens have been denied entry for not having obtained the proper type of visa in advance. Obtaining your visa in advance from the Mozambican Embassy in Washington, DC is strongly encouraged.
+
+* Business Travelers: Non-Mozambican citizens who do not have a valid DIRE and/or visa(s) and are traveling for work or business purposes are required to seek authorization to enter Mozambique from the Ministry of Interior. Such travelers wishing to enter Mozambique must obtain authorization to enter Mozambique at the Ministry of Interior via a letter addressed to “Sua Excelência Secretário Permanente do Ministério do Interior”. The letter should include the following information:
+  * Traveler name and passport details
+  * Date and time of arrival
+  * Flight Information/Travel itinerary
+  * Purpose of travel to Mozambique
+
+* The letter should be submitted at the Secretaria Geral do Ministério do Interior located at Avenida Olof Palme 46/48, Maputo, Mozambique. Please allow 7 days for the Ministry to consider the request. Once the request has been approved by the Ministry of Interior, the traveler will be instructed to apply for a visa at the nearest Mozambican embassy or consulate.
+
+* Is a negative COVID-19 test (PCR and/or serology) required for entry? Yes
+* Travelers arriving in Mozambique will be required to provide proof of negative Polymerase Chain Reaction (PCR)-based COVID-19 test results administered in their country of origin within 72 hours of departure. Children up to age 11 are exempt from this requirement.
+
+* For purposes of land border crossings, COVID-19 tests remain valid for 14 days for those requiring multiple entries over a short period of time or leaving Mozambique for a short duration.
+
+* The Government of Mozambique does not require a COVID-19 test to exit the country. However, acting as agents for the airlines, officials at the airport will request a negative COVID-19 PCR test before permitting you through immigration.
+
+* Are health screening procedures in place at airports and other ports of entry? Yes
+The Ministry of Health (MISAU) continues screening at airports and other points of entry scanning the temperatures of all travelers.
+
+### Movement Restrictions
+
+* Is a curfew in place? Yes
+
+* Are there restrictions on intercity or interstate travel? No
+
+### Quarantine Information
+
+* Are U.S. citizens required to quarantine? No
+
+* Proof of a negative PCR COVID-19 test must be presented upon arrival.
+
+* All persons who test positive for COVID-19 or have been directly exposed to a positive case of COVID-19 must quarantine for 14 days.
+
+### Transportation Options
+
+* Are commercial flights operating? Yes
+
+* A limited number of commercial flights are arriving and departing regularly.
+
+* Is public transportation operating? Yes
+Public transport operators are limited to the official 
+capacity of the vehicle, and all passengers must use facemasks or visors.
+
+### Fines for Non-Compliance (if applicable)
+
+* Failure to comply with the COVID-19 measures outlined in the Boletim da República (Number 224, 23 November 2020) constitutes a transgression, punishable by fines from one to five times the minimum salary. It is within the jurisdiction of the local tribunal to collect these fines.
+
+ 
+## Exploratory Data Analysis
+
+```{r confirmedcases,echo=FALSE}
+confirmed_cases <- filter(myData, type == "confirmed")
+
+ggplot(confirmed_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Confirmed cases in Mozambique")
+```
+
+#### Explanation
+
+Above graph shows the confirmed no.of corona patients in Mozambique in daily basis. It shows that no.of confirmed Corona patients has a seasonal effect. The Graph shows there has been high cases end of the year 2020 and reduced but again drastically increased at the begining of the year 2021 and then gradually reduce towards the mid 2021 but again drastically increase and decrease towards the end of 2021.
+
+```{r deathcases,echo=FALSE}
+death_cases <- filter(myData, type == "death")
+
+ggplot(death_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Death cases in Mozambique")
+```
+
+#### Explanation
+
+Above graph shows the death no.of corona patients in Mozambique in daily basis. It shows that no.of dead Corona patients has a seasonal effect too.The NUmber of dead cases is very low when compared to positive cases. The Graph shows there has been constant cases at the year 2020 but suddenly high cases at the begining of the year 2021 and then gradually reduce towards the mid 2021 but again drastically increase and decrease towards the end of 2021.
+
+```{r recoveredCases,echo=FALSE}
+recovered_cases <- filter(myData, type == "recovered")
+
+ggplot(recovered_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Recovered cases in Mozambique")
+```
+
+#### Explanation
+
+Above graph shows the recovered no.of corona patients in Mozambique in daily basis.The Graph shows there has been constant recoveries at the year 2020 but suddenly high cases at the begining of the year 2021 and then gradually reduce towards the mid 2021 but again drastically increase and decrease towards the end of 2021.
+
+
+```{r allTypesIn one,echo=FALSE}
+myData %>%
+  filter(type %in% c("confirmed", "recovered","death")) %>%
+  ggplot(aes(x = date, y = cases , group = type, colour = type)) +
+  geom_line()
+```
+
+#### Explanation
+
+Above graph shows the recovered,dead and confirmed no.of corona patients in Mozambique in daily basis.The Graph shows there is a clear relationship between confirmed and recovered cases. It seems both has simillar trends. Conveying that MOzambique has done good treatments eventhough there is a fluctuation in cases.
+
+### Camparing Countries Close to Mozambique
+
+```{r nearcountriesPlot,echo=FALSE}
+near_countries <- filter(coronavirus, country == "Mozambique"|country =="South Africa"|country =="Tanzania"|country =="Zambia")
+
+mozambique_map <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "grey"
+  ) +
+  coord_cartesian(xlim = c(-60, 60), ylim = c(-60, 10)) +
+  scale_x_continuous(breaks = seq(-60, 60, 30)) +
+  scale_y_continuous(breaks = seq(-60, 10, 10))
+
+mozambique_map +
+  geom_point(
+    data = near_countries , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=near_countries$long, y=near_countries$lat, label=near_countries$country))
+
+```
+```{r nearCountriesComparision , echo=FALSE}
+
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Confirmed cases in the countriesclose to Mozambique")
+
+
+```
+
+#### Explanation
+
+Above graph shows the confirmed  no.of corona patients in Mozambique,South Africa, Tanzania and Zambia which are the 3 neighbouring countries in daily basis.The Graph shows there is a clear pattern between countries. It seems both has simillar trends. Conveying that  the region is effected simillarly. South Africa is having higher number because they have a higher population conpared to other countries
+
+```{r nearcountriesDeath, echo=FALSE}
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Death cases in the countriesclose to Mozambique")
+
+```
+
+#### Explanation
+
+Above graph shows the dead  no.of corona patients in Mozambique,South Africa, Tanzania and Zambia which are the 3 neighbouring countries in daily basis.The Graph shows there is a clear pattern between countries. It seems both has simillar trends. Conveying that  the region is effected simillarly. South Africa is having higher number because they have a higher population conpared to other countries
+
+```{r nearcountriesRecovered, echo=FALSE}
+
+ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Recovered cases in the countriesclose to Mozambique")
+```
+
+#### Explanation
+
+Above graph shows the recovered  no.of corona patients in Mozambique,South Africa, Tanzania and Zambia which are the 3 neighbouring countries in daily basis.The Graph shows there is a clear pattern between countries. It seems both has simillar trends. Conveying that MOzambique the region is effected simillarly. South Africa is having higher number because they have a higher population conpared to other countries
+
+### Visualize Confirms , deaths and recoveries among countries after 2021-07-01
+
+```{r countrywiseSpecialPlotConfirmedcases,echo=FALSE}
+
+near_countries <- near_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+corona_final <- filter(near_countries, date >= "2021-07-01")
+
+corona_final_confirmed <- filter(corona_final, type == "confirmed" )
+
+
+mozambique_map + geom_point(data = corona_final_confirmed, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_confirmed$long, y=corona_final_confirmed$lat, label=corona_final_confirmed$country)) +
+  labs(title = "Total no.of confirmed cases after 2021-07-01")
+```
+
+#### Explanation
+
+South Africa leads the way. This is agian mainly due to its population being high as 60M. But we could say Tanzania has done a great job in that region because they match the South African population. Zambia has a very low population of 20M. Based on the population of Mozambique being 30M it has too done a great job because the confirmed cases are still very low compared to South Africa. There for South Africa haven't done a great job even if we consider its population. 
+
+```{r countrywiseSpecialPlotDeathcases,echo=FALSE}
+
+corona_final <- filter(near_countries, date >= "2021-07-01")
+corona_final_death <- filter(corona_final, type == "death")
+
+
+mozambique_map + geom_point(data = corona_final_death, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_death$long, y=corona_final_death$lat, label=corona_final_death$country)) +
+  labs(title = "Total no.of death cases after 2021-07-01")
+```
+
+#### Explanation
+
+Once again South Africa leads the way. This is agian mainly due to its population being high as 60M. But we could say Tanzania has done a great job in that region because they match the South African population. Zambia has a very low population of 20M. Based on the population of Mozambique being 30M it has too done a great job because the deaths are still very low compared to South Africa. There for South Africa haven't done a great job even if we consider its population. 
+
+```{r countrywiseSpecialPlotRecoveredcases,echo=FALSE}
+
+corona_final <- filter(near_countries, date >= "2021-07-01")
+
+corona_final_recovered <- filter(corona_final, type == "recovered")
+
+
+mozambique_map + geom_point(data = corona_final_recovered, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_recovered$long, y=corona_final_recovered$lat, label=corona_final_recovered$country)) +
+  labs(title = "Total no.of recovered cases after 2021-07-01")
+```
+
+#### Explanation
+
+It is seen that there is a drastic drop in the recovered cases but this data isn't seem to be true. Because when the confirmed cases increase the recovered cases should increases because the death rate is very low. According to my findings countries have recently decided to stop tabulizing the recovered patients [7,8].
+
+## Discussion and Conclution
+
+Covid 19 which is  a world pandemic has also made Mozambique it victim. Corona virus confirmed cases has appeared in Mozambique from 2nd week of March. Although the country was on lockdown from 17th May and also there had been fluctations in the no.of confirmed corona cases in Mozambique. When we take a look  at the overall picture  it can be seen that daily confirmed cases is increasing which means there is a upward trend in the no.of daily confirmed corona virus cases in Mozambique. But again it shows a low trend and increase again . This suggests the government impose laws when there is something wrong in the society. Not only the daily confirmed cases is increasing but also daily recovered cases are also increasing but increaing rate of confirmed cases is higher than that of recovered cases. The perecentage of recovered patients with respect to the total confirmed cases is low which is less than 25% which implies that still there are many corona patients who needed to be treated. 
+
+When comparing with the other countries close to Mozambique the no.of corona patients in Mozambique is  less which is almost negligible with the countries South Africa.It due to the population difference. South Africe have high confirmed and recovered cases than Mozambique and other close coutries. But Tanzania and Zambia show simillat relationships.But when we consider the Population scale Tanzania has done the best in the region because they have a similar population to South Africa. Mozambique too has performed well because it has a population that is half of South Africa but confirmed cases and deaths are way less than half of South Africa's numbers.
+
+
+## Refernces
+
+1. https://covid19.who.int/region/afro/country/mz
+2. https://www.osac.gov/Country/Mozambique/Content/Detail/Report/6f22baa4-7edb-4f00-8420-1c6dfa194ca0
+3. https://www.worldometers.info/coronavirus/country/mozambique/
+4. https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+5. https://www.climatelinks.org/sites/default/files/asset/document/mozambique_climate_vulnerability_profile_jan2013.pdf
+6. https://en.wikipedia.org/wiki/Mozambique
+7. https://www.dallasnews.com/news/public-health/2020/05/19/why-arent-coronavirus-recoveries-always-reported/
+8. https://covidtracking.com/analysis-updates/why-its-hard-to-count-recovered
+

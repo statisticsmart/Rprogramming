@@ -1,0 +1,588 @@
+---
+title: "Kosovo_Covid 19_AS2018572"
+author: "W.P.Thashmi Thilangi Weerakkody"
+date: "9/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,comment=NA, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2018572")
+```
+![Kosovo](https://4cdnik36lg2h29hfmo31l9qs-wpengine.netdna-ssl.com/wp-content/uploads/2019/10/globalpedia-hero-kosovo-1.jpg){width=80%}
+
+```{r}
+##loading packages
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(tidyr)
+library(norm)
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+Kosovo_corona <- coronavirus %>% filter(country == "Kosovo")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(ggmap)
+library(plotly)
+library(dplyr)
+library(RColorBrewer)
+library(gapminder)
+library(gifski)
+```
+
+## **Introduction of the country**
+
+![The National Flag of Kosovo](https://cdn.britannica.com/18/114418-004-2A12F087/Flag-Kosovo.jpg){width=60%}
+
+### Location of Kosovo in World map
+```{r}
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data =wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Kosovo_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+```{r}
+fr <- c(left = 14, bottom = 38, right = 27, top = 48)
+fond <- get_stamenmap(fr, zoom = 5,"toner-lite")
+Kosovo <- data.frame(lon=20.9,lat=42.6)
+ggmap(fond)+geom_point(data=Kosovo,aes(x=lon,y=lat),color="red",size=2)
+```
+
+Kosovo is the European country as shown above.Kosovo, self-declared independent country in the Balkans region of Europe.
+
+
+###  Climate condition of Kosovo
+The climate of Kosovo is predominantly continental, resulting in warm summers and cold winters with Mediterranean and Alpine influences (average temperature within the country range from +30 °C (summer) to –10 °C (winter)). However, due to unequal elevations in certain parts of the country, there are differences in temperature and rainfall distribution.
+December and January are regarded as the coldest months, July and August as the warmest months of the year. The maximum rainfall rate is reached between October and December. Between November and March, snowfall can be expected in Kosovo, even in the flat parts of the country. The highest snowfall rates can be expected in the mountain regions of Kosovo.
+The valley between Mitrovica and Kaçanik belongs to the dryer areas of the country. In contrast, the plain of Dukagjini between Peja and Prizren is described as a very fertile area with more precipitation between November and March.
+Based on the climate conditions, Kosovo can be separated into three climatic areas:
+
+ + Climatic Area of Kosovo (Kosovo Plain),
+ + Climatic Area of Dukagjini (Dukagjini Plain) and
+ + Climatic Area of mountains and forest parts.
+
+The climatic area of Kosovo (Kosovo Plain), which includes the Iber valley, is influenced by continental air masses. For this reason, in this part of the country, the winters are colder with medium temperatures above –10 °C, but sometimes down to –26 °C. The summers are very hot with average temperatures of 20 °C, sometimes up to 37 °C. This area is characterized by a dry climate and a total annual precipitation of 600 mm per year, approximately.
+The climatic area of Dukagjini (Dukagjini Plain), which includes the watershed of the Drini i Bardh river, is influenced very much by the hot air masses, which cross the Adriatic Sea. Medium temperatures during winter range from 0.5 °C to sometimes 22.8 °C. The average annual precipitation of this climatic area is about 700 mm per year. The winter is characterized by heavy snowfalls.
+
+![Kosovo whether,climate and geography](https://www.worldtravelguide.net/wp-content/uploads/2017/03/shu-Kosovo-Gjeravica-176687528-HrMiro-copy.jpg){width=60%}
+
+### Lock-down status of the Kosovo
+Since the first COVID-19 case was registered in Kosovo on 13 March 2020.The Kosovar government on  july 28 2020 imposed most of the previous lockdown measures, such as banning religious ceremonies and other activities, in an effort to prevent an alarming escalation of coronavirus cases.In these day the government ordered that public gatherings, including family traditional ceremonies and mass gathering of more than five people, were banned in squares or parks. Restaurants, cafes, night clubs cannot operate during 10.30 p.m. until 5 a.m.Citizens from neighboring Western Balkan countries where new virus cases had risen too need to present a negative virus test to enter the country.Citizens were advised to wear the mask in all closed buildings or spaces and institutions and companies should create the proper social distancing environment for the employees.
+While the number of new COVID-19 cases in Kosovo rose sharply in November 2020, with a weekly average of 715 new cases, the number started to significantly decline from mid-December. In January, Kosovo recorded a weekly average of 300 new cases, bringing the total number of reported cases to more than 58 000 since the beginning of the epidemic.Regarding measures put in place to help contain the spread of the virus, restrictions on freedom of movement remain in place across the country for people over the age of 65, who are only permitted to leave the house between 06:00-10:00 and 16:00-19:00. Weddings and religious ceremonies
+continue to be prohibited, while funerals may only be conducted with immediate family members.Since 23 December 2020 , controls at the borders also remain in force with both Kosovo citizens and most foreign nationals still required to present a negative PCR test when entering Kosovo, or undergo a seven-day self-isolation period following arrival.
+ On 15 January 2021, regulations governing public gatherings have, however, been relaxed throughout Kosovo. The number of people permitted to gather in public spaces such as parks, squares and recreational centers has been extended from four to fifty. With Kosovo’s parliamentary election scheduled for 14 February 2021, a special mention is also made for public rallies, which must be limited to
+50 persons.
+ Municipalities have continued to be designated as low, medium or high risk depending on the number of infected inhabitants (<75, 76-170, >150 infected individuals per 100 000 inhabitants respectively). 
+Depending on their classification, municipalities face different measures. In low and medium-risk municipalities, operating hours for businesses, shopping centers and cultural institutions have now
+been extended by two hours to between 05:00 and 22:00. In high-risk municipalities, a curfew remains in force but has been pushed back, now applying from 21:30 until 05:00.
+
+### Actions taken by the government 
+Acting Prime Minister announced that vaccinations against COVID-19 began in last February, with health professionals, people over the age of 65 and at-risk groups being the first to received the vaccine. Estimations are that 20 000 citizens will be vaccinated per day. Agreements were reached with Pfizer/BioNTech, COVAX, and the Austrian state to provide vaccines.
+
+![Kosovo's Health Minister Armend Zemaj says he has been kept in the dark about Serbia's supposed vaccination campaign](https://static.dw.com/image/56224026_303.jpg){width=40%}
+
+## **Exploratory Data analysis**
+```{r}
+Kosovo_corona<- as.data.frame(Kosovo_corona)
+head(Kosovo_corona)
+tail(Kosovo_corona)
+summary(Kosovo_corona)
+```
+
+Above table show as Kosovo_corona is consist of the number of confirmed, death and recovered covid-19 patients from 2020-01-22 to  2021-09-18 of the Kosovo and the location of the Kosovo country in the worlds map shown with it's latitude and longitude.It is located with 20.9 longitute and 42.6 latitude.
+
+
+### Visualization of death, confirmed, recovered, active cases 
+
+#### death cases
+
+```{r}
+death_cases <- filter(Kosovo_corona, type == "death")
+death_cases$cases[is.na(death_cases$cases)]<-mean(death_cases$cases,
+                                                          na.rm=TRUE)
+death_cases$cases<-round(death_cases$cases,digits=0)
+ggplot(death_cases,aes(x=date,y= cases))+ geom_path(size=1) + labs(title = "Death cases in Kosovo")
+```
+
+Above graph shows the death number of covid-19 patients in Kosovo in daily basis. It shows that number of death covid-19 patients has been increasing and  decreasing.Overall idea of the above graph,Higher death cases in country Kosovo  can be see since oct 2020 to june 2021.
+
+#### confirmed cases
+
+![Kosovo confirms first coronavirus cases](https://cdnuploads.aa.com.tr/uploads/Contents/2020/03/13/thumbs_b_c_c1e1072042a81867e102de53bf4dbf14.jpg?v=223129){width=60%}
+
+```{r}
+confirmed_cases <- filter(Kosovo_corona, type == "confirmed")
+confirmed_cases$cases[is.na(confirmed_cases$cases)]<-mean(confirmed_cases$cases,
+                                                          na.rm=TRUE)
+confirmed_cases$cases<-round(confirmed_cases$cases,digits=0)
+ggplot(confirmed_cases,aes(x=date,y= cases,colour = 'red')) + geom_path(size=1) + labs(title = "Confirmed cases in Kosovo")
+```
+
+Above graph shows the confirmed number of covid-19 patients in Kosovo in daily basis. It shows that number of confirmed covid-19 patients has been increasing and  decreasing.Overall idea of the above graph,Higher confirmed cases in country Kosovo  can be see since after oct 2020.
+
+#### recovered cases
+
+```{r}
+recovered_cases <- filter(Kosovo_corona, type == "recovered")
+recovered_cases$cases[is.na(recovered_cases$cases)]<-mean(recovered_cases$cases,
+                                                          na.rm=TRUE)
+recovered_cases$cases<-round(recovered_cases$cases,digits=0)
+ggplot(recovered_cases, aes(date,cases,colour=20)) + geom_path(size=1) + labs(title = "Recovered cases in Kosovo")
+```
+
+Above graph shows the recoverd number of covid-19 patients in Kosovo in daily basis. It shows that number of recoverd covid-19 patients has been increasing and  decreasing.Overall idea of the above graph,Higher recoverd cases in country Kosovo can be see since oct 2020 to jun 2021.
+
+#### active cases
+
+```{r}
+Kosovo_corona_wider<-Kosovo_corona%>%pivot_wider(names_from = "type",values_from = "cases")
+Kosovo_corona_wider<-Kosovo_corona_wider%>%mutate(active=cumsum(confirmed)-cumsum(death)-cumsum(recovered))
+Kosovo_corona_wider$active<-replace(Kosovo_corona_wider$active,Kosovo_corona_wider$active<0,0)
+ggplot(Kosovo_corona_wider, aes(date, active)) + geom_path(size=1) + labs(title = "Active cases in Kosovo")
+```
+
+Above graph shows the active number of covid-19 patients in Kosovo in daily basis. It shows that the number of active covid-19 patients has been increasing and  decreasing.Overall idea of the above graph,the higher active cases in country Kosovo can be see since oct 2020 to jun 2021.
+
+
+```{r}
+ggplot(Kosovo_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Kosovo")
+
+ggplot(Kosovo_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Confirmed, Death and Recovered cases in Kosovo")
+```
+
+Above graph shows the number of confirmed, death and recovered covid-19 patients in Kosovo in daily basis in the same graph. This graph shows that number of patients confirming with covid-19 in a day and number of covid-19 patients recovery in a day has still increased.But number of death cases has  still in the lower level over the time period comparing with  the number of patients confirming with covid-19 in a day. So,still the this situation has not controlled by the Kosovo and still the its spreading rapidly.
+
+```{r}
+Kosovo_corona<-  Kosovo_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(Kosovo_corona, aes(date, cum_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Total number of confirmed, death, recovered cases in Kosovo")
+```
+
+Above graph implies that the total number of covid-19 confirmed cases and covid-19 recovered cases has increased exponentially.Covid-19 recovered cases had parallely increased with Covid-19 confirmed cases over the time.covid-19 death cases has not showing any special characteristic according to above graph over the time.
+
+```{r}
+Kosovo_corona_spread <- spread(select(Kosovo_corona, 1,6,8), key = type, value = cum_cases)
+
+Kosovo_corona_spread$per_confirmed <- (Kosovo_corona_spread$confirmed / Kosovo_corona_spread$confirmed)*100
+Kosovo_corona_spread$per_death <- (Kosovo_corona_spread$death / Kosovo_corona_spread$confirmed)*100
+Kosovo_corona_spread$per_recovered <- (Kosovo_corona_spread$recovered / Kosovo_corona_spread$confirmed)*100
+
+Kosovo_corona_gather <- gather(Kosovo_corona_spread, key = "type_1" , value = "Per_cum_with_confirmed",5:7)
+
+Kosovo_corona <- cbind.data.frame(Kosovo_corona, select(Kosovo_corona_gather, 5,6))
+Kosovo_corona[is.na(Kosovo_corona)] <- 0
+
+ggplot(Kosovo_corona, aes(date, Per_cum_with_confirmed , colour = type)) + geom_path(size=1) +
+  labs(title = "Percentage of total death, recovered cases with confirmed cases in Kosovo")
+```
+
+Above graph implies the total number of covid-19 death and covid-19 recovered cases as a percentage with  total covid-19 confirmed cases in daily basis.
+This implies that percentage of total covid-19 recovered patients with the total number of covid-19 confirmed cases is increasing daily and it in a satisfactory level. Also the percentage of total number of covid-19 death cases with total number of covid-19 confirmed cases is  slowly increasing after 2021.
+
+### Comparison with other countries 
+
+```{r}
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(15, 30), ylim = c(35, 50)) +
+  scale_x_continuous(breaks = seq(15, 25,30)) +
+  scale_y_continuous(breaks = seq(35,45,50))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 3
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+
+```
+
+A landlocked country, Kosovo is bordered by Serbia to the north and east, North Macedonia to the south, Albania to the west, and Montenegro to the northwest. Kosovo, about the same size as Jamaica or Lebanon, is the smallest country in the Balkans.The above map implies the nearby countries to Kosovo.
+
+```{r}
+nearcountries <- subset.data.frame(coronavirus, ( 35< lat & lat < 50) & (15 < long & long < 30) )
+count(nearcountries,country)
+```
+
+The above table shows the list of nearly countries to Kosovo.
+
+```{r}
+nearest_countries <- filter(coronavirus, country == "Albania"|country =="Bosnia and Herzegovina"| country =="Bulgaria"| country =="Croatia"| country =="Czechia"|country =="Greece"|country =="Hungary"|country =="Kosovo"|country ==" Moldova"|country =="Montenegro"|country =="North Macedonia"|country =="Romania"|country =="Serbia"|country =="Slovakia")
+count(nearest_countries,country)
+```
+
+Above table shows,from the countries near Kosovo,which are in the continent Europe has been sorted to a new data frame for further analysis .
+
+
+```{r}
+p +
+  geom_point(
+    data = nearest_countries , aes(x = long, y = lat), color = "red", size
+    = 3
+  )  + geom_text(aes(x=nearest_countries$long, y=nearest_countries$lat, label=nearest_countries$country))
+```
+
+The above map was generated in order to confirm whether the countries near Kosovo,which are in the Europe continent is in the relevent dataframe. Therefore it can be concluded that the countries near Kosovo,which are in the Europe continent has been considered.
+
+```{r}
+confirmed_nearest_countries <- filter(nearest_countries, type == "confirmed")
+death_nearest_countries <- filter(nearest_countries, type == "death")
+recovered_nearest_countries <- filter(nearest_countries, type == "recovered")
+
+
+ggplot(death_nearest_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Death cases in the countries in Europe")
+
+```
+
+Above graph and treemap appear that daily death cases in Kosovo comparatively negligible when compared to other countries in the same continent.
+Romania,Hungary,Bulgaria,Czechia are the countries which have the high number of daily death cases in the country.
+
+
+```{r}
+ggplot(confirmed_nearest_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Confirmed cases in the countries in Europe")
+
+```
+
+Above graph and treemap appear that daily confirmed cases in Kosovo comparatively negligible when compared to other countries in the same continent.
+Romania,Serbia,Hungary,Czechia are the countries which have the high number of daily confirmed cases in the country.
+
+
+```{r}
+recovered_nearest_countries$cases[is.na(recovered_nearest_countries$cases)]<-mean(recovered_nearest_countries$cases,
+                                                          na.rm=TRUE)
+recovered_nearest_countries$cases<-round(recovered_nearest_countries$cases,digits=0)
+ggplot(recovered_nearest_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Recovered cases in the countries in Europe")
+
+```
+`
+
+Above graph and treemap appear that daily recovered cases in Kosovo comparatively negligible when compared to other countries in the same continent.
+Romania,Czechia,Hungary are the countries which have the high number of daily recovered cases in the country.
+
+```{r}
+ggplot(nearest_countries, aes(date, cases,colour = country)) + geom_path(size=0.5) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in Europe")
+
+```
+
+Kosovo is negligable when compared to other countries.
+
+```{r}
+count(nearest_countries, type)
+``` 
+
+```{r}
+nearest_countries <- nearest_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+nearest_countries
+```
+
+
+Above graph shows the table with total cases relevent to each type and country in daily basis. 
+
+```{r}
+ggplot(nearest_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases in Europe")
+ 
+```
+
+Above graph also express that total number of covid-19 confirmed, death and recovered patients in Kosovo in comparatively negligible when compared to the other countries in the same continent.
+
+```{r}
+ggplot(subset(nearest_countries,type == "death"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total number of death cases in nearest counties")
+```
+
+```{r}
+summary_df <- death_nearest_countries %>% 
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases)
+summary_df %>% head(20)
+```
+
+```{r}
+conf_df <- death_nearest_countries %>% 
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "death") %>%
+  ungroup() 
+  
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "death",
+          textinfo="label+value+percent parent")
+```
+
+
+Total number of death cases in Kosovo is higher than the country Montenegro and Albania but less than the countries near Kosovo,which are in the continent Europe.
+
+```{r}
+ggplot(subset(nearest_countries,type == "confirmed"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total number of confirmed cases in nearest counties")
+```
+
+```{r}
+summary_df <- confirmed_nearest_countries %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases)
+summary_df %>% head(20)
+```
+
+```{r}
+conf_df <- confirmed_nearest_countries %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "Confirmed") %>%
+  ungroup() 
+  
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "Confirmed",
+          textinfo="label+value+percent parent")
+```
+Above graph shows total number of confirmed cases in Kosovo is less than  the countries near Kosovo,which are in the continent Europe but the total number of confirmed cases in Kosovo is higher than the country Montenegr.
+
+```{r}
+ggplot(subset(nearest_countries,type == "recovered"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total number of recovered cases in nearest counties")
+```
+
+```{r}
+summary_df <- recovered_nearest_countries %>% 
+  filter(type == "recovered") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases)
+summary_df %>% head(20)
+```
+
+```{r}
+conf_df <- recovered_nearest_countries %>% 
+  filter(type == "recovered") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "recovered") %>%
+  ungroup() 
+  
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "recovered",
+          textinfo="label+value+percent parent")
+```
+Above graph represent,total number of recovered cases in Kosovo is higher than Serbia,Gress and Monatengro but less than  the other countries near Kosovo,which are in the continent Europe.
+
+```{r}
+corona_final <- filter(nearest_countries, date == "2020-11-19")
+corona_final_death <- filter(corona_final, type == "death" )
+corona_final_death 
+p + geom_point(data = corona_final_death, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_death$long, y=corona_final_death$lat, label=corona_final_death$country))+
+  labs(title = "Total no.of death cases as at 2020-11-19(mean quantile date)")
+```
+
+Above map exhibit that Kosovo has a low number of covid-19 death cases as at 19-11- 2020 comparing other countries near Kosovo,which are in the Europe continent.According to the above map Romania has a high number of covid-19 death
+cases at mean quantile date.
+ 
+```{r}
+corona_final_confirmed <- filter(corona_final, type == "confirmed" )
+corona_final_confirmed
+p + geom_point(data = corona_final_confirmed, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_confirmed$long, y=corona_final_confirmed$lat, label=corona_final_confirmed$country)) +
+  labs(title = "Total number of confirmed cases as at 2020-11-19(mean quantile date)")
+``` 
+
+Above map shows that Kosovo has a low number of covid-19 confirmed  cases as at 19-11-2020 comparing other countries near Kosovo,which are in the Europe continent.According to the above map Czechia has a higher number of covid-19 confirmed cases at mean quantile date. 
+
+
+```{r}
+corona_final_recovered <- filter(corona_final, type == "recovered")
+corona_final_recovered
+p + geom_point(data = corona_final_recovered, aes(x = long, y = lat, colour = cum_cases), size = 10) +
+  geom_text(aes(x=corona_final_recovered$long, y=corona_final_recovered$lat, label=corona_final_recovered$country)) +
+  labs(title = "Total no.of recovered cases as at 2020-11-19(mean quantile date)")
+```
+
+Above map shows that Kosovo has a low number of covid-19 recovered cases as at 19-11-2020 comparing other countries near Kosovo,which are in the Europe continent.According to the above map Czechia has a higher number of covid-19 recovered cases at mean quantile date.
+
+### Comparing between new cases and vaccination
+
+#### Kosovo Vaccine Process
+
+![A Kosovo health worker holds his arm after he was vaccinated with the AstraZeneca coronavirus vaccinae shots in the northern Albanian town of Kukes on Saturday, Mar 20, 2021](https://onecms-res.cloudinary.com/image/upload/s--6WdPrVRh--/c_fill%2Cg_auto%2Ch_468%2Cw_830/f_auto%2Cq_auto/virus-outbreak-albania-kosovo-37798-jpg-1616247083.jpg?itok=rS2EErFW){width=40%}
+
+
+```{r}
+data("covid19_vaccine")
+data("coronavirus")
+Kosovo_cases <- coronavirus %>% 
+  filter(country == "Kosovo", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "Kosovo") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+
+Kosovo_cases$people_fully_vaccinated[is.na(Kosovo_cases$people_fully_vaccinated)]<-mean(Kosovo_cases$people_fully_vaccinated,na.rm=TRUE)
+Kosovo_cases$people_fully_vaccinated<-round(Kosovo_cases$people_fully_vaccinated,digits=0)
+
+ head(Kosovo_cases)
+```
+```{r}
+tail(Kosovo_cases)
+````
+
+
+```{r}
+Kosovo_cases <- Kosovo_cases %>%
+  mutate(cases_normalized = (cases - min(cases)) / (max(cases) - min(cases)),
+         people_fully_vaccinated_normilized = (people_fully_vaccinated - min(people_fully_vaccinated, na.rm = TRUE)) / 
+           (max(people_fully_vaccinated, na.rm = TRUE) - 
+              min(people_fully_vaccinated, na.rm = TRUE)))
+
+head(Kosovo_cases)
+```
+
+```{r}
+tail(Kosovo_cases)
+```
+
+```{r}
+summary(Kosovo_cases)
+```
+
+```{r}
+plot_ly(data = Kosovo_cases,
+        x = ~ date,
+        y = ~ cases_normalized,
+        type = "scatter",
+        mode = "line",
+        name = "Daily Cases (Normalized)") %>%
+  add_lines(x = ~ date,
+            y = ~ people_fully_vaccinated_normilized,
+            name = "Fully Vaccinated - Aggregate (Normalized)") %>%
+  layout(title = "Kosovo - Daily New Cases vs. Total Vaccinated Population (Normalized)",
+         legend = list(orientation = 'h'),
+         yaxis = list(title = "Normalized Daily Cases/Total Vaccinated"),
+         xaxis = list(title = ""),
+         margin = list(b = 60))
+```
+
+According to above plot,the number of covid-19 daily new cases has been increasing and decreasing over the time same as the vaccination process in Kosovo has been increasing and decreasing over the time period.Accoring to the data ,4257 is the maximum daily new cases which was reported in Kosovo .399341 is the maximum daily vaccinated cases which was reported in Kosovo.
+
+
+## **Conclusions and Discussion**
+
+The COVID-19 pandemic, also colloquially known simply as coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The novel virus was first identified in Wuhan, China, in December 2019; a lockdown in Wuhan and other cities in Hubei province failed to contain the outbreak, and it spread to other parts of mainland China and around the world. The World Health Organization (WHO) declared a Public Health Emergency of International Concern on 30 January 2020, and a pandemic on 11 March 2020.
+
+Kosovo is the European Country.Kosovo was affected by covid -19 same as other countries.Since the first COVID-19 case was registered in Kosovo on 13 March 2020.
+Above information is consist of the number of confirmed, death and recovered covid-19 patients from 2020-01-22 to 2021-09-18 of the Kosovo.The number of death covid-19 patients,number of confirmed covid-19 patients,  number of recovered covid-19 patients have been increasing and decreasing in Kosovo these time period.
+Overall idea is the higher death cases in country Kosovo can be see since october 2020 to june 2021.Overall idea is the higher confirmed cases in country Kosovo can be see since after october 2020.Overall idea is the Higher recovered cases in country Kosovo can be see since october 2020 to jun 2021.The number of active covid-19 patients has been increasing and  decreasing in Kosovo.Overall idea of the above data,the higher active cases in country Kosovo can be see since october 2020 to june 2021.
+
+The number of patients confirming with covid-19 in a day and number of covid-19 patients recovery in a day has still increased.But number of death cases has still in the lower level over the time period comparing with the number of patients confirming with covid-19 in a day.
+ So,still the this situation has not controlled by the Kosovo and still the its spreading rapidly.The total number of covid-19 confirmed cases and covid-19 recovered cases has increased exponentially.Covid-19 recovered cases had parallely increased with Covid-19 confirmed cases over the time.
+ 
+covid-19 death cases has not showing any special characteristic over the time.The percentage of total covid-19 recovered patients with the total number of covid-19 confirmed cases is increasing daily and it in a satisfactory level. Also the percentage of total number of covid-19 death cases with total number of covid-19 confirmed cases is slowly increasing after 2021.
+	  
+The daily confirmed cases in Kosovo comparatively negligible when compared with other nearby countries in the same continent. Romania,Serbia,Hungary,Czechia are the countries which have the high number of daily confirmed cases in the country.Romania,Hungary, Bulgaria,Czechia are the countries which have the high number of daily death cases in the country and daily recovered cases in Kosovo comparatively negligible when compared to other countries in the same continent.Romania,Czechia,Hungary are the countries which have the high number of daily recovered cases in the country.
+
+Total number of confirmed cases in Kosovo is less than the countries near Kosovo,which are in the continent Europe but the total number of confirmed cases in Kosovo is higher than the country Montenegr.Total number of death cases in Kosovo is higher than the country Montenegro and Albania but less than the countries near Kosovo,which are in the continent Europe and total number of death cases in Kosovo is higher than Serbia,Gress and Monatengro but less than the other countries near Kosovo,which are in the continent Europe.
+
+Kosovo has a low number of covid-19 confirmed cases,death cases and recovered cases as at 19-11-2020 which is the mean quantile comparing other countries near Kosovo.
+Romania has a high number of covid-19 death cases at mean quantile date.Czechia has a higher number of covid-19 confirmed and recovered cases at mean quantile date.
+
+In Kosovo,the number of  covid-19 daily new cases has been increasing and decreasing over the time.According to the plot("Kosovo - Daily New Cases vs. Total Vaccinated Population (Normalized)"),highest number of covid-19 daily cases have confirmed in 29th march 2021.The vaccination process in Kosovo has been increasing and decreasing over the time period.According to the data ,4257 is the maximum daily new cases which was reported in Kosovo .399341 is the maximum daily vaccinated cases which was reported in Kosovo.
+
+
+![Covid-19: Kosovo during pandemic COVID-19](https://www.freiheit.org/sites/default/files/styles/uv_full_content_16_9/public/import/2020-06/23117-coronavirus-kosovo-750x375.jpg.jpeg?itok=F0NvuiLN){width=60%}
+
+
+## **References**
+ + https://kosovo-mining.org/kosovo/climatic-conditions/?lang=en
+ 
+ + https://www.rdocumentation.org/packages/maptools/versions/1.1-2/topics/wrld_simpl
+ 
+ + https://stackoverflow.com/questions/22038640/labeling-center-of-map-polygons-in-r-ggplot
+ 
+ + https://www.britannica.com/place/Kosovo
+ 
+ + https://apnews.com/article/virus-outbreak-religion-travel-international-news-sports-9456102fcf942d9e476c9000a1591a59
+ 
+ + https://www.oecd.org/south-east-europe/COVID-19-Crisis-in-Kosovo.pdf
+ 
+ + https://community.rstudio.com/t/rmarkdown-color-text/34382
+ 
+ + https://www.r-bloggers.com/2021/05/partial-dependence-plots-with-tidymodels-and-dalex-for-tidytuesday-mario-kart-world-records/
+ 
+ + https://lrouviere.github.io/VISU/pres_dataviz.pdf
+ 
+ + https://stackoverflow.com/questions/8161836/how-do-i-replace-na-values-with-zeros-in-an-r-dataframe
+ 
+ + https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd
+

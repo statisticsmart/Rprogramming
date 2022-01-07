@@ -1,0 +1,427 @@
+---
+title: "GERMANY COVID-19 ANALYSIS"
+author: "N.H.Wedisinghe, AS2018571"
+
+date: "9/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE , warning = FALSE)
+```
+# 1 Introduction
+
+Coronavirus disease 2019 (COVID-19) is defined as illness caused by a novel coronavirus called severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2; formerly called 2019-nCoV), which was first identified amid an outbreak of respiratory illness cases in Wuhan City, Hubei Province, China.  It was initially reported to the World Health Organization (WHO) on December 31, 2019. On January 30, 2020, the WHO declared the COVID-19 outbreak a global health emergency.  On March 11, 2020, the WHO declared COVID-19 a global pandemic, its first such designation since declaring H1N1 influenza a pandemic in 2009.    
+
+Illness caused by SARS-CoV-2 was termed COVID-19 by the WHO, the acronym derived from "coronavirus disease 2019. " The name was chosen to avoid stigmatizing the virus's origins in terms of populations, geography, or animal associations.
+
+```{r, echo=FALSE}
+library(knitr)
+knitr::include_graphics("image.jpg")
+```
+
+### 1.1 Visualization of the location
+
+Germany , officially the Federal Republic of Germany, is a country in Central Europe. It is the second-most populous country in Europe after Russia, and the most populous member state of the European Union. Germany is situated between the Baltic and North seas to the north, and the Alps to the south; covering an area of 357,022 square kilometres (137,847 sq mi), with a population of over 83 million within its 16 constituent states. It borders Denmark to the north, Poland and the Czech Republic to the east, Austria and Switzerland to the south, and France, Luxembourg, Belgium, and the Netherlands to the west. The nation's capital and largest city is Berlin, and its financial centre is Frankfurt; the largest urban area is the Ruhr.
+
+```{r, echo=FALSE}
+library(magrittr)
+library(leaflet)
+leaflet() %>%
+  setView(lng = 10.5, lat = 52.3, zoom = 6) %>%
+  addProviderTiles(providers$Esri.WorldGrayCanvas)%>% #to get gray canvas map
+  addMarkers(lng=10.5, lat=51.2, popup="Germany")
+```
+
+### 1.2 Climate
+
+Most of Germany has a temperate climate, ranging from oceanic in the north to continental in the east and southeast. Winters range from the cold in the Southern Alps to mild and are generally overcast with limited precipitation, while summers can vary from hot and dry to cool and rainy. The northern regions have prevailing westerly winds that bring in moist air from the North Sea, moderating the temperature and increasing precipitation. Conversely, the southeast regions have more extreme temperatures.
+
+From February 2019 – 2020, average monthly temperatures in Germany ranged from a low of 3.3 °C (37.9 °F) in January 2020 to a high of 19.8 °C (67.6 °F) in June 2019. Average monthly precipitation ranged from 30 litres per square metre in February and April 2019 to 125 litres per square metre in February 2020. Average monthly hours of sunshine ranged from 45 in November 2019 to 300 in June 2019. The highest temperature ever recorded in Germany was 42.6 °C on 25 July 2019 in Lingen and the lowest was −37.8 °C on 12 February 1929 in Wolnzach.
+
+### 1.3 Lock-down status and Actions taken by the government
+
+At present day there are no lock downs in Germany but, the Federal Cabinet last decided on 22 September to extend the regulation on entry quarantine up to and including 10 November 2021. 
+
+Since 28 July:
+
+- People entering the country from a new virus variant area can now end their mandatory 14-day quarantine early with a negative Corona test, provided the region they are coming from is downgraded to a risk area or a high-incidence area during the quarantine period. Early free testing is otherwise not possible for people entering Germany.
+
+- Those who have full vaccination protection can then end their quarantine by sending the vaccination certificate if the Robert Koch Institute determines and publishes on its website that this vaccine is sufficiently effective against the virus variant that led to the area being classified as a virus variant area.
+
+Almost all countries in the world are still affected by the COVID-19 pandemic. Travel and border traffic can contribute to the faster spread of the corona virus in Germany and to the emergence of new foci of infection. The aim of the Corona Virus Entry Ordinance is to prevent this.
+
+Since mid-May, the ordinance has brought together the various elements on the topic of entry in a uniform and comprehensive manner throughout Germany. It regulates the registration, testing and verification obligations as well as the quarantine regulations after entry. 
+
+# 2  Exploratory Data Analysis
+
+
+```{r,echo=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+covid.data <-as_tibble(coronavirus)
+
+
+#make neative values positive
+covid.data$cases <- abs(covid.data$cases)
+
+
+
+#this is for getting covid data acording to the country
+get.country.covid.data <- function(x){ 
+  covid.data %>% filter(country==x)
+}
+#this is for getting covid data acording to the country and type
+get.country.covid.data.byType<- function(k,l){ 
+  covid.data %>% filter(country == k ,type==l)
+}
+
+covid.data.germany <- get.country.covid.data("Germany")
+
+
+
+#now we remove NA valus from germany
+covid.data.germany<-covid.data.germany%>%drop_na(last_col())
+
+covid.data.germany.death<-get.country.covid.data.byType("Germany","death")%>%drop_na(last_col())
+covid.data.germany.recovered<-get.country.covid.data.byType("Germany","recovered")%>%drop_na(last_col())
+covid.data.germany.confirmed<-get.country.covid.data.byType("Germany","confirmed")%>%drop_na(last_col())
+
+```
+For this analysis we consider the Corona virus data set of Germany  from 2020-01-22 to 2021-09-18. It contains  the daily summary of Corona virus cases (confirmed cases , death cases, and recovered cases).
+
+### 2.1 Analysis of Germany
+
+
+```{r,echo=FALSE,eval=FALSE}
+library(kableExtra)
+head(covid.data.germany) %>%
+  kbl() %>%
+  kable_styling()
+```
+
+###### Table 01: Covid cases summary in Germany according to each case type
+
+```{r,echo=FALSE}
+library(kableExtra)
+sumary<-covid.data.germany %>%
+  group_by(type) %>%
+  summarise(
+   
+    minimum = min(cases),
+    first_Qu = quantile(cases,0.25),
+    median=median(cases),
+    mean = mean(cases),
+    third_Qu=quantile(cases,0.75),
+    maximum= max(cases)
+  )
+
+
+sumary %>%
+  kbl() %>%
+  kable_styling()
+```
+This table shows the summary according to each case in Germany per day.Maximum number of confirmed cases recorded in a day is 49044.In average 154 persons lost their life to the disease
+
+###### Figure 01: Time series plot for daily covid cases
+```{r,echo=FALSE}
+#we get con, deth,rec cases to new column
+covid.data.germany.wide <-pivot_wider(covid.data.germany, names_from = type, values_from = cases)
+covid.data.germany.wide$cu_active<-cumsum(covid.data.germany.wide$confirmed)-cumsum(covid.data.germany.wide$death)-cumsum(covid.data.germany.wide$recovered)
+covid.data.germany.wide<-covid.data.germany.wide
+
+
+#we ge the thime seres plot for those 3 columns using plotly
+figure <- plot_ly(covid.data.germany.wide, type = 'scatter', mode = 'lines')%>%
+  add_trace(x = ~date, y = ~death, name = 'death',line = list(color = 'rgb(12,185,94)'))%>%
+  add_trace(x = ~date, y = ~confirmed, name = 'confirmed',line = list(color = 'rgb(103,78,167)'))%>%
+  add_trace(x = ~date, y = ~recovered, name = 'recovered',line = list(color = 'rgb(255,165,0)'))%>%
+
+  layout(showlegend = T, title='Daily cases of germany', yaxis = list (title = "number of cases"),
+         xaxis = list(title = "date"))
+figure
+
+
+```
+
+
+
+
+###### Figure 02: confirmed cases , death cases, and recovered cases for each day
+```{r,echo=FALSE}
+f1 <- plot_ly(covid.data.germany.wide, type = 'scatter', mode = 'markers',x = ~date, y = ~confirmed, name = 'confirmed cases') 
+f2 <- plot_ly(covid.data.germany.wide, type = 'scatter', mode = 'markers',x = ~date, y = ~death, name = 'death cases') 
+f3 <-plot_ly(covid.data.germany.wide, type = 'scatter', mode = 'markers',x = ~date, y = ~recovered, name = 'recovered cases') 
+f4<- subplot(f1, f2, f3, nrows = 3) %>% 
+  layout(yaxis=list(type='linear'))
+f4
+```
+
+Since COVID-19  pandemic started there is a small spike in April 2020. We can consider this as the first wave. Confirmed cases went up to 7000  in a day. Similarly we can see the similar number of recovered cases in this time.
+We see the biggest spike in confirmed cases and deaths between Oct 2020-jun 2021 .Most number of confirmed cases recorded in DEC 30 2020.Most number of deaths recorded in Jan 19 2021 which is 1734 deaths.
+Since jun 2021 COVID-19 confirmed cases have decreased less than 4000 a day.After August 2021 there is increased number of COVID-19 cases up to now
+
+###### Figure 03: Total death cases for each day
+```{r,echo=FALSE}
+figur <- plot_ly()%>%
+  add_trace(covid.data.germany.death,x = ~covid.data.germany.death$date, 
+            y = ~cumsum(covid.data.germany.death$cases), name = 'Germany death', type = 'scatter', mode = 'lines',fill = 'tozeroy')%>%
+ 
+  
+  layout(showlegend = T, title='Total death cases of  Germany', yaxis = list (title = "numbaer of death cases"),
+         xaxis = list(title = "date"))
+figur
+```
+
+Covid 19 deaths has started to increase since April 2020. We can see a rapid increase of deaths from January 2021 to July 2021.There are 93,204 total number of death cases recorded up to the last day of the data set.
+
+
+###### Figure 04: Total Active cases for each day
+```{r,echo=FALSE}
+#ACTIVE cases
+figurex <- plot_ly()%>%
+  add_trace(covid.data.germany.wide,x = ~covid.data.germany.wide$date, 
+            y = ~covid.data.germany.wide$cu_active, name = 'Germany Active cases', type = 'scatter', mode = 'line',line = list(color = 'rgb(255,0,0)'))%>%
+  
+  layout(showlegend = T, title='Total Actve cases of germany daily', yaxis = list (title = "numbaer of Active cases"),
+         xaxis = list(title = "date"))
+figurex
+```
+
+According Figure 04 we can see  that active cases have peaked in December 2020 and again in April 2021 from then onwards total active cases rapidly decrease. For the final date there are 26,932 active cases in Germany.
+
+
+### 2.2 Comparison with Poland
+
+Poland is a neighboring country to Germany.Hence this section shows the COVID-19 situation of Germany when compared to Poland.
+
+
+###### Figure 05: Daily Confirmed Cases between Germany and Poland
+```{r,echo=FALSE}
+covid.data.poland.death<-get.country.covid.data.byType("Poland","death")%>%drop_na(last_col())
+covid.data.poland.recovered<-get.country.covid.data.byType("Poland","recovered")%>%drop_na(last_col())
+covid.data.poland.confirmed<-get.country.covid.data.byType("Poland","confirmed")%>%drop_na(last_col())
+
+#Poland vs Germany
+figure3 <- plot_ly()%>%
+  add_trace(covid.data.germany.confirmed,x = ~covid.data.germany.confirmed$date, 
+            y = ~covid.data.germany.confirmed$cases, name = 'Germany confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.poland.confirmed,x = ~covid.data.poland.confirmed$date,
+            y = ~covid.data.poland.confirmed$cases, name = 'Poland confirmed', type = 'scatter', mode = 'lines')%>%
+  
+  layout(showlegend = T, title='Daily confirmed cases between Germany and Poland', yaxis = list (title = "numbaer of recovered cases"),
+         xaxis = list(title = "date"))
+figure3
+
+```
+
+According to Figure 05 we can see that between march 2020 and jun 2020 there is a big spike in corona cases in Germany. after October 2020 both countries showed an increase of COVID-19 cases until June 2021, after that Poland has very low number of COVID-19 cases but from August 2020 there is a increase of COVID-19 cases in Germany.
+
+###### Figure 06: Total deaths upto today  between Germany and Poland
+```{r,echo=FALSE}
+
+figure1 <- plot_ly()%>%
+  add_trace(covid.data.germany.death,x = ~covid.data.germany.death$date, 
+            y = ~cumsum(covid.data.germany.death$cases), name = 'Germany death', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.poland.death,x = ~covid.data.poland.death$date,
+            y = ~cumsum(covid.data.poland.death$cases), name = 'Poland death', type = 'scatter', mode = 'lines')%>%
+  
+  layout(showlegend = T, title='death cases of poland and Germany', yaxis = list (title = "numbaer of confirmed cases"),
+         xaxis = list(title = "date"))
+figure1
+```
+
+Number of deaths has a rapid increase from December 2020 to may 2021 .Upto this day there are more than 15000 difference in death cases between Poland and Germany , with total death cases of Poland being lower .
+
+### 2.3 Comparison with other neighboring countries
+
+Here we compare Germany with other neighboring countries such as Austria and Switzerland.
+
+###### Figure 07: Daily cases between Germany,Austria and Switzerland
+```{r,echo=FALSE}
+#data from Austria
+covid.data.Austria.death<-get.country.covid.data.byType("Austria","death")%>%drop_na(last_col())
+covid.data.Austria.recovered<-get.country.covid.data.byType("Austria","recovered")%>%drop_na(last_col())
+covid.data.Austria.confirmed<-get.country.covid.data.byType("Austria","confirmed")%>%drop_na(last_col())
+
+#data from Swis
+covid.data.Switzerland.death<-get.country.covid.data.byType("Switzerland","death")%>%drop_na(last_col())
+covid.data.Switzerland.recovered<-get.country.covid.data.byType("Switzerland","recovered")%>%drop_na(last_col())
+covid.data.Switzerland.confirmed<-get.country.covid.data.byType("Switzerland","confirmed")%>%drop_na(last_col())
+
+
+figure11 <- plot_ly()%>%
+  add_trace(covid.data.germany.confirmed,x = ~covid.data.germany.confirmed$date, 
+            y = ~covid.data.germany.confirmed$cases, name = 'Germany confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.Austria.confirmed,x = ~covid.data.Austria.confirmed$date,
+            y = ~covid.data.Austria.confirmed$cases, name = 'Austria confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.Switzerland.confirmed,x = ~covid.data.Switzerland.confirmed$date,
+            y = ~covid.data.Switzerland.confirmed$cases, name = 'Switzerland confirmed', type = 'scatter', mode = 'lines')%>%
+  
+  layout(showlegend = T, title='Daily Confirmed cases', yaxis = list (title = "numbaer of confirmed cases"),
+         xaxis = list(title = "date"))
+figure11
+
+
+```
+
+Between Austria and Switzerland and Germany still Germany has higher confirmed cases daily according to our data.since October 2020 to may 2021 there number of COVID-19 cases reported are much higher in Germany comparing to other two countries.
+
+
+
+According to the Figure 08 we can elaborate that large number of people have recovered from COVID-19 in Germany and other neighboring countries.
+
+###### Figure 08: Recovered and death cases of Germany,Austria,Poland and Switzerland
+```{r,echo=FALSE}
+#bar chart of death and recovered cases
+figurey <- plot_ly()%>%
+  add_trace(covid.data.germany.recovered,x = ~covid.data.germany.recovered$country, 
+            y = ~covid.data.germany.recovered$cases, name = 'Germany recovered cases', type = 'bar',marker = list(color = 'rgb(236,129,17)'))%>%
+  add_trace(covid.data.germany.death,x = ~covid.data.germany.death$country, 
+            y = ~covid.data.germany.death$cases, name = 'Germany Death cases', type = 'bar',marker = list(color = 'rgb(77, 77, 255)')
+)%>%
+  
+  
+  add_trace(covid.data.Austria.recovered,x = ~covid.data.Austria.recovered$country, 
+            y = ~covid.data.Austria.recovered$cases, name = 'Austria recovered cases', type = 'bar',marker = list(color = 'rgb(236,129,17)'))%>%
+  add_trace(covid.data.Austria.death,x = ~covid.data.Austria.death$country, 
+            y = ~covid.data.Austria.death$cases, name = 'Austria death cases', type = 'bar',marker = list(color = 'rgb(77, 77, 255)')
+)%>%
+  
+  
+  add_trace(covid.data.Switzerland.recovered,x = ~covid.data.Switzerland.recovered$country, 
+            y = ~covid.data.Switzerland.recovered$cases, name = 'Switzerland recovered cases', type = 'bar',marker = list(color = 'rgb(236,129,17)'))%>%
+  add_trace(covid.data.Switzerland.death,x = ~covid.data.Switzerland.death$country, 
+            y = ~covid.data.Switzerland.death$cases, name = 'Switzerland death cases', type = 'bar',marker = list(color = 'rgb(77, 77, 255)')
+)%>%
+  
+  
+  add_trace(covid.data.poland.recovered,x = ~covid.data.poland.recovered$country, 
+            y = ~covid.data.poland.recovered$cases, name = 'poland recovered cases', type = 'bar',marker = list(color = 'rgb(236,129,17)'))%>%
+  add_trace(covid.data.poland.death,x = ~covid.data.poland.death$country, 
+            y = ~covid.data.poland.death$cases, name = 'poland confirmed cases', type = 'bar',marker = list(color = 'rgb(77, 77, 255)')
+)%>%
+  
+  layout(showlegend = T, title='death and recovered cases', yaxis = list (title = "numbaer of confirmed cases"),
+         xaxis = list(title = "date"),barmode = 'stack')
+
+figurey
+```
+
+### 2.4 Comparison with other non Europian countries
+
+In previous sections we considered about neighboring countries to Germany in this section we are going to compare Germany with non European countries like India , Singapore,Mexico and Sri Lanka.
+
+###### Figure 09: Total number of deaths in Germany,Sri Lanka,India and Singapore
+
+```{r,echo=FALSE}
+#data from srilanka
+covid.data.SriLanka.death<-get.country.covid.data.byType("Sri Lanka","death")%>%drop_na(last_col())
+covid.data.SriLanka.recovered<-get.country.covid.data.byType("Sri Lanka","recovered")%>%drop_na(last_col())
+covid.data.SriLanka.confirmed<-get.country.covid.data.byType("Sri Lanka","confirmed")%>%drop_na(last_col())
+
+#data from India
+covid.data.India.death<-get.country.covid.data.byType("India","death")%>%drop_na(last_col())
+covid.data.India.recovered<-get.country.covid.data.byType("India","recovered")%>%drop_na(last_col())
+covid.data.India.confirmed<-get.country.covid.data.byType("India","confirmed")%>%drop_na(last_col())
+
+#data from singapore
+covid.data.Singapore.death<-get.country.covid.data.byType("Singapore","death")%>%drop_na(last_col())
+covid.data.Singapore.recovered<-get.country.covid.data.byType("Singapore","recovered")%>%drop_na(last_col())
+covid.data.Singapore.confirmed<-get.country.covid.data.byType("Singapore","confirmed")%>%drop_na(last_col())
+
+#data from mexico
+covid.data.Mexico.death<-get.country.covid.data.byType("Mexico","death")%>%drop_na(last_col())
+covid.data.Mexico.recovered<-get.country.covid.data.byType("Mexico","recovered")%>%drop_na(last_col())
+covid.data.Mexico.confirmed<-get.country.covid.data.byType("Mexico","confirmed")%>%drop_na(last_col())
+
+figure11212 <- plot_ly()%>%
+  add_trace(covid.data.germany.death,x = ~covid.data.germany.death$date, 
+            y = ~cumsum(covid.data.germany.death$cases), name = 'Germany death', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.India.death,x = ~covid.data.India.death$date,
+            y = ~cumsum(covid.data.India.death$cases), name = 'India death', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.SriLanka.death,x = ~covid.data.SriLanka.death$date,
+            y = ~cumsum(covid.data.SriLanka.death$cases), name = 'SriLanka death', type = 'scatter', mode = 'lines')%>%
+   add_trace(covid.data.Singapore.death,x = ~covid.data.Singapore.death$date,
+            y = ~cumsum(covid.data.Singapore.death$cases), name = 'Singapore death', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.Mexico.death,x = ~covid.data.Mexico.death$date,
+            y = ~cumsum(covid.data.Mexico.death$cases), name = 'Mexico death', type = 'scatter', mode = 'lines',line = list(color = 'rgb(0,0,0)'))%>%
+  
+  layout(showlegend = T, title='Total deaths of germany and non europian countries', yaxis = list (title = "numbaer of confirmed cases"),
+         xaxis = list(title = "date"))
+figure11212
+```
+
+This elaborates that total number of deaths are lower in Germany than in India and Mexico up to now but population of India is higher than the population of Germany. 
+But when we compare the stats to Sri Lanka,Germany still have higher number of deaths, but we should not forget that the population difference plays a role in here.
+When we look at stats form Singapore we can see that Singapore has the lowest total deaths (59 deaths) comparing to total deaths of Germany (93k deaths).
+
+###### Figure 10: Daily cases between Germany,Sri Lanka,India and Singapore
+```{r,echo=FALSE}
+
+figure112123 <- plot_ly()%>%
+ add_trace(covid.data.germany.confirmed,x = ~covid.data.germany.confirmed$date, 
+            y = ~covid.data.germany.confirmed$cases, name = 'Germany confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.India.confirmed,x = ~covid.data.India.confirmed$date,
+            y = ~covid.data.India.confirmed$cases, name = 'India confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.SriLanka.confirmed,x = ~covid.data.SriLanka.confirmed$date,
+            y = ~covid.data.SriLanka.confirmed$cases, name = 'SriLanka confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.Singapore.confirmed,x = ~covid.data.Singapore.confirmed$date,
+            y = ~covid.data.Singapore.confirmed$cases, name = 'Singapore confirmed', type = 'scatter', mode = 'lines')%>%
+  add_trace(covid.data.Mexico.confirmed,x = ~covid.data.Mexico.confirmed$date,
+            y = ~covid.data.Mexico.confirmed$cases, name = 'Mexico confirmed', type = 'scatter', mode = 'lines',line = list(color = 'rgb(255,165,0)'))%>%
+  
+  layout(showlegend = T, title='Daily confirmed cases of germany and non europian countries', yaxis = list (title = "numbaer of confirmed cases"),
+         xaxis = list(title = "date"))
+figure112123
+```
+
+When comparing with India daily confirmed cases are lower in Germany almost every day.But Sri Lanka and Singapore have lower daily confirmed cases that Germany, Singapore being the lowest.
+
+# 3 Conclusions and Discussion
+
+Germany corona virus data set  obtained by given coronavirus data set.there are null values and minus values in the original data set.NA values were removed from the data set and we turn minus values to positive values by the assumption of them being data entry errors.
+In section 2.2 we discuss COVID-19 situation between Germany and Poland because those two countries are similar in population and size.
+Section 2.3 we compare Germany with other neighboring countries like Austria and Switzerland.
+Then we take the comparison of Germany with non European countries ,Singapore was selected beach they have best medical facilities in the world,India and mexico was selected because of those countries had higher  impact due to COVID-19 pandemic.
+Sri lanka is hand picked to comparison due to relevance.
+
+
+In April 2020 Germany started to show increase of confirmed cases we can consider this period march to may 2020 is the fist COVID-19 wave in Germany. After that number of COVID-19 cases were low until September 2020 since after that there is a rapid increase of cases until June 2021 we can consider this time period to be the second COVID-19 wave.
+In second wave period Germany experienced heavy damage.since early August up-to now there are increase number of cases ,hence we can conclude that Germany is experiencing third COVID-19 wave as of now.
+
+During the first COVID-19 wave in Germany neighboring countries like Austria,Poland,Switzerland did not have severe impact due to COVID-19.
+From the second wave all these countries had severe impact
+Neighboring countries managed to contain the outbreak and to avoid the 3rd wave unlike Germany.
+
+When we compare to a the non European country like Singapore that is equally developed country to Germany, we can conclude that Germany's prevention methods were not optimal.
+
+
+
+In conclusion, it can be said that currently Germany does not stands at a much favorable stage regarding the COVID-19 Pandemic when compared to most countries despite it being significantly affected in the earlier months.
+The German Government  has been able to apply many successful public health response strategies to stop deaths due to COVID-19. 
+The main shortcoming is that the current COVID-19 cases have increase bit much and it leads to question the effectiveness of the government’s public health strategies in Germany.
+
+
+# 4 References
+
+Wikipedia contributors. (2021, September 25). Germany. In Wikipedia, The Free Encyclopedia. Retrieved 14:42, September 26, 2021, from https://en.wikipedia.org/w/index.php?title=Germany&oldid=1046421385
+
+https://www.deutschland.de/en/news/german-federal-government-informs-about-the-corona-crisis
+
+https://plotly.com/r/
+
+https://bookdown.org/yihui/rmarkdown/
+
+Xie, Yihui. 2015. Dynamic Documents with R and Knitr. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. https://yihui.name/knitr/.
+
+
+https://hellor.netlify.app/slides/l92021.html#1
+
+https://www.who.int/health-topics/coronavirus#tab=tab_1
+
+https://emedicine.medscape.com/article/2500114-overview
+
+https://www.computerworld.com/article/2486425/business-intelligence-4-data-wrangling-tasks-in-r-for-advanced-beginners.html

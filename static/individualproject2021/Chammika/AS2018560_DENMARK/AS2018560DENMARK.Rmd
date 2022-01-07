@@ -1,0 +1,414 @@
+---
+title: "COVID - 19 DATA ANALYSIS- DENMARK"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,comment=NA, message=FALSE, warning=FALSE)
+```
+
+# 1. Introduction
+
+The COVID-19 pandemic simply konwn  as coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). Most people infected with the virus will experience mild to moderate respiratory illness and recover without having need of special treatment. However, some will become seriously ill and require medical attention. The best way to prevent and slow down transmission is to be well informed about the disease and how the virus spreads.Therefore,Within this article, we are going to provide an overview of the covid - 19 situation in Denmark by analyzing the data.
+
+
+![](figure 1.jpg)
+
+### Visualization of the location
+
+Denmark is a country in northern Europe. It is made up of the Jutland Peninsula and more than 400 islands in the North Sea. Neighboring countries include Germany, Norway, and Sweden. Denmark is located southwest of Sweden and due south of Norway and is bordered by the German state (and former possession) Schleswig-Holstein to the south, on Denmark's only land border, 68 kilometers (42 miles) long.  The land area of Denmark is estimated to be 43,094 km2 (16,639 sq mi). Denmark has a strategic location controlling the Danish Straits that link the Baltic and North Seas. The country’s capital, Copenhagen, is located primarily in Zealand, the second-largest city, Århus, is the major urban center of Jutland.
+
+
+```{r,eval=FALSE }
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2018560")
+
+```
+
+
+```{r}
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(skimr)
+library(plyr)
+library(gganimate)
+library(gifski)
+library(ggplot2)
+library(plotly)
+library(lubridate)
+library(gganimate)
+
+```
+
+
+
+```{r, fig.align='center', out.width="80%", comment=NA, message=FALSE, warning=FALSE}
+denmark_corona <- coronavirus %>% filter(country == "Denmark")
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = denmark_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+### Climate condition
+
+
+  Due to its location in the middle of several seas, Denmark has a temperate oceanic climate, meaning the summers are generally cool and the winters are never extremely cold. 
+  
+Denmark's mean temperature in the coldest month, February, is 34 degrees Fahrenheit (zero degrees Celsius) and in the warmest month of July, it's 64 degrees Fahrenheit (17 degrees Celsius), although wind gusts and shifts in wind direction can drastically change the weather any time of year. Summers are mild, featuring episodes of cloudy weather interrupted by sunny days. The mean temperature in July, which is the warmest month, is approximately 60 °F (16 °C).
+
+Rain in Denmark comes on a regular basis year-round, and there are no truly dry periods, although September through November brings the wettest season. The annual rainfall in Denmark averages 24 inches of precipitation with Copenhagen having an average of 170 rainy days. 
+Lakes may freeze and snow frequently falls during the cold winters, yet the mean temperature in February, the coldest month, is about 32 °F (0 °C), which is roughly 12 °F (7 °C) higher than the worldwide average for that latitude. 
+
+
+
+
+```{r,fig.show='hold', fig.cap="Left: Climate chart of Copenhagen.From https://en.wikipedia.org/wiki/Geography_of_Denmark; Right: Climate of Denmark according to the Köppen climate classification from https://en.wikipedia.org/wiki/Geography_of_Denmark." , out.width="50%"}
+
+knitr::include_graphics(c("figure2.png","figure3.png"))
+
+```
+
+
+### Lock-down status and Actions taken by the government
+
+
+  Denmark is a developed, industrialized country wherein the nation and different public governments exercising tremendous regulatory manage with inside the social sphere, presenting complete offerings and advantages to all citizens. By worldwide requirements, Denmark has one of the maximum requirements of living than in most of the worldwide locations.
+  
+The COVID-19 pandemic in Denmark is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first confirmed case of Denmark was reported on 27th February 2020. It was a man from Roskilde who had been skiing in Lombardy, Italy, and returned to Denmark on 24 February. Within the next day, he got a positive for the coronavirus test. Five people that had visited northern Italy and one person who visited the Iran covid test were positive on the 3rd of March 2020. All six were placed in-home quarantine.When 5th march 2020, there were five new confirmed cases. One of the cases was former Danish national football player Thomas Kahlenberg.On 9 March, there were 53 new confirmed cases, bringing the total in Denmark to 90. On 10 March, there were 172 new cases, bringing the total in Denmark to 262. Among the new cases was one patient admitted to the hospital, bringing the total to seven.
+
+  Starting on 13 March 2020, all people working in non-essential functions in the public sector were ordered to stay home for two weeks. On that same date, all secondary education (like gymnasiums), universities, libraries, indoor cultural institutions, and similar places were closed, initially for two weeks. Starting on 16 March, all primary schools, daycares, and similar places were also closed for two weeks. Virtual (online) schooling was used to some degree.
+Starting on 18 March at 10:00 AM, several further restrictions were activated. It became illegal to assemble more than ten people in public, all shopping centers and stores with close contact such as hairdressers and nightclubs must be closed, restaurants can only serve takeaway, and other businesses must ensure that there is enough space between customers.
+
+  Denmark is reporting 351 new infections on average each day, 10% of the peak — the highest daily average reported on December 18, 2020.
+There have been 357,370 infections and 2,646 coronavirus-related deaths reported in the country since the pandemic began.
+
+**Vaccination**
+
+  Denmark has administered at least 8,765,351 doses of COVID vaccines so far. Assuming every person needs 2 doses, that’s enough to have vaccinated about 75.3% of the country’s population.
+
+
+
+
+
+
+
+
+
+
+# 2. Exploratory Data Analysis
+
+###  Description of the data set
+
+This analysis has been done by using the coronavirus data set which can access easily as an installed package in R studio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus. In this report, we are going to give an overview analysis of Denmark. Every dataset has data per day and it gives a daily summary for that day. 498132 data sets are in different countries. This is the summary of coronavirus data set.
+
+*Summary of the coronavirus data set*            
+
+
+```{r}
+summary(coronavirus)
+```
+
+### **Covid -19 data analysis of Denmark by death, confirmed, recovered, and active cases **
+
+```{r}
+
+C_v<- coronavirus %>% mutate(cases.abs =abs(cases))
+C_v_wider<-C_v %>% pivot_wider(names_from = type, values_from = cases.abs)
+
+coronavirus_widwer<-C_v_wider
+
+```
+
+```{r}
+Confirmed_corona_denmark <- select(coronavirus_widwer,date,country,confirmed) %>%filter(country=="Denmark")
+Confirmed_Denmark<-aggregate(Confirmed_corona_denmark["confirmed"], by=Confirmed_corona_denmark["date"], sum, na.rm=TRUE)
+
+
+Recovered_corona_denmark <- select(coronavirus_widwer,date,country,recovered) %>%filter(country=="Denmark")
+Recovered_denmark<-aggregate(Recovered_corona_denmark["recovered"], by=Recovered_corona_denmark["date"], sum, na.rm=TRUE)
+
+
+Death_corona_denmark <- select(coronavirus_widwer,date,country,death) %>%filter(country=="Denmark")
+Death_denmark<-aggregate(Death_corona_denmark["death"], by=Death_corona_denmark["date"], sum, na.rm=TRUE)
+
+
+confirem_recover_denmark<- left_join(Confirmed_Denmark, Recovered_denmark, by= "date")
+denmark_All_cases <- left_join(confirem_recover_denmark,Death_denmark, by = "date")
+denmark_all_with_active <- denmark_All_cases %>% mutate(active= cumsum(confirmed)- cumsum(death)- cumsum(recovered))
+active_denmark <- select(denmark_all_with_active,date,active)
+
+
+```
+
+
+```{r,out.width="90%"}
+denmarksAll_longer<- denmark_All_cases %>% pivot_longer(2:4,names_to="type", values_to = "Cases")
+p <- ggplot(denmarksAll_longer, aes(x=date, y=Cases,color = type)) + geom_point(size=0.5)+geom_line(size = 0.1, alpha=0.7) +ggtitle("DENMARK: Distribution in covid - 19 cases") +labs(x ="Date", y = "Number of cases")
+plotly::ggplotly(p)
+
+
+```
+
+ This figure shows confirmed, death and recovered cases together in Denmark. At the commencement of  2020, there were no cases, it shows a clause to the zero, but when the April of 2020 confirmed cases has increased slowly, it seems 0 to 391 confirmed cases. When the end of 2020 confirmed cases have increased rapidly.  After, its peak level we can see a  decreasing pattern with a high negative slope of the number of confirmed cases. If we take death cases it doesn't show any increasing pattern per day. But the number of confirmed cases and recovered cases has increased speedily and it is too much larger than death cases. If the number of confirmed cases has increased by day it shows recovered cases also have increased. Therefore, we can say Denmark had significant recoveries.
+
+```{r,out.width="90%"}
+denmarksAll_with_active_longer<- denmark_all_with_active %>% pivot_longer(2:5,names_to="type", values_to = "Cases")
+t <- ggplot(denmarksAll_with_active_longer, aes(x=date, y=Cases,color = type)) + geom_point(size=0.5)+geom_line(size = 0.1, alpha=0.7) +ggtitle("DENMARK: Distribution in covid-19 cases(with active cases)") +labs(x ="Date", y = "Number of cases")
+plotly::ggplotly(t)
+
+
+```
+
+According to the above chart, we can compare active, confirmed, recover, and death cases together in Denmark.  The number of Active cases is increased speedily and it is too much larger than confirmed, death, and recovered cases. Further, it is noticed, active cases have reached their highest level in December of 2020, in September of 2021  and it shows drastic fluctuations.
+
+```{r, out.width="60%" }
+
+denmarksAll_separate <- denmark_All_cases %>% separate(date, into=c("year", "month", "day"), sep="-")
+dall_active_separate <- denmark_all_with_active %>% separate(date, into=c("year", "month", "day"), sep="-")
+
+
+q <- ggplot(denmarksAll_separate, aes(x=month, y=confirmed, col = year)) + geom_point(size = 0.3) + ggtitle("DENMARK: Distribution in covid - 19 confirmed cases")+labs(x ="Month", y = "Number of confirmed cases")
+plotly::ggplotly(q)
+
+
+```
+
+Using the above plot we can compare confirmed cases by year in Denmark. The month of December 2020 has the highest number of confirmed cases . The no of confirmed cases in the year 2020 has increased rapidly from January to December. Then the number of confirmed cases in January 2021 has decreased more than in December 2020. Further in 2021 confirmed cases has decreased with fluctuations.
+
+```{r,  out.width="60%"}
+r <- ggplot(denmarksAll_separate, aes(x=month, y=death, col = year)) + geom_point(size = 0.3) + ggtitle("DENMARK: Distribution in covid - 19 death cases")+labs(x ="Month", y = "Number of death cases")
+plotly::ggplotly(r)
+
+```
+Using the above plot we can compare death cases by year in Denmark. The month of December 2020 has the highest number of death cases 2020. The no of death cases in the year 2020 has increased from January to December with fluctuations.  The month of January 2021 has the highest number of death cases in 2021. The no of death cases in the year 2021 has decreased from January to December without fluctuations.
+
+
+```{r,  out.width="60%"}
+s <- ggplot(denmarksAll_separate, aes(x=month, y=recovered, col = year)) + geom_point(size = 0.3) + ggtitle("DENMARK: Distribution in covid - 19 recovered cases")+labs(x ="Month", y = "Number of recovered cases")
+plotly::ggplotly(s)
+
+```
+
+
+Using the above plot we can compare recovered cases by year in Denmark. The month of December 2020 has the highest number of recovered cases 2020. The no of recovered cases in the year 2020 has increased from January to December gradually.  The month of January 2021 has the highest number of recovered cases in 2021. The no of recovered cases in the year 2021 has decreased from gradually with fluctuations.
+```{r, out.width="60%"}
+b <- ggplot(dall_active_separate, aes(x=month, y=active, col = year)) + geom_point(size = 0.3) + ggtitle("DENMARK: Distribution in covid - 19 active cases")+labs(x ="Month", y = "Number of active cases")
+plotly::ggplotly(b)
+
+```
+
+Using the above plot we can compare active cases by year in Denmark. The month of December 2020 has the highest number of active cases 2020. The no of active cases in the year 2020 has increased from January to December gradually.When, we consider the number of active cases from december 2020 to january 2021, it shows number of active cases has decerased rapidly. The no of active cases in the year 2021 has increased gradually with  fluctuations.
+
+
+## Comparison with other countries
+
+```{r, fig.cap="https://www.pinterest.com/pin/691654455241965841/" , out.width="50%"}
+
+knitr::include_graphics(c("figure 4.jpg"))
+
+```
+
+
+#### **Denmark versus Germany and Norway**
+
+```{r}
+# ------------------------------------------------with Germany
+
+Confirmed_corona_Germany <- select(coronavirus_widwer,date,country,confirmed) %>%filter(country=="Germany")
+Confirmed_Germany<-aggregate(Confirmed_corona_Germany["confirmed"], by=Confirmed_corona_Germany["date"], sum, na.rm=TRUE)
+
+
+
+Recovered_corona_Germany <- select(coronavirus_widwer,date,country,recovered) %>%filter(country=="Germany")
+Recovered_Germany<-aggregate(Recovered_corona_Germany["recovered"], by=Recovered_corona_Germany["date"], sum, na.rm=TRUE)
+
+
+
+Death_corona_Germany <- select(coronavirus_widwer,date,country,death) %>%filter(country=="Germany")
+Death_Germany<-aggregate(Death_corona_Germany["death"], by=Death_corona_Germany["date"], sum, na.rm=TRUE)
+
+
+
+
+confirem_recover_Germany<- left_join(Confirmed_Germany, Recovered_Germany, by= "date")
+Germany_All_cases <- left_join(confirem_recover_Germany,Death_Germany, by = "date")
+
+GermanyAll_with_active <- Germany_All_cases %>% mutate(active= cumsum(confirmed)- cumsum(death)- cumsum(recovered))
+
+active_Germany <- select(GermanyAll_with_active,date,active)
+
+
+```
+
+
+```{r}
+
+#---------------Norway------------------------
+
+Confirmed_corona_Norway <- select(coronavirus_widwer,date,country,confirmed) %>%filter(country=="Norway")
+Confirmed_Norway<-aggregate(Confirmed_corona_Norway["confirmed"], by=Confirmed_corona_Norway["date"], sum, na.rm=TRUE)
+
+
+Recovered_corona_Norway <- select(coronavirus_widwer,date,country,recovered) %>%filter(country=="Norway")
+Recovered_Norway<-aggregate(Recovered_corona_Norway["recovered"], by=Recovered_corona_Norway["date"], sum, na.rm=TRUE)
+
+
+
+Death_corona_Norway<- select(coronavirus_widwer,date,country,death) %>%filter(country=="Norway")
+Death_Norway<-aggregate(Death_corona_Norway["death"], by=Death_corona_Norway["date"], sum, na.rm=TRUE)
+
+
+confirem_recover_Norway<- left_join(Confirmed_Norway, Recovered_Norway, by= "date")
+Norway_All_cases <- left_join(confirem_recover_Norway,Death_Norway, by = "date")
+NorwayAll_with_active <- Norway_All_cases %>% mutate(active= cumsum(confirmed)- cumsum(death)- cumsum(recovered))
+
+active_Norway <- select(NorwayAll_with_active,date,active)
+
+
+```
+Denmark is a Scandinavian country in Northern Europe bordering the Baltic and the North Sea. The country consists of a large peninsula and many islands referred to as the Danish Archipelago. Neighboring countries include Germany, Norway and sweden.Here, we have analysis and compare   Germany and Norway corona data cases with denmark corona cases. 
+
+
+```{r,  out.width="90%"}
+# ---------------------------------------- confirmed 
+
+Confirmed_Germany <- rename(Confirmed_Germany,`Confirmed Germany`= confirmed)
+Confirmed_Denmark <- rename(Confirmed_Denmark,`Confirmed Denmark`= confirmed)
+Confirmed_Norway <- rename(Confirmed_Norway,`Confirmed Norway`= confirmed)
+
+confirm_Germany_Denmark <- left_join(Confirmed_Denmark,Confirmed_Germany, by = "date")
+confirm_GDN <- left_join(confirm_Germany_Denmark,Confirmed_Norway, by = "date")
+
+confirm_GDN_longer<- confirm_GDN %>% pivot_longer(2:4,names_to="type", values_to = "Cases")
+
+f <- ggplot(confirm_GDN_longer, aes(x=date, y=Cases,color = type)) + geom_point(size=0.4)+geom_line(size = 0.1, alpha=0.7)+ggtitle(" Confimed cases in Demark ,Jermany and Norway") +labs(x ="Date", y = "Number of confimed cases")
+plotly::ggplotly(f)
+
+
+```
+According to the above chart, we can compare the number of confirmed cases in Denmark together with Germany and Norway. It can be seen that in the cases of  Germany and Norway, COVID-19 cases were confirmed before Denmark. When we compare the number of confirmed cases together, confirmed cases of Germany displaying a much drastic increase more than confirmed cases in Denmark and Norway. Further, the number of confirmed cases in Germany continuously keeps fluctuating and occasionally reaching peaks more than the other two countries which  Denmark and Norway. It shows the no of confirmed cases in Germany and Norway reached their peak at end of the December 2020 and Denmark reached its peak in mid of December 2020.
+
+
+```{r,out.width="90%"}
+
+#---------------------------- recovered
+
+Recovered_denmark <- rename(Recovered_denmark,`Recovered Denmark`= recovered)
+Recovered_Germany <- rename(Recovered_Germany,`Recovered Germany`= recovered)
+Recovered_Norway <- rename(Recovered_Norway,`Recovered Norway`= recovered)
+
+recovered_Germany_Denmark <- left_join(Recovered_denmark,Recovered_Germany, by = "date")
+recovered_GDN <- left_join(recovered_Germany_Denmark,Recovered_Norway, by = "date")
+
+recovered_GDN_longer<- recovered_GDN %>% pivot_longer(2:4,names_to="type", values_to = "Cases")
+
+h <- ggplot(recovered_GDN_longer, aes(x=date, y=Cases,color = type)) + geom_point(size=0.4)+geom_line(size = 0.1, alpha=0.7) +ggtitle(" Recovered cases in  Demark ,Jermany and Norway") +labs(x ="Date", y = "Number of recovered cases")
+plotly::ggplotly(h)
+
+
+
+```
+
+According to the above chart, we can compare the number of recovered cases in Denmark together with Germany and Norway.when we compared the  number of recoverd cases of three countries can be further understood by the graphical representation, Germany has higher propotion of recovered cases than Denmark and Norway.
+
+```{r,out.width="90%"}
+
+#---------------------------- death
+
+Death_denmark <- rename(Death_denmark,`Death Denmark`= death)
+Death_Germany <- rename(Death_Germany,`Death Germany`= death)
+Death_Norway <- rename(Death_Norway,`Death Norway`= death)
+
+death_Germany_Denmark <- left_join(Death_denmark,Death_Germany, by = "date")
+death_GDN <- left_join(death_Germany_Denmark,Death_Norway, by = "date")
+
+death_GDN_longer<- death_GDN %>% pivot_longer(2:4,names_to="type", values_to = "Cases")
+
+l <- ggplot(death_GDN_longer, aes(x=date, y=Cases,color = type)) + geom_point(size=0.4)+geom_line(size = 0.1, alpha=0.7) +ggtitle("Death cases in Demark ,Jermany and Norway") +labs(x ="Date", y = "Number of death cases")
+plotly::ggplotly(l)
+```
+                    
+According to the above chart, we can compare the number of death cases in Denmark together with Germany and Norway. It shows the number of death cases in Germany has been reported more than when comparing with other two countries. And also Death cases in Germany have reached their peak in January 2021 with drastic fluctuations. Denmark and Norway have a very low proportion of deaths concerning the number of death cases in Germany.
+
+```{r}
+
+#---------------------------- active
+
+active_denmark <- rename(active_denmark,`Active Denmark`= active)
+active_Germany <- rename(active_Germany,`Active Germany`= active)
+active_Norway <- rename(active_Norway,`Active Norway`= active)
+
+active_Germany_Denmark <- left_join(active_denmark,active_Germany, by = "date")
+active_GDN <- left_join(active_Germany_Denmark,active_Norway, by = "date")
+
+active_GDN_longer<- active_GDN %>% pivot_longer(2:4,names_to="type", values_to = "Cases")
+
+k <- ggplot(active_GDN_longer, aes(x=date, y=Cases,color = type)) + geom_point(size=0.4, alpha = 0.5, color = "blue")+geom_line(size = 0.1, alpha=0.7)+ facet_grid(~type) +ggtitle(" Active cases in Demark ,Jermany and Norway") +labs(x ="Date", y = "Number of active cases")
+plotly::ggplotly(k)
+
+```
+
+According to the above chart, we can compare the number of active cases in Denmark together with Germany and Norway. It seems clear, the number of active cases in both Germany and Norway has a higher proportion than in Denmark. Further, we can notice active cases in Germany are continuously increased with drastic fluctuations. But in the case of Norway, the number of active cases increasing gradually and without fluctuations. Denmark has a  less number of active cases when comparing with Germany and Norway but it shows increasing active cases gradually with fluctuations.
+
+# 3.Conclusions and Discussion
+
+## Discussion
+
+  COVID - 19 DATA ANALYSIS- DENMARK has done by using coronavirus data set from the coronavirus package in R. There are missing values and negative values in this coronavirus data set. It's important to handle missing values,  negative values properly to get a precious outcome. Here, when handling negative values, missing values, and multiple outcomes for the same day, it was used absolute function and aggregate function with na.rm=true.  
+To get a clear idea about the overview of covid -19 data analysis in Denmark is not enough analyzing within the data set of Denmark Corona data set. Therefore a comparison of Denmark with countries of significance during the COVID-19 pandemic has been carried out to reach the conclusions. 
+
+  The data of the above analysis was limited from the 22nd of January 2020  to the 18th of September 2021.  The all unusual observations are re-coded in a different manner which was described before. So the confirmed, recovered and death cases within that period were taken to make conclusions of different countries. 
+  
+  When considering the covid -19 situation in Denmark, it took an important place because Denmark has become the only European country with no coronavirus-related restrictions in place, as vaccine rates have reached more than 70 percent of the population.  Hence Germany and Norway which were neighbor countries of Denmark were selected due to get a significant idea of covid - 19 cases in the Denmark concerning European counties.
+
+
+
+
+
+### Conclusions
+
+  Since the first case of disease with this new coronavirus became mentioned in China in December 2019, SARS-CoV-2, as we now know it to be called, has killed over 2.5million human beings and inflamed at the least 116 million. Beginning as an unexplained, pneumonia-like illness, first detected in China’s Wuhan province. World leaders have become ill, complete nations have been locked right down to save you the unfold of contamination and the global journey ceased. As maximum governments struggled to incorporate the virus, scientists have been dashing to discover and discover remedies that labored towards covid-19. As infections surged worldwide, new, tremendously transmissible editions of the virus have been recognized and are circulating ever further.
+
+  The COVID-19 pandemic in Denmark is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was first confirmed to have spread to Denmark on 27 February 2020.
+  
+  Throughout this data analysis done by using coronavirus data set for Denmark, it was made a path to understanding,  how Denmark face the Covid-19 pandemic and what are the accurate decisions made by the officials of Denmark to fight against the Covid-19 pandemic and the effectiveness of those decisions. Further, it noticed when comparing Denmark with Neighbour countries which are Germany and Norway, how Denmark becomes only European country with no COVID curbs.
+It shows clearly according to the analysis that Denmark has struggled against the Covid-19 pandemic more precisely than the other European countries.
+
+
+### References
+
+ * https://www.newscientist.com/article/2270361-covid-19-the-story-of-a-pandemic/
+ * https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Denmark
+ * https://www.worldometers.info/coronavirus/country/denmark/
+ * https://covid19.who.int/region/euro/country/dk
+`* https://www.aljazeera.com/news/2021/9/10/denmark-becomes-only-european-country-with-no-covid-curbs
+ * https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Denmark
+ * https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7217796/
+ * https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/denmark/
+ * https://www.worldometers.info/coronavirus/country/denmark/

@@ -1,0 +1,458 @@
+---
+title: "COVID-19 Report of Singapore"
+author: "J.A.A.Weerasinghe-AS2018576"
+date: 
+
+output: html_document
+---
+```{r setup, include=FALSE, comment=NA}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# Introduction
+<div align="center">
+![Pic1: The view of the city-state](sin.jpg)
+</div>
+
+
+
+Singapore is a world famous city, a nation and a state which is located at the southern border of the Malay Peninsula. About 5.704 million people lived in 728.6km^2 area and has a parliamentary democracy system under the president of Halim Yacob. The port of Singapore is one of the busiest in the world thus the diversity of its economy. Its a treasure island for investors because of lower tax rate.The island city state is the largest tourist attraction place in the world because of its glamorous, foods and festivals. A well design infrastructure, colourfull streets and public art installations upgrade its liveliness,
+
+
+In December 2019, an unknown infection was detected in Wuhan, China and rapidly spread around the world and become a global pandemic. The severe acute respiratory syndrome coronavirus 2 (SARS-CoV2) which is known as COVID-19 was announced as a global pandemic by World Health Organization (WHO) on 30 January 2020.Singapore has to face this unfortunate situation on 23 January 2020 by detecting first confirmed case of Covid-19 in the country. After that, it spread through locals in February and March 2020. Then the multiple clusters were detected in Singapore by huge proportion. At the time of writing, the number of total confirmed cases were 85953 and 76 were died because of Covid-19. 
+
+
+
+## Visualization of the location on world map
+<div align="center">
+```{r , comment=NA , message=FALSE , warning=FALSE, echo=FALSE,fig.cap="Fig1: Visualization of Singapore"}
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+
+
+Singapore_corona <- coronavirus %>% filter(country == "Singapore")
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Singapore_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+ 
+```
+</div>
+
+## Climate condition in Singapore
+
+Singapore is situated near the equator and has a typically tropical climate. There are two monsoon seasons as Northeast from December to March and Southeast from June to September. So, rainfall is a part of the country (around 150mm each month) and the weather can be unpredictable. Despite the unpredictability of the weather, Singapore experiences brilliant sunshine as it does rain. In inter monsoon periods, hot afternoons are common (maximum above 32 degrees Celsius) and thunderstorms occur in the afternoon and early evening. Not only inter monsoon season but also Southeast Monsoon, thunderstorms are regular thing. And average temperature around 31 degrees Celsius during the day and humidity level is in between 70%-90%.   
+
+## Lockdown status in Singapore
+
+Since the Covid-19 affected to Singapore, the government took immediate actions to slow down the spread of the virus. The “circuit breaker lockdown” was implemented to safe people by announcing to stay at home and initially, it was applied from 7 April to 4 May 2020. Re-opening of the country only limited for economy activities. 
+
+But they implemented lockdown as following.
+
+              phase 1-from 2 June to 8 June
+              phase 2-from 19 June to 27 December
+              phase 3-from 28 December 2020 to 7 May 2021.
+
+Now its ban arrivals from some regions, recommend people to stay at home and schools and workplaces were recommended to close.After a decline in community cases, it was announced that Singapore would re-enter “phase 3 Heightened Alert”, with re-opening to commence in two stages. The first stage on 14 June with the limit on social gatherings increased to 5 people, the second stage on 21 June with the resumption of dining with 5 people.
+
+# Covid-19 summary of cases in the given time period
+
+<div align="center">
+```{r,  comment=NA , message=FALSE , warning=FALSE, echo = FALSE, fig.cap="Fig2:Summary of cases of Singapore"}
+
+
+library(plotly)
+library(dplyr)
+
+Singapore_corona <- coronavirus %>% filter(country == "Singapore")
+Singapore_corona_new <- Singapore_corona %>% select(date, country, type, cases) %>% na.omit()
+Singapore_corona_new$cases[Singapore_corona_new$cases == -335] = 179
+
+
+confirmed_cases_Singapore <- Singapore_corona_new %>% filter(type=="confirmed")
+recovered_Singapore       <- Singapore_corona_new %>% filter(type=="recovered") 
+death_Singapore           <- Singapore_corona_new %>% filter(type=="death")
+
+fig <- plot_ly(x = c(" Death cases", " Recovered cases", "Confirmed cases"),
+               y = c(sum(death_Singapore$cases), sum(recovered_Singapore$cases),sum(confirmed_cases_Singapore$cases)),
+               name = "The no of cases",type = "bar")
+
+fig
+
+```
+</div>
+
+
+
+
+
+## Conducing PCR tests and vaccination programme
+
+During this pandemic it is essential to conduct Polymerase Chain Reaction (PCR) tests to detect the people with virus to lower the community spread. It is the most accurate way, but usually take a day or two for the results. In Singapore, it is compulsory for some individuals to have Covid-19 PCR test, such as those who are working in high-risk sectors. The laboratories in Singapore are operating 80% capacity to fulfill the demand. In earlier April 2020, the capacity was as an average 2900 PCR tests per day but now they have capacity to conduct between 60000-70000 tests per day from January 2021 onward. 
+
+<div align="center">
+![Pic2: vaccination programme](vaccine.jpg){width=40%}
+</div>
+Singapore has one of the highest vaccination rates in the world, with 80% of the population fully vaccinated. Assuming that each person needs 2 doses, at least 9,223,226 doses of Covid-19 vaccine are given, which is enough to vaccinate about 80.9%of the country’s population. The government invested more than one billion Singapore dollars for Pfizer Bio-tech, Moderna etc. Singapore was the first country in Asia to approve the Pfizer-BioNTech coronavirus vaccine.
+
+
+## Actions taken by the Government
+
+  * To stop the spread of COVID-19, the COVID-19 (Temporary Measures) Act 2020 and its Control Order Regulations 2020 was brought into force. 
+  * Mask wearing continues to be mandatory in public transport and all public places in Singapore.
+  * Travel restrictions were applied.
+  * Every Singaporean who would be aged 18 and above in 2020 would receive S$100 worth of SingapoRediscovers vouchers.
+  * Wedding receptions are not allowed.
+  * The government has clarified that the flow of goods, cargo and food supplies between Singapore to avoid panic buying.
+  * Reduced purchasing limits for paper products.
+  * Transport services were gradually reduced in stages. Train timings were brought forward to early, and transport frequencies were limited.
+  * Trvellers were banned from boders.
+  
+
+## **Exploratory Data Analysis**
+
+
+
+## 1. Covid-19 confirmed cases in Singapore
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE, out.width="60%", out.height="50%",fig.cap="Fig3: Covid-19 confirmed cases in Singapore"}
+
+Singapore_corona <- coronavirus %>% filter(country == "Singapore")
+
+Singapore_corona_new <- Singapore_corona %>% select(date, country, type, cases) %>% na.omit()
+
+Singapore_corona_new$cases[Singapore_corona_new$cases == -335] = 179
+
+confirmed_cases_Singapore <- Singapore_corona_new %>% filter(type=="confirmed")
+
+ggplot(confirmed_cases_Singapore, aes(x=date, y=cases)) + geom_line() 
+```
+</div>
+
+According to the graph there's a huge increase in confirmed cases on April 2020 onwards. From October 2020 to July 2021 ther was no sush huge increase in the confirmed cases, although some cases were reported. But, in July 2021 onward again there's a increase in confirmed cases in Singapore.
+
+## 2. Covid-19 recovered cases in Singapore
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE, out.width="60%", out.height="50%",fig.cap="Fig4: Covid-19 recovered cases in Singapore" }
+  
+
+recovered_Singapore <- Singapore_corona_new %>% filter(type=="recovered")
+
+ggplot(Singapore_corona_new, aes(x=date, y=cases)) + geom_line() 
+
+```
+</div>
+As figure3, the behavior of recovered cases were reported can be seen. 
+
+
+
+
+## 3. Covid-19 death cases in Singapore
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE,fig.cap="Fig5: Covid-19  death cases in Singapore"}
+
+death_Singapore <- Singapore_corona_new %>% filter(type=="death")
+
+ggplot(death_Singapore, aes(x=date, y=cases)) + geom_line() 
+
+```
+</div>
+In Singapore, the number of death cases are less than 76 in the time of writing. In above figure we can see that death cases are lower than 4 during this time period. 
+
+
+### Total number of confirmed, death and recovered cases in Singapore
+
+ To get an overall idea about confirmed, recovered and death cases in Singapore refer figure(5).
+
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE ,fig.cap="Fig6: Total no.of confirmed, death, recovered cases in Singapore" }
+
+library(coronavirus)
+Singapore_corona <- coronavirus %>% filter(country == "Singapore")
+
+Singapore_corona_new <- Singapore_corona %>% select(date, country, type, cases) %>% na.omit()
+
+Singapore_corona_new$cases[Singapore_corona_new$cases == -335] = 179
+
+Singapore_corona_new <- Singapore_corona_new %>% group_by(type) %>% mutate(cum_cases = cumsum (cases))
+
+ggplot(Singapore_corona_new, aes(date, cum_cases, colour = type)) + geom_path(size = 1) + labs(title = "Total no.of confirmed, death, recovered cases in Singapore")
+
+```
+
+</div>
+
+
+## 4. Covid-19 active cases in Singapore
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE,fig.cap="Fig7: Covid-19 active cases in Singapore"}
+
+Singapore_corona          <- coronavirus %>% filter(country == "Singapore")
+
+Singapore_corona_new <- Singapore_corona %>% select(date, country, type, cases) %>% na.omit()
+
+Singapore_corona_new$cases[Singapore_corona_new$cases == -335] = 179
+
+
+confirmed_cases_Singapore <- Singapore_corona_new %>% filter(type=="confirmed")
+recovered_Singapore       <- Singapore_corona%>% filter(type=="recovered") 
+death_Singapore           <- Singapore_corona_new %>% filter(type=="death")
+
+
+active_Singapore <- mutate(confirmed_cases_Singapore, death = death_Singapore$cases, recovered = recovered_Singapore$cases, active_cases = (cases - death - recovered), cumulative_active_cases = cumsum(active_cases))
+
+ggplot(active_Singapore, aes(x=date, y=cumulative_active_cases)) + geom_line(color = "red") +  ggtitle(" Total active Covid-19 cases")
+
+```
+</div>
+
+By looking at the above graph, active cases are higher than in 2020 compared to 2021 during the considered time period.
+
+
+# Covid-19 Comparison with other countries
+
+## Comparison of Covid-19 in Singapore with other Southeast Asian countries
+####  i. Comparison Daily Covid-19 confirmed cases between Singapore and Thailand
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE, fig.cap="Fig8:Comparison Daily Covid-19 confirmed cases between Singapore and Thailand" }
+
+thai_corona          <- coronavirus %>% filter(country == "Thailand")
+confirmed_cases_thai <- thai_corona %>% filter(type =="confirmed")
+
+thai_sing <- data.frame(date = confirmed_cases_Singapore$date , thailand = confirmed_cases_thai$cases, singapore=confirmed_cases_Singapore$cases)
+thai_sing <- pivot_longer(thai_sing, c(2,3),"country","value")
+
+ggplot(thai_sing , aes(x=date, y=value, color=country)) + geom_line()
+
+```
+</div>
+When comparing the daily Covid-19 confirmed cases between Singapore and Thailand, we can see that Thailand has the highest confirmed cases in 2021 compared to Singapore.
+
+
+#### ii.Comparison Daily Covid-19 confirmed cases between Singapore and Indonesia
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE, fig.cap="Fig9:Comparison Daily Covid-19 confirmed cases between Singapore and Indonesia" }
+
+Indonesia_corona          <- coronavirus %>% filter(country == "Indonesia")
+confirmed_cases_Indonesia <- Indonesia_corona %>% filter(type =="confirmed")
+
+
+Indonesia_sing <- data.frame(date = confirmed_cases_Singapore$date , Indonesia = confirmed_cases_Indonesia$cases, singapore=confirmed_cases_Singapore$cases)
+
+Indonesia_sing <- pivot_longer(Indonesia_sing, c(2,3),"country","value")
+
+ggplot(Indonesia_sing , aes(x=date, y=value, color=country)) + geom_line()
+```
+</div>
+
+When comparing the daily Covid-19 confirmed cases between Singapore and Indonesia, we can see that Indonesia has the higher confirmed cases compared to Singapore.
+
+
+#### iii.Comparison Daily Covid-19 confirmed cases between Singapore and Malaysia
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE, fig.cap="Fig10:Comparison Daily Covid-19 confirmed cases between Singapore and Malaysia" }
+
+Malaysia_corona          <- coronavirus %>% filter(country == "Malaysia")
+confirmed_cases_Malaysia <- Malaysia_corona %>% filter(type=="confirmed")
+
+
+Malaysia_sing <- data.frame(date = confirmed_cases_Singapore$date , Malaysia = confirmed_cases_Malaysia$cases, singapore=confirmed_cases_Singapore$cases)
+Malaysia_sing <- pivot_longer(Malaysia_sing, c(2,3),"country","value")
+ggplot(Malaysia_sing , aes(x=date, y=value, color=country)) + geom_line()
+```
+</div>
+
+When comparing the daily Covid-19 confirmed cases between Singapore and Malaysia, we can see that Indonesia has the higher confirmed cases compared to Singapore.
+
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE }
+near_countries <- filter(coronavirus, country=="Indonesia"|country=="Thailand"|country=="Malaysia"|country=="Singapore")
+
+```
+
+```{r, echo = FALSE }
+death_near_countries     <- filter(near_countries, type=="death")
+confirmed_near_countries <- filter(near_countries, type=="confirmed")
+recovered_near_countries <- filter(near_countries, type=="confirmed")
+```
+
+
+### Overall look for deaths in near countries
+<div align="center">
+```{r,  comment=NA , message=FALSE , warning=FALSE,echo = FALSE ,fig.cap="Fig11: Covid-19 deaths in Singapore and near countries"}
+ggplot(death_near_countries, aes(x = date, y = cases , colour = country)) + geom_path(size=1)  
+
+```
+</div>
+
+As figure(10), Singapore has lowest death rate compared to near countries.
+
+
+### Overall look for recovered cases in near countries
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE ,fig.cap="Fig12: Covid-19 confirmed cases in Singapore and near countries"}
+ggplot(confirmed_near_countries, aes(x = date, y = cases , colour = country)) + geom_path(size=1)  
+
+```
+</div>
+Above figure shows that Indonesia has highest recovered cases than Malaysia and Thailand. We can get overall idea about how the recovered cases changed over the near countries. 
+
+### Overall look for confirmed cases in near countries
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE,fig.cap="Fig13: Covid-19 recovered cases in Singapore and near countries" }
+ggplot(recovered_near_countries,aes(x=date,y=cases,colour= country )) + geom_line(size=1)
+
+```
+</div>
+Above figure shows that Indonesia has highest confirmed cases than Singapore, Malaysia and Thailand. We can get overall idea about how the confirmed cases changed over the near countries during this time period. Since, Singapore has lowest confirmed cases compared to near countries.
+
+
+
+
+##  **Comparison of Covid-19 in Singapore with Asian countries**
+
+
+## 1. Comparison of Covid-19 in Singapore with India
+
+### Comparing Covid-19 deaths in Singapore and India
+
+since India hits the highest number of deaths in Asia, after china, it will be useful to compare how the deaths in Singapore has varied over the time. 
+
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE ,fig.cap="Fig14: Covid-19 death cases in India"}
+
+india_corona       <- coronavirus %>% filter(country == "India")
+death_india_corona <- india_corona %>% filter(type=="death")
+cum_deaths_india   <- mutate(death_india_corona, cumulative_death_sum_india = cumsum(cases))
+
+death_Singapore <- Singapore_corona_new %>% filter(type=="death")
+cum_deaths      <- mutate(death_Singapore, cumulative_death_sum = cumsum(cases))
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_india, aes(x=date, y=cumulative_death_sum_india,  colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "India")) + ggtitle("Total Covid-19 Deaths in Singapore and India")
+
+```
+</div>
+
+
+### Covid-19 overall comparison with India 
+
+
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE ,fig.cap="Fig15: Covid-19 overall comparison of cases in India"}
+
+india_and_Singapore <- filter(coronavirus, country=="Singapore"|country == "India")
+
+india_and_Singapore <- india_and_Singapore %>% group_by(country,type) %>% mutate(cum_cases = cumsum(cases))
+
+ggplot(india_and_Singapore, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Comparison of confirmed,death and recovered total number of cases with India")
+```
+</div>
+As figure 14, we can see that confirmed, death and recovered cases in Singapore are negligible when comparing it with India.
+
+### Total Covid-19 confirmed cases camparing with China
+
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE,fig.cap="Fig16: Covid-19 confirmed cases in Singapore" }
+
+china_corona           <- coronavirus %>% filter(country == "China")
+confirmed_china_corona <- india_corona %>% filter(type == "confirmed")
+cum_confirmed_china    <- mutate(confirmed_china_corona, cumulative_confirmed_sum_china = cumsum(cases))
+
+confirmed_cases_Singapore  <- Singapore_corona_new %>% filter(type=="confirmed")
+cum_confirmed              <- mutate(confirmed_cases_Singapore , cumulative_confirmed_sum = cumsum(cases))
+
+ggplot() + geom_line(data = cum_confirmed, aes(x=date, y=cumulative_confirmed_sum, colour = "green")) + geom_line(data = cum_confirmed_china, aes(x=date, y=cumulative_confirmed_sum_china,  colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "China")) + ggtitle("Total Covid-19 confirmed cases  Singapore with China")
+```
+</div>
+As firue(16), the total covid-19 confirmed cases of Singapore is much lower than China. Since, we all know how the pandemic affect to China so it is clear that Singapore has lowest confirmed cases compared to China.
+
+
+
+### Comparison of Covid-19 in Singapore with USA
+
+since USA hits the highest number of deaths in the world, it will be useful to compare how the deaths in Singapore has varied over the time. Deaths in Singapore are negligible when comparing it with USA.  
+
+### *Comparing Covid-19 deaths in Singapore and USA*
+
+<div align="center">
+```{r, comment=NA , message=FALSE , warning=FALSE,echo = FALSE,fig.cap="Fig17: the graph of Covid-19 deaths in USA" }
+usa_corona       <- coronavirus %>% filter(country == "US")
+
+death_usa_corona <- usa_corona %>% filter(type=="death")
+
+cum_deaths_usa   <- mutate(death_usa_corona, cumulative_death_sum_usa = cumsum(cases))
+
+death_Singapore  <- Singapore_corona_new %>% filter(type=="death")
+
+cum_deaths       <- mutate(death_Singapore, cumulative_death_sum = cumsum(cases))
+
+ggplot() + geom_line(data = cum_deaths, aes(x=date, y=cumulative_death_sum, colour = "green")) + geom_line(data = cum_deaths_usa, aes(x=date, y=cumulative_death_sum_usa,  colour = "red")) + scale_color_discrete(name = "Country", labels = c("Singapore", "USA")) + ggtitle("Total Covid-19 Deaths Singapore with USA")
+
+```
+</div>
+
+
+## Discussion
+
+As 27 September 2021, active cases of 14283, total of 89539 confirmed cases with 75176 recoveries and 80 deaths were reported due to the global pandemic of Covid-19. According to the report which I analyzed, we can see that Singapore took better decision makings comparing nearest countries. Singapore currently has a case fatality rate of 0.09%, one of the lowest in the world. As I think, it is because of  contact tracing and testing to identify cases, mandatory mask-wearing, and hospitalization of all high-risk patients etc. Singapore has comparatively strict criteria for classifying COVID-19 deaths, counting patients who were infected with COVID but died of other causes as non-COVID deaths.
+
+We can conclude that Singapore has managed to slow down the Covid-19 in the country with their best. Because, by looking at the graphs, we can't see such control in confirmed and death cases in nearest countries compared to Singapore. May be it's because of Singapore's population have been acting very responsibility and trust in the regulations asked to follow.
+
+
+
+
+## References
+  
+  * https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+  * Wikipedia-https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Singapore
+  * A Singapore Government Agency Website- https://www.gov.sg/COVID-19
+  * worlometer- https://www.worldometers.info/coronavirus/country/singapore/
+  * World Travel Guide-https://www.worldtravelguide.net/guides/asia/singapore/weather-climate-geography/
+  * http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
+  * https://journals.sagepub.com
+  * https://www.weforum.org
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

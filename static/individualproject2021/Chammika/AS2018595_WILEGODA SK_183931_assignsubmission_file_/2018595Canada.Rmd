@@ -1,0 +1,236 @@
+---
+title: <center>An overview of the current Coronavirus state in Canada</center>
+author: <center>Samadhi Wilegoda - AS2018595</center>
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(magrittr)
+library(sta3262)
+get_individual_project_country("AS2018595")
+library(coronavirus)
+data(coronavirus)
+canada_corona <- coronavirus %>% filter(country == "Canada")
+```
+
+
+
+## 1. Introduction
+### 1.1 Visualization of Location
+
+Canada is located on the continent of North America. Positioned just above the United States of America, Canada also shares a border with the US state of Alaska (Figure 01). Its ten provinces and three territories extend from the Atlantic to the pacific and northward into the Arctic ocean, spread among 9.98 million square kilometres(3.85 million square miles), making it the world's second largest country by total area. Its southern and western border with the United States, stretching 8,891 kilometres (5,525 miles), is the world’s longest bi-national land border. Canada's capital is Ottawa, and its three largest metropolitan areas are Toronto, Monrtreal and Vancouver.
+
+
+<p style = "text-align:center;"> **Figure 01: Location of Canada** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE,warning=FALSE,message=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = canada_corona, aes(x = -106.3468, y = 56.1304), color = "red", size
+    = 1
+  )
+```
+</center>
+
+
+### 1.2 Climate condition of Canada
+
+The northern part of Canada is extremely cold, with summer lasting less than two months, but almost all Canadians live near the southern border where the weather is warmer.Humid air masses from the Pacific cause enormous quantities of orographic (mountain-caused) rain to fall on the west coast and mountain areas. The climate of Canada is varied, and there will be big differences in weather on any given day from one part of the country to another.
+
+The climate around Vancouver, on Canada’s west coast, is rainy and temperate. It rarely snows except in the mountains. High temperatures in summer are around 72°F and in winter around 45°F. It rains in Vancouver almost half the days in winter but much the summer has more sunshine.Near Toronto, the climate is continental. Winters are cold and snowy. Summers are warm and humid. High temperatures in summer are around 79°F and in winter 32°F. It rains on average 7 days a month year-round.
+
+
+### 1.3 Lockdown status of the Canada
+
+The virus was confirmed to have reached Canada on January 27, 2020, after an individual who had returned to Toronto from Wuhan, Hubei, China, tested positive. The first case of community transmission in Canada was confirmed in British Columbia on March 5. In March 2020, as cases of community transmission were confirmed, all of Canada's provinces and territories declared states of emergency. By mid to late summer of 2020, the country saw a steady decline in active cases. On September 23, 2020, Prime Minister Trudeau declared that Canada was experiencing a second wave of the virus. New restrictions and reactions from provincial governments were put in place once again as cases increased, including variations of regional lockdowns.lockdowns resulted in active cases beginning to steadily decline, reaching a plateau in active cases in mid-February 2021. 
+
+During a third wave of the virus, cases began rising across most provinces west of Atlantic Canada in mid-March, prompting further lockdowns and restrictions in the most populous provinces like Ontario and Quebec. Due to a relatively low volume of cases in the Atlantic provinces, plans to reopen the special travel restricted area known as the Atlantic Bubble, however, in late April, the third wave had spread to the Atlantic provinces as well. In response, Prince Edward Island and Nova Scotia reinstated travel bans toward the rest of the country. Canada became one of the most vaccinated countries in the world, with a continually high uptake of the vaccine. Despite high general uptake of the vaccine, cases began to surge particularly amongst the unvaccinated population in provinces like Alberta who had removed virtually all pandemic restrictions. Near the end of summer 2021, cases began to surge across the country and notably in the provinces of British Columbia, Alberta, Quebec and Ontario, particularly amongst the unvaccinated population. During this fourth wave of the virus, return to pandemic restrictions such as mask mandates were reinstated in provinces like British Columbia and Alberta.
+
+
+### 1.4 Actions taken by the goverment
+
+The federal government activated its Emergency Operations Centre on January 15. On March 18, the government signed an interim order to speed up access to COVID-19 test kits that would allow provincial labs to increase testing.
+
+In March the federal government announced that it added $275 million in funding for an additional 49 projects to bring the total to 96 research projects that will focus on developing and implementing measures to detect, manage, and reduce the transmission of COVID-19. The National Research Council started working with small- and medium-sized companies on health research to fight the virus.
+
+Public service announcements were broadcasted on radio and television, urging personal hygiene, social distancing, use of face masks in public and against unnecessary travel. In response to backlogs in COVID-19 testing, especially provinces like Ontario, Health Canada approved new rapid testing for the virus.
+
+Further more, the government took measures to take care of long term care homes and many benefits have been granted to the general public. Travel entry restrictions were implemented and monitored throughout the country. The federal government lowered bank rates to support the economy and a moratorium was placed on student loans and tax payments to support the citizens during the pandemic. Vaccination and testing have been continuously taking place to ensure public health and safety.
+
+
+## 2. Data Analysis
+
+### 2.1 Visualization of the Spread of COVID-19 in Canada
+
+
+<p style = "text-align:center;"> **Figure 02: Daily confirmed cases in Canada** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+library(plotly)
+confirmed_canada_corona <- canada_corona %>% filter(type == "confirmed", cases >= 0)
+a <- ggplot(confirmed_canada_corona, aes(x = date, y = cases, color = province), na.rm = TRUE) + geom_line()
+ggplotly(a)
+```
+</center>
+
+Figure 02 shows daily confirmed COVID-19 cases in Canada. The 1st confirmed case of the corona virus disease has been reported on 22nd of January 2020. Canada has faced four significant waves of Covid-19. The highest number of daily confirmed cases have been reported on 31st of March 2021 in Ontario province & the value is 5542. British Colombia & Alberta provinces also have reported high daily confirmed cases during the 3rd and 4th waves. 
+
+
+
+<p style = "text-align:center;"> **Figure 03: Daily recovered cases in Canada** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+recovered_canada_corona <- canada_corona %>% filter(type == "recovered", cases >= 0)
+b <- ggplot(recovered_canada_corona, aes(x = date, y = cases), na.rm = TRUE) + geom_line(color = "deepskyblue4")
+ggplotly(b)
+```
+</center>
+
+Daily recovered COVID-19 cases in Canada are shown in Figure 03. The highest number of daily recovered cases has been reported on the 17th of July and it is 23848. Negative values and missing values have been omitted during the analysis in daily recovered cases since those records had less effect on the results.
+
+
+
+<p style = "text-align:center;"> **Figure 04: Daily death cases in Canada** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+death_canada_corona <- canada_corona %>% filter(type == "death", cases >= 0)
+a <- ggplot(death_canada_corona, aes(x = date, y = cases, color = province), na.rm = TRUE) + geom_line() 
+ggplotly(a)
+```
+</center>
+
+Figure 04 shows daily COVID-19 death cases in Canada. The first COVID-19 death has been recorded on the 20th of March 2020 in Quebec. Compared to the other provinces, higher death rates has been recorded in Ontario and Quebec continuously throughout the period. The highest number of daily deaths has been reported on the 29th of April 2020 in Quebec and the count is 151. Negative values and missing values have been omitted during the analysis in daily recovered cases since those records had less effect on the results. 
+
+
+
+### 2.2 Comparision of COVID-19 in Canada with US and China
+
+
+<p style = "text-align:center;"> **Figure 05: Daily confirmed cases in Canada, US and China** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+countries_confirmed <- coronavirus %>% filter(country == c("Canada","US","China")) %>% filter(type == "confirmed", cases >= 0)
+b <- ggplot(countries_confirmed, aes(x = date, y = cases, color = country), na.rm = TRUE) + geom_line()
+ggplotly(b)
+```
+</center>
+
+Figure 05 shows the daily confirmed COVID-19 cases in Canada, US and China. It can be seen that the number of daily confirmed cases in US is significantly higher than Canada and China. 
+
+
+
+<p style = "text-align:center;"> **Figure 06: Daily confirmed cases in Canada vs China** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+canada_china_confirmed <- coronavirus %>% filter(country == c("Canada","China")) %>% filter(type == "confirmed", cases >= 0)
+a <- ggplot(canada_china_confirmed, aes(x = date, y = cases, color = country), na.rm = TRUE) + geom_line()
+ggplotly(a)
+```
+</center>
+
+Confirmed cases in Canada and China are separately recorded in Figure 06 since the variations are not visible in Figure 05. The highest number of daily confirmed cases has been recorded by china which is 6200 on the 14th of February 2020 and the number of confirmed cases has been dropped after that with minor waves. This shows that China has been able to control the confirmed covid-19 cases while Canada has started reporting new confirmed cases. However, the total number of confirmed cases in Canada is visible to be greater than China.
+
+
+
+<p style = "text-align:center;"> **Figure 07: Daily recovered cases in Canada, US and China** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+countries_recovered <- coronavirus %>% filter(country == c("Canada","US","China")) %>% filter(type == "recovered", cases >= 0)
+b <- ggplot(countries_recovered, aes(x = date, y = cases, color = country), na.rm = TRUE) + geom_line()
+ggplotly(b)
+```
+</center>
+
+Figure 07 shows that US has extremely high daily recovered COVID-19 cases compared to Canada and China since it had significantly high confirmations as well. The highest number of recovered cases per day is 111291 and has been reported in US. Compared with US, both China and Canada has very less daily recovered cases. Recovered cases of Canada and China cannot be clearly visualized in this figure. 
+
+
+
+<p style = "text-align:center;"> **Figure 08: Daily recovered cases in Canada vs China** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+canada_china_recovered <- coronavirus %>% filter(country == c("Canada","China")) %>% filter(type == "recovered", cases >= 0)
+a <- ggplot(canada_china_recovered, aes(x = date, y = cases, color = country), na.rm = TRUE) + geom_line()
+ggplotly(a)
+```
+</center>
+
+Figure 08 displays recovered cases in Canada and China are separately. According to the graph the highest number of recoveries which is 12853 has been recorded by Canada. This is due to the higher confirmed cases recorded in Canada. China's recovered cases also has been reordered towards the beginning of the pandemic and Canada has started getting recoveries later.
+
+
+<p style = "text-align:center;"> **Figure 09: Daily death cases in Canada, US and China** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+countries_death <- coronavirus %>% filter(country == c("Canada","US","China")) %>% filter(type == "death", cases >= 0)
+b <- ggplot(countries_death, aes(x = date, y = cases, color = country), na.rm = TRUE) + geom_line()
+ggplotly(b)
+```
+</center>
+
+The above Figure 09 shows the number of daily deaths in Canada, US and China. The highest number of daily deaths which is 4413 also has been reported in US, as it had higher confirmed cases as well. Canada and China has extremely lower death rates compared to the US. US shows three significant waves in death cases in the graph.
+
+
+
+<p style = "text-align:center;"> **Figure 10: Daily death cases in Canada vs China** </p>
+<center>
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+canada_china_death <- coronavirus %>% filter(country == c("Canada","China")) %>% filter(type == "death", cases >= 0)
+a <- ggplot(canada_china_death, aes(x = date, y = cases, color = country), na.rm = TRUE) + geom_line()
+ggplotly(a)
+```
+</center>
+
+Figure 10 shows the number of death cases in Canada and China separately. It is almost similar to the confirmed cases graph shown in Figure 06. Comparatively higher death rates have been recorded by Canada as it had higher confirmed cases as well. However the highest daily death cases has been recorded by China which is 202, on 22nd of February 2020.
+
+
+## 3. Conclusions and Discussion
+
+### 3.1 Conclusions
+
+The World Health Organization (WHO) reported Coronavirus (COVID-19) as still an unclear infectious global pandemic. This report presents an overview of the Coronavirus state in Canada. Canada has faced four significant waves of Covid-19. The first confirmed case in Canada has been identified on 22nd of January 2020 from Alberta. The first COVID-19 death has been recorded on the 20th of March 2020 in Quebec. By August in 2020, a rapid spread of Covid-19 has shown among the community in Canada. Compared to the other provinces, higher death rates has been recorded in Ontario and Quebec continuously throughout the period. According to the analysis, the highest number of daily confirmed cases have been reported on 31st of March 2021 in Ontario and the value is 5542. The highest number of daily deaths has been reported on the 29th of April 2020 in Quebec and the count is 151. British Colombia & Alberta provinces also have reported high daily confirmed cases during the 3rd and 4th waves. As of 18th September 2021, Canada has reported a total of 1574820 Covid-19 cases with 1488240 recovered cases and 27168 deaths.
+
+When compared with the neighbouring country US, Canada shows significantly low Covid cases, deaths and recoveries. But when compared with China, the country which Covid-19 started, Canada shows higher Covid-19 cases.
+
+4.19% of the population of Canada has been diagnosed with Covid-19 and 2% of the diagnosed community have died while 98% has recovered successfully. However, the spread of Covid-19 has recently been decreasing due to the vaccination.
+
+
+### 3.2 Discussion
+
+This report was focused on COVID-19 distribution of Canada based on the data from 22nd of January 2020 to 18th of September 2021. Number of COVID-19 confirmed cases, deaths and recovered cases in Canada was analyzed by this report to provide an overview. Coronavirus data set was used to get the data related to the Canada. A few Negative values and  missing values found in the data set have been omitted during the analysis since those records had less effect on the results. These situations might occur due to the errors of recording data or due to mistakes when editing data.
+
+There was some issues with the reported method of Canada for given data set. Although daily confirmed cases and daily death were recorded as province by province,and the daily recovered cases of Canada was reported for the country as a whole. It was bit confusing to get daily active cases in Canada and compare with daily cases in other countries like China by using those figures. This is the reason for some figures shown as vertical lines. To avoid this issue and get better analysis, cumulative counts has been used in comparisons.
+
+In this report, COVID-19 cases of Canada has been compared with US and China. The reason for choosing US for comparison was that it is the neighbouring country of Canada and it had the worst Corona outbreak in the world. The situation of US also effected on Canada as they are the neighbouring countries, but however Compared with US, Canada has appeared to have its COVID-19 outbreak under control. But actually the situation in Canada is not satisfactory when comparing with other countries that have controlled the pandemic situation. China was chosen to compare with Canada because the spread of COVID-19 was started there. Canada's Covid cases are higher compared to China. The government of Canada has taken actions to control the spread of COVID-19 in Canada. Canada-US border was closed and travel restriction was placed. Continuous rapid tests and vaccination throughout the country has contributed to the reduction of the spread of Corona virus by September 2021.
+
+
+## 4.References
+
+* <https://worldpopulationreview.com/country-locations/where-is-canada>
+
+* <https://www.ef.edu/blog/faq/whats-canadas-climate-like/>
+
+* <https://www.britannica.com/place/Canada/Climate>
+
+* <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Canada#Saskatchewan>
+
+* <https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data>
