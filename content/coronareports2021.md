@@ -20,7 +20,7 @@ title: Individual Projects 2021
 | [Uruguay.html](/individualproject2021/Shashini/AS2018519/AS2018519Uruguay.html) [Uruguay-Rmd](/individualproject2021/Shashini/AS2018519/AS2018519Uruguay.Rmd)	| [Georgia.html](/individualproject2021/Shashini/AS2018529/AS2018529-Georgia.html) [Georgia-Rmd](/individualproject2021/Shashini/AS2018529/AS2018529-Georgia.Rmd)  	| [SouthKorea.html](/individualproject2021/Shashini/AS2018530/AS2018530_SouthKorea.html) [SouthKorea-Rmd](/individualproject2021/Shashini/AS2018530/AS2018530_SouthKorea.Rmd) 	|[Bahrain.html](/individualproject2021/Shashini/AS2018536/AS2018536BAHRAIN.html) [Bahrain-Rmd](/individualproject2021/Shashini/AS2018536/AS2018536BAHRAIN.Rmd)   | [Peru.html](/individualproject2021/Shashini/AS2018537/2018537Peru.html) [Peru-Rmd](/individualproject2021/Shashini/AS2018537/2018537Peru.Rmd) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| [Czechia.html](/individualproject2021/Shashini/AS2018538/AS2018538Czechia.html) [Czechia-Rmd](/individualproject2021/Shashini/AS2018538/AS2018538Czechia.Rmd)	| [Belgium.html](/individualproject2021/Shashini/AS2018542/AS2018542Belgium.html) [Belgium-Rmd](/individualproject2021/Shashini/AS2018542/AS2018542Belgium.Rmd) 	| [Oman.html](/individualproject2021/Shashini/AS2018546/AS2018546Oman.html) [Oman-Rmd](/individualproject2021/Shashini/AS2018546/AS2018546Oman.Rmd) 	|   |  |
+| [Czechia.html](/individualproject2021/Shashini/AS2018538/AS2018538Czechia.html) [Czechia-Rmd](/individualproject2021/Shashini/AS2018538/AS2018538Czechia.Rmd)	| [Belgium.html](/individualproject2021/Shashini/AS2018542/AS2018542Belgium.html) [Belgium-Rmd](/individualproject2021/Shashini/AS2018542/AS2018542Belgium.Rmd) 	| [Oman.html](/individualproject2021/Shashini/AS2018546/AS2018546Oman.html) [Oman-Rmd](/individualproject2021/Shashini/AS2018546/AS2018546Oman.Rmd) 	| [Guyana.html](/individualproject2021/Jayani/AS2017376/AS2017376Guyana.html) [Guyana-Rmd](/individualproject2021/Jayani/AS2018503/AS2017376Guyana.Rmd)  | [Eswatini.html](/individualproject2021/Jayani/AS2017378/AS2017378_Eswatini.html) [Eswatini-Rmd](/individualproject2021/Jayani/AS2017378/AS2017378Eswatini.Rmd)  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 | 	|  	|  	|   |  |
@@ -62,5 +62,5 @@ title: Individual Projects 2021
 | 	|  	|  	|   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-Note: Students' project submissions. Each file's content is the responsibility of the respective student. Some submissions include extractions from the Wikipedia website and other sources.
+Note: These files are students' project submissions. Each file's content is the responsibility of the respective student. Some submissions include extractions from the Wikipedia website and other sources.
 
