@@ -1,0 +1,331 @@
+---
+title: "Covid-19 Pandemic in Kazakhstan"
+author: "W.A.B.Nimanthika"
+
+output: html_document
+---
+
+```{css,echo=FALSE}
+P{
+  font-size:15px;
+  text-align:justify;
+}
+
+ul li{
+  font-size:15px;
+  text-align:justify;
+}
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# **1.Introduction**
+
+Coronavirus (COVID-19) is a transmittable disease caused by the SARS-CoV-2 virus. It is spreading all over the world making a global pandemic. Over 219 million people have been affected so far and over 4.55 million people have been died from coronavirus. The following report analyses the pandemic situation in Kazakhstan and the effective strategies taken by the government to control the COVID-19 situation in the country. According to the records of World Health Organization(WHO), 944733 confirmed cases and 15503 deaths have been reported uto 24th September, 2021.
+
+![](coronavirus.jfif){width=80%}
+
+
+## **1.1.Visualization of the location**
+
+Kazakhstan is the largest country in Central Asia and the ninth largest country in the world. Russia is the northwestern and northern boundary of Kazakhstan. It is bounded on east by China, south by Kyrgyzstan, Uzbekistan, Aral sea, and Turkmenistan. The southwest boundary of Kazakhstan is Caspian sea.The geographical location of Kazakhstan can be illustrated by the following map. 
+
+```{r fig.cap= "fig1:Geographical location of Kazakhstan", message=FALSE, warning=FALSE, fig.height=8, fig.width=12}
+
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(magrittr)
+kazakhstan_corona <- coronavirus %>% filter(country == "Kazakhstan")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = kazakhstan_corona, aes(x = long, y = lat), color = "red", size= 1
+  )
+
+```
+
+## **1.2.Climatic Condition in Kazakhstan**
+
+Kazakhstan comprise of a markedly continental climate, including very cold winters across the country and warm summers in north and very hot summers in southern part of the country. The temperature of the northern Kazakhstan reaches to -50 degree Celsius in winter and 40 degree Celsius in summer, while in south it reaches from -35 degree Celsius in winter to 45 degree Celsius in summer. 
+
+## **1.3.Lockdown status of Kazakhstan**
+
+COVD-19 virus was identified for the first time in Kazakhstan on 13th March 2020. Quarantine was placed on Nur-Sultan and Almaty cities on 19th March. Atyrau and 5 other cities in Karaganda region were kept under lockdown on 30th March.  On 4th of May, government decided to ease some restrictions. Again, in July, a 14-day lockdown was introduced. On 13th July, an extension of lockdown was introduced. In late July, an additional lockdown was introduced to be expired on 2nd august. Later on, it was extended until 16th august. 
+
+
+## **1.4.Actions taken by the Government**
+
+### Preventive Measures
+Since the beginning of COVID-19 crisis in January, the Government has been preparing for possibilities to ensure the healthcare of the public. Accordingly, Kazakhstan started to strengthen the national border health security by blocking the entrance of some countries with high epidemic danger and the public were instructed not to engage in foreign tours. On 15th of March, along with the identification of first COVID-19 positive patient, President has declared an emergency state across the country. Entrance and departure from the country was banned for all citizens except for Diplomats and Official delegations on special conditions. Moreover,  kindergartens, schools, universities and entertainment centres were closed with the introduction of quarantine. With the increase of the confirmed positive Nur-Sultan and Almaty cities were placed under lockdown. In order to reduce the public gatherings, Government has limited the Public transportation and penalties have imposed for those who violate the quarantine regulations.  
+
+### Awareness 
+* The president advised Ministry of Information and Public Development to set up a website to inform the public about daily Corona information and Government actions against the pandemic. 
+https://www.coronavirus2020.kz/
+* Ministry of Industry and Infrastructural Development along with Kazakhtelecom developed an interactive map to track accessible routes.
+https://www.ismet.kz/ru/infotransport
+
+### Vaccination 
+Vaccination process began on 1st of February on a voluntary basis. Kazakhstan has created an own COVID-19 vaccine,”QazCovid-in”. Kazakhstan government has ordered 6 million doses of Russian SputnikV vaccines to be carried out with QazCovid-in. Sinapharm, Sinovac are the vaccines that have gained the approval of Kazakhstan. It is recorded that 26% of eligible population have vaccinated at least first dose of the vaccine.
+
+# **2.Exploratory Data Analysis**
+
+## **2.1.Structure of the Data set**
+
+The data set used for the following analysis is comprises of following variables.
+
+* Date
+* Country
+* Province(sometimes may not be available)
+* Latitude and Longitude of the geographical region
+* Type of case(confirmed/death/recovered)
+* Number of cases
+
+Data are recorded from 22nd of January 2020 to 18th September 2021.
+
+## **2.2.COVID-19 Statistics of Kazakhstan**
+
+The following graphs express the daily confirmed, recovered and death cases in Kazakhstan. 
+
+```{r fig.cap= "fig2:Daily Confirmed cases in Kazakhstan",message=FALSE, comment=FALSE, fig.height=8, fig.width=12}
+
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+
+kazakhstan_corona <- coronavirus %>% filter(country == "Kazakhstan")
+kazakhstan_corona_new <- kazakhstan_corona %>% mutate(cases=replace(cases, which(cases<0), 0))
+kazakhstan_corona_new <- kazakhstan_corona_new[ , !names(kazakhstan_corona_new) %in% c("province", "lat", "long")]
+kazakhstan_corona_new <-kazakhstan_corona_new[kazakhstan_corona_new$date <= "2021-07-23", ]
+
+confirmed_kazakhstan_corona <- kazakhstan_corona_new%>% filter(type == "confirmed")
+ggplot(confirmed_kazakhstan_corona,aes(date,cases))+ geom_path(size=1)+labs(title = "Daily confirmed cases in Kazakhstan")
+
+```
+
+The figure 2 depicts the daily confirmed cases reported in Kazakhstan. Highest number of COVID-19 confirmed cases are reported in the month of July, 2021. Highest number of confirm cases is reported as to be higher than 60000 patients. It shows a high deviation in the number of confirmed cases. In both 2020 and 2021, month of July shows comparatively high number of confirmed cases.
+
+```{r fig.cap="fig3: Daily Death cases in Kazakhstan" ,message=FALSE, comment=FALSE, fig.height=8, fig.width=12}
+death_kazakhstan_corona <- kazakhstan_corona_new %>% filter(type == "death")
+ggplot(death_kazakhstan_corona,aes(date,cases))+ geom_path(size=1)+labs(title = "Daily death cases in Kazakhstan")
+```
+
+Above figure illustrates the daily death cases reported in Kazakhstan. Highest number of death cases reported in Kazakhstan is greater than 2000. Apart from that, the daily death cases of COVID-19 in Kazakhstan is variate under the range of 500 deaths.
+
+```{r fig.cap="fig4:Dily Recovered cases in Kazakhstan" ,message=FALSE, comment=FALSE, fig.height=8, fig.width=12}
+recover_kazakhstan_corona <- kazakhstan_corona_new %>% filter(type == "recovered")
+ggplot(recover_kazakhstan_corona,aes(date,cases))+ geom_path(size=1)+labs(title = "Daily recovered cases in Kazakhstan")
+```
+
+The figure 4 shows the daily recovered cases in Kazakhstan. The number of recovered cases is higher in early July and September in 2020. Recovered number of patients are comparatively low in 2021 than 2020.
+
+```{r ,message=FALSE, comment=FALSE, warning = FALSE,  fig.height=6, fig.width=10}
+library(plotly)
+All_cases <- ggplot(kazakhstan_corona_new, aes(date, cases, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Timeseries analysis of COVID-19 cases in Kazakhstan")
+ggplotly(All_cases)
+```
+
+The above graph depicts the time series analysis of COVID-19 statistics in Kazakhstan. The fluctuations of confirmed, recovered and death cases over time can be clearly identified through this graph. During later 5 months of 2020 and early months of 2021, recovered cases are higher than that of death and confirmed cases.Along with the time, an increment in the number of confirmed cases can be seen.
+
+## **2.3.Comparison with other countries**
+## Comparison with the boundary-line countries
+Kazakhstan is geographically bounded by China, Uzbekistan and Russia. The following graphs depicts the comparison of confirmed, deaths and recovered cases between Kazakhstan and boundary line countries. As a country which is nearest for the root country of COVID-19. Comparison between the neighbouring countries could be helpful in detecting it's influence on Kazakhstan COVID-19 status.
+
+### Comparison with China, Russia and Uzbekistan
+
+```{r message=FALSE, comment=FALSE, warning = FALSE,  fig.height=8, fig.width=12}
+
+china_corona <- coronavirus %>% filter(country == "China")
+china_corona <- china_corona %>% mutate(cases=replace(cases, which(cases<0), 0))
+china_corona <- china_corona[china_corona$date <= "2021-07-23", ]
+china_corona <- china_corona[ , !names(china_corona) %in% c("province", "lat", "long")]
+
+russia_corona <- coronavirus %>% filter(country == "Russia")
+russia_corona <- russia_corona %>% mutate(cases=replace(cases, which(cases<0), 0))
+russia_corona <- russia_corona[russia_corona$date <= "2021-07-23", ]
+russia_corona <- russia_corona[ , !names(russia_corona) %in% c("province", "lat", "long")]
+
+uzbekistan_corona <- coronavirus %>% filter(country == "Uzbekistan")
+uzbekistan_corona <- uzbekistan_corona%>% mutate(cases=replace(cases, which(cases<0), 0))
+uzbekistan_corona <- uzbekistan_corona[uzbekistan_corona$date <= "2021-07-23", ]
+uzbekistan_corona <- uzbekistan_corona[ , !names(uzbekistan_corona) %in% c("province", "lat", "long")]
+
+countries_corona <- as.data.frame(rbind(kazakhstan_corona_new, china_corona, russia_corona, uzbekistan_corona))
+
+death_countries <- countries_corona %>% filter(type == "death")
+confirmed_countries <- countries_corona %>% filter(type == "confirmed")
+recovered_countries <- countries_corona %>% filter(type == "recovered")
+
+ggplot(confirmed_countries, aes(x=date, y=cases, fill = type, col= country)) +
+  geom_point() +
+  geom_line() + 
+  facet_wrap(~country, ncol=4) + coord_flip() +
+  ggtitle("Confirmed cases comparison with boundary-line countries")
+```
+
+The above graph illustrates a comparison of COVID-19 confirmed cases from January 2020 to July 2021 of China, Russia and Uzbekistan along with Kazakhstan. Russia shows the highest confirm cases through out  the period. Kazakhstan has the 2nd highest number of confirmed cases during the period. Uzbekistan have been able to keep up the situation under control as it shows comparatively low number confirmed cases than the neighbouring countries, while Chinese COVID-19 confirmed cases have been higher at the beginning of 2020 and faded away with the time.
+
+```{r message=FALSE, comment=FALSE, warning = FALSE,  fig.height=8, fig.width=12}
+
+ggplot(death_countries, aes(x=date, y=cases, fill = type, col = country)) +
+  geom_point() +
+  geom_line() + 
+  facet_wrap(~country, ncol=4) + coord_flip() +
+  ggtitle("Death cases comparison with boundary-line countries")
+```
+
+The graph shows the reported death cases of China, Kazakhstan, Russia and Uzbekistan. Kazakhstan shows the highest number of death cases during the concerned period. Uzbekistan has the lowest number of death cases. Overall flow of death cases is higher in Russia through the considered time period. COVID-19 death cases in China takes a high value at the beginning. However, they have been succeeded in controlling the situation which lowered the death cases of COVID-19 in China.
+
+```{r message=FALSE, comment=FALSE, warning = FALSE,  fig.height=8, fig.width=12}
+
+ggplot(recovered_countries, aes(x=date, y=cases, fill = type, col = country)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~country, ncol=4) + coord_flip() +
+  ggtitle("Recovered cases comparison with boundary-line countries")
+```
+
+The number of Coronavirus recovered cases in China, Russia and Uzbekistan along with Kazakhstan is showed in the above graph. Even though Russia showed a high confirmed cases, it also shows a high recovered cases through out the considered period. Kazakhstan owns a moderate number of recovered cases while China and Uzbekistan shows a considerable recovered cases compared to their confirmed cases.
+
+## Comparison with United States, India and Brazil
+United States, India and Brazil can be identified as three countries with highest COVID-19 spread.Even though, COVID-19 outbreak started with China, US, India and Brazil were  main countries highly affected. This section is comprise with a comparison of confirmed, death and recovered cases of COVID-19 cases in US, India and Brazil along with Kazakhstan.
+
+### Death rate Comparison
+```{r message=FALSE, comment=FALSE, warning = FALSE}
+library(tidyverse)
+library(magrittr)
+
+merged_list <- cbind(confirmed_kazakhstan_corona, "recovered" = recover_kazakhstan_corona$cases, "death" = death_kazakhstan_corona$cases)
+Total_cases <- sum(merged_list$cases)
+Total_recovered <- sum(merged_list$recovered)
+Total_death <- sum(merged_list$death)
+Total_active <- Total_cases - (Total_recovered + Total_death)
+deathrate_kazakhstan <- (Total_death/Total_cases)*100
+
+us_corona <- coronavirus %>% filter(country == "US")
+us_corona <- us_corona %>% mutate(cases=replace(cases, which(cases<0), 0))
+us_corona <- us_corona[us_corona$date <= "2021-07-23", ]
+us_corona <- us_corona[ , !names(us_corona) %in% c("province", "lat", "long")]
+confirmed_us <- us_corona %>% filter(type == "confirmed")
+recover_us <- us_corona %>% filter(type == "recovered")
+death_us <- us_corona %>% filter(type == "death")
+total_us <- sum(confirmed_us$cases)
+total_death_us <- sum(death_us$cases)
+deathrate_us <- (total_death_us/total_us)*100
+
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+brazil_corona <- brazil_corona %>% mutate(cases=replace(cases, which(cases<0), 0))
+brazil_corona <- brazil_corona[brazil_corona$date <= "2021-07-23", ]
+brazil_corona <- brazil_corona[ , !names(brazil_corona) %in% c("province", "lat", "long")]
+confirmed_brazil <- brazil_corona %>% filter(type == "confirmed")
+recover_brazil <- brazil_corona %>% filter(type == "recovered")
+death_brazil <- brazil_corona %>% filter(type == "death")
+total_brazil <- sum(confirmed_brazil$cases)
+total_death_brazil <- sum(death_brazil$cases)
+deathrate_brazil <- (total_death_brazil/total_brazil)*100
+
+india_corona <- coronavirus %>% filter(country == "India")
+india_corona <- india_corona %>% mutate(cases=replace(cases, which(cases<0), 0))
+india_corona <- india_corona[india_corona$date <= "2021-07-23", ]
+india_corona <- india_corona[ , !names(india_corona) %in% c("province", "lat", "long")]
+confirmed_india <- india_corona %>% filter(type == "confirmed")
+recover_india <- india_corona %>% filter(type == "recovered")
+death_india <- india_corona %>% filter(type == "death")
+total_india <- sum(confirmed_india$cases)
+total_death_india <- sum(death_india$cases)
+deathrate_india <- (total_death_india/total_india)*100
+
+death_rates <- c(deathrate_brazil, deathrate_kazakhstan, deathrate_us, deathrate_india)
+barplot(death_rates, main = "Death rate Comparison", horiz = TRUE,names.arg = c("Brazil", "Kazakhstan", "US", "India"), col = c("red", "yellow", "blue", "green"))
+
+```
+
+The above bar chart shows the death rates of US, India and Brazil in comparison with Kazakhstan. According to that recorded data, Brazil shows the highest death rate while India owns the lowest death rate out of the four countries. Brazil has a death rate of 2.7%. Death rate of Kazakhstan is less than 1.4% and that of US is 1.7% while the death rate of India is 1.3% during the considered time period.
+
+### Recovery rate comparison
+
+```{r message=FALSE, comment=FALSE, warning = FALSE}
+
+library(tidyverse)
+library(magrittr)
+
+total_recover_us <- sum(recover_us$cases)
+recoveryrate_us <- (total_recover_us/total_us)*100
+
+
+Total_recovered <- sum(merged_list$recovered)
+recoveryrate_kazakhstan <- (Total_recovered/Total_cases)*100
+
+
+total_recover_brazil <- sum(recover_brazil$cases)
+recoveryrate_brazil <- (total_recover_brazil/total_brazil)*100
+
+total_recover_india <- sum(recover_india$cases)
+recoveryrate_india <- (total_recover_india/total_india)*100
+
+recovery_rates <- c(recoveryrate_brazil, recoveryrate_kazakhstan, recoveryrate_us,recoveryrate_india)
+barplot(recovery_rates, main = "Recovery rate Comparison", horiz = TRUE, names.arg = c("Brazil", "Kazakhstan", "US","India"), col = c("blue", "grey", "pink", "yellow"))
+```
+
+Recovery rates of US, Brazil, India and Kazakhstan is illustrated in the above bar chart. Brazil, India and Kazakhstan have comparatively higher recovery rates. when compared with the confirmed cases of the 4 countries, the recovery rate of US is considerably low during the concerned period. India has the highest recovery rate when compared with the confirmed cases.
+
+# **3.Discussion and Conclusion**
+## **3.1.Discussion**
+
+In the Kazakhstan COVID-19 data set extracted from the package was consisted of negative values for confirmed cases. It might be a result of misjudging of positive or negative in COVID-19 test or might be a mistake occured in entering the data. The data set was re-prepared to get only positive values prior the analysis. A high deviation in confirmed cases(66121) can be seen in July, 2021. Even though it can be eliminate by considering as an outlier, it was included in the analysis. This might be due to an addition of confirmed cases which were missed on prior days or might be a bulk of COVID-19 test results were released on that respective day . Due to lack of data (missing values) at the latter part of the data set, the data set had to be trimmed to obtain fair amount of data in all 3 types. The data set used for the analysis is consist of COVID-19 data of Kazakhstan from 22nd January 2020 to 23rd July 2021. When comparing with the other countries, the data sets of the other countries were also trimmed to obtain fair results.
+
+An analysis of COVID-19 data of Kazakhstan is done individually to interpret the situation in Kazakhstan clearly. Since it was not sufficient to have a sound knowledge about COVID-19 situation in Kazakhstan, a comparative analysis was done with the neighbouring countries; China , Russia , Uzbekistan and with countries that highly affected by corona virus as US, India and Brazil. COVID-19 statistics of Kazakhstan was compared with the above mentioned countries to get a thorough knowledge.
+
+When comparing the COVID-19 statistics and rates among the countries, it is important to consider about the population of the countries. The below table depicts the population and death and recovery rates of COVID-19.
+
+## **3.2.Conclusion**
+
+In accordance with the data used for the analysis, the current COVID-19 situation in Kazakhstan can not be defined exactly.  Total death cases are recorded as 8538. The total active and recovered cases are 72,088 and 500,762 respectively. Death rate in Kazakhstan is comparatively low, which is 1.4%. Recovery rate is also comparatively favourable. Even though Kazakhstan is situated in the Boarder line of China; which is the root county of COVID-19, the first confirmed case was appeared on 13th March 2020. Though the confirmed cases shows a significant deviation, due to the quarantine and other preventive measures taken by the Government, Kazakhstan have been comparably successful in reducing deaths and increasing recovered cases than most of the  wealthy countries with high medical facilities.
+The invention of a vaccine and the vaccination program carried out by the Kazakhstan Government, have contributed for the control of deaths.
+
+# **4.References**
+
+* Kazakhstan https://www.britannica.com/place/Kazakhstan
+
+* Geography of Kazakhstan
+https://en.wikipedia.org/wiki/Geography_of_Kazakhstan
+
+* Climates to travel - World climate guide
+https://www.climatestotravel.com/climate/kazakhstan
+
+* CORONA VIRUS - The situation in Kazakhstan https://www.flandersinvestmentandtrade.com/export/nieuws/corona-virus-situation-kazachstan
+
+* Government Actions https://www.euractiv.com/section/central-asia/news/kazakhstan-takes-decisive-steps-to-stop-the-spread-of-coronavirus/
+
+* Coronavirus Disease
+https://www.who.int/health-topics/coronavirus
+
+* Coronavirus Cases- Worldometer
+https://www.worldometers.info/coronavirus/
+
+* COVID-19 Vaccination in Kazakhstan https://en.wikipedia.org/wiki/COVID-19_vaccination_in_Kazakhstan

@@ -1,0 +1,233 @@
+---
+title: "COVID-19 Pandemic situation in Zambia"
+author: "H.L.U Madushanka"
+date: "27th September 2021"
+output:
+    html_document:
+      theme: darkly
+      toc: true
+      toc_float: true
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(png)
+library(grid)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+## Background
+
+In the intersections of Central, South and Eastern Africa Zambia, officially the Zambia Republic is a Landlocked Country. The neighbors of this area are: Northern Democratic Republic of the Congo; Northeast Tanzania; Eastern Malawi; South-West Mozambique; South-South Botswana and Zimbabwe; SW Namibia; and west Angola. *Zambia's capital city is Lusaka*, located in Zambia's southern center. In the south Lusaka and the province of Copperbelt in the north are the main economic centers in the country. The population is mostly concentrated. 
+
+The Bantu expansion in the 13th century was originally occupied by Khoisan peoples. In the late 19th century, after European explorers, British colonized the territory into the British protectorates of Barotseland-Northwestern Rhodesia and North-East Rhodesia. They were fused into North Rhodesia in 1911. Zambia was administered by a government selected by the British South Africa Company in London for the majority of the colonial period. 
+
+## Climate 
+
+Zambia is located between 1,000 and 1,600 meters above sea level on the Central African plateau. The average height of 1200 meters offers the country a mild climate. Zambia's climate is tropical, altered by height. Most of the country is classed as wet, subtropical and tropical wet and dry in the **Köppen** climatic classification, with tiny areas of semi-arids of the steppes on the South-West and along the Zambezi Valley.
+
+Two main seasons exist, one for the summer rainy season (Nov/April), the other for the winter rainy season (June/May/October/November). The cool dry season (May/June to August) and warm dry seasons (September to October/November) are divided into the dry season. During the cool season from May through August, the altitude changes give the country nice subtropical weather rather than tropical temperatures. However, average monthly temperatures across eight or more months of the year remain over 20 °C in most of the country.
+
+
+## Ethnicity
+
+The population is about 73 ethnic groups, mainly Bantu-speaking. Nigh of the nine main ethnolingual groups, almost 90% of the Zambian people are: Nyanja-Chewa, Bemba, Tonga, Tumbuka, Lunda, Luvale, Kaonde, Nkoya, and Lozi. In rural areas in distinct geographical regions ethnic groups are concentrated. Many tiny groupings are unfamiliar. In Lusaka and Copperbelt, however, all ethnic groups can be found in large numbers. In Zambia, tribal affiliations are not only relevant for the language dimension. Such tribal identities are often associated with family loyalty or traditional authorities.
+
+![Breakdown of population by age groups](https://demographicdividend.org/wp-content/uploads/2015/04/dd-zambia-pyramids-01.jpg)
+
+Zambia has roughly 88 900 refugees and asylum seekers, according to the World Refugee Survey 2009 released by the U.S. Committee for Refugees and Immigrants. Most of the country's refugees came from the Democratic Republic of the Congo (2007: 47,300 DRC refugees), Angola (27,100), Zimbabwe (5,400) and Rwanda (4,900). In general, Zambians are hospitable to foreigners.
+
+![Zambian ethnic map, source(wikipedia)](https://www.greanvillepost.com/wp-content/uploads/2016/07/Tribal_Linguistic_map_Zambia-466x400.jpg)
+
+# Health Crisis in the past
+
+Zambia has a general HIV/AIDS epidemic with 12.10 percent of adults in Zambia. national HIV prevalence. In the last decade, however, the nation has achieved advances: the HIV/AIDS prevalence rate for adults aged 15-49 has reduced to 13% in 2013/14, compared to approximately 16% ten years earlier. Significantly improved other health outcomes, yet worldwide standards remain dismal. The maternal death rate was 398 per 100,000 living births in 2014, as against 591 live births in 2007, with infants under five decreasing from 119 per 1,000 live births to 75 per 5,000 live births in 2014.
+
+Zambia has suffered with Tuberculosis and various kind of influenza throughout their history. although history shows that Zambia has burden with health crisis COVID-19 pandemic has done worse situation in the country.
+
+# Covid-19 Pandemic
+
+## Early Stage in Zambia
+
+By 17 March all educational institutions were shut down by the government and certain travel restrictions were placed in place. On 18 March Zambia reported in Lusaka its first 2 COVID-19 cases. The patients were a couple who went on vacation to France. On 22 March there was a third case. The patient was a man who went to Pakistan. In a total of 12 cases at a live national speech on 25 March, President Edgar Lungu verified the case. 36 people tested positive during the month of March. At the conclusion of the month, all 36 cases were still ongoing.
+
+The first death of Zambia was recorded on 2 April. In all, 70 people were positive and three died throughout the month. Since the outbreak started, there have been 106 confirmed cases. At the conclusion of the month, there were 48 active cases (an increase by 33 percent from March).
+
+## Impact on Education
+
+The government of Zambian declared the closure of all schools, colleges and universities on Friday, 20 March 2020. General Education Minister David Mabumba said that the Zambia National Broadcasting Corporation (ZNBC) would create a school-closing channel. The new ZNBC station will begin on 13 April, Mr Mabumba stated. Mr Mabumba stated that more instructional programs would be on the radio for those who cannot access television. The Minister stated the administration would implement more steps to enable kids to have access to school.
+
+# Exploratory Data Analysis
+
+## Structure of Data
+
+The data set used for this analysis is available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+* Date
+* Country
+* Province/state; if available
+* Latitude of center of geographic region defined by country/province
+* Longtitude of center of geographic region defined by country/province
+* Type of reported case – confirmed, death, recovered
+* Number of cases on given date
+
+All records are available for the time period from 20 January 2020 to 18 September 2021.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+## COVID-19 Impact on Zambia
+```{r, include=FALSE}
+library(coronavirus)
+#Load data
+data(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+zambia_cases <- coronavirus %>% filter(country == "Zambia")
+
+library(ggplot2)
+
+confirmed <- zambia_cases %>%  filter(type=="confirmed")
+
+recovered <- zambia_cases %>% filter(type=="recovered")
+
+death <- zambia_cases %>% filter(type=="death")
+
+merged_list <- cbind(confirmed, "recovered"= recovered$cases, "death" = death$cases)
+
+total_cases <- sum(merged_list$cases)
+cat("Total cases in Zambia = ", total_cases)
+
+
+total_recovery <- sum(merged_list$recovered, na.rm = TRUE)
+cat("Total recovery cases in Zambia = ", total_recovery)
+
+total_death <- sum(merged_list$death, na.rm = TRUE)
+cat("Total death cases in Zambia = ", total_death)
+
+total_active <- total_cases - (total_recovery + total_death)
+cat("Total active cases in Zambia = ", total_active)
+
+merge_clean <- merged_list[!(is.na(merged_list$recovered)|is.na(merged_list$cases)|is.na(merged_list$type)),]
+library(plotly)
+
+fig1 <- plot_ly(merge_clean, y = merge_clean$cases, x = merge_clean$date, name = "Confirmed", type = "bar")
+fig2 <- plot_ly(merge_clean, y = merge_clean$recovered, x = merge_clean$date, name = "Recieved", type = "bar")
+fig3 <- plot_ly(merge_clean, y = merge_clean$death, x = merge_clean$date,name = "Deaths", type = "bar")
+
+```
+
+```{r, echo=FALSE}
+
+subplot(fig1, fig2, fig3)
+
+```
+
+The cumulative scale graph is based on a total of confirmed COVID-19 cases in Zambia from January 2020 to September 2021. Total cases are identified via a PCR test. The authorities have documented 3,638 deaths from the COVID-19 virus, most of which occurred in Lusaka, on 18 September 2021, since Zambia announced its first case.
+
+On the same date, Zambia had documented a much larger number of recoveries than deaths. The health of 189658 patients was recovered.
+
+Above plot of *Confirmed* cases shows that in Zambia there have been three major waves of coronavirus outbreaks.Around the month of July 2020, the first peek did happened and the second and the third peeks have occured in February and July months of 2021.
+
+## Zambia vs Ghana, South Africa, Senegal and Uganda
+
+```{r include= FALSE}
+data(coronavirus)
+confirmed_world <- coronavirus %>% filter(type != "recovered")
+confirmed_ghana <- confirmed_world %>% filter(country == "Ghana")
+confirmed_sa <- confirmed_world %>% filter(country == "South Africa")
+confirmed_uga <- confirmed_world %>% filter(country == "Uganda")
+confirmed_sen <- confirmed_world %>% filter(country == "Senegal")
+confirmed_zam <- confirmed_world %>% filter(country == "Zambia")
+
+
+clean_1 <- confirmed_ghana[!is.na(confirmed_ghana$cases),]
+clean_2 <- confirmed_sa[!is.na(confirmed_sa$cases),]
+clean_3 <- confirmed_uga[!is.na(confirmed_uga$cases),]
+clean_4 <- confirmed_sen[!is.na(confirmed_sen$cases),]
+clean_5 <- confirmed_zam[!is.na(confirmed_zam$cases),]
+
+f1 <- plot_ly(clean_1, y = clean_1$cases, x = clean_1$type,name = "Ghana", type = "box")
+f2 <- plot_ly(clean_2, y = clean_2$cases, x = clean_2$type,name = "South Africa", type = "box")
+f3 <- plot_ly(clean_3, y = clean_3$cases, x = clean_3$type,name = "Uganda", type = "box")
+f4 <- plot_ly(clean_4, y = clean_4$cases, x = clean_4$type,name = "Senegal", type = "box")
+f5 <- plot_ly(clean_5, y = clean_5$cases, x = clean_5$type,name = "Zambia", type = "box")
+
+```
+```{r echo=FALSE}
+subplot(f1,f2,f3,f4,f5)
+```
+By the above graph of multiple boxplots of five African countries, Zambia has taken place in average count withn respect to other countries. South Africa happened to have the severe impact on Covid-19 pandemic. In Zambia, the median of the daily confirmed coronavirus cases is  85 while the lowest median among the five countries is 46 from Uganda. 
+
+
+```{r include=FALSE}
+death_world <- coronavirus %>% filter(type == "death")
+death_ghana <- death_world %>% filter(country == "Ghana")
+death_sa <- death_world %>% filter(country == "South Africa")
+death_zam <- death_world %>% filter(country == "Zambia")
+
+clean_11 <- death_ghana[!is.na(death_ghana$cases),]
+clean_12 <- death_sa[!is.na(death_sa$cases),]
+clean_15 <- death_zam[!is.na(death_zam$cases),]
+
+trace_0 <- clean_11$cases
+trace_1 <- clean_12$cases
+trace_4 <- clean_15$cases
+x <- death_world$date
+
+data_d <- data.frame(x, trace_0, trace_1,trace_4)
+
+
+
+fig <- plot_ly(data_d, x = ~death_world$date)%>%
+  layout(title = "Deaths comparison of the three countries", xaxis = list(title = "Dates"), yaxis =list(title = "Death Count") )
+fig <- fig %>% add_trace(y = ~trace_0, name = 'Ghana',mode = 'lines')
+fig <- fig %>% add_trace(y = ~trace_1, name = 'South Africa', mode = 'lines')
+fig <- fig %>% add_trace(y = ~trace_4, name = 'Zambia', mode = 'lines')
+```
+
+```{r echo=FALSE, message=FALSE}
+fig
+```
+Above diagram shows the comparison of death cases of three countries in African region. South Africa happens to have the highest impact of covid-19. Considering the population density, Zambia is not severely damaged cause of this pandemic comparison to South Africa. Though it has lower death cases than South Africa it has more than Ghana region cases.
+
+
+# Discussion
+
+The progress of COVID-19 in Zambia cannot be properly understood only by the analysis of the data in Zambia and so a comparison has been carried out between Zambia and important nations in the context of the COVID-19 pandemic in order to come to the final conclusions.
+The fact that negative values were found in the confirmed instances in some nations through the data processing procedure may be due to the fact that some patients may be diagnosed as positive and subsequently negative COVID 19 in the early phases of the testing.
+
+This is why certain line charts contain discontinuities.
+
+With regard to the Southern African-Ghana comparisons, it was recognized that because of the enormous values difference in the number of cases, when the higher values are shown on a graph, the smaller values cannot be interpreted.
+
+Therefore the following table will provide a much larger comprehension to the results of the data analyzes in comparison of countries, as it shows that the COVID-19 is easily spread through contact and increased risk to elderly individuals. The median age of all countries can be shown to be comparable. The urban population in South Africa and its population density are larger, and this could lead to a high incidence of COVID-19 cases. In Senegal, the population density is equivalent to that of Zambia and yet there are many cases. Another essential aspect is that Uganda is considerably dense in people than Zambia, it stands ahead of Zambia in the positive progress with COVID-19. The answer to all of the above discrepancies lie in the public health response adapted by each country. 
+
+# Conclusion
+
+After analyzing Zambia statistics, we may suppose that the COVID 19 pandemic in Zambia will significantly affect it. In conclusion, Zambia is currently at a very positive stage compared with most nations in the COVID-19 pandemic, although it has been hit considerably in recent months. The Zambia Government has succeeded in implementing numerous successful techniques for responding to the disease and stabilizing development.
+
+The principal deficiencies resulting in the elevated COVID-19 figures might be seen as the delay in testing due to lack of test kits. However, the government's long-term success in controlling the disease has not yet been seen.
+
+
+# References
+
+Demographics of Zambia, Wikipedia, viewed on 26.09.2021 [https://en.wikipedia.org/wiki/Demographics_of_Zambia](https://en.wikipedia.org/wiki/Demographics_of_Zambia)
+
+Climate of Zambia, wikipedia, viewed on 26.09.2021 [https://en.wikipedia.org/wiki/Zambia#Climate](https://en.wikipedia.org/wiki/Zambia#Climate)
+
+Health in Zambia, wikipedia, viewed on 26.09.2021 [https://en.wikipedia.org/wiki/Health_in_Zambia](https://en.wikipedia.org/wiki/Health_in_Zambia)
+
+Demographics of Zambia [https://demographicdividend.org/zambia/](https://demographicdividend.org/zambia/)
+
+Outbreaks and pandemics : Preparednes and Response strategies - Zambia [https://www.marsh.com/zm/migrated-articles/outbreaks-epidemics-pandemics-preparedness-and-response-strategies-zambia.html](https://www.marsh.com/zm/migrated-articles/outbreaks-epidemics-pandemics-preparedness-and-response-strategies-zambia.html)
+
+From tuberculosis to HIV, A tale of activism of 2 pandemics [https://academic.oup.com/cid/article/50/Supplement_3/S260/321311?login=true](https://academic.oup.com/cid/article/50/Supplement_3/S260/321311?login=true)
+
+ 

@@ -1,0 +1,555 @@
+---
+title: "Assignment 3"
+author: "Thushara Supun"
+date: "9/27/2021"
+output: html_document
+---
+
+<!-- Index NO : AS2018399 -->
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+library(coronavirus)
+data(coronavirus)
+
+project_country <- get_individual_project_country("AS2018399")
+jamaica_corona <- coronavirus %>% filter(country == project_country)
+
+jamaica_confirmed_corona <- jamaica_corona %>% filter(type=="confirmed")
+jamaica_recovered_corona <- jamaica_corona %>% filter(type=="recovered")
+recovered_mean <-mean(jamaica_recovered_corona$cases,na.rm = TRUE)
+jamaica_recovered_corona <-replace_na(jamaica_recovered_corona,list(cases=recovered_mean))
+jamaica_death_corona <- jamaica_corona %>% filter(type=="death")
+
+jamaica_confirmed_case<-cumsum(jamaica_confirmed_corona$cases)
+jamaica_recovered_case<- cumsum(jamaica_recovered_corona$cases)
+jamaica_death_case<-cumsum(jamaica_death_corona $cases )
+
+jamaica_active_case<-jamaica_confirmed_case-(jamaica_recovered_case+jamaica_death_case) 
+jamaica_active_corona<- data.frame(date=jamaica_confirmed_corona$date,jamaica_active_case)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(coronavirus)
+data(coronavirus)
+
+cuba_corona <- coronavirus %>% filter(country == "Cuba")
+cuba_confirmed_corona <- cuba_corona %>% filter(type=="confirmed")
+cuba_recovered_corona <- cuba_corona %>% filter(type=="recovered")
+recovered_mean <-mean(cuba_recovered_corona$cases,na.rm = TRUE)
+cuba_recovered_corona <-replace_na(cuba_recovered_corona,list(cases=recovered_mean))
+cuba_death_corona <- cuba_corona %>% filter(type=="death")
+cuba_confirmed_case<-cumsum(cuba_confirmed_corona$cases)
+cuba_recovered_case<- cumsum(cuba_recovered_corona$cases)
+cuba_death_case<-cumsum(cuba_death_corona $cases )
+cuba_active_case<-cuba_confirmed_case-(cuba_recovered_case+cuba_death_case) 
+cuba_active_corona<- data.frame(date=cuba_confirmed_corona$date,cuba_active_case)
+
+haiti_corona <- coronavirus %>% filter(country == "Haiti")
+haiti_confirmed_corona <- haiti_corona %>% filter(type=="confirmed")
+haiti_recovered_corona <- haiti_corona %>% filter(type=="recovered")
+recovered_mean <-mean(haiti_recovered_corona$cases,na.rm = TRUE)
+haiti_recovered_corona <-replace_na(haiti_recovered_corona,list(cases=recovered_mean))
+haiti_death_corona <- haiti_corona %>% filter(type=="death")
+haiti_confirmed_case<-cumsum(haiti_confirmed_corona$cases)
+haiti_recovered_case<- cumsum(haiti_recovered_corona$cases)
+haiti_death_case<-cumsum(haiti_death_corona $cases )
+haiti_active_case<-haiti_confirmed_case-(haiti_recovered_case+haiti_death_case) 
+haiti_active_corona<- data.frame(date=haiti_confirmed_corona$date,haiti_active_case)
+
+dominica_corona <- coronavirus %>% filter(country == "Dominica")
+dominica_confirmed_corona <- dominica_corona %>% filter(type=="confirmed")
+dominica_recovered_corona <- dominica_corona %>% filter(type=="recovered")
+recovered_mean <-mean(dominica_recovered_corona$cases,na.rm = TRUE)
+dominica_recovered_corona <-replace_na(dominica_recovered_corona,list(cases=recovered_mean))
+dominica_death_corona <- dominica_corona %>% filter(type=="death")
+dominica_confirmed_case<-cumsum(dominica_confirmed_corona$cases)
+dominica_recovered_case<- cumsum(dominica_recovered_corona$cases)
+dominica_death_case<-cumsum(dominica_death_corona $cases )
+dominica_active_case<-dominica_confirmed_case-(dominica_recovered_case+dominica_death_case) 
+dominica_active_corona<- data.frame(date=dominica_confirmed_corona$date,dominica_active_case)
+
+bahamas_corona <- coronavirus %>% filter(country == "Bahamas")
+bahamas_confirmed_corona <- bahamas_corona %>% filter(type=="confirmed")
+bahamas_recovered_corona <- bahamas_corona %>% filter(type=="recovered")
+recovered_mean <-mean(bahamas_recovered_corona$cases,na.rm = TRUE)
+bahamas_recovered_corona <-replace_na(bahamas_recovered_corona,list(cases=recovered_mean))
+bahamas_death_corona <- bahamas_corona %>% filter(type=="death")
+bahamas_confirmed_case<-cumsum(bahamas_confirmed_corona$cases)
+bahamas_recovered_case<- cumsum(bahamas_recovered_corona$cases)
+bahamas_death_case<-cumsum(bahamas_death_corona $cases )
+bahamas_active_case<-bahamas_confirmed_case-(bahamas_recovered_case+bahamas_death_case) 
+bahamas_active_corona<- data.frame(date=bahamas_confirmed_corona$date,bahamas_active_case)
+```
+
+# 1 Introduction
+
+Jamaica is an island country located in the Caribbean Sea, south of Cuba and west of Haiti and the Dominican Republic & largest English speaking island in the Caribbean. It is 150 miles long and approximately 50 miles at the widest point, covering an area of 4,411 square miles. The interior is mountainous and gives rise to many rivers. The Blue Mountain, running east to west, reach a peak of 7,402 ft.The chief of state is the Queen of the United Kingdom, and the head of government is the Prime Minister of Jamaica. Jamaica has a mixed economic system which includes a variety of private freedom, combined with centralized economic planning and government regulation. Jamaica is a member of the Caribbean Community (CARICOM).
+
+![Jamaican Flag](https://i.ibb.co/0mzQ8Z0/jamaica-flag.jpg)
+
+
+## 1.1 Visualization of the Location
+
+It is situated some 100 miles (160 km) west of Haiti, 90 miles (150 km) south of Cuba, and 390 miles (630 km) northeast of the nearest point on the mainland, Cape Gracias a Dios, on the Caribbean coast of Central America. The national capital is Kingston.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(magrittr)
+library(leaflet)
+library(dplyr)
+
+m <- leaflet() %>%
+    addTiles() %>%  
+    setView(lng=jamaica_corona$long[1], lat=jamaica_corona$lat[1], zoom = 4) %>%
+    addMarkers(lng=jamaica_corona$long[1], lat=jamaica_corona$lat[1], popup="<b>Jamaica</b><br><a href='https://www.google.com/maps/d/viewer?mid=1SunlfLhyBbZKPKOs1omDFdkytiI&usp=sharing'>Google Map</a>")
+
+m 
+```
+
+
+![Jamaica Location in the World Map with Continents](https://i.ibb.co/vjDbfBF/what-continent-is-jamaica-in.png)
+
+## 1.2 Climate Condition
+
+In Jamaica, the climate is tropical, hot all year round, with little difference between winter and summer (just a few degrees). Even in winter, daytime temperatures are around 27/30 °C (81/86 °F) and night-time temperatures around 20/23 °C (68/73 °F). The southern coast, where Kingston is located, is slightly warmer in the winter months, in fact the maximum temperature is around 30 °C (86 °F) even in January.
+
+![Average Temperatures of Kingston](https://i.ibb.co/hH6w9GQ/Screenshot-2021-09-27-at-19-38-59-Jamaica-climate-average-weather-temperature-precipitation-when-to.png)
+
+The main difference between the seasons is found in rainfall and air humidity: the rainy season, from late April to October, is hot and muggy. Rainfall occurs mainly in the form of thunderstorm in late afternoon. In almost all of Jamaica, except on the west coast (see Negril), in July there is a relative lull in precipitation, and in any case, there are two peaks in May and October, that is, at the beginning and the end of the period.
+
+![Average Precipitation in Kingston](https://i.ibb.co/txB05Dk/Screenshot-2021-09-27-at-19-39-49-Jamaica-climate-average-weather-temperature-precipitation-when-to.png)
+
+The rain pattern is also due to the north-east trade winds, which are typical of the Tropics, and blow from November to March. Along the northern coast of Jamaica, rainfall ranges between 1,200 and 1,800 millimeters (47 and 70 inches) per year. The southern coasts and plains are not as rainy as the northern slopes because they are sheltered from the trade winds, either by the Blue Mountains or by the hills of the west-central part of the country. These elevations receive a lot of rainfall and are covered with forests (especially the Blue Mountains in the east and the southern part of the Trelawny Parish in the west). Therefore, the capital, Kingston, is not very rainy, in fact it receives about 800 mm (31.5 in) of rain per year; the Pedro Plains in the west receive little rainfall as well, around 800 millimeters (31.5 inches) per year.
+
+## 1.3 Lock-down Status of the Country
+
+Officials have announced increased domestic COVID-19-related restrictions in response to the rising number of cases. Stay-at-home orders will be enforced over seven days through Sept. 5. The impacted days are Aug. 22, 23, 24, 29, 30, and 31, and Sept. 5. On lockdown days, essential workers may still travel. There will also be exceptions for international travelers, persons seeking medical assistance, and those attending religious services on Aug. 29 and Sept. 5.
+
+
+## 1.4 Actions Taken by the Government
+
+* On 12 March 2020 : the closing of all primary and secondary schools for fourteen days.
+
+* On 13 March 2020 : the invocation of the special powers under the Disaster Risk Management Act, the Emergency Powers Act and the Public Health Act to combat further spread of COVID-19.
+
+* On 17 March 2020 : the imposition of work-from-home directives to non-essential workers.
+
+* On 20 March 2020 : the closure of all ports of entry to incoming traffic for a period of 14 days, effective 21 March.
+
+* On 23 March 2020 : the imposition of a stay-at-home order for all Jamaican citizens and residents 75 years and older for a period of 14 days, effective 25 March.
+
+* On 25 March 2020 : the institution of the multi-billion dollar COVID-19 Allocation of Resources for Employees (CARE) Programme which aims to provided financial assistance to workers and business affected by the pandemic.[37] The programme became operational on 9 April.
+
+* On 30 March 2020 : the imposition of an island-wide curfew, from 1 April to 8 April.
+
+* On 3 April 2020 : the issuing of an order to the Passport, Immigration and Citizenship Agency to block 4500 individuals (who arrived between 18 and 24 March) from leaving the island, after said individuals failed to report to quarantine as required under the Disaster Risk Management Act.
+
+* On 5 April 2020 : the launching of a telethon, by the culture minister, aimed at raising US$10 million to fund the government's COVID-19 response.
+
+* On 6 April 2020 : the issuing of guidelines on the usage of masks following similar announcements by the USCDC and the World Health Organization.
+
+* On 8 April 2020 : the extension of the nightly curfew in place to 21 April & the extension of stay-at-home and work-from-home orders, until 21 April.
+
+* On 9 April 2020 : the launching of COVID-19 Allocation of Resources for Employees (CARE) Programme.
+
+* On 13 April 2020 : the consideration of new protocols to facilitate the controlled re-entry of Jamaicans when possible, contingent on quarantine and isolation capacity, among other variables, pending the full re-opening of our borders to passenger traffic & the launching and deployment of mobile testing units.
+
+* On 20 April 2020 : the tightening of the previously loosened island-wide curfew, effective 22 April.
+
+* On 27 April 2020 : the extension of a quarantine mandate of employees of the call centre involved in the workplace outbreak.
+
+* On 7 May 2020 : the quarantining of several communities in the parish of Saint Mary.
+
+* On 19 May 2020 : the rescinding of work-from-home orders, effective 31 May.
+
+* On 31 May 2020 : the publication of new workplace protocols.
+
+* On 1 June 2020 : the phased re-opening of the country's borders, in keeping with the Controlled Re-Entry Programme.
+
+* On 25 June 2020 : the placement of West Kingston under “community surveillance” following a rise in cases.
+
+* On 26 June 2020 : the placement of the community of Norwood, Saint James under “community surveillance” following a rise in cases.
+
+* On 6 August 2020 : the quarantining of the community of Sandy Bay, Clarendon for 14-days, following a rise in infections.
+
+* On 9 August 2020 : the quarantining of the communities of Lower Summit, Church Corner and Bamboo River in Saint Thomas for 14-days, following a rise in infections.
+
+* On 20 August 2020 : the quarantining of the communities of Albion and Seaforth in Saint Thomas for 14-days, following a rise in infections.
+
+* On 14 October 2020 : the procurement of Remdesivir for treatment of COVID-19.
+
+* On 8 December 2020 : the naming of the National COVID-19 Vaccine Commission, tasked with providing guidance and oversight in the development of a national deployment strategy for the introduction of COVID-19 vaccines.
+
+* On 21 December 2020 : the imposition of the travel ban from the United Kingdom over concerns surrounding the British variant of the virus.
+
+* On 31 December 2020 : the extension of the aforementioned travel ban until 31 January 2020.
+
+* On 2 January 2021 : the distribution 30,000 antigen test kits and reader machines to six private laboratories, to increase national testing capacity.
+
+* On 15 January 2021 : the approval of 129 schools to return to face-to-face learning.
+
+* On 22 February 2021 : the allocation of over JM $5bn for the procuring and planned distribution of the COVID-19 vaccine.
+
+* On 25 February 2021 : the extension of travel ban from the United Kingdom until 15 March.
+
+* On 27 February 2021 : the receipt of medical supplies and equipment from Japan.
+
+* On 28 February 2021 : the receipt of COVID-19 vaccine donation from India.
+
+* On 4 March 2021 : the publication of the Vaccine Implementation Plan outlining the scheduled rollout of the COVID-19 vaccine.
+
+* On 10 March 2021 : the commencement of the vaccination programme.
+
+* On 21 March 2021 : the introduction of ‘lockdown measures’ in light of sharp rise in infections.
+
+# 2 Exploratory Data Analysis
+
+## 2.1 Visualization of Confirmed, Recovered, Death & Active
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+p <- jamaica_corona %>% 
+  ggplot(aes(x=date, y=cases, col=type)) + geom_col() +
+  ggtitle("Jamaica: Daily Covid-19 Cases by Type") +
+  facet_grid(type~.)
+p <- ggplotly(p)
+p
+```
+
+### 2.1.1 Visualization of Confirmed
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+p <- jamaica_confirmed_corona %>%
+  ggplot( aes(x=date, y=jamaica_confirmed_case)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("Jamaica: Daily Covid-19 Confirmed") +
+  theme_ipsum()
+p <- ggplotly(p)
+p
+```
+
+### 2.1.2 Visualization of Recovered
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+p <- jamaica_recovered_corona %>%
+  ggplot( aes(x=date, y=jamaica_recovered_case)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("Jamaica: Daily Covid-19 Recovered") +
+  theme_ipsum()
+p <- ggplotly(p)
+p
+```
+
+### 2.1.3 Visualization of Death
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+p <- jamaica_death_corona %>%
+  ggplot( aes(x=date, y=jamaica_death_case)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("Jamaica: Daily Covid-19 Death") +
+  theme_ipsum()
+p <- ggplotly(p)
+p
+```
+
+### 2.1.4 Visualization of Active
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+p <- jamaica_active_corona %>%
+  ggplot( aes(x=date, y=jamaica_active_case)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("Jamaica: Daily Covid-19 Active") +
+  theme_ipsum()
+p <- ggplotly(p)
+p
+```
+
+
+## 2.2 Compare with Other Countries
+
+### Here we take neighbour countries of jamaica to compare.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+neighbour_confirmed_corona <- rbind(jamaica_confirmed_corona, cuba_confirmed_corona, haiti_confirmed_corona, dominica_confirmed_corona, bahamas_confirmed_corona)
+
+p <- neighbour_confirmed_corona %>% 
+  ggplot(aes(x=country, y=cases, col= country)) + 
+  geom_boxplot(outlier.shape = NA, alpha = 0.2) +
+  geom_jitter(aes(col=country)) +
+  ggtitle("A boxplot of confirmed Cases in Jamaica's neighbour countries")
+p <- ggplotly(p)
+p
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+neighbour_recovered_corona <- rbind(jamaica_recovered_corona, cuba_recovered_corona, haiti_recovered_corona, dominica_recovered_corona, bahamas_recovered_corona)
+
+p <- neighbour_recovered_corona %>% 
+  ggplot(aes(x=country, y=cases, col= country)) + 
+  geom_boxplot(outlier.shape = NA, alpha = 0.2) +
+  geom_jitter(aes(col=country)) +
+  ggtitle("A boxplot of recovered cases in Jamaica's neighbour countries")
+p <- ggplotly(p)
+p
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+neighbour_death_corona <- rbind(jamaica_death_corona, cuba_death_corona, haiti_death_corona, dominica_death_corona, bahamas_death_corona)
+
+p <- neighbour_death_corona %>% 
+  ggplot(aes(x=country, y=cases, col= country)) + 
+  geom_boxplot(outlier.shape = NA, alpha = 0.2) +
+  geom_jitter(aes(col=country)) +
+  ggtitle("A boxplot of death cases in Jamaica's neighbour countries")
+p <- ggplotly(p)
+p
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+library(ggplot2)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(hrbrthemes)
+library(viridis)
+
+a<-sum(jamaica_confirmed_corona$cases)
+b<-sum(cuba_confirmed_corona$cases)
+c<-sum(haiti_confirmed_corona$cases)
+d<-sum(dominica_confirmed_corona$cases)
+e<-sum(bahamas_confirmed_corona$cases)
+neighbour_confirmed_corona_sum <- c(a,b,c,d,e)
+
+f<-sum(jamaica_recovered_corona$cases)
+g<-sum(cuba_recovered_corona$cases)
+h<-sum(haiti_recovered_corona$cases)
+i<-sum(dominica_recovered_corona$cases)
+j<-sum(bahamas_recovered_corona$cases)
+neighbour_recovered_corona_sum <- c(f,g,h,i,j)
+
+k<-sum(jamaica_death_corona$cases)
+l<-sum(cuba_death_corona$cases)
+m<-sum(haiti_death_corona$cases)
+n<-sum(dominica_death_corona$cases)
+o<-sum(bahamas_death_corona$cases)
+neighbour_death_corona_sum <- c(k,l,m,n,o)
+
+
+Parts <- c("Jamaica","Cuba","Haiti","Dominica","Bahamas")
+countries <- data.frame(Parts, neighbour_confirmed_corona_sum, neighbour_recovered_corona_sum, neighbour_death_corona_sum)
+
+
+fig <- plot_ly(data= countries, x = ~Parts)
+fig <- fig %>% add_trace(y = ~neighbour_confirmed_corona_sum, name = 'Comfirmed')
+fig <- fig %>% add_trace(y = ~neighbour_recovered_corona_sum, name = 'Recovered')
+fig <- fig %>% add_trace(y = ~neighbour_death_corona_sum, name = 'Death')
+fig <- fig %>% layout(
+  title = "Covid-19 Cases in Neighboring Countries",
+  xaxis = list(title = "Country"),
+  yaxis = list(title = 'Number of Cases'), 
+  barmode = 'group')
+fig
+```
+
+
+# 3 Conclusions and Discussion
+
+* At the current moment Jamaica is in the middle of third wave of COVID-19.
+* The recovered cases are bit low compared to confirmed cases & Death cases distribution is very low compared to the confirmed cases distribution.
+* Here we compare other four neighbour countries (Cuba, Dominica, Bahamas, Haiti) with Jamaica.
+* As you can see in the above figures compared to Jamaica, Dominica Republic doing very well in managing COVID-19 pandemic situation.
+* Dominica has very low confirmed and death cases compared to Jamaica and as well as other three countries.
+* Overall compared to other caribbean countries in above figures Jamaica's government doing really good job to controll COVID-19 pandemic situation.
+* Actually COVID-19 infections are decreasing in Jamaica, with 374 new infections reported on average each day. That’s 52% of the peak — the highest daily average reported on September 7.
+* Jamaica has administered at least 743,184 doses of COVID vaccines so far. Assuming every person needs 2 doses, that’s enough to have vaccinated about 12.6% of the country’s population.
+* During the last week reported, Jamaica averaged about 3,292 doses administered each day. At that rate, it will take a further 180 days to administer enough doses for another 10% of the population.
+
+
+# 4 References
+* Jamaica : [https://en.wikipedia.org/wiki/Jamaica](https://en.wikipedia.org/wiki/Jamaica)
+* COVID-19 pandemic in Jamaica : [https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Jamaica](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Jamaica)
+* Introduction to Jamaica : [https://jamaicaexquisitetours.com/news/16/Introduction-to-Jamaica.html](https://jamaicaexquisitetours.com/news/16/Introduction-to-Jamaica.html)
+* Jamaica: Introduction : [https://globaledge.msu.edu/countries/jamaica](https://globaledge.msu.edu/countries/jamaica)
+* Jamaica | History, Population, Flag, Map, Capital, & Facts : [https://www.britannica.com/place/Jamaica](https://www.britannica.com/place/Jamaica)
+* Interactive maps with Leaflet : [https://learn.r-journalism.com/en/mapping/leaflet_maps/leaflet/](https://learn.r-journalism.com/en/mapping/leaflet_maps/leaflet/)
+* Jamaica climate: average weather, temperature, precipitation : [https://www.climatestotravel.com/climate/jamaica](https://www.climatestotravel.com/climate/jamaica)
+* Who Are Jamaica's Neighbours? : [https://www.my-island-jamaica.com/who-are-jamaicas-neighbours.html](https://www.my-island-jamaica.com/who-are-jamaicas-neighbours.html)
+* Jamaica and COVID-19 : [https://jis.gov.jm/jamaica-and-the-coronavirus/](https://jis.gov.jm/jamaica-and-the-coronavirus/)
+* Jamaica: Officials to enforce a series of lockdowns : [https://www.garda.com/crisis24/news-alerts/516016/jamaica-officials-to-enforce-a-series-of-lockdowns-from-aug-22-sept-5-to-stem-rising-covid-19-infection-rates-update-31](https://www.garda.com/crisis24/news-alerts/516016/jamaica-officials-to-enforce-a-series-of-lockdowns-from-aug-22-sept-5-to-stem-rising-covid-19-infection-rates-update-31)
+* Jamaica: the latest coronavirus counts, charts and maps : [https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/jamaica/](https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/jamaica/)
+
+

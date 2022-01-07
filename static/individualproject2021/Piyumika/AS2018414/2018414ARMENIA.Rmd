@@ -1,0 +1,197 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Assignment 03
+
+### AS2018414
+
+
+
+# Covid-19 in Armenia
+<img src="download.jpg" alt="Description for image" width="500" height="300">
+
+# Introduction
+
+The first case of Covid-19 in Armenia was discovered on March 1, 2020.The patient was a 29-year-old citizen of Armenia, who arrived from Tehran. Initially the spread was slow,reaching 100 cases by March 17. The spread of the virus accelerated rapidly thereafter, reaching 1,000cases by April 10, 5000 cases by May 19 and 10,000 cases by June 2.1The growth in the number of deaths from the disease followed a similar patter, albeit at a lower level and with a time lag. The 100 deaths mark was reached on May 14 and by June 15 some 269 deaths had been registered. Over the past month (mid-May to mid-June) the number of infections doubled every two weeks and there are as yet (end-June) few signs of a slowdown.
+
+
+#### Armenia vaccination 
+
+
+<img src="AM_Coronavirus_Vaccination_Rate.jpg" alt="Armenia vaccination" width="500" height="500">
+
+
+### Location of Armenia 
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Armenia_corona <- coronavirus %>% filter(country == "Armenia")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Armenia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+#### Neighboring countries
+<img src="images.jpg" alt="Description for image" width="500" height="300">
+
+### Climate condition of Armenia
+
+In Armenia, the climate is continental, with cold winters and hot summers.The climate becomes colder and wetter (and snowy in winter as well) with increasing altitude, while at lower elevations, the rains are scarce and the summer is very hot. In winter, cold air masses predominate, and after having reached the country from the north, they tend to stagnate in the valleys, causing severe frosts. Spring is an unstable season and experiences the most frequent rains, though they generally remain not abundant because, as mentioned, this country is generally arid, at least at lower elevations. Summer is dry and sunny, but with some afternoon thunderstorms in the mountains.From the mountains, a down-slope wind, dry and warm, similar to the Föhn or Chinook, can reach the valleys, especially in winter, but also in spring and autumn.
+
+### Lockdown status in Armenia
+
+Armenia confirmed its first Covid-19 case on March 1. On March 16, the government declared a state of emergency and extended it five times, ending it on September 11.In September, the government replaced the state of emergency with a special regime until January 11, which allows the national government to impose national or local lockdowns, and restrictions on gatherings and protests, without announcing a state of emergency.
+
+### Action taken by the government
+
+some of the key actions in January and February were the formation of a special Task Force to prevent the spread of the virus, temporary suspension of the visa-free regime with China, where the virus originated (just two weeks after a bilateral agreement between Armenia and China removing visa restrictions came into force) and closure of the border on February 23 with neighboring Iran. The messaging of the Government in early March, before a national lockdown and restrictions on freedom of movement were imposed, mainly focused on urging citizens to limit non-essential travel to countries where the virus was rapidly spreading. 
+
+## Data analysis
+
+### data cleaning
+
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+Armenia_corona$Month <- months(as.Date(Armenia_corona$date))
+data_new_Armenia_corona<- Armenia_corona[ , colSums(is.na(Armenia_corona)) < nrow(Armenia_corona)]
+data_new1_Armenia_corona<-na.omit(data_new_Armenia_corona)
+head(data_new1_Armenia_corona)
+tail(data_new1_Armenia_corona)
+```
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+summary(data_new1_Armenia_corona)
+```
+
+
+
+### Exploratory data analysis
+
+
+```{r,echo=FALSE,comment=NA,warning=FALSE,fig.height=4,fig.width=5}
+recover_Armenia_corona <- data_new1_Armenia_corona%>% filter(type=="recovered")
+death_Armenia_corona <- data_new1_Armenia_corona %>% filter(type=="death")
+confirm_Armenia_corona<-data_new1_Armenia_corona %>% filter(type=="confirmed")
+ggplot(data_new1_Armenia_corona,aes(x = type,y = cases),is.na=FALSE) +geom_bar(stat = "identity")+ggtitle("Figure 1:overall covid-19 status in Armenia")
+```
+
+
+According to that figure 1 there were all confirmed cases are more than 250000 and the death cases are low value until August 04,2021.
+
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+ggplot(data_new1_Armenia_corona,aes(date,cases,color=type),is.na=FALSE)+geom_line()+ggtitle("Figure 2:daily covid-19 status in Armenia")
+```
+
+By the figure2, we can see number of corona virus patients started increasing slowly,but end of the 2020 that is increased to daily confirmed cases were more than 2000 and again it went to down. The recovered cases as like as the confirmed cases.In the end of the 2020 that is increased highly. Daily reported death cases are constant.
+
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+active_cases<-data_new1_Armenia_corona %>% pivot_wider(names_from = type, values_from = cases) %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+ggplot(active_cases, aes(x=date, y=active),is.na=FALSE) + geom_line() +  ggtitle(" figure 3:Armenia Daily Covid-19 active cases")
+```
+
+According to the figure 3 the daily active cases increased in the end of the 2020. That is more than 40000. After the January 2021 it has been to maintain the active cases of less than 20000.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+neighbour_countries <- filter(coronavirus,country %in% c("Armenia","Iran","Azerbaijan","Turkey"))
+neighbor_confirmed <- neighbour_countries %>% filter(type=="confirmed")
+ggplot(neighbor_confirmed,aes(x=date,y=cases,col=country),is.na=FALSE)+ geom_line() + ggtitle("Figure 4:Daily confirmed cases of Armenia and neighbouring countries") 
+```
+
+By the above Figure 4 contain daily covid-19 confirmed cases, we can see Turkey has the daily highest reported cases.Another countries have same daily confirmed cases.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+neighbour_countries <- filter(coronavirus,country %in% c("Armenia","Iran","Azerbaijan","Turkey"))
+neighbor_death <- neighbour_countries %>% filter(type=="death")
+ggplot(neighbor_death,aes(x=date,y=cases,col=country),is.na=FALSE)+ geom_line() + ggtitle("Figure 5:Daily death cases of Armenia and neighbouring countries") 
+```
+
+In the figure 5 daily death cases are present neighbor countries with Armenia. The death cases are highest of the Iran. It is more than 600. Armenia has the lowest death cases in that period . Further before July 2021 Armenia and Azerbaijan have a same pattern.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+neighbour_countries <- filter(coronavirus,country %in% c("Armenia","Iran","Azerbaijan","Turkey"))
+neighbor_recovered <- neighbour_countries %>% filter(type=="recovered")
+ggplot(neighbor_recovered,aes(x=date,y=cases,col=country),is.na=FALSE)+ geom_line() + ggtitle("Figure 6:Daily recovered cases of Armenia and neighbouring countries") 
+```
+
+According to the figure 6 has a same pattern as the figure 4.In the figure 6 shows daily recovered cases of Armenia and neighboring countries. As the figure 5 Turkey has highest recovered cases. Another countries have a same pattern.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+ggplot(neighbor_confirmed, aes(x=country, y=cases,fill=country),is.na=FALSE) + geom_col() + ggtitle("Figure 7:Total confirmed cases")
+```
+
+By the figure 7, we can see total covid-19 confirmed cases were recorded. Here Turkey has the highest total value of the confirmed cases and Armenia has the lowest value.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+ggplot(neighbor_death, aes(x=country, y=cases,fill=country),is.na=FALSE) + geom_col() + ggtitle("Figure 8:Total death cases")
+```
+
+According to the figure 8 the highest death cases are reported in Iran. Armenia has the lowest value.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+ggplot(neighbor_recovered, aes(x=country, y=cases,fill=country),is.na=FALSE) + geom_col() + ggtitle("Figure 9:Total recovered cases")
+```
+
+The figure 8 has pattern like as figure 7 and 8. Here Turkey has highest recovered cases and lowest value is in Armenia.
+
+
+# conclusion
+
+In this period total Armenia death cases has lowest value and it behave uniform during this time. There has been an increase in confirmed cases and in the end of the 2020 there has been a decline again.But this period recovered cases has been increased. when look with other countries, such that Azerbaijan, Iran, Turkey, the Armenia has the very low distribution of covi-19. Turkey has the highest expansion in end of the 2020. Until that time these four  countries have same pattern. The death cases in Armenia and Azerbaijan have a same pattern after the July 2021 death cases of Azerbaijan has a certain increased. Iran has highly death cases among this period. above has daily reported cases but when see the total cases, Armenia has very low amount of the confirmed cases among the other three countries.
+
+
+# Discussion
+
+
+There was not reported by the province Covid-19 cases in the Armenia. That data was reported during from January 22, 2020 to September 18, 2021. By the above  figures and data we can say in Armenia has successfully control covid-19 situation. They have winter and summer season. Reason this climate condition, some times they can be controlled that situation. Turkey, Iran, Azerbaijan are located neighboring with Armenia. Armenia has successful control covid-19 more than these counties. Such that Armenia total death cases low than 10000 but Turkey approximately 60000 death cases was reported during this period. And Iran has reported more than 900000. It is approximately 120000. That is the very huge amount with Armenia total death cases. 
+
+
+ 
+# References
+
+[1] CLIMATE TO TRAVEL, World Climate Guide,https://www.climatestotravel.com/climate/armenia
+
+[2] Employment Country Report Series, ILO Decent Work Team and Country Office for Eastern Europe and Central Asia, Rapid assessment of the employment impact and policy responses of the COVID-19 pandemic on Armenia, October 2020. 
+
+[3] Armenia Events of 2020,https://www.hrw.org/world-report/2021/country-chapters/armenia
+
+[4] https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.orfonline.org%2Fexpert-speak%2Farmenia-coronavirus-projection-2021%2F&psig=AOvVaw3Ybfu494r_JpfCVW-X3NgW&ust=1632922165280000&source=images&cd=vfe&ved=2ahUKEwinvJCe46HzAhVBVXwKHY4pDpIQr4kDegQIARAV
+
+[5] https://www.google.com/url?sa=i&url=https%3A%2F%2Fpunchng.com%2Farmenian-pm-tests-positive-for-covid-19%2F&psig=AOvVaw00tXM1GgxvxRaXLn-1nOe8&ust=1632922202654000&source=images&cd=vfe&ved=0CAwQr4kDahcKEwiQiZa446HzAhUAAAAAHQAAAAAQBA
+
+[6] tradingeconomics.com| Our World in Data, https://tradingeconomics.com/armenia/coronavirus-vaccination-rate
+
+[7] Lusine Sargsyan,Observations About Armenia’s COVID-19 Response, https://www.evnreport.com/covid-19/observations-about-armenia-s-covid-19-response

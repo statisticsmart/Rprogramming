@@ -1,0 +1,382 @@
+---
+title: "COVID-19 Pandemic In FRANCE"
+author: "Saminda Munasinghe"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<center>
+
+![](COVIDFrance-704x369.jpg)
+
+</center>
+
+# <span style="text-decoration:underline">**INTRODUCTION**</span>
+
+**France**, also known as 'French Republic' is one of Europe’s largest countries, one of the most popular tourist destinations in the world and one of the richest countries in the world. The country is considered to be the gateway to Europe as there are several large international airports, ferry terminals and the French rail service. Current population of France is about 67 million. Paris is the capital and the largest and most the populous city of the country. National and official language of France is French. France is a developed country with the world's seventh largest economy by nominal GDP and in terms of aggregate household wealth, it ranks fourth in the world. France is a founding and leading member of the European Union and the Euro-zone, as well as a key member of the Group of Seven (G-7), North Atlantic Treaty Organization (NATO), Organisation for Economic Co-operation and Development (OECD), and Organisation internationale de la Francophonie.
+
+## **France in World Map**
+France is  located on the western edge of Europe and bordered by six other nations: Germany, Belgium and Luxembourg to the northeast, Switzerland and Italy to the southeast and Spain to the southwest. Its 18 integral regions ( 5 of which are overseas) span a combined area of 643,801 km2. Including its overseas territories, France has 12 time zones, as the most of any country. There are 13 regions and 101 departments, with 35,000 municipalities.
+
+<center>
+
+```{r, message=FALSE, warning=FALSE, fig.cap=" Geographical position of France"}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+france_corona <- coronavirus %>% filter(country == "France")
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+france_location <- tibble(long = 2.2137, lat = 46.2276) # to get the exact location
+
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "light blue", colour = "white") +
+  
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = france_location, aes(x = long, y = lat), color = "red", size = 2)
+```
+
+</center>
+
+![Regions of France](france-map-provinces-0.jpg)
+
+(Source : https://www.orangesmile.com/travelguide/france/country-maps-provinces.htm)
+
+## **Climate condition in France**
+France generally enjoys cool winters and mild summers except along the Mediterranean, where mild winters and hot summers are the norm. Rainfall is brought mainly by westerly winds from the Atlantic and is characterized by cyclonic depressions. Annual precipitation is more than 1,270 mm at higher elevations in western and northwestern France, in western Pyrenees, Massif Central, and in Alps and Jura mountains. Average winter temperatures range from 32° F to 46° F and average summer temperatures from 61° F to 75° F. For the most warmth and sunshine go to the south of the country.
+
+![Climate of France](3903369_orig.png)
+
+(Source : https://cultureinfrancetask.weebly.com/climate.html)
+
+## **Political background of France**
+France is a  unitary semi-presidential republic country. Its head of state is the president of the Republic that elected by direct universal suffrage and the government consists of the Prime Minister and ministers. The parliament consists of the National Assembly and the Senate. Current president of France is Mr. Emmanuel Macron. France was a founding member of the European Coal and Steel Community, later the European Union. Also, France has transferred part of its sovereignty to European institutions, as provided by its constitution. Therefore, the French government has to abide by European treaties, directives and regulations.
+
+## **COVID-19 status**
+The COVID-19 pandemic in France is part of the worldwide pandemic of corona virus disease (COVID-19) caused by "SARS-CoV-2". The virus was confirmed to have reached France on 24th of January 2020 and the first COVID-19 case in both Europe and France was identified in city Bordeaux. The first five confirmed cases were all individuals who had recently arrived from China. A Chinese tourist who was admitted to hospital in Paris on 28th of January 2020, died on 14th of February 2020, making it as the first COVID-19 death in France as well as the first COVID-19 death outside Asia. A key event in the spread of the disease across France as well as its overseas territories was the annual assembly of the Christian Open Door Church between 17th to 24th February 2020 in Mulhouse which was attended by about 2,500 people, at least half of whom are believed to have contracted the virus. Since that, France is still suffering from COVID-19 same as the other countries in the world.
+
+## **Lock-Down status & Actions taken by the government**
+President Emmanuel Macron announced on 12th of March 2020 in public television that all schools and all universities in France would close from Monday 16th of March 2020 until further notice. The next day, Prime Minister banned gatherings of more than 100 people, not including public transport. The following day, the prime minister ordered the closure of all non-essential public places, including restaurants, cafes, cinemas and nightclubs, effective from that midnight. 
+
+On 16th of March 2020, President Macron announced mandatory home lock-down for 15 days starting at noon on 17th of March 2020. All government workers engaged with non-essential work were ordered to stay home for two weeks while the government asked from private sector employers to allow their employees to stay home for the same period. This was extended twice and ended on 11th of May 2020, after a progressive lifting of lock-down and as face masks were made available to all citizens. On 2nd of May 2020, Health Minister announced that the government would seek to extend the health emergency period until 24th of July 2020. Several mayors opposed the 11th of May 2020 lifting of the lock-down, which had been announced by the president a few weeks earlier in a televised address to the nation, saying it was premature. 
+
+Again the increase of patients caused France to enter a 2nd nationwide lock-down on 28th of October 2020. In 2021, on 31st of March 2021, President, Macron announced a 3rd national lock-down which commenced on 3rd of April 2021 and which was mandated for all of April 2021; measures included the closure of non-essential shops, the suspension of school attendance, a ban on domestic travel and a nationwide curfew from 7pm-6am.
+
+COVID-19 vaccination in France started on 27 December 2020 after the approval of Pfizer/BioNTech vaccine by the European Union commission and the vaccination was planned to be distributed in 5 phases.
+
+# <span style="text-decoration:underline">**EXPLORATARY DATA ANALYSIS**</span>
+
+This is an analysis to find about the impact of COVID-19 in France, considering its confirmed cases, recovered cases, active cases and deaths. The analysis is performed by using the 'coronavirus' dataset. All the data were obtained from the period of 22nd of January 2020 to 18th of September 2021.
+
+* **There were some negative values in the dataset due to an error in recording data, those negative values are replaced as NA.**
+
+```{r}
+france_corona1 <- france_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # Replacing negative cases as NA
+```
+
+### **1. Confirmed Cases**
+
+```{r, message=FALSE, warning=FALSE}
+new_france <- pivot_wider(france_corona1, names_from = type, values_from = cases)
+a1 <- select(new_france, date, country, confirmed)
+confirmed_france <- aggregate(a1["confirmed"], by = a1["date"], sum, na.rm = TRUE) # without province
+
+confirmed_pro_france <- france_corona1 %>% filter(type == "confirmed")
+
+
+confirmed_france1 <- confirmed_france%>% mutate(cases = cumsum(confirmed))
+
+ggplot(confirmed_france, aes(x = date, y = confirmed)) + geom_line() + ggtitle("France: Daily Covid-19 Confirmed Cases")
+
+ggplot(confirmed_france1 , aes(date, cases)) + geom_path(size = 1) + ggtitle("France: Total Covid-19 Confirmed Cases")
+
+
+ggplot(confirmed_pro_france, aes(x = cases, y = province)) + geom_col() + ggtitle("France: Comaparison Of Confirmed Cases By Province")
+```
+
+Out of the 67 million of population in 11% which is 74,65,911 people have tested positive for COVID-19 virus in France. It can be seen that, the highest number of confirmed cases reported in 2021-04-11 and it was 117,902. Also in 2020 month of November there is a significant increase of the confirmed cases and again an increasing pattern of the confirmed cases can be seen from February 2020. There can be seen more number of confirmed cases in year 2021 compared to 2020. 
+
+* Maximum number of confirmed cases are reported from the province Reunion, as most of the reported cases are not classified to a particular province. 
+
+### **2. Recovered Cases**
+
+```{r, message=FALSE, warning=FALSE}
+b1 <- select(new_france, date, country, recovered)
+recovered_france <- aggregate(b1["recovered"], by = b1["date"], sum, na.rm = TRUE) # without province
+
+recovered_france1 <- recovered_france %>% mutate(cases = cumsum(recovered))
+
+ggplot(recovered_france, aes(x = date, y = recovered)) + geom_line() + ggtitle("France: Daily Covid-19 Recovered Cases")
+
+ggplot(recovered_france1 , aes(date, cases)) + geom_path(size = 1) + ggtitle("France: Total Covid-19 Recovered Cases ")
+
+```
+
+The total number of patients recovered in France is 4,29,206 within the given time period and that is 5.7% of the confirmed cases. It can be clearly identify that most number of confirmed cases reported in 2021-05-02 and it was 14,216. This is a huge increase in the plot compared to other days. Also it can be clearly seen that there is almost 0 number of recovered cases reported until mid of March in 2020.After that the number of recovered cases increased and sometimes it gradually decreased through the time.
+
+### **3. Deaths**
+```{r, message=FALSE, warning=FALSE}
+c1 <- select(new_france, date, country, death)
+death_france <- aggregate(c1["death"], by = c1["date"], sum, na.rm = TRUE) # without province
+
+death_france1 <- death_france%>% mutate(cases = cumsum(death))
+
+
+ggplot(death_france, aes(x = date, y = death)) + geom_line() + ggtitle("France: Daily Covid-19 Deaths")
+
+ggplot(death_france1, aes(date, cases)) + geom_path(size = 1) + ggtitle("France: Total Covid-19 Deaths")
+
+```
+
+The total number of COVID-19 deaths recorded through the time period is 1,17,141 and its 1.5% of the confirmed cases. According to the above visualization, it can be seen that almost no COVID-19 deaths reported until the beginning of March 2020. After that, the number of deaths are gradually increasing over the time and can see the highest number of deaths reported as 1438 in 2020-04-15. Therefore, we can conclude that there is a huge increase in deaths in a short period of time. After the month of May in 2020, the reported number of deaths began to falls but from the end of August 2020 it rapidly increased. In 2021 number of deaths reported are comparatively less than the year 2020.
+
+### **4. Active Cases**
+
+```{r, message=FALSE, warning=FALSE}
+all_t <- left_join(confirmed_france, recovered_france, by = "date")
+all_t1 <- left_join(all_t, death_france, by = "date")
+
+cum_1 <- cumsum(all_t1$confirmed)
+cum_2 <- cumsum(all_t1$recovered)
+cum_3 <- cumsum(all_t1$death)
+
+active <- cum_1 - cum_2 - cum_3
+all_t1 <- all_t1 %>% add_column(active)
+
+ggplot(all_t1, aes(x = date, y = active)) + geom_line() + ggtitle("France: Total Covid-19 Active Cases")
+
+```
+
+
+There were still 69,19,564 cases remaining as active in the end of the time period. The above cumulative plot shows the daily active cases in France, in the considered time period. It can be clearly seen that the distribution of active cases is almost looks same as the distribution of confirmed cases. Therefore, the number of daily active cases are almost same to the number of daily confirmed cases reported.
+
+
+## **Confirmed Cases vs Recovered Cases vs Deaths**
+
+```{r, message=FALSE, warning=FALSE}
+all_t2 <- pivot_longer(all_t1, 2:4, names_to = "type", values_to = "cases")
+
+ggplot(all_t2, 
+aes(x = date,  
+    y = cases, 
+    col = type)) + 
+    geom_col() + 
+    ggtitle("France: Daily Covid-19 Cases By Type") +
+    facet_grid(type ~.)
+
+ggplot(all_t2, aes(x = type, y = cases, fill = type)) + ggtitle("France: Comaparison Of Total Cases By Type") + geom_bar(stat = "identity")
+
+```
+
+Number of COVID-19 recoveries are about four times higher than number of deaths.
+
+## **Comparison with Neighbouring Countries**
+
+From this analysis we are going to compare the impact of COVID-19 in 
+France with the neighbouring countries from four different categories. Therefore we have selected Germany, Switzerland and Spain that are main bordering countries for France and mainly all of these compared countries in Europe are Developed and High Economical and stable countries.
+
+* Time period - **22nd of January 2020 to 18th of September 2021**
+
+### **1. Confirmed Cases**
+
+Country | Population | Confirmed Cases | Confirmed Percentage
+--- | --- |--- |---
+**France** | **67.06 million** | **74,65,911** | **11.1%**
+**Germany** | **83.02 million** | **41,45,215** | **5%**
+**Spain** | **46.94 million** | **50,14,299** | **10.7%**
+**Switzerland** | **8.55 million** | **08,23,078** | **9.6%**
+
+  
+```{r, message=FALSE, warning=FALSE}
+germany_corona <- coronavirus %>% filter(country == "Germany")
+germany_corona1 <- germany_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_germany <- germany_corona1 %>% filter(type == "confirmed")
+
+swiss_corona <- coronavirus %>% filter(country == "Switzerland")
+swiss_corona1 <- swiss_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_swiss <- swiss_corona1 %>% filter(type == "confirmed")
+
+spain_corona <- coronavirus %>% filter(country == "Spain")
+spain_corona1 <- spain_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_spain <- spain_corona1 %>% filter(type == "confirmed")
+
+confirmed_france2 <- france_corona1 %>% filter(type == "confirmed")
+
+together_c <- rbind(confirmed_germany, confirmed_swiss, confirmed_spain, confirmed_france2)
+
+ggplot(together_c, aes(x = country, y = cases)) + geom_col() + ggtitle("Total Confirmed Cases By Country")
+
+ggplot(together_c, 
+aes(x = date,  
+    y = cases, 
+    col = country)) + 
+    geom_col() + 
+    ggtitle("Comaparison Of Confirmed Cases By Country") +
+    facet_grid(country ~.)
+```
+
+* Highest number of confirmed cases reported in a single-day, 
+    * France - 1,17,902
+    * Germany - 49,044
+    * Spain - 93,822
+    * Switzerland - 21,926
+
+Considering the above analysis, it can be seen that among all other neighbouring countries, France has the most number of confirmed COVID-19 cases proportion, based on the population of the country. According to the above plots, the daily reported confirmed cases are also higher than other countries and France also has the maximum number of positive cases reported in a single day. In cases-wise, number of confirmed cases reported in France are nearly 10 times higher than that in Switzerland. Therefore, the impact of the virus in France is comparatively high. 
+
+Spain is in the 2nd position in number of reported confirmed cases proportion and Germany has the least proportion of confirmed cases reported when compared to others. Therefore, Germany has controlled the number of confirmed cases of COVID-19 pandemic well compared to other 3 countries.
+
+### **2. Recovered Cases**
+
+Country |  Confirmed Cases | Recovered Cases | Recovered Percentage
+--- | --- |--- |---
+**France** | **74,65,911** | **4,29,206** |**5.7%**
+**Germany** | **41,45,215** | **36,63,580** | **88.4%**
+**Spain** | **50,14,299** | **1,50,376** | **3%**
+**Switzerland** | **08,23,078** | **3,17,600** | **38.6%**
+
+```{r, message=FALSE, warning=FALSE}
+recovered_germany <- germany_corona1 %>% filter(type == "recovered")
+recovered_swiss <- swiss_corona1 %>% filter(type == "recovered")
+recovered_spain <- spain_corona1 %>% filter(type == "recovered")
+
+recovered_france2 <- france_corona1 %>% filter(type == "recovered")
+
+together_r <- rbind(recovered_germany, recovered_swiss, recovered_spain, recovered_france2)
+
+ggplot(together_r, aes(x = country, y = cases)) + geom_col() + ggtitle("Total Recovered Cases By Country")
+
+ggplot(together_r, 
+aes(x = date,  
+    y = cases, 
+    col = country)) + 
+    geom_col() + 
+    ggtitle("Comaparison Of Recovered Cases By Country") +
+    facet_grid(country ~.)
+```
+
+* Highest number of recovered cases reported in a single-day, 
+    * France - 14,216
+    * Germany - 44,517
+    * Spain - 6,399
+    * Switzerland - 35,300
+
+When considering the recovered COVID-19 cases by country, it can be clearly seen that Germany has the most number of recovered cases reported (cases-wise and recovered proportion), 88% of the confirmed patients has been recovered within the period. Also in Germany, the recovering process is very higher in the year 2021 and that also can be seen clearly. In France, the recovered percentage is comparatively lower, but higher than Spain. The distribution of number of recovered cases in France is not having many extreme cases throughout the time period according to the plot. 
+
+Spain is having the lowest recovered patients in cases-wise and also in percentage-wise, in 2020 Spain has some higher number of recovered cases reported for 2 or 3 months in the beginning of 2020, but after that, there were almost no any recovered cases reported according to the plot. In Switzerland also there were no recovered cases reported since the beginning of the year 2021. Compared to other countries, France does not have a good progress in COVID-19 recovering.     
+
+### **3. Deaths**
+
+Country |  Confirmed Cases | Deaths | Death Percentage
+--- | --- |--- |---
+**France** | **74,65,911** | **1,17,141** |**1.5%**
+**Germany** | **41,45,215** | **93,084** | **2.2%**
+**Spain** | **50,14,299** | **87,703** | **1.7%**
+**Switzerland** | **08,23,078** | **11,092** | **1.3%**
+
+```{r, message=FALSE, warning=FALSE}
+deaths_germany <- germany_corona1 %>% filter(type == "death")
+deaths_swiss <- swiss_corona1 %>% filter(type == "death")
+deaths_spain <- spain_corona1 %>% filter(type == "death")
+
+death_france2 <- france_corona1 %>% filter(type == "death")
+
+together_d <- rbind(deaths_germany, deaths_swiss, deaths_spain, death_france2)
+
+ggplot(together_d, aes(x = country, y = cases)) + geom_col() + ggtitle("Total Deaths By Country")
+
+ggplot(together_d, 
+aes(x = date,  
+    y = cases, 
+    col = country)) + 
+    geom_col() + 
+    ggtitle("Comaparison Of Deaths By Country") +
+    facet_grid(country ~.)
+```
+
+* Highest number of deaths reported in a single-day, 
+    * France - 1,438
+    * Germany - 1,734
+    * Spain - 1,623
+    * Switzerland - 131
+
+When comparing the number of COVID-19 deaths in above countries, highest percentage of deaths is recorded in Germany and that is above 2% from the confirmed cases. France has the highest number of deaths reported when considering in cases-wise, but the proportion of deaths (percentage) is comparatively lower than Germany and Spain but higher than Switzerland. In confirmed and recovered cases percentages, Germany has done well but when it comes to deaths, Germany has the highest number of death proportion compared to others. Lowest has recorded from Switzerland. Therefore, Switzerland has the credit of lowest death rate among others. 
+
+In the mid part of 2020, all 4 countries do have their lowest daily number of deaths. Therefore, we can see that, all countries were able to kept the number of deaths in lowest level. But from the beginning of 2021, number of deaths per day was increased rapidly, except in Switzerland. All the countries have managed to kept their percentage of deaths under 2%, except Germany. As discussed earlier, the confirmed cases reported were high in France, but the authorities of France have kept the number of deaths as low compared to others.
+
+### **4. Active Cases**
+
+Country |  Confirmed Cases | Active Cases | Active Percentage
+--- | --- |--- |---
+**France** | **74,65,911** | **69,19,564** |**92.7%**
+**Germany** | **41,45,215** | **3,88,551** | **9.37**
+**Spain** | **50,14,299** | **47,76,220** | **95.3%**
+**Switzerland** | **08,23,078** | **4,94,386** | **60.1%**
+
+```{r, message=FALSE, warning=FALSE}
+active_df <- data.frame(country = c("France", "Germany", "Spain", "Switzerland"), cases = c(6919564L, 388551L, 4776220L, 494386L))
+
+ggplot(active_df, aes(x = country, y = cases)) + geom_bar(stat = "identity") + ggtitle("Comaparison Of Active Cases By Country")
+
+
+```
+
+When comparing the countries, it can be clearly seen that remaining active COVID-19 cases reported is very high in France and Spain, which is more than 92% of the confirmed cases. Germany has the lowest of active cases percentage among others and its very low. Therefore, Germany has controlled the active cases in a good manner. 
+
+France has the 2nd highest remaining cases percentage and also highest in number of active cases among others. Therefore, France is highly suffering from the current pandemic. 
+
+## **Comparison of all cases by country**
+
+Below plot shows that the comparison of total confirmed, recovered cases and deaths in France, Germany, Spain and Switzerland.
+
+```{r, message=FALSE, warning=FALSE}
+total_c <- rbind(france_corona1, germany_corona1, spain_corona1, swiss_corona1)
+
+ggplot(total_c, aes(x = country, y = cases, fill = type)) + ggtitle("Total Cases By Country") + geom_bar(stat = "identity")
+```
+
+# <span style="text-decoration:underline">**DISCUSSION & CONCLUSIONS**</span>
+
+Currently the entire world is now effected by this ongoing COVID-19 pandemic and the pandemic taught the world about the importance of making most accurate decisions within less time. France have become a major victim of COVID-19 since 2020. The country have took some decisions such as social distancing, lock-downs, travel bans etc. The data of the above analysis was limited from 22nd of January 2020 to 18th of September 2021.
+
+According to this analysis, it shows that 11% of the total population in France has been infected with COVID-19 and there are over 90% of confirmed cases are still remaining as active at the end of the period. This means that the safety measures were not affected very well in controlling the pandemic.
+
+For the comparison of countries, I have selected Spain, Germany and Switzerland. The reasons to select those neighbour countries to compare with France are, all the selected countries are rich and developed countries that having almost same economic conditions as France. After the comparison of confirmed, recovered, deaths and active cases recorded through the period, we can conclude that, France does not have a good progression in controlling the pandemic well compared to other countries. If we consider Germany, the percentage of recovered cases are very high as its about 15 times higher than the rate of France. In overall, Switzerland and Germany are the well controlled countries for COVID-19.
+
+Throughout this project, it was able to identify the how France faced the Covid-19 pandemic. According to this analysis, France has not being able to face the pandemic well, but France has more than enough financial and economic power therefore, they can face the pandemic well and recover the patients and minimizing the number of deaths and active cases in future.
+
+
+# <span style="text-decoration:underline">**REFERENCES**</span>
+
+* Anon., n.d. Individual Projects. [Online] 
+Available at: https://hellor.netlify.app/coronareports/
+
+* Anon., n.d. Assignment - Help file. [Online] 
+Available at: https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+
+* The Ocean Health Index Team, n.d. Chapter 5 Visualizing: ggplot2 | Introduction to Open Data Science. [Online] 
+Available at: http://ohi-science.org/data-science-training/ggplot2
+[Accessed 26 09 2021].
+
+* Anon., 2021. COVID-19 pandemic in France. [Online] 
+Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_France
+[Accessed 24 09 2021].
+
+* Provided lecture notes
+
+
+
+
+
+
+

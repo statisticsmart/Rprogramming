@@ -1,0 +1,593 @@
+---
+title: "COVID-19 in Libya"
+author: "AS2018413"
+date: "26/09/2021"
+output: 
+  html_document:
+    theme: cerulean 
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+
+<style>
+body {
+text-align: justify}
+</style>
+
+<style type="text/css">
+  body{
+  font-size: 12pt;
+}
+</style>
+
+
+![](libya.png) 
+
+## **Introduction on Global Covid - 19 Pandemic Situation**
+
+Corona virus disease (COVID – 19) which is on 12 January 2020, the World Health Organization (WHO) confirmed that a novel corona virus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, which was reported to the WHO on 31 December 2019. It is caused by the SARS-CoV-2 virus. Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover without special treatment. However, some will become seriously ill and require medical attention. This virus can be infected by breathing if there is a someone who has COVID – 19, near to us. By touching some surface where has COVID – 19 virus and if we touch our eyes, nose or mouth. 
+
+Staying at least one metre away from people, wearing a face mask, social distance, washing our hands and vaccinating are the ways  to be safe form this virus recommended from WHO.
+
+But at least there is no silver line to end this terrible plague.
+
+Almost all countries suffering with this outbreak  of COVID – 19. Among them Here we talk about Libya.
+
+## **About Libya**
+
+### **Visualization of the location**
+
+```{r comment=NA, echo=FALSE }
+library(leaflet)
+library(rgdal)
+leaflet() %>%
+  setView(lng = -122.2705383, lat = 37.8698807, zoom = 11) %>%
+  addProviderTiles("CartoDB.Positron")%>%
+  addMarkers(lng = 13.180161, lat =  32.885353,
+             popup = "Libya")
+```
+
+Libya  is a North African country bordered by the Mediterranean Sea  to the north, Egypt to the east, Sudan to the southeast, Chad, to the south, Niger to the southwest, Algeria  to the west and Tunisia to the northwest with the area of  about 1.8 million km2 (700,000 square miles). Libya is the fourth largest country and the 16th largest in world.  Most of the country lies in the Sahara desert. Tripoli is  the capital of the country. According to the census in 2006, it shows about 5,670,688 population in Libya. So the estimated population for  2021 is about 6,959,000. According to the data, population density in Libya is 3.74 per Km2.
+
+### **Main Facts on Libya** 
+
+
+```{r comment=NA, echo=FALSE}
+library("vembedr")
+
+#embed_url("https://youtu.be/Xv_UadT1CH8")
+
+embed_url("https://youtu.be/Xv_UadT1CH8") %>%
+  use_start_time("1m32") %>%
+  use_align("center")
+```
+
+#### **More about Libya**
+
+<button><a href='https://en.wikipedia.org/wiki/Libya' alt='Broken Link'>Libya</a></button>
+
+### **Climate Condition**
+
+Libya’s climate is dominated by the hot arid Sahara, but it is moderated along the coastal littoral by the Mediterranean Sea. The Saharan influence is stronger in summer. From October to March, prevailing westerly winds bring cyclonic storms and rains across northern Libya. 
+Along the coast, the Mediterranean climate is characterized by a cool rainy winter season and a hot dry summer. The warmest months are July and August, when average temperatures in Benghazi and Tripoli, in the Mediterranean zone, reach between the low 70s and mid-80s F (low to upper 20s C) and the low 60s and mid-80s F (upper 10s and low 30s C), respectively. The coolest months are January and February; winter monthly temperatures in Benghazi range from the low 50s to low 60s F (low to mid-10s C), while those in Tripoli range from the upper 40s to low 60s F (low to mid-10s C). Benghazi has an average annual precipitation of about 10 inches (250 mm), and Tripoli receives an annual average of about 15 inches (380 mm).
+
+And also most rain falls in a few days between November and January. Less than 4 inches (100 mm) of rain falls annually in the steppes, and Saharan zones receive less than 1 inch (25 mm). In the Sahara, 200 consecutive rainless days in a year have been recorded in many areas, and the world’s highest degree of aridity has been recorded at Sabhā, which averages only 0.4 inch (10 mm) of precipitation annually. Average temperatures at Sabhā are in the low 50s F (low 10s C) in January and in the upper 80s F (low 30s C) in July, but these averages mask the fact that temperatures may vary enormously over the course of a day. 
+
+### **Health System in Libya**
+
+A Ministry of Health report stated that Libya has 96 hospitals, 25 specialized units, 1355 basic health centers, 37 polyclinics and 17 quarantine units and in February 2009 there were 10230 doctors. As a rate, 17 doctors for population of 10 000, 84% of them were nationals.
+According to the WHO, By 2017 there are 32 hospital beds per 10000 people in Libya. 
+
+## **COVID – 19 Pandemic Situation in Libya**
+
+The ongoing COVID -19 pandemic was confirmed to have spread to Libya on 24 March 2020, when the first case was officially confirmed in Tripoli.  Two months after the first patient was identified the number of reported COVID-19 cases started to increase notably. The outbreak was started in the southern region (Sabha) and then gradually spread to the eastern and western parts of Libya. By the end of 2020, the number of reported deaths from COVID-19  was over 1000. There estimated that roughly 14–20% of the Libyan population have been exposed to the COVID-19 pandemic.
+Two months after identification of the first case of COVID-19, the number of cases confirmed by PCR stood at 77 on 26 May 2020, with 3 deaths. After that, the number of confirmed infections and reported deaths rose more rapidly. By 31 July, there were 3691 confirmed cases and 80 deaths. This shift started soon after air flights began to arrive carrying Libyan citizens who had been stranded abroad after the suspension of flights, and a notable number of passengers were found to be infected. However, more notable is that the rise in the number of cases was initially more prominent in the less populous southern region
+Libya is considered especially vulnerable to the pandemic due to the effects from the Second Libyan Civil War, which has led to a dire humanitarian situation and the destruction of the nation's health infrastructure.
+
+### **Lock-down Status of Libya**
+
+Before the identification of the first COVID-19 case in Libya, air travel was suspended, schools and universities were closed, and other preventive measures were taken starting on 16 March 2020.
+The High Committee against the Corona Virus in Libya imposes a curfew on 22nd of March 2020 from 6:00 PM to 6:00 AM.
+ After identifying  5 new covid-19 cases in Misrata province, on 29th of March 2020 Misrata Municipality imposes a one week lockdown. And also, curfew hours increases to be from 2.00PM to 6.00AM.
+Libyan authorities impose a 10 day lockdown as preventive measure after 9 new Covid-19 cases had been identified on 15th of March 2020. With the increasing of cases again Libyan authorities impose 3 days lockdown as preventive measure during Eid on 24th  May 2020. Not only that, on 28th of May 2020 The Presidential Council of the GNA imposes a one week lockdown in Sebha Municipality. In that way the country had to be gradually closed  from times to time.
+The National Center for Disease Control in Libya (NCDC), which has branches in many cities and has managed to work on a national level, was tasked with overseeing the national effort to combat the COVID-19 pandemic. It publishes related information on its website and daily reports on its Facebook page about PCR-confirmed infections, deaths, recoveries and other information
+The unity government on April 15th announced full curfew and lockdown and additional measures in the western areas under its control to combat the spread of Covid-19
+
+### **Actions taken by the Libyan Government  against COVID - 19**	
+
+In response to the COVID-19 pandemic, Libyan authorities initiated public health measures in March 2020 aimed at curbing the spread of COVID-19. These measures include travel and 
+mobility restrictions due to the closure of airports, points of entry (POE) along land borders. However, on 05 May 2020, Libyan authorities started the repatriation of Libyans stranded 
+abroad through Misrata, Benghazi Benina and Al Abraq airports, as well as Emsaed and Ras Ajdir land border crossing points. They close their airports and land borders for 15 days on 16th of march 2020 though there were no local cases I their country. 
+Between 07 and 31 May 2020, close to 2,200 Libyans reportedly returned from Egypt through Emsaed, while almost 2,000 Libyans returned from Tunisia through Ras Ajdir land border crossing point.
+Local authorities in border cities such as Al Kufra and Al Jaghbub have implemented stricter measures by implementing municipal entry restrictions into their cities.
+Moreover, in curfew period schools, markets and shops remain closed except food stores, bakeries, hospitals and pharmacies.
+After 5 days of identifying  the first covid - 19 case, the Libyan government take a decision to go for a 7 day lockdown in Misrata province and to incease the curfew  hours across the country.
+Libyan authorities started the repatriation of Libyans stranded abroad through some airports and land borders crossing points.
+Libyans allowed to return in groups after 2 weeks quarantinein Tunisia.
+Misrata, Benina, Al Abraq Airport Only open for stranded Libyans returning from abroad.
+Migrants allowed to exit in small groups but not to enter unless they go through 14 days quarantine 
+in a facility near 2-2 Gate.
+Open for commercial movement only, maximum 2 cargo trucks per day.
+And also, Libyan government takes decisions to close most of routes for entering to the country except very essential routes. They established Land border crossing points, Unofficial border crossing points and Handwashing Stations throughout the contry.
+Face masks are required in all public spaces, to include all forms of public transportation. Large gatherings (both public and private) are currently prohibited.
+As a part of PHSM, Libya has suspended schools and universities as of 11 July 2021. Summer resorts, parks and public gardens have also been closed in some municipalities until further notice. As of 8 July 2021, borders with Tunisia have remained closed except for repatriation. In addition, GNU has officially issued a curfew from 6 pm to 6 am starting on 27 July 2021, for two weeks in Tripoli, central and western regions. Furthermore, the Ministry of education suspended all educational activities until 5 August. As of 29 July, Libyan authorities has made PCR testing mandatory for domestic flights.
+
+### **COVID-19 Testing**
+The government is conducting PCR and antigen tests testing throughout the country.  
+Apart from that the foreigners who come to Libya should face to PCR test at the airports.
+
+### **Vaccination**
+
+As of September 22, 2021, Libya administered a total of around 1.46 million doses of vaccine against the coronavirus (COVID-19). Previously, the country started the vaccination campaign with the first 750 injections on April 17, 2021. Although Libya ranks among the African countries with the highest vaccination rate, only a small share of the population is immunized. So by 159K people have been fully vaccinated. 2.3% of the total population is fully vaccination.
+
+
+## **Data description**
+
+```{r comment=NA, echo=FALSE }
+
+library(devtools)
+#devtools::install_github("thiyangt/sta3262")
+#install.packages("sta3262")
+library(sta3262)
+#get_individual_project_country("AS2018413")
+
+# Use coronavirus package to obtain data
+#install.packages("coronavirus")
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+```
+```{r comment=NA, echo=FALSE  }
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+libya_corona <- coronavirus %>% filter(country == "Libya")
+
+libya_corona <- as.data.frame(libya_corona)
+head(libya_corona)
+```
+
+
+```{r comment=NA, echo=FALSE }
+tail(libya_corona)
+```
+
+
+```{r comment=NA, echo=FALSE }
+summary(libya_corona)
+```
+
+Above outputs are given the summary measure of the libya_corona data set. It consists of number of confirmed, recovered and death corona patients from 22nd of 2020 to 27th of May 2021 in Libya.  1476 observations are given here. Apart from, the variables such as location with latitude and longitude and type of cases are given. 
+
+## **Exploratory Data Analysis**
+
+### **Number of Confirmed Cases**
+
+```{r comment=NA, echo=FALSE }
+library(ggplot2)
+#install.packages("plotly")
+library(plotly)
+confirmed_libya_corona <- libya_corona %>% filter(type=="confirmed")
+confirmed_libya_corona_plot <- ggplot(confirmed_libya_corona, aes(x=date, y=cases) )  + geom_line(color="brown3") + labs(title = "Confirmed cases in Libya") + labs(y= "Number of confirmed cases of each day", x = "Date")
+ggplotly(confirmed_libya_corona_plot)
+```
+
+This graph shows the number of daily confirmed corona patients in Libya. It shows that since July in 2020 up to end of October in 2020 number of patients has been increasing. From that up to end of March in 2021 situation is approximately same with some fluctuations by comparing remaining months.
+However, from April to May in this year there was some decrease of confirmed cases in Libya. But It’s not so satisfying condition.
+
+### **Number of Recovered Cases**
+
+```{r comment=NA, echo=FALSE }
+recover_libya_corona <- libya_corona %>% filter(type=="recovered")
+recover_libya_corona_plot <- ggplot(recover_libya_corona, aes(x=date, y=cases) )  + geom_line(color="steelblue4")+ labs(title = "Recovered cases in Libya") + labs(y= "Number of recovered cases of each day", x = "Date")
+ggplotly(recover_libya_corona_plot)
+```
+
+This graph shows the number of daily recovered corona patients in Libya. Up to mid of August there was no considerable number of recovered patients. Although, the number of recovered patients has increased from end of September in 2020 to early February but recovered patients has decreased after April of 2021 up to mid of May. It’s also not a satisfying condition. 
+
+### **Number of Death Cases**
+
+```{r comment=NA, echo=FALSE }
+death_libya_corona <- libya_corona %>% filter(type=="death")
+death_libya_corona_plot <- ggplot(death_libya_corona, aes(x=date, y=cases) )  + geom_line(color="green4")+ labs(title = "Death cases in Libya") + labs(y= "Number of death cases of each day", x = "Date") 
+ggplotly(death_libya_corona_plot)
+
+```
+
+This graph shows the number of daily death corona patients in Libya. It shows that the death cases has increased from late June up to mid of October in 2020. Between late October in 2020 and mid of January in 2021, there is no large difference of number of death cases. But shows some fluctuations. After late February, death cases have been increased rapidly. It’s also a harmful situation because of lack of controlling the covid - 19 situation.
+
+### **Confirmed, Death and Recovered Covid 19 cases in Libya**
+
+```{r comment=NA, echo=FALSE }
+cases_libya_corona <- libya_corona %>% filter(country=="Libya")
+
+ggplot(cases_libya_corona, aes(x=cases, y=type, fill=type, col=type))+
+  geom_boxplot(outlier.shape = NA, alpha=0.2) +
+  geom_jitter(aes(col=type))+ labs(title = "Confirmed, Death and Recovered Covid 19 cases in Libya")+ labs(x = "Number of daily cases") + labs(y = "Type of cases")
+
+```
+
+This graph shows that the number of daily confirmed, recovered and death cases in Libya. In early time period there reported large number of confirmed cases and less number of recoveries. But gradually they have passed to increased their recoveries by controlling the spreading of virus. It’s a fairly good trend. The less number of overall covid death cases in Libya,  can be somewhat satisfying. 
+
+
+
+```{r comment=NA, echo=FALSE }
+
+all_cases_libya_corona<-ggplot(libya_corona, aes(x=date, y=cases, col=type)) + geom_line()+ labs(title = "All of cases in Libya") + labs(y= "Number of  cases of each day", x = "Date")
+ggplotly(all_cases_libya_corona)
+```
+
+This graph shows the number of daily confirmed, recovered and deaths of corona patients in Libya. It shows that recovering is very slow up to mid of October in 2020 comparing to the confirmation cases. It says that  the pandemic situation is spreading rapidly in the country. But between mid of November in 2020 and April of 2021, there are considerable number of recovered cases comparing with confirmed cases. That implies during this time period spreading has been controlled. However, overall death cases are in very low rate comparing with the confirmed patients. 
+And also till late of May in 2021, both of confirmed and death cases have decreasing. But in overall recovering is very slower than the spreading the virus. 
+
+### **Total Number of Confirmed, Death, Recovered cases in Libya**
+
+```{r comment=NA, echo=FALSE }
+libya_corona <-  libya_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+cum_cases_libya  <- ggplot(libya_corona, aes(date, cum_cases, colour = type)) + geom_line() +
+  labs(title = "Total number of confirmed, death, recovered cases in Libya")
+
+ggplotly(cum_cases_libya)
+```
+
+This graph shows that the total number of confirmed, recovered and death cases in Libya. It shows that, the total number of confirmed and recovered cases have increased linearly. It implies that, the health care system and the measures taken by the government  have a positive effect on disease reduction.
+
+### **Number of Active Cases**
+
+
+```{r comment=NA, echo=FALSE }
+
+library(dplyr)
+libya_corona <- coronavirus %>% filter(country == "Libya")
+libya_corona_new <- mutate(libya_corona , cases=replace(cases,which(cases<0),NA))
+table_with_active <- libya_corona_new %>%
+  pivot_wider(names_from = type, values_from = cases) %>%
+  mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+active_libya_corona <- table_with_active$confirmed - table_with_active$death -table_with_active$recovered
+active_libya_corona_plot <- ggplot(table_with_active, aes(x=date, y=active_libya_corona)) + geom_line(color="midnightblue") + labs(title = "Active cases in Libya") + labs(y= "Number of active cases of each day", x = "Date") 
+ggplotly(active_libya_corona_plot)
+```
+
+$$Active Cases=ConfirmedCases - RecoveredCases-DeathCases$$
+
+This shows that the number of daily active cases in Libya. It shows there is a less number of active cases in Libya because there recovered cases are in high level relative to the confirmed cases. Graph shows minus values. It may be happend because of their data collecting methods like 48hour inteval or one week inteval or some other else.However the number of total active cases is a positive value.  
+
+## **Summary of Cases in Libya**
+```{r comment=NA, echo=FALSE }
+library(dplyr)
+libya_corona <- coronavirus %>% filter(country == "Libya")
+pivot_libya_type <- libya_corona %>%
+  pivot_wider(c(1, 4:7), names_from = "type", values_from = "cases")
+
+total_confirmed_libya <- sum(pivot_libya_type $confirmed)
+total_recovered_libya <- sum(pivot_libya_type $recovered)
+total_death_libya <- sum(pivot_libya_type $death)
+
+```
+
+
+
+|     Type of cases in Libya  | Number of total cases          |
+  | ------------- |:-------------:|
+  | Confirmed    | 184472 |
+  | Recovered     | 171008      |
+  | Death | 3121      |   
+  
+  
+## **Comparing with neighboring countries**
+
+### **Daily Confirmed cases in neighboring countries.**
+
+```{r comment=NA, echo=FALSE }
+library(tidyverse)
+library(gganimate)
+#library(ggplot2)
+neighboring_countries <- filter(coronavirus, country == "Libya"|country =="Algeria"|country =="Egypt"|
+                                  country =="Chad" |country =="Sudan" |country =="Niger")
+
+
+confirmed_neighboring_countries <- filter(neighboring_countries, type == "confirmed")
+
+plot_confirmed_neighboring_countries <- ggplot(confirmed_neighboring_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + transition_reveal(date)+ 
+  labs(x = "Date", y = "Confirmed cases", title="Daily Confirmed cases in the Neighboring Countries",colour="Country") + theme_bw(base_size=15)
+
+
+animate(plot_confirmed_neighboring_countries, height=600, width=850)
+#animate(anim4, height=400, width=550)
+anim_save("Daily Confirmed cases in neighboring countries")
+```
+
+This figure shows that the covid – 19 situation in the neighboring countries to Libya. According to the plot, huge number of confirmed cases have been reported in Libya with the comparing of cases in other countries. But in Egypt has reported the largest number of confirmed cases in early time period of covid pandemic. However, Chad and Niger have few confirmed cases relatively. But the all the neighboring countries and Libya are in risk.
+
+### **Daily Recovered cases in neighboring countries.**
+
+```{r comment=NA, echo=FALSE }
+recovered_neighboring_countries <- filter(neighboring_countries, type == "recovered")
+
+plot_recovered_neighboring_countries <- ggplot(recovered_neighboring_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + transition_reveal(date)+ 
+  labs(x = "Date", y = "Recovered cases", title="Daily Recovered cases in the Neighboring Countries",colour="Country") + theme_bw(base_size=15)
+
+
+animate(plot_recovered_neighboring_countries, height=600, width=850, fps = 8)
+#animate(anim4, height=400, width=550)
+anim_save("Daily Recovered cases in neighboring countries")
+```
+
+This figure shows that at the first time period of spreading virus, Egypt had a considerable large number of recovered cases when comparing with other related countries. But after Libya reached to increase their recovered cases than other countries.  
+
+### **Daily Death cases in neighboring countries.**
+
+```{r comment=NA, echo=FALSE }
+death_neighboring_countries <- filter(neighboring_countries, type == "death")
+
+plot_death_neighboring_countries <- ggplot(death_neighboring_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + transition_reveal(date)+ 
+  labs(x = "Date", y = "Death cases", title="Daily Death cases in the Neighboring Countries",colour="Country") + theme_bw(base_size=15)
+animate(plot_death_neighboring_countries, height=600, width=850, fps = 8)
+anim_save("Daily Death cases in neighboring countries")
+```
+
+The death cases are relatively high in Egypt. But in Libya the cases of death are less the cases in Egypt. There are lot of fluctuations of daily death cases in Sudan. However almost all of countries represented in the figure have an increasing trend of death cases. It’s a serious situation.
+
+```{r comment=NA, echo=FALSE }
+library(plotly)
+all_plot <- ggplot(neighboring_countries, aes(date, cases,colour = country)) + geom_line() + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in Neighboring Countries")
+ggplotly(all_plot)
+```
+
+This figure gives comparative details about confirmed, recovered and death cases in neighboring countries to Libya. There is a huge gap between confirmed and recovered cases in Egypt and Libya. It’s a bad situation which implies Libya and Egypt have rapid increase of this pandemic situation when comparing other countries such as Algeria, Chad, Niger and Sudan. Among Egypt and Libya, Libya has some risk of confirming cases rapidly. 
+
+
+```{r comment=NA, echo=FALSE }
+library(coronavirus)
+library(ggplot2)
+library(ggpubr)
+
+neighboring_countries <- filter(coronavirus, country == "Libya"|country =="Algeria"|country =="Egypt"|
+                                  country =="Chad" |country =="Sudan" |country =="Niger")
+
+
+libya_corona <- coronavirus %>% filter(country == "Libya")
+algeria_corona <- coronavirus %>% filter(country == "Algeria")
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+chad_corona <- coronavirus %>% filter(country == "Chad")
+sudan_corona <- coronavirus %>% filter(country == "Sudan")
+niger_corona <- coronavirus %>% filter(country == "Niger")
+
+corona <- rbind(libya_corona, algeria_corona, egypt_corona, chad_corona, sudan_corona, niger_corona)
+corona_confirmed <- corona %>% filter(type=="confirmed")
+plot1 <- ggplot(corona_confirmed, aes(x=country, y=cases, fill=country)) + geom_col() + ggtitle("Confirmed cases") + scale_fill_brewer(palette="Reds")
+
+corona_deaths <- corona %>% filter(type=="death")
+plot2<- ggplot(corona_deaths, aes(x=country, y=cases, fill=country)) + geom_col() + ggtitle("Deaths") + scale_fill_brewer(palette="Greens")
+
+corona_recovered <- corona %>% filter(type=="recovered") 
+plot3 <- ggplot(corona_recovered, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Recoveries")  + scale_fill_brewer(palette="Blues")
+
+theme_set(theme_pubr())
+figure <- ggarrange(plot1, plot2, plot3)
+figure
+```
+
+This figure is a summary of comparing neighboring countries to Libya. It also shows clearly,  among these countries Egypt and Libya are in risk because those two countries have a large number confirmed daily cases. But among them Egypt has high risk because the number of death cases are higher than the other nearby countries.
+
+
+```{r comment=NA, echo=FALSE }
+library(plotly)
+neighboring_countries <- neighboring_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+cum_cases_plot <- ggplot(neighboring_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total number of confirmed, death, recovered cases in neighboring countries")
+
+ggplotly(cum_cases_plot)
+```
+
+This shows above fact very clearly.
+
+
+The locations of the  neighboring countries selected  for this comparison is given below. 
+
+```{r comment=NA, echo=FALSE }
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray68", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = libya_corona, aes(x = long, y = lat), color = "blue", size= 4 )+ 
+  geom_point(data = algeria_corona, aes(x = long, y = lat), color = "red", size= 4 )+
+  geom_point(data = egypt_corona, aes(x = long, y = lat), color = "red", size= 3 )+
+  geom_point(data = chad_corona, aes(x = long, y = lat), color = "red", size= 3 )+
+  geom_point(data = sudan_corona, aes(x = long, y = lat), color = "red", size= 4 )+
+  geom_point(data = niger_corona, aes(x = long, y = lat), color = "red", size= 3 )
+
+```
+
+## **Comparing with Other Countries in the World**
+
+### **Daily Confirmed cases in World Countries.**
+```{r comment=NA, echo=FALSE }
+library(tidyverse)
+library(gganimate)
+world_countries <- filter(coronavirus, country == "Libya"|country =="US"|country =="India"|
+                                  country =="Russia" |country =="China"  |country =="Sri Lanka" )
+
+
+confirmed_world_countries <- filter(world_countries, type == "confirmed")
+
+plot_confirmed_world_countries <- ggplot(confirmed_world_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + transition_reveal(date)+ 
+  labs(x = "Date", y = "Confirmed cases", title="Daily Confirmed cases in the World Countries",colour="Country") + theme_bw(base_size=15)
+
+
+animate(plot_confirmed_world_countries, height=600, width=850)
+anim_save("Daily Confirmed cases in world countries")
+```
+
+This graph shows the number of daily confirmed corona patients in some of world countries. It shows that there has been a rapid increase in patient reporting in India and United States when comparing with Libya. So, those countries are in risk. But the spreading of the disease is increasing in other countries as well.
+
+### **Daily Recovered cases in cases in World Countries.**
+
+```{r comment=NA, echo=FALSE }
+recovered_world_countries <- filter(world_countries, type == "recovered")
+
+plot_recovered_world_countries <- ggplot(recovered_world_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + transition_reveal(date)+ 
+  labs(x = "Date", y = "Recovered cases", title="Daily Recovered cases in  World Countries",colour="Country") + theme_bw(base_size=15)
+
+
+animate(plot_recovered_world_countries, height=600, width=850, fps = 8)
+anim_save("Daily Recovered cases in  World Countries")
+```
+
+Graph shows that, up to  January in 2021 recovered cases have increased  gradually. But after it is decreasing. After 2021 the number of recovered patients have been increased in India than the other countries mentioned here. Libya has the less number of recovered patients with the comparing of other countries here. 
+
+### **Daily Death cases in World Countries.**
+
+```{r comment=NA, echo=FALSE }
+death_world_countries <- filter(world_countries, type == "death")
+
+plot_death_world_countries <- ggplot(death_world_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + transition_reveal(date)+ 
+  labs(x = "Date", y = "Death cases", title="Daily Death cases in World Countries",colour="Country") + theme_bw(base_size=15)
+animate(plot_death_world_countries, height=600, width=850, fps = 8)
+anim_save("Daily Death cases in world countries")
+```
+
+This graph shows that there is a rapid increase of death cases in US. And also after January in 2021 India shows a significant increase in the number of death cases. Other countries show some fluctuations of death cases. The reported death cases are small value with the comparing of India, Russia and US . 
+
+
+```{r comment=NA, echo=FALSE }
+library(coronavirus)
+library(ggplot2)
+library(ggpubr)
+
+world_countries <- filter(coronavirus, country == "Libya"|country =="US"|country =="India"|
+                                  country =="Russia" |country =="China"  |country =="Sri Lanka" )
+
+libya_corona <- coronavirus %>% filter(country == "Libya")
+us_corona <- coronavirus %>% filter(country == "US")
+india_corona <- coronavirus %>% filter(country == "India")
+russia_corona <- coronavirus %>% filter(country == "Russia")
+china_corona <- coronavirus %>% filter(country == "China")
+sri_lanka_corona <- coronavirus %>% filter(country == "Sri Lanka")
+
+corona <- rbind(libya_corona, us_corona, india_corona, russia_corona, china_corona, sri_lanka_corona)
+corona_confirmed <- corona %>% filter(type=="confirmed")
+plot4 <- ggplot(corona_confirmed, aes(x=country, y=cases, fill=country)) + geom_col() + ggtitle("Confirmed cases") + scale_fill_brewer(palette="Reds")
+
+corona_deaths <- corona %>% filter(type=="death")
+plot5<- ggplot(corona_deaths, aes(x=country, y=cases, fill=country)) + geom_col() + ggtitle("Deaths") + scale_fill_brewer(palette="Greens")
+
+corona_recovered <- corona %>% filter(type=="recovered") 
+plot6 <- ggplot(corona_recovered, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Recoveries")  + scale_fill_brewer(palette="Blues")
+
+theme_set(theme_pubr())
+figure <- ggarrange(plot4, plot5, plot6)
+figure
+```
+
+The figure shows lot of variations of confirmed, recovered and death cases in countries that selected here. The reason of that may be the  location, population rate, health system, measures taken by governments in each country etc.  
+
+Following graphs verify the facts that we discussed in earlier.
+
+```{r comment=NA, echo=FALSE }
+library(plotly)
+world_countries <- filter(coronavirus, country == "Libya"|country =="US"|country =="India"|
+                                  country =="Russia" |country =="China"  |country =="Sri Lanka" )
+
+world_countries <- world_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+cum_cases_plot_world <- ggplot(world_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total number of confirmed, death, recovered cases in world countries")
+
+ggplotly(cum_cases_plot_world)
+```
+
+## **For More about Libya Situation,**
+
+ <button><a href='https://covid19.who.int/region/emro/country/ly' alt='Broken Link'>Libya - WHO Coronavirus (COVID-19) Dashboard</a></button>
+ 
+## **Discussion**
+
+Libya dataset is loaded by coronavirus dataset in R for the above analysis. The negative values are recoded  with the absolute value before the analyzing. Graphs taken for the analyzing represented the cases per day. There are no provinces given in Libya dataset. Here corona cases are given from 1st of January 2020 to 27th of May 2021. Hence the  length of the dataset is 1476, the clearly representation of data is bit harder.
+In the graphs "Confirmed cases in Libya", "Recovered cases in Libya" and "Death cases in Libya" there can see a huge difference of the values of covid cases in two consecutive days.In those graphs there are more 0 cases in 2021. It may happen because of the data collecting or data recording methods to the reports in the country.Sometimes data might be collected in 48 hour interval or one week interval or etc. It should be the reson for the huge difference of data in consecutive days.
+In the graph  “Total number of confirmed, death, recovered cases in Libya” shows that recover rate of the cases is much enough when considering the all confirmed cases in Libya. Choosing the countries for comparison with Libya is based on some special criteria. Libya is located with neighboring countries such as Algeria, Chad, Egypt, Niger and Sudan. Covid 19 is spreading rapidly. So the pandemic situation of nearby countries highly affect to the pandemic situation in Libya. So that’s the way to identifying effects of nearby countries. Those countries are located in same continent too. Moreover, when considering the situation in Libya with other countries in the world, here selected  countries are China, India, Russia, Sri Lanka and United States. There are reasons of selecting those countries for comparison with Libya. China is the first country which is identified the first case in Covid – 19 virus. Although United States, Russia and India are the world power countries with a huge wealth, the best health system and etc. but those countries were infected with the virus. That’s why those are selected  for this comparison. Sri Lanka also victimized and it’s having with medium health facilities. For this comparison, datasets are obtained by the same way of obtaining Libya dataset.
+
+## **Conclusions**
+
+Even at this moment the Covid – 19 disease is a pandemic. Libya becomes a victim in late of March in 2020. But, Libya has much successful  situation of controlling the pandemic situation because the graph “All cases in Libya ” shows that there is a increasing trend of recovered cases as well as confirmed cases. The measures taken by Government of Libya, curfews, lock down situations, PCR and Antigen tests and vaccination program may cause to control this situation in Libya. But when comparing with nearby countries to Libya, the situation is not good. All of the cases are increasing yet. However, the controlling process against to the spreading the virus is considered as enough in Libya. 
+Russia is also controlling the spread of the disease using their strong health system. Since the very first time of spreading the virus, Chinese controlled it successfully. With their powerful health service, modern technology and the actions and policies taken by the Government in China, they were able to control the disease. Although United States has the best technologies and health care system, they also become a victim of the Covid – 19  pandemic. From the beginning of the spreading the virus throughout the world, cases were reported rapidly in US. But they have kept the number of deaths in low rate relative to their confirmed cases. So, with comparing other countries which are selected to above analysis part, Libya has become to keep their death rate lower and recovering rate higher enough relative to the confirmed cases. 
+Almost all the neighboring countries to Libya victimized by this virus. But, according to the analysis higher damage occurred to Egypt and Libya. However, Libya could to control the spreading than Egypt.
+Though Libya could not be able to prevent the virus and to decrease the confirmed cases, they could be able to increase the recovered cases with the measures taken by Government of Libya and the efficiency of the staff of health in Libya. But by now whole countries in the world are struggling with this Covid -19 pandemic situation.    
+
+## **References**
+
+https://www.r-graph-gallery.com/animation.html
+
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/libya/
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Libya
+
+https://reliefweb.int/sites/reliefweb.int/files/resources/COVID-19%20Impact%20in%20Libya_2021Apr-May.pdf
+
+https://www.britannica.com/place/Libya
+
+https://www.codegrepper.com/code-examples/html/how+to+add+a+link+to+a+button+in+html
+
+https://www.britannica.com/place/Libya/Climate
+
+https://onlinelibrary.wiley.com/doi/10.1111/j.1467-6346.2020.09415.x
+
+https://data.worldbank.org/indicator/SH.MED.BEDS.ZS?locations=LY
+
+https://reliefweb.int/sites/reliefweb.int/files/resources/COVID-19%20Movement%20Restrictions%20-%20Libya%20Mobility%20Restriction%20Dashboard%20%234%20%2807%20-%2031%20May%202020%29.pdf
+
+https://www.who.int/
+
+https://bookdown.org/BaktiSiregar/data-science-for-beginners/Advanced-Visualizations.html
+
+https://www.r-graph-gallery.com/ggplot2-color.html
+
+https://www.musgraveanalytics.com/blog/2018/8/24/how-to-make-ggplot2-charts-interactive-with-plotly
+
+
+https://uomresearchit.github.io/r-tidyverse-intro/aio/
+
+https://stackoverflow.com/questions/57992798/how-to-set-the-speed-of-the-animation-in-r
+
+
+https://ly.usembassy.gov/u-s-citizen-services/covid-19-information/
+
+https://www.learnbyexample.org/r-bar-plot-ggplot2/
+
+https://bookdown.org/nicohahn/making_maps_with_r5/docs/mapview.html
+
+https://paldhous.github.io/ucb/2018/dataviz/week13.html
+
+
+

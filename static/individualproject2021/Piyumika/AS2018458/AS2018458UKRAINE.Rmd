@@ -1,0 +1,592 @@
+---
+title: "Covid-19 Pandemic in Ukraine"
+author: "H.M. Nadeeshani"
+
+output: html_document
+
+---
+```{css,echo=FALSE}
+P{
+  font-size:20px;
+  text-align:justify;
+}
+
+li{
+  font-size:20px;
+}
+caption{
+    text-align:center;
+    font-weight:bold;
+    font-size:18px;
+    
+  }
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+![](R.jfif)
+
+# **1.Introduction**
+
+The Covid-19 pandemic has brought numerous issues to the people around the world since 2019.This is the greatest challenge we have faced after world war 2.The virus has spread to every continent except Antarctica.Total Covid-19 cases are now nearly to 219M and total deaths are nearly to 4.55M.In Ukraine,total cases are near to 2.46M and and deaths near to 58477.Comparing to previous period ,now situation is somewhat better in Ukraine.In this report,I am going to analyze impact of Covid-19 pandemic in Ukraine.
+
+##  1.1 Visualization of The Location
+
+```{r fig.cap="Geographical location of Ukraine", message=FALSE, warning=FALSE}
+
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(magrittr)
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = ukraine_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+
+```
+  
+  Ukraine is located in Eastern Europe.This is the second largest country on the Europe continent and 46th largest in the world.The capital city of Ukraine is Kiev and around 2.91M people lived in there.Ukraine is boarded by Russia,Belarus,The sea of Azov,Black sea,Moldova,Romania,Hungary,Slovakia and Poland.Land size of Ukraine is 603628 sq.km
+  
+  ![Regions of Ukraine](provinces-of-ukraine-map.png){width=75%}
+  
+This map shows Ukraine's 24 regions.They are Kirovohad Oblast,Donetsk,Volyn Oblast,Dnipropetrovsk,Zakarpattia Oblast,Kharkiv,Kharkiv Oblast,Donetsk Oblast,Vinnytsia,Sumy Oblast,Dnipropetrovsk Oblast,Luhansk Oblast,Kherson,Luhansk,Poltava Oblast,Zhytomyr Oblast,Lviv Oblast,Kyiv Oblast,Ivano-Frankivsk Oblast,Chernivtsi,Mykolaiv,Cherkasy Oblast,Kherson Oblast and Chernihiv Oblast.Cherkasy Oblast is the biggest region. With a population over 42 million people,Ukraine is the 7th most populous country in Europe.67% of Ukraine total population lives in urban areas.Ukraine is a safe country for travellers.The most Popular destinations in the Ukraine are Kiev and the coast town odessa.Grain,Steel and sunflower oil are most famous goods prodcued in Ukraine to export.
+
+##  1.2 Climate Condition in Ukraine
+
+  Ukraine's average annual temperature range from about 5.5-7 celcius in north and 11-13 celcius in south.January is the coldest month in Ukraine and temperature is about -3 celcius in southwest and -8 celcius in northeast.July is the hottest month and average temperature in this month is 23 celcius in southeast and 18 celcius in the northeast.Ukraine has snowfalls in late November and early December.In Ukraine,Winters are normally mild and rainy with little snow and summers are dry and hot.Moderately Ukraine has warm and humid air from the Atlantic ocean.
+  
+##  1.3 Lockdown Status of The Ukraine
+
+Covid-19 virus was confirmed to have spread to Ukraine on 3rd March 2020,in Chernivtsi Oblast.On 12th March,Ukraine found two more cases and 17th March they found 6 new cases.First emergency was called on 20th March 2020 in Kyiv Oblast,Chernivtsi Oblast,Zhytomyr Oblast,Dnipropetrovsk Oblast,Ivano-Frankivsk Oblast and Kiev.
+
+In April 6 in 2020 Ukraine impose quarantine.On 21st April in 2020 they extended quarantine until 11th of May.And on the 11th of May they extended the quarantine till 22nd of May.On 25th May Kyiv and Kharkiv were reopened.On 5th June in 2020,they reopened the restuarants,cafes and public places.On 11th November,the government approved weekend lockdowns were non essential businesses would close for the weekend for three weeks.On 8th January in 2021 Ukraine imposed new lockdown until 25th of Januaray.Ukraine started their vaccination programme on 24th February in 2021.In 21st of April covid-19 deaths rise its peak and now also deaths are rising again.In September 2021,Ukraine government extend lockdown restrictions until 1st of October in 2021.
+
+
+
+##  1.4 Actions Taken by The Government
+  
+  Ukraine government took and still taking many actions to prevent from Covid-19.
+  
+  * Airports
+  
+   Air traffic in Ukraine has been renewed.
+  
+  * Public Transport
+  
+  In Ukraine,passengers should wear masks when they are going on public transport and number of passengers are limited to number of seats in vehicle.
+  
+  * Metro
+  
+  Passengers should keep distance in subway cars,on escalators and on platforms while waiting for the train and passengers must wear masks.
+  
+  * Intercity Transport
+  
+  In intercity transport passengers are up to 10 people at a time.
+  
+  * Stores,Pharmacies,petrol stations and banks
+  
+  Operation is restored and visitors must wear masks at all time on the premises.
+  
+  * Cafes
+  
+  Only outdoor terraces are allowed to be opened.The decision making process of opening and closing cafes taken by local authorities.
+  
+  * Sports Clubs
+  
+  In sport clubs number of visitors can't exceed 1 person per 10sq m in individual workout and 5 sq m per person during team workouts.
+  
+  * Events
+  
+  The government gives permission upto 50 people and indoor religious events,provided 1 person per 5sq m and visitors should maintain a distance of 1.5 meters.
+  
+  * Medical Institutions
+  
+  Allowed to provide medicare for during childbirth,cancer patients in hospital and other urgent measures of hospitalization and schedulded operations.
+  
+  * Educational Institutions 
+  
+  The 2021/22 academic year for school children and students continues in a remote format.Students can come to take exams after passing observation or self-isolation.
+  
+  * Rules for foreigners
+  
+  No travel ban for foreigners but need to have an insuarance policy to cover the cost of covid-19 treatments.
+  
+  
+## 1.5 Vaccination progress in Ukraine
+
+ Ukraine started their vaccination program on 24th of february 2021.In first phase,they vaccinated doctors,ambulance staff,labouratory people and military personnel in the joint forces operation in Donbas.They use astrazenica,Pfizer,Novavax and china's sinovac biotech vaccines for their vaccination program.Current vaccination status of Ukraine is 12.5% Of People got fully vaccinated and 14.9% people got first dose of vaccines.
+ 
+ ---- 
+  
+
+# **2. Exploratory Data Analysis**
+
+## 2.1 Confirmed,Recovered and Death Cases in Ukraine
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+confirmed_cases <- filter(ukraine_corona, type == "confirmed")
+ggplot(confirmed_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Confirmed cases in Ukraine")
+ 
+```
+  
+  
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+death_cases <- filter(ukraine_corona, type == "death")
+
+ggplot(death_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Death cases in Ukraine")
+```
+     
+     
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+recovered_cases <- filter(ukraine_corona, type == "recovered")
+ggplot(recovered_cases, aes(date, cases)) + geom_path(size=1) + labs(title = "Recovered cases in Ukraine")
+```
+
+
+```{r, message=FALSE, warning=FALSE,fig.width=12}
+library(plotly)
+all_cases <- ggplot(ukraine_corona,aes(date, cases, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("All Cases in Ukraine")
+ 
+ggplotly(all_cases)
+
+```
+
+The obeservations for this study taken from 22nd January 2020 to 31st of July 2021.Accoridng to these graphs we can see no.of cases in first weeks is very low.But from April 2020 cases started to increase and in November that wave came its peak.Again end of December cases decreased and again April 2021 cases increased its peak.In April 2021 peak of cases is more than November 2020 peak.But May 2021,cases again started to decrease.Ukraine has more recovered cases than death cases.
+
+  * Highest number of confirmed cases in Ukraine(03-04-2021) = 20456
+  * Highest number of death cases in Ukraine(14-04-2021) = 473
+  * Highest number of recovered cases in Ukraine(30-04-2021) = 20308
+
+
+## 2.2 Comparing Deaths with Neighbouring Countries
+
+```{r, message=FALSE, warning=FALSE}
+
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+ukraine_corona_new<-ukraine_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+uk_corona<-coronavirus%>%filter(country=="United Kingdom")
+uk_corona <-uk_corona[uk_corona$date<="2021-07-31",]
+uk_corona_new<-uk_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+sweden_corona<-coronavirus%>%filter(country=="Sweden")
+sweden_corona <-sweden_corona[sweden_corona$date<="2021-07-31",]
+sweden_corona_new<-sweden_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+denmark_corona<-coronavirus%>%filter(country=="Denmark")
+denmark_corona <-denmark_corona[denmark_corona$date<="2021-07-31",]
+denmark_corona_new<-denmark_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+germany_corona<-coronavirus%>%filter(country=="Germany")
+germany_corona <-germany_corona[germany_corona$date<="2021-07-31",]
+germany_corona_new<-germany_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+italy_corona<-coronavirus%>%filter(country=="Italy")
+italy_corona <-italy_corona[italy_corona$date<="2021-07-31",]
+italy_corona_new<-italy_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+france_corona<-coronavirus%>%filter(country=="France")
+france_corona <-france_corona[france_corona$date<="2021-07-31",]
+france_corona_new<-france_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+
+countries_corona<-as.data.frame(rbind(ukraine_corona,uk_corona_new,sweden_corona_new,denmark_corona_new,germany_corona_new,italy_corona_new,france_corona_new))
+
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Deaths of covid-19 in countries of same continent")
+
+```
+
+```{r, message=FALSE, warning=FALSE,comment=NA}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+ukraine_corona_new<-ukraine_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+
+confirmed_cases <- filter(ukraine_corona_new, type == "confirmed")
+death_cases <- filter(ukraine_corona_new, type == "death")
+recovered_cases <- filter(ukraine_corona_new, type == "recovered")
+merged_list <- cbind(confirmed_cases, "recovered"= recovered_cases$cases, "death" = death_cases$cases)
+
+total_cases <- sum(merged_list$cases)
+total_recovery <- sum(merged_list$recovered)
+total_death <- sum(merged_list$death)
+total_active <- total_cases - (total_recovery + total_death)
+
+library(tidyverse)
+library(magrittr)
+
+death_rate_ukraine <- (total_death / total_cases)*100
+cat("Death Rate in Ukraine = ",death_rate_ukraine)
+
+uk_corona<-coronavirus%>%filter(country=="United Kingdom")
+uk_corona <-uk_corona[uk_corona$date<="2021-07-31",]
+uk_corona_new<-uk_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_uk <- uk_corona_new %>% filter(type == "confirmed")
+total_cases_uk <- sum(confirmed_cases_uk$cases)
+death_cases_uk <- uk_corona_new %>% filter(type == "death")
+total_death_uk <- sum(death_cases_uk$cases)
+death_rate_uk <- (total_death_uk/ total_cases_uk)*100
+cat("Death Rate in UK = ",death_rate_uk)
+  
+italy_corona<-coronavirus%>%filter(country=="Italy")
+italy_corona <-italy_corona[italy_corona$date<="2021-07-31",]
+italy_corona_new<-italy_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_italy <- italy_corona_new %>% filter(type == "confirmed")
+total_cases_italy <- sum(confirmed_cases_italy$cases)
+death_cases_italy <- italy_corona_new %>% filter(type == "death")
+total_death_italy <- sum(death_cases_italy$cases)
+death_rate_italy <- (total_death_italy/ total_cases_italy)*100
+cat("Death Rate in Italy = ",death_rate_italy)
+
+
+denmark_corona<-coronavirus%>%filter(country=="Denmark")
+denmark_corona <-denmark_corona[denmark_corona$date<="2021-07-31",]
+denmark_corona_new<-denmark_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_denmark <- denmark_corona_new %>% filter(type == "confirmed")
+total_cases_denmark <- sum(confirmed_cases_denmark$cases)
+death_cases_denmark <- denmark_corona_new %>% filter(type == "death")
+total_death_denmark <- sum(death_cases_denmark$cases)
+death_rate_denmark <- (total_death_denmark/ total_cases_denmark)*100
+cat("Death Rate in Denmark = ",death_rate_denmark)
+
+france_corona<-coronavirus%>%filter(country=="France")
+france_corona <-france_corona[france_corona$date<="2021-07-31",]
+france_corona_new<-france_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_france <- france_corona_new %>% filter(type == "confirmed")
+total_cases_france <- sum(confirmed_cases_france$cases)
+death_cases_france <- france_corona_new %>% filter(type == "death")
+total_death_france <- sum(death_cases_france$cases)
+death_rate_france <- (total_death_france/ total_cases_france)*100
+cat("Death Rate in France = ",death_rate_france)
+
+germany_corona<-coronavirus%>%filter(country=="Germany")
+germany_corona <-germany_corona[germany_corona$date<="2021-07-31",]
+germany_corona_new<-germany_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_germany <- germany_corona_new %>% filter(type == "confirmed")
+total_cases_germany <- sum(confirmed_cases_germany$cases)
+death_cases_germany<- germany_corona_new %>% filter(type == "death")
+total_death_germany<- sum(death_cases_germany$cases)
+death_rate_germany <- (total_death_germany/ total_cases_germany)*100
+cat("Death Rate in Germany = ",death_rate_germany)
+
+
+
+
+
+death_rates <- c(death_rate_ukraine,death_rate_uk,death_rate_italy,death_rate_denmark,death_rate_france,death_rate_germany)
+
+barplot(death_rates,xlab="Country",ylab="Death Rate", main="Death Rates of neighbouring countries", horiz=FALSE, names.arg = c("Ukraine", "UK", "Italy", "Denmark","France","Germany"), cex.names = 0.8,col = c("blue","yellow","red", "pink", "grey","green"))
+
+
+```
+
+According to these two graphs and death rates,We can clearly see Italy has the highest death rate and Ukraine has the third highest death rate.Ukraine's death rate is 2.380894.Denmark has the lowest death rate among these countries.Ukraine is not in good position when comparing death rate with neighbouring countries.
+
+## 2.3 Comparing Recovered Cases with Neighbouring Countries
+
+```{r, message=FALSE, warning=FALSE}
+countries_recovered<-countries_corona%>%filter(type=="recovered")
+ggplot(countries_recovered,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Recovered Cases of covid-19 in countries of same continent")
+```
+
+
+```{r, message=FALSE, warning=FALSE,comment=NA}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+ukraine_corona_new<-ukraine_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases <- filter(ukraine_corona_new, type == "confirmed")
+death_cases <- filter(ukraine_corona_new, type == "death")
+recovered_cases <- filter(ukraine_corona_new, type == "recovered")
+merged_list <- cbind(confirmed_cases, "recovered"= recovered_cases$cases, "death" = death_cases$cases)
+
+total_cases <- sum(merged_list$cases)
+total_recovery <- sum(merged_list$recovered)
+total_death <- sum(merged_list$death)
+total_active <- total_cases - (total_recovery + total_death)
+
+library(tidyverse)
+library(magrittr)
+
+recovered_rate_ukraine <- (total_recovery / total_cases)*100
+cat("Recovered Rate in Ukraine = ",recovered_rate_ukraine)
+
+uk_corona<-coronavirus%>%filter(country=="United Kingdom")
+uk_corona <-uk_corona[uk_corona$date<="2021-07-31",]
+uk_corona_new<-uk_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_uk <- uk_corona_new %>% filter(type == "confirmed")
+total_cases_uk <- sum(confirmed_cases_uk$cases)
+recovered_cases_uk <- uk_corona_new %>% filter(type == "recovered")
+total_recovered_uk <- sum(recovered_cases_uk$cases)
+recovered_rate_uk <- (total_recovered_uk/ total_cases_uk)*100
+cat("Recovered Rate in United Kingdom = ",recovered_rate_uk)
+  
+italy_corona<-coronavirus%>%filter(country=="Italy")
+italy_corona <-italy_corona[italy_corona$date<="2021-07-31",]
+italy_corona_new<-italy_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_italy <- italy_corona_new %>% filter(type == "confirmed")
+total_cases_italy <- sum(confirmed_cases_italy$cases)
+recovered_cases_italy <- italy_corona_new %>% filter(type == "recovered")
+total_recovered_italy <- sum(recovered_cases_italy$cases)
+recovered_rate_italy <- (total_recovered_italy/ total_cases_italy)*100
+cat("Recovered Rate in Italy = ",recovered_rate_italy)
+
+
+denmark_corona<-coronavirus%>%filter(country=="Denmark")
+denmark_corona <-denmark_corona[denmark_corona$date<="2021-07-31",]
+denmark_corona_new<-denmark_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_denmark <- denmark_corona_new %>% filter(type == "confirmed")
+total_cases_denmark <- sum(confirmed_cases_denmark$cases)
+recovered_cases_denmark <- denmark_corona_new %>% filter(type == "recovered")
+total_recovered_denmark <- sum(recovered_cases_denmark$cases)
+recovered_rate_denmark <- (total_recovered_denmark/ total_cases_denmark)*100
+cat("Recovered Rate in Denmark = ",recovered_rate_denmark)
+
+france_corona<-coronavirus%>%filter(country=="France")
+france_corona <-france_corona[france_corona$date<="2021-07-31",]
+france_corona_new<-france_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_france <- france_corona_new %>% filter(type == "confirmed")
+total_cases_france <- sum(confirmed_cases_france$cases)
+recovered_cases_france <- france_corona_new %>% filter(type == "recovered")
+total_recovered_france <- sum(recovered_cases_france$cases)
+recovered_rate_france <- (total_recovered_france/ total_cases_france)*100
+cat("Recovered Rate in France = ",recovered_rate_france)
+
+germany_corona<-coronavirus%>%filter(country=="Germany")
+germany_corona <-germany_corona[germany_corona$date<="2021-07-31",]
+germany_corona_new<-germany_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_germany <- germany_corona_new %>% filter(type == "confirmed")
+total_cases_germany <- sum(confirmed_cases_germany$cases)
+recovered_cases_germany<- germany_corona_new %>% filter(type == "recovered")
+total_recovered_germany<- sum(recovered_cases_germany$cases)
+recovered_rate_germany <- (total_recovered_germany/ total_cases_germany)*100
+cat("Recovered Rate in Germany = ",recovered_rate_germany)
+
+
+
+
+recovered_rates <- c(recovered_rate_ukraine,recovered_rate_uk,recovered_rate_italy,recovered_rate_denmark,recovered_rate_france,recovered_rate_germany)
+
+barplot(recovered_rates,xlab="Country",ylab="Recovered Rate", main="Recovered Rates of neighbouring countries", horiz=FALSE, names.arg = c("Ukraine", "UK", "Italy", "Denmark","France","Germany"), cex.names = 0.8,col = c("blue","yellow","red", "pink", "grey","green"))
+
+```
+
+According to these plots and rates Germany has the highest recovered rate and Ukraine has the second highest.Ukraine's recovered rate is 96.66951.UK has the lowest recovered rate.When comparing recovered rates with neighbouring countries,Ukraine is in a good position.
+
+## 2.4 Comparing Death Rate with India,Australia and United States
+
+```{r, message=FALSE, warning=FALSE,comment=NA}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+ukraine_corona_new<-ukraine_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+
+confirmed_cases <- filter(ukraine_corona_new, type == "confirmed")
+death_cases <- filter(ukraine_corona_new, type == "death")
+recovered_cases <- filter(ukraine_corona_new, type == "recovered")
+merged_list <- cbind(confirmed_cases, "recovered"= recovered_cases$cases, "death" = death_cases$cases)
+
+total_cases <- sum(merged_list$cases)
+total_recovery <- sum(merged_list$recovered)
+total_death <- sum(merged_list$death)
+total_active <- total_cases - (total_recovery + total_death)
+
+library(tidyverse)
+library(magrittr)
+
+death_rate_ukraine <- (total_death / total_cases)*100
+cat("Death Rate in Ukraine = ",death_rate_ukraine)
+
+us_corona<-coronavirus%>%filter(country=="US")
+us_corona <-us_corona[us_corona$date<="2021-07-31",]
+us_corona_new<-us_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_us <- us_corona_new %>% filter(type == "confirmed")
+total_cases_us <- sum(confirmed_cases_us$cases)
+death_cases_us <- us_corona_new %>% filter(type == "death")
+total_death_us <- sum(death_cases_us$cases)
+death_rate_us <- (total_death_us/ total_cases_us)*100
+cat("Death Rate in US = ",death_rate_us)
+  
+australia_corona<-coronavirus%>%filter(country=="Australia")
+australia_corona <-australia_corona[australia_corona$date<="2021-07-31",]
+australia_corona_new<-australia_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_australia <- australia_corona_new %>% filter(type == "confirmed")
+total_cases_australia <- sum(confirmed_cases_australia$cases)
+death_cases_australia<- australia_corona_new %>% filter(type == "death")
+total_death_australia <- sum(death_cases_australia$cases)
+death_rate_australia <- (total_death_australia/ total_cases_australia)*100
+cat("Death Rate in Australia = ",death_rate_australia)
+
+india_corona<-coronavirus%>%filter(country=="India")
+india_corona <-india_corona[india_corona$date<="2021-07-31",]
+india_corona_new<-india_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases_india <- india_corona_new %>% filter(type == "confirmed")
+total_cases_india <- sum(confirmed_cases_india$cases)
+death_cases_india <- india_corona_new %>% filter(type == "death")
+total_death_india <- sum(death_cases_india$cases)
+death_rate_india <- (total_death_india/ total_cases_india)*100
+cat("Death Rate in India = ",death_rate_india)
+
+death_rates <- c(death_rate_ukraine,death_rate_us,death_rate_australia,death_rate_india)
+
+barplot(death_rates,xlab="Country",ylab="Death Rate", main="Death Rates Comparison", horiz=FALSE, names.arg = c("Ukraine", "US","Australia","India"), cex.names = 0.8,col = c("red","yellow","grey","green"))
+```
+
+US,India and Australia are major most affected covid-19 countries in Asia,North America and Oceania continents.When comparing Ukraine death rate with them Ukraine has the second highest death rate and Australia has the highest.India has the lowest death rate among these countries.So comparing with these countries Ukraine is not in a good position about death rates.
+
+
+## 2.5 Comparing Recovered Rate with India,Australia and United States
+
+```{r, message=FALSE, warning=FALSE,comment=NA}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+ukraine_corona<- ukraine_corona[,!names(ukraine_corona)%in% c("province","country","lat","long")]
+ukraine_corona <-ukraine_corona[ukraine_corona$date<="2021-07-31",]
+ukraine_corona_new<-ukraine_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+
+confirmed_cases <- filter(ukraine_corona_new, type == "confirmed")
+death_cases <- filter(ukraine_corona_new, type == "death")
+recovered_cases <- filter(ukraine_corona_new, type == "recovered")
+merged_list <- cbind(confirmed_cases, "recovered"= recovered_cases$cases, "death" = death_cases$cases)
+
+total_cases <- sum(merged_list$cases)
+total_recovery <- sum(merged_list$recovered)
+total_death <- sum(merged_list$death)
+total_active <- total_cases - (total_recovery + total_death)
+
+library(tidyverse)
+library(magrittr)
+
+recovered_rate_ukraine <- (total_recovery / total_cases)*100
+cat("Recovered Rate in Ukraine = ",recovered_rate_ukraine)
+
+us_corona<-coronavirus%>%filter(country=="US")
+us_corona <-us_corona[us_corona$date<="2021-07-31",]
+us_corona_new<-us_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_us <- us_corona_new %>% filter(type == "confirmed")
+total_cases_us <- sum(confirmed_cases_us$cases)
+recovered_cases_us <- us_corona_new %>% filter(type == "recovered")
+total_recovered_us <- sum(recovered_cases_us$cases)
+recovered_rate_us <- (total_recovered_us/ total_cases_us)*100
+cat("Recovered Rate in US = ",recovered_rate_us)
+  
+australia_corona<-coronavirus%>%filter(country=="Australia")
+australia_corona <-australia_corona[australia_corona$date<="2021-07-31",]
+australia_corona_new<-australia_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_australia <- australia_corona_new %>% filter(type == "confirmed")
+total_cases_australia <- sum(confirmed_cases_australia$cases)
+recovered_cases_australia <- australia_corona_new %>% filter(type == "recovered")
+total_recovered_australia <- sum(recovered_cases_australia$cases)
+recovered_rate_australia <- (total_recovered_australia/ total_cases_australia)*100
+cat("Recovered Rate in Australia = ",recovered_rate_australia)
+
+india_corona<-coronavirus%>%filter(country=="India")
+india_corona <-india_corona[india_corona$date<="2021-07-31",]
+india_corona_new<-india_corona%>%mutate(cases=replace(cases,which(cases<0),0))
+confirmed_cases_india <- india_corona_new %>% filter(type == "confirmed")
+total_cases_india <- sum(confirmed_cases_india$cases)
+recovered_cases_india <- india_corona_new %>% filter(type == "recovered")
+total_recovered_india <- sum(recovered_cases_india$cases)
+recovered_rate_india <- (total_recovered_india/ total_cases_india)*100
+cat("Recovered Rate in India = ",recovered_rate_india)
+
+recovered_rates_new <- c(recovered_rate_ukraine,recovered_rate_us,recovered_rate_australia,recovered_rate_india)
+
+barplot(recovered_rates_new,xlab="Country",ylab="Recovered Rate", main="Recovered Rates Comparison", horiz=FALSE, names.arg = c("Ukraine", "US","Australia","India"), cex.names = 0.8,col = c("red","yellow","grey","green"))
+```
+
+When comparing Ukraine's recovered rate with India,US and Australia, Ukraine has the second highest recovered rate.India has the highest recovered rate among these countries and US has the lowest recovered rate.So comparing with these countries Ukraine is in a good position about recovered rates.
+
+----
+
+# **3.0 Discussion**
+
+The data taken from 22nd January to 31st of July 2021.The data is loaded from corona virus package in R.Some recovered,death and confirmed cases data sets contained negative values.The reason for this is,at first stage some patients test positive and later on diagnosed as negative.August and September(2021) data not be taken for the analysis.Because data are missing in these months.So current status of the country cannot be made.When selecting countries for comparison,first I get popular countries in same continent with Ukraine.Italy and Uk  covid pandemic is more popular last year in the world.So I specially decided to get these two countries.Also I get Denmark,France and Germany for this comparison.Then I compared Ukraine with US,Australia and India.Pandemic of US and India is also more popular in this year and last year in worldwide.Australia is the most affected country in Oceania continent.So I decided to compare Ukraine with these countries.
+
+----
+
+# **4.0 Conclusion**
+
+Ukraine situation is stable and much better comparing with other countries when 31.07.2021.Ukraine neared to pandemic peak in April 2021.When we consider with other countries, recovered rate is much better in Ukraine but death rate is not.Ukraine government has taken many successful decisions to prevent from covid-19.In public places and when traveling public transportation wearing mask and maintain social distance is essential thing in Ukraine now.And vaccination program in Ukraine shows a good progress.Therefore pandemic situation is now under control in Ukraine.
+
+----
+
+# **5.0 References**
+
+  * Covid-19 in Ukraine - https://wwwnc.cdc.gov/travel/notices/covid-3/coronavirus-ukraine
+
+  * Climate change in Ukraine - https://www.climatechangepost.com/ukraine/climate-change/
+
+  * Covid-19 pandemic in Ukraine - https://covid19.gov.ua/en/
+
+  * Adminstrative divisions of Ukraie - https://en.wikipedia.org/wiki/Regions_of_Ukraine
+
+  * Ukraine - https://en.wikipedia.org/wiki/Ukraine
+
+  * Assignment-Help file - https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+  
+  * Covid-19 vaccination pace accelarates in Ukraine - https://covid.unian.info/covid-in-ukraine-daily-deaths-rise-sharply-as-of-march-10-11347318.html
+  
+  * Ukraine takes first delivery of astrazenica vaccine for covid-19 - https://www.rferl.org/a/ukraine-covid-19-astrazeneca-vaccine-first-delivery/31117396.html

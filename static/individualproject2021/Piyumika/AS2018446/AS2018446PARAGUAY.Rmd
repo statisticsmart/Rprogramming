@@ -1,0 +1,413 @@
+---
+title: "**COVID-19 PANDEMIC IN PARAGUAY**"
+
+---
+
+<body style="background-color:Cream;">
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,comment=NA,eval=FALSE,echo=FALSE} 
+library(devtools) # Step 2
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)  # Step 3
+get_individual_project_country("AS2018446") # Step 4
+```
+
+<span style = "font-family:Arial;font-style:italic"> 
+<font size="4">  
+
+
+### **1.INTRODUCTION**
+Coronavirus pandemic, is an ongoing global pandemic caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).The novel virus was first identified in Wuhan, China, in December 2019 and by now today it was spreaded among more than 188 countries in the world.In Paraguay, first confirmed case is a 32-year-old Paraguayan who arrived from Ecuador and it is reported in March 7,2020. 
+
+![](E:\Pictures\FN-AJ646_FN_COR_P_20200204115607.jpg){width=100%}
+
+
+
+
+
+#### **Visualization of the location**
+Paraguay is a South American country located in the southern central region of the continent. Called the Republic of Paraguay officially, Paraguay is surrounded by land along all of its borders. The three South American countries that share borders with Paraguay are Bolivia, Brazil, and Argentina. The northwestern boundary of Paraguay is shared with Bolivia, while Brazil surrounds the eastern and northeastern borders of Paraguay. Argentina encompasses Paraguay along the country's southernmost and most southwestern borders.
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE,out.height="150%",out.width="150%"}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(gridBase)
+library(grid)
+library(sp)
+library(coronavirus)
+paraguay_corona<-coronavirus %>% filter(country=="Paraguay")
+
+data(wrld_simpl)
+
+
+p <-ggplot() + 
+  geom_polygon(
+    data=wrld_simpl,
+    aes(x=long,y=lat,group=group), fill= "gray",color=" white"
+  ) +
+  coord_cartesian(xlim=c(-180,180), ylim=c(-90,90)) +
+  scale_x_continuous(breaks=seq(-180, 180, 120)) +
+  scale_y_continuous(breaks=seq(-190, 90, 100))
+
+p+
+  geom_point(
+    data=paraguay_corona, aes(x = long, y = lat),color ="red",size
+    =2
+    
+  )
+```
+
+<p style = "text-align: center;" > Plot of Paraguay</p>
+            
+
+#### **Climate Condition**
+Paraguay’s climate is subtropical to temperate, characterized by a rainy season in summer and a dry season in winter. The mean temperature of Paraguay is 24 degrees Celsius. However, thermal variations exist. The mountains, plateaus and valleys located in the east of the country contribute to a temperate and humid climate, contrasting with the warm, dry tropical climate of the Chaco plain in the west. Substantial rainfall occurs in the eastern region, becoming semiarid in the far west (CIA 2009). Mean annual rainfall in the southeastern region is 1800 millimeters. Mean rainfall in the northwest is 700 millimeters. Temperatures in Paraguay, particularly maximum temperatures, were observed to increase from 1960 to 2010 in both winter and summer months, with greater increases seen in summer months.Warm temperatures are present throughout most of the year, as average annual temperatures exceed 20°C throughout the country. In the Eastern Region, the annual average temperature is between 20°C and 24°C, while in the Chaco or Western Region, average annual temperatures hover around 25°C. 
+
+#### **Lockdown status of the country**
+The virus was confirmed to have reached Paraguay on March 7, 2020, in a 32-year-old man from Guayaquil, Ecuador, living in San Lorenzo, Central Department.On March 10, 2020, the Paraguayan government suspended classes and all activities that involve groups of people, as well as public and private events, with the goal of avoiding the spread of the virus, pursuant to Decree no. 3442/2020. Other preventive measures have been adopted, such as commerce and movement restrictions, suspension of flights, border closures, curfews, and strengthening controls to ensure compliance with the measures.
+
+On March 20, 2020, the first death and the first case of community transmission were confirmed. The government declared a total quarantine until May 3, with free movement completely restricted. Public movement was restricted to buying food, medicine and other essential items. From May 4, 2020, Paraguay implemented the so-called “Intelligent/Smart” Quarantine, a gradual return to work and social activities with social distancing and hygiene measures. However, the government decided to maintain the closure of borders and other restrictions.
+
+Since October 5, 2020, the country moved to a new phase known as the "Covid way of living", relaxing restrictions on most activities while maintaining an increased focus on hygiene until a vaccine or cure is found. National borders were opened and some international flights were resumed. Eventually, specific exceptions could be raised by zones or by a particular economic sector, if the circumstances require it. Online learning and nightly curfew are still in effect indefinitely.
+
+#### **Actions taken by the government**
+The government website provides all health protectively information.The government take immediate action against this pandemic situation.
+Following are the actions taken by goverment.
+
+-In public transport,all passengers are to wear masks over your noise and mouth .
+
+-Government has done a project setup hand washbasins in 33 Family Health Units and 5 hospitals in Asuncion. Similary 6 water tanks with pumps were setup in Family Health Units of Asuncion.
+
+-More than a 100 staff members of the Famiy Health Units and hospitals participated in the training on infection prevention and control,safe water management,sanitization procedures.
+
+-Thirty-three Family Health Units recieved hygiene and cleaning supplies,benefiting 26,744 families.
+
+-Four hospitals of Asuncion and the National Institute of Respiratory and Environmental Diseases,the refernce center for cases of COVID-19 also recieved critical hygeine supplies.
+
+-Seventy-nine community organizations recieved hygeine and cleaning supplies and training on their proper use,as well as ten public spaces of Asuncion.
+
+-The Government also implemented measures to preventthe spread of the virus, including border closure and suspension of school, all activities that involve groups of people, as well as public and private events, a contingency hospital was built in 21 days.
+
+
+\newpage
+
+### **2.Exploratory Data Analysis**
+
+Following outputs are taken from  Paraguay coronavirus data set.There are 1818 observations  and they are taken from 22 January 2020 to 21 September 2021.The several variables obtained here are date of the observation taken,province of the case,latitude of center of geographic region,longitude of center of geographic region,number of cases on the given date and the type of the case on the given date.(whether it is confirmed,death or recovered)
+
+```{r,comment=NA,eval=FALSE,echo=FALSE,eval=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE,echo=FALSE}
+library(tidyverse)
+library(magrittr)
+coronavirus <- as.data.frame(coronavirus,stringAsFactors= TRUE)
+#paraguay_corona<-coronavirus %>% filter(country=="Paraguay")
+paraguay_corona <-as.data.frame(paraguay_corona)
+paraguay_corona[is.na(paraguay_corona)]=0
+```
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+paraguay_corona[is.na(paraguay_corona)]=0
+head(paraguay_corona)
+```
+So these 6 observations are the first six observations in the paraguay_corona data set.
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+paraguay_corona[is.na(paraguay_corona)]=0
+tail(paraguay_corona)
+```
+So these 6 observations are the last six observations in the paraguay_corona data set.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+paraguay_corona[is.na(paraguay_corona)]=0
+summary(paraguay_corona)
+```
+And this gives the summary statistics of the  paraguay_corona data set.No negative values were there.But there were 45 missing values.Since there are all together 1818 observations ,45 of them(missing values) set to zero assuming that it doesn't make any harm to the data set.
+
+
+
+\newpage
+
+#### **Visualization of death,confirmed,recovered,active cases**
+
+
+##### **Confirmed cases in Paraguay**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+confirmed_paraguay_corona_cases <-paraguay_corona %>% filter(type=="confirmed")
+ggplot(confirmed_paraguay_corona_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title="Confirmed cases in Paraguay")
+```
+
+Above graph shows no. of confirmed corona patients in Paraguay in daily basis.We can see there are lower no of cases reported from January 2020 upto July 2020. It can be seen virus was spread to the community increasingly from July 2020 to upto like March 2021.We can see highest no of confirmed cases in the month of June 2021. After like June 2021  no. of  confirmed cases getting lower gradually.
+
+
+##### **Recovered cases in Paraguay**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+recovered_paraguay_corona_cases <-paraguay_corona %>% filter(type=="recovered")
+ggplot(recovered_paraguay_corona_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title="Recovered cases in Paraguay")
+```
+
+Above graph shows no. of recovered corona patients in Paraguay in daily basis.By looking at this graph we can see it is remaining in the zero line constantly from  January 2020 to July 2021.That means it doesn't change over the time.Then it is gradually increasing over the time upto like June of 2021.And thereafter it goes downwards.
+
+##### **Death cases in Paraguay**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+death_paraguay_corona_cases <-paraguay_corona %>% filter(type=="death")
+ggplot(death_paraguay_corona_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title="Death cases in Paraguay")
+```
+
+Above graph shows no. of death  corona patients in Paraguay in daily basis.From January 2020 to July 2020 there are lower no of deaths recorded.But on July 2020 upwards to  July 2021 no of deaths are increasing in a considerable manner.From July 2020 to January 2021 we can see no of deaths recorded per day was below 30.But thereafter it is increased rapidly upto July 2021.After July 2021 it again decreased  to the zeroth level and we can see a rapid increasement of deaths at the end.
+
+##### **Active cases in Paraguay**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+paraguay_corona <-coronavirus %>% filter(country == "Paraguay")
+paraguay_corona2 <-paraguay_corona %>% filter(cases >=0)
+coronaParaguay_wider <- paraguay_corona2 %>% pivot_wider(names_from=type,values_from=cases)
+coronaParaguay_wider$active_paraguay_corona <-coronaParaguay_wider$confirmed-coronaParaguay_wider$death-coronaParaguay_wider$recovered
+ggplot(coronaParaguay_wider,aes(x=date, y=active_paraguay_corona)) +geom_line() +ggtitle("Paraguay: Daily covid- 19 Active cases")
+
+```
+
+There are outliers in the data set.Active cases can't  take any negative value.So we have to remove the outliers first,before doing any analysis.
+
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+paraguay_corona <-coronavirus %>% filter(country == "Paraguay")
+active_paraguay_corona <-paraguay_corona  %>% filter(type == "recovered")
+active_paraguay_corona2 <- active_paraguay_corona %>% filter(cases >=0)
+ggplot(active_paraguay_corona2, aes(x=date, y=cases)) +geom_line() + ggtitle("Paraguay:Daily Covid-19 Active cases without Outliers")
+```
+
+So this is the plot you get after removing outliers in the data set.
+It shows no. of active  corona patients in Paraguay in daily basis.So we can see no of active cases is very low from the month of January 2020 to July 2020.And thereafter it  is increasing upto June 2021.At this time period active cases in Paraguay shows an increasing liner trend.After like June month of 2021 it again goes downwards.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+
+ggplot(paraguay_corona,aes(x=date,y= cases,colour=type)) + geom_path(size=1) +labs(title="Confirmed,Death and Recovered cases in Paraguay")
+
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(paraguay_corona2, aes(x=date,y=cases,col=type)) +geom_col() + ggtitle("Paraguay:Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+
+This figure shows confirmed,death,recovered cases in Paraguay.
+As we can  see compared to confirmed and recovered cases Paraguay has  small amount of death cases.At first there are no cases but after July month of 2020,no. of confirmed and recovered cases are increased rapidly.By looking at this figure we can say Paraguay has large no.of confirmed cases than that of recovered cases.However,no. of death cases in Paraguay within this time period(January,2020-July 2021) is very low.Therefore we can say as a country Paraguay has controlled deaths within the country to some extent.
+
+#### **Total no. of Confirmed,Death and Recovered cases in Paraguay**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+paraguay_corona <-paraguay_corona %>% group_by(type)%>%mutate(cum_cases =cumsum(cases))
+ggplot(paraguay_corona, aes(date,cum_cases,color= type)) + geom_path(size=1) + labs(title ="Total no. of Confirmed,Death and Recovered cases in Paraguay")
+```
+
+On July there are several no.of confirmed,death and recovered cases identified.Total no of confirmed and recovered cases has increased since July 2020.As well as total no of recovered cases has increased exponentially from July 2020 onwards.Highest no.of confirmed and recovered cases are reported in the month of  like August 2021.(After July 2021).There is a small gap between total no. of confirmed patients Vs. total no. of recovered patients and total no.of confirmed patinets are greater than that of recovered.So it can be concluded virus is spreading very fastly to the community and recovering procedure is slower than virus spreading procedure.
+In July 2021 deaths are reported but reported deaths are very lower than confirmed and recovered cases. Especially, total no of death cases recorded are very low constantly entire time period.Therefore it can be concluded that country Paraguay has managed Covid-19 considerably in a good way.
+
+
+\newpage
+
+#### **Comparing with the  nearby countries in the same continent **
+
+
+So these are the list of nearby countries to Paraguay.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+nearby_countries <-subset.data.frame(coronavirus,(-60<lat & lat<10) & (-90< long & long< -50))
+count(nearby_countries,country)
+
+```
+
+If we consider the plot,
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+coronavirus <-as.data.frame(coronavirus)
+data(wrld_simpl)
+p <-ggplot() +
+  geom_polygon(
+    data=wrld_simpl,
+    aes(x=long,y=lat,group=group,), fill="gray",colour="white"
+    ) +
+  coord_cartesian(xlim=c(-120,0),ylim=c(-70,10)) +
+  scale_x_continuous(breaks= seq(-120,0,20)) +
+  scale_y_continuous(breaks=seq(-70,10,10))
+  
+p+
+  geom_point(
+    data=coronavirus,aes(x=long,y=lat),coclor="red",size
+    =1
+  ) +geom_text(aes(x=coronavirus$long,y=coronavirus$lat,label=coronavirus$country))
+  
+```
+
+This plot shows the nearby countries to Paraguay.
+
+Paraguay is a country which is situated in 'South America' continent.So here we are considering the countries nearby Paraguay which belong to the same continent.Therefore we have to sort countries which belong to the South America continent from the countries nearby to Paraguay.For that we need a new data frame for the analysis.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+nearby_countries <-filter(coronavirus, country== "Argentina"|country=="Bolivia"|country== "Brazil"| country== "Chile"| country== "Colombia"| country== "Costa Rica"| country== "Ecuador"| country== "Guyana"| country== "Panama"| country== "Paraguay"| country== "Peru"| country== "Suriname"| country== "Uruguay"| country== "Venezuela")
+count(nearby_countries,country)
+```
+
+
+So here is the plot of all 14 nearby countries in the 'South America' continent.
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p+
+  geom_point(
+    data=nearby_countries,aes(x=long, y=lat), color="red", size
+    =1
+    
+  ) +geom_text(aes(x=nearby_countries$long, y=nearby_countries$lat,label=nearby_countries$country))
+
+```
+
+
+#### **Daily confirmed cases in nearby countries to Paraguay in South America**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+confirmed_nearby_countries <-filter(nearby_countries,type=="confirmed")
+death_nearby_countries <-filter(nearby_countries,type=="death")
+recovered_nearby_countries <-filter(nearby_countries,type=="recovered")
+
+ggplot(confirmed_nearby_countries,aes(x=date, y=cases, colour=country)) +geom_path(size=1)
+
+```
+
+Brazil has the highest no.of Confirmed cases in South America continet.Confirmed cases in Paraguay is negligible when compared to other countries in the same continent.
+
+
+#### **Daily Death cases in nearby countries to Paraguay in South America**
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(death_nearby_countries,aes(x=date, y=cases, colour=country)) +geom_path(size=0.5)
+
+```
+
+By looking at this graph we can say again Brazil and Costa Rica  have the highest no. of death cases in South America continet.No.of deaths in Paraguay is lower than other countries nearby.
+
+
+
+#### **Daily recovered cases in nearby countries to Paraguay in South America**
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(recovered_nearby_countries,aes(x=date, y=cases, colour=country)) +geom_path(size=0.5)
+
+```
+
+Daily recovered cases in Paraguay is negligible when compared to other countries in South America continent.Where again Brazil has the highest no. of recovered cases.
+
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(nearby_countries,aes(x=date, y=cases, colour=country)) +geom_path(size=1) +facet_grid(rows=vars(type)) +
+  labs(title="Daily Confirmed,Death and Recovered cases in South America")
+```
+
+It seems that as a continent no.of deaths per day is in a very low position in South America.Confirmed and recovered rates per day is high is Brazil than the other countries in the continent.And also as a country no. of cases(death,confirmed and recovered) is negligible when compared to other countries.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+
+count(nearby_countries,type)
+nearby_countries <-nearby_countries%>%group_by(country,type)%>%
+  mutate(cum_cases=cumsum(cases))                                               
+ggplot(nearby_countries,aes(date,cum_cases,colour=country)) +geom_path(size=1) +facet_grid(rows=vars(type)) +
+  labs(title="Total no.of confirmed,death,recovered cases in nearby countries in South America")
+```
+
+Above graph confirms that total no.of corona confirmed,death and recovered patients in Paraguay is negligible when compared to other countries.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(subset(nearby_countries,type=="confirmed"),aes(x=date,y=cum_cases,colour=country)) +geom_path(size=1) +
+  labs(title="Total no.of confirmed cases in nearby countries in South America")
+
+```
+
+Total no.of confirmed Covid-19 patients in Paraguay are lower than Brazil,Bolivia,Argentina,Colombia, Costa Rica  and higher than Venezuela,Uruguay and Suriname.
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(subset(nearby_countries,type=="death"),aes(x=date,y=cum_cases,colour=country)) +geom_path(size=1) +
+  labs(title="Total no.of death cases in nearby countries in South America")
+
+```
+
+Total no. of death Covid-19 patients in Paraguay is lower than Brazil,Peru,Colombia,Bolivia,Chile but almost equal with other countries in South America.
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(subset(nearby_countries,type=="recovered"),aes(date,cum_cases,colour=country)) +geom_path(size=1) +
+  labs(title="Total no.of recovered cases in nearby countries in South America")
+
+```
+
+Above plot shows us total no.of recovered corona patients in Paraguay are lower than to the total no.of patients in Brazil,Colombia,Bolivia,Peru,Argentina but almost equal with other countries in South America.
+
+
+
+\newpage
+
+### **3. Discussion  and Conclusion**
+
+
+#### **Discussion**
+
+This data set is loaded by coronavirus data set given in the package R.Paraguay dataset is obtained by it.The data set has no negative values.But there were 45 missing values for cases.So missing values were removed by setting them to zero.There were some outliers found when considering active cases in Paraguay and outliers were removed before doing the analysis.
+In Daily Covid-19 cases by type figure,before July 2020 there were no death cases identified,but several no. of confirmed and recovered cases were there.When considering  all cases in the country it can be seen there are more confirmed cases than recovered or deaths.
+Paraguay is comparisoned with nearby countries in the same South America continent as well.When comparing with the other countries  the no.of covid-19 confirmed patients in Paraguay is almost negligible compared to  the countries like Brazil,Bolivia,Argentina,Colombia, Costa Rica in the South America.And also same thing goes with recovered and death cases.Among all of these countries, Brazil records the highest no.of cases of all types.
+
+#### **Conclusion**
+
+Covid-19 disease is identified in December 2019 in Wuhan,Hubei but it is increased speedly in January to March.However,it is directly affected to the other countries.At this time most of the countries in the world had risk but did not expect serious situation like this.
+China is the country which has the largest population plus they have strong health facilities and modern technologies.After the virus entered to the population they had taken actions to prevent from the virus.
+
+Covid-19 pandemic was confirmed to have reached South America on 26 February 2020 when Brazil confirmed a case in São Paulo.
+By 3 April, all countries and territories in South America had recorded at least one case.Among the countries in South America continent the most affected victim was Brazil. On 22 May 2020, citing the rapid increase of infections in Brazil, the World Health Organization declared South America the epicentre of the pandemic.
+
+The virus was confirmed to have reached Chile on 3 March 2020.Considering its population, by June 2020 Chile had one of the worst outbreaks in the world.Chile became one of the first countries to start a nationwide program to vaccinate against COVID-19. On 24 December 2020.The virus was confirmed to have reached Colombia on 6 March 2020.On 29 February 2020, the Minister of Health in Ecuador, Catalina Andramuño, confirmed the first case of the virus in the country.
+
+The paraguay became a victim of the virus on 7 th March 2020.
+On March 10, 2020, the Paraguayan government suspended classes and all activities that involve groups of people. Other preventive measures have been adopted, such as commerce and movement restrictions, suspension of flights, border closures, curfews, and strengthening controls to ensure compliance with the measures.On March 20, 2020, the first death and the first case of community transmission were confirmed. The government declared a total quarantine until May 3, with free movement completely restricted. Public movement was restricted to buying food, medicine and other essential items.Paraguay implemented the so-called “Intelligent/Smart” Quarantine, a gradual return to work and social activities with social distancing and hygiene measures. However, the government decided to maintain the closure of borders and other restrictions.However when compared to other countries to nearby Paraguay the total no.of all types of cases reported is negligible.So we can conclude that as a country paraguay has managed Covid-19 in a considerably good way.
+
+
+\newpage
+
+### **4.References**
+
+*Wikipedia-[https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Paraguay](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Paraguay)
+
+*Wikipedia-[https://en.wikipedia.org/wiki/Geography_of_Paraguay](https://en.wikipedia.org/wiki/Geography_of_Paraguay)
+
+*YouTube-[https://www.youtube.com/watch?v=8hgkPDlrN0E](https://www.youtube.com/watch?v=8hgkPDlrN0E)
+
+*[https://wwwnc.cdc.gov/travel/notices/covid-3/coronavirus-paraguay](https://wwwnc.cdc.gov/travel/notices/covid-3/coronavirus-paraguay)
+
+*[https://www.adaptation-undp.org/explore/latin-america-and-caribbean/paraguay](https://www.adaptation-undp.org/explore/latin-america-and-caribbean/paraguay)
+
+*[https://www.britannica.com/place/Paraguay/Land](https://www.britannica.com/place/Paraguay/Land)
+
+*[https://www.climatestotravel.com/climate/paraguay](https://www.climatestotravel.com/climate/paraguay)
+
+
+</font>
+</span>
+
+
+

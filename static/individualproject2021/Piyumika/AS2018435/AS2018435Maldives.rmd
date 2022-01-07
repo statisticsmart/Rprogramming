@@ -1,0 +1,528 @@
+---
+title: "AS2018435"
+output: html_document
+---
+
+```{r setup, include=FALSE }
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# **Covid-19 pandemic in Maldives**
+
+![](thumbs_b_c_27bff11da11f9727c09a16b184ae0ad8.jpg)
+
+## Abstract
+
+The World Health Organization (WHO) has declared the coronavirus disease 2019 (COVID-19) a pandemic. A global coordinated effort is needed to stop the further spread of the virus. A pandemic is defined as “occurring over a wide geographic area and affecting an exceptionally high proportion of the population.” The last pandemic reported in the world was the H1N1 flu pandemic in 2009.On 31 December 2019, a cluster of cases of pneumonia of unknown cause, in the city of Wuhan, Hubei province in China, was reported to the World Health Organization.
+
+This report is an exploratory analysis of the pandemic in Maldives by studying 
+data **from 22 January 2020 to 18 September 2021** and comparing it with neighboring 
+countries as well as countries identified as of key importance with respect to COVID-19.
+We are still facing the global crisis of the COVID-19 pandemic. As individuals we can do our part in keeping
+others safe by following the rules suggested by the government and WHO. As part of the data science
+community we can also provide our contribution, by analyzing the data and helping to communicate it. Such
+type of support is high demand among government and related institutions. The purpose of this report is to fulfill that role.
+
+
+## Introduction of the country
+
+Maldives is an island nation in the Indian Ocean formed by a chain of 1,900 coral islands grouped into 26 atolls southwest of Sri Lanka and India. The archipelago has a strategic location astride and along major sea lanes in Indian Ocean. The government system is a republic; the chief of state and head of government is the president. Maldives has a mixed economic system which includes a variety of business and fiscal freedom, combined with centralized economic planning and government regulation. Maldives is a member of the South Asian Association for Regional Cooperation (SAARC).
+
+## Visualization of the location
+
+```{r, comment = NA, echo = FALSE, message=FALSE, warning=FALSE}
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018435")
+
+library(coronavirus)
+data(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+
+maldives_corona <- coronavirus %>% filter(country == "Maldives")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+# mapping country
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = maldives_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+
+```
+
+
+## Climate condition
+
+The Maldives have a tropical climate, hot all year round and influenced by the monsoons. The south-west monsoon, from late April to September, it's stronger on the northern islands, and it's accompanied by the wind, which can make the sea rough and therefore may discourage activities such as diving, and it's also accompanied by higher humidity and more frequent cloudiness. The northeast monsoon, from October to December, it's quieter and simply brings showers and thunderstorms in the afternoon or evening, especially in the southern atolls.
+The driest period, outside the monsoons, runs from January to April and is felt more on the northern atolls.
+The temperatures are stable: highs are around 30 °C (86 °F) and lows around 25 °C (77 °F) most of the year. Relative humidity is high and stable throughout the year as well, around 80%. However, between February and May, there is a slight increase in temperature and in the feeling of sultriness as well, especially in the northern atolls; in fact, in this period, the maximum temperature rises to 31/32 °C (88/90 °F) and the minimum temperature to 26/27 °C (79/81 °F).
+As is common in tropical areas, the rains mostly occur in the form of short and intense downpour or thunderstorm. Total annual rainfall is a bit more abundant in the southern atolls, where it hovers around 2,200/2,300 millimeters (87/91 inches) per year, and less abundant in the north, where it hovers around 1,700/1,800 mm (67/71 in) per year. The difference is mainly due to the fact that in the central and northern atolls there is a relatively dry season from January to mid-April, which is more pronounced in the northernmost atolls.
+
+## Demographics of Maldives
+
+**Maldives Population 2021 (Live) - 544,673**
+
+The people of the Maldives have an identity that is a blend of the cultures of people who settled on the islands. It is believed the earliest inhabitants were from Sri Lanka and southern India. The Maldives people are ethnically related to those of the Indian subcontinent and are ethnically known as Dhivehi.
+
+There are about 70,000 foreign workers in the Maldives, as well as 33,000 illegal immigrants, who make up about one-third of the total population. Most workers and immigrants are from Nepal, Bangladesh, and Sri Lanka.
+
+
+
+**Maldives Population**
+
+Name | Population
+---  | ---
+Male | 103,693
+Fuvahmulah |	11,140
+Hithadhoo	| 9,927
+Kulhudhuffushi | 9,500
+Thinadhoo	| 6,376
+Naifaru	| 5,044
+Dhidhdhoo	| 3,039
+Viligili	| 2,925
+Funadhoo	| 2,900
+Eydhafushi	| 2,808
+
+
+
+## Lock-down status of the country
+
+coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to the Maldives on 7 March 2020 from a 69-year-old Italian tourist who had returned to Italy after spending holidays in Kuredu Resort & Spa.The Health Protection Agency of the Maldives confirmed two cases in the Maldives, both employees of the resort. Following this, the hotel was locked down with several tourists stranded on the island. As of 11 March, the resorts of Kuredu, Vilamendhoo, Batalaa, and Kuramathi island were also placed under temporary quarantine. Schools were closed as a precaution.
+
+The first case of local transmission of COVID‐19 was reported in Male’ City on 
+15 April 2020.The alert level of Male’ 
+City remains at level IV.  A lockdown imposed on 16 April continues, with strict 
+travel and movement restrictions measures being enforced. Government has 
+rolled out carefully considered lock down ease out plan from 1 June, 2020
+
+On 24 May 2021, Maldives had the world's fastest-growing COVID-19 outbreak, with the highest number of infections per million people over the prior 7 and 14 days, according to data compiled by Bloomberg.
+
+currently, there are no any lock-down status in Maldives.
+
+#### Latest Updates(Last Updated Date: 26 September 2021)
+
+Date | Title
+--- | ---
+**01 September 2021** | **COVID-19 vaccination coverage criteria for domestic travel**
+**18 August 2021** | **Islands Under Monitoring**
+**04 August 2021** | **COVID-19 Vaccination Coverage**
+**31 July 2021** | **COVID-19 Vaccination Coverage Criteria for Permitting Tourist Arrivals**
+**23 July 2021** | **Easing of restrictions for locals and work-permit holders traveling to the Maldives**
+**13 July 2021** | **Health Protection Agency Announcement (IUL)23-L/452/2021/2**
+**09 July 2021 ** | **Quarantine Guidelines for Work Permit Holders Travelling from South Asia (Updated 23/07/21))**
+
+
+## Quarantine facilities
+
+The Maldivian government turned the resort island of Villivaru in the Kaafu Atoll into a quarantine facility, described as "the world's first coronavirus resort", where patients would enjoy a luxurious stay and free medical care.
+According to Minister of Tourism Ali Waheed, the Maldives had 2,288 beds available for quarantine as of late March 2020.
+
+
+## covid-19 impact
+
+The Maldives' economy is dependent on tourism, which dropped severely due to travel restrictions amid the pandemic. Experts warned of an economic contraction and possible difficulties paying back foreign debt, especially to China and India.[48]
+
+Migrant workers in Maldives have been reported to face harsh treatment from their employers, such as wage theft, unsafe living and working conditions, passport confiscation, and deceptive recruitment practices. According to an investigation by Human Rights Watch, these migrant labor abuses have worsened due to COVID-19 pandemic that resulted in job loss and forced labor without any pay.
+
+
+
+## Actions taken by the government
+
+* National Emergency Operating Center (A multi‐disciplinary/multi‐sectoral body) is leading the 
+government COVID‐19 response under the patronage of HE President of the Maldives 
+
+* For the ongoing response, the Government of Maldives has spent USD 60 million for direct health 
+responses and USD 20 million under economic as of 7 June 2020. 
+
+* The outbreak in Maldives is focused at Male, the capital. All cases reported in other parts of the 
+country are linked to Male cases. COVID‐19 transmission has not been established in other part of 
+the country.
+
+* Considering the imminent import of cases in Male and rapid transmission then after, the NEOC had 
+prepared a plan, conducted table top exercises and drills for response. When the first case in Male
+as detected the plan was effectively rolled out. 
+
+* Quarantine facilities to accommodate 3000 people and Isolation facility to accommodate 2000 cases 
+were set up. Majority of quarantined and isolated cases without severity were kept in resorts. 
+
+* To accommodate mild to moderately ill COVID‐19 cases, a 286 bedded Isolation facility has been set 
+up in Hulhumale.
+
+* 100 bedded ICU set up is ready to manage severe cases.
+
+* Male lock down was announced from 16 April to 14 June and Public health emergency has been 
+extended till 30 June, 2020. 
+
+* The Government of Maldives had decided to temporarily suspend the issuance of all on‐arrival 
+visas from 27 March 2020. The country will open from 1 July 2020 for tourists.
+
+# Exploratory Data Analysis
+
+```{r, comment = NA, echo = FALSE, message=FALSE, warning=FALSE, eval=FALSE}
+
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018435")
+
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+unique(coronavirus$country)
+library(tidyverse)
+library(magrittr)
+
+```
+
+```{r, comment = NA, message=FALSE, warning=FALSE}
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(gifski)
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(hrbrthemes)
+
+# confirmed 
+
+maldives_corona <- coronavirus %>% filter(country == "Maldives")
+confirmed_maldives_corona <- maldives_corona %>% filter(type=="confirmed")
+
+p1 <- confirmed_maldives_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_line(color="green") +
+  ylab("cases") +
+  theme_ipsum() +
+  ggtitle("Daily Confirmed Cases in Maldives")
+
+##  Turn it interactive with ggplotly
+p1 <- ggplotly(p1)
+p1
+
+## summary
+summary(confirmed_maldives_corona) 
+
+```
+
+In the above graph can be seen that the number of confirmed cases taken very high values in month of may 2021.
+
+
+
+
+
+```{r, comment = NA, message=FALSE, warning=FALSE}
+
+# Recovered
+
+recovered_maldives_corona <- maldives_corona %>% filter(type=="recovered")
+m <- mean(recovered_maldives_corona$cases, na.rm = TRUE)
+recovered_maldives_corona <- replace_na(recovered_maldives_corona, list(cases = 134))
+
+p2 <- recovered_maldives_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_line(color="blue") +
+  ylab("cases") +
+  theme_ipsum() +
+  ggtitle("Daily Recovered Cases in Maldives")
+
+## Turn it interactive with ggplotly
+p2 <- ggplotly(p2)
+p2
+
+## summary
+summary(recovered_maldives_corona)
+```
+
+```{r, comment = NA, message=FALSE, warning=FALSE}
+
+# Death
+
+death_maldives_corona <- maldives_corona %>% filter(type=="death")
+
+p3 <- death_maldives_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_line(color="red") +
+  ylab("cases") +
+  theme_ipsum() +
+  ggtitle("Daily Death Cases in Maldives")
+
+## Turn it interactive with ggplotly
+p3 <- ggplotly(p3)
+p3
+
+## summary
+summary(death_maldives_corona)
+
+```
+
+
+```{r, comment = NA, message=FALSE, warning=FALSE}
+
+# Actives
+
+recov_cases <- cumsum(recovered_maldives_corona$cases)
+conf_cases <- cumsum(confirmed_maldives_corona$cases)
+death_cases <- cumsum(death_maldives_corona$cases)
+active_cases <- conf_cases-(recov_cases + death_cases)
+active_maldives_corona <- data.frame(date = confirmed_maldives_corona$date, cases = active_cases)
+
+p4 <- active_maldives_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_line(color="lightblue") +
+  ylab("cases") +
+  theme_ipsum() +
+  ggtitle("Daily Active Cases in Maldives")
+
+## Turn it interactive with ggplotly
+p4 <- ggplotly(p4)
+p4
+
+## summary
+summary(active_maldives_corona)
+
+
+```
+
+Above four graphs show that the number of covid-19 confirmed, recovered and deaths cases are get high value in the month of may 2021.
+
+
+## Total Coronavirus Cases in Maldives
+
+```{r, comment = NA, message=FALSE, warning=FALSE }
+
+# Total cases(cumulative sums) in single plot
+
+all_cases <- data.frame(date = confirmed_maldives_corona$date,
+                        conf_cases, recov_cases, death_cases, active_cases )
+dfplot <- all_cases %>% gather(key, value, -date)
+ggplot(dfplot, mapping = aes(x = date, y = value, color = key) ) +
+geom_line(size = 1) +
+theme(plot.background = element_rect(fill = "pink", colour = "black", size = 2)) +
+ggtitle("Date vs Total Covid-19 Cases in Maldives")
+
+```
+
+
+This figure shows that, the total number of confirmed, death, recovered and active cases in Maldives. At first, there were no confirmed cases but in shortly, number of confirmed cases are increased speedily and it is too much larger than death cases. Especially, Maldives has small amount of death cases than confirmed cases and the graph shows recovered cases are increased speedily.So Maldives had considerable recoveries.
+
+
+# Comparison with other countries
+
+Maldives is a low-lying island country in the north-central Indian Ocean. Its closest neighbors are India, about 600 kilometers north-north-east, and Sri Lanka, about 645 kilometers north-east. It is made up of around 1,200 small coral islands and sandbanks
+
+I selected India, Sri Lanka, Bangladesh, Nepal for my analysis(as the neighboring countries).
+
+```{r, comment = NA, message=FALSE, warning=FALSE }
+
+
+## confirmed cases: geom_point
+
+sriLanka_corona <- coronavirus %>% filter(country == "Sri Lanka")
+confirmed_sriLanka_corona <- sriLanka_corona %>% filter(type=="confirmed")
+
+india_corona <- coronavirus %>% filter(country == "India")
+confirmed_india_corona <- india_corona %>% filter(type=="confirmed")
+
+bangladesh_corona <- coronavirus %>% filter(country == "Bangladesh")
+confirmed_bangladesh_corona <- bangladesh_corona %>% filter(type=="confirmed")
+
+nepal_corona <- coronavirus %>% filter(country == "Nepal")
+confirmed_nepal_corona <- nepal_corona %>% filter(type=="confirmed")
+
+
+Neighbor_confirmed <- rbind(confirmed_sriLanka_corona, confirmed_india_corona, 
+                            confirmed_maldives_corona, confirmed_bangladesh_corona, confirmed_nepal_corona)
+ggplot(Neighbor_confirmed, aes(x=date, y=cases, col=country )) + geom_point() + 
+ggtitle("Confirmed cases in Maldives and their neighbouring countries") + 
+ylim(0,15000)
+
+## bar plot 
+
+ggplot(Neighbor_confirmed, aes(x=country, y=cases)) + geom_col() + 
+ggtitle("Confirmed cases") + ylim(0,15000)
+
+```
+
+
+
+
+
+
+
+
+
+```{r, comment = NA, message=FALSE, warning=FALSE }
+
+## Recovered cases
+
+recovered_sriLanka_corona <- sriLanka_corona %>% filter(type=="recovered")
+m2 <- mean(recovered_sriLanka_corona$cases, na.rm = TRUE)
+recovered_sriLanka_corona <- replace_na(recovered_sriLanka_corona, list(cases = 507 ))## Approximately got 507 as a mean
+
+
+recovered_india_corona <- india_corona %>% filter(type=="recovered")
+m3 <- mean(recovered_india_corona$cases, na.rm = TRUE)
+recovered_india_corona <- replace_na(recovered_india_corona, list(cases = 55213))## Approximately got 55213 as a mean
+
+
+recovered_bangladesh_corona <- bangladesh_corona %>% filter(type=="recovered")
+m4 <- mean(recovered_bangladesh_corona$cases, na.rm = TRUE);
+recovered_bangladesh_corona <- replace_na(recovered_bangladesh_corona, list(cases = 2034))
+
+
+recovered_nepal_corona <- nepal_corona %>% filter(type=="recovered")
+m5 <- mean(recovered_nepal_corona$cases, na.rm = TRUE);
+recovered_nepal_corona <- replace_na(recovered_nepal_corona, list(cases = 1179))
+
+
+Neighbor_recovered <- rbind(recovered_sriLanka_corona, recovered_india_corona, recovered_maldives_corona, recovered_bangladesh_corona, recovered_nepal_corona)
+ggplot(Neighbor_recovered, aes(x=date, y=cases, col=country)) + geom_point() + 
+  ggtitle("Recovered cases in Maldives and their neighbouring countries") +
+  ylim(0,10000)
+
+```
+
+
+```{r, comment = NA, message=FALSE, warning=FALSE }
+
+## plot of Maldives, India and Sri Lanka Death cases
+
+death_sriLanka_corona <- sriLanka_corona %>% filter(type=="death")
+
+death_india_corona <- india_corona %>% filter(type=="death")
+
+death_bangladesh_corona <- bangladesh_corona %>% filter(type=="death")
+
+death_nepal_corona <- nepal_corona %>% filter(type=="death")
+
+Neighbor_death <- rbind(death_sriLanka_corona, death_india_corona, death_maldives_corona, death_bangladesh_corona, death_nepal_corona)
+
+ggplot(Neighbor_death, aes(x=date, y=cases, col=country)) + geom_point() + 
+  ggtitle("Death cases in Maldives and their neighbouring countries")
+
+```
+
+
+## Comparison of Confirmed and death cases(Maldives, India, Bangladesh,Sri Lanka and Nepal )
+
+```{r, comment = NA, message=FALSE, warning=FALSE }
+
+a <- sum(confirmed_india_corona$cases)
+b <- sum(confirmed_sriLanka_corona$cases)
+c <- sum(confirmed_bangladesh_corona$cases)
+d <- sum(confirmed_nepal_corona$cases)
+e <- sum(confirmed_maldives_corona$cases)
+comfirmed <- c(a, b, c, d, e)
+
+p <- sum(death_india_corona $cases )
+q <- sum(death_sriLanka_corona $cases )
+r <- sum(death_bangladesh_corona $cases )
+s <- sum(death_nepal_corona $cases)
+t <- sum(death_maldives_corona $cases)
+death <-c(p, q, r, s, t)
+
+Parts <- c("India", "Sri Lanka", "Bangladesh", "Nepal", "Maldives")
+countries <- data.frame(Parts, comfirmed, death)
+
+# Data Visualization
+
+fig <- plot_ly(data= countries, x = ~Parts, y = ~comfirmed, type = 'bar', 
+               name = 'Comfirmed')
+
+fig <- fig %>% add_trace(y = ~death, name = 'Death')
+
+fig <- fig %>% layout(
+  title = "Coronavirus Cases in neighboring countries",
+  xaxis = list(title = "Country"),
+  yaxis = list(title = 'Number of cases'), 
+  barmode = 'stack')
+
+fig
+
+
+```
+
+
+
+A comparison of the five countries can be further understood by the graphical representation of confirmed cases and death cases shown above. It can be seen that India has a highest proportion of confirmed cases that resulted in deaths when compared with Bangladesh, Sri Lanka, nepal and Maldives. Maldives has a very low proportion of deaths with respect to the number of confirmed cases.
+
+
+### Discussion
+
+
+The dataset is loaded by coronavirus dataset given in the package R. Maldives dataset is obtained by it. The dataset has no null values or minus value for cases.(Recovered cases had the null values and I removed that values and replaced it from mean value of recovered cases)
+When Comparison with other countries with Maldives, I selected neighboring countries(India, Sri Lanka, Nepal and Bangladesh ).
+
+
+### conclusions
+
+From the Maldives coronavirus data set,  it is clearly observable that Maldives’s number of recovered Cases are in a high level and number of deaths are very small value considering the confirmed cases.We use sample of the dataset and get bar charts, dotplots etc..for that sample to predict the conclusions of the country situation.When the coronavirus starting period Maldives does not face to that much corona virus calamity. When the time is passing Maldives also compliance to coronavirus. By consider about the other country situations with Maldives, It represent good position greater than India, Bangladesh and Sri Lanka.
+
+
+
+
+
+## References:
+
+https://www.physio-pedia.com/Coronavirus_Disease_(COVID-19)
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Maldives
+
+https://worldpopulationreview.com/countries/maldives-population
+
+https://blog.wego.com/maldives-travel-restrictions-and-quarantine-requirements/
+
+https://www.climatestotravel.com/climate/maldives#introduction
+
+https://covid19.health.gov.mv/en/?c=0
+
+https://www.who.int/docs/default-source/maldives/covid-19-sitrep-14-june-2020b46bd752adf24bcbb2a2d63308591e0a.pdf?sfvrsn=cf999c93_2
+
+https://medium.com/swlh/step-by-step-data-visualization-guideline-with-plotly-in-r-fbd212640de2
+
+
+
+
+
+
+
+
+

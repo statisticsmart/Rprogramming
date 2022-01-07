@@ -1,0 +1,357 @@
+---
+title: "**Mexico COVID-19 Analysis**"
+author: "Shikshanee Vindya"
+date: "19/09/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = NA, message = FALSE, warning = FALSE)
+```
+
+<body style="background-color:beige"></body> 
+
+<style>
+body {
+text-align: justify; font-size: 15pt}
+</style>
+
+<font face="Times New Roman">
+
+##**1. Background**
+
+### **1.1 Introduction**
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.The symptoms of the disease being more or less similar to those of influenza (flu) or common cold makes it even more difficult to accurately diagnose it without further testing.
+
+
+<div align="center">![](image1.jpg)
+
+<span style="color : gray">source : scratchyourmapa.com</span></div>
+
+
+The virus has spread across many countries and territories.Mexico also being affected with COVID-19.Therefore, this report attempts to analyze the COVID-19 related data of Mexico in order to communicate it to any parties of interest.
+<br>
+
+###**1.2 Visualization of the location**
+
+The geography of Mexico describes the geographic features of Mexico, a country in the Americas. Mexico is located at about 23(degrees) N and 102(degrees) W in the southern portion of North America.From its farthest land points, Mexico is a little over 3,200km (2,000mi) in length. Mexico is bounded to the north by the United States (specifically, from west to east, by California, Arizona, New Mexico, and Texas) to the west and south by the Pacific Ocean, to the east by the Gulf of Mexico, and to the southeast by Belize, Guatemala, and the Caribbean Sea. The northernmost constituent of Latin America, it is the most populous Spanish-speaking country in the world. Mexico is the world's 13th largest country.
+
+<div align="center">
+```{r,include=FALSE}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+
+library(sta3262)
+get_individual_project_country("AS2018410") # To get the name of the country
+
+library(coronavirus)
+data(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+
+mexico_corona <- coronavirus %>% filter(country == "Mexico")
+
+mexico_corona[mexico_corona$cases < 0, ] # Identifing negative values
+
+#Replace two negative cases which are Identify above
+mexico_corona[1164, 7] <- mean(mexico_corona[1163, 7], mexico_corona[1165, 7]) 
+mexico_corona[1280, 7] <- mean(mexico_corona[1279, 7], mexico_corona[1281, 7])
+
+summary(mexico_corona)
+# Nothing NA cases
+
+```
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill ="gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + scale_x_continuous(breaks = seq(-180, 180, 120)) + scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p + geom_point(data = mexico_corona, aes(x = long, y = lat), color = "red", size = 2)
+
+```
+</div>
+<br>
+
+###**1.3 Climate in Mexico**
+
+**Mexican Dry Season:**
+
+November to May
+
+**Mexican Rainy Season:**
+
+June to October
+
+**Mexico Weather**
+
+The climate in Mexico is tropical with a rainy and dry season and little temperature fluctuation from season to season.
+The temperature in all areas of Mexico typically ranges between 50F and 90F throughout the year. Average annual humidity is around 70\%.
+
+**Main seven climate regions**
+
+Mexico has many mountains with rapid changes in elevation, temperature and rainfall, applying the Koppen system, even as modified by Garcia, to Mexico can become extremely complicated. A relatively small area of Mexico may include several Koppen climate categories seven main climate regions, as shown on the map:
+
+<div align="center">![](climateRegion.jpg){width=800px}
+
+<span style="color : gray">source : geo-mexico.com</span></div>
+
+###**1.4 Demographics of Mexico**
+
+Based on current projections(2021), Mexico's population will peak at the end of 2062 at 157.2 million people. Mexico's annual population growth rate is about 1.06\%.
+Mexico's birth rate is 18.3 births per 1,000 people and its fertility rate is 2.4 children per woman. The birth rate and fertility rates have decreased significantly in recent decades because the marriage rate has fallen and the number of divorces has quadrupled since 1994. The death rate in Mexico is 5.8 deaths per 1,000 people. 
+
+<div align="center">![](population.JPG){width=800px}
+
+<span style="color : gray">source : worldpopulationreview.com</span></div>                                     
+<br>
+
+Mexico covers an area of 1,972,550 square kilometers, making the country's population density of about 66 people per square kilometer. Its capital city, Federal District, Mexico City, has a population of 21.2 million people with 8.9 million of these people living within the city.
+
+The largest cities and more densely populated areas are Mexico City (12,294,193), Itzapalpa (1,820,888), and Ecatepec (1,806,226). The country consists of 31 states and one federal district.
+
+<div align="center">![](populationDensity.jpg){width=800px}
+
+<span style="color : gray">source : ontheworldmap.com</span></div>                                                                                       
+<br>
+
+###**1.5 Actions taken by the Government**
+
+The first confirmed case of coronavirus was registered in Mexico at the end of February(2020).
+
+At the begining(Feb 2020), The Mexican government has been insufficient in its response to the coronavirus. With poorly communicated and inconsistent messaging that offers no clear guidelines, their federal government's inaction has given rise to widespread rumors that are beginning to stoke panic and insecurity.
+
+At about March in 2020, The Mexican government has been decided to close the schools and all sporting and civic events in schools would be cancelled. Remote learning (on-line, television, radio) for the 2020-2021 school year began in August. Further, the mandatory use of face masks and obligatory stay-at-home orders.
+
+**Vaccination**
+
+The vaccination campaign against COVID-19 in Mexico began at the end of December 2020.
+Following chart shows that the vaccinations progress respect to the total population in Mexico until the end of May 2021.
+
+<div align="center">
+```{r}
+library(plotrix)
+vac.perc <- c(6.9, 9.7, 83.4)
+vac.detail <- c("Only one dose", "Fully vaccined", "No vaccine") 
+pie3D(vac.perc, labels = vac.detail, labelcex = 0.9, labelcol = "blue",
+      radius = 0.9, main = "Vaccination Progress in Mexico(until the end of May 2021)")
+```
+
+**Only one dose** 9.3M  _____ **percentage** 6.9\%    
+**people fully vaccinated** 12.4M _____ **percentage** 9.7\%</div>
+
+<br>
+
+## **2. Exploratory Data Analysis**
+
+###**2.1 Structure of the Data**
+
+The data set contains the daily COVID\-19 cases worldwide and data are store in 7 variables such that, 
+
+**date** : Date of the observation taken from
+
+**province** : Province of the case identified(if available)
+
+**country** : Country of the case identified
+
+**lat**  : Latitude of center of geographic region
+
+**lon** : Longitude of center of geographic region
+
+**type** : Type of the reported case [death, recovered, confirmed] 
+
+**cases** : no.of cases
+
+This analysis mainly for the COVID\-19 in Mexico by using R langauge.
+
+###**2.2 COVID\-19 Statistics of Mexico**
+
+The analysis going to be conducted with the 1476 observations are taken from 22 January 2020 to 27 May 2021.
+
+<div align="center">
+```{r}
+#Box plot
+ggplot(mexico_corona, aes(x=cases, y=type, fill= type, col = type))+
+  geom_boxplot(outlier.shape = NA, alpha=0.2) + 
+  geom_jitter(aes(col = type))
+```
+
+<span style="color : gray">**Figure 1**</span></div>
+The **Figure 1** shows that, brief idea about the amount of confirmed, death and recovered cases in Mexico. 
+
+Number of death cases were less and the especially,  the range is no much large when compare with that of confirmed and recovered cases. That would be thought as better  only compare with amount of confirmed cases and also recovered cases. When look at only the death cases as a count individually then can see that is also very large amount. 
+
+Recovered and confirmed cases plots seems likely same. They distributed in roughtly same range. This implies that significantly large percentage of Corona patients could be recovered.
+ 
+<br>
+<div align="center">
+```{r}
+# time series plot
+library(plotly)
+t1 <- ggplot(data = mexico_corona, aes(x = date, y = cases, col = type))  + geom_line() +
+   facet_grid(rows = vars(type), scale = "free_y") + theme(legend.position = "bottom")
+plotly::ggplotly(t1)
+```
+
+<span style="color : gray">**Figure 2**</span></div>
+In **Figure 2**, When consider  the time series plot of confirmed cases, At the beginning there are  no large number of confirmed cases were recoded but in recently it is increasing speedy. There are two significant upward trends in two different time periods before about Feb 2021. Variance of the time series is also increasing. That means there more people were infected with COVID\-19 and amount of the confirmed cases is increasing speedy  with respect to the time. But there is a significant downward trend and the seasonal patter since about Feb 2021 and the variance is seems like decreasing. This implies there is some decreasing of that persons were being infected with the  disease. Some time it might be happened under the travel restriction. That might be the main reason of having such decrease in confirmed cases. And also the government announced country lockdown and reopen time to time that may be the cause to having seasonal pattern of recoding new patients. The maximum no.of confirmed cases (28115) had been reported on 5th of Jan 2020 so far.The next maximum case (26626) had been reported after 4 months. Those were reported in unpredictably.
+   
+In the plot of recovered cases represents nearly same pattern with confirmed cases.
+
+Further, when consider the plot of death cases also have the likely same pattern with other two cases. First two maximum cases were reported on the same day with that of other to cases.     
+
+**Active Cases**
+<div align="center">![](active.gif)
+
+<span style="color : gray">**Figure 3**</span></div>
+
+**Figure 3** shows  that how actives cases were reported daily in Mexico.  Before July in 2020 have some increase but in average it goes slowly. Late  July in 2020  there is significant downward in very short period. 
+
+Active cases in Mexico are approaching  its  highest levels seen during the second wave since Aug in 2020. When compare with previous upward the count of cases increasing very much speedy  from  Aug in 2020 to Feb 2021. Late Feb in 2021 have a control with a stabilized level around 150000 cases.  
+
+
+###**2.3 Comparison with few countries** 
+
+<div align="center">
+```{r}
+# Close countries to Mexico
+select_countries_corona <- filter(coronavirus, country %in% c("Mexico", "Panama", "Belize", "Guatemala", "Cuba", "Nicaragua"))
+
+select_countries <- ggplot() + geom_polygon(
+  data = wrld_simpl,
+  aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+select_countries + geom_point( data = select_countries_corona, 
+  aes(x = long, y = lat), color = "red", size = 1)
+```
+
+<span style="color : gray">**Figure 4**</span></div>
+**Figure 4** shows the world map to visualize the locations of  several countries which surrounded by  Mexico (Panama, Guatemala, Cuba, Nicaragua). USA is the closest country to Mexico but in case there is nothing  available data about USA right now. So, further analysis is going to be conducted with other 4 countries which are mentioned above. 
+
+<br>
+**Comparison of Daily Confirmed Cases**
+
+<div align="center">![](confirmed.gif)
+
+<span style="color : gray">**Figure 5**</span></div>
+According to the **Figure 5** Mexico was on the top with confirming COVID\-19  cases in the whole time period. Mexico having much drastic points than the other countries . There are two significant ups at about July 2020 and also January 2021 in most of  the countries those were selected. Furthermore, the daily confirmed cases of these countries reached its peak from January 2021 to February 2021. 
+
+<br>
+**Comparison of Daily Death Cases**
+
+<div align="center">![](death.gif)
+
+<span style="color : gray">**Figure 6**</span></div>
+In the **Figure 6**, It can be seen the nearly same pattern  with **Figure 5**. The amount of daily death with COVID\-19 in Mexico displaying very much larger  than the other 4 countries. 
+The  amount of  people who were infected with corona was very large than others so that might be the cause having more death cases in Mexico.
+
+<br>
+**Comparison of Daily Recovered Cases**
+
+<div align="center">![](recovered.gif)
+
+<span style="color : gray">**Figure 7**</span></div>
+When consider the **Figure 7**, It is  again same pattern as the **Figure 5**. Because the amount recovered cases also should depends on the amount of confirmed cases. There is some relationship between confirmed and recovered cases when keep mind on the  real situation.
+Probably all the countries could recover in daily some large amount of  people who were infected with the disease.
+<br>
+
+## **3. Discussion**
+
+The data set is loaded by the coronavirus  R package  from   R database.  It contains  useful data  about  worldwide corona outbreak of  more countries. So, Mexico data set was obtained by it for this analysis. 
+  
+Through the data analysis process it was recognized that there were two negative values for recovered  cases in Mexico dataset and  no null values under the variable cases. Those negative values may be happened due to some mistake  when input the data. Because under the variable cases stores a kind of  amount . So it should have only the countable values and nothing possible situation to have negatives. Before do further anlysis those unusual cases were replaced by the mean of  their previous and  the next case.
+
+This statistical analysis was conducted by using  the data which are recoded  from mid of Jan in 2020 to end of  May in 2021.
+
+Further, It is not enough to capturing a big picture about  COVID\-19 pandemic situation in Mexico when considering only the Mexico dataset. Therefore, decided to make comparisons of Mexico with countries which are closely locate and significance during the COVID\-19 pandemic have  been carried out in order to reach the final conclusions. 
+
+```{r}
+c1 <- c("Mexico ", "Panama ", "Guatemala ", "Cuba ", "Nicaragua ")
+c2 <- c(130629699, 4400713, 18337156, 11318137, 6723550)
+c3 <- c(66, 58, 167, 106, 55)
+
+select_countries_corona <- filter(coronavirus, country %in% c("Mexico", "Panama", "Guatemala", "Cuba", "Nicaragua"))
+
+select_countries_wider_corona <- select_countries_corona %>%pivot_wider(names_from = type, values_from = cases)
+
+confirmed_sum <- aggregate(x = select_countries_wider_corona$confirmed, by=list(select_countries_wider_corona$country),FUN=sum)
+
+death_sum <- aggregate(x = select_countries_wider_corona$death, by= list(select_countries_wider_corona$country),FUN=sum)
+
+c4 <- round(confirmed_sum$x / c2 * 100, digits = 3)
+c5 <- round(death_sum$x / c2 * 100, digits = 3)
+
+table <- cbind(country = c1, population = c2, population_density = c3, conf_perc = c4, death_perc = c5)
+knitr::kable(table) 
+```
+<br>
+
+**country** : Selected countries which are located near by Mexico
+
+**population** : Total population of the countries roughly
+
+**population_density** : Population density given by per square kilo metter
+
+**conf_perc** : Case confirmation percentage corresponding to the total population
+
+**death_perc** : Percentage of reporting death cases corresponding to the total population
+
+The confirmation rate always depends on the test rate.
+When assume that all the countries have the same test rate,
+Panama and Nicaragua are very neighbor with Mexico respect to the population density in per square kilometer. When compare the confirmation and death rates on each of them Mexico has the lowest rates.
+
+
+## **4. Conclusion**
+
+Mexican's  already faced two  COVID\-19 waves. When only concerning the dataset before May 2021 it seems going to be relaxed with the disease. From March 2021 to May 2021, following such low range in deaths.
+
+But unpredictably, new COVID\-19 cases in Mexico is approaching  the highest levels seen during the third wave in late May  2021. The third wave is happening with new three variants of the virus of international concern are spreading fast  alpha, gamma and delta. But after May 2021 the dataset corresponding to Mexico in corona R package is not updated yet. Because it could not be contributed to the analysis. 
+
+Mexico's relatively low vaccine coverage rates and it is not sufficient to control the spreading of virus in the third wave.
+
+
+## **5. References** 
+ 
+ * _[https://hellor.netlify.app/slides/coronavirus_assignment_help_file](https://hellor.netlify.app/slides/coronavirus_assignment_help_file)_
+ 
+ * _[https://hellor.netlify.app/coronareports/](: https://hellor.netlify.app/coronareports/)_
+
+ * _[https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/mexico/](https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/mexico/)_
+
+ * _[https://stackoverflow.com/questions/43222169/how-to-justify-the-text-to-both-sides-when-knitting-html-in-rmarkdown](https://stackoverflow.com/questions/43222169/how-to-justify-the-text-to-both-sides-when-knitting-html-in-rmarkdown)_
+ 
+ * _[https://en.wikipedia.org/wiki/Mexico](https://en.wikipedia.org/wiki/Mexico)_
+ 
+ * _[https://www.liveandinvestoverseas.com/country-hub/mexico/climate-in-mexico/](https://www.liveandinvestoverseas.com/country-hub/mexico/climate-in-mexico/)_
+ 
+ * _[https://geo-mexico.com/?p=9512](https://geo-mexico.com/?p=9512)_
+ 
+ * _[https://towardsdatascience.com/how-to-create-animated-plots-in-r-adf53a775961](https://towardsdatascience.com/how-to-create-animated-plots-in-r-adf53a775961)_
+ 
+ * _[https://www.youtube.com/watch?v=7DgORwK8pKA](https://www.youtube.com/watch?v=7DgORwK8pKA)_
+ 
+ * _[https://bookdown.org/yihui/rmarkdown-cookbook/kable.html](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html)_
+ 
+ * _[https://www.tutorialspoint.com/r/r_pie_charts.htm](https://www.tutorialspoint.com/r/r_pie_charts.htm)_
+ 
+ * _[https://r-charts.com/part-whole/pie3d/](https://r-charts.com/part-whole/pie3d/)_
+ 
+ * _[https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd](https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd)_
+ 
+ * _[https://theconversation.com/mexico-facing-its-third-covid-19-wave-shows-the-dangers-of-weak-federal-coordination-164995](https://theconversation.com/mexico-facing-its-third-covid-19-wave-shows-the-dangers-of-weak-federal-coordination-164995)_
+
+</font>  
+

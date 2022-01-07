@@ -1,0 +1,449 @@
+---
+title: "COVID-19 Pandemic in Kyrgyzstan"
+author: "A.K.S.Madhusha"
+date: "9/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+![](COVID-1.png)
+
+# **1.Introduction**
+
+## **COVID-19**
+
+**The first confirmed human infections were in Wuhan, Hubei, China.** A study of the first 41 cases of confirmed COVID-19, published in January 2020 in The Lancet, reported the earliest date of onset of symptoms as 1 December 2019.Official publications from the WHO reported the earliest onset of symptoms as 8 December 2019. Human-to-human transmission was confirmed by the WHO and Chinese authorities by 20 January 2020.According to official Chinese sources, these were mostly linked to the Huanan Seafood Wholesale Market, which also sold live animals.In May 2020, George Gao, the director of the CDC, said animal samples collected from the seafood market had tested negative for the virus, indicating that the market was the site of an early super spreading event, but that it was not the site of the initial outbreak.Traces of the virus have been found in waste water samples that were collected in Milan and Turin, Italy, on 18 December 2019.Corona virus disease 2019 (COVID-19) is a contagious disease caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2).
+
+## **Kyrgyzstan**
+
+The Kyrgyz Republic, commonly known as Kyrgyzstan,is a mountainous landlocked country in Central Asia. Kyrgyzstan is bordered by Kazakhstan to the north, Uzbekistan to the west, Tajikistan to the south, and China to the east. Its capital and largest city is Bishkek. Ethnic Kyrgyz make up the majority of the country’s six million people, followed by significant minorities of Uzbeks and Russians. The Kyrgyz language is closely related to other Turkic languages, although Russian remains spoken and is a co-official language. Ninety percent of Kyrgyzstan’s population are Muslim, with the majority of its population following Sunni Islam.In addition to its Turkic origins, Kyrgyz culture bears elements of Iranic, Mongolian and Russian influence.
+
+## **COVID-19 pandemic in Kyrgyzstan**
+
+The COVID-19 pandemic in Kyrgyzstan is part of the worldwide pandemic of corona virus disease 2019 (COVID-19) caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2). The virus was confirmed to have reached Kyrgyzstan in March 2020. On 18 March 2020, the first three cases in the country were confirmed, after a citizen returned from Saudi Arabia according to the nation’s health ministry, prior to the first reported case Kyrgyzstan closed its borders to foreigners.
+
+
+![](total 1.png)
+
+# **1.1 Visualization of the location**
+
+![](regions-of-kyrgyzstan-map.png)
+
+Kyrgyzstan, a landlocked country, covers an area of 199,951 sq. km in Central Asia. Over 90% of Kyrgyzstan is dominated by massive, rugged mountain ranges, including the Alai, Kirghiz, and Tien Shan, and their associated valleys and basins. Large areas of those mountain regions are covered by glaciers.A few flat areas (lower valleys) are found in the north and far southwest, but almost 35% of the land is higher than 9,842 ft. (3,000 m) above sea level.Kyrgyzstan’s highest point is Jengish Chokusu which peaks at 24,406 ft. (7,439 m).Dozens and dozens of rivers flow from the upper reaches of the mountains; the most significant ones include the Al-Say, Chu, Kara Darya, and Naryn. Issyk-Kul is the world’s second-largest alpine lake.The Kara Darya River has the lowest point of Kyrgyzstan at 132 m (433 ft) above sea level.
+
+Kyrgyzstan (officially, The Kyrgyz Republic) is a sovereign country divided into 7 administrative regions (sing. oblast; plur. oblasttar) and two independent cities (shaar). In alphabetical order, the regions are: Batken, Chuy, Issyk-kul, Jalal-Abad, Naryn, Osh and Talas. Bishkek city and Osh city are the two independent cities. Each region is further subdivided into districts (raion).
+
+```{r ,comment=NA , warning=FALSE , message=FALSE ,fig.align='center' ,fig.cap= "A plot of Kyrgyzstan"}
+
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+kyrgyzstan_corona <- coronavirus %>% filter(country == "Kyrgyzstan")
+library(ggplot2)
+library(sp) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(png) 
+
+data(wrld_simpl)
+
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = kyrgyzstan_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+# **1.2 Climate Condition**
+
+The climate in Kyrgyzstan is generally sunny, averaging only about 70 days of rain a year. The climate is continental, because Kyrgyzstan is located so far from any ocean. Though the summers in the cities can get quite hot, the mountains remain colder even in the hottest months. Winters are cold and snowy everywhere, especially at higher elevations. Days tend to be significantly warmer than nights, but the general climate of Kyrgyzstan is quite pleasant, with four defined seasons.
+
+![](climate.png)
+
+
+The country’s climate is influenced chiefly by the mountains, Kyrgyzstan’s position near the middle of the Eurasian landmass, and the absence of any body of water large enough to influence weather patterns.Those factors create a distinctly continental climate that has significant local variations.Although the mountains tend to collect clouds and block sunlight (reducing some narrow valleys at certain times of year to no more than three or four hours of sunlight per day), the country is generally sunny, receiving as much as 2,900 hours of sunlight per year in some areas.The same conditions also affect temperatures, which can vary significantly from place to place.
+
+
+In January the warmest average temperature (−4 °C)occurs around the southern city of Osh, and around Ysyk-Köl.The latter, which has a volume of 1,738 cubic kilometers (417 cu mi), does not freeze in winter.Indeed, its name means “hot lake” in Kyrgyz.The coldest temperatures are in mountain valleys.There, readings can fall to −30 °C or lower; the record is −53.6 °C.The average temperature for July similarly varies from 27 °C in the Fergana Valley, where the record high is 44 °C , to a low of −10 °C on the highest mountain peaks.Precipitation varies from 2,000 millimeters (78.7 in) per year in the mountains above the Fergana Valley to less than 100 millimeters (3.9 in) per year on the west bank of Ysyk-Köl.
+
+# **1.3 Lock-down status of the Kyrgyzstan**
+
+The first case of COVID-19 in Kyrgyzstan, a mountainous land-lock country in Central Asia, was detected on March 18, 2020 . Thereafter the country was plagued with the pandemic and went through a lock-down, declaration of state of emergency, steady case increase and devastating peak of the wave with total 60 279 confirmed cases, 1159 deaths and 51 288 recoveries across the country by November 4, 2020.
+
+Three citizens returning from a pilgrimage in Saudi Arabia were tested positive on March 18, 2020 . Immediately after the first cases, Kyrgyzstan enforced containment measures to curb the virus spread by establishing checkpoints in each city, temporarily closing cafes, shopping malls, and other entertainment places, permitting only essential services such as grocery stores, food markets, pharmacies and medical centers on March 22, 2020 . The large gatherings along with prayers at mosques and churches were banned. People were recommended to maintain a one-meter physical distance, refrain from physical contacts such as hand-shaking, and encouraged the wearing of face masks. The government closed country borders to foreigners and barred export of medicines and medical equipment as well as some food products and other essential goods.
+
+Despite the strict measures, the numbers of COVID-19 cases were constantly increasing. The government declared a state of emergency on March 25, 2020 in the three major cities of Bishkek, Osh and Jalal-Abad. The locals were forbidden to get outside of their homes during curfew hours and were only allowed out for essential businesses such as buying food, medicines and visiting a medical facility during the day time. The government prohibited entering the regions with declared state of emergency except for citizens with local residence permits. All state employees and government servants had to work remotely from home except employees of emergency services. Schools and universities were closed and administrations of these institutions were recommended to continue operating using virtual means.
+
+The state of emergency was terminated on May 10, 2020. Yet, quarantine measures were still in place in the biggest cities of Bishkek and Osh, and some highly affected districts of Kyrgyzstan. The declaration of state of emergency allowed to delay dramatic uncontrolled spread of the virus around the country and gave valuable time to prepare healthcare system for possible increase of cases. Thus, the average number of daily COVID-19 incident cases did not exceed 100 until the middle of June 2020.
+
+The Kyrgyz government lifted majority of quarantine restrictions after June 1, 2020. All business activities such as production and sales, consumer services, tourism and recreational activities were resumed. At once, the number of incident cases of COVID 19 began increasing dramatically and by the end of the June 2020, the number of daily incident cases was almost 3 times higher compared to the start of the month.
+
+In the middle of June 2020, the situation started to exacerbate dramatically. Bishkek with the highest number of cases, lack of medical staff, hospital beds and equipment, became the epicenter of the pandemic.
+
+Under lockdown since 19 Mar 2020.
+
+Most businesses and public spaces in Kyrgyzstan have now reopened. In Bishkek entertainment venues, including restaurants, should be closed between 11pm and 7am, though food delivery services can continue to operate. Businesses may be following additional hygiene and sanitary requirements. You should comply with hygiene and social distancing requirements.
+
+Local authorities may introduce new restrictions if the Corona virus situation deteriorates. You should follow local government announcements and media reporting for further information.
+
+Taxi services and city public transport are able to operate as normal. Internal flights between Bishkek, Osh, Jalalabad and Batken are operating, though with a reduced service.
+
+# **1.4 Actions taken by the government of Kyrgyzstan**
+
+
+* ### **General Information**
+
+    * The government has announced its readiness for a potential crisis caused by the COVID -19. The state of emergency was announced and enacted from March, 25 2020.
+    
+    * Price control: state regulation of prices is enacted on socially significant goods/products.
+    
+    * A ban on exports of a number of “socially significant” products and medicine until state of emergency is lifted.
+
+
+* ### **Employment-related measures**
+
+
+1. #### *Social institutions*
+
+    * About 490 thousand citizens from socially vulnerable groups will receive social payments from the Government.
+    
+    * The government allocated 4459,5 tons of flour.
+    
+    * 200 million soms allocated for the purchase of food for families from socially vulnerable groups.
+
+
+2. #### *Workers involved in combating COVID-19*
+
+    * As of April 10, from the deposit account opened for the Ministry of Health of the Kyrgyz Republic, 433 medical workers were paid compensation payments in the total amount of 3 million 159 thousand soms for March.
+    
+    * To avoid the risk of coronavirus infection, the Ministry of Health of the Kyrgyz Republic decided to send on paid labor leave medical workers over 65, pregnant women and employees with small children.
+    
+    * About 500 vehicles (buses, minibuses, personal vehicles) are involved in the movement of health workers. 
+    
+
+* ### **Economic stimulus measures**
+
+
+1. #### *Business support*
+
+    * The amount of external aid received the head of the Government of the Kyrgyz Republic estimated is at 450 million dollars. These funds will be used to support the budget and business.
+
+    * The Government is working on conducting a detailed economic analysis and preparing a forecast on the possible amount of budget revenues due to emergency situation in the country, as well as on the provision of tax deferrals as part of the Government’s anti-crisis plan to support economic sectors and businesses affected by as a result of the spread of the COVID-19.
+    
+
+* ### **Other measures and sources**
+
+
+1. #### *Donations from citizens of Kyrgyzstan and International Organizations*
+
+    * Representatives of the state bodies of the Kyrgyz Republic, as well as active and caring citizens, united in a movement called the Help Center to help low-income families, people with disabilities and socially vulnerable citizens. The “Help Center” has provided food to 187,922 families in need.
+
+    * The Executive Board of the International Monetary Fund approved the issuance of 120.9 million US dollars, which is 50% of the quota of the Kyrgyz Republic.
+
+    * The Asian Development Bank is preparing a budget support of $ 50 million for the Kyrgyz Republic under the new Bank Response Window to the COVID-19 pandemic.
+
+    * An agreement on receiving 12.15 million US dollars from the World Bank was signed and the corresponding law on its ratification was adopted by the Jogorku Kenesh of the Kyrgyz Republic.
+
+    * The saved funds of the Islamic Development Bank t of $ 15 million from ongoing projects in the Kyrgyz Republic will also be redistributed and aimed at combating COVID-19.
+
+    * In the direction of economic support, in particular for the development of small and medium-sized businesses, the German Development Bank KfW agreed to provide $ 30 million to ensure food security in the country.
+
+    *Humanitarian aid as masks, respirators, special protective suits for Ministry of Health of the Kyrgyz republic comes from different countries as China, Russia, Uzbekistan and international organizations.
+
+
+# **1.5 Vaccsination**
+
+![](vacc.png)
+   
+According to information of August 10, the Kyrgyzstanis may get the vaccine of the following brands;
+
+* **AstraZeneсa** developed by the University of Oxford and British-Swedish AstraZeneca company (Uni
+    ted Kingdom).
+* **Sinoрharm** developed by the Sinopharm National Pharmaceutical Group (China).
+
+* **Sputnik V** developed by the N.F.Gamaleya National Research Centre of Epidemiology and Microbiology (Russia).
+
+The vaccination is not administered if one has respiratory diseases or corona virus infection symptoms. Therefore, there is no need to take a PCR test before getting a vaccine. The presence of antibodies does not guarantee protection from COVID-19.
+
+Kyrgyzstan does not recommend to administer the vaccine to pregnant and breastfeeding women because no clinical trials were conducted in them.
+
+Kyrgyzstan does not vaccinate children so far.
+
+
+# **1.6 Comparing between new confirmed cases and vaccination**
+
+```{r , comment=NA ,warning=FALSE , message=FALSE , fig.align='center' , fig.cap= "The plot of between new confirmed cases and vaccination"}
+
+
+library(plotly)
+
+data("covid19_vaccine")
+
+kyrgyzstan_conf_vacc <- coronavirus %>% 
+  filter(country ==  "Kyrgyzstan", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "Kyrgyzstan") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+
+head(kyrgyzstan_conf_vacc)
+tail(kyrgyzstan_conf_vacc)
+
+ggplotly(ggplot(kyrgyzstan_conf_vacc, aes(x = date , y = people_fully_vaccinated , col=cases)) + geom_col()) 
+
+
+
+```
+
+
+
+
+# **1.7 Comparing between new death cases and vaccination**
+
+```{r , comment=NA ,warning=FALSE , message=FALSE , fig.align='center' , fig.cap= "The plot of between new death cases and vaccination"}
+
+
+
+kyrgyzstan_deth_vacc <- coronavirus %>% 
+  filter(country =="Kyrgyzstan", 
+         type =="death") %>%
+  arrange(date) %>%
+  select(date , cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "Kyrgyzstan") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+
+head(kyrgyzstan_deth_vacc )
+tail(kyrgyzstan_deth_vacc )
+
+ggplotly(ggplot(kyrgyzstan_deth_vacc , aes(x = date , y = people_fully_vaccinated , col=cases)) + geom_col()) 
+
+
+```
+
+
+# **2. Exploratory Data Analysis**
+
+The summary of the Kyrgyzstan COVID-19 data from 22.01.2020 to 18.09.2021 is as follow.
+
+```{r , comment=NA ,warning=FALSE , message=FALSE }
+library(skimr)
+
+as_tibble(head(kyrgyzstan_corona))
+as_tibble(tail(kyrgyzstan_corona))
+summary(kyrgyzstan_corona) 
+str(as_tibble(kyrgyzstan_corona))
+skim(kyrgyzstan_corona)
+
+
+
+```
+
+# **2.1 Confirmed Case**
+
+```{r , comment=NA , warning=FALSE , message=FALSE}
+
+library(plotly)
+
+confirmed_corona <- kyrgyzstan_corona %>% filter(type=="confirmed")
+
+ggplotly(ggplot(confirmed_corona, aes(x=date, y=cases , na.rm = TRUE)) + geom_line(size =1 , colour= "blue") + ggtitle("Kyrgyzstan: Daily Covid-19 Confirmed"))
+
+```
+
+# **2.2 Death Case**
+
+```{r , comment=NA , warning=FALSE ,message=FALSE}
+
+
+death_corona <- kyrgyzstan_corona %>% filter(type=="death" )
+death_corona [death_corona <0] <- NA      # for remove negative cases in death_corona
+
+ggplotly(ggplot(death_corona, aes(x=date, y=cases , na.rm= TRUE)) + geom_line(size= 1 , colour = "red") + ggtitle("Kyrgyzstan: Daily Covid-19 Death"))
+
+```
+
+
+# **2.3 Recovered Case**
+
+```{r , comment=NA , warning=FALSE , message=FALSE}
+library(plotly)
+
+recovered_corona <- kyrgyzstan_corona %>% filter(type=="recovered" )
+
+ggplotly(ggplot(recovered_corona, aes(x=date, y=cases , na.rm= TRUE)) + geom_line(size= 1 , colour = "pink") + ggtitle("Kyrgyzstan: Daily Covid-19 Recovered"))
+
+```
+
+# **2.4 Visualization Death, Confirmed , Recovered cases in Kyrgyzstan**
+
+```{r , comment=NA , warning=FALSE ,message=FALSE}
+
+ggplotly(ggplot(kyrgyzstan_corona, 
+       aes(x= cases , y= type , col= type )) + geom_boxplot( ) + geom_jitter(aes(col=type)) + theme(legend.position = "right") +
+  labs(title = "Figure 01",x= "Number Of cases per day",
+       y = "Type of cases"))
+
+```
+
+# **2.5 Comparison with other countries**
+
+* ## **Kyrgyzstan Vs. Austria , China , South Korea and Sri Lanka**
+
+```{r , comment=NA , warning=FALSE ,message=FALSE , fig.align='center' , fig.cap= "Comparison counties visualization"}
+
+com_contry <- filter(coronavirus, country %in% c( "Sri Lanka" , "Kyrgyzstan" , "China" ,"Korea, South" , "Austria"  ))
+
+as_tibble(com_contry)
+
+glimpse(as_tibble(com_contry))
+
+str(as_tibble(com_contry))
+
+
+my_countries <- coronavirus%>% filter(country == "Sri Lanka"| country =="Kyrgyzstan" | country =="Korea, South" | country =="Austria")
+
+p +
+  geom_point(
+    data = my_countries , aes(x = long, y = lat), color = "red", size
+    = 1
+  ) + geom_text(aes(x=my_countries$long, y=my_countries$lat, label=my_countries$country)) 
+
+
+```
+
+
+
+### **2.5.1. Comparison with Death cases**
+
+```{r , comment=NA , warning=FALSE ,message=FALSE , fig.align='center' , fig.cap= "Figure 02 : Death Cases"}
+
+library(gganimate)
+library(directlabels)
+library(png)
+library(transformr)
+library(grid)
+library(gifski)
+
+
+com_contry_death <- com_contry %>% filter(type =="death")
+
+str(as_tibble(com_contry_death))
+
+com_contry_death [com_contry_death < 0] <- NA
+
+
+animate(ggplot(com_contry_death , aes(date , cases, col = country)) + geom_line(size=1) +scale_color_viridis_d() +
+  labs(x="date" , y= "Number of death cases") + theme(legend.position = "right") + transition_reveal(date) + labs(title ='Date : {frame_along}' ) , renderer = gifski_renderer())
+
+
+
+```
+
+### **2.5.2. Comparison with Confirmed cases**
+
+```{r , comment=NA , warning=FALSE ,message=FALSE , fig.align='center' , fig.cap= " Figure 03: Confirmed Cases"}
+
+
+com_contry_confirmed <- com_contry %>% filter(type =="confirmed")
+
+str(as_tibble(com_contry_confirmed))
+
+
+
+animate(ggplot(com_contry_confirmed , aes(date , cases, col = country)) + 
+           geom_line() +scale_color_viridis_d() +
+  labs( x="Date" , y= "Number of confirmed cases") + 
+    theme(legend.position = "right")  + transition_reveal(date) + labs(title ='Date : {frame_along}' ) , renderer = gifski_renderer())
+
+
+
+```
+
+
+## **2.5.3.Comparison with total cases
+
+
+```{r, comment=NA , warning=FALSE ,message=FALSE}
+
+ggplotly(ggplot(com_contry , aes(x=country , col = type  , fill = type)) + labs(title = "Figure 05: Total Cases" , x= "Country" , y = "Number of total cases")+
+  geom_bar() +   theme(legend.position = "right") )
+
+
+
+ggplotly(ggplot(com_contry , aes(x=country , col = type  , fill = type)) + labs(title = "Figure 05: With Log Values" , x= "Country" , y = "log(Number of total cases)")+
+           geom_bar()+  scale_y_log10() +   theme(legend.position = "right") )
+
+
+
+```
+
+# **3. Conclusions and Discussion**
+
+Since last two years world we are fighting with COVID-19 (coronavirus). This infection disease has been effect not only for human health this effect society very badly . Also people day-today works have been controlled due to this disease.
+
+The main focus of this report is on the COVID 19 pandemic in Kyrgyzstan. 
+
+According to " Kyrgyzstan: Daily Covid-19 Confirmed"  plot , the first case was reported on the 18.03.2020 and it is three patients. Since then  patients have been reported and the maximum number of patients was reported on 18.07.2020. It's 11505 patients.
+
+The first death in Kyrgyzstan was reported on 03.04.2020. The maximum number of deaths reported on 18.07.2020. It was 727. 
+
+Mortality is lower compared to the number of confirmed patients. 
+
+Compared with the vaccination process, as the number of people who received the full vaccine increased, the number of COVID 19 deaths and confirmed cases decreased.
+
+But we can't come to a definite conclusion considering only the COVID situation in Kyrgyzstan.So we made a comparison with the COVID conditions in several other countries. 
+
+Kyrgyzstan currently has fewer deaths and confirmations than Sri Lanka, Korea,china, and Austria.
+But we do know that each country's population, climate, economic status, health status, etc. affect this COVID pandemic.
+
+For example, when comparing the populations of Kyrgyzstan and China,
+  In general, COVID deaths and confirmations should be lower in Kyrgyzstan than in China. 
+
+Therefore, in order to make a correct conclusion about this COVID pandemic, all these factors must be taken into consideration. 
+
+But in general, we know that following the advice given by the health department can protect against this epidemic to some extent. For example, wearing masks, getting vaccinated, keeping a meter distance between two people, etc. Also, if symptoms persist, treatment and quarantine rules should be followed. 
+
+At present , however,  this has become a deadly monster to prey on an entire world. 
+
+Every effort should be made to protect against this disease. Because no specific a drug has yet been found for the disease.
+
+<center> **STAY SAFE** </center>
+
+
+###  **Reference**
+
+* https://www.worldometers.info/coronavirus/country/kyrgyzstan/
+* https://www.garda.com/crisis24/news-alerts/324056/kyrgyzstan-first-covid-19-cases-confirmed-march-18-update-5
+* https://www.advantour.com/kyrgyzstan/climate-weather.htm
+* https://home.kpmg/xx/en/home/insights/2020/04/kyrgyzstan-government-and-institution-measures-in-response-to-covid.html
+* https://covidcontrols.co/restrictions/kyrgyzstan
+* https://news.google.com/covid19/map?hl=en-US&state=7&mid=%2Fm%2F0jt3tjf&gl=US&ceid=US%3Aen
+*https://rdrr.io/github/RamiKrispin/coronavirus/f/vignettes/covid19_vaccine.Rmd
+
+
+
+
+
+    

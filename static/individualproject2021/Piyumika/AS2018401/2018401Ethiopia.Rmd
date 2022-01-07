@@ -1,0 +1,255 @@
+---
+
+
+---
+
+```{r setup, include=FALSE,echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# **COVID-19 Pandemic in Ethiopia**
+### udara kaushalya
+### 2021/06/24
+## Introduction:
+
+![](abae421d7fc58632b5354594a902f105.jpg)
+
+
+COVID-19 is a novel coronavirus that had not previously been identified in humans.The first case was detected in the Hubei province of China at the end of December 2019.Thousand of new cases are being reported each day,and because the illness has only recently been detected,it is known that the virus spread via cough and sneeze droplets.
+
+March 13, 2020, The Federal Ministry of Health has confirmed a coronavirus disease (COVID-19) case in Addis Ababa, Ethiopia. The case, which was announced on the 13th of March 2020, is the first one to be reported in Ethiopia since the beginning of the outbreak in China in December 2019.The WHO Country Office Ethiopia (WCO) is following up closely to ensure an outbreak in Ethiopia is quickly controlled and contained. The COVID-19 Emergency Operations Centre housed at Ethiopian Public Health Institute (EPHI) is working closely with the Ministry of Health and the WCO to respond to this case and implement firm control measures
+
+
+## Location of Ethiopia 
+
+Ethiopia is found in the Horn of Africa.  It is completely landlocked, bordered by Sudan in the west, Somalia and Dijbouti in the east, Eritrea in the north and Kenya in the south.  The tenth largest country in Africa in size, Ethiopia is the second most populous country on the continent. Ethiopia has a high central plateau that varies from 1,290 to 3,000 m (4,232 to 9,843 ft) above sea level, with the highest mountain reaching 4,533 m (14,872 ft).
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(ggplot2)
+library(magrittr)
+Ethiopia_corona<-coronavirus%>% filter(country =="Ethiopia")
+Ethiopia_corona1<-pivot_wider(Ethiopia_corona,names_from = "type",values_from = "cases")%>% drop_na(recovered)
+e2<-Ethiopia_corona1%>%
+  mutate(recovered2=abs(recovered))%>%
+  select(-c(recovered))
+
+Ethiopia_cum<-e2%>%
+  mutate(cum_confirmed=cumsum(confirmed))%>%
+  mutate(cum_death=cumsum(death))%>%
+  mutate(cum_recovered=cumsum(recovered2))
+
+Ethiopia_active_cases<-Ethiopia_cum%>%mutate(Active=cum_confirmed-cum_death-cum_recovered)
+Ethiopia_cases<-select(Ethiopia_active_cases,-c(cum_confirmed,cum_death,cum_recovered))
+
+total2<-tibble(type=c("Active","death","confirmed","recovered"),total_cases=c(13388,4403,281811,264020))
+WORLD<-filter(coronavirus,country %in% c("Ethiopia","Peru","Latvia"))
+death_corona_country<-WORLD%>%filter(type=="death")
+WORLD1<-filter(coronavirus,country %in% c("Ethiopia","Peru","Latvia"))
+confirmed_corona_country<-WORLD1%>%filter(type=="confirmed")
+
+```
+
+## Geography of Ethiopia
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data =Ethiopia_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+## climate condition:
+
+
+The climate of Ethiopia and its dependent territories varies greatly. It is temperate on the plateau and hot in the lowlands.maximum temperature is 26 °C (78.8 °F) and minimum 4 °C (39.2 °F).The weather is usually sunny and dry, but the short rains occur from February to April and the large rains from mid-June to mid-September.In the uplands, the air is cool and bracing in summer, and in winter very bleak. The mean range of temperature is between 15 to 25 °C (59 to 77 °F).In addition to the variation in climate dependent on elevation, the year may be divided into three seasons. Winter, or the cold season, lasts from October to February. It is followed by a dry hot period, which about the middle of June gives place to the rainy season. The rain is heaviest in the Tekezé basin in July and August.
+
+![](images.jfif)
+
+
+## lockdown states and Actions of Ethiopia government:
+
+Government of Ethiopia control the pandemic of corona in Ethiopia.Lot of actions are taken by Ethiopia government.There are,
+
+1. Regularly and thoroughly wash your hands with soap and water and use alcohol-based hand sanitizer.
+
+2. Maintain a physical distance of at least one meter, particularly if a person is coughing.
+
+3. Persons with persistent cough or sneezing should stay home or keep a social distance, and not mix in crowds.
+
+4. Make sure you are coughing into a tissue or a bent elbow, and make sure to safely dispose of the used tissue afterwards.
+
+5. On 16 March 2020, the office of the Prime Minister announced that schools, sporting events, and public gatherings shall be suspended for 15 days
+
+6. On 20 March 2020, Ethiopian Airlines suspended flights to 30 countries affected with the coronavirus. On the same date it was announced that anyone entering the country should undergo a mandatory self-quarantine for 14 days. Night clubs in Addis Ababa are also to remain closed until further notice.
+
+7. On 23 March 2020, Ethiopia closed all land borders and deployed security forces to halt the movement of people along the borders.
+
+8. On 25 March 2020, 4,011 prisoners were granted pardon by the Ethiopian President Sahle-Work Zewde in an effort to prevent the coronavirus spread. The pardon applies only to prisoners convicted of minor crimes who are serving sentences of up to three years and those who are about to be released.
+
+9. On 29 March 2020, Ethiopian Airlines suspended flights to more than 80 countries.
+
+10. Any person known to be infected with coronavirus is prohibited from entering the country, mixing or meeting with other people in any way that may spread the virus
+
+## vaccination schedule
+
+vaccinations are recommended for your protection and to prevent the spread of infectious diseases. Before you travel, the following vaccines should be reviewed and updated if necessary:
+
+Tetanus, Diphtheria, Pertussis (Tdap)
+Measles, Mumps, Rubella (MMR)
+Polio,Influenza
+
+Influenza vaccination is recommended for all travelers over 6 months of age, especially for children, pregnant women, persons over 65, and those with chronic health conditions such as asthma, diabetes, lung disease, heart disease, immunosuppressive disorders, and organ transplant recipients.
+
+
+
+## Exploratory data analysis
+
+This exploratory data analysis based on daily Ethiopia corona cases from January 2020 to August 2021
+
+
+### plot of total cases and Type
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(total2,aes(x=type,y=total_cases,fill=type,col=type))+
+  geom_col()+labs(title="Total cases in Ethiopia")
+
+```
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+r2<- e2 %>% pivot_longer(6:8,"type","cases")
+
+ggplot(r2, aes(x=date, y=value, col=type )) +
+  geom_point() + labs(title="confirmed,recovered,death cases in ethiopia")+
+  scale_x_date(date_labels = "%b",date_breaks = "months")
+```
+
+#### figure 1: plot of total cases
+
+The above graph illustrates, total of Active cases(pink), total of confirmed cases(green),total of death cases(blue),total of recovered cases(purple)
+total of Active cases=13388
+total of confirmed cases=281811
+total of death cases=4403
+total of recovered cases=264020
+we can see recovered cases have more percentage.Also death cases have law percentage.
+
+### plot of confirmed cases ethiopia
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Ethiopia_cases, aes(x=date, y=confirmed))+ geom_col(color="green") + labs(title="confirmed_cases_ethiopia")+scale_x_date(date_labels = "%b",date_breaks = "months")
+
+```
+
+#### figure 2: plot of confirmed cases
+
+we can see daily covid-19 confirmed cases. The highest cases of confirmed shows in Apr of 2021.But we can see cases of confirmed of Ethiopia are declining between Apr and july in above graph.So in some days of July of 2020, there are no confirmed cases were reported.  
+
+### plot of recovered cases ethiopia
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Ethiopia_cases, aes(x=date, y=recovered2))+
+  geom_col(color="green") + labs(title="recovered_cases_ethiopia")+
+  scale_x_date(date_labels = "%b",date_breaks = "months")
+```
+
+#### figure 3: plot of recovered cases
+
+We can see daily Covid-19 recovered cases. This graph shows, cases of recovered of Ethiopia are increasing between Jan of 2021 and May of 2021 in graph.Many of recovered cases were have reported between March and July of 2021. 
+
+### plot of death cases ethiopia
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Ethiopia_cases, aes(x=date, y=death))+
+  geom_col(color="green") + labs(title="death_cases_ethiopia")+
+  scale_x_date(date_labels = "%b",date_breaks = "months")
+```
+
+#### figure 4: plot of death cases
+
+We can see daily Covid-19 death cases. The maximum number of death cases are reported April 2021.Number of death cases is lowest for overall.By looking the plot we can say cases is declining between September 2020 to February 2021 and again cases is increasing to April 2021.After that cases are gone down. 
+
+### plot of Active cases ethiopia
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Ethiopia_cases, aes(x=date, y=Active))+
+  geom_line(color="green") + labs(title="Active_cases_ethiopia")+
+  scale_x_date(date_labels = "%b",date_breaks = "months")
+```
+
+#### figure 5: plot of Active cases
+
+This plot shows there are several active cases in between February 2020 to August 2020.By looking the plot we can say active cases is declining between October 2020 to February 2021 and again cases is increasing to April 2021.After that active cases are gone down.
+
+## compare with other country:
+
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(death_corona_country,aes(x=date,y=cases,color=country, fill=country))+geom_point(size=1)+
+  labs(title="death casea in Ethiopia,Latvia and Peru")+
+  scale_x_date(date_labels="%b",date_breaks="months")+
+  facet_grid(country~.,scales = "free")
+```
+
+#### figure 6: plot of death cases in Ethiopia,Latvia and Peru
+
+We can see covid-19 cases were reported in all theses three countries at same time by graph.Death cases of Ethiopia is more than death cases of Latvia.Also death cases of Peru is more than death cases of Ethiopia and Latvia countries.
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(confirmed_corona_country,aes(x=date,y=cases,color=country, fill=country))+geom_point(size=1)+
+  labs(title="confirmed casea in Ethiopia,Latvia and Peru")+
+  scale_x_date(date_labels="%b",date_breaks="months")+
+  facet_grid(country~.,scales = "free")
+```
+
+#### figure 7: plot of confirmed cases in Ethiopia,Latvia and Peru
+
+We can see daily confirmed cases of three countries. There are Ethiopia,Latvia and Peru. Number of cases in Latvia is lower than confirmed cases of Ethiopia and Peru.Also confirmed cases of Peru is more than confirmed cases of Ethiopia and Latvia countries.
+
+## Discussion and Conclusion:
+
+The covid-19 pandemic continuous as a significant worldwide health threat.Most African countries face an enormous mission to contain the rapidly spreading pandemic due to poor healthcare and limited resources "corona virus" is the data set which used for this analysis consist of the daily covid-19 cases. this data set available as installation package in R-studio.
+
+  The data set consist daily covid-19 cases since January 22,2020 to September 19,2021 and it has seven variables namely latitude, longitude, date, province, type, (confirmed,death, recovered) and cases (number of observation each type).This data analysis examines the covid 19 impact in Ethiopia. 
+    
+   Overlooking the summary of Ethiopia data set, some rows of recovered cases values were missed and some cases reported as minus values. This analysis based on Ethiopia daily cases since January 22.2020 to August 04,2021.However few missing rows where below the 04 August 2021 cases was removed and taken absolute values for the minus cases.
+    
+ The first cases of covid-19 was reported on 13 March 2020.A total of 281811 persons have tested positive for the corona virus pandemic, up to this point, while 4403 persons have died, based on data selected for this analysis.
+Ethiopia have been controlled at Jul 2020.But number of confirmed cases reported daily May 2020 after that it increased. The highest confirmed case have reported in Apr 2021.Also climate of Ethiopia effected for total confirmed cases. The confirmed cases was decreased in lock down. Therefore death cases of Ethiopia was decreased in lock down.so corona of Ethiopia had been controlled by vaccination program 
+    
+   Ethiopia has quite successfully control the Ethiopia covid-19 cases when comparison of other countries.
+ 
+## references: 
+ 
+ 
+ https://www.worldometers.info/coronavirus/country/ethiopia
+ 
+ https://www.goway.com/travel-information/africa-middle-east/ethiopia/geography-and-maps/
+
+https://en.m.wikipedia.org/wiki/Geography_of_Ethiopi
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Ethiopia
+
+https://www.hi-us.org/news_covid19_in_ethiopia_lockdown_halts_business_income_for_mother_of_10
+
+https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjG_t2t9aHzAhUKJCsKHTLoDl0YABAAGgJzZg&ae=2&ohost=www.google.com&cid=CAESQeD2MJVZX0jm7G3wHenSMkbgJ7xteVKJNMqhcjMp-RTLBPEDe0KH9KRtJ5OPjKL60XUjHh-S5SyohsOhwmix9i4m&sig=AOD64_1n9vHaYizlO6NdSGBojd0FPGPYBg&q&adurl&ved=2ahUKEwjKotat9aHzAhVRU30KHfJKAFgQ0Qx6BAgCEAE

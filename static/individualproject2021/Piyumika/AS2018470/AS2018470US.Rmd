@@ -1,0 +1,349 @@
+---
+title: "COVID-19 Analysis of US"
+author: "J.A Rashmi Nishani AS2018470"
+#date: `r format(Sys.time(), "%d %B, %Y")`
+#toc : True
+output: 
+  html_document:
+    code folding: "show"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, out.width='100%', fig.align='center', echo=FALSE}
+knitr::include_graphics("picture/image1.jpg") # First image, coronavirus us
+```
+
+## 1. Introduction
+
+### 1.1 Overview
+
+Novel Corona virus is a highly infectious disease, which has led to a pandemic situation across the globe, affecting almost all nations of the world, and has caused enormous economic, social and psychological burden on countries. According to the World Health Organization(WHO), millions of enterprises face an existential threat and nearly half of the world's 3.3 billion global workforce are at risk of losing their livelihoods. Moreover, the economic and social disruption caused by the pandemic is devastating: tens of millions of people are at risk of falling into extreme poverty. While COVID-19 pandemic is impacting the global community in many ways, US also faced dramatic loss of human life due to unnecessarily underestimating the impact of the pandemic. 
+
+### 1.2 Location of US
+
+The United States of America (the U.S.A. or the USA), commonly known as the United States (U.S. or US) or America, is a country primarily located in North America. It consists of 50 states, a federal district, five major unincorporated territories, 326 Indian reservations, and some minor possessions. At 3.8 million square miles (9.8 million square kilometers), it is the world's third- or fourth-largest country by total area. The United States shares significant land borders with Canada to the north and Mexico to the south, as well as limited maritime borders with the Bahamas, Cuba, and Russia With a population of more than 331 million people, it is the third most populous country in the world. The national capital is Washington, D.C., and the most populous city is New York City.[(Wikipedia, 2021)](https://en.wikipedia.org/wiki/United_States)
+
+The United States of America is the world's third-largest country in size and nearly the third largest in terms of population. Located in North America, the country is bordered on the west by the Pacific Ocean and to the east by the Atlantic Ocean. Along the northern border is Canada and the southern border is Mexico. There are 50 states and the District of Columbia.
+
+Resource: [United States - National Geographic kids](https://kids.nationalgeographic.com/geography/countries/article/united-states#:~:text=respectful%20of%20copyright.-,The%20United%20States%20of%20America%20is%20the%20world's%20third%20largest,the%20southern%20border%20is%20Mexico.)
+
+```{r, out.width='75%', fig.align='center', echo=FALSE}
+knitr::include_graphics("picture/image2.jpg")  # Geographic location of US
+```
+
+
+```{r load-packages, include=FALSE}
+library(devtools) # Loaded the needed packages for the project
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+```
+
+
+### 1.3 Climate of US
+
+Being a huge country, the contiguous United States is home to a wide variety of climates. However, in general, it has a continental climate, with cold winters (often frigid) and hot summers (sometimes very hot), with a different season duration depending on latitude and distance from the sea. There are, however, some exceptions: on the west coast overlooking the Pacific Ocean, the climate is cool and damp in the northern part and the Mediterranean in the southern part; on the coast of the Gulf of Mexico, the climate is mild in winter and hot and muggy in summer, while in Florida, it is almost tropical; the mountainous areas are cold in winter and cool to cold even in summer; and finally, there are deserts which are mild in winter and scorchingly hot in summer.
+Since there are no obstacles to cold air masses from Canada, almost all of the country can experience sudden cold waves in winter, but they have different intensities and duration depending on the area. Cold spells last a few days in the south, where the temperature drops a few degrees below freezing (0 °C or 32 °F) in winter, while they are intense and sometimes long in inland areas, in the highlands and in the north-east. The summer heatwaves can be intense as well, especially in inland areas. In general, the western half of the country is arider than the eastern one, with the exception of the north-central coast of the Pacific, which is rainy.
+
+[Climates to travel](https://www.climatestotravel.com/climate/united-states)
+
+
+### 1.4 Lockdown status of the country by States.(27/09/2021)
+
+
+```{r, out.width='75%', fig.align='center', echo=FALSE}
+knitr::include_graphics("picture/image4.jpg")   # US current situation by state image
+```
+Image source: [https://www.usatoday.com](https://www.usatoday.com/storytelling/coronavirus-reopening-america-map/#wi-update)
+```{r, out.width='75%', fig.align='center', echo=FALSE}
+knitr::include_graphics("picture/image5.jpg") # Us current lockdown stage by state image
+```
+Image source: [https://www.usatoday.com](https://www.usatoday.com/storytelling/coronavirus-reopening-america-map/#ia-update)
+
+
+### 1.5 Actions taken by government to control covid 
+
+The novel virus was first identified in Wuhan, China, in 2019. A lock down in Wuhan and other cities in Hubei Province failed to contain the outbreak, and it spread to other parts of the China and around the world. The World Heath Organization(WHO) declared a Public Health Emergency of International Concern on 30 January 2020, and a pandemic on 11 March 2020. Since 2021, variants of the virus have emerged and become dominant in many countries, with the Delta, Alpha and Beta variants being the most virulent. As of 27 September 2021, more than 231 million cases and 4.74 million deaths have been confirmed, making one of the out breaking pandemics in history. Most of the countries took immediate action for the pandemic from the beginning while the initial U.S response to the pandemic was not admirable. Therefore COVID-19 is the deadliest pandemic in American history, with over 688,000 deaths. 
+
+Now, Let's look at the actions taken by U.S government to control COVID-19 pandemic with the expansion of the pandemic.
+
+* The first American case was reported on January 2020
+    -President Donald Trump declared the U.S outbreak a public health emergency on January 31.
+    
+    -Restrictions were placed on flights arriving from China
+    
+* The first known American deaths occurred in February
+    
+    -On March 6, 2020, Trump allocated $8.3 billion to fight the outbreak and declared a national emergency on March 13.
+    
+    -The government purchased large quantities of medical equipments.
+    
+* By mid April in 2020, disaster declarations were made by all states and territories as they all had increasing cases.
+
+* A second wave of infections began in June.
+
+* By mid October 2020, a third surgeof cases began
+
+* Vaccines become available in December 2020 under emergency use, and one was officially approved by the FDA on August 23,2021.
+
+* A fourth rise in infections began in late March(2021) with the rise of the Alpha Variant.
+
+
+#### Vaccination Program
+
+Recent data from studies in the U.S and in other countries have found that the available COVID-19 vaccines from the United States are highly protective against severe illness, hospitalization, and death due to COVID-19. However, Several vaccines have been approved and distributed in various countries and US also started their vaccination program after a slow kickoff in December. Then the country surpassed President Biden's initial goals of getting 100 million vaccines into arms in his first 100 days, reaching 200 million vaccines by day 92. 
+Vaccine eligibility opened across the country to everyone 16 and up in the U.S. in mid-April, and expanded to kids as young as 12 in mid-May. By July, the country had made significant progress, but still fell several million people short of President Biden's goal of getting at least one shot to 70% of adults in the U.S. by Independence Day.
+
+
+## 2. Exploratory Data Analysis
+
+The data set used for the analysis is, the open data set 2019 Novel Corona virus COVID-19 (2019-nCoV) data set which is available in R. This data set provide a summary of the Corona virus (COVID-19) cases by state/province. Data source: Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Corona virus.
+
+The available data set contains the reported cases of Covid-19 from 2020-01-22  to the date 2021-09-18. Moreover, the complete coronavirus data set contains 498132 observations of 7 variables, which contains the daily summary of worldwide Corona virus cases. From the complete data set, we extracted the US covid data set for the analyses going forward. The US covid data set consists of 1818 observations of 7 variables. These 7 variables can be explained as;
+
+1.  Date           - Format: "YYYY-MM-DD"
+2.  Country        -chr(data type)
+3.  Province/state - chr(data type): Depends upon the availability
+4.  Long           - num(data type) : Longitude of center of the country/province based on the center of the location
+5.  Lat            - num(data type)  : Latitude of center of the country/province based on the center of the location
+6.  type           - chr(data type) : confirmed, recovered, death
+7.  cases          - int(data type) : No of cases on given date
+
+This data set has a daily information on the number of confirmed cases, deaths and recovery.Now let's start doing the exploratory data analysis of the us covid-19 data from 2020-01-22 to 2021-09-18 using the R programming language.
+
+```{r, include=FALSE} 
+#library(devtools) # Used this code block to obtain the allocated country for the data analysis
+#devtools::install_github("thiyangt/sta3262") 
+#library(sta3262)
+get_individual_project_country("AS2018470") 
+
+```
+```{r, include=FALSE}
+data(coronavirus) # Load data
+get_individual_project_country("AS2018470")
+usa_corona <- coronavirus %>% filter(country == "US")
+```
+
+Since our analysis is based on the US COVID-19 data, we filtered the US COVID -19 data from the corona virus data set. 
+
+```{r, include=FALSE}
+  head(usa_corona)
+  sum(is.na(usa_corona))   # 1863
+```
+
+Now, Let's look at the summary of the US covid-19 data set to get a brief overview of the available data set.
+
+```{r, echo=FALSE}
+summary(usa_corona)
+```
+
+By looking at the summary of the data set we can identify that there's a negative value in the minimum number of cases(-6298082). This gives the incorrect information regarding the no of cases for the analysis.By splitting the US COVID-19 data set based on the column "type", we obtained three data sets.The summaries we obtained for the three sub data sets are given below. 
+
+```{r, echo=FALSE}
+confirmed_cases_usa <- usa_corona %>% filter(type=="confirmed")
+death_cases_usa <- usa_corona %>% filter(type=="death")
+recovered_cases_usa <- usa_corona %>% filter(type=="recovered")
+summary(confirmed_cases_usa)
+summary(death_cases_usa)
+summary(recovered_cases_usa)
+
+```
+
+Therefore, we can see that the no of minimum cases that are reported in the recovered cases data set is similar to the negative value that we obtained previously, which is -6298082.The number of recovered COVID cases can't be a negative value. Therefore, we can say that they have mistakenly recorded negative values as some of the number of recovered cases in the COVID-19 data set. Moreover, we observed that there are 45 missing(NA) values in the cases column of the US COVID-19 data set, which is similar to the number of missing(NA) values in the recovered cases sub data set that we have obtained by filtering the type(recovered, death, confirmed). It conveys that all the missing values in the COVID-19 cases have been resulted due to the mistakenly entered recovered number of cases. Next we cleaned the data set to remove missing values.
+
+```{r, include=FALSE}
+  usa_corona$cases[usa_corona$cases < 0] <-0
+  usa_corona[is.na(usa_corona)] <- 0
+  recovered_cases_usa[is.na(recovered_cases_usa)] <- 0
+  recovered_cases_usa$cases[recovered_cases_usa$cases < 0] <- 0
+  summary(recovered_cases_usa)
+```
+
+According to the summary of the data we obtained above for the cleaned data set, the mean number of COVID-19 confirmed cases reported per a day is 69390 people and on average 1111 deaths has been reported daily due to COVID-19 in US.  
+
+```{r , echo=FALSE,out.width="100%",figurs-side, fig.show="hold"}
+p1 <- ggplot(usa_corona,aes(date, cases/1000, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Figure 1: Time Series Plot of covid 19 cases of USA(Daily Confirmed/Recovered/Death cases in thousands)")
+ 
+ggplotly(p1)
+```
+
+In line with the Figure 1, we can say that even though the first corona virus case in the US was confirmed on 21st January 2020, the cases surged from the second half of February and further in March as the nation-wide testing was increased significantly.
+
+The time series plot in Figure 1 conveys that, there are some patterns in the time series plot due to the unexpected pandemic waves. The U.s has been impacted with four pandemic waves during the period that we have analysed(from 2020-01-22 to 2021-09-18).
+
+* 2020 January 21 - First case was reported.
+
+* 2020 February  - First known American deaths occurred.
+
+* 2020 October  - Third wave of infections began.
+
+* 2021 March    - Fourth wave of infections began.
+
+We can clearly see the variations in the confirmed cases during the above four periods of the pandemic.The highest number of cOVID-19 daily confirmed cases reported was 302959 infected people. Further more the highest number of daily death count was 4460 deaths, which was recorded on 11th of December 2020 during the third wave of the infection.
+
+```{r echo=FALSE,warning=FALSE, comment=FALSE, message=FALSE, out.width="50%", fig.show="hold"}
+group_by(usa_corona, date, type) %>%
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "US",
+  )
+
+china_corona <- coronavirus %>% filter(country == "China")
+
+group_by(china_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "China",
+  )
+
+
+india_corona <- coronavirus %>% filter(country == "India")
+
+group_by(india_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "India",
+  )
+
+```
+   Figure 2: Comparison of US , China and India COVID-19 cases (daily)
+
+The no.of cases on any given day is the cumulative number. When analyzing the COVID-19 data of US, it's important to compare the cases of similar countries with the relatively similar conditions. Here we analyse US COVID-19 cases with India and China COVID-19 cases because these three countries are having the world largest population; where China holds the first place.
+China, is currently the fourth-worst affected country by the novel corona virus outbreak. China has witnessed more than 4,000 deaths. The number of cases in China has been on decline starting March 2020. 
+
+
+
+```{r, include=FALSE}
+  m_corona <- coronavirus %>% filter(country == "Mexico") # Mexico
+  m_corona[is.na(m_corona)] <- 0
+  m_corona$cases[m_corona$cases < 0] <-0
+  confirmed_cases_m <- m_corona %>% filter(type=="confirmed")
+  death_cases_m <- m_corona %>% filter(type=="death")
+
+```
+
+```{r, include=FALSE}
+  canada_corona <- coronavirus %>% filter(country == "Canada") # Canada
+  canada_corona[is.na(canada_corona)] <- 0
+  canada_corona$cases[canada_corona$cases < 0] <-0
+  confirmed_cases_canada <- canada_corona %>% filter(type=="confirmed")
+  death_cases_canada <- canada_corona %>% filter(type=="death")
+
+```
+
+Moreover, it's equal important to compare the COVID-19 cases of the countries which are located nearby to U.S. Here we compare US COVID-19 data with Canada and Mexico. 
+
+```{r , echo=FALSE,out.width="80%",figuree-side, fig.show="hold"}
+p2 <- ggplot(m_corona,aes(date, cases/1000, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Time Series Plot of covid 19 confirmed cases of Mexico in thousands(Daily)")
+ 
+ggplotly(p2)
+```
+
+```{r , echo=FALSE,out.width="80%",figurees-side, fig.show="hold"}
+p3 <- ggplot(usa_corona,aes(date, cases/1000, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Time Series Plot of covid 19 confirmed cases of USA in thousands(Daily)")
+ 
+ggplotly(p3)
+```
+           
+            
+```{r , echo=FALSE,out.width="80%",figures-side, fig.show="hold"}
+p4 <- ggplot(canada_corona,aes(date, cases/1000, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Time Series Plot of covid 19 confirmed cases of Canada in thousands(Daily)")
+ 
+ggplotly(p4)
+```
+
+
+## 3. Conclusions and Discussion
+
+### 3.1 Discussion
+
+We observed that there are negative values available in the USA covid-19 data set. Further analyzing the data set we were able to find out that these negative values has been entered as result of the mistakenly entered daily recovered cases data. Since the recovered cases data are not randomly missing, a mean substitution can't be done in place of the mistakenly entered data value for the same variable cases. Since the mean is affected by the presence of the outliers it seems natural to use the median. But the mean and the median value we obtained for the recovered data set was also zero.
+
+According to [(Mater’s in Data Science ,2021)](https://www.npr.org/sections/health-shots/2021/01/28/960901166/how-is-the-covid-19-vaccination-campaign-going-in-your-state), removing the missing data may result a bias. Also it's not ideal to substitute zero to the negative values, as it was a big proportion of the recovered data set. But during the analysis we concerned about the death cases and the confirmed cases, to prevent the misinterpretation of the data occur due to the faults of the data available. We could have done further studies about how to deal with higher number of negative values in the recovered data set which are also not random.
+
+To have an overall idea about the COVID-19 situation in the US, it's important to compare the situation with the other countries. In this study we have taken crude death rate as a measure to compare the impact of COVID-19 pandemic on different countries. Here we have considered Canada and Mexico due to the nearby location. Furthermore, China, India and US are the countries with the highest number of population in the world.
+
+```{r, echo=FALSE}
+
+Country = c("US","China","India","Mexico","Canada")
+Total_Population = c(333434380, 1446260522,1397131989,130645026,38159048)
+Death_counts = c(709119, 4636, 447406,275676,27689)
+Crude_Death_rate = (Death_counts/Total_Population)*100000
+
+df <- data.frame(Country,Total_Population,Death_counts,Crude_Death_rate);
+df
+
+```
+We can say that Us has the highest Crude death rate which is 212.67 among these 5 countries.    
+
+Even though China has witnessed more impact of the COVID-19, at the start. The number of cases in China, has been on the decline starting March 2020 due to the rapid control measures and response by the Chinese government.
+
+It was a popular fact across the globe that India is also among the highly affected countries.There was a time that the scenes and stories coming out of India grow more heart wrenching everyday.
+
+
+### 3.2 Conclusions
+
+
+In line with our findings we can conclude that US is the mostly affected country where COVID-19 has spread. Community spread and the delayed testing has been a major concern to Americans.
+The United States remains the world's worst-affected country due to underestimating the spike of the outbreak and not taking necessary actions at the beginning. Furthermore still US has not completely recovered from the Fourth wave of COVID-19 infections, with irregular variations of the confirmed cases.However, the countries has taken necessary preventive measures to minimize the impact of the pandemic. The government of US was not so active during the previous stages of the pandemic; but later US government have taken steps to help mitigate the spread of the virus. 
+
+## 4. References:
+
+United States- Wikipedia (2021) _Wikipedia._ Available at: [Wikipedia](https://en.wikipedia.org/wiki/United_States)(Accessed: 27 Sept 2021).
+
+United States - National Geographic kids (2020)._United States - National Geographic kids_ Available at: [https://kids.nationalgeographic.com/geography/countries/article/united-states#:~:text=respectful%20of%20copyright.-,The%20United%20States%20of%20America%20is%20the%20world's%20third%20largest,the%20southern%20border%20is%20Mexico.](https://kids.nationalgeographic.com/geography/countries/article/united-states#:~:text=respectful%20of%20copyright.-,The%20United%20States%20of%20America%20is%20the%20world's%20third%20largest,the%20southern%20border%20is%20Mexico.) (Accessed: 27 Set 2021)
+
+[Climates to travel, 2020](https://www.climatestotravel.com/climate/united-states) _Climates to travel_ (Accesseed: 28 Sept 2021)
+
+World Health Organization(WHO) (2021) _Impact of COVID-19 on people's livelihoods, their health and our food systems_.Available at:[https://www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people's-livelihoods-their-health-and-our-food-systems](https://www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people's-livelihoods-their-health-and-our-food-systems) (Accessed: 28 Sept 2021)
+
+Google (2021) _Google terms of service._ Available at:[https://cran.r-project.org/web/packages/coronavirus/index.html](https://systems.jhu.edu/research/public-health/ncov/)(Accessed: 27 Sept 2021).
+
+Woldometer (2021) _Countries in the world by population._ Available at: [https://www.worldometers.info/world-population/population-by-country/](https://www.worldometers.info/world-population/population-by-country/) (Accessed: 27 Sept 2021).
+
+Mater's in Data Science (2021) _How to deal with missing data?._ Available at: [https://www.mastersindatascience.org/learning/how-to-deal-with-missing-data/](https://www.mastersindatascience.org/learning/how-to-deal-with-missing-data/) (Accessed: 27 Sept 2021)
+
+How Is The COVID-19 Vaccination Campaign Going In Your State? Available at:
+[https://www.npr.org/sections/health-shots/2021/01/28/960901166/how-is-the-covid-19-vaccination-campaign-going-in-your-state](https://www.npr.org/sections/health-shots/2021/01/28/960901166/how-is-the-covid-19-vaccination-campaign-going-in-your-state) (Accessed: 28 Sept 2021)
