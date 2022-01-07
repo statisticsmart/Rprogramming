@@ -1,0 +1,139 @@
+---
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+## Assignment 03
+
+## AS2018503
+
+
+## INTRODUCTION
+
+  Senegal is a coastal West African nation located 14 degrees north of the equator and 14 degrees west of the Prime Meridian. Senegal's total area id 196190km2 of which 192000km2 is land and 4190km2 is water. 70% of the population of Senegal lives in the Coastal Region.
+  
+  The state was formed as part of the independance of French West Africa from French colonial rule.
+
+## 1.Visualization of thr location
+
+```{r, message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 1 : Location in the word map",fig.align='center'}
+library(coronavirus)
+
+library(tidyverse) 
+library(magrittr)
+Senegal_corona <- coronavirus %>% filter(country == "Senegal")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble) 
+library(tidyverse) 
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl) 
+
+p <- ggplot() + 
+  geom_polygon( data = wrld_simpl, 
+            aes(x = long, y = lat, group = group), fill = "gray", colour = "white" ) + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + 
+scale_x_continuous(breaks = seq(-180, 180, 120)) + 
+scale_y_continuous(breaks = seq(-90, 90, 100)) 
+
+p + geom_point( data = Senegal_corona, aes(x = long, y = lat), color = "red", size = 1) 
+ 
+
+```
+
+## 2.Climate Conditions
+
+  Tropical;hot, humid;rainy season has strong southeast winds; dry season dominated by hot, dry,harmattan wind. Well defined dry and humid seasons results from northeast winter winds and southeast summer winds.
+  
+  Daka,s annual rainfall occurs between June and October when the maximum temperature average 30 degrees of celcius and minimum 24.2 degrees of celcius; December to February maximum temperature average 25.7 degrees of celcius and minimum 18 degrees of celcius.
+  
+  Extremes in annual precipitation range from 250mm in the extreme north, to 1800mm in extreme southern coastal areas. In the far interior of the country, in the region of Tembacounda, particularly on the boeder of Mali, temperature can reach as high as 54 degrees of celcius.
+  
+  Climate change in Senegal will have wide reaching impacts on many aspects of life in Senegal. Climate change will cause an increase in average temperatures over west Africa by between 1.5-4 degreeas of celcius by midcentury, relative to 1986-2005. 
+  
+  Senegal is a currently not a major contributor to global greenhouse gas emissions, it is one of the most vulnerable countries to climate change. Senegal released its intended Nationally Determined Contributins that indicated climate change would be treated as a national priority.
+
+## 3.Lock-down status of the country
+
+
+
+## 4.Actions taken by the government
+
+  South African president Cyril Ramaphosa announced a three week national lockdown to contain the spread of the deadly new coronavirus which has affected more than 400 people and ordered the military to enforce the ban.
+  
+  The number of confirmed in cases in South Africa has climbed six fold in just eight days from 61 to 402.
+  
+  The West African states of Senegal and Ivory Coast declared a state of emergency in the face of the new coronavirus pandemic.Senegal will impose a dusk to dawn curfew, while Ivory Coast said it would introduce gradual confinement measurements."The speed of the progress of the disease requires us to raise the level of the response,"Senegalese President Macky Sall said in a televised address to the nation.
+  
+  
+
+## EXPLORATORY DATA ANALYSIS
+
+## 1.Summary Measures
+```{r,,message=FALSE, warning=FALSE, comment=NA, echo=FALSE}
+Senegal_corona_wider<-Senegal_corona %>% pivot_wider(names_from = "type",values_from = "cases")
+Senegal_corona_wider$recovered <- replace(Senegal_corona_wider$recovered,Senegal_corona_wider$recovered<0,NA)
+
+Senegal_corona_wider$recovered[is.na(Senegal_corona_wider$recovered)] <-mean(Senegal_corona_wider$recovered,na.rm = TRUE)
+Senegal_corona_wider$recovered <- round(Senegal_corona_wider$recovered,digits = 0)
+
+Senegal_corona_wider <- Senegal_corona_wider %>% mutate(active= cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+
+
+summary(Senegal_corona_wider)
+```
+
+## 2.Confirmed cases
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 2 : Plot of daily confirmed cases in Senegal" , fig.align='center', out.width='100%'}
+library(plotly)
+c <- ggplot(Senegal_corona_wider, aes(x=date, y=confirmed))+geom_path(size=0.5)
+ggplotly(c)
+
+
+```
+## 3.Death Cases
+
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 3 : Plot of daily death cases in Senegal", fig.align='center',out.width='100%'}
+
+d <- ggplot(Senegal_corona_wider, aes(x=date, y=death ))+geom_path(size=0.5)
+ggplotly(d)
+```      
+
+## 4.Recovered Cases
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 4 : Plot of daily recovered cases in Senegal", fig.align='center', out.width='100%'}
+
+r <- ggplot(Senegal_corona_wider, aes(x=date, y=recovered))+geom_path(size=0.5)
+ggplotly(r)
+```
+## 5.Active Cases
+
+```{r,message=FALSE, warning=FALSE, comment=NA, echo=FALSE, fig.cap="Figure 5 : Plot of daily death cases in Senegal", fig.align='center'}
+
+a <-ggplot(Senegal_corona_wider, aes(x=date, y=active))+geom_path(size=0.5)
+ggplotly(a)
+
+```
+## CONCLUSIONS AND DISCUSSIONS
+
+  1.
+
+## REFERENCES 
+
+  https://en.m.wikipedia,org>wiki
+  https://www.worldtravelguide.net
+  https://www.bbc.com
+  https://geology.com
+  https://worldatlas,comhttps://youtu.be/TbQiuKuNdg8
+  https://youtu.be?XuQ7na73XBE
+  https://youtu.be/re87peNHS8
+  https://youtu.be/MuVtUJEBbE
+  

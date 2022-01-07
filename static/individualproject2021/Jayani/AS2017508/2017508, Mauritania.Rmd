@@ -1,0 +1,380 @@
+---
+title: "Covid 19 in Mauritania"
+author: "Geethma Liyanage- AS2017508 "
+date: "9/20/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, comment = NA, message = FALSE)
+```
+
+## 1.**Introduction**
+#### 1.1 **About Country**
+Mauritania, the eleventh largest country in Africa, and 90 percent of its territory is situated in the Sahara's a sovereign state in Northwest Africa. It is bordered by the Atlantic Ocean to the west, Western Sahara to the north and northwest, Algeria to the northeast, Mali to the east and southeast, and Senegal to the southwest.This county  officially the Islamic Republic of Mauritania.Most of its population of 4.4 million lives in the temperate south of the country, with roughly one third concentrated in the capital and largest city, Nouakchott, located on the Atlantic coast. Mauritania's capital city is Nouakchott and also this is the largest city in the Mauritania. Nouadhibou, Kiffa(south Mauritania), Kaedi(south Mauritania), Zouerat(Nothern Mauritania) are the largest Cities in the Mauritania.
+
+#### **1.2 Location of Mauritania in World Map**
+
+```{r}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(magrittr)
+Mauritania_corona <- coronavirus %>% filter(country =="Mauritania" )
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+library(lubridate)
+library(magrittr)
+
+data(wrld_simpl)
+p <- ggplot() +geom_polygon(data = wrld_simpl,aes(x = long, y = lat, group = group), fill ="gray", colour ="white") +
+  coord_cartesian(xlim = c(- 180, 180), ylim = c(- 90,90)) + scale_x_continuous(breaks = seq(-180,180,120)) +
+  scale_y_continuous(breaks = seq(-90,90,100))
+p +geom_point(data = Mauritania_corona, aes(x = long, y = lat), color = "red", size =1) + labs(title= "Mauritania in the world map", y= "Latitude", x= "Longitude")
+```
+
+#####  Mauritania Map
+
+![](Mauritania_Map.jpg)
+
+
+Mauritania lies in the western region of the continent of Africa, and is generally flat, its 1,030,700 square kilometres forming vast, arid plains broken by occasional ridges and clifflike outcroppings.It borders the North Atlantic Ocean, between Senegal and Western Sahara, Mali and Algeria. It is considered part of both the Sahel and the Maghreb. Approximately three-quarters of Mauritania is desert or semi desert. As a result of extended, severe drought, the desert has been expanding since the mid-1960s.
+
+
+#### **1.3 Climate and Average Weather in Mauritania**
+
+Mauritania has a dry, hot, and windy climate, and is severely exposed to the effects of desertification. The majority of Mauritania receives very little rainfall throughout the year. The country’s southern edge, which reaches the Sahel, has a wet season controlled by the movement of the Inter-Tropical Convergence Zone (ITCZ) which oscillates between the northern and southern tropics over the course of a year. The country’s mean monthly temperature stays above 25°C year-round with the hot season occurring from May to October, with peak mean monthly temperatures reaching 33°C in June and July.
+
+### **2. Diseases  in Mauritania**
+
+#### **2.1 Epidemic, Mauritania Faced Before**
+
+  Tuberculosis- Tuberculosis is the deadliest disease in Mauritania, accounting for more than 12 percent of the                     total deaths in 2014. This disease dangerous infectious disease spread by coughing and sneezing.
+  
+  Malaria - Malaria is another one of the top diseases in Mauritania. Since 1990, the number of reported cases of               malaria have increased, with an average of 181,000 cases per year.
+  
+#### **2.2 Covid 19 Pandemic in Mauritania.**
+#### **Background**
+On 30 December 2019, an uncommon pneumonia outbreak of unknown aetiology was reported in Wuhan, Hubei province, China. Virus isolation and molecular analysis indicated a novel corona virus (family Corona viridae) provisionally named 2019-nCov. As a result of its high ineffectiveness and person-to-person mode of transmission,SARS-CoV-2 rapidly spread across China to other countries worldwide. Hence Mauritania is the one of the Country what faced the Covid 19 pandemic.
+
+In Mauritania, a West African country, the first case of COVID-19 was diagnosed on 13 March 2020 in a 40-year-old Australian expatriate traveling from abroad. A few days later, a second COVID-19 case was diagnosed in a 41-year-old foreign female domestic worker who returned from Senegal 10 days before she was diagnosed. A third positive case was reported on 26 March 2020 in a 74-year-old man who had returned from France 10 days earlier. The first death associated with COVID-19 occurred on 30 March 2020 in a 48-year-old French-Mauritanian woman who tested positive after death. 
+
+There were three pathways through which the Mauritanian Ministry of Health recruited patients positive for COVID-19: mobile alert management teams; sentinel reception sites created in collaboration with the army; and patients with suspected COVID-19 signs and symptoms attending health facilities.
+
+#### **Diagnostic Methods.**
+
+Implementation of the COVID-19 diagnostic testing started on 12 February 2020 using serologic and PCR-based approaches. Serology was performed by SARS-CoV-2 IgG/IgM rapid diagnostic test (Xiamen Biotime Biotechnology, Fujian, China). SARS-CoV-2 molecular diagnosis was performed using Daan real-time fluorescent-PCR kits for 2019 Novel Corona virus RNA detection (DAAN Gene, Sun Yat-Sen University, Guangzhou, China). Both serologic tests and RT-PCR were performed at the virology laboratory, INRSP, Nouakchott.
+
+#### **Lock down Status & Action taken by government**
+
+Back in March, the Mauritanian government acted swiftly – banning travel between regions, restricting outings and gatherings and imposing a curfew between 6pm and 6am. All markets were closed and only food shops remained open. Police vehicles with loudspeakers patrolled the streets to force people back to their homes.While these measures have undoubtedly helped reduce the spread of the virus  they have also had a huge impact on the most vulnerable people.The community outreach was done in ways that respected the social distancing orders and also gave all of the recipients clear information and advice on avoiding the corona virus.
+
+When consider the travel restriction for other countries, Nouakchott-Oumtounsy International Airport (NKC) remains open for limited international commercial passenger travel, and domestic flights are operating. However, travelers to Mauritania must present a negative result from a COVID-19 polymerase chain reaction (PCR) test taken no more than five days before arrival. Arriving travelers also face screening measures and 10 days of self-isolation; travelers who test positive or display symptoms of the disease will be quarantined at a state health facility.
+Travelers from countries with new variants of the disease will be required to isolate at the port of entry. The traveler will then be transported to a secure facility ahead of a possible quarantine at their own expense. A PCR test will be administered at the facility; travelers who test negative will be allowed to continue with regular COVID-19 travel procedures.
+Land borders with Senegal and Mali are reportedly open. Freight travel remains permitted at several border crossings but is subject to enhanced inspections. However, noncommercial overland travel with Morocco remains banned.
+
+
+
+```{r, echo=FALSE, out.width="100%", out.height="100%"}
+knitr::include_graphics("mauritania-covid-pandemic-masks-journalist-kerkoub-getty.jpg")
+```
+
+
+
+
+### **3. Exploratory Data Analysis**
+
+```{r}
+
+a <-ggplot(Mauritania_corona ,aes(x = type, y = log(cases), fill= type))+ geom_bar(stat = "identity") + scale_fill_brewer(type = "qual",palette = "Dark2") + labs(title = "Number of Covid cases with the Type of the Covid 19 Cases", x = "Type of Corona Virus", Y ="log10(cases)" )
+ggplotly(a)
+
+```
+
+Figure 01: Number of each types cases in the Mauritania. 
+
+The above figure can be gotten  the similar idea about the total cases of the confirmed,death and the recovered cases. When consider the death cases in the Mauritania are most smaller than the confirmed cases. That is a  good situation.
+
+
+#### **Confirmed Cases.**
+
+
+```{r,out.width="100%", out.height="100%" }
+Mauritania_corona <- coronavirus %>% filter(country =="Mauritania" )
+confirmed_corona <- Mauritania_corona %>% filter(type=="confirmed")
+a <- ggplot(confirmed_corona , aes(x= date, y= cases)) + geom_line( size = 0.5, color="#13960c") +geom_vline(xintercept = as.numeric(as.Date("2021-05-13")), color ="red",lwd = 1) + ggtitle("Mauritania: Daily Covid-19 Confirmed") + theme_bw()+ labs(y= "Number of comfirmed Cases", x= "Date")
+ggplotly(a)
+
+```
+
+Figure 02: Daily Covid 19 Confirmed cases.
+
+Consider the above figure 02, can be seen the confirmed covid cases in the Mauritania with respect to the time.After the half of may in 2021,Covid 19 confirmed cases increases with the time and the peak of the confirmed cases in 24 th of June. After these peak the the confirmed cases are decrease with the time. However, Consider the whole time series plot there can be seen separate three peaks of the Covid confirmed cases. Then consider the Mauritania covid cases confirmed three different clusters. highest confirmed value is 401 in 29-07-2021. And also there red line represent their cultural festival day Eid al -Fitr day in 13-05-2021.
+
+```{r, out.width="100%", out.height="500%"}
+sep_data <- confirmed_corona %>% separate(date, into=c("year", "month", "day"), sep="-")
+sep_data_2020 <- sep_data %>% filter(year == "2020" )
+t <- ggplot(sep_data_2020,aes(x= day, y= cases, color= month )) + geom_point(size=1) + facet_grid(month~.) + ylim("0","300") +labs(title = "Comfirmed cases in 2020 Each month", x= "Day", y = "Confirmed Cases")
+ggplotly(t)
+
+
+```
+
+ 
+Figure 03: Daily Covid-19 confirmed cases in Mauritania among months in 2021
+
+We can get more clear idea about increase of daily confirmed cases using figure 02.This graph represent the Number of Confirmed Cases in each month and Behavior of the confirmed cases for each month. July to December, The confirmed cases are increase the mid of the month and May and June confirmed cases increase in the end of the month.  
+
+```{r, out.width="100%", out.height="500%"}
+sep_data <- confirmed_corona %>% separate(date, into=c("year", "month", "day"), sep="-")
+sep_data_2021 <- sep_data %>% filter(year == "2021" )
+t <- ggplot(sep_data_2021,aes(x= day, y= cases, color= month )) + geom_point(size=1) + facet_grid(month~.) + ylim("0","400") +labs(title = "Comfirmed cases in 2021 Each month", x= "Day", y = "Confirmed Cases")
+ggplotly(t)
+
+
+```
+
+Figure 04: Daily Covid-19 confirmed cases in Mauritania among months in 2021
+
+We can get more clear idea about increase of daily confirmed cases using figure 02.This graph represent the Number of Confirmed Cases in each month and Behavior of the confirmed cases for each month. consider the August in 2021, The Number of Confirmed Cases higher than the other months.
+
+##### Compare the Confirmed cases in each year.
+
+```{r}
+confirmed_corona <- Mauritania_corona %>% filter(type=="confirmed")
+sep_data <- confirmed_corona %>% separate(date, into=c("year", "month", "day"), sep="-") %>% group_by(year) %>% 
+  mutate(cum_cases = cumsum(cases))
+
+g <-ggplot(sep_data, aes(x=month, y=cum_cases, fill = year)) + geom_bar(size = 1, stat = "identity", position = "dodge") +labs(title = "Mauritania: Confirmed cases by Years", x= "Month", y= "Number of Confirmed cases")
+
+ggplotly(g)
+
+```
+
+Figure 05: Number of Confirmed Cases for each Month by Years.
+
+Above Figure 05 shows that Confirmed cases for each month in 2020 and 2021. There compare with the months what are available both year, in 2021 number of Confirmed cases increased than the 2020.
+
+
+
+##### **Recovered Cases**
+
+```{r,out.width="100%", out.height="100%"}
+Recovered_corona <- Mauritania_corona %>% filter(type =="recovered")
+
+a <- ggplot(Recovered_corona , aes(x= date, y= cases)) + geom_line( size = 0.5, color = "#d782d9") + geom_point(size =0.5, color = "#d782d9") + ggtitle("Mauritania: Daily Covid-19 Recovered") + theme_bw() + labs(y= "Number of Recovered Cases", x= "Date")
+ggplotly(a)
+
+
+```
+
+Figure 06: Daily Covid 19 Recovered Cases in Mauritania.
+
+Consider the above Figure 06, there can be seen that the Number of Confirmed, Death, Recovered cases with the day. By figure 02 can be seen the three clusters(Daily Confirmed cases). Then these three clusters are represent the number of recover cases also. Highest number of recovery cases is 364 in 12.20.2020.
+
+##### **Death Cases**
+
+```{r, out.width="100%", out.height="100%"}
+Mauritania_corona <- coronavirus %>% filter(country =="Mauritania")
+death_corona <- Mauritania_corona %>% filter(type =="death")
+a <- ggplot(death_corona , aes(x= date, y= cases)) + geom_bar( stat = "identity",color="#1abced")  + labs(title= "Mauritania : Daily Death Cases", x ="Date", y = "Death Cases") 
+
+ggplotly(a)
+```
+ Figure 07: Daily death Covid Cases in Mauritania
+ 
+This Figure 07, shows that the death of the Covid 19 change with the time with Mauritania.The highest value of the  death cases in 13 at 2020-12-25.
+
+#### Compare the Death Cases for Years.
+
+```{r}
+sep_data_death <- death_corona%>% separate(date, into=c("year", "month", "day"), sep="-") %>% group_by(year) %>% mutate(cum_cases = cumsum(cases))
+
+g <-ggplot(sep_data_death, aes(x=month, y=cum_cases, fill = year)) + geom_bar(size = 1, stat = "identity", position = "dodge") +labs(title = "Mauritania: Death cases by Years", x= "Month", y= "Number of Death cases")
+
+ggplotly(g)
+
+
+```
+
+ Figure 08: Number of deaths Fo each year
+ 
+ Above Figure 08, can be seen the number of deaths for each year. In the 2021, Number of death cases higher that the number of death cases in 2021. in July, August, September Number of deaths in 2021 equal to two times of deahs cases in 2020 in same month.
+ 
+ 
+
+
+```{r}
+Mauri_corona_wider <-Mauritania_corona %>%pivot_wider(names_from = type,values_from = cases)
+p1 <- ggplot(Mauri_corona_wider, aes(x= confirmed, y= death)) +geom_point(aes(size = death), color ="forestgreen") + geom_smooth(method = "lm", se=FALSE)     +theme_bw()+ labs(title= "Confirmed Cases and Death Cases", x= "confirmed Cases per day", y= "Death Cases per day")
+ggplotly(p1)
+cor(Mauri_corona_wider$confirmed , Mauri_corona_wider$death, method = "pearson")
+
+```
+
+Figure 09 : Relation Between Confirmed Cases and Death Cases.
+
+Above figure shows that the relation between Death cases and Confirmed cases in the Mauritania. it is a linear relationship but not the strong relationship ships.
+
+
+####  **Active cases**
+
+             **Active Cases = Confirmed Cases - Death Cases - Recovered Cases**
+
+Table 01: Daily Active Cases of the Mauritania. 
+
+      
+```{r,out.width = "100%", out.height = "100%"}
+Mauri_corona_wider <-Mauritania_corona %>%pivot_wider(names_from = type,values_from = cases)
+Mauri_corona_wider
+Mauri_corona_new<- Mauri_corona_wider %>%mutate(active=confirmed-recovered-death)
+Mauri_corona_new
+a <- ggplot(Mauri_corona_new , aes(x= date, y= active)) + geom_bar( stat = "identity",color="#1abced") + geom_vline(xintercept = as.numeric(as.Date("2020-10-29")), color ="red",lwd = 1) + labs(title= "Mauritania : Active Death Cases", x ="Date", y = "Active Cases") 
+
+ggplotly(a)
+``` 
+
+Figure 10: Daily  Covid 19 Active Cases in Mauritania.
+
+The above Figure 10 shows that the Active cases in the daily in the Mauritania. The Red color vertical line shows the their cultural festival day of the Mouloud day in 13-05-2021. After these day, the active cases are start the  increase. Highest Active case value is 233 at 2020.12.11. 
+
+
+```{r}
+
+Mauri_corona_lon <- Mauri_corona_new %>% pivot_longer(6:9,names_to = "type",values_to = "cases" )
+
+
+b<- ggplot(Mauri_corona_lon, aes(x= date, y = cases, color= type)) + geom_bar(stat = "identity") +facet_grid(type~.,scales = "free_y") +  labs(title ="Mauritania: Daily Covid 19 Cases", y= " Number of  Cases", x= " Date") 
+ggplotly(b)
+
+
+```
+
+Figure 11: Daily Covid 19 cases in different Types
+
+This figure 11 shows that the Covid -19 Recovered cases, Death cases, Active cases and  the confirmed cases with depend on the time(daily cases). Consider the graph of confirmed, death  and recovered cases have same three separate clusters of the cases. Approximately they have same pattern of the cases. But the recovered cases of end days values are missing. then consider the plot of the active cases, values of some active cases are minus. the reason of these number of death cases and number of recovered cases of each days are greater than the number of confirmed cases of corresponding days.
+
+
+#### **Compare With the other Countries.**
+
+Mauritania lies in the western region of the continent of Africa. The country borders Moroccan-occupied Western Sahara to the northwest, Algeria to the northeast, Mali to the east and southeast, the Senegal River forms the border with Senegal in the southwest and Morocco is he another country related to the Mauritania.
+
+
+The COVID-19 pandemic in Algeria is part of the worldwide pandemic of corona virus disease 2019 (COVID-19) caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2). The virus was confirmed to have spread to Algeria in February 2020. In December it was announced that Algeria intended to launch COVID-19 vaccinations in January 2021.
+
+consider the another nearest country in Mali, The COVID-19 pandemic  is part of the ongoing worldwide pandemic of corona virus disease 2019 (COVID-19) caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2). The virus was confirmed to have reached Mali in March 2020.
+
+Then consider the Morocco, The virus was confirmed to have spread to Morocco on 2 March 2020, when the first case COVID-19 case was confirmed in Casablanca. It involved a Moroccan expatriate residing in Bergamo, Italy, who arrived from Italy on 27 February. A second case was confirmed later that same day involving an 89-year-old woman Moroccan residing in Italy who had returned to Morocco on 25 February from Bologna, Italy. As the outbreak widened in Morocco, in mid-March the Government closed schools and suspended international passenger flights.
+
+ In the Senegal the virus was confirmed to have reached Senegal on March 2, 2020.
+ 
+ Then Consider the nearest countries of Algeria confirmed the fist Covid -19 cases.
+ 
+Therefore to compare the corona virus pandemic in Mauritania, we choose Algeria, Mali, Morocco, Senegal  as the neighboring country which s confirmed the first case, China.
+
+In this part, we compare the corona virus cases of Mauritania with Algeria, Mali, Morocco, Senegal.
+
+
+
+```{r}
+corona_nw <-filter(coronavirus,country %in% c("Algeria","Mauritania","Mali", "Morocco", "Senegal"))
+com_country_Con<- corona_nw %>% filter(type == "confirmed")
+
+```
+
+```{r}
+d <- com_country_Con %>% group_by(country) %>% mutate(cum_cases = cumsum(cases))
+g <-ggplot(d, aes(x=date, y=cum_cases, colour = country)) + geom_path(size = 1) +labs(title = "Total No.of confirmed, cases in countries", x= "Date", y= "Total Number of Confirmed cases")
+ggplotly(g)
+
+
+```
+
+Figure 12: Total Number Of confirmed Cases in neighbors Country.
+
+Above Figure Shows that the  total Confirmed Cases of the neighbors country of Mauritania. Compared to its neighboring countries, Mauritania seems to be performing better, but however if should be noted that the total population of Mauritania  around 4.5 million. Therefore Mauritania  having 35,380 total confirmed cases with a population of 4.5 million people, then seems to be a Mali having 15060 total confirmed cases with the 19.66 millions of population. But seems to be the shape of graph the total confirmed cases of the Mali and Mauritania is same. And also consider the Morocco having highest total values than others and total number of pollution also higher than the others countries. Then total confirmed cases of the Algeria approximately equal to two times of Senegal total confirmed cases and also number of population of Algeria is approximately equal two times of the Senegal population. 
+
+
+```{r}
+library(magrittr)
+corona_nw <-filter(coronavirus,country %in% c("Algeria","Mauritania","Mali", "Morocco", "Senegal"))
+Death_country<- corona_nw %>% filter(type == "death")
+c<- Death_country %>% group_by(country) %>% mutate(cum_cases = cumsum(cases))
+g <-ggplot(d, aes(x=date, y=cum_cases, colour = country)) + geom_path(size = 1) +labs(title = "Total No.of Death, cases in countries", x= "Date", y = " Total Number Of Deaths")
+ggplotly(g)
+
+```
+
+Figure 13: Total Number Of confirmed Cases in neighbors Country.
+
+Figure 13 shows that the total number of deaths of the neighbor countries. Algeria, Morocco and Senegal have a highest total deaths than the Mauritania. But those three countries population also higher than the Mauritania.
+However, All countries total deaths are increase with the time.
+
+```{r}
+corona_nw <-filter(coronavirus,country %in% c("Algeria","Mauritania","Mali", "Morocco", "Senegal"))
+Recovered_country<- corona_nw %>% filter(type == "recovered")
+c<- Recovered_country %>% group_by(country) %>% mutate(cum_cases = cumsum(cases))
+g <-ggplot(d, aes(x=date, y=cum_cases, colour = country)) + geom_path(size = 1) +labs(title = "Total No.of Recovered, cases in countries", x = " Date", y =" Total Number of Recovered")
+ggplotly(g)
+
+
+```
+Figure 14: Total Number Of confirmed Cases in neighbors Country.
+
+Figure  14 shows that the total number of Recovered of the neighbor countries. Algeria, Morocco and Senegal have a highest total Recovered than the Mauritania. But those three countries population also higher than the Mauritania.However, All countries total Recovered cases are increase with the time.
+
+### **4. Conclusions & Discussion.**
+
+*  Covid 19 Confirmed cases in the Mauritania is can be seen the three separate clusters. Highest value of the confirmed cases is 401 in 2021.07.29. consider the three separate clusters, effect to the these three clusters can be the cultural or festival of the Mauritania. Because this festival gathering peoples to the Islamic religious places. That can be effect to the spread of the Covid 19. then consider the second cluster stat from the 2020.11.04. they celebrate the Mouloud festival(Birthday of Muhammad). that can be affect to the increase of the Covid 19 cases. Again also third increasing cluster happen after the Eid al -Fitr day in 13-05-2021.
+
+*  Consider the Covid 19 Death cases, when increasing the Number of confirmed cases  number of Deaths cases and number of Recovered cases also increases. Highest number of deaths is 13.
+
+*  Consider the neighbor Countries, Compare the Confirmed  cases of the Mauritania, the rate of the growth Covid 19 cases has low values that other neighbor countries without Mali. the reasons of this situation can be total population of the each countries. Hence consider the population, compare the Mali Covid 19 confirmed cases  the  Mauritania is not in good situation.
+
+*   Consider the relationship between the Death cases and Recovered cases of Mauritania is weakly linear relation.(correlation = 0.74)
+
+* Number of Confirmed cases in the 2021 highest tht the confirmed cases of 2020.
+
+
+### **5.Suggestions**
+
+* If the Government of Mauritania  can impose the lock down in the country. It's can be help to reduce the Confirmed Covid 19 cases.
+ 
+* In the Mauritania, generally family has 10 or more family member and also most of peoples are worked for hire. then the lock down period is nt to their family life. if government can give them foods and their essentials. it's good for the reduce the covid cases and also poor citizens.
+
+
+### **6. References.**
+
+* https://en.wikipedia.org/wiki/Mauritania
+* https://weather-and-climate.com/average-monthly-Rainfall-Temperature-Sunshine-in-Mauritania
+* https://projectionist.org/top-diseases-mauritania/
+* https://www.sciencedirect.com/science/article/pii/S2052297520301402
+* https://www.garda.com/crisis24/news-alerts/464366/mauritania-covid-19-restrictions-in-effect-nationwide-as-of-april-7-update-17
+* https://www.antislavery.org/mauritania-lockdown-helping-the-most-vulnerable/
+* https://www.google.com/search?q=population+of+senegal+2021&oq=&aqs=chrome.4.35i39i362j46i39i175i199i362j35i39i362l6...8.5372875j0j7&sourceid=chrome&ie=UTF-8
+* https://www.google.com/search?q=population+of+morocco+in+2021&oq=&aqs=chrome.2.35i39i362j46i39i175i199i362j35i39i362l6...8.5418854j0j7&sourceid=chrome&ie=UTF-8
+* https://www.worldtravelguide.net/guides/africa/mauritania/public-holidays/
+* https://www.worldtravelguide.net/guides/africa/mauritania/public-holidays/
+* https://statisticsglobe.com/draw-grouped-barplot-in-r
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,86 @@
+---
+title: "COVID-19 Pandamic in North Macedonia"
+author: "P.S.G.D.D.Jayarathna-AS2017392"
+date: "28/09/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,echo=FALSE}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2017392")
+install.packages("coronavirus")
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+unique(coronavirus$country)
+library(tidyverse)
+library(magrittr)
+nm_corona <- coronavirus %>% filter(country == "North Macedonia")
+confirm_nm_corona <- nm_corona %>% filter(type=="confirmed")
+head(confirm_nm_corona)
+recover_nm_corona <- nm_corona %>% filter(type=="recovered")
+head(recover_nm_corona)
+death_nm_corona <- nm_corona %>% filter(type=="death")
+head(death_nm_corona)
+```
+
+# **1.Introduction**
+![](north m.jpg)
+
+## **1.1.Visualization of the location**
+
+```{r message=FALSE,warning=FALSE,echo=FALSE}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+nm_corona <- coronavirus %>% filter(country == "North Macedonia")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p<- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y= lat, group=group), fill ="gray", colour="white"
+  ) +
+  coord_cartesian(xlim = c(-180,180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180,180,120))+
+  scale_y_continuous(breaks = seq(-90,90,100))
+
+p +
+  geom_point(
+    data = nm_corona, aes(x=long, y=lat), color = "red",size
+    =1
+  )
+
+```
+## **1.2.Climate Condition**
+
+ North Macedonia has a diverse climate, with eight distinct climate zones: sub-Mediterranean, moderate continental sub-Mediterranean, warm continental, cold continental, sub-forest continental mountainous, forest continental mountainous, sub-alpine mountainous, and alpine mountainous. Notable ecosystems include: temperate forests, grasslands, and wetlands. The average annual temperatures range from 10.1°C to 14.3°C with significant variation between regions and throughout the year; in January, the monthly
+average dips below zero, to -0.9°C, while in July and August the monthly average reaches 20.3°C. Driven by differences in elevation, two basic rainfall regimes exist in North Macedonia, the Mediterranean and continental. Regions in the Mediterranean regime experience high levels of rainfall in October through December, while regions in the continental regime see most of their rainfall in the months of May and June.Annual precipitation totals about 1,000 mm in the wettest areas and 400 mm in the driest. The mountain ranges in the west have the largest amount of precipitation, with the summit of Baba Mountain receiving around 1,000 mm annually. Regions in central and southern areas of the country are the driest, with less than 400 mm of annual precipitation.
+
+## **1.3.Lock-down status of the country**
+
+## **1.4.Actions taken by the government**
+
+# **2.Exploratory Data Analysis**
+  *Visualization of death, confirmed, recovered, active cases
+  *Comparison with other countries
+  
+#**3.Conclusions and Discussion**
+

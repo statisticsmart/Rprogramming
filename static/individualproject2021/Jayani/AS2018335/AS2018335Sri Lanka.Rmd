@@ -1,0 +1,185 @@
+# AS2018335 - P.H.U.Devindi
+## Coronavirus Sri Lanka Report
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+Sri_Lanka_Corona <- coronavirus %>% filter(country == "Sri Lanka")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+```
+
+## Introduction
+### Location of Sri Lanka
+
+estination Sri Lanka, an island nation in the Indian Ocean, located between the Laccadive Sea in west and the Bay of Bengal in east. The island is situated about 30 km south east of the southern coast of India.
+
+**Sri Lanka in the world map**
+```{r}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p +
+  geom_point(
+    data =  Sri_Lanka_Corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+### Climate condition in Sri Lanka
+
+Sri Lanka's climate is tropical and consists of distinct wet and dry seasons. Generally speaking, the coastal areas of Sri Lanka enjoy temperatures averaging 28°C (82°F) while the upland areas are cooler and more temperate, with a yearly average around 16-20°C (60-68°F).
+
+### Lock-down status of Sri Lanka and actions tacken by the government
+
+On March 11, 2020, the World Health Organization (WHO) declared COVID-19 a global pandemic. Sri Lanka was extremely vulnerable to the spread of the virus because of its thriving tourism industry and large expatriate population. The first case was detected on January 27, 2020 and the first Sri Lankan national tested positive for COVID-19 on March 10, 2020. In response, the Government of Sri Lanka rapidly introduced measures to curb the spread of the disease and imposed a strict island wide lockdown on March 16, 2020. After that Sri Lankan government imposed a island wide lockdown in several times. Sri Lanka is still in a island wide lockdown state.
+
+
+## Exploratory Data Analysis
+```{r}
+Sri_Lanka_Corona <- as.data.frame(Sri_Lanka_Corona)
+head(Sri_Lanka_Corona)
+```
+
+```{r}
+tail(Sri_Lanka_Corona)
+```
+
+```{r}
+summary(Sri_Lanka_Corona)
+```
+
+### Visualization of death, confirmed, recovered, active cases 
+
+```{r}
+death_cases <- filter(Sri_Lanka_Corona, type == "death")
+
+ggplot(death_cases,aes(date, cases)) + geom_path(size=1) + labs(title = "Death cases in Sri Lanka")
+```
+
+```{r}
+confirmed_cases <- filter(Sri_Lanka_Corona, type == "confirmed")
+
+ggplot(confirmed_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Confirmed cases in Sri Lanka")
+```
+
+
+```{r}
+recovered_cases <- filter(Sri_Lanka_Corona, type == "recovered")
+
+ggplot(recovered_cases, aes(date, cases)) + geom_path(size=1) + labs(title = "Recovered cases in Sri Lanka")
+```
+
+```{r}
+Sri_Lanka_Corona <-  Sri_Lanka_Corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(Sri_Lanka_Corona, aes(date, cum_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Confirmed, Death, Recovered cases in Sri Lanka")
+```
+
+Above graph shows that total number of Confiremed, Death and Recovered cases in Daily. It shows that number of daily confirm cases are higher than death cases and recovered cases.
+
+### Comparison with other countries
+
+**Neighbour Countries for Sri Lanka**
+
+```{r}
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(70, 90), ylim = c(-10, 30)) +
+  scale_x_continuous(breaks = seq(-120, 0,20)) +
+  scale_y_continuous(breaks = seq(-70,10,10))
+
+
+p +
+  geom_point(
+    data = Sri_Lanka_Corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+```
+
+**List of Neighbour Countries for Sri Lanka**
+
+```{r}
+neighbourcountries <- subset.data.frame(coronavirus, ( -10< lat & lat < 30) & (70 < long & long < 90) )
+
+count(neighbourcountries,country)
+```
+India, Maldives and Nepal are the most near countries for Sri Lanka.
+
+```{r}
+other_countries <- filter(coronavirus, country == "India"|country =="Maldives"|country =="Nepal"|  country =="Sri Lanka")
+count(other_countries,country)
+
+p +
+  geom_point(
+    data = other_countries , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=other_countries$long, y=other_countries$lat, label=other_countries$country))
+```
+
+```{r}
+confirmed_other_countries <- filter(other_countries, type == "confirmed")
+death_other_countries <- filter(other_countries, type == "death")
+recovered_other_countries <- filter(other_countries, type == "recovered")
+
+ggplot(confirmed_other_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Comparison of Daily Confirmed cases in Sri Lanka with other neighbour countries")
+```
+
+```{r}
+ggplot(death_other_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Comparison of Daily Death cases in Sri Lanka with other neighbour countries")
+```
+
+```{r}
+ggplot(recovered_other_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Comparison of Daily Recovered cases in Sri Lanka with other neighbour countries")
+```
+
+```{r}
+ggplot(other_countries, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Comparison of Daily Confirmed, Death and Recovered cases in Sri Lanka with other neighbour countries")
+```
+
+##  Conclusions and Discussion 
+
+The government of Sri Lanka has implemented control measures. Those are island wide curfew, interdistrict travel restriction, and lockdown of high-risk villages to reduce the growth rate of the coronavirus.
+
+Result is over several contact rate values suggest that the reduction of contact rate by not less than 50% would make the outbreak easier to control. History of the infected individual and quarantining them could contribute to reducing the overallcoronavirus outbreak. Ideal one is self-quarantine. The human mobility inside the country has to be regulated or restricted, in order to stop the disease being transmitted. Self  safety is my main priority of every person.
+
+
+## References
+https://www.hindawi.com/journals/jam/2020/2954519/
+
+https://www.worldtravelguide.net/guides/asia/sri-lanka/weather-climate-geography/#
+
+https://www.worldbank.org/en/results/2020/10/21/sri-lanka-covid-19-response-saving-lives-today-preparing-for-tomorrow
+
+
+
+# ----AS2018335----

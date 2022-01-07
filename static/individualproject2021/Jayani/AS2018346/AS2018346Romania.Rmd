@@ -1,0 +1,373 @@
+---
+title: "An Analysis of Covid-19 pandemic in Romania"
+author: "Sadrushi Dissanayake (AS2018346)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE, echo=FALSE)
+```
+
+### 1.	Introduction
+
+#### 1.1 About Romania  ![](flag.jfif){width=5%}  
+
+Romania is a country located in southeastern Europe with an area of 238,397 sq. km. It is the 12th largest country in Europe. Romania is divided into 41 counties and one municipality. The largest city and the capital in Romania are Bucharest. According to the 2020 statistics, Romania’s population was 19,237,691; as of 25th September 2021, the population is 19,079,654. Romania shares borders with Ukraine to the north, Bulgaria to the south, Hungary to the west, Moldova to the northeast, and Serbia to the southwest.
+
+```{r}
+# map
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(devtools)
+library(sta3262)
+library(coronavirus)
+
+data("coronavirus")
+data("wrld_simpl")
+
+romania_corona      <- coronavirus     %>% filter(country == "Romania")
+
+plot1_map <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+plot1_map + geom_point(data = romania_corona, aes(x = long, y = lat), color = "red", size = 1) + labs(x = "Longitude", y = "Latitude") 
+
+```
+
+
+
+#### 1.2	Climate condition in Romania
+
+Romania has a continental and temperate climate. There are four seasons with mild springs, hot summers, cool and dry autumns, and cold winters.
+
+
+* __Spring__
+     + •	Romania has spring from March to May. In spring, mornings and nights are cool while days are warm.
+       
+      
+*	__Summer__ 
+      + •	Summer lasts from June to August. Generally, summer is hot and sunny; however, thunderstorms can occur mainly in the afternoon during May and July. Lowlands in eastern and southern Romania are the hottest areas in summer. For example, the temperature in Bucharest can reach or exceed 35 °C on a hot day.
+      
+      
+*	__Autumn__ 
+      + •	Autumn starts in September and continues until November. Autumn is dry and has lower temperatures than in spring.
+       
+       
+*	__Winter__ 
+      + •	Winter is from December to February. Winters are cold through the country, often with cloudy skies. Snowfalls are common in winter. There are about thirty days with snowfalls in inland plains every year. The Winter season in Bucharest is cold, with snowfall and frost, and the temperature can decrease to -15 °C.
+      
+      
+#### 1.3	About Covid-19 
+
+Covid-19 is a respiratory illness caused by the SARS-CoV-2 virus. WHO discovered this new virus on 31st December 2019 through a report regarding a cluster of viral pneumonia cases in Wuhan city, China. The virus can spread from an infected person’s mouth or nose in small liquid particles when they cough, sneeze, speak or breathe. The most common symptoms of infected people are fever, cough, tiredness, and loss of taste or smell. Polymerase chain reaction test (PCR) detects infected people by taking samples from the nose and/or throat with a swab. Maintaining a one-meter distance from others, wearing a properly fitted mask, washing hands using soap or alcohol-based rub, and getting vaccinated helps protect from infection. WHO has recommended AstraZeneca, Johnson, and Johnson, Moderna, Pfizer, Sinopharm, and Sinovac vaccines against COVID-19.
+
+#### 1.4	Actions taken by the Romanian government regarding covid-19
+
+Romanian government has taken many measures to prevent the spread of covid-19. The following are some of them,
+*	People returning from "red zones" such as China, Iran and Italy were quarantined and tested.
+
+*	Schools were closed on March 11, 2020, for the first time until March 22, and then until April 22, 2020.
+
+*	The President of Romania announced a state of national emergency for the entire country on 16th March 2020, for 30 days. The decree grants the CNSSU more authority. (CNSSU – Comitetul naţional pentru situaţii speciale de urgenţă). However, CNSSU’s initial actions were only focused on increasing the capacity of the public health system and the national emergency response system.
+
+*	In response to the increasing health crisis, the government enacted its first Military Ordinance on 17th March. A second Military Ordinance was on 21st March, stating that no groups greater than three persons should be on the streets. From 10 p.m. to 6 a.m., there is a curfew. In addition, all shopping malls were closed except for the sale of food, veterinary or pharmaceutical products, and cleaning services.
+
+*	work from home was recommended for all employers.
+
+*	•	On 4th April, several counties and municipalities recommended locals to wear protective masks, whether professional or homemade.
+
+*	The vaccination campaign began on 27th December and was separated into three phases.
+
+*	Romania entered the second phase of the COVID-19 vaccination process on January 15, 2021, when President Klaus Iohannis was vaccinated against the virus.
+
+*	Romania entered the third phase of the COVID-19 vaccination campaign on March 15 2021 where the general public who are 16 years or older got vaccinated.
+
+* The Romanian government approved COVID-19 vaccines Pfizer-BioNTech, Moderna, AstraZeneca, and Johnson & Johnson. 
+
+#### 1.5	Lock down status of Romania
+
+The first nationwide lockdown was on March 17. Between March and May, Romanians had strict COVID-19 lockdown.
+
+
+### 2. Exploratory Data Analysis
+
+```{r}
+# Loading Libraries
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+library(skimr)
+
+```
+
+```{r, eval=FALSE}
+# Getting the country
+get_individual_project_country("AS2018346") # Romania
+
+# Getting corona virus and vaccinated data
+data("coronavirus")
+data("covid19_vaccine")
+
+```
+
+
+#### 2.1 Summary of data
+
+The data was obtained from the "coronavirus" package in R.The "coronavirus" package contains a tidy format "dataset" of the 2019 Novel COVID-19 (2019-nCoV) pandemic and country-level vaccination measures. The raw data was obtained from the "Coronavirus" repository at Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE).
+
+##### **Data summary for "coronavirus" data set**
+
+```{r}
+# extracting Romania data
+romania_corona      <- coronavirus     %>% filter(country == "Romania")
+romania_vaccination <- covid19_vaccine %>% filter(country_region == "Romania")
+
+# About Romania corona virus data set
+skim(romania_corona)
+
+```
+
+There are three character variable province, country and type. For Romania provice data are not available.type variable indicate confirmed, recovered and death cases.
+Data represent values from 22nd January 2020 to 18th September 2021.lat and long represent latitude and longitude of the country respectively. Variable "cases" consist of 45 missing values.
+
+
+##### **Data summary for "covid19_vaccine" data set**
+
+```{r}
+# extracting Romania data
+romania_vaccination <- covid19_vaccine %>% filter(country_region == "Romania")
+
+# About Romania vaccine data set
+skim(romania_vaccination)
+
+```
+
+Data represent daily summary of the COVID-19 vaccination in Romania. The total number of people who received at least one dose of vaccination is indicated by people_partially_vaccinated variable.The total number of people who received all of the required vaccine doses are classified as people_fully_vaccinated.
+
+
+#### 2.2 Covid-19 impact on Romania
+
+```{r}
+# wide format of data set by adding active cases
+romania_corona_wide_format <- romania_corona %>% 
+  pivot_wider(names_from = "type", values_from = "cases") %>% 
+  mutate(active = cumsum(confirmed - (death + recovered)))
+
+# long format of data
+romania_corona <- romania_corona_wide_format %>% 
+  pivot_longer(6:9, names_to = "type", values_to = "cases")
+
+# extracting data according to type
+confirmed_corona <- romania_corona %>% filter(type == "confirmed")
+death_corona     <- romania_corona %>% filter(type == "death")     
+recovered        <- romania_corona %>% filter(type == "recovered") 
+recovered_corona <- recovered[!is.na(recovered$cases), ] # omit NA by column cases
+active           <- romania_corona %>% filter(type == "active") 
+active_corona    <- active[!is.na(active$cases), ]      # omit NA by column cases
+
+```
+
+```{r}
+# Plot for confirmed cases
+average.confirm.cases <- mean(confirmed_corona$cases)
+firstcase <- confirmed_corona %>% filter(date == "2020-02-26")
+plot1 <- ggplot(confirmed_corona, aes(x = date, y = cases)) + geom_line(color = "red") + 
+  geom_point(data = firstcase, aes(x = date, y = cases), color = "black", size = 1) +
+  labs(title = "Daily Confirmed Covid-19 cases in Romania", x = "Date", 
+       y = "Confirmed Cases") 
+ggplotly(plot1)
+
+```
+
+First corona virus case was found on 26th February 2020 (represented by the black dot). Then after March 2020 the number of daily confirmed cases were increased rapidly. Maximum number of daily confirmed cases was reported on November 18th 2020 with 10269 cases. The number of confirmed cases decreased after the maximum confirmed case was reported. Again there is an increase in confirmed cases after the 25th February 2021. Cases was increased for about a month and suddenly drop while reporting less than 500 cases per day. After mid August 2021 there is an increase of cases and as of September 18th repoted daily confirmed cases was 5388.
+
+
+```{r}
+# Plot for death cases
+average.death.cases <- mean(death_corona$cases)
+first.deaths <- death_corona %>% filter(date == "2020-03-22")
+plot2 <- ggplot(death_corona, aes(x = date, y = cases)) + geom_line(color = "blue") + 
+  geom_point(data = first.deaths, aes(x = date, y = cases), color = "red", size = 1) +
+  labs(title = "Daily Covid-19 Death cases in Romania", x = "Date", 
+       y = "Death Cases") + 
+  geom_hline(yintercept = average.death.cases) 
+ggplotly(plot2)
+
+```
+
+As represented by the red dot first three covid-19 deaths  was reported on 22th March 2020. According to Romania all three were suffering from pre-existing conditions, one was on dialysis, another was dying of lung cancer, and the third had diabetes. The highest number of daily deaths were reported on 29th June 2021 which was 294 cases. The average death cases according to data was 58.50825 per day (represent by blck line). Most of the daily death cases was above average between 7th October 2020 to 29th June 2021. There was a decrease in daily deaths between July and Semptember. However on September 18th 97 cases were reported.
+
+
+```{r}
+# Plot for recovered cases
+plot3 <- ggplot(recovered_corona, aes(x = date, y = cases)) + 
+  geom_line(color = "forestgreen") + 
+  labs(title = "Daily Recovered Covid-19 cases in Romania", x = "Date", 
+       y = "Recovered Cases") 
+ggplotly(plot3)
+
+```
+
+There is a significant spike on September 18, 2020 with 44991 recovered cases. According to data except for this point maximum daily recovered cases reported were 13088 which was on November 29th 2020. This might be due to data entry error or could be an actual value.
+
+
+```{r}
+# Plot for active cases
+plot4 <- ggplot(active_corona, aes(x = date, y = cases)) + 
+  geom_line(color = "orange") + 
+  labs(title = "Total Active COVID-19 cases in Romania", x = "Date",
+       y = "Total Active Cases") 
+ggplotly(plot4)
+
+```
+
+Highest number of active cases was on November 27th 2020 which was 120307. Then number of active cases were gradually decreases again after mid February active cases increased up to 78839 total cases as of April 2021. On August 4th 2021 total number of active cases were deceased up to 1612 cases.
+
+
+```{r}
+# plot for partially vaccinated people
+plot6 <- ggplot(data = romania_vaccination, aes(x = date, y = ((people_partially_vaccinated/population)*100))) + 
+  geom_line(color = "purple") +
+  scale_y_continuous(labels = function(y) paste0(y, "%")) +
+  labs(title = "Percentage of partially vaccinated people", x = "Date",
+       y = "Percentage") + scale_x_date(date_labels = "%Y-%m")
+ggplotly(plot6) 
+
+```
+
+
+```{r}
+# plot for fully vaccinated people
+plot <- ggplot(data = romania_vaccination, aes(x = date, y = people_fully_vaccinated)) + 
+  geom_line(color = "purple") +
+  scale_y_continuous(labels = function(y) paste0(y/1000000, " million")) +
+  labs(title = "Number of people fully vaccinated against Covid-19", x = "Date",
+       y = "Total number of people") + scale_x_date(date_labels = "%Y-%m")
+ggplotly(plot) 
+
+```
+
+
+As of September 17th 2021 28% of people has received at least one dose of vaccination and more than 5 million people were fully vaccinated against Covid-19.
+
+
+
+## 2.3 Comparison with other countries
+
+Romania confirmed and death cases were compared with the neighbouring ccountries such as Bulgaria, Hungary, Moldova and Ukaraine.
+
+
+```{r}
+# Getting neighbour countries coronavirus data
+country_corona <- coronavirus %>% 
+  filter(country %in% c("Bulgaria", "Hungary", "Moldova", "Romania", "Ukraine")) %>%
+  select(-c(province, lat, long))
+# wide format of data
+neighbour.country.corona <- country_corona %>% 
+  pivot_wider(names_from = "type", values_from = "cases") %>% group_by(country) %>%
+  mutate(Total.Confirmed = cumsum(confirmed), Total.Death = cumsum(death))
+
+```
+
+```{r}
+# plot for confirmed cases
+plot7 <- ggplot(neighbour.country.corona, aes(x = date, y = log(Total.Confirmed))) +   geom_line(aes(color = country)) + 
+  labs(title = "Cumulative Confirmed Covid-19 cases", y = "Total confirmed cases in log scale") +
+  scale_color_brewer(type = "qual", palette = "Dark2") 
+ggplotly(plot7)
+
+```
+
+Romania had the highest confirmed cases than other countries until May 11 2020. Then
+Ukraine confirmed cases increased and remain highest than other four countries. 
+Hungary, Bulgaria and Moldova had relatively low confirmed cases than Romania.
+
+
+```{r}
+# plot for death cases
+plot8 <- ggplot(neighbour.country.corona, aes(x = date, y = log(Total.Death))) + 
+  geom_line(aes(color = country)) + 
+  labs(title = "Cumulative Covid-19 Death cases", y = "Total death cases in log scale") +
+  scale_color_brewer(type = "qual", palette = "Dark2") 
+ggplotly(plot8)
+
+```
+
+Romania had highest deaths compared to other countries between March 23rd and October 21st 2020. Then Ukraine had the highest deaths. Moldova had the lowest deaths compared to Bulgaria, Hungary, Romania and Ukraine after 12th November 2020.
+
+
+```{r}
+# Getting neighbour countries corona vaccination data
+country_vaccination <- covid19_vaccine %>% 
+  filter(country_region %in% c("Bulgaria", "Hungary", "Moldova", "Romania")) 
+plot10 <- ggplot(country_vaccination, aes(x = date, y = ((people_fully_vaccinated/population)*100))) + 
+  geom_line(aes(color = country_region)) + 
+  scale_y_continuous(labels = function(y) paste0(y, "%")) +
+  labs(title = "Percentage of fully vaccinated people", x = "Date",
+       y = "Percentage") +
+  scale_color_brewer(type = "qual", palette = "Dark2") +scale_x_date(date_labels = "%Y-%m")
+ggplotly(plot10)
+
+```
+
+According to 17th September 2021 data 57% of population in Hungary had fully vaccinated while 27% of Romanian people had vaccinated against covid-19. Both Bulgaria and Moldova had fully vaccinated about 18% of the population.
+
+
+### Discussion and Conclusion
+
+Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) decided to stop tracking the Covid19 recovery cases as of 4th August 2021. Therefore coronavirus data set contains 45 missing values from recovered cases after 5th August 2021. All the rows of recovered cases that had missing values were removed before analyzing. After removing missing values of recovered cases, cumulative active cases were calculated up to 4th August 2021 by taking the difference between the cumulative sum of confirmed cases and cumulative sum of recovered and death cases.
+
+In Romania, the number of corona patients increased significantly after July 2020, and the maximum number of cases was reported on 18th November 2020. By the end of the year 2020, there was a decrease in confirmed corona cases. Again after February 2021, there is a growth of cases; however, it only lasts for a month. The number of confirmed cases was dropped rapidly after March. Again in September, there was a rise in daily confirmed cases. Nevertheless, daily confirmed corona patients in 2021 were significantly lower than in the year 2020. When compared to daily confirmed cases in
+Bulgaria, Hungary, Moldova, and Ukraine, total confirmed cases reported on 18th September were slightly lower than Ukraine but higher than Bulgaria, Hungary, and Moldova.
+
+There was an increase in the number of death cases at the end of the year 2020. 213 death cases were reported on 8th December, which was the maximum death case for 2020. Daily death cases reported in 2021 were higher than in the year 2020. On 29th June highest death cases were reported with (294) cases. There is a decrease in daily confirmed death cases between July and September. Compared to total death cases as of 18th September 2021 with neighboring countries, Romania cases were lower than in Ukraine. Romania and Hungary reported almost the same number of death cases. However, there is a significant difference in Romania’s death cases when compared with Moldova and Bulgaria.
+
+Romania started the vaccination program on 27th December 2020 and held in three stages. The first stage began on 27th December, then the second stage started on 15th January 2021. The final stage was started on 15th March. When the third phase started, 7% of people were partially vaccinated, and 722,956 were fully vaccinated. As of 17th September 2021, 28% of people were partially vaccinated, and 5.2 million were fully vaccinated.
+
+When compared to confirmed cases per day for the year 2020, the year 2021 cases were lower. This might be due to their early vaccination program. Total number of active cases also dropped in 2021 than in the year 2020. Therefore, based on data, we can conclude that Romania has successfully controlled the spread of the virus in 2021 than in 2020.
+
+
+
+### References
+
+1. [Romania Maps & Facts](https://www.worldatlas.com/maps/romania#:~:text=Romania%20is%20bordered%20by%205%20European%20Nations%3A%20Ukraine,Bordering%20Countries%20%3A%20Ukraine%2C%20Hungary%2C%20Bulgaria%2C%20Moldova%2C%20Serbia.)
+
+2. [Romania Population (2021)](https://www.worldometers.info/world-population/romania-population/)
+
+3. [Romania climate](https://www.climatestotravel.com/climate/romania)
+
+4. [What Type Of Climate Does Romania Have?](https://www.worldatlas.com/articles/what-type-of-climate-does-romania-have.html)
+
+5. [Climate & Weather in Romania](https://www.romaniatourism.net/culture-history/weather-romania/)
+
+6. [Climate and weather in Romania | Rolandia](https://rolandia.eu/en/blog/others/climate-and-weather-in-romania)
+
+7. [Coronavirus](https://www.who.int/health-topics/coronavirus#tab=tab_1)
+
+8. [COVID-19 Vaccines Advice](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/covid-19-vaccines/advice)
+
+9. [COVID-19 Information | U.S. Embassy in Romania](https://ro.usembassy.gov/covid-19-information/)
+
+10. [COVID-19 pandemic in Romania - Wikipedia](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Romania#Timeline)
+
+11. [coronavirus package](https://ramikrispin.github.io/coronavirus/index.html)
+
+
+
+
+
+
+
+

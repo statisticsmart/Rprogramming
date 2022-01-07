@@ -1,0 +1,384 @@
+---
+title: "Covid-19 Impact in Mali"
+author: "Maheshi Piumika Panditha - AS2017457"
+date: "9/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE , message=FALSE, warning=FALSE,echo=FALSE, out.width="100%"}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE,warning=FALSE}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+```
+
+```{r, message=FALSE,warning=FALSE}
+library(sta3262)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE,results='hide'}
+get_individual_project_country("AS2017457")
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(coronavirus)
+```
+
+```{r, message=FALSE, warning=FALSE}
+data(coronavirus)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+```{r, message=FALSE, warning=FALSE}
+Mali_corona <- coronavirus %>% filter(country == "Mali" )
+```
+
+
+
+
+# 1. Introduction
+
+## 1.1 Visualization of the location
+
+Mali is a landlocked country in West Africa, located southwest of Algeria.Mali is the world's 24th-largest country and it is the eighth-largest country in Africa, with an area of just over 1,240,000 square kilometres (480,000 sq mi). Mali borders Algeria to the north-northeast, Niger to the east, Burkina Faso to the south-east, Ivory Coast to the south, Guinea to the south-west, and Senegal to the west and Mauritania to the north-west.Its capital and largest city is Bamako.The population of Mali is 19.1 million. 
+
+![](188px-Flag_of_Mali.svg.png)   ![](128px-Coat_of_arms_of_Mali.svg.png)
+
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Mali_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+```
+
+## 1.2 Climate Condition in Mali
+
+Mali is one of the hottest countries in the world. The thermal equator, which matches the hottest spots year-round on the planet based on the mean daily annual temperature, crosses the country. Most of Mali receives negligible rainfall and droughts are very frequent. Late April to early October is the rainy season in the southernmost area. During this time, flooding of the Niger River is common, creating the Inner Niger Delta. 
+
+The vast northern desert part of Mali has a hot desert climate (Köppen climate classification BWh) with long, extremely hot summers and scarce rainfall which decreases northwards. The central area has a hot semi-arid climate (Köppen climate classification BSh) with very high temperatures year-round, a long, intense dry season and a brief, irregular rainy season. The southern areas have a tropical wet and dry climate (Köppen climate classification Aw) very high temperatures year-round with a dry season and a rainy season. 
+
+During the hottest season of the year, temperatures are high throughout the country. Timbuktu, Taoudenni, Araouane, Gao, Kidal, Tessalit are some of the hottest spots on Earth during their warmest months. Kayes, with an average high temperature of about 44° (111.2°) in April is nicknamed "the pressure cooker of Africa" due to his extreme heat year-round.  Mali has overall a hot, sunny and dry climate dominated by the subtropical ridge.
+
+![](450px-Koppen-Geiger_Map_MLI_present.svg.png)
+(Source:*https://en.wikipedia.org/wiki/Mali*)
+
+## 1.3 Lock-down status of Mali
+
+### Travel Restrictions
+
++Entry For Vaccinated Travelers: Partially Allowed
+Vaccination Requirements: As from 30th June 2021, all arrivals from the UK need to present proof of full vaccination with14 days after the second dose.
+
++As from the 1st July 2021 the Superintendent of Public Health is recognising and accepting the following vaccination certificate : -“NHS COVID Pass “– NHS Coronavirus (COVID-19) vaccination record – full course of vaccination with 14 days after last dose
+-“EU Digital COVID Certifcate (Vaccination Certifcate) “ full course of vaccination with 14 days after last dose
+
++Children aged 5-11 can travel if they are accompanying their vaccinated parents/legal guardian and must show evidence of a negative pharyngeal Polymerase Chain Reaction (PCR) test, dated within 72 hours before arrival. Children under 5 do not need a test. Children aged 12-18 will only be able to travel if they have proof of full vaccination.If you have a recognised certificate of vaccination you are exempt from pre-travel testing and self-isolation.
+
+
+### Movement Restrictions
+
+Is a curfew in place? No
+Are there restrictions on intercity or interstate travel? No
+Tourist Entry: Partially Allowed
+Testing: Negative PCR test is required for all country.
+Quarantine Required: Depends
+Quarantine Details: Quarantine for 14 days days required for some countries.
+
+Local Restrictions
+Lockdown in Effect: Partial
+Events: Partially Allowed
+Transport: Operational
+Shopping: Open
+Restaurants and Bars: Open with restrictions
+
+
+
+## 1.4 Actions taken by the government
+
+he Government of Mali has announced that as of September 19, 2021, there were 15,163. confirmed cases of COVID-19 in Mali, including 547 deaths and 14,264 recoveries.
+The Government of Mali has implemented enhanced screening and quarantine measures to reduce the spread of COVID-19.  Travelers should be prepared for additional travel restrictions to go into effect with little or no advanced notice.
+Check with your airline prior to travel regarding restrictions and COVID-19 testing requirements for Mali and for any countries through which you intend to travel to and from Mali.  You may be required to present a negative COVID-19 test result prior to departing Mali.
+ 
+In 2020 at the beginning of this Covid - 19 the Government of Mali has taken the following additional steps.
+
+*Face masks are mandatory in public.   
+
+*Schools and universities have allowed students with mandatory exams to return, but schools remain closed to most students.
+
+*Sporting events, festivals, and gatherings larger than 50 people have been banned, and bars and night clubs have also been closed.
+
+*Vehicle occupancy has been restricted to promote social distancing.
+
+*The work schedule for all government offices (with the exception of defense, security, and health) has been reduced to 7:30 a.m. to 2:00 p.m. Monday through Friday. 
+
+# 2. Data Exploration
+
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(skimr)
+skim(coronavirus)
+summary(Mali_corona)
+```
+
+## 2.1 Visualization of the Spread of COVID-19 in Mali
+
+### 2.1.1 COvid -19 Cases in Mali 
+
+```{r, message=FALSE, warning=FALSE}
+library(plotly)
+
+Mali_corona %>% 
+  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  mutate(active_total = cumsum(active),
+                recovered_total = cumsum(recovered),
+                death_total = cumsum(death)) %>%
+  plot_ly(x = ~ date,
+                  y = ~ active_total,
+                  name = 'Active', 
+                  fillcolor = '#1f77b4',
+                  type = 'scatter',
+                  mode = 'none', 
+                  stackgroup = 'one') %>%
+  add_trace(y = ~ death_total, 
+             name = "Death",
+             fillcolor = '#E41317') %>%
+  add_trace(y = ~recovered_total, 
+            name = 'Recovered', 
+            fillcolor = 'forestgreen') %>%
+  layout(title = "Distribution of Covid19 Cases in Mali",
+         legend = list(x = 0.1, y = 0.9),
+         yaxis = list(title = "Number of Cases"),
+         xaxis = list(title = "Date"))
+
+```
+
+According to the above plot we can see even though there is an increasing pattern number of death cases and active cases more than half of corona patients have been recovered.
+
+```{r, message=FALSE, warning=FALSE}
+confirmed_Mali_corona <- Mali_corona %>% filter(type=="confirmed")
+```
+
+```{r, message=FALSE, warning=FALSE}
+
+library(plotly)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+recovered_Mali_corona <- Mali_corona %>% filter(type=="recovered")
+```
+
+
+
+```{r, message=FALSE, warning=FALSE}
+death_Mali_corona <- Mali_corona %>% filter(type=="death")
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+death_Mali_corona <- Mali_corona %>% filter(type=="death")
+```
+
+### 2.1.2 COvid -19 Cases in Mali -2020
+
+```{r, message=FALSE, warning=FALSE}
+library(gganimate)
+library(lubridate)
+
+Mali_2021 <- subset(Mali_corona,date>"2021-01-01" & date<"2021-10-01" )
+Mali_2020 <- subset(Mali_corona,date>"2020-01-01" & date<"2020-12-31" )
+p3 <- ggplot(Mali_2020, aes(x= date, y=cases,col=type),is.na=FALSE)  +geom_line() + ggtitle("Mali: Daily Covid-19 in 2020 ") + transition_reveal(date)+ facet_grid(~type)
+ggplotly(p3)
+``` 
+
+### 2.1.3 COvid -19 Cases in Mali -2021
+
+```{r, message=FALSE, warning=FALSE}
+Mali<-Mali_2021 %>% group_by(type,date) %>% pivot_wider(names_from = type, values_from = cases)
+ggplot(Mali, aes(x=date)) + 
+  geom_line(aes(y = recovered), color = "blue") +
+  geom_line(aes(y = death), color="green") +
+  geom_line(aes(y = confirmed), color = "red") +
+  ylab("cases")+transition_reveal(date)+ggtitle("Summary case in Mali 2021 ")+theme(legend.position = "right")
+```
+
+
+```{r, message=FALSE, warning=FALSE,results='hide'}
+Ghana_corona <- coronavirus %>% filter(country == "Ghana" )
+death_Ghana_corona <- Ghana_corona %>% filter(type=="death")
+active_Ghana_corona <- Ghana_corona %>%group_by(type,cases, date) %>%
+  pivot_wider(names_from = type, values_from = cases) %>% mutate(active_Ghana_corona = confirmed - death - recovered)
+arrange(active_Ghana_corona)
+```
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE,results='hide'}
+Niger_corona <- coronavirus %>% filter(country == "Niger" )
+death_Niger_corona <- Niger_corona %>% filter(type=="death")
+active_Niger_corona <- Niger_corona %>%group_by(type,cases, date) %>%
+  pivot_wider(names_from = type, values_from = cases) %>% mutate(active_Niger_corona = confirmed - death - recovered)
+arrange(active_Niger_corona)
+```
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE,results='hide'}
+Algeria_corona <- coronavirus %>% filter(country == "Algeria" )
+death_Algeria_corona <- Algeria_corona %>% filter(type=="death")
+active_Algeria_corona <- Algeria_corona %>%group_by(type,cases, date) %>%
+  pivot_wider(names_from = type, values_from = cases) %>% mutate(active_Algeria_corona = confirmed - death - recovered)
+arrange(active_Algeria_corona)
+```
+
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE,results='hide'}
+Nigeria_corona <- coronavirus %>% filter(country == "Nigeria" )
+death_Nigeria_corona <- Nigeria_corona %>% filter(type=="death")
+active_Nigeria_corona <- Nigeria_corona %>%group_by(type,cases, date) %>%
+  pivot_wider(names_from = type, values_from = cases) %>% mutate(active_Nigeria_corona = confirmed - death - recovered)
+arrange(active_Nigeria_corona)
+```
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE,results='hide'}
+Mauritania_corona <- coronavirus %>% filter(country == "Mauritania"  )
+death_Mauritania_corona <- Mauritania_corona %>% filter(type=="death")
+active_Mauritania_corona <- Mauritania_corona %>%group_by(type,cases, date) %>%
+  pivot_wider(names_from = type, values_from = cases) %>% mutate(active_Mauritania_corona = confirmed - death - recovered)
+arrange(active_Mauritania_corona)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+neighbourdeaths <- rbind(death_Ghana_corona,death_Niger_corona,death_Algeria_corona,death_Nigeria_corona,death_Mauritania_corona)
+```
+
+## 2.2 Comparision of COVID-19 in Mali with Neighbour Countries
+
+```{r, message=FALSE, warning=FALSE}
+library(viridis)
+Neighbourdeath_2021 <- subset(neighbourdeaths,date>"2021-01-01" & date<"2021-10-01" )
+p6<-ggplot(Neighbourdeath_2021, aes(x=date, y=cases, col=country, group= country)) + geom_line() + geom_point(size = 3)+transition_reveal(date) +ggtitle("Death cases in Mali's neighbour countries in 2021") +  ylim(0,40)+scale_color_viridis_d()+facet_wrap(~country)
+p6
+```
+
+According to plot daily highest death cases are recorded from Algeria as well as minimum from Niger.
+
+```{r, message=FALSE, warning=FALSE}
+neighbour_countries_1 <- coronavirus%>% filter(country=="Ghana")
+neighbour_countries_2 <- coronavirus%>% filter(country=="Niger")
+neighbour_countries_3 <- coronavirus%>% filter(country=="Algeria")
+neighbour_countries_4 <- coronavirus%>% filter(country=="Nigeria")
+neighbour_countries_5 <- coronavirus%>% filter(country=="Mauritania")
+
+neighbour_countries <- rbind(neighbour_countries_1 ,neighbour_countries_2 ,neighbour_countries_3 ,neighbour_countries_4 ,neighbour_countries_5 )
+```
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE}
+neighbour_countries %>% 
+  group_by(type, date) %>%
+  pivot_wider(names_from = type, values_from = cases) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  arrange(active)
+```
+```{r, message=FALSE, warning=FALSE}
+library(viridis)
+Neighbouractive_2021 <- subset(neighbour_countries,date>"2021-01-01" & date<"2021-10-01" )
+p7<-ggplot(Neighbouractive_2021, aes(x=date, y=cases, col=country, group= country), is.na=TRUE) + geom_line()  +ggtitle("Active cases in Mali's neighbour countries in 2021") +  ylim(0,40)+scale_color_viridis_d()+facet_wrap(~country)
+p7
+```
+
+According to plot daily lowest active cases are recorded from Algenia and up to now Niger is shown that active cases are recorded through out the year.
+
+```{r, message=FALSE, warning=FALSE}
+conf_df <- neighbour_countries %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "Confirmed") %>%
+  ungroup() 
+  
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "Confirmed",
+          textinfo="label+value+percent parent")
+```
+
+## 2.2 1 Comparison between Sri Lanka and Mali Covid-19 Cases 
+
+```{r, message=FALSE, warning=FALSE}
+sl<- coronavirus%>% filter(country=="Sri Lanka") 
+sl_2021<- subset(sl,date>"2021-01-01" & date<"2021-10-01" )
+Sri_Lanka<-sl_2021 %>% group_by(type,date) %>% pivot_wider(names_from = type, values_from = cases)
+ggplot(Sri_Lanka, aes(x=date)) + 
+  geom_line(aes(y = recovered), color = "blue") +
+  geom_line(aes(y = death), color="green") +
+  geom_line(aes(y = confirmed), color = "red") +
+  ylab("cases")+transition_reveal(date)+ggtitle("Summary case in Sri Lanka ")+theme(legend.position = "right")
+```
+
+According to the plots confirmed cases were increasing in a increasing pattern in last few month of this year but in Mali they could control the Covid -19 situation.However, still Sri Lanka in danger comparing to the Mali's situation.
+
+# Discussion and Conclusion
+
+Mali is one of the European countries most effected by the COVID-19 pandemic.
+Malian authorities recorded the country's first coronavirus infections, in two nationals who had recently arrived from France.The virus was first confirmed to have spread to Spain on 25 March 2020. When considering about previous figures daily confirmed corona cases and deaths within Mali is deccreasing and also daily corona recoveries in Mali shows that they control the death rate of Mali. Daily active corona cases in Mali also in a decreasing pattern. 
+
+
+### Conclusion
+
+In conclusion, this study shows how COVID-19 virus affected Mali, how the virus spread with time. Study also considered how the recovery from COVID-19 happened in Mali and how fatal was it with regard to deaths.
+
+Finally Mali COVID-19 spread is compared with other neighboring countries affected by COVID-19. The actual number of cases and deaths can be different from these data. 
+
+In this situation, clean hands often, wear a mask, maintain safe distance from others are some of steps that a person can reduce the chance of being infected or spreading COVID-19.Be safe with your loved ones.
+
+
+
+# References
+
+1. *https://ml.usembassy.gov/covid-19-information/*
+2. *https://github.com/RamiKrispin/coronavirus*
+3. *https://www.france24.com/en/20200326-mali-coronavirus-ibrahim-boubacar-keita-lockdown-epidemic*
+4. *https://en.wikipedia.org/wiki/Mali*
+5. *https://www.britannica.com/place/Mali*
+6. *https://www.international.ucla.edu/asc/countries/96950*
+
+
+
+
+
+
+

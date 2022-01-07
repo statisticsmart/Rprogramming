@@ -1,0 +1,328 @@
+---
+title: "COVID-19 Pandemic in Guinea"
+author: "W.H.Shashini Kaushalya"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, comment = NA}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, comment = NA}
+library(plotly)
+library(ggplot2)
+library(leaflet)
+```
+
+```{r, echo = FALSE, eval = FALSE }
+get_individual_project_country("AS2017419")
+data(coronavirus)
+
+```
+
+## **1.Introduction**
+
+<p align = "justify">COVID-19 pandemic is a ongoing global pandemic of corona virus disease 2019. It has become a global health crisis by spreading all over the world. Severe Acute Respiratory Syndrome Corona virus 2 (SARS-CoV-2) is the virus that causes this disease. This virus is transmitted when airborne contaminants are breathed through droplets and small airborne particles. The first outbreak of this virus was identified in 19th December 2019 in Wuhan, China. Since 2021, there are some variants of this corona virus in the world such as Delta, Alpha, Beta and so on. In many countries, they have emerged and become more severe. It has been identified that this pandemic may be controlled by the vaccination process and preventive measures of spreading virus, if people behave responsibly. This report provide general analysis of COVID-19 related data in Guinea.</p>
+
+![](/4 th year/R programming/New/new/Picture corona.jpg)
+
+
+### **1.1 Location of Guinea**
+
+<p align = "justify">Guinea is a coastal country in West Africa. The official name of Guinea is Republic of Guinea. Conakry is the capital and largest city of Guinea. Guinea has an area of 245,857 square kilometers and a population of 12.4 million. The majority of the population are Muslim, with animist and Christian minorities. It is bordered by Guinea-Bissau, Senegal, Mali, Ivory Coast, Liberia, and Sierra Leone. Guinea is divided into four geographic regions, such as maritime Guinea (Lower Guinea), the pastoral Fouta Djallon highlands (Middle Guinea), the northern savanna (Upper Guinea) and southeastern rain-forest region (Forest Guinea). It has a territorial sea and coastline. Furthermore, Guinea has an unique economic zone.</p>
+
+```{r, echo = FALSE}
+library(leaflet)
+library(magrittr)
+map_guinea <- leaflet() %>% 
+  addTiles() %>% 
+  setView(lng = -9.6966, lat = 9.9456, zoom = 16) %>%
+  addMarkers(lng = -9.6966, lat = 9.9456)
+map_guinea
+
+```
+
+
+### **1.2 Climate Condition of Guinea**
+
+<p align = "justify">The climate in Guinea is tropical and humid with a dry and wet season. This is one of the wettest countries in Africa. Guinea has a tropical climate along with coastal region and most of inlands. Furthermore, a monsoon season with a southwesterly winds lasts from April to November. In addition, the dry season lasts from December to May with northeasterly winds.</p>
+
+### **1.3 Lock-down status of Guinea**
+
+<p align = "justify">The COVID-19 pandemic in Guinea is part of the worldwide outbreak of the corona virus. On 13th March 2020, it was confirmed that the corona virus had entered Guinea, when a Belgian person worked in Guinea was tested positive for novel corona virus. Guinea has in moderate level in this pandemic.On 29th March, 16 cases were observed. On April, total confirmed cases were 1495 and the death total was 7. Further, 329 patients were recovered. In these time period, sometimes checkpoints were established in the country.The curfew is still in place and the population is complying with it.</p>
+
+### **1.4 Actions taken by the government**
+
+<p align = "justify">Guinea is a country that imposing some rules for their public in this pandemic situation. They informed some of prevention action from this disease. Government of Guinea has taken action to closed some public places in their country. And also, they informed for all nonessential businesses to close their businesses during peak time of spreading coronavirus. Furthermore, they have given guidance to protect their people, such as face masks should be worn in public areas, hands should be sanitized in necessary times, etc. They imposed some lock down conditions in their country as well as they imposed fines for people who have not wearing mask in public places. They, have taken action to vaccinate their people to improve their immunity system. In addition to that they have given so many rules and regulations for the workplaces in their country.</p> 
+
+## **2. Exploratory Data Analysis**
+
+<p align = "justify">The data set used for this analysis is included the observations of coronavirus details in Guinea. There are 1683 observations in this data set. They were obtained from 22th January 2020 to 4th August 2021. The several variables are included in this data set, such as date of the observation taken from, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given date. The data for Guinea was obtained from the 2019 Novel Coronavirus COVID-19 (2019-nCoV) dataset where the raw data was sourced from Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website.</p>
+
+```{r, echo = FALSE}
+library(coronavirus)
+guinea_corona <- coronavirus %>% filter(country == "Guinea")
+
+```
+
+```{r, echo = FALSE, eval = FALSE, warning = FALSE}
+
+as_tibble(guinea_corona) #convert to a tibble
+
+```
+
+```{r, echo = FALSE, warning = FALSE, comment = NA}
+#identifying missing values of province  variable and remove it 
+guinea_corona1 <- select(guinea_corona, -c(province)) 
+
+
+```
+
+```{r, echo = FALSE}
+#omitting missing values of recovered variable
+guinea_corona_wider <- guinea_corona1 %>%
+  pivot_wider(names_from = type, values_from = cases) %>%
+  drop_na()
+
+#convert to long format
+guinea_corona_new <- guinea_corona_wider %>%
+  pivot_longer(5:7, names_to = "type", values_to = "cases")
+
+```
+
+```{r, echo = FALSE, comment = NA}
+head(guinea_corona_new)
+summary(guinea_corona_new)
+glimpse(guinea_corona_new)
+
+```
+
+### **2.1 Visualization of COVID-19 cases in Guinea**
+
+#### *2.1.1 Visualization of COVID-19 cases in Guinea by type of cases*
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "Figure 1: Distribution of COVID-19 Confirmed, Death and recovered cases in Guinea"}
+p1 <- ggplot(guinea_corona_new, aes(date, cases)) +
+  geom_line(color = "blue") +
+  facet_wrap(.~type) +
+  ggtitle("Time series plot of COVID-19 Confirmed, Death and recovered cases in Guinea")
+ggplotly(p1)
+```
+
+<p align = "justify">Figure 1 shows about the variation of coronavirus cases (confirmed cases, death cases and recovered cases) in Guinea with the time from 22th January 2020 to 4th August 2021. It can be identified that number of confirmed cases per day vary with some increasing and decreasing patterns of this time period. Their first confirmed case was reported on 13th March 2020. Their confirmed cases have increased from march to end of the May in that year. Furthermore, their peak confirmed case per day was reported on 21th March 2021. Their cases are increasing after June in this year in this time period. When it comes to talk about the daily death cases in Guinea, there is no very huge fluctuation in daily death cases in this time period. According to the figure 1, their maximum death cases in a day is 9. Recovered cases have varied very hugely in Guinea under this time period. When considering the confirmed COVID-19 cases, their cases are recovered in a positive manner.</p>
+
+```{r, echo = FALSE, fig.cap = "Figure 2: Distribution of daily COVID-19 Confirmed, Death and recovered cases in Guinea"}
+p2 <- ggplot(guinea_corona_new, aes(cases, type, color = type)) +
+  geom_jitter() + 
+  ggtitle("Visualization of COVID-19 cases in Guinea by type")
+ggplotly(p2)
+```
+
+<p align = "justify">This figure 2 shows that confirmed, death and recovered COVID-19 cases in Guinea. In first 2 months, there were no confirmed cases. But then their cases were reported. In addition to that, Guinea's death cases has very small amount when comparing confirmed cases. Their COVID-19 cases are much more recovering than death and confirmed cases.</p>
+
+#### *2.1.2 Visualization of COVID-19 active cases in Guinea*
+
+```{r, echo = FALSE, comment = NA, fig.cap = "Figure 3: Distribution of COVID-19 Confirmed, Death and recovered cases in Guinea"}
+active_cases_guinea <- guinea_corona_wider %>% 
+  mutate(total_active_cases = cumsum(confirmed) - cumsum(recovered) - cumsum(death))
+head(active_cases_guinea)
+
+p3 <- ggplot(active_cases_guinea, aes(date, total_active_cases)) +
+  geom_line() + ggtitle("Distribution of COVID-19 active cases in Guinea")
+p3
+
+```
+
+<p align = "justify">According to the figure 3, there is a fair seasonal pattern in active COVID-19 in Guinea. It shows that there was no any cases in first two and three months. In last part of the time period, it has an increasing trend of active cases in Guinea.</p>
+
+### **2.2 Comparison of COVID-19 cases between Guinea and Other countries**
+
+<p align = "justify">Guinea, country of western Africa, located on the Atlantic coast. Guinea is bordered by Mali to the northeast, Senegal to the north, Cote d'Ívoire to the southeast, Guinea-Bissau to the northwest, and Liberia and Sierra Leone to the south.</p> 
+
+![](/4 th year/R programming/New/new/guinea map.jpg)
+
+
+<p align = "justify">Therefore, this analysis are considered the neighboring countries of Guinea to compare about the COVID-19 cases. It is try to show how the neighboring countries vary with the type of COVID-19 cases of confirmed, death and recovered. Furthermore, this analysis has been considered main four neighboring countries of Guinea, such as Mali, Liberia, Senegal and Sierra Leone.</p>
+
+#### *2.2.1 Comparison of COVID-19 confirmed cases between Guinea and Other countries*
+
+```{r, echo = FALSE}
+guinea_corona <- coronavirus %>% filter(country == "Guinea")
+confirmed_cases_guinea <- guinea_corona %>% filter(type == "confirmed")
+
+mali_corona <- coronavirus %>% filter(country == "Mali")
+confirmed_cases_mali <- mali_corona %>% filter(type == "confirmed")
+
+liberia_corona <- coronavirus %>% filter(country == "Liberia")
+confirmed_cases_liberia <- liberia_corona %>% filter(type == "confirmed")
+
+senegal_corona <- coronavirus %>% filter(country == "Senegal")
+confirmed_cases_senegal <- senegal_corona %>% filter(type == "confirmed")
+
+serria_leone_corona <- coronavirus %>% filter(country == "Sierra Leone")
+confirmed_cases_serria_leone <- serria_leone_corona %>% filter(type == "confirmed")
+
+neighbor_confirmed_cases <- rbind(confirmed_cases_guinea, confirmed_cases_mali,
+                                 confirmed_cases_liberia, confirmed_cases_senegal,
+                                 confirmed_cases_serria_leone)
+
+#tidying data set 
+neighbor_confirmed_cases1 <- select(neighbor_confirmed_cases, -c(province, long, lat )) 
+neighbor_confirmed_cases_new <- neighbor_confirmed_cases1 
+neighbor_confirmed_cases_new [neighbor_confirmed_cases_new <0] <-0
+
+```
+
+
+```{r, echo = FALSE, comment = NA}
+head(neighbor_confirmed_cases_new)
+summary(neighbor_confirmed_cases_new)
+```
+
+```{r,echo = FALSE, fig.cap = "Figure 4: Distribution of COVID-19 Confirmed cases between Guinea and other countries"}
+
+g1 <- ggplot(neighbor_confirmed_cases_new, aes(x = date, y = cases, col = country)) +
+  geom_line() + 
+  ggtitle("Distribution of confirmed cases between Guinea and other neighboring coutries")
+ggplotly(g1)
+
+
+```
+<p align = "justify">Figure 4 shows that the distribution of COVID-19 confirmed cases in Guinea, Liberia, Mali, Senegal and Sierra Leone from 22th January 2020 to 4th August 2021. There is a huge variation of COVID-19 confirmed cases in Senegal with respect to the other countries. </p>
+
+
+```{r,echo = FALSE, fig.cap = "Figure 5: Distribution of COVID-19 Confirmed cases between Guinea and other countries"}
+g2 <- ggplot(neighbor_confirmed_cases_new, aes(x = country, y = cases, fill = country)) +
+  geom_boxplot() + 
+  ggtitle("Boxplot of confirmed cases between Guinea and other neighboring coutries")
+ggplotly(g2)
+```
+<p align = "justify">According to the figure 5, we can clearly identify about the variation of COVID-19 confirmed cases by the type of countries. all of countries show some outliers in above figure.</p>
+
+#### *2.2.2 Comparison of COVID-19 death cases between Guinea and Other countries*
+
+
+```{r, echo = FALSE}
+guinea_corona <- coronavirus %>% filter(country == "Guinea")
+death_cases_guinea <- guinea_corona %>% filter(type == "death")
+
+mali_corona <- coronavirus %>% filter(country == "Mali")
+death_cases_mali <- mali_corona %>% filter(type == "death")
+
+liberia_corona <- coronavirus %>% filter(country == "Liberia")
+death_cases_liberia <- liberia_corona %>% filter(type == "death")
+
+senegal_corona <- coronavirus %>% filter(country == "Senegal")
+death_cases_senegal <- senegal_corona %>% filter(type == "death")
+
+serria_leone_corona <- coronavirus %>% filter(country == "Sierra Leone")
+death_cases_serria_leone <- serria_leone_corona %>% filter(type == "death")
+
+neighbor_death_cases <- rbind(death_cases_guinea, death_cases_mali, death_cases_liberia,
+                             death_cases_senegal, death_cases_serria_leone)
+summary(neighbor_death_cases)
+
+#tidying data set 
+neighbor_death_cases1 <- select(neighbor_death_cases, -c(province, long, lat )) 
+neighbor_death_cases_new <- neighbor_death_cases1 
+neighbor_death_cases_new [neighbor_death_cases_new <0] <-0
+```
+
+
+```{r, echo = FALSE, comment = NA}
+head(neighbor_death_cases_new)
+summary(neighbor_death_cases_new)
+```
+
+```{r,echo = FALSE, fig.cap = "Figure 6: Distribution  of COVID-19 death cases between Guinea and other countries"}
+g3 <- ggplot(neighbor_death_cases_new, aes(x = date, y = cases, col = country)) +
+  geom_line() + 
+  ggtitle("Time series plot of death cases between Guinea and other neighboring coutries")
+ggplotly(g3)
+```
+<p align = "justify">Figure 6 shows that the distribution of COVID-19 death cases between Guinea and other countries. The highest death cases were reported in Liberia around 72 in this time period.</p>
+
+
+#### *2.2.3 Comparison of COVID-19 recovered cases between Guinea and Other countries*
+
+```{r, echo = FALSE, comment = NA}
+guinea_corona <- coronavirus %>% filter(country == "Guinea")
+recovered_cases_guinea <- guinea_corona %>% filter(type == "recovered")
+
+mali_corona <- coronavirus %>% filter(country == "Mali")
+recovered_cases_mali <- mali_corona %>% filter(type == "death")
+
+liberia_corona <- coronavirus %>% filter(country == "Liberia")
+recovered_cases_liberia <- liberia_corona %>% filter(type == "recovered")
+
+senegal_corona <- coronavirus %>% filter(country == "Senegal")
+recovered_cases_senegal <- senegal_corona %>% filter(type == "recovered")
+
+serria_leone_corona <- coronavirus %>% filter(country == "Sierra Leone")
+recovered_cases_serria_leone <- serria_leone_corona %>% filter(type == "recovered")
+
+neighbor_recovered_cases <- rbind(recovered_cases_guinea, recovered_cases_mali,
+                                 recovered_cases_liberia, recovered_cases_senegal,
+                                 recovered_cases_serria_leone)
+summary(neighbor_recovered_cases)
+#tidying data set 
+neighbor_recovered_cases1 <- select(neighbor_recovered_cases, -c(province, long, lat )) 
+neighbor_recovered_cases_new <- neighbor_recovered_cases1 %>% drop_na()
+
+```
+
+
+```{r, echo = FALSE, comment = NA}
+head(neighbor_recovered_cases_new)
+summary(neighbor_recovered_cases_new)
+```
+
+```{r,echo = FALSE, fig.cap = "Figure 7: Distribution of COVID-19 recovered cases between Guinea and other countries"}
+
+g4 <- ggplot(neighbor_recovered_cases_new, aes(x = date, y = cases, col = country)) +
+  geom_line() + 
+  ggtitle("Time series plot of recovered cases between Guinea and other neighboring coutries")
+ggplotly(g4)
+```
+<p align = "justify">According to the figure 7, there are so many variation of recovered cases in all of countries in this time period. Specially, it can be identified that there are so many variations in Guinea and Senegal in this time period.</p> 
+
+
+```{r,echo = FALSE, fig.cap = "Figure 8: Distribution of COVID-19 recovered cases between Guinea and other countries"}
+g5 <- ggplot(neighbor_recovered_cases_new, aes(x = country, y = cases, fill = country)) +
+  geom_boxplot() + 
+  ggtitle("Boxplot of recovered cases between Guinea and other neighboring coutries")
+ggplotly(g5)
+
+```
+ <p align = "justify">As above figure 8, it is also identified about the distribution of COVID-19 recovered cases between Guinea and other countries. this can be clearly understand about outliers of the recovered daa set in all countries according to the above figure.</p>
+ 
+## **3. Conclusion**
+ 
+<p align = "justify">In this study, it can be clearly show how COVID-19 virus affected and distributed in Guinea. This analysis mainly explained the variations on confirmed, death, recovered and active cases of COVID-19 disease in Guinea. This data set is included from 22th January 2020 to 4th August 2021. And also, this is compared the variation of COVID-19 virus between Guinea and their 4 neighboring countries, such as Guinea, Liberia, Mali, Senegal and Sierra Leone. This analysis can be used to get good idea about the situation of COVID-19 virus of Guinea and other countries and pay attention to control this pandemic situation.</p>
+ 
+ 
+## **4. Discussion**
+ 
+<p align = "justify">This analysis was done after tidying the raw data set, because of that it could be clearly identified some missing values in the data set. But in this analysis, when comparing COVID-19 virus with other countries, data sets of confirmed, death and recovered cases tided separately. In some plots, it can be shown some outliers. This analysis only focused on the data from 22th January 2020 to 4th August 2021. More plots can be used to visualize the the final outputs of tthis analysis, as my opinion for further analysis.
+
+
+## **5. References**
+ 
+* https://en.wikipedia.org/wiki/Guinea
+* https://previews.123rf.com/images/pavalena/pavalena1312/pavalena131200010/24569893-republic-of-guinea-map.jpg
+* https://en.wikipedia.org/wiki/Geography_of_Guinea
+* https://www.earthdatascience.org/courses/earth-analytics/get-data-using-apis/leaflet-r/
+ 
+ 

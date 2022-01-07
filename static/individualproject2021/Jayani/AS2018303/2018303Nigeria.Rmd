@@ -1,0 +1,325 @@
+---
+title: "Corona virus vs Nigeria"
+author: "AS2018303"
+date: "9/26/2021"
+output: html_document
+---
+
+<H1> Nigeria</H1>
+
+
+
+
+Nigeria, officially the Federal Republic of Nigeria, is a country in West Africa. It is the most populous country in Africa; geographically situated between the Sahel to the north, and the Gulf of Guinea to the south in the Atlantic Ocean; covering an area of 923,769 square kilometers, with a population of over 211 million. It borders Niger in the north, Chad in the northeast, Cameroon in the east, and Benin in the west. Nigeria is a federal republic comprising 36 states and the Federal Capital Territory, where the capital, Abuja, is located. 
+Nigeria has been home to several indigenous pre-colonial states and kingdoms since the second millennium BC, with the Nok civilization in the 15th century BC marking the first internal unification in the country. The modern state originated with British colonialization in the 19th century
+Nigeria is a multinational state inhabited by more than 250 ethnic groups speaking 500 distinct languages, all identifying with a wide variety of cultures. The three largest ethnic groups are the Hausa–Fulani in the north, Yoruba in the west, and Igbo in the east, together comprising over 60% of the total population. The official language is English, chosen to facilitate linguistic unity at the national level.Nigeria's constitution ensures freedom of religion and is home to some of the world's largest Muslim and Christian populations, simultaneously.
+```{r,echo=FALSE,warning=FALSE,message=FALSE,comment=NA}
+
+library(devtools)
+
+library(sta3262)
+get_individual_project_country("AS2018303") 
+
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+
+
+library(plotly)
+Nigeria_corona <- coronavirus %>% filter(country ==  "Nigeria")
+
+
+
+
+library(dbplyr)
+library(magrittr)
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+recovered_Nigeria_corona<-Nigeria_corona %>% filter(type=="recovered")
+death_Nigeria_corona<-Nigeria_corona %>% filter(type=="death")
+confirmed_Nigeria_corona<-Nigeria_corona %>% filter(type=="confirmed")
+
+```
+
+
+
+<H2>visualisation of the location</H2>
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+data(wrld_simpl)
+p <- ggplot() +
+    geom_polygon(
+        data = wrld_simpl,
+        aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+    ) +
+    coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+    scale_x_continuous(breaks = seq(-180, 180, 120)) +
+    scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+    geom_point(
+        data = Nigeria_corona, aes(x = long, y = lat), color = "red", size
+        = 1
+    )
+
+
+```
+
+
+
+Nigeria is bordered to the north by Niger, to the east by Chad and Cameroon, to the south by the Gulf of Guinea of the Atlantic Ocean, and to the west by Benin. Nigeria is not only large in area—larger than the U.S. state of Texas—but also Africa's most populous country.
+
+
+
+<H2>climate condition</H2>
+
+
+Nigeria has a varied landscape. The far south is defined by its tropical rainforest climate, where annual rainfall is 1,500 to 2,000 millimetres (60 to 80 in) per year.[114] In the southeast stands the Obudu Plateau. Coastal plains are found in both the southwest and the southeast.[113] Mangrove swamps are found along the coast.[115]
+
+
+Climate map of Nigeria
+The area near the border with Cameroon close to the coast is rich rainforest and part of the Cross-Sanaga-Bioko coastal forests ecoregion, an important centre for biodiversity. It is habitat for the drill primate, which is found in the wild only in this area and across the border in Cameroon. The areas surrounding Calabar, Cross River State, also in this forest, are believed to contain the world's largest diversity of butterflies. The area of southern Nigeria between the Niger and the Cross Rivers has lost most of its forest because of development and harvesting by increased population, with it being replaced by grassland.
+
+Everything in between the far south and the far north is savannah (insignificant tree cover, with grasses and flowers located between trees). Rainfall is more limited to between 500 and 1,500 millimetres (20 and 60 in) per year.[114] The savannah zone's three categories are Guinean forest-savanna mosaic, Sudan savannah, and Sahel savannah. Guinean forest-savanna mosaic is plains of tall grass interrupted by trees. Sudan savannah is similar but with shorter grasses and shorter trees. Sahel savannah consists of patches of grass and sand, found in the northeast.[115] In the Sahel region, rain is less than 500 millimetres (20 in) per year, and the Sahara Desert is encroaching.[114] In the dry northeast corner of the country lies Lake Chad, which Nigeria shares with Niger, Chad and Cameroon.
+
+
+
+<H2>Lockdown status of the country</H2>
+
+n a move to combat the spread of the pandemic disease, President Muhammadu Buhari directed the cessation of all movements in Lagos and the FCT for an initial period of 14 days, which took effect from 11 pm on Monday, 30th March 2020.
+The movement restriction, which was extended by another two weeks period, has been partially put on hold with some businesses commencing operation from May 4. On April 27th, 2020, Nigeria’s President, Muhammadu Buhari declared an overnight curfew from 8 pm to 6 am across the country, as part of new measures to contain the spread of the COVID-19. This comes along with the phased and gradual easing of lockdown measures in FCT, Lagos, and Ogun States, which took effect from Saturday, 2nd May 2020, at 9 am.
+On Monday, 29th June 2020 the federal government extended the second phase of the eased lockdown by 4 weeks and approved interstate movement outside curfew hours with effect from July 1, 2020. Also, on Monday 27th July 2020, the federal government extended the second phase of eased lockdown by an additional one week.
+On Thursday, 6th August 2020 the federal government through the secretary to the Government of the Federation (SGF) and Chairman of the Presidential Task Force (PTF) on COVID-19 announced the extension of the second phase of eased lockdown by another four (4) weeks.
+Governor Babajide Sanwo-Olu of Lagos State announced the closed down of the Eti-Osa Isolation Centre, with effect from Friday, 31st July 2020. He also mentioned that the Agidingbi Isolation Centre would also be closed and the patients relocated to a large capacity centre.
+Due to the increased number of covid-19 cases in Nigeria, the Nigerian government ordered the reopening of Isolation and treatment centres in the country on Thursday, 10th December 2020.
+On 26th January 2021, the Federal Government announced the extension of the guidelines of phase 3 of the eased lockdown by one month following the rising cases of the coronavirus disease in the country and the expiration of phase 3 of the eased lockdown.
+On 28th February 2021, the federal government confirmed that the first tranche of Covid-19 vaccines will arrive in Nigeria on Tuesday, March 2nd, 2021.
+On Tuesday, 2nd March 2021, the National Primary Health Care Development Agency announced the arrival of the expected COVAX Astrazeneca/Oxford covid-19 vaccines.
+On Saturday, 6th March 2021, President Muhammadu Buhari and his vice, Yemi Osinbajo received vaccination against the covid-19 at the State House in Abuja.
+Thursday, 8th July 2021, the Nigerian government revealed that a case of the dangerous delta variant has been recorded in a traveler in the country.
+
+<H2>Actions taken by government</H2>
+
+
+
+Regularly and carefully wash your hands with soap and water, and use alcohol-based hand sanitizer.
+
+Maintain at least 1 & half meteres (5 feet) distance between yourself and anyone who is coughing or sneezing.
+
+Persons with persistent cough or sneezing should stay home or keep a social distance, but not mix in crowd.
+
+Make sure you and people around you, follow good respiratory hygiene, meaning cover your mouth and nose with a tissue or into your sleeve at the bent elbow or tissue when you cough or sneeze. Then dispose of the used tissue immediately.
+
+Stay home if you feel unwell with symptoms like fever, cough and difficulty in breathing. Please call NCDC toll free number which is available day and night, for guidance- 0800-970000-10. Do not engage in self-medication
+
+Stay informed on the latest developments about COVID-19 through official channels on TV and Radio, including the Lagos State Ministry of Health, NCDC and Federal Ministry of Health.
+
+
+<H1> Exploratory Data Analysis</H1>
+The original data set filtered with country="Nigerian" for  analysing,we have access data  range of 2020-01-27 to 2021-09-27
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,comment=NA}
+head(Nigeria_corona)
+str(Nigeria_corona)
+tail(Nigeria_corona)
+```
+
+
+
+summary of the death cases
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,comment=NA}
+summary(death_Nigeria_corona$cases)
+```
+
+in this data set there has only one negative value (-1),deaths cannot be a minus, but for the further calculations its effect will be minimum so (-1)will be ignored
+
+
+summary of the recovered cases
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,comment=NA}
+
+summary(recovered_Nigeria_corona$cases)
+
+```
+
+
+
+summary of the confirmed cases
+```{r,echo=FALSE,warning=FALSE,message=FALSE,comment=NA}
+
+
+
+summary(confirmed_Nigeria_corona$cases)
+```
+
+<H2>visualization of data </H2>
+
+
+
+
+visualization of death cases
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+
+p1 <- ggplot(death_Nigeria_corona,aes(date, cases,type="death",color = type), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("Time series  analysis-death")
+
+
+p2 <- ggplot(confirmed_Nigeria_corona,aes(date, cases,type="confirmed",color = type), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("Time series  analysis-confirm cases")
+
+p3 <- ggplot(recovered_Nigeria_corona,aes(date, cases,type="recovered",color = type), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("Time series  analysis-recover cases")
+
+
+##actve cases
+confirmed_cases=confirmed_Nigeria_corona$cases
+recovered_cases=recovered_Nigeria_corona$cases
+death_cases=death_Nigeria_corona$cases
+cumulative_confirmed_cases=cumsum(confirmed_cases)
+cumulative_recovered_cases=cumsum(recovered_cases)
+cumulative_death_cases=cumsum(death_cases)
+active_cases=cumulative_confirmed_cases-(cumulative_death_cases+cumulative_recovered_cases)
+Nigeria_corona_new<-Nigeria_corona
+Nigeria_corona_new$active=active_cases
+
+
+p4 <- ggplot(Nigeria_corona_new,aes(date,active,color =active), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("Time series  analysis-Active cases")
+
+
+
+p1
+
+
+```
+
+
+
+visualization of confirmed cases
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+p2
+```
+
+visualization of recovered cases
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+p3
+```
+
+
+visualization of active cases
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+p4
+```
+
+
+
+
+<H2>comparison with surrounding countries </H2>
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+Nigeria_corona <- coronavirus %>% filter(country ==  "Nigeria")
+Niger_corona <- coronavirus %>% filter(country ==  "Niger")
+Chad_corona <- coronavirus %>% filter(country ==  "Chad")
+Cameroon_corona <- coronavirus %>% filter(country ==  "Cameroon")
+
+countriessurround <- rbind(Nigeria_corona,Niger_corona,Chad_corona,Cameroon_corona)
+
+pconfirm_surround <- ggplot(countriessurround,aes(date, cases,type="confirmed", color = country), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("comparison with surrounding countries")
+pdeath_surround <- ggplot(countriessurround,aes(date, cases,type="death", color = country), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("comparison with surrounding countries")
+precover_surround <- ggplot(countriessurround,aes(date, cases,type="recovered", color = country), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("comparison with surrounding countries")
+fig1 <- subplot(pconfirm_surround,pdeath_surround,precover_surround,nrows =3)
+fig1
+
+```
+
+
+<H2>comparison with similar population density countries </H2>
+
+
+
+
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+SaoTomandPrincipe_corona<-coronavirus %>% filter(country == "Sao Tome and Principe" )
+
+DominicanRepublic_corona<-coronavirus %>% filter(country ==  "Dominican Republic" )
+countriesbydensity <- rbind(Nigeria_corona,  SaoTomandPrincipe_corona,DominicanRepublic_corona)
+
+pconfirm_density <- ggplot(countriesbydensity,aes(date, cases,type="confirmed", color = country), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("comparison with similar population density countries")
+pdeath_density <- ggplot(countriesbydensity,aes(date, cases,type="death", color = country), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("comparison with similar population density countries")
+precover_density <- ggplot(countriesbydensity,aes(date, cases,type="recovered", color = country), is.na=FALSE) +
+    geom_point() +
+    geom_line() +
+    ggtitle("comparison with similar population density countries")
+
+
+fig2 <- subplot(pconfirm_density,pdeath_density,precover_density,nrows =3)
+fig2
+
+
+    
+```
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+```
+
+
+<H1> Conclusions and Discussion</H1>
+As we can see on these data set there are clearly main 3 covid breakouts in the nigeria 
+in 2020 from may to july
+   2021 from january to march and 
+   2021 from august to still
+  
+<H1> References</H1>
+https://www.brookings.edu/blog/future-development/2020/07/02/how-well-has-nigeria-responded-to-covid-19/
+https://nairametrics.com/2021/09/28/covid-19-update-in-nigeria/
+https://en.wikipedia.org/wiki/Nigeria

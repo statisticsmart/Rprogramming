@@ -1,0 +1,253 @@
+---
+title: "Moldova_Covid19_Report"
+author: "K.A.A.Chandrasena"
+date: "9/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1.  Introduction
+
+## 1.1 COVID-19
+A cluster of cases of unknown cause pneumonia was reported to the World Health Organization on 31 December 2019 in the city of Wuhan, Hubei province in China. A previously unknown new virus was identified in January 2020, later named the 2019 novel coronavirus, and samples from cases and genetic analysis of the virus indicated this was the cause of the outbreak. This novel coronavirus was named by WHO in February 2020 as Coronavirus Disease 2019 (COVID-19). The virus is known as SARS-CoV-2 and the associated disease is COVID-19. 
+
+## 1.2  Moldova
+Moldova is a landlocked country in Eastern Europe, located between Romania and Ukraine. The government system is a republic; the chief of state is the president, and the head of government is the prime minister. Moldova has a mixed economic system which includes a variety of private freedom, combined with centralized economic planning and government regulation. Moldova is a member of the Central European Free Trade Agreement (CEFTA).
+
+## 1.3 Climate Condition in Moldova
+The climate of the Republic of Moldova is moderately continental, characterized by relatively mild winters with little snow, long warm summers and low humidity. The average annual air temperatures vary between 8-12⁰C, and amount of precipitations, respectively between 450-900 mm per year.Air temperature changes in Moldova until now Changes in air temperature have been calculated for two periods: 1887-1980 and 1981-2008. It can be said with high confidence that the mean seasonal and annual temperatures in the last three decades are different from the previous years. The variability of air temperature remains practically the same.Annual air temperature in Moldova has increased during 1887-1980 by 0.035°C per decade, and by about 0.58°C per decade during 1981-2008. The temperature trends in last three decades are statistically significant for summer and annual temperatures  and for spring . Further evidence of the acceleration of regional warming can be seen in the fact that seven years among the ten warmest in the history of instrumental observations in Moldova have been in the last two decades .Changes in precipitation have been calculated for two periods: 1887-1980 and 1981-2008. The changes in the precipitation regime are not significant in their quantity; however there is evidence of an increase in their variability in transition seasons.The precipitation picture is more complex. There is a change in the direction of some trends from 1887-1980 to 1981-2008: from a decrease to an increase in spring, and from an increase  to a decrease in the last thirty years in summer. For autumn-winter and annual precipitation the previous slight increase is continuing.
+
+
+## 1.4  Visualization of the location
+
+```{r,comment=NA, echo=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+mol_corona <- coronavirus %>% filter(country == "Moldova")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "blue"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = mol_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+
+
+```
+
+Moldova  is a landlocked country in Eastern Europe. It is bordered by Romania to the west and Ukraine to the north, east, and south. Additionally, the unrecognised state of Transnistria, internationally recognised as part of Moldova, lies across the Dniester on the country's eastern Ukrainian border.
+
+## 1.5 Lockdown status of the country and Actions taken by the government
+The CDC has issued a Level 3 Travel Health Notice advising U.S. citizens of a high level of COVID-19 in Moldova.	On March 8, 2020, Moldova reported its first confirmed case of COVID-19  within its borders. As of September 22, Moldova has more than 285,000 confirmed cases.Effective April 29, 2021, the National Public Health Emergency Commission in Moldova has issued a National State of Public Health Emergency.  Announcements from the Commission and restrictions under the ongoing State of Public Health Emergency are available on the Government of Moldova website.  Face-masks are mandatory in all public indoor spaces.  Chisinau has a mask mandate for open-air public events, as well as social-distancing rules.  Additional restrictions could be lifted or imposed with little notice.Moldovan authorities established new public health measures to limit the spread of COVID-19 infection at all public events and gatherings, both indoor and outdoor.  Effective September 12, 2021, anyone over the age of 18 attending any show, concert, festival, theater, cinema, concert hall, nightclub, dance floor, etc., must present one of the following documents. A negative PCR COVID-19 test  or an antigen test. A COVID-19 vaccine certificate. A medical certificate attesting the person had COVID-19 in the previous 6 months.A COVID-19 antibodies certificate valid for 90 days from the exam date. This decision does not apply to restaurants or cafes.The Chisinau International Airport is open, although service is limited and commercial airlines will make independent decisions about when they will resume service in Chisinau. We recommend that you check with your airline or travel agent regularly for the most current information on upcoming flights.  Land borders are open, subject to the entry restrictions imposed by Moldova described below, and those of neighboring Slovakia and Ukraine
+
+
+# 2.  Exploratory Data Analysis
+```{r,comment=NA, echo=FALSE}
+mol_corona <- as.data.frame(mol_corona)
+head(mol_corona)
+tail(mol_corona)
+summary(mol_corona)
+```
+The table mol_corona is consist of the number of confirmed, death recovered and active corona patients from  2020-01-22 to 2021 09 18 of the country Moldova.
+
+## 2.1 Confirmed cases in Moldova
+
+```{r,comment=NA, echo=FALSE}
+mol_confirmed_cases <- filter(mol_corona, type == "confirmed")
+ggplot(mol_confirmed_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Confirmed cases in Moldova")
+
+```
+
+
+Above graph shows the confirmed number of corona patients in Moldova. It shows that number of confirmed corona patients has been increasing since mid of March,2020 up to end of November,2020. As well it shows that number of confirmed corona patients has been decreasing since mid of December,2020 up to end of January,2021. As well as it shows that number of confirmed corona patients has been increasing since mid of February,2021 up to end of April,2021. Similarly it shows that number of confirmed corona patients has been decreasing since mid of May,2021 up to end of July,2021. As we it shows that number of confirmed corona patients has been increasing since mid of August,2021 up to mid of September,2021.   
+
+## 2.2 Death cases in Moldova
+
+```{r,comment=NA,echo=FALSE}
+mol_death_cases <- filter(mol_corona, type == "death")
+ggplot(mol_death_cases,aes(date, cases)) + geom_path(size=1) + labs(title = "Death cases in Moldova")
+
+```
+
+
+Above graph shows the number of death cases from Corona in Moldova in daily basis. It shows that number of corona death cases has been increasing since end of March,2020 up to end of December,2020. As well it shows that number of corona death cases has been decreasing since end of January,2021 up to end of February,2021. As we as it shows that number of corona death cases has been increasing since mid of March,2021 up to end of April,2021.Similarly it shows that number of corona death cases has been decreasing since mid of May,2021 up to end of July,2021. As well it shows that number of corona death cases has been increasing since mid of August,2021 up to mid of September,2021.
+
+## 2.3 Recovered cases in Moldova
+
+```{r,comment=NA,echo=FALSE}
+mol_recovered_cases <- filter(mol_corona, type == "recovered")
+ggplot(mol_recovered_cases,aes(date, cases)) + geom_path(size=1) + labs(title = "Recovered cases in Moldova")
+```
+
+
+Above graph shows the number of patients recovered from corona in Moldova in daily basis. It shows that number of recovered corona patients has been increasing since mid of March,2020 up to end of December,2020.As well it shows that number of recovered corona patients has been decreasing since mid of January,2021 up to end of February,2021.As well as it shows that number of recovered corona patients has been increasing since mid of March,2021 up to end of April,2021.As well it shows that number of recovered corona patients has been decreasing since mid of May,2021 up to end of September,2021.
+
+## 2.4 Active cases in Moldova
+```{r,comment=NA,echo=FALSE}
+mol_corona_wider <- mol_corona %>% pivot_wider(names_from = "type", values_from = "cases")
+mol_corona_wider <- mol_corona_wider %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+mol_corona_wider$active <- replace(mol_corona_wider$active,mol_corona_wider$active<0,0)
+ggplot(mol_corona_wider,aes(x=date, y = active)) + geom_path(size=1) + labs(title = "Active cases in Moldova")
+```
+
+Above graph shows the number of active corona patients in Moldova in daily basis.It shows that number of active corona patients has been increasing since mid of March,2020 up to mid of September,2020.As well it shows that number of active corona patients has been decreasing since mid of September,2020 up to end of September,2020.As well as it shows that number of active corona patients has been increasing since mid of November,2020 up to mid of December,2020.Similarly it shows that number of active corona patients has been decreasing since end of December,2020 up to mid of February,2021.As well as it shows that number of active corona patients has been increasing since mid of March,2021 up to end of April,2021.As well it shows that number of active corona patients has been decreasing since mid of May,2021 up to mid of September,2021.
+
+
+```{r,comment=NA,echo=FALSE}
+
+ggplot(mol_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Confirmed, Death, Recovered cases in Moldova")
+```
+
+
+Above graph shows the no.of confirmed, death and recovered corona patients in Moldova in daily basis in the same graph. This graph implies that recovery of the corona patients has started from April where corona patients has started to confirm from begining of May. And also it shows that no.of patients recovery in a day has not still increased than the no.of patients confirming with corona in a day which implies that still the this situation has not controlled by the country and still the its spreading rapidly where the curve of no.of confirming corona patients increasing exponentially.This implies that percentage of total recovered patients with the total no.of confirmed cases is increasing daily but not in a satisfactory level. And also the percentage of total no.of death cases with total no.of confirmed cases is decreasing after increasing.Comparing with the countries in the same continent
+
+# 3. Comparison with several nearness countries
+```{r,comment=NA,echo=FALSE}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(15, 40), ylim = c(47, 50)) +
+  scale_x_continuous(breaks = seq(15, 15,40)) +
+  scale_y_continuous(breaks = seq(47,50,50))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+
+mol_near_countries <- subset.data.frame(coronavirus, ( 47< lat & lat < 50) & (15 < long & long < 40) )
+
+count(mol_near_countries,country)
+```
+
+
+## 3.1 Comparing Confirmed cases in Moldova with nearness countries
+```{r,comment=NA,echo=FALSE}
+confirmed_mol_near_countries <- filter(mol_near_countries, type == "confirmed")
+death_mol_near_countries <- filter(mol_near_countries, type == "death")
+recovered_mol_near_countries <- filter(mol_near_countries, type == "recovered")
+active_mol_near_countries <- filter(mol_near_countries, type == "active")
+
+ggplot(confirmed_mol_near_countries, aes(x = country, y = cases, colour = country)) + geom_boxplot(size=1) + 
+  labs(title="Confirmed cases in the countries in Eastern Europe")
+
+```
+
+Above graph shows the confirmed number of corona patients in Moldova and its nearness countries.It shows Ukraine had lower median of confirmed number of corona patients. As well it shows Hungary had higher median of confirmed number of corona patients.Comparing Moldova with Ukraine Moldova had higher median of confirmed number of corona patients.Comparing Moldova with Slovakia Moldova had lower median of confirmed number of corona patients.As well as Comparing Moldova with Czechia and Hungary Moldova had lower median of confirmed number of corona patients.Ukraine,which indicate that confirmed number of corona cases spread out among nears countries. 
+
+
+
+
+## 3.2 Comparing death cases in Moldova with nearess countries
+```{r,comment=NA,echo=FALSE}
+ggplot(death_mol_near_countries, aes(x = country, y = cases, colour = country)) + geom_boxplot(size=1) + 
+  labs(title="Death cases in the countries in Eastern Europe")
+```
+
+
+Above graph shows the number of corona death cases in Moldova and its nearness countries.It shows Ukraine had lower median of number of corona death cases. As well it shows Slovakia had higher median number of corona  death cases.Comparing Moldova with Ukraine Moldova had higher median  number of corona death cases.Comparing Moldova with Slovakia Moldova had lower median number of corona death cases.As well as Comparing Moldova with Czechia and Hungary Moldova had lower median number of corona death cases.Ukraine,which indicate that  number of corona death cases spread out among nears countries.
+
+## 3.3 Comparing recovered cases in Moldova with nearess countries
+```{r,comment=NA,echo=FALSE}
+ggplot(recovered_mol_near_countries, aes(x = country, y = cases, colour = country)) + geom_boxplot(size=1) + 
+  labs(title="recovered cases in the countries in Eastern Europe")
+```
+
+
+Above graph shows the  number of corona recovered patients in Moldova and its nearness countries.It shows Ukraine had lower median of recovered number of corona patients. As well it shows Slovakia had higher median of recovered number of corona patients.Comparing Moldova with Ukraine Moldova had higher median of recovered number of corona patients.Comparing Moldova with Slovakia Moldova had lower median of recovered number of corona patients.As well as Comparing Moldova with Czechia and Hungary Moldova had love median of recovered number of corona patients.Ukraine,which indicate that recovered number of corona cases spread out among nears countries. 
+
+## 3.4 Comparing active cases in Moldova with nearess countries
+### 3.4.1 Comparing active cases in Moldova with Ukraine
+```{r,comment=NA,echo=FALSE}
+Uk_corona <- coronavirus %>% filter(country == "Ukraine")
+Uk_corona_wider <- Uk_corona %>% pivot_wider(names_from = "type", values_from = "cases")
+Uk_corona_wider <- Uk_corona_wider %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+Uk_corona_wider$active <- replace(Uk_corona_wider$active,Uk_corona_wider$active<0,0)
+ggplot(Uk_corona_wider,aes(x=date, y = active)) + geom_path(size=1) + labs(title = "Active cases in Ukraine" )
+```
+
+
+Above graph shows the number of active corona patients in Ukraine in daily basis.Comparing Moldova with Ukraine, Moldova had higher number of active corona cases.
+
+
+
+### 3.4.2 Comparing active cases in Moldova with Slovakia
+```{r,comment=NA,echo=FALSE}
+sl_corona <- coronavirus %>% filter(country == "Slovakia")
+sl_corona_wider <- sl_corona %>% pivot_wider(names_from = "type", values_from = "cases")
+sl_corona_wider <- sl_corona_wider %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+sl_corona_wider$active <- replace(sl_corona_wider$active,sl_corona_wider$active<0,0)
+ggplot(sl_corona_wider,aes(x=date, y = active)) + geom_path(size=1) + labs(title = "Active cases in in Slovakia" )
+```
+
+
+Above graph shows the number of active corona patients in Slovakia in daily basis.Comparing Moldova with Slovakia, Moldova had lower number of active corona cases.
+
+
+
+### 3.4.3 Comparing active cases in Moldova with Hungary
+```{r,comment=NA,echo=FALSE}
+Hu_corona <- coronavirus %>% filter(country == "Hungary")
+Hu_corona_wider <- Hu_corona %>% pivot_wider(names_from = "type", values_from = "cases")
+Hu_corona_wider <- Hu_corona_wider %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+Hu_corona_wider$active <- replace(Hu_corona_wider$active,Hu_corona_wider$active<0,0)
+ggplot(Hu_corona_wider,aes(x=date, y = active)) + geom_path(size=1) + labs(title = "Active cases in in Hungary")
+```
+
+
+Above graph shows the number of active corona patients in Hungary in daily basis.Comparing Moldova with Hungary, Moldova had higher number of active corona cases.
+
+
+
+### 3.4.4 Comparing active cases in Moldova with Czechia
+```{r,comment=NA,echo=FALSE}
+cz_corona <- coronavirus %>% filter(country == "Czechia")
+cz_corona_wider <- cz_corona %>% pivot_wider(names_from = "type", values_from = "cases")
+cz_corona_wider <- cz_corona_wider %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+cz_corona_wider$active <- replace(cz_corona_wider$active,cz_corona_wider$active<0,0)
+ggplot(cz_corona_wider,aes(x=date, y = active)) + geom_path(size=1) + labs(title = "Active cases in in Czechia")
+```
+
+
+Above graph shows the number of active corona patients in Czechia in daily basis.Comparing Moldova with Czechia, Moldova had lower number of active corona cases.
+
+
+# 4 Conclusions and Discussion
+(conclusions based on data set from 2020-01-22 to 2021-09-18)
+The covid-19 has been very well controlled inside the country untill mid of the August,2021.But After that we can see corona cases rate has started to gradually increase in  end of Augst 2021.  But we can see through the above graphs the death rate is very lower when compared to the confirmed covid-19 cases.As well the death rate is very lower when compared to the recovered covid-19 cases. Furthermore, recovery rate also  high when compared with other countries.The monthly number of new corona virus cases dropped sharply in January,2021, which saw a total of 14,986 new cases. This represents a 60% decrease compared to the number of new cases reported during the previous month. Weekly figures, nevertheless, show a more nuanced picture of the evolution of the pandemic in the country. For the most part of the month, the growth in corona virus cases continued on the gradual downward trend that started in the middle of December,2020. However, January 2021, saw an upward in new cases.The growth in corona virus cases continued on the gradual downward trend that started in the middle of June,2021.But end of August saw an upward in new cases.
+ 
+
+# 5 References
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7307707/
+https://globaledge.msu.edu/countries/moldova/#:~:text=Moldova%3A%20Introduction%20Moldova%20is%20a%20landlocked%20country%20in,the%20head%20of%20government%20is%20the%20prime%20minister.
+https://en.wikipedia.org/wiki/Moldova
+https://md.usembassy.gov/u-s-citizen-services/covid-19-information/
+

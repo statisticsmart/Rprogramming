@@ -1,0 +1,568 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+author: "Dhananjaya Fernando - AS2018356"
+output: html_document
+---
+
+<style>
+body {
+text-align:justify
+}
+</style>
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = FALSE)
+```
+<p>&nbsp;</p>
+# **COVID-19 in Spain**
+<p>&nbsp;</p>
+# Introduction
+<p>&nbsp;</p>
+## *Country Background*
+<p>&nbsp;</p>
+
+```{r, echo=FALSE, out.width = '50%'}
+knitr::include_graphics("sS4SPkl.jpg")
+```
+
+<p>&nbsp;</p>
+
+Spain (Kingdom of Spain) is a country located in Southwestern Europe on the Iberian Peninsula to the south of France and Andorra and to the east of Portugal. Spain's capital and largest city is Madrid, and the country is known for its long history, unique culture, strong economy, and very high living standards. With an area of 195,360 square miles, Spain is the largest country in Southern Europe & with a population exceeding 47.3 million.  Spanish—featured in the 1978 Spanish Constitution as castellano has effectively been the official language of the entire country since 1931. Besides Spanish, other territorialized languages include Aragonese, Aranese, Astur-Leonese, Basque, Ceutan Arabic, Catalan, Galician, Portuguese and Tamazight, to which the Romani Caló and the sign languages may add up. Roman Catholicism, which has a long history in Spain, remains the dominant religion. Although it no longer has official status by law, in all public schools in Spain students have to choose either a religion or ethics class.
+
+Spain is a Western country. Almost every aspect of Spanish life is permeated by its Roman heritage, making Spain one of the major Latin countries of Europe. Spanish culture is marked by strong historic ties to Catholicism, which played a pivotal role in the country's formation and subsequent identity. Spanish art, architecture, cuisine, and music have been shaped by successive waves of foreign invaders, as well as by the country's Mediterranean climate and geography. The centuries-long colonial era globalized Spanish language and culture, with Spain also absorbing the cultural and commercial products of its diverse empire.
+
+There are three different climate zones in Spain, due to its large size. Visitors can generally expect a Mediterranean climate, characterized by hot, dry summers and mild, rainy winters. The vast central plateau, or Meseta, has a more continental influenced climate with hot, dry summers and cold winters. Rain generally falls mostly in spring and autumn. The mountains surrounding the plateau have a higher rainfall and often experience heavy snowfalls in winter.
+
+From -<a href="https://en.wikipedia.org/wiki/Spain"> Wikipedia</a>
+<p>&nbsp;</p>
+```{r, comment=NA, echo=FALSE, warning=FALSE, message=FALSE}
+library(coronavirus)
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(DT)
+library(leaflet)
+library(gganimate)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(gifski)
+library(av)
+library(scales)
+
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+my_country <- get_individual_project_country("AS2018356")
+data(coronavirus)
+spain_corona <- coronavirus %>% filter(country == "Spain")
+spain_corona$cases[is.na(spain_corona$cases)] <-0
+spain_corona$cases[spain_corona$cases <0] <- abs(spain_corona$cases)
+
+```
+## *Location of Spain*
+<p>&nbsp;</p>
+<center>
+```{r, comment=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
+location <- leaflet() %>%
+  addTiles() %>%
+  setView(lng = -3.703790, lat = 40.416775, zoom = 2) %>%
+  addMarkers(lng = -3.703790, lat = 40.416775, popup = "<b>Spain</b>")
+
+
+location %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+</center>
+<p>&nbsp;</p>
+
+## **Corona Virus in Spain**
+
+<p>&nbsp;</p>
+
+```{r, echo=FALSE, out.width = '50%'}
+knitr::include_graphics("photo-1584483766114-2cea6facdf57.jpg")
+```
+<p>&nbsp;</p>
+
+
+The first confirmed case of COVID-19 in Spain was reported on January 31, 2020, when a German tourist tested positive in the Spanish Canary Islands. However, this was an isolated imported case. It was not until February 24 when Spain confirmed several new COVID-19 cases related to a recent SARS-CoV-2 outbreak in the north of Italy. Since that date, the number of COVID-19 cases grew exponentially in Spain. The economic and social impact of the COVID-19 pandemic in Spain is without precedent.
+
+To combat the pandemic, the Spanish Government implemented a series of social distancing and mobility restriction measures. First, all classes at all educational levels were cancelled. On March 13, the Government of Spain declared a state of emergency for 2 weeks across the entire country. Since the state of emergency was established, all schools and university classes were cancelled, large-scale events and nonessential travel were forbidden, and workers were encouraged to tele-work. Despite these efforts, the daily growth rate in the number of confirmed COVID-19 cases continued to grow. Thus, on March 30, new mobility restriction and social distancing measures were implemented; all nonessential labor activity was to be interrupted for a 2-week period. Moreover, the Spanish Government extended the state of emergency first until April 11 and then renewed on a biweekly basis until June 21. Although these interventions put a halt to the normal daily lives of most people in Spain, their impact on people’s economic, physical, and mental well-being were unknown at the time, as was the actual prevalence of the disease.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+## COVID-19 Full Details in Spain
+
+```{r,echo=FALSE,comment=FALSE,warning=FALSE,message=FALSE}
+datatable(spain_corona, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+
+
+<p>&nbsp;</p>
+
+# Exploratory Data Analysis
+<p>&nbsp;</p>
+### *Details of Confirmed cases in Spain*
+```{r,echo=FALSE,comment=FALSE,warning=FALSE,message=FALSE}
+confirmed_cases_spain <- spain_corona %>% filter(type == "confirmed")
+datatable(confirmed_cases_spain, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+<p>&nbsp;</p>
+
+```{r, echo=FALSE, comment=FALSE, warning=FALSE, message=FALSE}
+alldates <- confirmed_cases_spain$date
+
+dataframe1 <- data.frame(alldates,confirmed_cases_spain)
+
+fig1 <- plot_ly(data=dataframe1, x = ~alldates, y = ~confirmed_cases_spain$cases, name = 'Confirmed', 
+               type = 'scatter', mode = 'lines',
+               line = list(color = 'darkorange', width = 1), fill= 'tozeroy') %>%
+  layout(title="Confirmed Cases by Date",
+         xaxis = list(title = "Date"),
+         yaxis = list (title = "Cases"))
+fig1
+#comment the fig1
+```
+This graph shows the daily confirmed cases in Spain. In this graph we can observe, the number of daily confirmed cases had certain spikes in the middle days(Oct 2020 & Jan 2021) and also the late days(July 2021). The first wave of the Corona virus (COVID-19) pandemic spread rapidly in Spain from February to April 2020, one of Europe's most affected countries. The second wave of pandemic was from September to December in 2020 & third wave of pandemic from January to February 2021. From the graph we can see that rise of confirmed cases in Covid waves.
+
+<p>&nbsp;</p>
+### *Details of Recovered cases in Spain*
+```{r,echo=FALSE,comment=FALSE,warning=FALSE,message=FALSE}
+recovered_cases_spain <- spain_corona %>% filter(type == "recovered")
+datatable(recovered_cases_spain, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+<p>&nbsp;</p>
+
+```{r, echo=FALSE, comment=FALSE, warning=FALSE, message=FALSE}
+dataframe2 <- data.frame(alldates,recovered_cases_spain$cases)
+
+fig2 <- plot_ly(data=dataframe2, x = ~alldates, y = ~recovered_cases_spain$cases, name = 'Recovered', 
+               type = 'scatter', mode = 'lines',
+               line = list(color = 'darkred', width = 1), fill= 'tozeroy') %>%
+  layout(title="Recovered Cases by Date",
+         xaxis = list(title = "Date"),
+         yaxis = list (title = "Cases"))
+fig2
+
+#comment the fig2
+```
+This graph shows how Spain recovered their patients daily. If we look at this graph we can see that there is no data from May 2020. So, we can not mention anything about recovered cases after May 2020.
+
+
+<p>&nbsp;</p>
+### *Details of Death cases in Spain*
+```{r,echo=FALSE,comment=FALSE,warning=FALSE,message=FALSE}
+death_cases_spain <- spain_corona %>% filter(type == "death")
+datatable(death_cases_spain, rownames = FALSE, filter="top", options = list(pageLength = 5, scrollX=T) )
+```
+<p>&nbsp;</p>
+
+```{r, echo=FALSE, comment=FALSE, warning=FALSE, message=FALSE}
+dataframe3 <- data.frame(alldates,death_cases_spain$cases)
+
+fig3 <- plot_ly(data=dataframe3, x = ~alldates, y = ~death_cases_spain$cases, name = 'Death', 
+               type = 'scatter', mode = 'lines',
+               line = list(color = 'darkblue', width = 1), fill= 'tozeroy') %>%
+  layout(title="Death Cases by Date",
+         xaxis = list(title = "Date"),
+         yaxis = list (title = "Cases"))
+fig3
+
+#comment the fig3
+```
+This graph shows the count of death patients in Spain due to the Covid-19. From March to April in 2020 death cases went up. This is possibly because of the first wave of corona virus. Spain reported their highest death count in a day on 4th of November 2020 and again count of death cases climbed from January to March 2021. This is clearly due to third wave of corona virus.
+
+
+<p>&nbsp;</p>
+<center>
+```{r,echo=FALSE,comment=FALSE,message=FALSE,warning=FALSE}
+spain_corona %>%
+  filter(type == "confirmed" |
+    type == "death" |
+    type == "recovered") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = type,
+    color = type
+  )) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  ggtitle("Number of Confirmed, Recovered & Death Cases by Date") +
+  transition_reveal(date)
+#comment the plot2
+```
+
+
+<p>&nbsp;</p>
+</center>
+This graph shows daily Confirmed, Recovered & Death cases in one graph. We can see that death cases are quite low when compared to confirmed cases. There are still Active cases as well. From March to May 2020 Recovery cases are in a good position when compared to Confirmed cases.
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<center>
+```{r,echo=FALSE,comment=FALSE,message=FALSE,warning=FALSE}
+alldates <- confirmed_cases_spain$date
+active_cases_spain <- (cumsum(confirmed_cases_spain$cases)-(cumsum(recovered_cases_spain$cases)+cumsum(death_cases_spain$cases)))
+
+df2 <- data.frame(alldates,active_cases_spain)
+
+plot3 <- plot_ly(data=df2, x = ~alldates, y = ~active_cases_spain, name = 'Activate', 
+               type = 'scatter', mode = 'lines',
+               line = list(color = 'darkblue', width = 1), fill= 'tozeroy') %>%
+  layout(title="Active Cases by Date",
+         xaxis = list(title = "Date"),
+         yaxis = list (title = "Cases"))
+plot3
+#comment the plot3
+```
+</center>
+If we look at this graph, we can see that the accuracy of above graph is high because, in here number of active cases are increasing day by day. This is clearly due to high number of Confirmed Cases & low number of Recovery Cases.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<center>
+```{r, comment=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
+
+active_cases_spain <- (cumsum(confirmed_cases_spain$cases)-(cumsum(recovered_cases_spain$cases)+cumsum(death_cases_spain$cases)))
+active <- c(active_cases_spain)
+
+
+total_confirmed_cases_spain <- sum(confirmed_cases_spain$cases)
+total_recovered_cases_spain <- sum(recovered_cases_spain$cases)
+total_death_cases_spain <- sum(death_cases_spain$cases)
+total_active_cases_spain <- (total_confirmed_cases_spain -(total_recovered_cases_spain + total_death_cases_spain))
+
+
+
+recovered_cases_percentage <-round((total_recovered_cases_spain / total_confirmed_cases_spain) * 100, 1)
+
+death_cases_percentage <- round((total_death_cases_spain / total_confirmed_cases_spain) * 100, 1)
+
+active_cases_percentage <-round((total_active_cases_spain / total_confirmed_cases_spain) * 100, 1)
+
+cases <- c("Recovered","Death","Active")
+percentage <- c(recovered_cases_percentage, death_cases_percentage, active_cases_percentage)
+df1 <- data.frame(cases, percentage)
+
+plot1 <- plot_ly(
+  x = cases,
+  y = percentage,
+  type = ("bar"),
+  marker= list(color=c('lightblue','red','purple')
+))
+plot1 <- plot1 %>% layout(title = "Cases by Percentage",
+         xaxis = list(title = "Cases"),
+         yaxis = list (title = "Percentage",ticksuffix = "%"))
+plot1
+#comment the plot1
+```
+</center>
+
+This graph shows the percentages of cases in Spain. The horizontal axis represents the case name & the vertical axis represents the percentages. In Spain, their Active cases (95.3%) are staggeringly high and Recovery of patients (3%) are very low. However, I would like to focus your attention on death cases (1.7%) because they have been able to control it.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+## Comparison with Other Countries
+<p>&nbsp;</p>
+
+In this project, we are comparing Spain with regard to several other countries. I selected India, Brazil, Russia & Germany because these countries are the most affected countries from Covid-19 and Italy, Portugal & Morocco because they are neighborhood countries of Spain.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+```{r, comment=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
+
+#Corona Data in India
+india_corona <- coronavirus %>% filter(country == "India")
+india_corona$cases[is.na(india_corona$cases)] <-0
+india_corona$cases[india_corona$cases <0] <- abs(india_corona$cases)
+
+confirmed_cases_india <- india_corona %>% filter(type == "confirmed")
+recovered_cases_india <- india_corona %>% filter(type == "recovered")
+death_cases_india <- india_corona %>% filter(type == "death")
+
+
+#Corona Data in Brazil
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+brazil_corona$cases[is.na(brazil_corona$cases)] <-0
+brazil_corona$cases[brazil_corona$cases <0] <- abs(brazil_corona$cases)
+
+confirmed_cases_brazil <- brazil_corona %>% filter(type == "confirmed")
+recovered_cases_brazil <- brazil_corona %>% filter(type == "recovered")
+death_cases_brazil <- brazil_corona %>% filter(type == "death")
+
+
+#Corona Data in Russia
+russia_corona <- coronavirus %>% filter(country == "Russia")
+russia_corona$cases[is.na(russia_corona$cases)] <-0
+russia_corona$cases[russia_corona$cases <0] <- abs(russia_corona$cases)
+
+confirmed_cases_russia <- russia_corona %>% filter(type == "confirmed")
+recovered_cases_russia <- russia_corona %>% filter(type == "recovered")
+death_cases_russia <- russia_corona %>% filter(type == "death")
+
+
+#Corona Data in Germany
+germany_corona <- coronavirus %>% filter(country == "Germany")
+germany_corona$cases[is.na(germany_corona$cases)] <-0
+germany_corona$cases[germany_corona$cases <0] <- abs(germany_corona$cases)
+
+confirmed_cases_germany <- germany_corona %>% filter(type == "confirmed")
+recovered_cases_germany <- germany_corona %>% filter(type == "recovered")
+death_cases_germany <- germany_corona %>% filter(type == "death")
+
+
+#Corona Data in Italy
+italy_corona <- coronavirus %>% filter(country == "Italy")
+italy_corona$cases[is.na(italy_corona$cases)] <-0
+italy_corona$cases[italy_corona$cases <0] <- abs(italy_corona$cases)
+
+confirmed_cases_italy <- italy_corona %>% filter(type == "confirmed")
+recovered_cases_italy <- italy_corona %>% filter(type == "recovered")
+death_cases_italy <- italy_corona %>% filter(type == "death")
+
+
+#Corona Data in Portugal
+portugal_corona <- coronavirus %>% filter(country == "Portugal")
+portugal_corona$cases[is.na(portugal_corona$cases)] <-0
+portugal_corona$cases[portugal_corona$cases <0] <- abs(portugal_corona$cases)
+
+confirmed_cases_portugal <- portugal_corona %>% filter(type == "confirmed")
+recovered_cases_portugal <- portugal_corona %>% filter(type == "recovered")
+death_cases_portugal <- portugal_corona %>% filter(type == "death")
+
+
+#Corona Data in Morocco
+morocco_corona <- coronavirus %>% filter(country == "Morocco")
+morocco_corona$cases[is.na(morocco_corona$cases)] <-0
+morocco_corona$cases[morocco_corona$cases <0] <- abs(morocco_corona$cases)
+
+confirmed_cases_morocco <- morocco_corona %>% filter(type == "confirmed")
+recovered_cases_morocco <- morocco_corona %>% filter(type == "recovered")
+death_cases_morocco <- morocco_corona %>% filter(type == "death")
+
+```
+
+
+<center>
+```{r, echo=FALSE, comment=FALSE, warning=FALSE, message=FALSE}
+
+confirmed_spain <- c(cumsum(confirmed_cases_spain$cases))
+recovered_spain <- c(cumsum(recovered_cases_spain$cases))
+death_spain <- c(cumsum(death_cases_spain$cases))
+
+confirmed_india <- c(cumsum(confirmed_cases_india$cases))
+recovered_india <- c(cumsum(recovered_cases_india$cases))
+death_india <- c(cumsum(death_cases_india$cases))
+
+confirmed_brazil <- c(cumsum(confirmed_cases_brazil$cases))
+recovered_brazil <- c(cumsum(recovered_cases_brazil$cases))
+death_brazil <- c(cumsum(death_cases_brazil$cases))
+
+confirmed_russia <- c(cumsum(confirmed_cases_russia$cases))
+recovered_russia <- c(cumsum(recovered_cases_russia$cases))
+death_russia <- c(cumsum(death_cases_russia$cases))
+
+confirmed_germany <- c(cumsum(confirmed_cases_germany$cases))
+recovered_germany <- c(cumsum(recovered_cases_germany$cases))
+death_germany <- c(cumsum(death_cases_germany$cases))
+
+confirmed_italy <- c(cumsum(confirmed_cases_italy$cases))
+recovered_italy <- c(cumsum(recovered_cases_italy$cases))
+death_italy <- c(cumsum(death_cases_italy$cases))
+
+confirmed_portugal <- c(cumsum(confirmed_cases_portugal$cases))
+recovered_portugal <- c(cumsum(recovered_cases_portugal$cases))
+death_portugal <- c(cumsum(death_cases_portugal$cases))
+
+confirmed_morocco <- c(cumsum(confirmed_cases_morocco$cases))
+recovered_morocco <- c(cumsum(recovered_cases_morocco$cases))
+death_morocco <- c(cumsum(death_cases_morocco$cases))
+
+#Comparison by Confirmed Cases
+
+df3 <- data.frame(alldates,confirmed_spain,confirmed_india,confirmed_brazil,confirmed_russia,confirmed_germany,confirmed_italy,confirmed_portugal,confirmed_morocco)
+
+plot4 <- plot_ly(data=df3, x = ~alldates, y = ~confirmed_spain, name = 'Spain', 
+               type = 'scatter', mode = 'lines',
+               line = list(color = 'blue', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_india, name = 'India', 
+                         line = list(color = 'red', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_brazil, name = 'Brazil', 
+                         line = list(color = 'green', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_russia, name = 'Russia', 
+                         line = list(color = 'black', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_germany, name = 'Germany', 
+                         line = list(color = 'silver', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_italy, name = 'Italy', 
+                         line = list(color = 'yellow', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_portugal, name = 'Portugal', 
+                         line = list(color = 'brown', width = 1))
+plot4 <- plot4 %>% add_trace(y = ~confirmed_morocco, name = 'Morocco', 
+                         line = list(color = 'purple', width = 1))
+plot4 <- plot4 %>% layout(title="Comparison of Total Confirmed Cases",
+         xaxis = list(title = "Date"),
+         yaxis = list (title = "Total Confirmed Cases"))
+plot4
+#comment the plot4
+```
+</center>
+From the above graph we can see that the India has increased total number of daily Confirmed cases rapidly from July 2020 to December in 2020 & from April 2021 to September 2021. Brazil also shows sudden increased total number of Confirmed cases since June in 2020. After that, Russia, Spain, Italy & Germany climbed their total number of confirmed cases slowly. Portugal and Morocco have taken control of the situation and kept it under control. An interesting observation is, in nowadays Spain has taken in under control of confirmed cases.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<center>
+```{r,echo=FALSE,comment=FALSE,message=FALSE,warning=FALSE}
+
+#Comparison by Recovered Cases
+
+df4 <- data.frame(confirmed_spain,confirmed_india,confirmed_brazil,confirmed_russia,confirmed_germany,confirmed_italy,confirmed_portugal,confirmed_morocco,recovered_spain,recovered_india,recovered_brazil,recovered_russia,recovered_germany,recovered_italy,recovered_portugal,recovered_morocco)
+
+plot5 <- plot_ly(data=df4, x = ~confirmed_spain, y = ~recovered_spain, name = 'Spain', 
+               type = 'scatter', mode = 'lines',
+               line = list(color = 'blue', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_spain, y = ~recovered_india, name = 'India', 
+                         line = list(color = 'red', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_brazil, y = ~recovered_brazil, name = 'Brazil', 
+                         line = list(color = 'green', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_russia, y = ~recovered_russia, name = 'Russia', 
+                         line = list(color = 'orange', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_germany, y = ~recovered_germany, name = 'Germany', 
+                         line = list(color = 'silver', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_italy, y = ~recovered_italy, name = 'Italy', 
+                         line = list(color = 'yellow', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_portugal, y = ~recovered_portugal, name = 'Portugal', 
+                         line = list(color = 'brown', width = 2))
+plot5 <- plot5 %>% add_trace(x = ~confirmed_morocco, y = ~recovered_morocco, name = 'Morocco', 
+                         line = list(color = 'purple', width = 2))
+plot5 <- plot5 %>% add_segments(x = 0, xend = 20000000, y = 0, yend = 20000000, line = list(dash = "dash", color = 'black'), showlegend = FALSE)
+plot5 <- plot5 %>% layout(title="Comparison of Confirmed & Recovered Cases of Countries",
+         xaxis = list(title = "Confirmed Cases"),
+         yaxis = list (title = "Recovered Cases"))
+plot5
+#comment the plot5
+```
+</center>
+In this plot we illustrate total Confirmed Cases vs total Recovered Cases of selected countries. With regards to the ratio of confirmed and recovered cases, Portugal, Morocco and Germany have been quite close to the 1:1 ratio line with slight deviation in the middle. There are strict regulations in Brazil, Russia and Italy have had some effect in their ability to get more patients recovered. I would like to focus your attention on two key significant areas. The first one is, India is increasing their recovery cases more than their confirmed cases. The second one is, in Spain their confirmed cases grow up while recovery cases are reduced.
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<center>
+```{r, echo=FALSE, comment=FALSE, warning=FALSE, message=FALSE}
+
+World_death_cases <- coronavirus %>% filter(type == "death")
+World_death_cases$cases[World_death_cases$cases < 0] <- abs(World_death_cases$cases)
+world_death_count <- sum(World_death_cases$cases)
+
+total_death_cases_spain <- sum(death_cases_spain$cases)
+total_death_cases_india <- sum(death_cases_india$cases)
+total_death_cases_brazil <- sum(death_cases_brazil$cases)
+total_death_cases_russia <- sum(death_cases_russia$cases)
+total_death_cases_germany <- sum(death_cases_brazil$cases)
+total_death_cases_italy <- sum(death_cases_italy$cases)
+total_death_cases_portugal <- sum(death_cases_portugal$cases)
+total_death_cases_morocco <- sum(death_cases_morocco$cases)
+
+total_death_cases_of_all_other_countries <- world_death_count - (sum(total_death_cases_spain, total_death_cases_india, total_death_cases_brazil, total_death_cases_russia, total_death_cases_germany, total_death_cases_italy, total_death_cases_portugal, total_death_cases_morocco))
+
+spain_death_cases_percentage <- round((total_death_cases_spain / world_death_count) * 100, 2)
+india_death_cases_percentage <- round((total_death_cases_india / world_death_count) * 100, 2)
+brazil_death_cases_percentage <- round((total_death_cases_brazil / world_death_count) * 100, 2)
+russia_death_cases_percentage <- round((total_death_cases_russia / world_death_count) * 100, 2)
+germany_death_cases_percentage <- round((total_death_cases_germany / world_death_count) * 100, 2)
+italy_death_cases_percentage <- round((total_death_cases_italy / world_death_count) * 100, 2)
+portugal_death_cases_percentage <- round((total_death_cases_portugal / world_death_count) * 100, 2)
+morocco_death_cases_percentage <- round((total_death_cases_morocco / world_death_count) * 100, 2)
+other_countries_death_case_percentage <- round((total_death_cases_of_all_other_countries/world_death_count)*100, 2)
+
+labels = c('Spain','India','Brazil','Russia','Germany','Italy','Portugal','Morocco','Other Countries')
+values = c(spain_death_cases_percentage, india_death_cases_percentage, brazil_death_cases_percentage, russia_death_cases_percentage, germany_death_cases_percentage, italy_death_cases_percentage, portugal_death_cases_percentage, morocco_death_cases_percentage, other_countries_death_case_percentage)
+
+plot6 <- plot_ly(type='pie', labels=labels, values=values, 
+               textinfo='label+percent',
+               insidetextorientation='radial')
+plot6 <- plot6 %>% layout(title = "Percentage of Death in Selected Countries out of Total Deaths in the World")
+plot6
+
+#comment the plot6
+```
+</center>
+The pie chart above illustrates percentages of deaths in countries. According to the pie chart it is clear that the death percentage is higher in Brazil, Germany and India. Death percentages of Russia and Italy are slightly high & in Portugal and Morocco the Death percentages are slightly low. Compared to other countries Spain is in a good position.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+# Conclusion
+
+<p>&nbsp;</p>
+
+This project represents how Covid-19 pandemic has affected Spain.
+<p>&nbsp;</p>
+Overall,
+<ol>
+<li>This project is based on the data from January 2020 to September 2021.</li>
+<li>In Spain, first confirmed case was reported on 01st January 2020.</li>
+<li>Highest Confirmed cases were reported on 25th January 2021 and it was 93,822.</li>
+<li>However in late days Spain has been able to reduce the daily confirmed cases.</li>
+<li>First Death case was reported on 03rd March 2020 & highest number of cases were reported on 04th November 2020 and it was 1623.</li>
+<li>Compared to other countries (Brazil, Germany, India), Spain has reduced the death rate to some extent.</li>
+<li>However we can not be satisfied with the Recovery cases in Spain.</li>
+<li>Neighborhood countries (Portugal,Morocco) of Spain have been able to reduce the confirmed and death cases.</li>
+<li>Also Portugal and Morocco have been able to show their ability to get more patients Recovered.</li>
+<li>Finally, We can conclude that the country has not yet been able to reduce the Covid-19 Confirmed cases and country is still suffering from Covid-19 disease.</li>
+</ol>
+
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+# Discussion
+
+<p>&nbsp;</p>
+
+Whole world still facing the global crisis of the COVID-19 pandemic. This project was done to analyse the Covid-19 affect of Spain. The first wave of corona virus was in Spain from April to May in 2020 and a national lockdown was implemented on 15th March in 2020. Then the second wave was from September to December in 2020. On 07th September in 2020, the number of cases reported reached over half a million and became the second country in Europe to reach this milestone after Russia. In January 2021, Spain started to vaccinate the first dose and in February 2021 they started the second dose vaccination. On July 2021, Spain registered the highest number of COVID-19 vaccines administered with around 578 thousand doses. As of September 2021, the number of COVID-19 vaccines administered in Spain amounted to nearly 70 million doses. The countries that had administered the highest number of COVID-19 vaccination doses in Europe were the Germany and France. My goal in this project is to provide my contribution, by analyzing the data related to the Spain and compare them with some other countries. I have used four countries (India, Brazil, Russia, Germany) that were mostly affected from Covid-19 and three neighborhood countries (Italy, Portugal, Morocco). The report is written in R Markdown. This analysis represents Confirmed cases, Recovered cases, Death cases and Active cases in Spain and also the data was compared with other selected countries as well. The results are in R and it is being updated. This study is based on the data from January 2020 to September 2021. However with regard to other countries as mentioned earlier, Spain is in a real situation by the number of Confirmed cases rising and Recovery cases falling down. We do not know when or how the pandemic will end. In this period keep social distance, wear a mask and keep sanitizing your hands as well. Then we can reduce the chance of being infected and spreading corona virus. And also it is helpful for future epidemic control.
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+# References
+
+<p>&nbsp;</p>
+
+<ol>
+<li> Wikipedia : https://en.wikipedia.org/wiki/Spain </li>
+<li> COVID-19 pandemic in Spain : https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Spain </li>
+<li> World Health Organization : https://www.who.int/ </li>
+<li> BBC News : https://www.bbc.com/news </li>
+<li> CNN News : https://edition.cnn.com/ </li>
+<li> Borgen Magazine : https://www.borgenmagazine.com/covid-19-in-spain/ </li>
+<li> Last Year Reports : https://hellor.netlify.app/coronareports/ </li>
+<li> R Markdown Basics : http://stats.idre.ucla.edu/stat/data/rmarkdown/rmarkdown_seminar_flat.html#figure-captions </li>
+<li> Data Visualization Guideline : https://medium.com/swlh/step-by-step-data-visualization-guideline-with-plotly-in-r-fbd212640de2 </li>
+</ol>
+
+<p>&nbsp;</p>
+
+
+
+
+
+
+
+
+

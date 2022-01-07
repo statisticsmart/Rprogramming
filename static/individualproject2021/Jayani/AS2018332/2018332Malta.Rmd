@@ -1,0 +1,443 @@
+---
+title: "Corona Condition in Malta"
+author: "Pasindu Piyumike De Silva"
+date: "9/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# **1.  INTRODUCTION**
+
+<p style='text-align: justify;'> 
+Malta is a southern European country and consists of an archipelago. It is situated centrally in the Mediterranean Sea, south of Sicily, Italy.It lies 80 km (50 mi) south of Italy, 284 km (176 mi) east of Tunisia, and 333 km (207 mi) north of Libya. Malta's geographic position between the European Union region and Africa makes it a target for immigration. The government system is a republic; the chief of state is the president, and the head of government is the prime minister. Malta has a mixed economic system which includes a variety of private freedom, combined with centralized economic planning and government regulation. Malta is a member of the European Union (EU).
+</p>
+```{r, echo=FALSE, out.width="60%",fig.align = 'center', fig.cap="Malta - Google Maps"}
+knitr::include_graphics("asdrty.jpg")
+
+
+```
+
+### **1.1.  Visualization of Malta in World Map**
+```{r,warning=FALSE,message=FALSE, fig.align = 'center'} 
+library(sta3262)
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+malta_corona <- coronavirus %>% filter(country == "Malta")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = malta_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+
+
+
+### **1.2.  Climate condition in Malta**
+
+<p style='text-align: justify;'> 
+Malta enjoys a Mediterranean climate, with sea temperatures higher than in any other part of Europe. The Maltese Islands have a pleasantly sunny climate with a daily average of around 12 hours sunshine in summer going down to 5 to 6 hours in mid-winter. The average yearly temperature is around 23 °C (73 °F) during the day and 16 °C (61 °F) at night. In the capital, Valletta, the average temperature ranges from 12.5 °C (54.5 °F) in February to 27 °C (81 °F) in August. </p>
+
+Summers are hot, dry and very sunny. Day-time temperatures in summer are often mitigated by cooling sea breezes. 
+
+Spring and autumn are cooler, except when the occasional Scirocco wind from Africa brings unseasonally high temperatures and humidity.
+
+Winters are mild, with the occasional short cold spells brought about by the north and north-easterly winds from central Europe.
+
+Annual rainfall is low, averaging 568mm a year. Bathing in the sea is quite possible well into the ‘winter’ months, and the peak beach season can last until mid- to late October. 
+
+
+
+
+```{r, echo=FALSE, out.width="60%",fig.align = 'center', fig.cap="Malta Average Monthly Temeratures"}
+knitr::include_graphics("climate.jpg")
+
+```
+
+
+### **1.3.  COVID-19 pandemic in Malta and Timeline**
+
+<p style='text-align: justify;'>
+The COVID-19 pandemic in Malta is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first case of the disease in Malta was an Italian 12-year-old girl on 7 March 2020. The girl and her family were in isolation, as required by those following the Maltese health authority's guidelines who were in Italy or other highly infected countries. Later, both her parents were found positive as well. </p>
+
+On 23 March, the total number of confirmed cases in the country crossed over 100 as another seventeen new cases were reported.
+
+<p style='text-align: justify;'>
+The first death due to COVID-19 in Malta was reported on 8 April in a press-conference held by the Minister for Health & Superintendent of Public Health. The victim was a 92-year-old woman from Gozo.</p>
+
+<p style='text-align: justify;'>
+On 8 August 2021, the total number of confirmed cases in the country crossed over 1000. On 2 December, the total number of confirmed cases in the country crossed over 10,000.
+The second wave of the virus in Malta is considered to be worse than the first.</p>
+
+As of 26 September 2021, Malta has reported 37,090 confirmed cases, 35,816 recoveries and 457 deaths, while 421 cases remain active.
+
+
+### **1.4.  Lockdown Status and Actions taken by Government**
+
+On 24 January 2020, the Superintendent for Public Health, Charmaine Gauci, predicted low exposure due to no direct flights between Malta and China
+
+<p style='text-align: justify;'>
+On 25 February, the Ministry for Health recommended travellers coming from Italy to self-quarantine for 14 days and for all citizens not to travel to regions of Italy affected by the outbreak.As the Italy coronavirus pandemic proceeded south with the first case discovered in Palermo, panic buying ensued and supermarkets were emptied.</p>
+
+<p style='text-align: justify;'>
+On 11 March, Maltese government has placed a travel ban on trips to Germany, France, Spain and Switzerland, in addition to the ban on trips to Italy, which had been placed on 9 March. Additionally anyone travelling back from mentioned countries must follow a mandatory self-quarantine. Disobeying the order makes the individuals subject to a €1,000 fine.
+On 12 March, the Prime Minister announced a number of measures including:</p>
+
+  * Closure of all schools, university and childcare centres for a week;
+  * Closure of day centres for the elderly;
+  * Stop religious activities unless absolutely necessary;
+  * Television channel TVM2 will be transmitting religious activities in agreement with the  Archbishop;
+  * All football games to be played behind closed doors. Other matches were been postponed;
+  * No political activities.[3
+
+<p style='text-align: justify;'>
+On 26th March 2020 the Maltese government announced that with effect from 28th March 2020, people over sixty-five years of age and people with health-related conditions should be required to stay at home at all times, barring a few exceptions. It is important to note that people in these categories and who work, are being asked to either work from home or benefit from special quarantine leave. t was also announced that the police shall be empowered to break up and disperse groups of more than five people who may be gathered in public places.</p>
+
+<p style='text-align: justify;'>
+The first death due to COVID-19 in Malta was reported on 8th April. On 8th August, the total number of confirmed cases in the country crossed over 1000 and on 2nd December, the total number of confirmed cases in the country crossed over 10,000. On 16th October, due to a massive spike in cases, the Maltese Government announced new measures that would go into effect on 19 October.</p>
+
+<p style='text-align: justify;'>
+A mandatory quarantine was imposed on travellers and those who were possibly in contact with those who travelled abroad. A mandatory lockdown was imposed on those over the age of 65 and/or suffering from chronic health conditions. WHO praised the Maltese government's response to the pandemic. before the number of cases rose to 52 on 7 April. On May Day, because the reproductive rate of the virus was below 0, the first relaxation of some measures were announced.</p>
+
+On 10 March 2021, following 510 new reported cases, the Maltese Government announced new measured that would go into effect on 11 March. These were:
+
+  * Schools to close on Monday and lessons shift online
+  * Non-essential shops, restaurants, cafes, bars, casinos and services closed from tomorrow
+  * Childcare centres to close from Monday
+  * All ancillary services in hotels will be shut
+  * Gozo travel restricted to essential travel and to those who own property there
+  * Public group gatherings will be limited to 4 people
+  * All organised sport activities are suspended
+  * Pools, gyms, museums, theatres and cinemas will close
+  * No weddings can be held
+  * Religious services, including mass are cancelled
+  * Funerals will continue being held according to existing protocols
+  * Non-urgent operations at hospital are postponed
+  
+<p style='text-align: justify;'>
+On 12 May 2021, the Minister for Health, Chris Fearne, stated that Malta would be the first EU country to open up the vaccine to its population of over 16 years of age. On 25 May 2021, Maltese government announced that 70% of the Maltese population had become fully vaccinated, making it the first nation in the world to reach the minimum estimated benchmark for herd immunity against the virus.</p>
+
+<p style='text-align: justify;'>
+In May 2021, Malta became the first EU country to open up the vaccine to the entire population.[7] On 25 May 2021, the health minister announced that 70% of the Maltese population had become fully vaccinated, making it the first nation in the world to reach the minimum estimated benchmark for herd immunity against the virus.</p>
+
+<p style='text-align: justify;'>
+In May 2021, Malta became the first EU country to open up the vaccine to the entire population. On 25 May 2021, the health minister announced that 70% of the Maltese population had become fully vaccinated, making it the first nation in the world to reach the minimum estimated benchmark for herd immunity against the virus.</p>
+
+
+# **2.  Exploratory Data Analysis**
+
+
+### **2.1.  Visualization of death, confirmed, recovered, active cases**
+
+```{r,warning=FALSE,message=FALSE}
+library(tidyverse)
+library(magrittr)
+malta_corona <- coronavirus %>% filter(country == "Malta")
+# To remove the negative values of the data set
+malta_corona1 <- malta_corona %>% mutate(cases = replace (cases, which(cases < 0),0))
+malta_corona <- coronavirus %>% filter(country == "Malta")
+# To remove the null values of the data set
+malta_corona1[is.na(malta_corona1)]=0
+view(malta_corona1)
+```
+#### **Summery of Covid-19 Data in Malta**
+```{r,message=FALSE,fig.align = 'center',(echo = TRUE)} 
+summary(malta_corona1)
+```
+
+This summery is consisted with the number of confirmed, death and recovered corona cases from 22nd January 2020 to 18th September 2021 of the country Malta
+
+#### **Extract recovered cases in the Malta**
+```{r, fig.align = 'center'}
+recover_corona <- malta_corona1 %>% filter(type=="recovered")
+ggplot(recover_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Malta: Daily Covid-19 Recovered cases")
+```
+<p style='text-align: justify;'>
+According to the plot we can see that there is only few recovered cases were reported until the August 2020. After that we can see clearly that number of daily recovered cases has increased until March 2020. It has been reached near 400 daily recovered cases. After end of March there was a rapid decrease in daily confirmd cases untill April 2021. Again it rapidly increased to 300 daily confirmed cases during the month of August 2021 and after that it rapidly decreases again.
+</p>
+
+
+#### **Extract confirmed cases in the Malta**
+```{r, fig.align = 'center'}
+confirm_corona <- malta_corona1 %>% filter(type=="confirmed")
+ggplot(confirm_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Malta: Daily Covid-19 Confirmed cases")
+```
+<p style='text-align: justify;'>
+According to the plot we can see that there is only few confirmed cases were reported until the end of  July 2020. After that we can see clearly that number of confirmed cases has increased by daily until March 2020. In March there has been a significant increase and it has been reached 500 daily confirmed cases. After middle of March there was a rapid decrease in daily confirmd cases untill July 2021. Again it rapidly increased to 200 daily confirmed cases during the month of July 2021
+</p>
+
+#### **Extract death cases in the Malta**
+```{r, fig.align = 'center'}
+death_corona <- malta_corona1 %>% filter(type=="death")
+ggplot(death_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Malta: Daily Covid-19 death cases")
+```
+<p style='text-align: justify;'>
+According to figure there were no coronavirus death records in Malta until the month of April 2020. Then we can see that there is only few death cases were reported. After that we can see clearly that number of daily death cases has rapidly increased and it has been reached near 7 daily death cases in November 2020. After that from middle of March 2021, it has been decreased again.
+</p>
+
+#### **Extract Active cases in the Malta**
+```{r}
+new_malta <- malta_corona1 %>% pivot_wider(names_from=type, values_from=cases)
+new_malta$active <- new_malta$confirmed - new_malta$death - new_malta$recovered
+# To remove the negative values of the data set
+malta_active <- new_malta %>% mutate(active = replace (active, which(active < 0),0))
+# To remove the null values of the data set
+malta_active[is.na(malta_active)]=0
+
+ggplot(malta_active, aes(x=date, y=active)) + geom_line() + ggtitle("Malta: Daily Covid-19 Active cases")
+```
+
+<p style='text-align: justify;'>
+According to figure there were no coronavirus active cases in Malta until the month of March 2020. Then we can see that there is only few active cases were reported. After that we can see clearly that number of active cases has rapidly increased and it has been reached near 250 daily active cases in March 2021. After that it has been decreased again. Then it has been increased again in July 2021.
+</p>
+
+##### **Daily Covid-19 cases by type**
+```{r, fig.align = 'center'}
+ggplot(malta_corona1, aes(x=date, y = cases, color = type)) + geom_path(size = 0.5) + ggtitle("Malta: Daily Covid-19 cases by type")
+```
+```{r, fig.align = 'center'}
+ggplot(malta_corona1, aes(x=date, y=cases, color=type)) + geom_line() + ggtitle("Malta: Daily Covid-19 cases by type") + facet_grid(rows = vars(type))
+```
+<p style='text-align: justify;'>
+Above 2 graphs shows the number of confirmed, death and recovered covid-19 cases in Malta in daily basis in the same graph. According to the both graphs it shows that the daily covid-19 death cases are very law compared to both covid-19 confirmed & recovered cases. We can clearly see that confirmed cases have been started before recovered covid-19 cases.  Also we can clearly identify that the curves of confirmed and recovered cases have some similarities to each other.  From January 2021 to middle of March 2021, we can see a rapid increase in both confirmed and recovered cases. After that there has been a significant decrease in both cases until August 2021.
+</p>
+
+#### **Total Covid-19 Death cases in Malta**
+```{r, fig.align = 'center'}
+death_corona1 <-  death_corona%>% mutate(cum_cases = cumsum(cases))
+ggplot(death_corona1, aes(date, cum_cases)) + geom_path(size = 1) +
+  ggtitle("Malta: Total Covid-19 death cases")
+sum(death_corona$cases)
+```
+
+<p style='text-align: justify;'>
+We can see there were no coronavirus death cases in Malta before the month of April 2020. Covid-19 total death cases from April to August 2020, have been increase to 50. But then from August 2020 to April 2021 there has been a rapid increase of death cases and total number of death cases have been raised to 400.
+</p>
+
+#### **Total Covid-19 confirmed cases**
+
+
+```{r, fig.align = 'center'}
+confirm_corona1 <-  confirm_corona%>% mutate(cum_cases = cumsum(cases))
+ggplot(confirm_corona1, aes(date, cum_cases)) + geom_path(size = 1) +
+  ggtitle("Malta: Total Covid-19 confirmed cases")
+sum(confirm_corona$cases)
+```
+
+<p style='text-align: justify;'>
+According to figure there were no coronavirus confirmed pations in Malta before begining of the month of April 2020. From beginning of April 2020 to December 2020, the total number of confirmed cases have been increses to 10000. But after that there has been a rapid increase in the number of total confirmed covid-19 cases. Total number of covid-19 recovered cases has passed 30000 in end of April 2021. Tthe highest number of total confirmed cases has reached to 36994.
+</p>
+
+#### **Total Covid-19 recovered cases**
+```{r, fig.align = 'center'}
+recover_corona1 <-  recover_corona%>% mutate(cum_cases = cumsum(cases))
+ggplot(recover_corona1, aes(date, cum_cases)) + geom_path(size = 1) +
+  ggtitle("Malta: Total Covid-19 recovered cases")
+sum(recover_corona$cases)
+```
+
+<p style='text-align: justify;'>
+According to figure there were no coronavirus recovered cases in Malta before begining of the month of April 2020. From end of April 2020 to January 2021, the total number of recovered cases have been increses to 10000. But after that there has been a rapid increase in the number of total recovered covid-19 cases. Total number of covid-19 recovered cases has passed 30000 in beginning of July 2021. In August 2021, the highest number of total recovered cases has reached to 32483.
+</p>
+
+
+
+### **2.2.  Comparison with other countries**
+
+<p style='text-align: justify;'>
+Malta is a southern European country and consists of an archipelago. It is situated centrally in the Mediterranean Sea. There are no countries that are directly adjacent to Malta because Malta is completely surrounded by water and has no (natural) land connections to other countries. But Malta is situated close to France, Italy, Albania, Greece, Algeria, Tunesia and Libya. These countries can be also considered as one of its neighboring countries, therefore this section elaborates the Covid-19 situation of Malta when compared to its neighboring countries.
+</p>
+
+```{r, echo=FALSE, out.width="75%",fig.align = 'center', fig.cap="Malta's neighbour countries"}
+knitr::include_graphics("World-Data-Locator-Map-Malta.jpg")
+
+```
+
+### **Malta VS Europe neighbour countries (France, Italy, Albania & Greece)**
+```{r}
+near_countries1 <- coronavirus %>% filter(country == "Malta" |country == "France" | country == "Italy" | country == "Albania" | country == "Greece",)
+
+# To remove the negative values from the data set
+near_countries1 <- near_countries1 %>% mutate(cases = replace (cases, which(cases < 0),0))
+
+# To remove the null values from the data set
+near_countries1[is.na(near_countries1)]=0
+
+# view(near_countries)
+##count(near_countries,country)
+
+confirm_near_countries1 <- near_countries1 %>% filter(type == "confirmed")
+death_near_countries1 <- near_countries1 %>% filter(type == "death")
+recover_near_countries1 <- near_countries1 %>% filter(type == "recovered")
+```
+
+
+<p style='text-align: justify;'>
+Here France, Italy, Albania & Greece are Europe countries. These countries can be also considered as one of its neighboring countries of Europe, therefore this section elaborates the Covid-19 situation of Malta when compared to its Europe neighboring countries.
+</p>
+
+#### **Daily confirmed cases with Europe neighbour countries**
+
+```{r, fig.align = 'center'}
+ggplot(confirm_near_countries1, aes(x = date, y = cases, colour = country)) + geom_point() + 
+  ggtitle("Daily confirmed cases")
+
+ggplot(confirm_near_countries1, aes(x=country, y=cases)) + geom_col() + ggtitle("Bar chart of Daily confirmed cases")
+
+```
+
+<p style='text-align: justify;'>
+From these graphs we can clearly see that Malta covid-19 confirmed cases are the lowest confirmed cases compared to neighboring countries. Also France covid-19 confirmed cases are higher than other neighboring countries. France and Italy displaying a much drastic increase than the other countries.
+</p>
+
+
+#### **Daily death cases with Europe neighbour countries**
+
+```{r, fig.align = 'center'}
+ggplot(death_near_countries1, aes(x = date, y = cases, colour = country)) + geom_point() + 
+  ggtitle("Daily death cases")
+
+ggplot(death_near_countries1, aes(x=country, y=cases)) + geom_col() + ggtitle("Bar chart of Daily death cases")
+
+```
+
+<p style='text-align: justify;'>
+From these graphs we can clearly see that Malta covid-19 death cases are the lowest death cases compared to neighboring countries. Italy covid-19 death cases are higher than other neighboring countries. France and Italy displaying a much drastic increase than the other countries. Albania has low death cases compared to Greece.
+</p>
+
+#### **Daily recovered cases with Europe neighbour countries**
+
+```{r, fig.align = 'center'}
+ggplot(recover_near_countries1, aes(x = date, y = cases, colour = country)) + geom_point() + 
+  ggtitle("Daily recovered cases")
+
+ggplot(recover_near_countries1, aes(x=country, y=cases)) + geom_col() + ggtitle("Bar chart of Daily recovered cases")
+```
+
+<p style='text-align: justify;'>
+From these graphs we can clearly see that Italy covid-19 recovered cases are the highest recovered cases compared to neighboring countries. Italy displaying a much drastic increase than the other countries. Malta covid-19 recovered cases has the lowest recover case compared to other neighbouring countries. Greece has low recovered cases compared to Albania.
+</p>
+
+### **Malta VS North African neighbour countries (Algeria, Tunisia & Libya)**
+
+```{r}
+near_countries2 <- coronavirus %>% filter(country == "Malta" |country == "Algeria" | country == "Tunisia" | country == "Libya" ,)
+# To remove the negative values from the data set
+near_countries2 <- near_countries2 %>% mutate(cases = replace (cases, which(cases < 0),0))
+
+# To remove the null values from the data set
+near_countries2[is.na(near_countries2)]=0
+
+# view(near_countries)
+##count(near_countries,country)
+
+confirm_near_countries2 <- near_countries2 %>% filter(type == "confirmed")
+death_near_countries2 <- near_countries2 %>% filter(type == "death")
+recover_near_countries2 <- near_countries2 %>% filter(type == "recovered")
+```
+
+<p style='text-align: justify;'>
+Here Algeria, Tunisia & Libya are North African countries. These countries can be also considered as one of its neighboring countries of North Africa, therefore this section elaborates the Covid-19 situation of Malta when compared to its North African neighboring countries.</p>
+
+
+#### **Daily confirmed cases with North African neighbour countries**
+
+```{r, fig.align = 'center'}
+ggplot(confirm_near_countries2, aes(x=date, y=cases, color=country)) + geom_line() + ggtitle("Daily confirm cases") + facet_grid(rows = vars(type))
+
+ggplot(confirm_near_countries2, aes(x=country, y=cases)) + geom_col() + ggtitle("Bar chart of Daily confirmed cases")
+
+```
+
+
+<p style='text-align: justify;'>
+From these graphs we can clearly see that Malta covid-19 confirmed cases are the lowest confirmed cases compared to neighboring countries. Tunisia covid-19 confirmed cases are higher than other neighboring countries. Tunisia displaying a much drastic increase than the other countries. Algeria has low confirmed cases compared to Libya.
+</p>
+
+
+
+#### **Daily death cases with North African neighbour countries**
+
+
+```{r, fig.align = 'center'}
+ggplot(death_near_countries2, aes(x=date, y=cases, color=country)) + geom_line() + ggtitle("Daily death cases") + facet_grid(rows = vars(type))
+
+ggplot(death_near_countries2, aes(x=country, y=cases)) + geom_col() + ggtitle("Bar chart of Daily death cases")
+
+```
+
+<p style='text-align: justify;'>
+According to these graphs we can clearly see that Malta covid-19 death cases are the lowest death cases compared to neighboring countries. Also Tunisia covid-19 death cases are higher than other neighboring countries. Tunisia displaying a much drastic increase than the other countries. Libya has low death cases compared to Algeria.</p>
+
+
+#### **Daily recovered cases with North African neighbour countries**
+
+
+```{r, fig.align = 'center'}
+ggplot(recover_near_countries2, aes(x=date, y=cases, color=country)) + geom_line() + ggtitle("Daily recovered cases") + facet_grid(rows = vars(type))
+
+ggplot(recover_near_countries2, aes(x=country, y=cases)) + geom_col() + ggtitle("Bar chart of Daily recovered cases")
+
+```
+
+<p style='text-align: justify;'>
+According to these graphs we can clearly see that Malta covid-19 recovered cases are the lowest recovered cases compared to neighboring countries. Also Tunisia covid-19 recovered cases are higher than other neighboring countries. Tunisia displaying a much drastic increase than the other countries. Algeria has low recovered cases compared to Libya.
+</p>
+
+
+# **3.  Conclusions and Discussion**
+
+<p style='text-align: justify;'>
+The COVID-19 pandemic in Malta is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first case of the disease in Malta was an Italian 12-year-old girl on 7 March 2020. The girl and her family were in isolation, as required by those following the Maltese health authority's guidelines who were in Italy or other highly infected countries.</p>
+
+<p style='text-align: justify;'>
+The data set has been cosidered from 22 of Junuary 2020 to 18 of September 2021 time period. Here we have been given daily coronavirus confirmed cases, recovered cases in Malta  for this analysis.There were negative values and null values in coronavirus cases on data set . They were the outliers in this data set. Therefore I changed negative values and null values to zero.</p>
+
+<p style='text-align: justify;'>
+Here I have done an Exploratory Data Analysis to discuss the daily Covid-19 confirmed, recovered and death cases seperately. Then I discussed the confirmed, death and recovered Covid-19 cases in Malta in daily basis in the same graph. After that I considered the Total Covid-19 confirmed, recovered and death cases seperately.</p>
+
+<p style='text-align: justify;'>
+Malta is situated close to France, Italy, Albania, Greece, Algeria, Tunesia and Libya. These countries can be also considered as one of its neighboring countries. Here France, Italy, Albania & Greece are Europe countries and Algeria, Tunisia & Libya are North African countries. I made an comparison to Covid-19 cases of Malta with its Europe and North African neighbouring countries.</p>
+
+<p style='text-align: justify;'>
+In Malta, we can see the daily covid-19 death cases are very law compared to both covid-19 confirmed & recovered cases. Also we can clearly see that confirmed cases have been started before recovered covid-19 cases. From January 2021 to middle of March 2021, we can see a rapid increase in both confirmed and recovered cases. After that there has been a significant decrease in both cases until August 2021. For the period  when we consider the total Covid-19 cases, we can see total number of death cases have been raised to 400,  total confirmed cases has reached to 36994 and total recovered cases has reached to 32483.
+When we compared Malta with its Europe and North African neighbour countries, we can clearly see that Malta covid-19 confirmed, recovered and death cases are the lowest than other countries.
+</p>
+
+# **4.  References**
+
+
+globaledge.msu.edu. (n.d.). Malta: Introduction. [online] Available at: https://globaledge.msu.edu/countries/malta [Accessed 25 Sep. 2021].
+
+Wikipedia Contributors (2019). Malta. [online] Wikipedia. Available at: https://en.wikipedia.org/wiki/Malta [Accessed 25 Sep. 2021].
+
+Visit Malta. (n.d.). Climate. [online] Available at: https://www.visitmalta.com/en/a/climate/ [Accessed 25 Sep. 2021].
+
+Wikipedia. (2021). COVID-19 pandemic in Malta. [online] Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Malta [Accessed 25 Sep. 2021].
+
+www.mondaq.com. (n.d.). Partial Lockdown In Malta To Have Effect From 28 March 2020 - Government, Public Sector - Malta. [online] Available at: https://mondaq.com/human-rights/912314/partial-lockdown-in-malta-to-have-effect-from-28-march-2020 [Accessed 25 Sep. 2021].
+
+Wikipedia. (2021b). Timeline of the COVID-19 pandemic in Malta. [online] Available at: https://en.wikipedia.org/wiki/Timeline_of_the_COVID-19_pandemic_in_Malta [Accessed 25 Sep. 2021].
+

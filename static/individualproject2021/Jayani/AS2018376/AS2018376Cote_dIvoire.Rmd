@@ -1,0 +1,386 @@
+---
+title: "Covid-19 Pandemic in Cote d'Ivoire"
+author: "HMHB Herath"
+date: "9/26/2021"
+output: html_document
+---
+
+# Introduction
+<p style = "text-align: left;" >The Cote d'Ivoire , commonly known as  Ivory Coast, is a West African republic surrounded by the Gulf of Guinea. Liberia, Guinea, Mali, Burkina Faso, and Ghana are all close neighbors. The interior of Cote d'Ivoire is largely wooded, with mountains in the northwest. The government is a multiparty presidential system that is open to the public. The president is the head of state, while the prime minister is the head of government. Cote d'Ivoire has a mainly traditional economic structure, with agriculture and associated sectors playing a large role in the economy. </p>
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+```{r,include=FALSE,comment=NA,Message=FALSE,echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(rjson)
+library(jsonlite)
+library(leaflet)
+library(RCurl)
+```
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+Cote_dIvoire <- leaflet() %>%
+  addTiles() %>% 
+  addMarkers(lng=-5.5471, lat=7.54)
+            ( popup="Cote d'Ivoire")
+Cote_dIvoire
+```
+<p style = "text-align: center;" >*Location of the Cote d'Ivoire* </p>
+
+<p style = "text-align: left;" >Ivory Coast's climate is usually hot and humid, ranging from equatorial in the south to tropical in the center and semiarid in the north. Warm and dry (November to March), hot and dry (March to May), and hot and wet (May to September) are the three seasons (June to October). Temperatures vary from 10 to 40 °C (50 to 104 °F) and average between 25 and 32 °C (77.0 and 89.6 °F).Because of its extensive forest cover, the Ivory Coast boasts a thriving wood sector. The country's hardwood exports are comparable to those of Brazil. The fast rate of deforestation has been a source of worry in recent years.The only forest left completely untouched in Ivory Coast is Taï National Park (Parc National de Taï), a 3,600 km2 (1,390 sq mi) area in the country's far southwest that is home to over 150 endemic species and many other endangered species such as the Pygmy hippopotamus and 11 species of monkeys.Arable land covers 9% of the nation. The Ivory Coast produces the most cocoa in the world, which is a key national cash crop. Coffee, bananas, and oil palms, which yield palm oil and kernels, are among the other major crops. Petroleum, natural gas, diamonds, manganese, iron, cobalt, bauxite, copper, gold, nickel, tantalum, silica sand, clay, palm oil, and hydropower are examples of natural resources.</p>
+**Recent Covid-19 status and the actions taken by the government in Côte d'Ivoire**
+<p style = "text-align: left;" >As of September 11, Côte d'Ivoire had recorded 59,020 confirmed COVID-19 cases inside its borders (56,688 recovered, 566 dead, 1,766 active) since the start of the epidemic.The Ivoirian administration announced on July 1 that the Health State of Emergency would be prolonged until September 30 and that protective health measures would be enforced more strictly. Distancing oneself from others, wearing masks, and limiting non-essential motions are all encouraged.Limited commercial flight services are available from domestic and international carriers.
+Schools, including primary and secondary, as well as universities, are open.Restaurants, maquis, bars, nightclubs, and other entertainment places are open, and patrons are asked to adhere to social distancing and cleanliness standards.Face masks/cloth face coverings remain mandatory in all public spaces, including in vehicles. </p>
+
+![**Figure :** *Ivory coast children after reopening school*](https://africa.cgtn.com/wp-content/photo-gallery/2020/05/2020-05-25T124114Z_1794176715_RC2OVG9O3R84_RTRMADP_3_HEALTH-CORONAVIRUS-IVORYCOAST-EDUCATION-696x464.jpg)
+
+# Exploratory Data Analysis
+<p style = "text-align: left;" >The summary of the Cote d'Ivoire coronavirus data is presented in the outputs below. From the 22nd of January 2020 to the 18th of September 2021, 1818 observations were made. Several variables are obtained, including the date of the observation, the latitude of the geographic region's center, the longitude of the geographic region's center, the type of cases (whether confirmed, death, or recovered), and the number of cases on the given date.</p>
+
+```{r,comment=NA,Message=FALSE,echo=FALSE,include=FALSE,results="hide"}
+install.packages("coronavirus")
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE,include=FALSE,results="hide"}
+unique(coronavirus$country)
+library(tidyverse)
+library(magrittr)
+
+```
+
+
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+Cote_dIvoire_corona <- coronavirus %>% filter(country == "Cote d'Ivoire")
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+```
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+head(Cote_dIvoire_corona)
+tail(Cote_dIvoire_corona)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+summary(Cote_dIvoire_corona)
+```
+
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+library(tidyverse)
+library(magrittr)
+view(Cote_dIvoire_corona)
+new_Cote_dIvoire_corona<-filter(Cote_dIvoire_corona,cases>=0)
+
+
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+confirmed_cases_new_Cote_dIvoire_corona <- new_Cote_dIvoire_corona %>%  filter(type=="confirmed")
+
+recovered_cases_new_Cote_dIvoire_corona <- new_Cote_dIvoire_corona%>% filter(type=="recovered")
+
+death_cases_new_Cote_dIvoire_corona <-new_Cote_dIvoire_corona%>% filter(type=="death")
+```
+<p style = "text-align: left;" >There were some negative values and NA values in cases(confirm,recover,death) but those values cannot be negative or NA so we removed those values and calculate total number of confirmed cases,total number of recovered cases and total number of death cases as follows.  </p>
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_confirm_cases <- sum(confirmed_cases_new_Cote_dIvoire_corona $cases)
+cat("Total confirmed cases in Cote d'Ivoire = ", total_confirm_cases)
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_recover_cases<-sum(recovered_cases_new_Cote_dIvoire_corona $cases)
+cat("Total recovered cases in Cote d'Ivoire = ", total_recover_cases)
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_death_cases <- sum(death_cases_new_Cote_dIvoire_corona $cases)
+cat("Total death cases in Cote d'Ivoire = ", total_death_cases)
+
+
+
+
+```
+<p style = "text-align: left;" >After that using those values calculated the total active cases by substracting (Total recovered cases in Cote d'Ivoire+Total death cases in Cote d'Ivoire) from the Total confirmed cases in Cote d'Ivoire </p>
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_active_cases <- total_confirm_cases - (total_recover_cases + total_death_cases)
+cat("Total active cases in Cote d'Ivoire = ", total_active_cases)
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+library(ggplot2)
+ggplot(confirmed_cases_new_Cote_dIvoire_corona, aes(x=date, y=cumsum(cases), colour=type)) + geom_line(col="blue") + ggtitle("Cote d'Ivoire: Daily Covid-19 confirmed cases")
+```
+<p style = "text-align: left;" >From this graph we can clearly see Covid-19 confirm cases in Cote d'Ivoire started to increase rapidly during January to April and after July in 2021   </p>
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+library(ggplot2)
+ggplot(recovered_cases_new_Cote_dIvoire_corona, aes(x=date, y=cumsum(cases), colour=type)) + geom_line(col="green") + ggtitle("Cote d'Ivoire: Daily Covid-19 recovered cases")
+```
+<p style = "text-align: left;" >From this graph  we can see there was a good increase of recovered cases also in Cote d'Ivoire.  </p>
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+library(ggplot2)
+ggplot(death_cases_new_Cote_dIvoire_corona, aes(x=date, y=cumsum(cases), colour=type)) + geom_line(col="red") + ggtitle("Cote d'Ivoire: Daily Covid-19 death cases")
+```
+<p style = "text-align: left;" >From this graph  we can clearly see there was a rapid increase of death cases in Cote d'Ivoire after July 2021 and that was not a good thing it is important to take immediate actions.  </p>
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+recovery_rate_Cote_dIvoire <- (total_recover_cases/ total_confirm_cases)*100
+death_rate_Cote_dIvoire <- (total_death_cases/ total_confirm_cases)*100
+active_rate_Cote_dIvoire <- (total_active_cases/ total_confirm_cases)*100
+x<-round(recovery_rate_Cote_dIvoire,digits = 2)
+z<-round(death_rate_Cote_dIvoire,digits = 2)
+y<-round(active_rate_Cote_dIvoire,digits = 2)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+
+library(plotrix)
+percentages_of_cases<-c(x,y,z)
+pie3D(percentages_of_cases,labels = paste0(percentages_of_cases,"%"),main = "Percentages of cases",col = c("green","cyan","red"),theta = 1.5)
+legend("topright",legend = c("Recover","Active","Deaths"),fill = c("green","cyan","red"))
+```
+<p style = "text-align: left;" >From this pie chart we can clearly see 86.32% of Covid 19 patients in Cote d'Ivoire was recovered while 12.72 were under treatments.And 0.95% of patients were dead from Covid-19 during 22.10.2020 to 18.09.2021  </p>
+## Comparision with other countries
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+Ghana_corona <- coronavirus %>% filter(country == "Ghana")
+Liberia_corona <- coronavirus %>% filter(country == "Liberia")
+Mali_corona <- coronavirus %>% filter(country == "Mali")
+Nigeria_corona <- coronavirus %>% filter(country == "Nigeria")
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+new_Ghana_corona<-filter(Ghana_corona,cases>=0)
+new_Liberia_corona<-filter(Liberia_corona,cases>=0)
+new_Mali_corona<-filter(Mali_corona,cases>=0)
+new_Nigeria_corona<-filter(Nigeria_corona,cases>=0)
+```
+**Confirm Cases **
+<p style = "text-align: left;" >For compairing Covid 19 cases of the Cote d'Ivoire with it neighbour countries Let's select Ghana,Liberia,Mali and Nigeria.
+ First of all let's identify total Covid-19 confirm cases in each country.</p>
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+confirmed_cases_new_Ghana_corona <- new_Ghana_corona %>%  filter(type=="confirmed")
+confirmed_cases_new_Liberia_corona <- new_Liberia_corona %>%  filter(type=="confirmed")
+confirmed_cases_new_Mali_corona <- new_Mali_corona %>%  filter(type=="confirmed")
+confirmed_cases_new_Nigeria_corona <- new_Nigeria_corona %>%  filter(type=="confirmed")
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_confirm_cases_Ghana <- sum(confirmed_cases_new_Ghana_corona $cases)
+total_confirm_cases_Liberia <- sum(confirmed_cases_new_Liberia_corona $cases)
+total_confirm_cases_Mali<- sum(confirmed_cases_new_Mali_corona $cases)
+total_confirm_cases_Nigeria <- sum(confirmed_cases_new_Nigeria_corona $cases)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Total confirmed cases in Cote d'Ivoire = ", total_confirm_cases)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Total confirmed cases in Ghana = ", total_confirm_cases_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Total confirmed cases in Liberia = ", total_confirm_cases_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Total confirmed cases in Mali = ", total_confirm_cases_Mali)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Total confirmed cases in Nigeria = ", total_confirm_cases_Nigeria)
+```
+**Recover cases**
+<p style = "text-align: left;" >Let's compare recover cases of Cote d'Ivore with it neighbor countries.</p> 
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+Recovered_cases_new_Ghana_corona <- new_Ghana_corona %>%  filter(type=="recovered")
+Recovered_cases_new_Liberia_corona <- new_Liberia_corona %>%  filter(type=="recovered")
+Recovered_cases_new_Mali_corona <- new_Mali_corona %>%  filter(type=="recovered")
+Recovered_cases_new_Nigeria_corona <- new_Nigeria_corona %>%  filter(type=="recovered")
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Total recovered cases in Cote d'Icoire = ", total_recover_cases)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_recover_cases_Ghana<-sum(Recovered_cases_new_Ghana_corona$cases)
+cat("Total recovered cases in Ghana = ", total_recover_cases_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_recover_cases_Liberia<-sum(Recovered_cases_new_Liberia_corona$cases)
+cat("Total recovered cases in Liberia = ", total_recover_cases_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_recover_cases_Mali<-sum(Recovered_cases_new_Mali_corona$cases)
+cat("Total recovered cases in Mali = ", total_recover_cases_Mali)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_recover_cases_Nigeria<-sum(Recovered_cases_new_Nigeria_corona$cases)
+cat("Total recovered cases in Nigeria = ", total_recover_cases_Nigeria)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+recovery_rate_Ghana <- (total_recover_cases_Ghana/ total_confirm_cases_Ghana)*100
+recovery_rate_Liberia<- (total_recover_cases_Liberia/ total_confirm_cases_Liberia)*100
+recovery_rate_Mali <- (total_recover_cases_Mali/ total_confirm_cases_Mali)*100
+recovery_rate_Nigeria <- (total_recover_cases_Nigeria/ total_confirm_cases_Nigeria)*100
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+recovery_rates <- c(recovery_rate_Cote_dIvoire, recovery_rate_Ghana, recovery_rate_Liberia, recovery_rate_Mali, recovery_rate_Nigeria)
+
+barplot(recovery_rates, main="Recovery Rate Comparision", names.arg = c("Cote d'Ivoire", "Ghana", "Liberia", "Mali", "Nigeria"), col = c("cyan","green","Brown", "yellow", "red"))
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Recovery rate in Cote d'Iovire = ", recovery_rate_Cote_dIvoire)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Recovery rate in Ghana = ", recovery_rate_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Recovery rate in Liberia = ",recovery_rate_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Recovery rate in Mali = ", recovery_rate_Mali)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Recovery rate in Nigeria = ", recovery_rate_Nigeria)
+```
+<p style = "text-align: left;" >From this graph we can clearly see Mali has higher rate of recoveries from Covid-19 while least rate has in Liberia. Cote d'Ivoire also has a higher rate of recover when compare to it neighboring countries .</p> 
+
+**Death cases**
+<p style = "text-align: left;" >Now we compare death cases of Cote d'Ivoire with it neighboring countries .</p> 
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+death_cases_new_Ghana <-new_Ghana_corona%>% filter(type=="death")
+death_cases_new_Liberia <-new_Liberia_corona%>% filter(type=="death")
+death_cases_new_Mali <-new_Mali_corona%>% filter(type=="death")
+death_cases_new_Nigeria <-new_Nigeria_corona%>% filter(type=="death")
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+
+cat("Total death cases in Cote d'Ivoire = ", total_death_cases)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_death_cases_Ghana <- sum(death_cases_new_Ghana $cases)
+cat("Total death cases in Ghana = ", total_death_cases_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_death_cases_Liberia <- sum(death_cases_new_Liberia $cases)
+cat("Total death cases in Liberia = ", total_death_cases_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_death_cases_Mali <- sum(death_cases_new_Mali $cases)
+cat("Total death cases in Mali = ", total_death_cases_Mali)
+```
+
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_death_cases_Nigeria <- sum(death_cases_new_Nigeria $cases)
+cat("Total death cases in Nigeria = ", total_death_cases_Nigeria)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+death_rate_Ghana <- (total_death_cases_Ghana/ total_confirm_cases_Ghana)*100
+death_rate_Liberia<- (total_death_cases_Liberia/ total_confirm_cases_Liberia)*100
+death_rate_Mali <- (total_death_cases_Mali/ total_confirm_cases_Mali)*100
+death_rate_Nigeria <- (total_death_cases_Nigeria/ total_confirm_cases_Nigeria)*100
+```
+
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+death_rates <- c(death_rate_Cote_dIvoire, death_rate_Ghana, death_rate_Liberia, death_rate_Mali, death_rate_Nigeria)
+
+barplot(death_rates, main="Death Rate Comparision", names.arg = c("Cote d'Ivoire", "Ghana", "Liberia", "Mali", "Nigeria"), col = c("cyan","green","Brown", "yellow", "red"))
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Death rate in Cote d'Iovire = ", death_rate_Cote_dIvoire)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Death rate in Ghana = ", death_rate_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Death rate in Liberia = ",death_rate_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Death rate in Mali = ", death_rate_Mali)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Death rate in Nigeria = ", death_rate_Nigeria)
+```
+<p style = "text-align: left;" >From this graph we can clearly see Liberia has higher death rate while Ghana has lowest death rate.And we can see Cote d'Ivoire also has low death rate when compare to it's neighboring countries and that percentage slightly less than 1%.</p> 
+**Active cases**
+<p style = "text-align: left;" >Now we consider about Covid-19 patients who are under treatments in Cote d'Ivoire and it's neighboring countries.</p> 
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+
+cat("Total active cases in Cote d'Ivoire = ", total_active_cases)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_active_cases_Ghana <- total_confirm_cases_Ghana - (total_recover_cases_Ghana + total_death_cases_Ghana)
+cat("Total active cases in Ghana = ", total_active_cases_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_active_cases_Liberia <- total_confirm_cases_Liberia - (total_recover_cases_Liberia + total_death_cases_Liberia)
+cat("Total active cases in Liberia = ", total_active_cases_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_active_cases_Mali <- total_confirm_cases_Mali - (total_recover_cases_Mali + total_death_cases_Mali)
+cat("Total active cases in Mali = ", total_active_cases_Mali)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+total_active_cases_Nigeria <- total_confirm_cases_Nigeria - (total_recover_cases_Nigeria + total_death_cases_Nigeria)
+cat("Total active cases in Nigeria = ", total_active_cases_Nigeria)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+active_rate_Cote_dIvoire <- (total_active_cases/ total_confirm_cases)*100
+active_rate_Ghana <- (total_active_cases_Ghana/ total_confirm_cases_Ghana)*100
+active_rate_Liberia <- (total_active_cases_Liberia/ total_confirm_cases_Liberia)*100
+active_rate_Mali <- (total_active_cases_Mali/ total_confirm_cases_Mali)*100
+active_rate_Nigeria <- (total_active_cases_Nigeria/ total_confirm_cases_Nigeria)*100
+```
+
+
+
+`
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+active_rates <- c(active_rate_Cote_dIvoire, active_rate_Ghana, active_rate_Liberia, active_rate_Mali, active_rate_Nigeria)
+barplot(active_rates, main="Active cases Rate Comparision", names.arg = c("Cote d'Ivoire", "Ghana", "Liberia", "Mali", "Nigeria"), col = c("cyan","green","Brown", "yellow", "red"))
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Active cases rate in Cote d'Iovire = ", active_rate_Cote_dIvoire)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Active cases rate in Ghana = ", active_rate_Ghana)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Active cases rate in Liberia = ",active_rate_Liberia)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Active cases rate in Mali = ", active_rate_Mali)
+```
+```{r,comment=NA,Message=FALSE,echo=FALSE}
+cat("Active cases rate in Nigeria = ", active_rate_Nigeria)
+```
+<p style = "text-align: left;" >From this graph we can clearly see highest rate of active cases are in the Liberia while lowest rate in the Mali.Cote d'Ivoire also has less active cases rate compare to its neighboring countries. </p> 
+
+# Discussion
+<p style = "text-align: left;" >Cote d'Iovire is one of the African country  effected by the COVID-19 pandemic. On March3,2020, the virus was verified to have spread to Cote d'Iovire for the first time. In Cote d'Iovire, the number of confirmed cases was 58923, and 561 individuals died as a result of the COVID-19 pandemic.50865 patients were able to regain their health.Recovery rate of Mali is greater than other selected countries during the studied period.It is 92.70916%. Cote d'Iovire has second place in recovery rate comparison compared to other selected countries.It is 86.32453%. There is lowest recovery rate in Liberia Compared to other four countries, the death rate of Cote d'Ivoire is recorded as 0.95209%. According to the above rates, we can identify Liberia has the highest death rate of 4.790926% compared to other neighboring countries of Cote d'Ivoire.From 22nd January 2020 to 18th September2021, Malie has the lowest active cases rate and it is 3.671979% while highest active cases rate in the Liberia and it is 49.24666%.Cote d'Ivoire has about 12.72% rate of active cases.
+                   There are some negative and NA values in cases(Confirm,recovery,death) those data cannot be negative or NA so we removed those data and done our analysis. </p> 
+                   
+# Conclusion
+<p style = "text-align: left;" >By considering the Recovered rates,Death rates and Active cases rates of Covid-19 cases in Cote d'Ivoire we can conclude that they were able to gain control of the Covid 19 in Cote d'Ivoire. But there was a increase of Covid 19 new cases and Deaths in last two or three months in Cote d'Ivoire so Ivory coast government should take necessary actions for control this situation. When we considering the Coste d'Ivoire neighboring countries corona situation The Liberia situation seems to be not good at this movement when compare their rates of Covid-19 with other neighboring countries.</p>
+# Referances
+<p style = "text-align: left;" >   https://ci.usembassy.gov/covid-19-information/ </p>
+<p style = "text-align: left;" >   https://en.wikipedia.org/wiki/Geography_of_Ivory_Coast </p>                                                                
+<p style = "text-align: left;" >   https://www.bbc.co.uk/news/world-africa-13287216 </p>
+                                   
+                                   
+

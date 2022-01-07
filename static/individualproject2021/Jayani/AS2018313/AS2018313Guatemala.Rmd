@@ -1,0 +1,1081 @@
+---
+title: "Impact of Covid-19 in Guatemala"
+author: "G.R.M.B. Bandara"
+date: "9/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+
+
+```{r Step 2, include=FALSE}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+```
+ 
+ 
+```{r Step 3, include=FALSE}
+library(sta3262)
+```
+ 
+ 
+```{r Step 4, include=FALSE}
+get_individual_project_country("AS2018313")
+```
+
+```{r installing coronavirus package, eval=FALSE, include=FALSE}
+install.packages("coronavirus")
+```
+
+```{r loading coronavirus package, include=FALSE}
+library(coronavirus)
+```
+
+
+```{r loading dataset, include=FALSE}
+data(coronavirus)
+```
+
+
+```{r data description, include=FALSE}
+coronavirus
+```
+
+
+```{r countries, include=FALSE}
+unique(coronavirus$country)
+```
+
+
+```{r front image}
+#install.packages("jpeg")
+knitr::include_graphics("0be08989-002b-401e-a0c1-a2b19bedb6ee_corona world_4a321e62_750x400_478x394.jpg")
+
+```
+
+
+# Introduction
+
+```{r Load necessary packages, include=FALSE}
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(zoo)
+library(plotly)
+
+```
+
+
+```{r Filter Guatemala, include=FALSE}
+guatemala_corona <- coronavirus %>% filter(country == "Guatemala")
+guatemala_corona
+```
+
+
+```{r replacing negative values with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+guatemala_corona$cases <- replace(guatemala_corona$cases, which(guatemala_corona$cases < 0), NA)     
+guatemala_corona   
+```
+
+
+
+```{r replacing missing values with most recent values, include=FALSE}
+guatemala_corona <- transform(guatemala_corona, cases = na.locf(cases))
+head(guatemala_corona)
+```
+
+
+
+```{r chacking na, eval=FALSE, include=FALSE}
+new_DF <- guatemala_corona[is.na(guatemala_corona$cases),]
+new_DF
+```
+
+### **Location of Guatemala**
+
+In Central America Guatemala is located. Guatemala is bordered by the Gulf of Honduras and the Pacific Ocean, North and West by Mexico and East by Belize, Honduras and El Salvador.
+
+```{r plot, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "skyblue", colour = "blue"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = guatemala_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+### **Climate and Average Weather in Guatemala**
+
+Four types of climate exist in Guatemala. The country is both connected to two oceans on the American continent. The Pacific Ocean is bordered by the west while the Gulf of Honduras is bordered with eastern Guatemala. Mainly plateaus and mountains are the core region of the country. As a result, the climate in Guatemala is quite different, although the types of the tropics dominate.
+
+The average coastal yearly temperature is between 25° and 30° Celsius (77° and 86° F). Only 15° Celsius (52° Fahrenheit) is a lower temperature when you travel to higher places in the country. Mercury rises in winter to more than 30°C (86°F) during the summer months in significant part of the country, between 22 and 25°C (71.6°F-77°F).
+
+In Guatemala they call the wet season winter and the dry season summer. The rainy season starts in May and lasts until October inland. At the coast it starts in May and lasts until December. The annual rainfall amounts range from 500 millimeters (30.5 inch) in the southwest to more than three thousand millimeters (183 inch) in some tropical rainforest locations and in the mountains and volcanoes.
+
+Hurricanes and tropical storms may occur. They can come both from the Caribbean and Pacific Seas, however this opportunity is little smaller. The time of the hurricane begins in late June and runs through November. It has the most opportunity to deal with a hurricane from time to time, especially on the East Coast. When such a tropical low passes through earth, its strength reduces very rapidly.
+
+
+### **Covid 19 status in Gautemala**
+
+Coronavirus (COVID-19) is a SARS-CoV-2 virus infectious disease.
+Most people with COVID-19 suffer from mild to moderate symptoms and recover without particular therapy. However, some are seriously unwell and need medical assistance.
+
+When you cough, sneeze, talk, sing, or breathe, the virus can spread through your mouth or nose in minute liquid particles. The particles range can be from bigger inhalation droplets to tiny aerosols.
+If you are close to someone with COVID-19, or contact a polluted surface then your eyes, mouth or nose may get infected by breathing the virus. Indoors and in crowded environments, this virus spreads more easily.
+
+221 Countries and Territories around the world have reported a total of 232,090,369 confirmed cases of the coronavirus COVID-19 that originated from Wuhan, China, and a death toll of 4,754,042 deaths.
+
+After the first verified case in mid-March, Guatemala's government quickly shut down the entire country. Despite some government assistance, however, with 75% of workers employed informally, many were forced to choose between losing pay and safeguarding their health. 11 By mid-July, there had been over 1000 deaths.
+
+
+The COVID-19 rate was considerably larger in Guatemala than in other Central American countries. According to the Ministry Of health, 111.262 confirmed cases of COVID-19 were reported to have died in Guatemala from November 2020, 3,821. In order to minimize the virus spread, a 'state of calamity' was declared on 5 March and severe locking and curfew and travel restrictions have been enforced.
+
+
+### **Vaccination Status**
+
+At least 6,243,535 COVID vaccine doses has been provided thus far in Guatemala. If every person requires two doses, around 18.8% of the country's population will be sufficient to get vaccinated.
+
+```{r vaccination image}
+knitr::include_graphics("GT_Coronavirus_Vaccination_Rate.png")
+```
+
+
+
+# Exploratory data analysis
+
+#### **Assumptions** : 
+
+- Negative values of this dataset have been considered as missing values.
+
+- Since there are 47 rows with NA's, all the missing values of the dataset were replaced with the recent values using the last one carried forward method(locf) in the same column.
+
+- Outliers were removed before doing the calculations.
+
+
+
+
+
+```{r Extract confirmed cases in the Guatemala, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+confirmed_guatemala_corona <- guatemala_corona %>% filter(type=="confirmed")
+
+```
+
+
+```{r removing outliers in confirms, include=FALSE}
+confirmed_guatemala_corona <- confirmed_guatemala_corona[-c(179), ]
+```
+
+
+
+```{r Extract recovered cases in the Guatemala, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+recover_guatemala_corona <- guatemala_corona %>% filter(type=="recovered")
+
+```
+
+
+```{r removing outliers in recovers, include=FALSE}
+recover_guatemala_corona <- recover_guatemala_corona[-c(179), ]
+```
+
+
+
+```{r Extract death cases in the Guatemala, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+death_guatemala_corona <- guatemala_corona %>% filter(type=="death")
+
+```
+
+
+```{r removing outliers in deaths, include=FALSE}
+death_guatemala_corona <- death_guatemala_corona[-c(179), ]
+```
+
+  
+  
+```{r total list}
+new_list <- cbind(confirmed_guatemala_corona,"confirmed" = confirmed_guatemala_corona$cases, "recovered"= recover_guatemala_corona$cases, "death" =
+death_guatemala_corona$cases)
+
+total_list <- select(new_list, c(-province, -country, -lat, -long, -type, -cases))
+```
+
+
+```{r total cases}
+total_cases <- sum(total_list$confirmed)
+cat("Total cases = ", total_cases)
+```
+
+
+```{r total recovered cases}
+total_recovered_cases <- sum(recover_guatemala_corona$cases)
+cat("Total recovered cases= ", total_recovered_cases)
+```
+
+```{r recovered rate}
+recovered_rate <- (total_recovered_cases / total_cases)*100
+cat("Recovered rate in Guatemala = ", recovered_rate)
+```
+
+
+```{r total death cases}
+total_death_cases <- sum(death_guatemala_corona$cases)
+cat("Total death cases = ", total_death_cases)
+```
+
+
+```{r death rate}
+death_rate <- (total_death_cases / total_cases)*100
+cat("Death rate in Guatemala = ", death_rate)
+```
+
+
+```{r Total active cases}
+total_active_cases <- total_cases - (total_recovered_cases + total_death_cases)
+cat("Total active cases = ", total_active_cases)
+```
+
+```{r active rate}
+active_rate <- (total_active_cases / total_cases)*100
+cat("Active cases rate in Guatemala = ", active_rate)
+```
+
+
+### Tail part of the total dataset with active cases
+
+Active cases in Guatemala were calculated using the cumulative sums of total cases with cumulative sums of death cases and recovered cases.
+
+
+```{r cumulative sums, echo=FALSE}
+total_list_updated <- total_list %>%
+  mutate(cumulative_cases = cumsum(confirmed))  %>%
+  mutate(cumulative_recovered = cumsum(recovered)) %>%
+  mutate(cumulative_death = cumsum(death)) %>%
+  mutate(active = cumulative_cases - (cumulative_death+cumulative_recovered))
+
+knitr::kable(tail(total_list_updated), caption = "Tail part of Guatemala corona cleaned dataset")
+
+```
+
+
+#### summary statistics of the cases in Guatemala
+
+Descriptive statistics of all types of cases with respect to the date were calculated below.
+
+
+```{r summary}
+summarys_cases <- summary(total_list_updated)
+
+knitr::kable(summarys_cases, caption = "Summary Statistics of Guatemala Corona")
+
+```
+
+
+
+```{r plotting in a same graph, include=FALSE}
+samegraph <- total_list_updated %>%
+pivot_longer(c(2,3, 4, 8), names_to="variable", values_to="value")
+tail(samegraph)
+```
+
+### Behaviours of the all types of cases
+
+
+```{r behaviour}
+a <- ggplot(samegraph, aes(y = variable, x = value, fill = variable)) + geom_boxplot() +
+facet_wrap(variable ~., ncol=1 , scales = "free")
+a
+```
+
+
+##### *Interpretation 1*
+
+According to this box plot we can see that,
+
+- Number of confirmed cases have been mostly reported under 1500 in a day. 
+- Majority of Recovery cases have been reported under 1000 per day. But some recovery cases have been reported above 2000.
+- Majority of death cases have been spread around 25. Few cases have been reported above 75.
+- Number of active cases have been mostly spread around 20000.
+
+
+### Time series plots of case types
+
+```{r Time series plots of case types}
+b <- ggplot(samegraph, aes(y = value, x = date, color= variable)) + geom_line() +
+facet_wrap(variable ~., ncol=1, scales = "free")
+
+fig2 <- ggplotly(b)
+    fig2 <- fig2 %>% style(line = list(color = 'gold'), hoverinfo = "y", traces = 1)
+    fig2
+```
+
+
+##### *Interpretation 2*
+
+According to these line plots, In Guatemala,
+
+- Large number of covid-19 cases have been reported after 7th month in 2021. Until then, an average number of Covid-19 cases were reported in the 1st half of 2020, it was under 400 per day. 
+- And then in the 2nd half of 2020 and in the 1st half of 2021 it was around 1000.
+- But gradually it has been increased upto 5000 in mid 2021 per day.
+- Few daily recovered cases have been reported in 1st half of 2020 under 200. But gradually it has been increased upto 6000 in mid 2021s.
+
+- Similarly, daily death cases have been also increased upto 100 in mid 2021s. But in 1st few months it was only a little number under 25 per day.
+
+- Also we can see that, the heights between points have been increasing gradually along the date axis in all four plots. So we can say that the variances of all case types are increasong.
+
+
+
+### Comparison of all cases in the same time series
+
+```{r multiple time series}
+fig3 <- plot_ly(total_list_updated, type = 'scatter', mode = 'lines')%>%
+  add_trace(x = ~date, y = ~cumulative_death, name = 'death',line = list(color = 'rgb(12,185,94)'))%>%
+  add_trace(x = ~date, y = ~cumulative_cases, name = 'confirmed',line = list(color = 'rgb(103,78,167)'))%>%
+  add_trace(x = ~date, y = ~cumulative_recovered, name = 'recovered',line = list(color = 'rgb(255,165,0)'))%>%
+  add_trace(x = ~date, y = ~active, name = 'active',line = list(color = 'rgb(200,4, 8)'))%>%
+
+  layout(showlegend = T, title='Daily cases of Guatemala', yaxis = list (title = "number of cases"),
+         xaxis = list(title = "date"))
+
+fig3
+
+```
+
+##### *Interpretation 3*
+
+When compairing all the types of cases with each other,
+
+- Total number of death cases have been reported under 11000 and it has not shown a large cumulative distribution.
+- Total number of Active cases have been reported under 80000 and it also has not shown a large difference.
+- But the recovered cases and the total cases shows a large monotonically increasing cumulative distribution rather than active cases and death cases.
+
+
+### Relationship between the types of cases
+
+
+```{r multiple graphs}
+library(GGally)
+
+rel <- function(data, mapping, method = "lm" ) {
+  p <- ggplot(data = data, mapping = mapping) +
+    geom_point(colour = "blue") +
+    geom_smooth(method = method, color = "red")
+  p
+}
+ggpairs(total_list_updated,
+    columns= c("confirmed", "recovered", "death", "active"),
+    lower=list(continuous=wrap(rel)), 
+    axisLabels='none',
+    abline = 'TRUE'
+)
+```
+
+
+##### *Interpretation 4*
+
+
+- According to the scatterplot and the correlation coefficient between daily total cases and the daily recovered cases, it shows a simple linear relationship but it is not a strong linear relationship since 0.794 is not much closer to 1.
+
+
+- According to the scatterplot and the correlation coefficient between daily total cases and the daily death cases, it also shows a simple linear relationship but it is not a strong linear relationship  since 0.704 is not much closer to 1.
+
+
+- According to the scatterplot and the correlation coefficient between daily total cases and the daily active cases, it also shows a simple linear relationship but it is not a strong linear relationship  since 0.792 is not much closer to 1.
+
+
+## Comparison with the countries most affected by covid 19
+
+According the data, USA, India, Brazil and Russia are the top 5 countries most affected by covid 19 so far.
+
+```{r compare countries}
+compare_most <- coronavirus %>% filter(country == c("Guatemala","US", "Russia", "India", "Brazil"))
+
+
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "grey"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = compare_most, aes(x = long, y = lat, col = country), size
+    = 1
+  )
+
+```
+
+Let's compare the status of the virus of these countries with Guatemala.
+
+
+- **USA**
+
+```{r Filter USA, include=FALSE}
+us_corona <- coronavirus %>% filter(country == "US")
+us_corona
+```
+
+
+```{r replacing negative values of US with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+us_corona$cases <- replace(us_corona$cases, which(us_corona$cases < 0), NA)     
+us_corona   
+```
+
+```{r replacing missing values of US with most recent values, include=FALSE}
+us_corona <- transform(us_corona, cases = na.locf(cases))
+head(us_corona)
+```
+
+```{r recover rate of US}
+confirmed_us <- us_corona %>% filter(type == "confirmed")
+recovered_us <- us_corona %>% filter(type == "recovered")
+total_us <- sum(confirmed_us$cases)
+total_recoveries_us <- sum(recovered_us$cases)
+recovery_rate_us <- (total_recoveries_us/ total_us)*100
+
+death_us <- us_corona %>% filter(type == "death")
+total_death_us <- sum(death_us$cases)
+death_rate_us <- (total_death_us/ total_us)*100
+
+```
+
+- **India**
+
+
+```{r Filter India, include=FALSE}
+ind_corona <- coronavirus %>% filter(country == "India")
+ind_corona
+```
+
+```{r replacing negative values of India with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+ind_corona$cases <- replace(ind_corona$cases, which(ind_corona$cases < 0), NA)     
+ind_corona   
+```
+
+```{r replacing missing values of India with most recent values, include=FALSE}
+ind_corona <- transform(ind_corona, cases = na.locf(cases))
+head(ind_corona)
+```
+
+```{r recover rate of India}
+confirmed_ind <- ind_corona %>% filter(type == "confirmed")
+recovered_ind <- ind_corona %>% filter(type == "recovered")
+total_ind <- sum(confirmed_ind$cases)
+total_recoveries_ind <- sum(recovered_ind$cases)
+recovery_rate_ind <- (total_recoveries_ind/ total_ind)*100
+
+death_ind <- ind_corona %>% filter(type == "death")
+total_death_ind <- sum(death_ind$cases)
+death_rate_ind <- (total_death_ind/ total_ind)*100
+
+```
+
+- **Brazil**
+
+
+```{r Filter brazil, include=FALSE}
+braz_corona <- coronavirus %>% filter(country == "Brazil")
+braz_corona
+```
+
+```{r replacing negative values of Brazil with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+braz_corona$cases <- replace(braz_corona$cases, which(braz_corona$cases < 0), NA)     
+braz_corona   
+```
+
+```{r replacing missing values of Brazil with most recent values, include=FALSE}
+braz_corona <- transform(braz_corona, cases = na.locf(cases))
+head(braz_corona)
+```
+
+```{r recover rate of Brazil}
+confirmed_braz <- braz_corona %>% filter(type == "confirmed")
+recovered_braz <- braz_corona %>% filter(type == "recovered")
+total_braz <- sum(confirmed_braz$cases)
+total_recoveries_braz <- sum(recovered_braz$cases)
+recovery_rate_braz <- (total_recoveries_braz/ total_braz)*100
+
+death_braz <- braz_corona %>% filter(type == "death")
+total_death_braz <- sum(death_braz$cases)
+death_rate_braz <- (total_death_braz/ total_braz)*100
+
+```
+
+
+
+
+- **Russia**
+
+
+```{r Filter Russia, include=FALSE}
+rus_corona <- coronavirus %>% filter(country == "Russia")
+rus_corona
+```
+
+```{r replacing negative values of Russia with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+rus_corona$cases <- replace(rus_corona$cases, which(rus_corona$cases < 0), NA)     
+rus_corona   
+```
+
+```{r replacing missing values of Russia with most recent values, include=FALSE}
+rus_corona <- transform(rus_corona, cases = na.locf(cases))
+head(rus_corona)
+```
+
+```{r recover rate of Russia}
+confirmed_rus <- rus_corona %>% filter(type == "confirmed")
+recovered_rus <- rus_corona %>% filter(type == "recovered")
+
+total_rus <- sum(confirmed_rus$cases)
+total_recoveries_rus <- sum(recovered_rus$cases)
+recovery_rate_rus <- (total_recoveries_rus/ total_rus)*100
+
+death_rus <- rus_corona %>% filter(type == "death")
+total_death_rus <- sum(death_rus$cases)
+death_rate_rus <- (total_death_rus/ total_rus)*100
+
+```
+
+
+```{r most affected country table}
+country <- c("US", "India", "Russia", "Brazil")
+totalcomfirmed_cases <- c(total_us, total_ind, total_rus, total_braz)
+totatl_recoveries <- c(total_recoveries_us, total_recoveries_ind, total_recoveries_rus, total_recoveries_braz)
+recovery_rates <- c(recovery_rate_us, recovery_rate_ind, recovery_rate_rus, recovery_rate_braz)
+
+totatl_deaths <- c(total_death_us, total_death_ind, total_death_rus, total_death_braz)
+death_rates <- c(death_rate_us, death_rate_ind, death_rate_rus, death_rate_braz)
+
+dataframe1 <- data.frame(country, totalcomfirmed_cases, totatl_recoveries, recovery_rates, totatl_deaths, death_rates )
+
+knitr::kable(dataframe1, caption = "Most affected countries summary")
+
+```
+
+
+#### Recovery cases and death cases comparison with the most affected countries
+
+- Guatemala = gold
+- USA       = blue
+- Russia    = red
+- India     = purple
+- Brazil    = green
+
+```{r removing outliers in countries recovers, include=FALSE}
+recovered_us <- recovered_us[-c(165), ]
+recovered_braz <- recovered_braz[-c(280),]
+
+```
+
+
+```{r plotting time series recoveries in a same graph}
+
+
+q1 <- ggplot(recover_guatemala_corona, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("Guatemala: Daily Covid-19 Recoveries")
+
+fig3 <- ggplotly(q1)
+    fig3 <- fig3 %>% style(line = list(color = 'gold'), hoverinfo = "y", traces = 1)
+    
+q2 <- ggplot(recovered_us, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("US: Daily Covid-19 Recoveries")
+fig4 <- ggplotly(q2)
+    fig4 <- fig4 %>% style(line = list(color = 'blue'), hoverinfo = "y", traces = 1)
+    
+q3 <- ggplot(recovered_rus, aes(x=date, y=cumsum(cases))) + geom_line() +  ggtitle("Russia: Daily Covid-19 Recoveries")
+
+fig5 <- ggplotly(q3)
+    fig5 <- fig5 %>% style(line = list(color = 'red'), hoverinfo = "y", traces = 1)
+
+q4 <- ggplot(recovered_braz, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("Brazil: Daily Covid-19 Recoveries")
+
+
+fig6 <- ggplotly(q4)
+    fig6 <- fig6 %>% style(line = list(color = 'green'), hoverinfo = "y", traces = 1)
+    
+q5 <- ggplot(recovered_ind, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("India: Daily Covid-19 Recoveries")
+
+fig7 <- ggplotly(q5)
+    fig7 <- fig7 %>% style(line = list(color = 'purple'), hoverinfo = "y", traces = 1) 
+
+figure3 <- subplot(fig3 ,fig4 ,fig5 ,fig6 ,fig7
+                   , nrows = 3, shareY = FALSE, shareX = TRUE) %>%
+layout(title = list(text = "Total Recovery cases of most affected countries"),
+         plot_bgcolor='#e5ecf6',
+         xaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff'), 
+         yaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff')) 
+figure3
+
+
+```
+
+
+##### *Interpretation 5*
+
+According to these cumulative plots,
+
+- As an average, total number of recovery cases of US(blue) and Russia(red) are larger than Guatemala.
+
+- As an average, total number of recovery cases of Brazil and India are less than Guatemala.
+
+
+```{r plotting time series deaths of most affected in a same graph}
+
+p1 <- ggplot(death_guatemala_corona, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("Guatemala: Daily Covid-19 deaths")
+
+fig9 <- ggplotly(p1)
+    fig9 <- fig9 %>% style(line = list(color = 'gold'), hoverinfo = "y", traces = 1)
+    
+
+p2 <- ggplot(death_us, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("US: Daily Covid-19 deaths")
+
+fig10 <- ggplotly(p2)
+    fig10 <- fig10 %>% style(line = list(color = 'blue'), hoverinfo = "y", traces = 1)
+    
+
+p3 <- ggplot(death_rus, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("Russia: Daily Covid-19 deaths")
+
+fig11 <- ggplotly(p3)
+    fig11 <- fig11 %>% style(line = list(color = 'red'), hoverinfo = "y", traces = 1)
+    
+
+p4 <- ggplot(death_braz, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("Brazil: Daily Covid-19 deaths")
+
+fig12 <- ggplotly(p4)
+    fig12 <- fig12 %>% style(line = list(color = 'green'), hoverinfo = "y", traces = 1)
+    
+
+p5 <- ggplot(death_ind, aes(x=date, y=cumsum(cases))) + geom_line() + ggtitle("India: Daily Covid-19 deaths")
+
+fig13 <- ggplotly(p5)
+    fig13 <- fig13 %>% style(line = list(color = 'purple'), hoverinfo = "y", traces = 1)
+    
+
+figure4 <- subplot(fig9, fig10, fig11, fig12, fig13, nrows = 3, shareY = FALSE, shareX = TRUE) %>%
+layout(title = list(text = "Total Death cases of most affected countries"),
+         plot_bgcolor='#e5ecf6',
+         xaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff'), 
+         yaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff')) 
+figure4
+```
+
+##### *Interpretation 6*
+
+According to these cumulative plots,
+
+- When it takes as an average, total number of death cases of US(blue), Russia(red), Brazil(green) and India(purple) are larger than Guatemala.
+
+- As an average, total number of death cases of guatemala is a less than the most affected countries by covid-19.
+
+
+```{r rate comparison with most affected countries}
+par(mfrow=c(1,2))
+
+death_rate_high <- c(death_rate, death_rate_us, death_rate_braz, death_rate_ind, death_rate_rus)
+barplot(death_rate_high, main="Death rates", horiz=FALSE, las=2, names.arg = c("Guatemala", "US", "Brazil", "India", "Russia"), col = c("gold","blue","green", "purple", "red"))
+
+recovery_rate_high <- c(recovered_rate, recovery_rate_us, recovery_rate_braz, recovery_rate_ind, recovery_rate_rus)
+barplot(recovery_rate_high, main="Recovery rates", horiz=FALSE, las=2, names.arg = c("Guatemala", "US", "Brazil", "India", "Russia"), col = c("gold","blue","green", "purple", "red"))
+```
+
+
+##### *Interpretation 7*
+
+When compairing with the most affected countries by covid-19, according to these barcharts we can see that,
+
+- The Highest death rate is shown in Brazil and recovery rate is shown in India .
+
+- Even if the total number of death cases and recovery cases of US is larger than Guatemala total cases, both death rate and the recovery rate of these 2 countries are lower than Guatemala.
+
+
+
+## Comparison the affection of covid 19 with the countries closest to Guatemala
+
+According to the data, Nicaragua, Belize, Honduras, El Salvado are the closest countries affected by covid 19 of Guatemala.
+
+```{r compare close countries}
+compare_close <- coronavirus %>% filter(country == c("Guatemala",  "Nicaragua", "Belize", "Honduras", "El Salvador"))
+
+
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "grey"
+  ) +
+  coord_cartesian(xlim = c(-135, -45), ylim = c(-45, 45)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = compare_close, aes(x = long, y = lat, col = country), size
+    = 1
+  )
+
+```
+
+
+- **Honduras**
+
+
+```{r Filter Honduras, include=FALSE}
+hond_corona <- coronavirus %>% filter(country == "Honduras")
+hond_corona
+```
+
+```{r replacing negative values of Honduras with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+hond_corona$cases <- replace(hond_corona$cases, which(hond_corona$cases < 0), NA)  
+hond_corona   
+```
+
+```{r replacing missing values of Honduras with most recent values, include=FALSE}
+hond_corona <- transform(hond_corona, cases = na.locf(cases))
+head(hond_corona)
+```
+
+
+```{r recover rate of Honduras}
+confirmed_hond <- hond_corona %>% filter(type == "confirmed")
+recovered_hond <- hond_corona %>% filter(type == "recovered")
+death_hond <- hond_corona %>% filter(type == "death")
+total_hond <- sum(confirmed_hond$cases)
+total_recoveries_hond <- sum(recovered_hond$cases)
+recovery_rate_hond <- (total_recoveries_hond/ total_hond)*100
+
+total_death_hond <- sum(death_hond$cases)
+death_rate_hond <- (total_death_hond/ total_hond)*100
+
+```
+
+
+- **Belize**
+
+
+```{r Filter Belize, include=FALSE}
+bel_corona <- coronavirus %>% filter(country == "Belize")
+bel_corona
+```
+
+```{r replacing negative values of Belize with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+bel_corona$cases <- replace(bel_corona$cases, which(bel_corona$cases < 0), NA)  
+bel_corona   
+```
+
+```{r replacing missing values of Belize with most recent values, include=FALSE}
+bel_corona <- transform(bel_corona, cases = na.locf(cases))
+head(bel_corona)
+```
+
+```{r recover rate of Belize}
+confirmed_bel <- bel_corona %>% filter(type == "confirmed")
+recovered_bel <- bel_corona %>% filter(type == "recovered")
+death_bel <- bel_corona %>% filter(type == "death")
+total_bel <- sum(confirmed_bel$cases)
+total_recoveries_bel <- sum(recovered_bel$cases)
+recovery_rate_bel <- (total_recoveries_bel/ total_bel)*100
+
+total_death_bel <- sum(death_bel$cases)
+death_rate_bel <- (total_death_bel/ total_bel)*100
+
+```
+
+- **Nicaragua**
+
+
+```{r Filter Nicaragua, include=FALSE}
+nic_corona <- coronavirus %>% filter(country == "Nicaragua")
+nic_corona
+```
+
+```{r replacing negative values of Nicaragua with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+nic_corona$cases <- replace(nic_corona$cases, which(nic_corona$cases < 0), NA)  
+nic_corona   
+```
+
+
+```{r replacing missing values of Nicaragua with most recent values, include=FALSE}
+nic_corona <- transform(nic_corona, cases = na.locf(cases))
+head(nic_corona)
+```
+
+
+```{r recover rate of Nicaragua}
+confirmed_nic <- nic_corona %>% filter(type == "confirmed")
+recovered_nic <- nic_corona %>% filter(type == "recovered")
+death_nic <- nic_corona %>% filter(type == "death")
+total_nic <- sum(confirmed_nic$cases)
+total_recoveries_nic <- sum(recovered_nic$cases)
+recovery_rate_nic <- (total_recoveries_nic/ total_nic)*100
+
+total_death_nic <- sum(death_nic$cases)
+death_rate_nic <- (total_death_nic/ total_nic)*100
+
+```
+
+
+- **El Salvador** 
+
+
+```{r Filter El Salvador, include=FALSE}
+elsal_corona <- coronavirus %>% filter(country == "El Salvador")
+elsal_corona
+```
+
+```{r replacing negative values of El Salvador with NA, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+elsal_corona$cases <- replace(elsal_corona$cases, which(elsal_corona$cases < 0), NA)  
+elsal_corona   
+```
+
+
+```{r replacing missing values of El Salvador with most recent values, include=FALSE}
+elsal_corona <- transform(elsal_corona, cases = na.locf(cases))
+head(elsal_corona)
+```
+
+
+```{r recover rate of El Salvador}
+confirmed_elsal <- elsal_corona %>% filter(type == "confirmed")
+recovered_elsal <- elsal_corona %>% filter(type == "recovered")
+death_elsal <- elsal_corona %>% filter(type == "death")
+total_elsal <- sum(confirmed_elsal$cases)
+total_recoveries_elsal <- sum(recovered_elsal$cases)
+recovery_rate_elsal <- (total_recoveries_elsal/ total_elsal)*100
+
+total_death_elsal <- sum(death_elsal$cases)
+death_rate_elsal <- (total_death_elsal/ total_elsal)*100
+```
+
+```{r close country table}
+country <- c("Belize", "Nicaragua", "Honduras", "El-Salvador")
+totalcomfirmed_cases <- c(total_bel, total_nic, total_hond, total_elsal)
+
+totatl_recoveries <- c(total_recoveries_bel, total_recoveries_nic, total_recoveries_hond, total_recoveries_elsal)
+recovery_rates <- c(recovery_rate_bel, recovery_rate_nic, recovery_rate_hond, recovery_rate_elsal)
+
+totatl_deaths <- c(total_death_bel, total_death_nic, total_death_hond, total_death_elsal)
+death_rates <- c(death_rate_bel, death_rate_nic, death_rate_hond, death_rate_elsal)
+
+dataframe2 <- data.frame(country, totalcomfirmed_cases, totatl_recoveries, recovery_rates, totatl_deaths, death_rates )
+
+knitr::kable(dataframe2, caption = "Closest countries summary")
+
+```
+
+
+```{r outliers}
+recovered_nic <-recovered_nic[-c(259), ]
+recovered_bel<- recovered_braz[-c(335), ]
+recovered_elsal <- recovered_braz[-c(344), ]
+```
+
+
+#### Recovery cases and death cases comparison with the closest countries
+
+- Guatemala = gold
+- Belize    = deep pink
+- Nicaragua = light green
+- Honduras  = sky blue
+- El-Salvadore = dark orange
+
+
+
+```{r plotting time series recoveries of closest countriesin a same graph}
+
+
+s1 <- ggplot(recover_guatemala_corona, aes(x=date, y=cumsum(cases)))  + geom_line() + ggtitle("Guatemala: Daily Covid-19 Recoveries")
+
+fig15 <- ggplotly(s1)
+    fig15 <- fig15 %>% style(line = list(color = 'gold'), hoverinfo = "y", traces = 1)
+    
+
+s2 <- ggplot(recovered_bel, aes(x=date, y=cumsum(cases)))  + geom_line() + ggtitle("US: Daily Covid-19 Recoveries")
+fig16 <- ggplotly(s2)
+    fig16 <- fig16 %>% style(line = list(color = 'deeppink'), hoverinfo = "y", traces = 1)
+    
+
+s3 <- ggplot(recovered_nic, aes(x=date,y=cumsum(cases)))  + geom_line() +  ggtitle("Russia: Daily Covid-19 Recoveries")
+
+fig17 <- ggplotly(s3)
+    fig17 <- fig17 %>% style(line = list(color = 'chartreuse'), hoverinfo = "y", traces = 1)
+    
+
+s4 <- ggplot(recovered_hond, aes(x=date,y=cumsum(cases)))  + geom_line() + ggtitle("UK: Daily Covid-19 Recoveries")
+
+fig18 <- ggplotly(s4)
+    fig18 <- fig18 %>% style(line = list(color = 'deepskyblue'), hoverinfo = "y", traces = 1)
+    
+
+s5 <- ggplot(recovered_elsal, aes(x=date,y=cumsum(cases)))  + geom_line() + ggtitle("India: Daily Covid-19 Recoveries")
+
+fig19 <- ggplotly(s5)
+    fig19 <- fig19 %>% style(line = list(color = 'darkorange'), hoverinfo = "y", traces = 1)
+    
+
+figure5 <- subplot(fig15, fig16, fig17, fig18, fig19, nrows = 3, shareY = FALSE, shareX = TRUE) %>%
+layout(title = list(text = "Total number of Recovery caese of closest countries"),
+         plot_bgcolor='#e5ecf6',
+         xaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff'), 
+         yaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff')) 
+figure5
+```
+
+##### *Interpretation 8*
+
+According to these cumulative plots,
+
+- When it takes as an average, total number of recovery cases of Nicaragura(light green) and Honduras(sku blue)are lower than Guatemala. They show a total of recoveries around 150,000.
+
+- But Belize(deep pink) and El-Salvadore(orange) show larger values of recovery cases than Guatemala.
+
+
+```{r plotting time series deaths of closest countriesin a same graph}
+
+
+r1 <- ggplot(death_guatemala_corona, aes(x=date, y=cumsum(cases)))  + geom_line() + ggtitle("Guatemala: Daily Covid-19 Recoveries")
+
+fig15 <- ggplotly(r1)
+    fig15 <- fig15 %>% style(line = list(color = 'gold'), hoverinfo = "y", traces = 1)
+    
+
+r2 <- ggplot(death_bel, aes(x=date, y=cumsum(cases)))  + geom_line() + ggtitle("US: Daily Covid-19 Recoveries")
+fig16 <- ggplotly(r2)
+    fig16 <- fig16 %>% style(line = list(color = 'deeppink'), hoverinfo = "y", traces = 1)
+    
+
+r3 <- ggplot(death_nic, aes(x=date,y=cumsum(cases)))  + geom_line() +  ggtitle("Russia: Daily Covid-19 Recoveries")
+
+fig17 <- ggplotly(r3)
+    fig17 <- fig17 %>% style(line = list(color = 'chartreuse'), hoverinfo = "y", traces = 1)
+    
+
+r4 <- ggplot(death_hond, aes(x=date,y=cumsum(cases)))  + geom_line() + ggtitle("UK: Daily Covid-19 Recoveries")
+
+fig18 <- ggplotly(r4)
+    fig18 <- fig18 %>% style(line = list(color = 'deepskyblue'), hoverinfo = "y", traces = 1)
+    
+
+r5 <- ggplot(death_elsal, aes(x=date,y=cumsum(cases)))  + geom_line() + ggtitle("India: Daily Covid-19 Recoveries")
+
+fig19 <- ggplotly(r5)
+    fig19 <- fig19 %>% style(line = list(color = 'darkorange'), hoverinfo = "y", traces = 1)
+    
+
+figure5 <- subplot(fig15, fig16, fig17, fig18, fig19, nrows = 3, shareY = FALSE, shareX = TRUE) %>%
+layout(title = list(text = "Total number of Death caese of closest countries"),
+         plot_bgcolor='#e5ecf6',
+         xaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff'), 
+         yaxis = list( 
+           zerolinecolor = '#ffff', 
+           zerolinewidth = 2, 
+           gridcolor = 'ffff')) 
+figure5
+```
+
+##### *Interpretation 9*
+
+According to these cumulative plots,
+
+- Even if the recovery cases of Belize(deep pink) has shown a larger value, the number of death cases are lower than Guatemala.
+
+- As an average, all the other closest countries show less values to the total number of deaths than Guatemala.
+
+
+
+```{r comparison in same plot}
+par(mfrow=c(1,2))
+
+death_rate_close <- c(death_rate, death_rate_bel, death_rate_elsal, death_rate_hond, death_rate_nic)
+
+barplot(death_rate_close, main="Death rates", horiz=FALSE, las=2, names.arg = c("Guatemala", "Belize", "El-Salvadore", "Honduras", "Nicaragua"), col = c("gold","deeppink","darkorange","deepskyblue", "chartreuse"))
+
+
+recovery_rate_close <- c(recovered_rate, recovery_rate_bel, recovery_rate_elsal, recovery_rate_hond, recovery_rate_nic)
+barplot(recovery_rate_close, main="Recovery rates", horiz=FALSE, las=2, names.arg = c("Guatemala", "Belize", "ElSalvadore", "Honduras", "Nicaragua"), col = c("gold","deeppink","darkorange","deepskyblue", "chartreuse"))
+```
+
+##### *Interpretation 10*
+
+When compairing with the closest countries affected by covid-19, according to these barcharts we can see that,
+
+- The highest value of death rate is shown in El-Salvadore but Guatemala is larger than other 4 countries.
+
+- Even though Belize and El-Salvadore show similar avarage  values of recovery rates to Guatemala, Guatemala shows the larger value.
+
+- Honduras and Nicaragua has the least in both death and recovery rates.
+
+
+# Discussion
+
+So far Covid-19 virus has attacked to 221 countries around the world and 232,774,817 confirmed cases have been reported. Even Guatemala has to face this deadly situation. After the first verified case in mid-March, Guatemala's government quickly shut down the entire country. Despite some government assistance, however, with 75% of workers employed informally, many were forced to choose between losing pay and safeguarding their health. 11 By mid-July, there had been over 1000 deaths.This report discuss the status about how covid-19 has been spread in the country and impact to the country. Small data analysis has been done in this report and the data were collected from the coronavirus dataset from github. Before analysing the data, the datset had to be filterd and cleaned becouse there were minus values in the dataset. Since cases cannot be negative values, they had to be cleaned. So the minus values were replaced as missing values(NA). And then those missing values were replaced with the nearest values usin locf(last one carried forward) method. After that Outliers were removed. Finally the data analysing process was done with graphs and charts. In this report boxplots, line plots, cumulative plots, barcharts and scatter plots were used to visualize the data. Results were interpreted below the graphs.
+
+# Conclusion
+
+According to the results of analysis, Total confirmed, death and recovery cases of Guatemala have been gradually increased since the virus was starting to spread. When compairing the case types with each other, recoveries, deaths and active cases have been varied and increased linearly with the total cases. 
+
+When compairing Guatemala with the countries most affected by covid 19, Even though the total number of deaths and recoveries has shown a lower value death rate and recovery rate shows higher values compared to those countries.
+But Guatemala shows a lower death rate compared to the closest countries.
+
+Concluded that, Guatemala is a country where Covid-19 is spreading rapidly and deadly.
+
+
+# References
+
+- <https://weather-and-climate.com/average-monthly-Rainfall-Temperature-Sunshine-in-Guatemala>
+
+- <https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/guatemala/>
+
+- <https://www.worldometers.info/coronavirus/country/guatemala/>
+
+- <https://www.who.int/emergencies/diseases/novel-coronavirus-2019?gclid=Cj0KCQjw18WKBhCUARIsAFiW7JzE3Q7j4lEE7OYbuH4C0xtkvmhc5Db3LRKKoTnG_GfszETgi6m0egcaAo-XEALw_wcB>
+
+- <https://www.wur.nl/nl/artikel/Overview-of-corona-news-for-students-employees-customers-and-partners.htm>
