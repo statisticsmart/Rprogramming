@@ -23,22 +23,22 @@ title: Individual Projects 2021
 | [Czechia.html](/individualproject2021/Shashini/AS2018538/AS2018538Czechia.html) [Czechia-Rmd](/individualproject2021/Shashini/AS2018538/AS2018538Czechia.Rmd)	| [Belgium.html](/individualproject2021/Shashini/AS2018542/AS2018542Belgium.html) [Belgium-Rmd](/individualproject2021/Shashini/AS2018542/AS2018542Belgium.Rmd) 	| [Oman.html](/individualproject2021/Shashini/AS2018546/AS2018546Oman.html) [Oman-Rmd](/individualproject2021/Shashini/AS2018546/AS2018546Oman.Rmd) 	| [Guyana.html](/individualproject2021/Jayani/AS2017376/AS2017376Guyana.html) [Guyana-Rmd](/individualproject2021/Jayani/AS2018503/AS2017376Guyana.Rmd)  | [Eswatini.html](/individualproject2021/Jayani/AS2017378/AS2017378_Eswatini.html) [Eswatini-Rmd](/individualproject2021/Jayani/AS2017378/AS2017378Eswatini.Rmd)  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
+|  [North Macedonia.html](/individualproject2021/Jayani/AS2017392/AS2017392NorthMacedonia.html) [North Macedonia-Rmd](/individualproject2021/Jayani/AS2017392/AS2017392NorthMacedonia.Rmd) 	|  [Gabon.html](/individualproject2021/Jayani/AS2017416/AS2017416_Gabon.html) [Gabon-Rmd](/individualproject2021/Jayani/AS2017416/AS2017416_Gabon.Rmd)	|  [Guinea.html](/individualproject2021/Jayani/AS2017419/AS2017419Guinea(new).html) [Guinea-Rmd](/individualproject2021/Jayani/AS2017419/AS2017419Guinea.Rmd) 	| [PapuaNewGuinea.html](/individualproject2021/Jayani/AS2017422/AS2017422PapuaNewG.html) [PapuaNewGuinea-Rmd](/individualproject2021/Jayani/AS2017422/AS2017422PapuaNewG.Rmd)  | [Mali.html](/individualproject2021/Jayani/AS2017457/AS2017457Mali.html) [Mali-Rmd](/individualproject2021/Jayani/AS2017457/AS2017457Mali.Rmd) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
+| [Somalia.html](/individualproject2021/Jayani/AS2017468/AS2017468_Somalia.html) [Somalia-Rmd](/individualproject2021/Jayani/AS2017468/AS2017468_Somalia.Rmd)	| [Mauritania.html](/individualproject2021/Jayani/AS2017508/2017508Mauritania.html) [Mauritania-Rmd](/individualproject2021/Jayani/AS2017508/AS2017508Mauritania.Rmd)	 	|  [Trinidad and Tobago.html](/individualproject2021/Jayani/AS2017547/2017547.html) [Trinidad and Tobago-Rmd](/individualproject2021/Jayani/AS2017547/AS2017547.Rmd)	| [Nigeria.html](/individualproject2021/Jayani/AS2018303/2018303Nigeria.html) [Nigeria-Rmd](/individualproject2021/Jayani/AS2017303/AS2018303Nigeria.Rmd)  |[Australia.html](/individualproject2021/Jayani/AS2018305/2018305Australia.html) [Australia-Rmd](/individualproject2021/Jayani/AS2018305/2018305Australia.Rmd)   |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
+| [Botswana.html](/individualproject2021/Jayani/AS2018306/2018306Botswana.html) [Botswana-Rmd](/individualproject2021/Jayani/AS2018306/AS2018306Botswana.Rmd) 	| [Ghana.html](/individualproject2021/Jayani/AS2018310/2018310Ghana.html) [Ghana-Rmd](/individualproject2021/Jayani/AS2018310/AS2018310Ghana.Rmd) 	| [Guatemala.html](/individualproject2021/Jayani/AS2018313/AS2018313Guatemala.html) [Guatemala-Rmd](/individualproject2021/Jayani/AS2018313/AS2018313Gua.Rmd) 	| [Croatia.html](/individualproject2021/Jayani/AS2018317/AS2018317CROATIA.html) [Croatia-Rmd](/individualproject2021/Jayani/AS2018317/AS2018317CROATIA.Rmd)   | [Moldova.html](/individualproject2021/Jayani/AS2018319/AS2018319Moldova.html) [Moldova-Rmd](/individualproject2021/Jayani/AS2018319/AS2018319Moldova.Rmd) |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
+| [Poland.html](/individualproject2021/Jayani/AS2018323/AS2018323Poland.html) [Poland-Rmd](/individualproject2021/Jayani/AS2018323/AS2018323Poland.Rmd)	| [Malta.html](/individualproject2021/Jayani/AS2018332/AS2018332Malta.html) [Malta-Rmd](/individualproject2021/Jayani/AS2018332/AS2018332Malta.Rmd) 	|[Sri Lanka.html](/individualproject2021/Jayani/AS2018335/AS2018335SriLanka.html) [Sri Lanka-Rmd](/individualproject2021/Jayani/AS2018335/AS2018335SriLanka.Rmd)  	|  [Senegal.html](/individualproject2021/Jayani/AS2018339/AS2018339Senegal.html) [Senegal-Rmd](/individualproject2021/Jayani/AS2018339/AS2018339Senegal.Rmd) |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
+| [Romania.html](/individualproject2021/Jayani/AS2018346/AS2018346Romania.html) [Romania-Rmd](/individualproject2021/Jayani/AS2018346/AS2018346Romania.Rmd)	| [Spain.html](/individualproject2021/Jayani/AS2018356/AS2018356Spain.html) [Spain-Rmd](/individualproject2021/Jayani/AS2018356/AS2018356Spain.Rmd) 	| [Andorra.html](/individualproject2021/Jayani/AS2018357/AS2018357.html) [Andorra-Rmd](/individualproject2021/Jayani/AS2018357/AS2018357.Rmd) 	| [Latvia.html](/individualproject2021/Jayani/AS2018372/AS2018372Latvia.html) [Latvia-Rmd](/individualproject2021/Jayani/AS2018372/AS2018372Latvia.Rmd)   | [Cote dlvoire.html](/individualproject2021/Jayani/AS2018376/AS2018376Cote_dlvoire.html) [Cote dlvoire-Rmd](/individualproject2021/Jayani/AS2018376/AS2018376Cote_dlvoire.Rmd)  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
-| 	|  	|  	|   |  |
+| [Pakistan.html](/individualproject2021/Jayani/AS2018379/AS2018379Pakistan.html) [Pakistan-Rmd](/individualproject2021/Jayani/AS2018379/AS2018379Pakistan.Rmd) 	|  	|  	|   |  |
 |:-:	|:-:	|:-:	|:-:	|:-:	|
 
 | 	|  	|  	|   |  |
