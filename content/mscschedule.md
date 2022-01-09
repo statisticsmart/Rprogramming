@@ -34,7 +34,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 2: Data Structures in R (Vector, Matrix, Array, Data Frame, List) 
 
-|Slides   	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices)	|  [Cheat sheet]((/cheatsheets/baser.pdf)) 	| R-script | [Exercise 3](https://thiyangt.github.io/rworkbook/matrices-arrays-data-frames.html) 	| Answers: Tutorial discussion |
+|[Slides-2](/slides/l22021msc.html) 	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices)	|  [Cheat sheet]((/cheatsheets/baser.pdf)) 	| R-script | [Exercise 3](https://thiyangt.github.io/rworkbook/matrices-arrays-data-frames.html) 	| Answers: Tutorial discussion |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 3: Built-in functions in R
