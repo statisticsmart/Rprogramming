@@ -39,7 +39,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 3: Built-in functions in R
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides - 3](/slides/l32021msc.html)  	| [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions)  [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html) 	|  Cheat sheet 	| R-script | [Exercise 5](https://thiyangt.github.io/rworkbook/data-visualization-with-r-qplot.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 4: Writing functions in R and control structures
