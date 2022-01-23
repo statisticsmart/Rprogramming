@@ -44,7 +44,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 4: Writing functions in R and control structures
 
-|[Slides-4](/slides/l42021msc.html))  	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19])	|  Cheat sheet 	| R-script | [Exercise]((https://thiyangt.github.io/rworkbook/writing-functions-in-r.html)) 	| Answers |
+|[Slides-4](/slides/l42021msc.html)  	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19])	|  Cheat sheet 	| R-script | [Exercise]((https://thiyangt.github.io/rworkbook/writing-functions-in-r.html)) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 5: Introduction to the tidyverse, pipe operator and data import and export
