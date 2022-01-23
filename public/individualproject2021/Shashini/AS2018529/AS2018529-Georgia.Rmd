@@ -1,0 +1,200 @@
+---
+title: "COVID 19 EPIDEMIC IN GEORGIA"
+author: "H.B.D.M.Sandaruwani"
+date: "9/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introduction
+
+Georgia is a country at the intersection of Europe and Asia,is a former soviet republic that’s home to caucasus mountain villages and Blank sea beaches.It’s famous for vardzia, a sprawling cave monastery dating to the 12th century,atheancient wine-growing region kakhrti,The capital,Tbilisi,is known for the diversearchitecture and mazelike , cobblestone streets or its old town .The climate of Georgia is a humid subtropical climate, with most of the state having short, mild winters and long, hot summers. The Atlantic Ocean on the east coast of Georgia and the hill country in the north impact the state’s climate.[1] Also, the Chattahoochee River divides Georgia into separate climatic regions with the mountain region to the northwest being cooler than the rest of the state, the average temperatures for that region in January and July being 39 °F (4 °C) and 78 °F (26 °C) respectively.[2] Winter in Georgia is characterized by mild temperatures and little snowfall around the state, with the potential for snow and ice increasing in the northern parts of the state. Summer daytime temperatures in Georgia often exceed 95 °F (35 °C). The state experiences widespread precipitation. Tornadoes and tropical cyclones are common.
+
+## *Lock-down status of the country*
+
+* The positivity rate has come down to 4.99% of tested individuals for Covid-19  as of September 26 in comparison to 6.48% of last two weeks
+* Meanwhile, 2,956 patients have recovered from the coronavirus and 30 infected  individuals have died
+* 25,692 tests were conducted around the country in the past 24 hours.
+* A total of 28,553 tests were conducted around the country in the past 24     hours. 15,965 of the 28,553 tests were rapid tests, while the remaining 12,588 were
+
+The COVID-19 pandemic was first detected in the U.S. state of Georgia on March 2, 2020. The state’s first death came ten days later on March 12. As of April 17, 2021, there were 868,163 confirmed cases, 60,403 hospitalizations, and 17,214 deaths.[1] All of Georgia’s 159 counties now report COVID-19 cases, with Gwinnett County reporting over 85,000 cases and the next three counties (Fulton, Cobb and DeKalb) now reporting over 56,000 cases each.[1] As of October 23, 2020, forty-five Georgia counties have higher per capita COVID-19 case rates than New York City. georgia goverment take many av=ction to protect from the corona virus
+
+* All Georgians can be tested for COVID-19, whether or not they are experiencing  symptoms
+* Confirmed COVID-19 cases, hospitalizations, and deaths.
+* COVID-19 vaccines administered, residents vaccinated, and distribution of vaccine recipients.
+
+```{r,comment=FALSE,message=FALSE,warning=FALSE}
+
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+Georgia_corona <- coronavirus %>% filter(country == "Georgia")
+library(ggplot2) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(png) 
+library(gridBase) 
+library(sp) 
+data(wrld_simpl)
+
+Georgia_location <- tibble(lat=55.3781   , long=3.436) 
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  
+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = Georgia_location, aes(x = long, y = lat), color = "red", size = 1)
+```
+
+## *Exploratory Data Analysis*
+
+### *Data Description*
+
+### **Coronavirus Data**
+
+```{r,comment=NA}
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+```
+
+### **Georgia coronaviras Data**
+
+```{r,comment=NA}
+head(Georgia_corona)
+tail(Georgia_corona)
+```
+### **countries feld with corona virus**
+
+```{r,comment=NA}
+unique(coronavirus$country)
+```
+
+### *Summary of Data*
+
+coronavirus and Georgia_corona 
+ 
+ ```{r,comment=NA}
+ summary(coronavirus)
+ summary(Georgia_corona)
+ ```
+### *Confirmed data* 
+ 
+```{r,comment=NA} 
+confirmedcases_Georgia_corona <- Georgia_corona %>% filter(type=="confirmed") 
+head(confirmedcases_Georgia_corona)
+tail(confirmedcases_Georgia_corona)
+ggplot(confirmedcases_Georgia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Georgia: Daily Covid-19 Confirmed cases")
+summary(confirmedcases_Georgia_corona)
+```
+
+
+### *dethed data*
+
+```{r,comment=NA}
+deaths_Georgia_corona <- Georgia_corona %>% filter(type=="death") 
+head(deaths_Georgia_corona)
+tail(deaths_Georgia_corona)
+ggplot(deaths_Georgia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Georgia: Daily Covid-19 deaths")
+summary(deaths_Georgia_corona)
+```
+
+### *recovered data*
+
+```{r,comment=NA}
+recover_Georgia_corona <- Georgia_corona %>% filter(type=="recovered")
+head(recover_Georgia_corona)
+tail(recover_Georgia_corona)
+ggplot(recover_Georgia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Georgia: Daily Covid-19 recoveries")
+summary(recover_Georgia_corona)
+
+```
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+Georgia_corona2 <- Georgia_corona %>% filter(cases >= 0)
+ggplot(Georgia_corona2, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Georgia: Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+
+
+```{r,comment=NA,message-FALSE,warning=FALSE}
+Georgia_corona <- coronavirus %>% filter(country == "Georgia")
+confirmedcases_Georgia_corona <- Georgia_corona %>% filter(type=="confirmed") 
+``` 
+
+```{r}
+Armenia_corona <- coronavirus %>% filter(country == "Armenia")
+confirmedcases_Armenia_corona <- Armenia_corona %>% filter(type=="confirmed") 
+``` 
+```{r}
+Azerbaijan_corona <- coronavirus %>% filter(country == "Azerbaijan")
+confirmedcases_Azerbaijan_corona <- Azerbaijan_corona %>% filter(type=="confirmed") 
+``` 
+
+```{r}
+Turkey_corona <- coronavirus %>% filter(country == "Turkey")
+confirmedcases_Turkey_corona <- Turkey_corona %>% filter(type=="confirmed") 
+``` 
+
+```{r}
+Ukarine_corona <- coronavirus %>% filter(country == "Ukarine")
+confirmedcases_Ukarine_corona <- Ukarine_corona %>% filter(type=="confirmed") 
+``` 
+
+
+```{r}
+Iraq_corona <- coronavirus %>% filter(country == "Iraq")
+confirmedcases_Iraq_corona <- Iraq_corona %>% filter(type=="confirmed") 
+```
+
+```{r}
+Iran_corona <- coronavirus %>% filter(country == "Iran")
+confirmedcases_Iran_corona <- Iran_corona %>% filter(type=="confirmed") 
+``` 
+
+```{r}
+Neighbor_confirm <- rbind(confirmedcases_Georgia_corona,confirmedcases_Armenia_corona,confirmedcases_Azerbaijan_corona,confirmedcases_Turkey_corona,confirmedcases_Ukarine_corona,confirmedcases_Iraq_corona,confirmedcases_Iran_corona)
+```
+```{r,comment=NA,message=FALSE,warning=FALSE}
+ ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK's neighbour countries") + ylim(0,10000)
+```
+
+```{r,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,30000)
+```
+```{r}
+ggplot(Neighbor_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed cases in Georgia's neighbor countries")
+```
+
+## Discussion
+
+According to  corona virus data set there are 389 countries are pending with corona .I do this report regarding one of those countries.It is Georgia.First of all I summarized    all corona virus data set.According to that summary we can say that corona patients are increased highly within two years. The all data contain with 498132 elements.After that Georgia corona virus data set was summarized and it gave the information by using 1818 datas.According to that  maximum cases are equal to 6208.
+
+According to our secound graph of *Daily covid 19 confirmed cases* we can see two peaks . End of the 2020 and 2021 confirmed cases have done the highest values.Also we can see another small peak in between that two peaks.The highest value of the peak is in between 5000 and 6000.That mean summarized data and graphical representation is matching.After that we can talk about the death pations using third graph of *Daily covid 19 death*.Unfortunately there were so many death cases in 3rd wave. It's gave value as much as 85.when we focus about *Daily covid 19 recoveries* ,we can say that they were able to protected so
+many lives in 1st wave.But in third wave it's very hard to control it. 
+
+Furthermore we can see that confirmed cases and recover cases are look like same in *Daily covid 19 cases by type* graph. so we can say that georgia faced strongly for this World epidemic. using last three graphs we can compare georgia with another neighbor countries.So we can see that reported cases were look like same.there are no outlier in data set 
+
+## Conclution
+ 
+ For the gerogia coronavirus data set it is clearly observe that georgia's number of confirmed cases and recovered cases are in high level and number of deaths are in low level.But in end of 2021 it is to much hard to control it.so georgia government must pay there attention to that matter. But in overall georgia faced to corona virus successfully
+ 
+## References
+ 
+ 
+* https://en.wikipedia.org/wiki/Climate_of_Georgia_(U.S._state)#:~:text=The%20c   limate%20of%20Georgia%20is,north%20impact%20the%20state's%20climate.
+* Google map
+* https://dph.georgia.gov/covid-19-daily-status-report
+
+
+
+

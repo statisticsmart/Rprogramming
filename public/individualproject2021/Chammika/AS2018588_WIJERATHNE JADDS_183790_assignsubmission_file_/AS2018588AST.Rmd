@@ -1,0 +1,458 @@
+---
+title: "Austria Corona Report"
+author: "By Dilmi (AS2018588)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018588")
+library(tidyverse)
+library(magrittr)
+
+library(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+```
+<div align="center">
+# 1.0 Introduction
+</div>
+
+<div align="justify">
+Austria is a country blessed with stunning natural landscapes, picturesque villages, cultural cities, and so much more. It boasts charming places to visit, great food and drink, a robust social system, and an abundance of culture. While **Austrian German** is the country's official language, many Austrians communicate informally in a variety of languages such as talian, Slovene, Croatian, Hungarian, and Czech in the border provinces; English. Austria occupies an area of **83,879 km2** (32,386 sq mi) and has a population of nearly ***9 million people***.
+
+<div align="center">
+![](gettyimages-1217374041-2048x2048.jpg){width=75%}
+</div>
+Image by Thomas Kronsteiner via [gettyimages](www.gettyimages.com)
+
+<div align="center">
+## 1.1 Location
+</div>
+
+<div align="justify">
+Austria officially the Republic of Austria, is a landlocked East Alpine country in the southern part of Central Europe. It is composed of nine federated states, one of which is Vienna, Austria's capital and largest city. It is bordered by Germany to the northwest, the Czech Republic to the north, Slovakia to the northeast, Hungary to the east, Slovenia and Italy to the south, and Switzerland and Liechtenstein to the west. 
+
+![](gettyimages-956152366-2048x2048.jpg)
+Image via [gettyimages](www.gettyimages.com)
+
+<div align="center">
+## 1.2 Climate Change 
+</div>
+
+<div align="justify">
+Austria can be divided into three climatic zones: the eastern part shows a continental Pannonian climate (mean July temperature >19°C, annual rainfall < 800 mm), while the central Alpine region has the characteristic features of the Alpine Climate (high precipitation, short summers, long winters). The remaining part of the country belongs to the transitional central European climatic zone, which is characterized by a wet and temperate climate (mean July temperature 14–19°C, annual precipitation of 700–2000 mm).
+
+
+<div align="center">
+## 1.3 Lock-down Status of the country 
+</div>
+
+<div align="justify" >
+On February 25, 2020, the first COVID-19 case was reported in Austria. In spring 2020, there was a first national lockdown lasting several weeks, before the situation increasingly normalized in summer. In autumn 2020, a second wave of infection began to spread. The measures were tightened again and have since restricted public life. 
+As the second wave led to renewed restrictions on public life by the federal government. Since the beginning of November 2020, Austria has been in a lockdown, which was eased in the meantime for several weeks (December 7 - December 26). On February 8, 2021, many of the measures that had been in place, such as the closure of shops and schools, were lifted.
+The peak of confirmed daily cases of infection was reached on November 11, 2020 with 9.209 confirmed cases. In the last two weeks of November and at the beginning of December, more than half of Austria's beds in Intensive Care Units (ICU) were occupied by Covid-19 patients. Additionally, new virus mutations from South Africa and Great Britain were spreading in Austria since January 2021 at the latest.
+
+As up-to-datel,Hotels in Austria are open now, and travellers from certain countries can enter Austria again. Up-to-date information regarding safety risks and travel warnings can be obtained from the [website of the Ministry of Foreign Affairs.](https://www.bmeia.gv.at/reise-services/reiseinformation/)
+
+
+<div align="center">
+## 1.4 Actions taken by the government
+</div>
+
+<div align="justify">
+(Mar. 17, 2020) On March 13, 14, 15, and 16, 2020, respectively, the Austrian government adopted the COVID-19 Act and several regulations that tighten restrictions already put in place to prevent or contain the spread of the novel coronavirus in Austria and to make money available to deal with the economic fallout from the pandemic. The measures include the following:
+
+  * The establishment of a crisis management fund
+  * Measures to support employers and employees affected by COVID-19
+   * Closures of or restrictions on entering certain business premises
+   * The reintroduction of border controls and travel restrictions from certain countries to Austria
+  * Prohibition on gathering in public places
+
+The regulations are based on authorizations contained in the Epidemics Act 1950.
+
+As of March 16, 2020, 8,490 people have been tested in Austria, with 959 positive cases. One individual has died and six people have recovered.
+
+<div align="left">
+#### _COVID-19 Act_
+</div>
+
+The COVID-19 Act establishes a crisis management fund at the Ministry of Finance to make the necessary financial resources available to the federal ministries to enable them to take the necessary measures to efficiently manage the COVID-19 crisis situation. (COVID-19 Act art. 1, § 1.) The fund is equipped with 4 billion euros (€) (about US$4.47 billion). (§ 2.) The money may be issued for measures to stabilize the health care system; stimulate the labor market, in particular short-time work; maintain public order and safety; absorb losses of revenue caused by the crisis; and stimulate the economy. It may also be used in connection with educational institutions and with the Epidemics Act 1950. (§ 3.)
+
+Furthermore, the COVID-19 Act authorizes the federal bad bank established in 2014 to provide services and take financial measures that are necessary to help Austrian companies maintain their solvency and bridge liquidity problems that occur due to the spread of the SARS-CoV-2 virus and the resulting economic effects. (COVID-19 Act art. 4, no. 1.) If so directed by the federal minister of finance, the federal bad bank must form one or more subsidiaries whose sole purpose is to fulfill the aforementioned tasks.
+
+In addition, employers who implement short-time work in connection with COVID-19 may receive higher allowances than usual. If child care institutions are ordered closed by administrative action, employees who have no legal right to take administrative leave to take care of their children may be granted special leave of up to three weeks by the employer to take care of children up to 14 years of age. The federal government must compensate the employer with one-third of the salary of the respective employee during that time. (Art. 7.)
+
+Lastly, the COVID-19 Act authorizes the Federal Ministry for Social Affairs, Health, Care, and Consumer Protection to issue regulations that prohibit entering business premises to buy goods or services in order to prevent the spread of COVID-19. The prohibition can be limited to specific times. People who enter premises that have been ordered closed may be fined up to €3,600 (about US4,008). Likewise, the owner of the premises in question may be fined up to €30,000 (about US$ 33,418). (Art. 8.)
+
+The minister therefore ordered the closure of all businesses that sell goods or provide services, and all leisure and sports facilities, with the exception of the following:
+
+* Public pharmacies
+* Grocery stores
+* Drug stores
+* Stores that sell medicinal, sanitary, and therapeutic products
+* Health and care services
+* Services for people with disabilities
+* Veterinary services
+* Establishments that sell pet food
+* Establishments that sell and maintain safety and emergency products
+* Emergency services
+* Agricultural trade establishments
+* Gas stations
+* Banks
+* Post office
+* Legal services
+* Delivery services
+* Public transportation
+* Specialty tobacco stores and newspaper kiosks
+* Hygienic and cleaning services
+* Garbage pickup services
+* Car repair shops
+
+In addition, all sit-down service in restaurants is prohibited. Delivery service is exempt. Restaurants may be open only between 5 a.m. and 3 p.m.
+
+<div align="left">
+#### Additional Travel Restrictions
+</div>
+
+Furthermore, Austria has reintroduced border controls at its border with Switzerland and Liechtenstein, in addition to the border controls in place for travel from Italy. Schengen area member states are allowed to temporarily reintroduce border controls at their internal borders if a serious threat to public policy or internal security has been established. (Schengen Border Code § 25.)
+
+In order to enter Austria from Italy, Switzerland, or Liechtenstein, travelers must present a medical certificate in either German, English, or Italian that shows they have tested negative for the virus SARS-CoV-2. The certificate cannot be older than four days. Anyone who cannot present such a medical certificate is to be refused entry. Austrian citizens and people permanently residing in Austria are exempt from these requirements if they agree in writing to self-quarantine for 14 days.
+
+Furthermore, in addition to Italy, China, South Korea, and Iran, travel by air from the following countries to Austria is prohibited:
+
+* Switzerland
+* France
+* Spain
+* United Kingdom
+* Netherlands
+* Russian Federation
+* Ukraine
+
+Likewise, all travel by train from Switzerland and Liechtenstein to Austria, as well as from Italy, is prohibited. Freight transport is exempt.
+</div>
+
+<div align="center">
+# 2.0 Exploratory Data Analysis
+</div>
+
+```{r include=FALSE}
+ast_corona <- coronavirus %>% filter(country == "Austria")
+ast_corona
+
+library(skimr)
+skim(ast_corona)
+
+ast_corona <- ast_corona %>% select(-province) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  na.omit() 
+head(ast_corona)
+tail(ast_corona)
+skim(ast_corona)
+summary(ast_corona)
+```
+
+<div align="center">
+## 2.1 Overrall
+</div>
+
+<div textsize=50px>
+Following outputs are given the summary of the Austria coronavirus data.We have taken 1766 observations from **22 January 2020 to 4 August 2021**. 
+
+```{r, include=FALSE}
+ast_corona_wider <- ast_corona %>% pivot_wider(names_from = "type",values_from = "cases") %>% 
+  na.omit()
+ast_corona_wider %>% summarise(
+  confirmed = sum(confirmed),
+  recovered = sum(recovered),
+  death = sum(death))
+
+```
+
+The several variables are obtained such as date of the observation taken from, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given date.
+In Austria, from 22 January 2020 to 4 August 2021, there have been 659,084 confirmed cases of COVID-19 with 10,743 deaths, reported to WHO.
+</div>
+
+```{r, include=FALSE}
+plot1 <- ggplot(ast_corona,
+       aes(x = date, 
+           y = cases,
+           col = type))+
+  geom_line()+
+  facet_grid(type ~.)+
+  labs(x ="Date", y = "Cases")
+```
+
+```{r, out.width='75%', fig.align='center', fig.cap='Figure 1.0 Daily Covid-19 Death, Recovered and Confirm cases '}
+plot1
+
+```
+
+```{r, include=FALSE}
+summarise(ast_corona_wider,
+  confirmed = sum(confirmed),
+  recovered = sum(recovered),
+  death = sum(death))
+
+mean(ast_corona_wider$confirmed)
+
+```
+
+<div align="center"> 
+First case of Covid-19 was reported on 25 February in Austria. In the weeks before, several Austrian suspects had been reported in the media but were always tested negative.
+Austria have reported 1187 average confirmed cases each day, with the highest daily cases, 9586 confirmed on 3 November.
+
+#### There are 644,142 have been recovered and 10,743 coronavirus-related deaths reported in the country during the period.
+</div>
+
+```{r, include=FALSE}
+ast_corona_wider <- pivot_wider(ast_corona,names_from = "type",values_from = "cases")%>% 
+  na.omit()  %>% 
+  mutate(active_cases = confirmed-recovered-death)
+tail(ast_corona_wider)
+```
+
+<div align="center" >
+#### _What is Covid-19 Active Cases?_ 
+
+##### Active cases = (total cases) - (total deaths) - (recovered)
+</div>
+
+<div align="justify" >
+This figure represents the current number of people detected and confirmed to be infected with the virus. This figure can increase or decrease, and represents an important metric for Public Health and Emergency response authorities when assessing hospitalization needs versus capacity.
+</div>
+
+```{r, include=FALSE}
+ast_corona_wider <- ast_corona_wider %>% mutate(active = confirmed-recovered-death) %>%
+  mutate(Austria = cumsum(active))
+active_plot <- ggplot(ast_corona_wider,
+                aes(x = date, 
+                    y = Austria)) +
+  geom_line()+
+  labs(x ="Date", y = "Number of cases")
+```
+
+```{r, out.width='75%', fig.align='center', fig.cap='Figure 2.0 Daily Covid-19 Active cases'}
+active_plot
+```
+
+<div align="center">
+## 2.2 Covid-19 Dead Cases
+</div>
+
+<div align= "justify>
+On 12 March, Austria confirmed the first death of COVID-19, a 69-year-old man from Vienna died in Vienna's Kaiser-Franz-Josef Hospital.
+As of August 2021, Austria confirmed a total of 10,703 deaths from the COVID-19
+</div>
+
+```{r}
+ast_corona_wider <- ast_corona_wider %>% 
+  separate("date",c("Year","Month","Date")) %>% 
+  mutate(Deaths  = cumsum(death))
+ast_corona_wider
+
+deathcases_plot <- ggplot(ast_corona_wider,
+                      aes(x = Month, 
+                          y = death,
+                          col = Month))+
+  geom_point()+
+  labs(x ="Date", y = "Number of cases")
+
+```
+```{r,out.width='75%', fig.align='center', fig.cap='Figure 2.2 Covid-19 Death cases over the Months'}
+deathcases_plot
+```
+
+
+<div align="center">
+## 2.3 Comparison with other countries
+</div>
+
+<div align="justify">
+There is no one perfect statistic to compare the outbreaks different countries have experienced during this pandemic. 
+But looking at the confirmed cases, recovered cases and death cases gives us a more complete view of the virus’ toll on each country. Here is an overview of the Covid-19 cases in Austria, Germany, Italy and Russia during the 22 of January 2020 to 04 of August 2021. 
+</div>
+
+```{r include=FALSE}
+# It
+it_corona <- coronavirus %>% filter(country == "Italy") %>% 
+  select(-province) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  pivot_wider(names_from = "type",values_from = "cases") %>% 
+  na.omit() %>% 
+  mutate(active_it = confirmed-recovered-death) %>%
+  mutate(Italy = cumsum(active_it))
+tail(it_corona)
+skim(it_corona)
+it_corona %>% summarise(
+  confirmed_it=sum(confirmed),
+  recovered_it=sum(recovered),
+  death_it=sum(death))
+
+# Rus
+rus_corona <- coronavirus %>% filter(country == "Russia") %>% 
+  select(-province) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  pivot_wider(names_from = "type",values_from = "cases")  %>% 
+  na.omit() %>%
+  mutate(active_rus = confirmed-recovered-death) %>%
+  mutate(Russia = cumsum(active_rus))
+tail(rus_corona)
+skim(rus_corona)
+rus_corona %>% summarise(
+  confirmed_rus=sum(confirmed),
+  recovered_rus=sum(recovered),
+  death_rus=sum(death))
+
+# Ger
+ger_corona <- coronavirus %>% filter(country == "Germany") %>% 
+  select(-province) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))%>% 
+  pivot_wider(names_from = "type",values_from = "cases") %>% 
+  na.omit() %>%
+  mutate(active_ger = confirmed-recovered-death)%>%
+  mutate(Germany = cumsum(active_ger))
+tail(ger_corona)
+skim(ger_corona)
+ger_corona %>% summarise(
+  confirmed_ger=sum(confirmed),
+  recovered_ger=sum(recovered),
+  death_ger=sum(death))
+
+```
+
+<div align="center">
+#### ~EUROPE~
+  Country           |   Death cases   |   confirmed cases   |   Recovered cases
+----------          |---------------  |---------------------|------------
+  Austria           |    10,743       |     659,084         |    644,142
+  Italy             |   128,110       |    4368,465         |   4142,603 
+  Russia            |   159,032       |    6274,006         |   5609,682
+  Germany           |    91,856       |     377,9540        |   3658,742
+</div>
+
+```{r, include=FALSE}
+
+active_it <- select(it_corona,"date","Italy")
+active_rus <- select(rus_corona,"date","Russia")
+active_ger <- select(ger_corona,"date","Germany")
+active_ast <- select(ast_corona_wider,"date","Austria")
+
+compared <- full_join(active_it,active_rus, by="date") %>% 
+  full_join(active_ger, by="date")  %>% 
+  full_join(active_ast,by="date") %>%
+  pivot_longer(c(2:5),"Country","cases")
+compared  
+tail(compared)
+
+
+active_compare <- ggplot(compared,
+                         aes(x = date, 
+                             y = value, 
+                             col = Country))+
+  geom_line()+
+  labs(x ="Date", y = "Number of cases")
+
+```
+
+<div align="justify">
+Although the virus outbreak in these countries specially between November 2020 to July 2021 shared similar origins , Russia have not the similar flow at the beginning. Those countries experienced a surge in cases starting around March 6th but effectively reduced the number of daily new infections by April 20th (Fig. 2.1).Particularly striking is that although the number of cases in Russia increased substantially higher than in other countries , all four countries were able to reduce the spread of infection at around September 2020.
+
+</div>
+
+```{r,out.width='100%', fig.align='center', fig.cap='Figure 2.3 Comparison over the Daily Active Covid-19 cases '}
+active_compare
+```
+<div align="justify">
+
+
+These countries faced similar epidemiological situations during the Covid-19 pandemic, and were largely successful at preventing many of the negative impacts seen across the rest of Europe.
+
+The first confirmed cases of Covid-19 in this region appeared in Germany in late January, but these initial outbreaks remained contained. The major outbreak in the region began in late February. Fig. 2.4 showing how the  Covid-19  active cases have spread across Austria and other countries.
+</div>
+
+```{r, include=FALSE}
+it_corona <- it_corona %>% mutate(Italy = cumsum(confirmed))
+rus_corona <- rus_corona %>% mutate(Russia = cumsum(confirmed))
+ger_corona <- ger_corona %>% mutate(Germany = cumsum(confirmed))
+ast_corona_wider <- ast_corona_wider %>% mutate(Austria = cumsum(confirmed))
+
+
+confirm_it <- select(it_corona,"date","Italy")
+confirm_rus <- select(rus_corona,"date","Russia")
+confirm_ger <- select(ger_corona,"date","Germany")
+confirm <- select(ast_corona_wider,"date","Austria")
+
+compared_confirm <- full_join(confirm_it,confirm_rus, by="date") %>% 
+  full_join(confirm_ger, by="date")  %>% 
+  full_join(confirm,by="date") %>%
+  pivot_longer(c(2:5),"Country","cases")
+compared_confirm  
+tail(compared_confirm)
+
+
+confirm_compare <- ggplot(compared_confirm,
+                         aes(x = date, 
+                             y = value, 
+                             col = Country))+
+  geom_line()+
+  labs(title="Confirm cases",
+       x ="Date", y = "Number of cases")
+```
+
+```{r, out.width='100%', fig.align='center', fig.cap='Figure 2.1 Cumulative Confirmed  cases'}
+confirm_compare
+```
+
+
+
+<div align="center">
+# 3.0 Discussion
+</div>
+
+<div align="justify">
+This paper presents an overview of the Covid-19 during the early stages of the 2020 Covid-19 pandemic to August 2021. This analysis provides insight into the Covid-19 cases in the Austria.
+An in-depth review and analysis of available data from the Coronavirus data set from R. Data was collected directly from 'coronavirus' dataset from R. The data was then analyzed to identify common patterns as well as significant divergences across the Austria and near countries.
+The negative values on the data set are removed from the calculations assumuming the result of the poor data accuracy. 
+I acknowledge that my models are quite simple as they were primarily meant for educational purposes. They do not provide information on uncertainties or confidence intervals.
+</div>
+
+<div align="center">
+# 4.0 Conclusion
+</div>
+
+<div align="justify">
+The actions taken by Austria appear to have been largely successful in reducing the health impact of Covid-19, allowing a return to normal economic activities much earlier than in neighboring countries. Even, Public health measures Austria as were successful. Infection rates reached low levels within a period comparable in duration to that in China. The public health measures also had beneficial (e.g.,
+improved air quality) and adverse side effects (e.g., social isolation, anxiety, and lack of physical activity).
+Currently (end of September 2021), a gradual opening of the country is being considered in the Austrian political arena.
+</div>
+
+<div align="center">
+# 5.0 References
+</div>
+
+<div align="justify">
+* Time Course of COVID-19 Cases in Austria by Hanns Moshammer, Michael Poteser, Kathrin Lemmerer ,Peter Wallner, and Hans-Peter Hutter 
+(https://www.mdpi.com/1660-4601/17/9/3270)
+
+* Europe's Covid-19 outliers: German, Austrian and Swiss policy responses during the early stages of the 2020 pandemic by Zachary Desson, Lisa Lambertza, Jan Willem Peters, Michelle Falkenbach, Lukas Kauer at Erasmus University Rotterdam, Netherlands. (https://www.sciencedirect.com/science/article/pii/S2211883720300964)
+
+* Chronology of the Corona Crisis in Austria - Part 2: From the first easing of measures towards restoring normality By Markus Pollak, Nikolaus Kowarz und Julia Partheymüller (https://viecer.univie.ac.at/en/projects-and-cooperations/austrian-corona-panel-project/corona-blog/corona-blog-beitraege/blog60/)
+
+* Emergence of coronavirus disease 2019 (COVID-19) in Austria by Peter Kreidl, Daniela Schmid, Sabine Maritschnik, Lukas Richter, Wegene Borena, Jakob-Wendelin Genger, Alexandra Popa, Thomas Penz, Christoph Bock, Andreas Bergthaler & Franz Allerberger (https://link.springer.com/article/10.1007/s00508-020-01723-9#Abs1)
+
+* Article [Austria: Government Tightens Rules to Contain Spread of Coronavirus](https://www.loc.gov/item/global-legal-monitor/2020-03-17/austria-government-tightens-rules-to-contain-spread-of-coronavirus/)
+
+* Article [Up-to-date Information on the Coronavirus Situation](https://www.austria.info/en/service-and-facts/coronavirus-information#more-information)
+* Article [An introduction to Austria](https://www.expatica.com/at/moving/about/austria-89477/) Written by Gayatri Bhaumik
+
+* (https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/austria/)
+
+* (https://www.worldometers.info/coronavirus/country/austria/)
+
+* (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Austria)
+
+</div>

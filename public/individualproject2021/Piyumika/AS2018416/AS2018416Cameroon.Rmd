@@ -1,0 +1,258 @@
+---
+title: "Coronavirus Pandemic in Cameroon"
+author: "AS2018416"
+date: "9/22/2021"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **1. Introduction**
+
+## 1.1 Introduction of Coronavirus
+
+![](https://cdn.shrm.org/image/upload/c_crop,h_617,w_1099,x_0,y_0/c_fit,f_auto,q_auto,w_767/v1/Global%20HR/coronavirus4m_y8vnwv?databtoa=eyIxNng5Ijp7IngiOjAsInkiOjAsIngyIjoxMDk5LCJ5MiI6NjE3LCJ3IjoxMDk5LCJoIjo2MTd9fQ%253D%253D){width="500"}
+
+Coronaviruses are a large family of viruses that are known to cause illnesses ranging from the common cold to more severe diseases. The Coronavirus pandemic is the defining global health crisis of our time. A novel coronavirus (COVID-19) was identified on 31 December 2019, WHO was informed of cases of pneumonia of unknown cause in Wuhan City, Hubei Province, China. This is a new coronavirus that has not been previously identified in humans. With its emergence, the virus has now spread to every continent.
+
+The new coronavirus is a respiratory virus that spreads primarily through droplets generated when an infected person coughs or sneezes, or through droplets of saliva or discharge from the nose. It is not certain how long the virus survives on surfaces. A recent review of the survival of human coronaviruses on surfaces found large variability, ranging from 2 hours to 9 days. Coronaviruses die very quickly when exposed to UV light in sunlight. The survival time depends on several factors, including the type of surface, temperature, relative humidity, and a specific strain of the virus. The World Health Organization has made the assessment that COVID-19 can be characterized as a pandemic, but it is a pandemic that can be controlled.
+
+The COVID-19 pandemic in Cameroon is part of the worldwide pandemic of COVID-19 caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Cameroon on 6 March 2020.
+
+### 1.1.1 Loading the Dataset
+
+```{r, message=FALSE, warning=FALSE, comment=NA}
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+```
+
+```{r comment=NA}
+unique(coronavirus$country)
+```
+
+```{r, message=FALSE, warning=FALSE, comment=NA}
+library(tidyverse)
+library(magrittr)
+cameroon_corona <- coronavirus %>% filter(country == "Cameroon")
+cameroon_corona[cameroon_corona < 0] <- 0
+cameroon_corona$cases[is.na(cameroon_corona$cases)] <- 0
+head(cameroon_corona)
+tail(cameroon_corona)
+summary(cameroon_corona)
+```
+
+## 1.2 Brief Introduction of the country Cameroon
+
+![Flag of Cameroon](https://s3.amazonaws.com/images.wpr.com/flag-pages/png1000/cm.png){width="350"}
+
+![Coat of arms](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Coat_of_arms_of_Cameroon.svg/200px-Coat_of_arms_of_Cameroon.svg.png){width="200"}
+
+### 1.2.1 Visualization of the Location
+
+Cameroon is a country in Western Africa that borders the Bight of Biafra and is located along the Atlantic Ocean. It is bordered by Nigeria to the west and north; Chad to the northeast; the Central African Republic to the east; and Equatorial Guinea, Gabon, and the Republic of the Congo to the south. Yaounde is the capital city of Cameroon. Cameroon is a lower-middle-income country with a population of over 25 million. The geography of Cameroon is diverse with coastal plains in the southwest, plateau in the center, mountains in the west, and plains in the north.
+
+![**Map of Cameroon**](https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSyfr9cR7cL0G1Usw22WhBdZSKmpg9KFK8l1B81SL9hq57lIjN9){width="300"}
+
+The government system is a multiparty presidential regime republic, the chief of state is the president, and the head of government is the prime minister. Cameroon has a mixed economic system that includes a variety of private freedom, combined with centralized economic planning and government regulation. Cameroon is a member of the Economic Community of Central African States (ECCAS).
+
+```{r, message=FALSE, warning=FALSE, comment=NA}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+```
+
+```{r, message=FALSE, warning=FALSE, comment=NA}
+p <- ggplot() + 
+  geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "light green", colour = "white" ) + 
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + 
+  scale_x_continuous(breaks = seq(-180, 180, 120)) + 
+  scale_y_continuous(breaks = seq(-90, 90, 100)) + 
+  ggtitle("Location of Cameroon in the World Map")
+
+p + geom_point(data = cameroon_corona, aes(x = long, y = lat), color = "red", size = 2)
+```
+
+### 1.2.2 Climate Condition
+
+In Cameroon, the climate is tropical, semi-arid in the north, and humid and rainy in the rest of the country. Almost everywhere, there is a dry season in winter and a rainy season in summer due to the African monsoon, which is shorter in the north and longer in the south, while along the coast, even in winter there can be some showers.
+
+![](https://www.climatestotravel.com/images/webp/Precipitation-cameroon.webp){width="260"}
+
+[**Precipitation**]{.ul}
+
+The average annual precipitation over Cameroon has decreased by 2.9 millimeters per decade since 1960. The number of meteorological stations (Bamenda, Banyo, Bertoua, Douala Obs., Garoua, Meiganga, Poli, Yabassi) have captured decreasing trends in rainy season precipitation (May - November) in the Southwest, West, and Northern regions of Cameroon throughout 1951 to 2000. The southern part of the country is characterized as humid and equatorial with temperatures ranging from 20-25°C (depending on altitude) and the wettest regions receiving more than 400 millimeters of rainfall per month. The northernmost part of the country, the shores of Lake Chad is the driest area with temperatures ranging from 25-30°C. This portion of the country receives less than 600 millimeters of rainfall per year, while the wettest is the coast, where rainfall exceeds 3,000 millimeters per year.
+
+[**Temperature**]{.ul}
+
+Mean annual temperatures have increased 0.7°C since the 1960s, and have risen the most rapidly during March to May at a rate of 0.19°C per decade overall of Cameroon. The northern part of the country has seen the most rapid rise in temperatures during December to February and September to November at rates of 0.2 - 0.4°C per decade.
+
+![**Cameroon Climate Observations**](https://crudata.uea.ac.uk/~timo/climgen/national/web/Cameroon/anncyc_pretmp_Cameroon.png){width="400"}
+
+### 1.2.3 Lock-down Status of the Country
+
+The COVID-19 pandemic was confirmed to have spread to Cameroon, Central Africa on 6 March with its first confirmed case. The infected person is a French national who arrived in the capital Yaoundé on 24th February. The second case was announced on 6 March. The case was a Cameroonian citizen who was in close contact with the first case, but officials did not release any further information on the case. Five new cases were confirmed on 18 March. Although further information about the victims was not published, one of the confirmed victims is a foreigner. The Minister of Public Health, Dr. Malachie Manaouda, revealed on 23 March that among the 16 cases that tested positive that morning, 9 were from Douala, 6 in Yaoundé, and one in Bafoussam. On 27 March, the total number of COVID-19 cases in Cameroon reached 91 with the breakdown per area as 63 in Yaounde, 25 in Douala, and 3 in Bafoussam. The total number of COVID-19 cases keeps climbing up in the country. On 30 March, the Minister of Public Health announced that Cameroon had 142 active cases. The first death occurred on 24 March, the deceased was the famous saxophonist Manu Dibango. By the end of March, six persons had died from COVID-19. There were 56 deaths in April, bringing the death toll to 61.
+
+The coronavirus, which began to spread in this way, has grown from 1,361 new cases in August to the total number of confirmed cases to 83,425. Furthermore, were 16 reported deaths, bringing the death toll to 1350.
+
+![**COVID-19 pandemic in Cameroon**](https://reliefweb.int/sites/reliefweb.int/files/styles/report-large/public/resources-pdf-previews/1517069-UNICEF%20Cameroon%20COVID-19%20Snapshot%20-%2030%20April%202020.png?itok=6zgU4CbB){width="450"}
+
+### 1.2.4 Actions taken by the government
+
+On 18 March, Cameroonian Prime Minister Joseph Dion Ngute closed its land, air, and sea borders. On 30 March, the Minister of Health announced the imminent launch of a coronavirus test campaign in the city of Douala. Dedicated teams will go door-to-door in the economic capital from April 2 to 6, says the minister. On 7 April, the Cameroonian government has suspended calls for public generosity in the fight against COVID-19, a move that attracted criticism over political motives. On 10 April, the government took 7 additional measures to stop the spread of COVID-19 in Cameroon. These measures take effect from Monday, 13 April 2020.
+
+Measure 1: Wearing a mask in all areas open to the public;
+
+Measure 2: Local production of drugs, screening tests, protective masks, and hydro-alcoholic gels;
+
+Measure 3: Establishment of specialized COVID-19 treatment centers in all regional capitals;
+
+Measure 4: Intensification of the screening campaign with the collaboration of the Center Pasteur;
+
+Measure 5: Intensification of the awareness campaign in urban and rural areas in both official languages;
+
+Measure 6: Continuation of activities essential to the economy in strict compliance with the directives of March 17, 2020;
+
+Measure 7: Sanction
+
+On April 15, following the claims of the Human Rights Commission of the Cameroon Bar Association, President Paul Biya announced the release of certain prisoners in connection with COVID-19.
+
+On Tuesday, May 5, 2020, the Minister of Health announced the provision to healthcare personnel of 50,000 coveralls, 320,000 surgical masks, 220 backpack sprayers, 10,000 pairs of overshoes. In late June, the government announced that the 2021 Africa Cup of Nations would be postponed until 2022.
+
+The Cameroonian government has updated the previous policy of mandatory quarantine for travelers. Air passengers with a positive COVID-19 test result will be required to enter isolation at home or in a government facility at their own expense depending on their symptoms. Although quarantine is not required, travelers may have been exposed to COVID-19 during their travels and are encouraged to limit contact with others for 14 days after their trip.
+
+[**Lock-down**]{.ul}
+
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces, and international borders in order to contain the spread of the virus. This chart shows how different lock down measures were implemented in Cameroon during the course of the pandemic.
+
+![Lock down - Schools](Lockdown%20-%20Schools.png){width="300" height="250"} ![Lock down - Workplaces](Lockdown%20-%20Workplaces.png){width="300" height="250"}
+
+![Lock down - Borders](Lockdown%20-%20Borders.png){width="300" height="250"} ![Lock down - Stay at home](Lockdown%20-%20Stay%20at%20home.png){width="300" height="250"}
+
+[**Vaccination**]{.ul}
+
+At least 200 countries have started vaccinating against COVID-19. Vaccination started in Cameroon on 12 April 2021, initially with 200,000 doses of Sinopharm's BBIBP-CorV vaccine donated by China. Cameroon has administered at least 459,397 doses of COVID vaccines so far. 1.5% received at least one dose and 0.3% have been fully vaccinated. Assuming every person needs 2 doses, that's enough to have vaccinated about 0.9% of the country's population. During the last week reported, Cameroon averaged about 1,506 doses administered each day. At that rate, it will take a further 3,437 days to administer enough doses for another 10% of the population.
+
+# **2. Exploratory Data Analysis**
+
+## 2.1 Visualization of Coronavirus Cases
+
+![**Coronavirus Cases in Cameroon**](COVID-19%20Cases%20in%20Cameroon.png){width="450"}
+
+### 2.1.1 Visualization of Confirmed Cases
+
+```{r, comment=NA}
+confirmed_cameroon_corona <- cameroon_corona %>% filter(type=="confirmed")
+head(confirmed_cameroon_corona)
+tail(confirmed_cameroon_corona)
+summary(confirmed_cameroon_corona)
+```
+
+```{r, comment=NA}
+ggplot(confirmed_cameroon_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Cameroon: Daily Covid-19 Confirmed Cases")
+```
+
+### 2.1.2 Visualization of Death Cases
+
+```{r, comment=NA}
+death_cameroon_corona <- cameroon_corona %>% filter(type=="death")
+head(death_cameroon_corona)
+tail(death_cameroon_corona)
+summary(death_cameroon_corona)
+```
+
+```{r, comment=NA}
+ggplot(death_cameroon_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Cameroon: Daily Covid-19 Death Cases")
+```
+
+### 2.1.3 Visualization of Recovered Cases
+
+```{r, comment=NA}
+recovered_cameroon_corona <- cameroon_corona %>% filter(type=="recovered")
+head(recovered_cameroon_corona)
+tail(recovered_cameroon_corona)
+summary(recovered_cameroon_corona)
+```
+
+```{r, comment=NA}
+ggplot(recovered_cameroon_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Cameroon: Daily Covid-19 Recovered Cases")
+```
+
+### 2.1.4 Visualization of Active Cases
+
+```{r,comment=NA}
+library(dplyr)
+active_cameroon_corona1 <- cameroon_corona %>% pivot_wider(names_from = type,values_from = cases)
+active_cameroon_corona1
+```
+
+```{r, comment=NA}
+active_cameroon_corona2 <- active_cameroon_corona1 %>% mutate(active = confirmed - (recovered + death))
+active_cameroon_corona2
+```
+
+```{r, comment=NA}
+active_cameroon_corona <- active_cameroon_corona2 %>% mutate(active_total = cumsum(active), recovered_total = cumsum(recovered), death_total = cumsum(death))
+active_cameroon_corona
+```
+
+```{r, comment=NA}
+ggplot(active_cameroon_corona, aes(x=date, y=active_total)) + geom_line() + ggtitle("Cameroon: Covid-19 Total Active Cases")
+```
+
+### 2.1.5 Summary of Total Number of Cases
+
+```{r, comment=NA}
+ggplot(cameroon_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Cameroon: Covid-19 Confirmed, Death and Recovered Cases")
+```
+
+```{r, comment=NA}
+cameroon_corona <- cameroon_corona %>% group_by(type) %>% mutate(cum_cases = cumsum(cases))
+ggplot(cameroon_corona, aes(date, cum_cases, colour = type)) + geom_path(size = 1) + labs(title = "Total no.of confirmed, death, recovered cases in cameroon")
+```
+
+```{r, comment=NA}
+cameroon_corona %>% select(type, cases) %>% group_by(type) %>% summarise(total_cases = sum(cases)) %>% pivot_wider(names_from = type,values_from = total_cases) %>% arrange(-confirmed)
+```
+
+## 2.2 Comparison with other countries
+
+```{r, comment=NA}
+#america_corona <- coronavirus %>% filter(country =="America")
+#america_corona$cases[is.na(america_corona$cases)] <- 0
+#head(america_corona)
+#confirmed_america_corona <- america_corona %>% filter(type=="confirmed")
+#head(confirmed_america_corona)
+#cameroon_america_confirmed <- data.frame(date = confirmed_cameroon_corona$date, cameroon = confirmed_cameroon_corona$cases, America = confirmed_america_corona$cases)
+#cameroon_america_confirmed <- pivot_longer(cameroon_america_confirmed, c(2,3), "country", "value")
+#ggplot(cameroon_america_confirmed, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Comparison with the nearest country of America")
+```
+
+# **3. Conclusions and Discussion**
+
+# **4. References**
+
+-   <https://en.wikipedia.org/wiki/Cameroon>
+
+-   <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Cameroon>
+
+-   <https://covid19.minsante.cm/>
+
+-   <https://climateknowledgeportal.worldbank.org/country/cameroon/climate-data-historical>
+
+-   <https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/cameroon/>
+
+-   <https://news.google.com/covid19/map?hl=en-US&mid=%2Fm%2F01nln&gl=US&ceid=US%3Aen>
+
+-   

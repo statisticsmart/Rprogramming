@@ -1,0 +1,912 @@
+---
+title: "**COVID-19 PANDEMIC IN PAKISTAN**"
+author: "Thejaka Hewakuruppu"
+output:
+  rmdformats::downcute:
+    lightbox: true
+    highlight: tango
+    embed_fonts: TRUE
+        
+---
+<style>
+            .my_text
+            {
+                font-family: "Times New Roman", Times, serif;
+                font-size:      18px;
+                font-weight: normal;
+                
+            }
+</style>
+
+
+
+<body style="background-color:#303136;">
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(lubridate)
+library(gganimate)
+library(tidyquant)
+library(plotly)
+library(scales)
+```
+![](cv19.jpg)
+
+# 1. Introduction
+<div style="text-align: justify", class = "my_text">
+Coronavirus disease 2019 (COVID-19) is a disease cause by SARS-CoV-2, which was first identified in Wuhan City, Hubei Province, China due to an outbreak of respiratory illness among people. On January 30, 2020, the World Health Organization (WHO) declared COVID-19 as an global pandemic and with that, countries started to take actions to prevent the spread of the virus.
+Since the virus is new, the behavior of the virus has to be analyzed to get a proper understanding of it and to tackle the spread of the virus and the number of deaths. Country Pakistan was selected to analyze the behavior and patterns of active, confirmed, death and recovered cases of the virus and the comparison of Pakistan's performance with other countries considering some prior knowledge of the behavior the virus is also done.
+</div>
+## 1.1 Background of Pakistan
+<div style="text-align: justify", class = "my_text">
+Islamic Republic of Pakistan; commonly known as Pakistan, is marked as the 5<sup>th</sup> most populated country in the world with a population density of 287 per Km<sup>2</sup> and with a median age of 22.8 years. Country is located in Asia, neighboring Iran to the west, Afghanistan to the northwest and north, China to the northeast, India to the east and southeast, and to the coast of the Arabian Sea in its southern border.
+```{r, echo=FALSE, fig.cap="Figure 01", fig.align = "center"}
+knitr::include_graphics("gifnew.gif")
+```
+</div>
+## 1.2 Climate Conditions of Pakistan
+
+<div style="text-align: justify", class = "my_text">
+There are 4 main seasons in Pakistan. <br>
+
+<li> Cool dry winter from December-February </li>
+<li> Hot and dry spring from March-May </li>
+<li> Monsoon period from June-September </li>
+<li> Retreating monsoon period of October and November </li>
+
+However, the rainfall varies greatly from year to year but the patterns of alternate flooding and drought are common. In the monsoon season, frequent flooding is seen due to heavy rainfall and in the dry season, no significant rainfall is seen. 
+</div>
+
+```{r Data Cleaning/ Wrangling, include=FALSE}
+pakistan_data <- coronavirus %>% filter(country == "Pakistan")
+tail(pakistan_data)
+pakistan_data <- pakistan_data[6:1818,]
+pakistan_data <- pakistan_data %>% subset(select = -c(province))
+pakistan_data
+anyNA(pakistan_data$cases)
+missing <- which(is.na(pakistan_data$cases) == TRUE)
+missing #data set have missing values in the last 45 rows
+pakistan_data <- pakistan_data[-missing,]
+tail(pakistan_data)
+anyNA(pakistan_data)
+
+#Negative to Positive
+negative <- which(pakistan_data$cases < 0)
+negative
+pakistan_data[1267,]
+pakistan_data <- pakistan_data %>% mutate(cases_abs =abs(cases))
+pakistan_data <- pakistan_data %>% subset(select = -c(cases))
+pakistan_data
+tail(pakistan_data)
+
+tidy_pakistan_data <- pakistan_data %>% pivot_wider(names_from = type, values_from = cases_abs)
+tidy_pakistan_data
+tail(tidy_pakistan_data, 10)
+tidy_pakistan_data
+tidy_pakistan_data <- tidy_pakistan_data[1:553,]
+tidy_pakistan_data
+tail(tidy_pakistan_data)
+anyNA(tidy_pakistan_data)
+
+
+tidy_pakistan_data
+tail(tidy_pakistan_data)
+
+#How to get the active cases
+
+confirmed_vector <- tidy_pakistan_data$confirmed
+recovered_vector <- tidy_pakistan_data$recovered
+death_vector <- tidy_pakistan_data$death
+
+
+cum_confirmed_vector <- cumsum(confirmed_vector)
+cum_death_vector <- cumsum(death_vector)
+cum_recovered_vector <- cumsum(recovered_vector)
+
+
+
+
+
+active <- cum_confirmed_vector - cum_death_vector - cum_recovered_vector
+active
+
+
+tidy_pakistan_data <- tidy_pakistan_data %>% add_column(active) 
+tidy_pakistan_data
+
+#converting to weekly data
+weekly_data_recovered <- tidy_pakistan_data %>%
+  tq_transmute(select     = recovered,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_recovered
+
+weekly_data_confirmed <- tidy_pakistan_data %>%
+  tq_transmute(select     = confirmed,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_confirmed
+
+weekly_data_death <- tidy_pakistan_data %>%
+  tq_transmute(select     = death,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_death
+
+weekly_data_active <- tidy_pakistan_data %>%
+  tq_transmute(select     = active,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_active
+
+tidy_week_data <- tibble(weekly_data_active$date, weekly_data_active$active, weekly_data_confirmed$confirmed, weekly_data_recovered$recovered, weekly_data_death$death)
+tidy_week_data
+
+tidy_week_data <- tidy_week_data %>% rename("date" = `weekly_data_active$date` )
+tidy_week_data <- tidy_week_data %>% rename("active" = `weekly_data_active$active` )
+tidy_week_data <- tidy_week_data %>% rename("confirmed" = `weekly_data_confirmed$confirmed` )
+tidy_week_data <- tidy_week_data %>% rename("recovered" = `weekly_data_recovered$recovered` )
+tidy_week_data <- tidy_week_data %>% rename("death" = `weekly_data_death$death` )
+
+week_data <- pivot_longer(tidy_week_data, 2:5, names_to = "type", values_to = "cases")
+week_data
+
+tidy_week_data_1 <- tidy_week_data %>% mutate(closed = recovered + death)
+tidy_week_data_1 <- tidy_week_data_1 %>% mutate(deathrate = 100*cumsum(death)/cumsum(closed))
+tidy_week_data_1 <- tidy_week_data_1 %>% mutate(recoveredrate = 100*cumsum(recovered)/cumsum(closed))
+tidy_week_data_1 <- tidy_week_data_1[c(1,7,8)]
+
+week_data_1 <- pivot_longer(tidy_week_data_1, 2:3, names_to = "type", values_to = "cases")
+
+
+```
+## 1.3 Lockdown Status and Actions taken by the Government
+
+<div style="text-align: justify", class = "my_text">
+
+The first COVID-19 positive case of Pakistan was found in 25<sup>th</sup> February 2020, a student in Karachi who had just returned from Iran. Same day, another person was tested positive for the virus. Upon that, borders with Iran have closed and flights to Japan and China were suspended. On 14<sup>th</sup> of March 2020, all the schools in the country were closed. Following that on 20<sup>th</sup> all the international flights were cancelled. On 30<sup>th</sup> March, Prime Minister of Pakistan denies the need for lockdown stating that 25% of the country will starve if the lockdown was imposed. On 1<sup>st</sup> of April country was fully lockdown for 2 weeks. However, the lockdown period was extended further up until 9<sup>th</sup> of May. On 9<sup>th</sup> of May, Smart lockdown was imposed to overcome the damage done the economy of the country. Following that, small markets, shopping malls and essential services were opened. However, smart lockdown was imposed across the country with high confirmed cases. On 15<sup>th</sup> July of 2020, major cities were lockdown due to the increase in covid cases. However, in August of 2020, Tourism, Cinemas, Parks and Marriage halls were opened again and gradually lockdown restrictions were eased. <br>
+Number of weekly confirmed cases along with some significant events that might affect the spread of the virus are shown in the timeline graph below.
+</div>
+```{r fig.cap="Figure 02", fig.align = "center"}
+l <- list(
+  x="2021-02-25",
+  y=0,
+  xref="x",
+  yref="y",
+  text="1st Confirmed Case",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l1 <- list(
+  x="2020-04-05",
+  y=2049,
+  xref="x",
+  yref="y",
+  text="Lockdown Starts ",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l2 <- list(
+  x="2020-05-09",
+  y=9626,
+  xref="x",
+  yref="y",
+  text="Lockdown Ends/Smart Lockdown Starts",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l3 <- list(
+  x="2020-07-09",
+  y=25306,
+  xref="x",
+  yref="y",
+  text="Eid al-Adha Festival Begins",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l4 <- list(
+  x="2020-07-13",
+  y=19807,
+  xref="x",
+  yref="y",
+  text="Eid al-Adha Festival Ends",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+
+l5 <- list(
+  x="2020-03-22",
+  y=130,
+  xref="x",
+  yref="y",
+  text="1st Wave Begins",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l6 <- list(
+  x="2020-10-25",
+  y=5150,
+  xref="x",
+  yref="y",
+  text="2nd Wave Begins",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l7 <- list(
+  x="2021-07-13",
+  y=11300,
+  xref="x",
+  yref="y",
+  text="Eid al-Adha Festival Begins",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l8 <- list(
+  x="2021-07-13",
+  y=15500,
+  xref="x",
+  yref="y",
+  text="Eid al-Adha Festival Ends",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l9 <- list(
+  x="2021-02-28",
+  y=9031,
+  xref="x",
+  yref="y",
+  text="3rd Wave Begins",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l10 <- list(
+  x="2021-03-10",
+  y=14000,
+  xref="x",
+  yref="y",
+  text="Vaccination Starts",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l11 <- list(
+  x="2021-06-27",
+  y=6482,
+  xref="x",
+  yref="y",
+  text="4th Wave Begins",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l12 <- list(
+  x="2020-07-20",
+  y=13500,
+  xref="x",
+  yref="y",
+  text="Major Cities Lockdown",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l13 <- list(
+  x="2020-08-2",
+  y=6586,
+  xref="x",
+  yref="y",
+  text="Opening the Country",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l20 <- list(
+  x="2021-04-1",
+  y=30000,
+  xref="x",
+  yref="y",
+  text="Ramadan Starts",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+l21 <- list(
+  x="2021-04-30",
+  y=33750,
+  xref="x",
+  yref="y",
+  text="Ramadan Ends",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363"
+)
+
+
+p1 <- plot_ly(tidy_week_data, x = ~date, y = ~confirmed, name = 'Confirmed', type = 'scatter', mode = 'line')
+
+p1 <- p1 %>% layout(annotations = l)
+p1 <- p1 %>% layout(annotations = l1)
+p1 <- p1 %>% layout(annotations = l2)
+p1 <- p1 %>% layout(annotations = l3)
+p1 <- p1 %>% layout(annotations = l4)
+p1 <- p1 %>% layout(annotations = l5)
+p1 <- p1 %>% layout(annotations = l6)
+p1 <- p1 %>% layout(annotations = l7)
+p1 <- p1 %>% layout(annotations = l8)
+p1 <- p1 %>% layout(annotations = l9)
+p1 <- p1 %>% layout(annotations = l10)
+p1 <- p1 %>% layout(annotations = l11)
+p1 <- p1 %>% layout(annotations = l12)
+p1 <- p1 %>% layout(annotations = l13)
+p1 <- p1 %>% layout(annotations = l20)
+p1 <- p1 %>% layout(annotations = l21)
+
+
+p1 <- p1 %>% layout(title = "Timeline of Confirmed Cases",
+                    xaxis = list(title = "Date"),
+                    yaxis = list (title = "Number of Cases"))
+
+
+p1
+
+week_data_wout_active <- tidy_week_data %>% subset(select = -c(active) )
+week_data_wout_active <- pivot_longer(week_data_wout_active, 2:4, names_to = "type", values_to = "cases")
+
+color1 <- c("#2E03BE",  "#2E86C1", "#E74C3C", "#1E8449")
+color2 <- c( "#00457C", "#006BBE", "#F0325D", "#04AC65", "#E1A000")
+
+  color <- c( "#2E86C1", "#EA4133", "#1E8449") #confirmed death recovered
+
+y <- ggplot(week_data) +
+  geom_line(aes(x = date, y = cases, colour = type)) +
+  scale_y_continuous(labels = label_number(suffix = "K", scale = 1e-3)) +
+  scale_color_manual(values = color1) +
+  facet_grid(type~., scales = "free") +
+  labs(title = "Weekly Covid-19", y = "Cases", x ="Date")
+
+
+```
+# 2. Story of the Data
+<div style="text-align: justify", class = "my_text">
+Data set was taken from the "coronavirus" package in RCRAN, which is maintained by Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE). <br>
+Weekly data are used from 27<sup>th</sup> January 2020 to 1<sup>st</sup> of August 2021 to find out clear patterns and trends in the data. 79 data points/weeks were consider to draw all these plots.
+</div>
+## 2.1 Within Pakistan
+<div style="text-align: justify", class = "my_text">
+Figure 02 above does not show significant change in number of cases after some special events of Pakistan like Ramadan, Eid al-Adha.
+Main reason for the 2<sup>nd</sup> wave can be considered as the opening of the country in August 08, 2020. Just before the 3<sup>rd</sup> wave vaccination program was started in Pakistan. It can be assumed that, number of confirmed cases have increased due to people rushing to get the vaccine and not following health rules.
+</div>
+```{r fig.cap="Figure 03", fig.align = "center"}
+ggplotly(y)
+```
+<div style="text-align: justify", class = "my_text">
+Above plot depicts the trends of weekly active cases, weekly confirmed cases, weekly death cases and weekly recovered cases of Pakistan from 27<sup>th</sup> January 2020 to 1<sup>st</sup> of August 2021. All the 4 graphs follow the same pattern implying that direct proportionality of confirm cases with active, death and recovery cases. There are 3 clear waves in all 4 types of graphs from starting date of the analysis to the ending data and the 4<sup>th</sup> wave has been just started with the end of last week of July in year 2021.
+</div>
+```{r, fig.align="center", fig.cap= "Figure 04"}
+p9 <- plot_ly() %>% 
+  add_trace(data = week_data_wout_active,
+            y = ~cases,
+            x = ~date,
+            line = list(shape = 'linear', width= 2.5),
+            color = ~type,
+            colors = color,
+            type = "scatter",
+            mode = "lines")
+p9 <- p9 %>% layout(title = "Weekly Cases",
+                      xaxis = list(title = "Date"),
+                      yaxis = list (title = "Log Transformed Number of Cases", type = "log"))
+
+p9
+```
+<div style="text-align: justify", class = "my_text">
+Above graph gives more insight regarding the difference of the trends in confirmed, death and recovered cases. Approximately, same pattern and same number of cases as confirmed line has followed by the recovered line with a gap of 2-3 weeks, implying that most of the infected people get recovered around 2-3 weeks of time after the confirmation of the infection. Same pattern as confirmed line but with significantly less number of cases and with a gap of approximately a week, has followed by the death line implying that people who get highly ill die within 1-2 weeks after the confirmation week of the infection.   
+</div>
+
+```{r, fig.align="center", fig.cap= "Figure 05"}
+p2 <- plot_ly(tidy_week_data, x = ~date, y = ~log(confirmed), name = 'Death', type = 'scatter', mode = 'line') %>%
+  add_trace(x = ~date, y = ~log(death), name = 'Confirmed', type = 'scatter', mode = 'line') %>%
+  layout(title = "Timeline of Confirmed and Death Cases",
+                      xaxis = list(title = "Date"),
+                      yaxis = list (title = "Log Transformed Number of Cases"))
+
+l14 <- list(
+  x="2021-03-10",
+  y=5.75,
+  xref="x",
+  yref="y",
+  text="Vaccination Starts",
+  arrowhead=2,
+  arrowsize=1,
+  arrowwidth=2,
+  arrowcolor="#636363")
+
+p2 <- p2 %>% layout(annotations = l14)
+
+
+
+p2
+```
+<div style="text-align: justify", class = "my_text">
+Above graph does not show any significant effect of vaccination program to reduce the mortality rate due to COVID-19.
+</div>
+```{r, fig.align="center", fig.cap= "Figure 06"}
+p16 <- plot_ly() %>% 
+  add_trace(data = week_data_1,
+            y = ~cases,
+            x = ~date,
+            line = list(shape = 'linear', width= 2.5),
+            color = ~type,
+            colors = c("#EE4436", "#1E8449"),
+            type = "scatter",
+            mode = "lines")
+p16 <- p16 %>% layout(title = "Weekly Cases",
+                    xaxis = list(title = "Date"),
+                    yaxis = list (title = "Rate"))
+
+p16
+```
+<div style="text-align: justify", class = "my_text">
+Above graph shows the weekly recovery and death rates of Pakistan. After August, both recovered and death rate becomes stable implying the fact that for every 100 cases, one or two people die and 99 to 98 people get recovered.
+</div>
+## 2.2 Between the Countries
+<div style="text-align: justify", class = "my_text">
+Two Countries with same population density as Pakistan were selected to compare the weekly confirmation cases. The reason for the selection of two countries is because population density is a significant factor which affects the spreading of the virus. For the selection countries with same population density Wikipedia data sources were used. 
+
+```{r, include= FALSE}
+Pop_density <- coronavirus %>% filter(country %in% c("Jamaica", "Qatar"))
+Pop_density
+Pop_density <- Pop_density %>% filter(type == "confirmed")
+Pop_density
+
+Pop_density <- Pop_density[,c(1, 3, 6, 7)]
+Pop_density
+anyNA(Pop_density$cases)
+missing1 <- which(is.na(Pop_density$cases) == TRUE)
+missing1
+Pop_density <- Pop_density %>% mutate(cases = abs(cases))
+Pop_density <- Pop_density %>% pivot_wider(names_from = type, values_from = cases)
+
+Pop_density
+anyNA(Pop_density$confirmed)
+
+
+
+Pop_density <- Pop_density %>% pivot_wider(names_from = country, values_from = confirmed)
+tail(Pop_density)
+Pop_density <- Pop_density[6:558,]
+Pop_density
+tail(Pop_density)
+
+
+
+Pop_density
+tail(Pop_density)
+Jamaica <- Pop_density[,1:2]
+Jamaica
+
+Qatar <- Pop_density[,c(1,3)]
+
+
+
+weekly_data_Jamaica <- Jamaica %>%
+  tq_transmute(select     = Jamaica,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_Jamaica
+
+
+
+
+weekly_data_Qatar <- Qatar %>%
+  tq_transmute(select     = Qatar,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_Qatar
+
+
+weekly_data_country <- left_join(weekly_data_Jamaica, weekly_data_Qatar, by="date")
+
+Pak <- select(tidy_week_data, c(date, confirmed))
+Pak <- rename(Pak, Pakistan = confirmed)
+weekly_data_country <- left_join(weekly_data_country, Pak, by="date")
+
+weekly_data_country
+
+
+weekly_data_country <- weekly_data_country %>% pivot_longer(2:4, names_to = "country", values_to = "confirmed")
+weekly_data_country
+```
+
+</div>
+
+```{r, fig.align="center", fig.cap= "Figure 07"}
+p10 <- plot_ly() %>% 
+  add_trace(data = weekly_data_country,
+            y = ~confirmed,
+            x = ~date,
+            line = list(shape = 'linear', width= 2.5),
+            color = ~country,
+            colors = color,
+            type = "scatter",
+            mode = "lines")
+
+p10 <- p10 %>% layout(title = "Weekly Confirmed Cases(log transformed)",
+                      xaxis = list(title = "Date"),
+                      yaxis = list (title = "Number of Confirmed Cases", type = "log"))
+
+p10
+```
+
+<div style="text-align: justify", class = "my_text">
+The 1<sup>st</sup> positive case of Pakistan and Qatar were identified within the last week of February and 1<sup>st</sup> positive case of Jamaica was identified in the 2<sup>nd</sup> week of March in 2020. Above graph depicts the fact that Pakistan and Qatar have failed to control spreading of the virus compared to Jamaica. However, that interpretation is valid only if all 3 countries have same testing rate for COVID-19. Comparing the area under each line, Jamaica shows the lowest number of total confirmed cases and Pakistan shows the highest at the end of 1<sup>st</sup> of August, 2021. <br><br>
+To compare death rate, two countries with approximately same total number of confirmed cases as Pakistan as of 1<sup>st</sup> of August 2021 were selected.
+</div>
+
+```{r, include= FALSE}
+confirmed_all_country <- coronavirus %>% filter(type == "confirmed")
+
+confirmed_all_country <- confirmed_all_country %>% mutate(cases = abs(cases))
+
+group_country <- group_by(confirmed_all_country, country)
+
+group_country <- group_country %>% summarise(sum_confirmed = mean(cases))
+
+group_country %>% filter(sum_confirmed <= 2400 & sum_confirmed >= 1600)
+
+#Portugal, Kazakhastan, Israel, Romania
+
+Country_death <- coronavirus %>% filter(country %in% c("Portugal", "Kazakhstan", "Pakistan"))
+Country_death
+Country_death <- Country_death %>% filter(type == "death")
+Country_death
+
+Country_death <- Country_death[,c(1, 3, 6, 7)]
+Country_death
+anyNA(Country_death$cases)
+
+Country_death <- Country_death %>% mutate(cases = abs(cases))
+Country_death <- Country_death %>% pivot_wider(names_from = type, values_from = cases)
+
+Country_death
+anyNA(Country_death$death)
+
+Country_death <- Country_death %>% pivot_wider(names_from = country, values_from = death)
+tail(Country_death)
+Country_death <- Country_death[6:558,]
+Country_death
+tail(Country_death)
+
+
+
+
+Kazakhstan <- Country_death[,c(1,2)]
+
+Pakistan <- Country_death[,c(1,3)]
+Portugal <- Country_death[,c(1,4)]
+
+
+
+
+
+
+weekly_data_Kazakhastan <- Kazakhstan %>%
+  tq_transmute(select     = Kazakhstan,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_Kazakhastan
+
+
+weekly_data_Pakistan <- Pakistan %>%
+  tq_transmute(select     = Pakistan,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_Pakistan
+
+weekly_data_Portugal <- Portugal %>%
+  tq_transmute(select     = Portugal,
+               mutate_fun = apply.weekly,
+               FUN        = sum)
+weekly_data_Portugal
+
+
+weekly_data_death <- left_join(weekly_data_Pakistan, weekly_data_Portugal, by="date")
+weekly_data_death <- left_join(weekly_data_death, weekly_data_Kazakhastan, by="date")
+
+
+
+weekly_data_death <- weekly_data_death %>% pivot_longer(2:4, names_to = "country", values_to = "Death")
+weekly_data_death
+```
+
+```{r, fig.align="center", fig.cap= "Figure 08"}
+p11 <- plot_ly() %>% 
+  add_trace(data = weekly_data_death,
+            y = ~Death,
+            x = ~date,
+            line = list(shape = 'linear', width= 2.5),
+            color = ~country,
+            colors = color,
+            type = "scatter",
+            mode = "lines")
+
+p11 <- p11 %>% layout(title = "Weekly Death Rate",
+                      xaxis = list(title = "Date"),
+                      yaxis = list (title = "Number of Deaths"))
+
+
+p11
+```
+<div style="text-align: justify", class = "my_text">
+Above graph does not show a significant difference between the countries implying the fact that race, geographic locations are not significant factors that affects the death rate. Moreover, if the number of confirmed cases are high, number of death cases are also likely to be high for all countries. <br>
+</div>
+```{r Vaccine data Wrangling, include= FALSE}
+data("covid19_vaccine")
+
+df <- covid19_vaccine %>% filter(country_region %in% c("Nigeria", "Pakistan", "Brazil", "Indonesia", "US"))
+df <- df[c(1, 2, 4, 5, 16)]
+df
+df[is.na(df)] <- 0
+df
+df_grouped <- df %>% group_by(country_region)
+df_grouped
+
+pop <- tibble(country_region = c("Nigeria", "Pakistan", "Brazil", "Indonesia", "US"), population = c(206139589,  220892340, 212559417, 273523615, 331002651))
+pop
+partial <- df_grouped %>% summarise(sum_part = max(people_partially_vaccinated))
+fully <- df_grouped %>% summarise(sum_full = max(people_fully_vaccinated))
+fully
+
+df1 <- left_join(pop, partial, by ="country_region")
+df1 <- left_join(df1, fully, by = "country_region")
+df1 <- df1 %>% mutate(Partially = 100*sum_part/population)
+df1 <- df1%>% mutate(Fully = 100*sum_full/population)
+df1 <- df1[,c(1,5,6)]
+df1
+df1 <- df1 %>% pivot_longer(2:3, names_to = "Vaccine_Status", values_to = "Percentage")
+df1
+df1 <- df1 %>%
+  mutate(y_label = paste0(round(Percentage, 1), "%"))
+df1
+```
+<div style="text-align: justify", class = "my_text">
+To compare the efficiency of the vaccination program of Pakistan, 4 countries with same population were considered.
+</div>
+```{r, fig.align="center", fig.cap= "Figure 09"}
+vac <- ggplot(df1, aes(x = country_region, y = Percentage, fill = factor(Vaccine_Status))) +
+  geom_bar(stat = "identity", position = "dodge", color = "grey40")+
+  scale_fill_manual(values = c("#ED564F", "#01B8C1")) +
+  labs(title = "Vaccination Status", xlab = "Status") +
+  geom_text(aes(label = y_label), position = position_dodge(0.9),
+            vjust = 1.5, color = "white", family = "Georgia")
+
+
+vac
+
+```
+<div style="text-align: justify", class = "my_text">
+Above bar graph depicts the fact that efficiency of the vaccination program of Pakistan compared to other countries with same population is low. Pakistan is only better than Nigeria. Highest partially vaccinated country among these 5 countries is Brazil whilst most fully vaccinated country is United States of America. <br><br>
+Cumulative confirmed cases of COVID-19 of each country is shown below.(Dark Blue color represents the highest number of cumulative confirmed cases and light yellow represents the lowest number). However, below plot is highly depend on the population size of the country. Since a comparison of countries cannot be made.
+</div>
+```{r World Map Library Chunk, include=FALSE}
+library(whoville)
+library(sf)
+library(rgeos)
+library(ggspatial)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(DT)
+library(rworldmap)
+
+table <- coronavirus %>% pivot_wider(names_from = type, values_from = cases)
+table
+
+country_names <- coronavirus$country
+country_names <- unique(country_names)
+country_names <- sort(country_names)
+
+
+
+
+IS <- names_to_iso3(country_names)
+table <- table %>% group_by(country)
+table
+
+table1 <- table %>% summarise(cum_confirm = sum(confirmed, na.rm = TRUE))
+
+conf_sum <- table1$cum_confirm
+
+
+
+
+
+countriesvisited <- data.frame(country = c(IS),
+                               visited = c(conf_sum))
+datatable(countriesvisited, rownames = FALSE, options = list(pageLength = 5, scrollX=T), filter = "none")
+
+
+visitedMap <- joinCountryData2Map(countriesvisited, 
+                                  joinCode = "ISO3",
+                                  nameJoinColumn = "country")
+```
+
+```{r Visual Part, fig.align="center", fig.cap= "Figure 10"}
+mapParams <- mapCountryData(visitedMap, 
+                            nameColumnToPlot="visited",
+                            oceanCol = "azure2",
+                            catMethod = "categorical",
+                            missingCountryCol = gray(.8),
+                            colourPalette = c("#fde725",
+                                              "#f1e51d",
+                                              "#e5e419",
+                                              "#d8e219",
+                                              "#cae11f",
+                                              "#bade28",
+                                              "#addc30",
+                                              "#a0da39",
+                                              "#93d741",
+                                              "#84d44b",
+                                              "#77d153",
+                                              "#6ccd5a",
+                                              "#60ca60",
+                                              "#56c667",
+                                              "#4ac16d",
+                                              "#40bd72",
+                                              "#38b977",
+                                              "#31b57b",
+                                              "#29af7f",
+                                              "#25ab82",
+                                              "#21a685",
+                                              "#1fa187",
+                                              "#1e9d89",
+                                              "#1f978b",
+                                              "#20928c",
+                                              "#218e8d",
+                                              "#23898e",
+                                              "#25838e",
+                                              "#277f8e",
+                                              "#297a8e",
+                                              "#2b758e",
+                                              "#2d718e",
+                                              "#2f6b8e",
+                                              "#31668e",
+                                              "#34618d",
+                                              "#365c8d",
+                                              "#39558c",
+                                              "#3c508b",
+                                              "#3e4a89",
+                                              "#404588",
+                                              "#423f85",
+                                              "#453882",
+                                              "#46327e",
+                                              "#472c7a",
+                                              "#482576",
+                                              "#481d6f",
+                                              "#481769",
+                                              "#471063",
+                                              "#46085c",
+                                              "#440154"),
+                            addLegend = F,
+                            mapTitle = "",
+                            border = NA)
+
+```
+
+
+
+# 3. Discussion
+<div style="text-align: justify", class = "my_text">
+Data set of Pakistan was filtered and taken from the coronavirus package in CRAN. Provinces of Pakistan was missing there by removed from the data set. Since the analysis is done from 27<sup>th</sup> January, 2020 to 1<sup>st</sup> of August 2021, other rows were removed from the data set. There was only 1 negative case in the recovered type. Date of that case was 21<sup>st</sup> March, 2020.Since no prior information was given regarding the reason of having negative cases for recovered type, it was converted to positive after looking at that row. Data frame was converted into weekly format for all 4 variables (confirmed, death, recovered, active) to clearly see and compare the trends of each variable.<br> <br>
+
+For the comparison of confirmed cases with other countries, to select countries the fact that population density has an impact on the spread of COVID-19 were considered. Thereby, two countries with approximately same population density as Pakistan were choose by looking at the Wikipedia data source. For the comparison of death cases with other countries, to select countries the fact that number of deaths due to COVID-19 highly depends on the number of confirmed cases were considered. Thereby, two countries with approximately same cumulative confirmed cases as Pakistan at the end of 1<sup>st</sup> of August 2021 were considered.
+Figure 02 which shows the timeline of confirmed cases with regard to significant events that might affect the number of confirmed cases, clearly shows that the reason for the 2nd wave is the reopening of the country. 
+<br>
+Figure 03: Y-axis was made scale free since number of deaths graph had a relatively small numbers in y-axis compared to other types. <br>
+
+Figure 04: Log transformation was applied to the y-axis in order to see a clear variation in the death line. 
+<br>
+Figure 05: Log transformed y-axis is used because the death numbers per week are significantly lower than the confirmed number. To see any patterns, log transformation has to be used. However, it is hard to jump into the conclusion that vaccines are not effective due to only very few proportion of people were vaccinated at the end of 1st of August, 2021. The graph was drawn to see whether there is a significant effect of vaccines even with only smaller number of proportion of people being vaccinated.
+<br>
+Figure 06: Case Fatality Rate (CFR) represents the proportion of cases who eventually die from a disease. Once the pandemic has ended, it is calculated by the formula: deaths/cases. However, since the COVID-19 pandemic is still an ongoing pandemic, use of this formula to calculate CFR is naive. Therefore, an alternative method as suggested by the America Journal of Epidemiology study were used to calculate CFR rates.
+<br>
+Figure 07: Due to high values in Pakistan and Qatar confirmed cases compared to Jamaica, a logarithmic scale was used.
+Confirmed cases interpretations are made assuming the testing rate for COVID-19 is same for every country.
+<br>
+Figure 08: Log transformation was not used since deaths have small numbers per week and some weeks have only 1 death. For the comparison to be valid, percentage of people in all the age groups have to assumed equal for all 3 countries and the ages of people who get infected with the virus have to be approximately equal for all 3 countries. Reason is because age is a significant factor that affects the mortality rate due to COVID-19. (Other significant factors are also assumed to be same.)
+<br>
+Vaccination data were collected by "covid-19-vaccine" package in RCRAN.
+<br>
+Figure 09: To compare the efficiency of vaccination program of Pakistan, 4 other countries with same population as Pakistan was selected.
+
+</div>
+
+# 4. Conclusion
+<div style="text-align: justify", class = "my_text">
+
+
+<li> Most people who get infected with the COVID-19 virus gets recovered within 2-3 weeks of time.</li> 
+<li> For every 100 cases of COVID-19, there is at least 1 death. </li>
+<li> Spreading of the COVID-19 virus in Pakistan is higher compared to other countries. </li>
+<li> Race of the people, geometric location of a country (climate condition), does not affect the mortality rate due to COVID-19. </li>
+<li> Pakistan is following a slow vaccination program compared to other countries. </li>
+
+
+</div>
+
+# 5. Limitations
+<div style="text-align: justify", class = "my_text">
+<li> Country wise comparison limited only for 2 countries due to time constraints and to avoid the complexity of the graphs. </li>
+<li> When comparing confirmed cases of each country, same testing rate of people for the infection condition maybe violated. </li>
+<li>Due to time constraints, cumulative confirmed cases per population factor could not be consider to draw the world map of cumulative confirmed cases. There by country wise comparison could not be made by looking at the map. </li>
+<li> Due to time constraints, only 50 different cumulative confirmed cases were visible in the world map because the color palette was limited only to 50 different colors.</li>
+<li> When comparing death cases with other countries, factors which affects to death rate is not same. </li>
+<li> More accurate formula to calculate CFR was suggested by America Journal of Epidemiology. However due to complexity and time constraint, an easy formula was used in this report. </li>
+</div>
+
+# 6. References
+<div style="text-align: justify", class = "my_text">
+
+<li>Bhutta, Z. A. et al., 2021. Balancing science and public policy in Pakistan’s COVID-19 response. EMHJ, 27(8). </li>
+<li>Ghani, A. C. et al., 2005. Methods for Estimating the Case Fatality Ratio for a Novel, Emerging Infectious Disease. American Journal of Epidemiology, 162(5), p. 479–486. </li>
+<li>Islamabad, 2021. Pakistan to begin vaccination drive for those aged 60, above from March 10. Business Standard, 08 March. </li>
+<li>National Information Technology Board, 2021. Government of Pakistan. [Online] 
+Available at: https://covid.gov.pk/
+[Accessed 26 09 2021].</li>
+<li>Schweinberger, M., 2021. Language Technology and Data Analysis Laboratoty. Displaying Geo-Spatial Data with R, 06 09. 
+WHO, 2021. World Health Organization. [Online] 
+Available at: https://covid19.who.int/region/emro/country/pk
+[Accessed 26 09 2021].</li>
+<li>Wikipedia, 2021. Climate of Pakistan. [Online] 
+Available at: https://en.wikipedia.org/wiki/Climate_of_Pakistan
+[Accessed 25 09 2021].</li>
+
+
+
+
+</div>
+</body>

@@ -1,0 +1,329 @@
+---
+title: "COVID-19 Pandemic in Bolivia"
+author: "Mayura Rahubaddhe"
+date: "9/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introduction
+
+<p align="justify"> In December 2019, a disease classified as COVID-19 first started in Wuhan, China. Coronavirus disease 2019 (COVID-19) is a disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). Since being classified as a pandemic, it has caused a global health crisis. COVID-19 is affecting 213 countries and territories.</p>
+
+<p align="center">
+```{r, out.height="80%", out.width="80%"}
+knitr::include_graphics("cover.jpg")
+```
+</p>
+
+### Location of Bolivia
+
+<p align="justify"> Bolivia is located in the central part of South America between 57 ° 26' - 69 ° 38'W and 9 ° 38' - 22 ° 53'S. With an area of 1,098,581 square kilometers, Bolivia is the 28th largest country in the world and the 5th largest country in South America, extending from the central Andes to the Gran Chaco, Pantanal, and Amazon.Bolivia is bordered by Brazil to the north and east, Paraguay to the southeast, Argentina to the south, Chile to the southwest, and Peru to the northwest.</p>
+
+```{r, message=FALSE, warning=FALSE, fig.cap="Location of Bolivia", out.height="90%", out.width="90%"}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+bolivia_corona <- coronavirus %>% filter(country == "Bolivia")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+data(wrld_simpl)
+
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +  geom_point(data = bolivia_corona, aes(x = long, y = lat), color = "red", size = 2)
+
+```
+
+### Climate in Bolivia
+
+<p align="justify"> Bolivia's climate varies drastically from one ecosystem to another, from the tropics of eastern llanos to the polar climate of the western Andes. Summers are warm, humid in the east, and dry in the west, with rainfall varying in temperature, humidity, wind, atmospheric pressure, and evaporation, with rainfall giving different climates in different regions. When the climatic phenomenon called El Niño occurs, it causes large changes in the weather. Winters in the west are very cold, with snow in the mountains and windy days in the west. Autumn is dry in non-tropical areas.</p>
+
+### Lockdown status of Bolivia
+
+<p align="justify"> COVID-19 virus was confirmed to have spread to Bolivia on March 10, 2020, with the first two patients being confirmed in the departments of Oruro and Santa Cruz.Bolivia has suspended all public schools from March 12 to March 31, as well as all commercial flights to and from Europe indefinitely. Nationwide lockdown policy was implemented from March 17. Lockdown policy was implemented on March 18 for workplaces that should be closed to all except essential employees. Many cities across Bolivia have re-enforced mandatory transit restrictions in the evenings and weekends. These restrictions can be imposed without warning.</p>
+
+### Actions taken by the government
+
+<p align="justify"> Before identifying the first COVID-19 case in Bolivia, the government had set up an Emergency Operating Committee comprising WHO officials, various ministries, and specialized health organizations. The Ministry of Health set up free hotlines to inform people about symptoms and ask questions about the virus.</p>
+
+<p align="justify">President Jeanine Áñez announced on March 17 that the following actions, to be in effect from March 19 to 31:</p>
+
+<p align="justify">* Closure of all borders.
+* Only Bolivians and residents are allowed to enter Bolivia and must follow the protocols laid down by the Ministry of Health and the World Health Organization.
+* All international flights have been suspended.
+* Inter-departmental and inter-provincial land transportation has been suspended. Only merchandise can be transported.</p>
+
+**Decree 4196**
+
+<p align="justify"> On March 17, the minister of the presidency, Yerko Núñez, declared a public health emergency, formulated a series of quarantine measures, and implemented them in the entire country until March 31.</p>
+
+Decree 4196 indicates:
+
+<p align="justify">* The Ministry of Labor will, exceptionally, regulate granting of special licenses to protect people with underlying diseases, older adults of age sixty or above, pregnant people, and people under five years old if their parent or guardian has a special license.
+* From midnight on March 20 to March 31 the country's borders are closed.
+* From midnight on March 21 international flights are suspended, as are land, river, and lake passenger transportation.
+* Effective March 18 the workday for all sectors is from 9:00 to 13:00. Markets and supermarkets are to open 8:00 to 15:00.
+* Public and private transportation is to operate 5:00 to 18:00.
+* Social sporting, religious, and other activities and gatherings are prohibited.
+* Those who violate the decree may be arrested for eight hours.</p>
+
+**Decree 4199 – Nationwide quarantine**
+
+<p align="justify"> A nationwide quarantine was in effect from March 22 at midnight for 14 days.</p>
+
+Orders of the Decree 4199:
+
+<p align="justify">* Markets and supply centers will continue to operate every morning until midday, so that one person from each family can get supplies.
+* Factories and transportation serving basic grocery needs will continue functioning normally. The banking system, pharmacies, and hospitals will continue to attend to the needs of the population.
+* People may leave their houses if they need medical attention.
+* Private and public transport is suspended. Permits will be provided to transport workers whose companies must continue working and for people who work in healthcare, water, electricity, and gas services, among others.
+* Electricity prices are reduced. It is prohibited to cut off water, gas, or internet during the quarantine. Tax and loan payments will be eased.</p>
+<br>
+
+# Exploratory Data Analysis
+
+### COVID-19 cases in Bolivia
+
+<p align="justify">The below graph shows the confirmed, death, and recovered COVID-19 cases in Bolivia. Since the beginning, the number of COVID-19 cases in Bolivia has risen sharply. Significantly, the death toll has dropped compared to confirmed cases. Also, the recovery rate in Bolivia is considerably higher.</p>
+
+```{r, message=FALSE, warning=FALSE, out.height="100%", out.width="100%"}
+bolivia_corona1 <- bolivia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+f1 <- ggplot(bolivia_corona1,aes(date, cases, color = type), is.na=FALSE) +
+  geom_line() + labs(title= "Daily confirmed, death and recovered cases in Bolivia ", x= "Date", y= "Number of Cases")
+
+ggplotly(f1)
+```
+<br>
+
+```{r, message=FALSE, warning=FALSE}
+coronavirus %>% filter(country == "Bolivia") %>%
+  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  mutate(active_total = cumsum(active),
+                recovered_total = cumsum(recovered),
+                death_total = cumsum(death)) %>%
+  plot_ly(x = ~ date,
+                  y = ~ active_total,
+                  name = 'Active', 
+                  fillcolor = '#24abf2',
+                  type = 'scatter',
+                  mode = 'none', 
+                  stackgroup = 'one') %>%
+  add_trace(y = ~ death_total, 
+             name = "Death",
+             fillcolor = '#dd5145') %>%
+  add_trace(y = ~recovered_total, 
+            name = 'Recovered', 
+            fillcolor = '#6eb43f') %>%
+  layout(title = "Distribution of COVID-19 Cases in Bolivia",
+         legend = list(x = 0.1, y = 0.9),
+         yaxis = list(title = "Number of Cases"), xaxis = list(title = "Date"))
+```
+
+<p align="justify">The above graph shows the distribution of recovered, death and active COVID-19 cases in Bolivia. Over time, COVID-19 waves can be clearly identified by the active cases in Bolivia. The number of active cases increased in April 2021 and it decreased after mid-June. As of today, the number of active COVID-19 cases in Bolivia is declining. Also, COVID-19 recovered cases increasingly high compared to death cases in Bolivia.</p>
+<br>
+
+### COVID-19 outbreak in Bolivia by department
+
+<p align="justify">The following map shows the COVID-19 confirmed cases in Bolivia by departments. It is clear that the COVID-19 virus is highly prevalent throughout the country. COVID-19 is highly affected in Sanata Cruz and La Paz departments.</p>
+
+```{r, out.width="80%", fig.cap="*COVID-19 confirmed cases in Bolivia by departments (Source: Wikipedia)*"}
+knitr::include_graphics("Bolivia by department.png")
+```
+<br>
+
+### Comparison with other countries
+
+<p align="justify">Bolivia is bordered by Brazil, Paraguay, Argentina, Chile, and Peru. Therefore, it is essential to examine the COVID-19 outbreak in neighboring countries. This section describes Bolivia's COVID-19 status compared to its neighbor countries.</p>
+
+```{r, out.width="60%", fig.cap="*Map of Bolivia (Source: ICEF Moniter)*"}
+knitr::include_graphics("bolivia-map.jpg")
+```
+<br>
+
+<p align="justify">The number of daily confirmed COVID-19 cases in Bolivia is significantly lower compared to neighboring countries. The pandemic has highly affect Brazil compared to other countries in the region. Also, Argentina, Peru, and Chile have a high number of daily confirmed cases than Bolivia. The number of daily confirmed cases in Bolivia and Paraguay is almost similar.</p>
+
+```{r, message=FALSE, warning=FALSE, out.height="110%", out.width="110%"}
+countries <- filter(coronavirus, country =="Bolivia" |country =="Brazil"|country =="Paraguay"|country == "Argentina"|country =="Chile"|country =="Peru")
+
+confirmed_countries <- filter(countries, type == "confirmed")
+death_countries <- filter(countries, type == "death")
+recovered_countries <- filter(countries, type == "recovered")
+
+confirmed_countries <- confirmed_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_countries <- death_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_countries <- recovered_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+daily_confirmed <- ggplot(confirmed_countries, aes(x = date, y = cases, colour = country)) + geom_line() + 
+  labs(title="Comparison of Daily Confirmed Cases", x= "Date", y= "Number of Confirmed Cases")
+
+ggplotly(daily_confirmed)
+```
+<br>
+
+<p align="justify">The COVID-19 daily death toll in Brazil is extremely high compared to neighboring countries. The death toll in Argentina and Peru is higher than in Bolivia. Bolivia and Paraguay have a lower number of daily death cases compared to neighboring countries.</p>
+
+```{r, message=FALSE, warning=FALSE, out.height="110%", out.width="110%"}
+daily_death <- ggplot(death_countries, aes(x = date, y = cases, colour = country)) + geom_line() + 
+  labs(title="Comparison of Daily Death Cases", x= "Date", y= "Number of Death Cases")
+
+ggplotly(daily_death)
+```
+<br>
+
+<p align="justify">Based on the number of confirmed cases, Brazil has the highest daily recovered cases. Daily recovered COVID-19 cases in Argentina, Peru, and Chile is higher than in Bolivia. Depending on the daily confirmed cases, Bolivia and Paraguay have a lower number of daily recovered cases compared to neighboring countries.</p>
+
+```{r, message=FALSE, warning=FALSE, out.height="110%", out.width="110%"}
+daily_recovered <- ggplot(recovered_countries, aes(x = date, y = cases, colour = country)) + geom_line() + 
+  labs(title="Comparison of Daily Recovered Cases", x= "Date", y= "Number of Recovered Cases")
+
+ggplotly(daily_recovered)
+```
+<br>
+
+**Comparison of Total Confirmed Cases**
+
+<p align="justify">The percentage of total COVID-19 confirmed cases in Bolivia is 2% of the total number of confirmed cases in all six countries(Bolivia, Brazil, Paraguay, Argentina, Chile, and Peru). Brazil's total COVID-19 confirmed cases for more than 50% of total confirmed in all six countries. Paraguay has the lowest number of total confirmed cases compared to other countries. Bolivia also has significantly fewer total confirmed cases than Brazil, Argentina, Chile, and Peru.</p>
+
+```{r, message=FALSE, warning=FALSE, out.height="100%", out.width="100%"}
+tot_confirmed <- countries %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "Confirmed") %>%
+  ungroup() 
+  
+  plot_ly(data = tot_confirmed,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "Confirmed",
+          textinfo="label+value+percent parent")
+```
+
+**Comparison of Total Death Cases**
+
+<p align="justify">The total death toll of COVID-19 in Bolivia is 2% of the total deaths in all six countries (Bolivia, Brazil, Paraguay, Argentina, Chile, and Peru). More than 50% of COVID-19 deaths in all six countries were reported from Brazil. The lowest death toll was recorded in Paraguay. The overall death toll in Bolivia is significantly lower than in Brazil, Argentina, Chile, and Peru.</p>
+
+```{r, message=FALSE, warning=FALSE, out.height="100%", out.width="100%"}
+tot_death <- countries %>% 
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "Death") %>%
+  ungroup() 
+  
+  plot_ly(data = tot_death,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "Death",
+          textinfo="label+value+percent parent")
+```
+
+<p align="justify">It is clear that the overall COVID-19 cases in Bolivia is lower than the neighboring countries.</p>
+<br>
+
+### COVID-19 Vaccination in Bolivia
+
+<p align="justify">The COVID-19 vaccine is a vaccine that was given to provide immunity against severe acute respiratory syndrome coronavirus 2(SARS-CoV-2).</p>
+
+<p align="justify">The government of the newly elected President Luis Arce signed an agreement between Bolivia and Russia on December 30, 2020, to receive 5.2 million doses of the Sputnik-V vaccine. The vaccine was approved by the Bolivian regulator based on phase III clinical trials in Russia. The first 20,000 doses of the vaccine arrived on January 28, 2021. In January 2021, the government entered into an agreement with the Serum Institute of India to provide 5 million doses of the Oxford-AstraZeneca vaccine.</p>
+
+<p align="justify">Bolivia has given at least 6,443,148 doses of COVID vaccines so far. It is enough to vaccinate about 28% of the country's population. The normalized daily number of cases and the aggregate number of fully vaccinated people in Bolivia are graphically shown below.</p>
+<br>
+
+```{r}
+data("covid19_vaccine")
+bolivia_cases <- coronavirus %>% 
+  filter(country == "Bolivia", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "Bolivia") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+
+bolivia_cases <- bolivia_cases %>%
+  mutate(cases_normalized = (cases - min(cases)) / (max(cases) - min(cases)),
+         people_fully_vaccinated_normilized = (people_fully_vaccinated - min(people_fully_vaccinated, na.rm = TRUE)) / 
+           (max(people_fully_vaccinated, na.rm = TRUE) - 
+              min(people_fully_vaccinated, na.rm = TRUE)))
+
+plot_ly(data = bolivia_cases,
+        x = ~ date,
+        y = ~ cases_normalized,
+        type = "scatter",
+        mode = "line",
+        name = "Daily Cases (Normalized)") %>%
+  add_lines(x = ~ date,
+            y = ~ people_fully_vaccinated_normilized,
+            name = "Fully Vaccinated - Aggregate (Normalized)") %>%
+  layout(title = "Bolivia - Daily New Cases vs. Total Vaccinated Population (Normalized)",
+         legend = list(orientation = 'h'),
+         yaxis = list(title = "Normalized Daily Cases/Total Vaccinated"),
+         xaxis = list(title = ""),
+         margin = list(b = 60))
+```
+
+<p align="justify">Based on the last week reported, Bolivia has vaccinated on average 18,588 doses per day. And it is estimated that it would take another 124 days to vaccine another 10% of the population at that rate.</p>
+
+# Discussion
+
+<p align="justify">From the beginning of the spread of the pandemic, the Bolivian government implemented necessary actions to control the situation. The Bolivian government announced seven measures on March 12, 2020 to slow the spread of the COVID-19 disease, including suspending education in schools and universities until March 21 and suspending flights to and from Europe from March 14. The city of Oruro declared a 14-day quarantine from March 16, 2020, due to six confirmed COVID-19 cases reported. Interim President Jeanine Áñez prohibited anyone coming from China, South Korea, Italy, or Spain to enter Bolivia from March 14. On March 17, the President announced that Bolivia's borders would be closed to all foreign nationals from March 19. The Bolivian government suspended all international flights from March 20, 2020, and banned domestic travel between departments and provinces. The government announced a 14-day nationwide quarantine with effect from midnight on March 22. On March 25, a public health emergency was declared in the country, and its borders were completely locked down, allowing no one to enter or leave except for health or security reasons. The Bolivian government extended the quarantine from time to time.</p>
+
+<p align="justify">The source of this data is the Coronavirus from the Johns Hopkins University Center for Systems Science and Engineering. The data set used for this analysis is the 2019 Novel Coronavirus COVID-19 (2019-nCoV) data set, which is readily available as a package installed on RStudio. The coronavirus package provides a data set of the 2019 Novel Coronavirus COVID-19 (2019-nCoV) pandemic and the vaccination by country. Negative values may occur in the data due to the calculation of the daily cases from the raw data, and in some cases, removing false-positive cases.</p> 
+
+<p align="justify">Overall COVID-19 cases in Bolivia is relatively low when compared to neighboring countries. Brazil, Argentina, Chile, and Peru have been highly affected by the pandemic compared to other countries in their region. Brazil is one of the most COVID-19 impacted countries in the world. With the geographical location, Bolivia is surrounded by the countries that are highly affected by the COVID-19 pandemic. The number of COVID-19 cases in Bolivia has risen sharply from March 2020. COVID-19 cases reached their peak in Bolivia in July 2020, January 2021, and June 2021. Actions taken by the government were effective in controlling the spread of the pandemic in the country. Today, the number of COVID-19 cases in Bolivia is declining.</p>
+
+# Conclusion
+
+<p align="justify">As of today, the Bolivian government has the situation under control. Bolivia has managed the COVID-19 pandemic significantly better than its neighboring countries in the region(Brazil, Argentina, Chile, and Peru). Also, Bolivia is in a significantly better status in the pandemic compared to many countries globally. Strategies and actions taken by the Bolivian government were successful even if Bolivia is bordered by highly impacted countries by the pandemic.</p>  
+
+# References
+
+* Bolivia, World Health Organization.2021, Accessed: 22 September 2021,[https://www.who.int/countries/bol/](https://www.who.int/countries/bol/)
+
+* Bolivia, Pan American Health Organization.2021, Accessed: 22 September 2021,[https://www.paho.org/es/bolivia0](https://www.paho.org/es/bolivia)
+
+* Bolivia, Encyclopædia Britannica.2021, Accessed: 22 September 2021,[https://www.britannica.com/place/Bolivia](https://www.britannica.com/place/Bolivia/Climate)
+
+* Ministry of Health and Sports of Bolivia.2021, Accessed: 22 September 2021,[https://www.minsalud.gob.bo/](https://www.minsalud.gob.bo/)
+
+* Bolivia, Wikipedia.2021, Accessed: 22 September 2021,[https://en.wikipedia.org/wiki/Bolivia](https://en.wikipedia.org/wiki/Bolivia)
+
+* Coronavirus R package (v0.3.30), Accessed: 24 September 2021,[https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd](https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd)
+
+* Official government information on COVID-19, Accessed: 24 September 2021,[https://www.unidoscontraelcovid.gob.bo/index.php/category/ultimas-noticias/](https://www.unidoscontraelcovid.gob.bo/index.php/category/ultimas-noticias/) 
+
+* COVID-19 Tracker, REUTERS, Accessed: 22 September 2021,[https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/bolivia/](https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/bolivia/)

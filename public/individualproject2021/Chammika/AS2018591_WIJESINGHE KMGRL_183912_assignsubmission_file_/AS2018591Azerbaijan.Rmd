@@ -1,0 +1,668 @@
+---
+title: "AS2018591"
+author: "Rajitha Wijesinghe"
+date: "9/23/2021"
+output: html_document
+---
+<style>
+body {
+text-align:justify}
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, command = NA, message = FALSE, warning = FALSE, out.width = "50%")
+```
+
+
+# **COVID-19 pandemic in Azerbaijan**
+
+### **1. Introduction**
+<center>
+
+ ![](images\covid.png)
+ </center>
+
+  
+  
+  COVID-19 (Corona virus disease) is an infectious disease caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2). Firstly, identified in Wuhan in China on December 2019.The first confirmed case has been traced back to 17 November 2019 in Hubei. It spread very quickly in all over the world. As of 20 September 2021, more than 229+ million cases have been reported across 221 countries and territories, resulting in more than 4 million  deaths. More than 206 million people have recovered.
+  
+  Corona virus primarily spread between close contact of people, small droplets producing by coughing sneezing and talking. Common symptoms of Corona virus are fever, cough, fatigue, shortness of breath, loss of smell and taste. Typically, it takes around five days to show symptom from the time of exposure. But may take 2 – 14 days as a range. Can identify the diagnosis using RT-PCR testing and CT scans. Also lots of countries were doing so many experiments regarding corona virus.
+
+  Lots of countries has been taken necessary precautions to control to spreading of this virus.Some countries were lock down and some countries run under the control condition.So many schools and universities were closed and started online education. Hand washing, face covering, quarantine and social distancing are the main methods that we can use to prevent from this serial interval.
+
+#### **1.1 COVID-19 pandemic in Azerbaijan**
+Azerbaijan, the nation and former Soviet republic, is bounded by the Caspian Sea and Caucasus Mountains, which span Asia and Europe. Its capital, Baku, is famed for its medieval walled Inner City. Within the Inner City lies the Palace of the Shirvanshahs, a royal retreat dating to the 15th century, and the centuries-old stone Maiden Tower, which dominates the city skyline.
+
+#### **1.2 Visualization of the location** 
+Azerbaijan, is a country located at the boundary of Eastern Europe and Western Asia.[12] It is a part of the Caucasus region, and is bounded by the Caspian Sea to the east, Russia to the north, Georgia to the northwest, Armenia and Turkey to the west, and Iran to the south. Baku is the capital and largest city.
+<center>
+```{r,out.width="80%"}
+library(coronavirus)
+library(zoo)
+library(tidyverse)
+library(magrittr)
+azerbaijan_corona <- coronavirus %>% filter(country == "Azerbaijan")
+azerbaijan_corona <- transform(azerbaijan_corona, cases = na.locf(cases))
+
+
+library(leaflet)
+library(dplyr)
+library(httpuv)
+
+m <- leaflet() %>%
+  # Now add tiles to it
+  addTiles() %>%
+  # Setting the middle of where the map should be and the zoom level 40.4076319308778, 48.13983086027659
+  setView(lng = 40.4076319308778, lat = 48.13983086027659, zoom = 2) %>%
+  # Now, add a marker with a popup,
+  addMarkers(lng = 40.4076319308778, lat = 48.13983086027659, popup = "<b>Azerbaijan</b>")
+
+
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+</center>
+
+
+#### **1.3 Climate Condition**
+In Azerbaijan, the climate is slightly continental, with relatively cold winters and hot summers; it is also arid in most of the low-lying areas, while it is colder and generally rainier in the mountains. The coast on the Caspian Sea is semi-arid in the northern part and arid in the center (see Baku), while it is rainy in the southernmost stretch, which is therefore an exception to the rule that the plains of Azerbaijan are arid.
+Winter in Azerbaijan is cold but not freezing, at least in the plains. The Caucasus Mountain Range partially protects the interior of the country from outbreaks of cold air from Russia, in fact, the north wind descending from the mountains is warm and dry, similar to the Foehn or Chinook, while along the coast, the cold wind blows intensely but it's tempered by the Caspian Sea. In winter, however, there may be some light snowfalls and frosts on the coast, but especially in inland areas, where cold air stagnates with more ease, after the wind has ceased.
+Summer is hot and sunny, with some afternoon thunderstorms in inland areas.
+The mountainous areas are usually green and full of forests and streams; the highest peak is Bazardüzü, 4,466 meters (14,652 feet) high, located in the northern Caucasus Range, on the border with the Russian Republic of Dagestan. There are also some natural parks located in the plain and along the coast, to protect the species of birds that come to nest in these area, or marine animals such as seals.
+
+#### **1.4 Lockdown status in Azerbaijan**
+
+   The disease was confirmed to have reached Azerbaijan on 28 February 2020.Azerbaijan remains one of the relatively less-affected countries by the rapidly spreading Coronavirus (COVID-19) disease. The country’s official institutions are applying necessary measures to reduce exposure to and transmission of the novel coronavirus.
+   The special quarantine regime will remain in effect until November 1, 2021, according to an August 28, 2021 decision by Azerbaijan’s Cabinet of Ministers. Effective May 31, 2021 masks are no longer required in outdoor spaces, but remain obligatory indoors, subject to fines. Most public transportation, including the Baku Metro, reopened on May 31, but will not operate on weekends. As of June 10, 2021, beaches, sport and health centers, places of religious worship, malls, and shopping centers are reopened, subject to COVID-related restrictions.The Azerbaijani Government has extended the quarantine measures until 01 September 2021 to combat the Coronavirus pandemic.
+People are encouraged to practice social distancing and obliged to wear mouth and nose protection indoors. Local and long-distance public transport is closed on the weekends (0:00 a.m. on Saturdays to 6:00 a.m. on Mondays), there are no restrictions on the other days of the week.
+Entry in the country is only possible by air and it is limited to: citizens of the Azerbaijan Republic and their close relatives, holders of diplomatic passports, heads of diplomatic missions and consulates of foreign States in the Azerbaijan Republic, foreigners and stateless persons with work permit, foreigners with temporary or permanent residence permits in the Azerbaijani Republic, passengers who have a permit from the Cabinet of Ministers of the Republic of Azerbaijan - with relevant confirmations and a negative COVID-19 test result (within 72 hours before departure).
+The government implemented a financial aid package for individuals and businesses, particularly those heavily affected.
+
+   
+#### **1.5 Action taken by goverment**
+
+   The IFRC Country Cluster Delegation for South Caucasus is preparing for the CEA training for the staff and volunteers of the RC Society of Azerbaijan. The training will be attended by the designated CEA focal points, Head of Branch Development department, FA and PSS/Mental Health Coordinator of the RC Society of Azerbaijan.
+   
+### **2. Exploratory Data Analysis**
+#### **2.1 Structure of Data**
+
+The data set used for this analysis is The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+- date: Date in YYYY-MM-DD format.
+- province: Name of province/state, for countries where data is provided split across multiple provinces/states.
+- country: Name of country/region.
+- lat: Latitude of center of geographic region, defined as either country or, if available, province.
+- long: Longitude of center of geographic region, defined as either country or, if available, province.
+- type: An indicator for the type of cases (confirmed, death, recovered).
+- cases: Number of cases on given date.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+#### **2.2 COVID-19 Statistics of Azerbaijan**
+The data presented below are valid only up to the date of 18th September 2021. The current situation might be quite different from what is depicted below.
+
+```{r}
+library(kableExtra)
+sumary<-azerbaijan_corona %>%
+  group_by(type) %>%
+  summarise(
+   
+    minimum = min(cases),
+    first_Qu = quantile(cases,0.25),
+    median=median(cases),
+    mean = mean(cases),
+    third_Qu=quantile(cases,0.75),
+    maximum= max(cases)
+  )
+
+
+sumary %>%
+  kbl() %>%
+  kable_styling()
+
+```
+
+ | Type | Cases|
+ | ---| ---|
+ | Confirmed Cases | 467173  |
+ | Recovered Cases | 342784|
+ | Death Cases| 6227| 
+ 
+ 
+```{r}
+# devtools::install_github("lbusett/insert_table")
+# azerbaijanCoronaTable <- head(azerbaijan_corona)
+summary(azerbaijan_corona)
+
+confirmed_Azerbaijan_corona <- azerbaijan_corona %>% filter(type == "confirmed")
+death_Azerbaijan_corona <- azerbaijan_corona %>% filter(type == "death")
+recovered_Azerbaijan_corona <- azerbaijan_corona %>% filter(type == "recovered")
+
+# Total No. of confirm cases
+confirmed_cases <- select(confirmed_Azerbaijan_corona, cases)
+total_confirm_cases <- sum(confirmed_cases)
+
+# #confirmed cases Percentage
+# confirmed_cases_percentage <- c(select(confirmed_Azerbaijan_corona,cases)/total_confirm_cases*100)
+# confirmed_cases_percentage
+
+# Total No. of death cases
+death_cases <- select(death_Azerbaijan_corona, cases)
+total_death_cases <- sum(death_cases)
+
+
+# Total No. of recovered cases
+recovered_cases <- select(recovered_Azerbaijan_corona, cases)
+total_recovered_cases <- sum(recovered_cases, na.rm = FALSE)
+```
+
+```{r} 
+
+```
+<center>
+```{r,out.width="80%"}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(gganimate)
+library(gifski)
+library(av)
+library(gapminder)
+library(scales)
+
+azerbaijan_corona %>%
+  filter(type == "confirmed" |
+    type == "death" |
+    type == "recovered") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = type,
+    color = type
+  )) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  ggtitle("Daily Cases in Azerbaijan") +
+  transition_reveal(date)
+```
+</center>
+
+This figure shows that, confirmed, death and recovered cases in Azerbaijan At first, there were no cases but in shortly, number of confirmed case are increased speedily and it is too much larger than death and recovered cases. Especially, Azerbaijan has small amount of death cases than confirmed cases. Azerbaijan had considerable recoveries.
+
+
+<center>
+
+```{r,out.width="80%"} 
+library(plotly)
+azerbaijan_corona %>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~type,
+    y = ~cases,
+    color = ~type,
+    type = "bar",
+    mode = "markers",
+    name = ~type,
+    title = "Confirmed, Death and Recovered cases in Azerbaijan"
+  )
+```
+</center>
+
+According to the summary table of cases by types and month and bar chart, it can be seen that highest no. of confirmed cases, recoveries are during the month of November. The progress of the disease in the first few weeks after confirmation of first case (28 February) is comparatively slow with respect to the high acceleration in November 2020. in Year 2021 February its decreased and April confirmed cases and Recovering are increased and deaths are still lower. It can be seen virus is spared in to the community somehow and spreading very higher. In May deaths are reported but reported deaths are very lower than confirmed and recover cases. Further it is noticed, recover cases are started to increase.In spite of the fact that data only till mid of September 2021 is available, And after that it's very dangerous to say that confirmed cases have comparatively increased with respect to the previous months and decreased recovered cases. 
+However, Deaths are in controlled certain range and It’s very lower than confirmed cases.Overall Azerbaijan has been performing well in keeping the fatality rate low and ensuring that the confirmed patients are recovering. However the confirmed cases amount is still staggeringly high.
+
+
+
+#### **2.2.1 Daily Confirmed Cases in Azerbaijan**
+<center>
+```{r,out.width="80%"}
+confirmed_Azerbaijan_corona %>%
+  mutate(cuml = cumsum(cases)) %>%
+  ggplot(aes(x = date, y = cases)) +
+  geom_line(color = "red") +
+  geom_point(size = 1.5) +
+  geom_area(fill = "pink") +
+  theme_bw() +
+  ggtitle("Daily Confirmed Cases in Azerbaijan") +
+  transition_reveal(date)
+```
+</center>
+
+End of the February confirmed cases of covid 19 founded in Azerbaijan,up to middle of December corona virus effect increased and after April it became decreasing till begin of the March,After that its again increased and again its decreasing with maximum number (7319 cases) of confirm cases founded on 12th of September 2021 and in April,August months in 2021 Azerbaijan also highly effected by corona virus.
+
+
+#### **2.2.2 Daily Death Cases in Azerbaijan**
+<center>
+
+```{r,out.width="80%"}
+
+death_Azerbaijan_corona %>%
+  mutate(cuml = cumsum(cases)) %>%
+  ggplot(aes(x = date, y = cases)) +
+  geom_line(color = "blue") +
+  geom_point(size = 1.5) +
+  geom_area(fill = "blue") +
+  theme_bw() +
+  ggtitle("Daily Death Cases in Azerbaijan") +
+  transition_reveal(date)
+```
+</center>
+
+On April 7th first covid-19 death founded in Azerbaijan, death rate increased up to middle of December 2020 and it decreased, again its incresed till April 2021 and its decreased and after the August 2021 its again increased and high deaths founded 2nd week of September 2021.maximum number of death (111 cases) founded on 10th of September 2021. 
+
+#### **2.2.3 Daily Recovered Cases in Azerbaijan**
+<center>
+
+```{r,out.width="80%"}
+death_Azerbaijan_corona %>%
+  mutate(cuml = cumsum(cases)) %>%
+  ggplot(aes(x = date, y = cases)) +
+  geom_line(color = "green") +
+  geom_point(size = 1.5) +
+  geom_area(fill = "green") +
+  theme_bw() +
+  ggtitle("Daily Recovered Cases in Azerbaijan") +
+  transition_reveal(date)
+```
+</center>
+
+After the October month recovered cases increased and end of the December 2020 most of the patients recovered, After April 2021 Mid week recovered cases also slightly decreased.maximum number of recovered cases (4471 cases) founded on 27th of December 2020.
+
+#### **2.2.4 Daily Active Cases in Azerbaijan**
+<center>
+
+```{r,out.width="80%"}
+
+
+cumsum_confirmed_cases <- confirmed_Azerbaijan_corona %>% mutate(cumsum((cases)))
+# cumsum_confirmed_cases
+
+cumsum_death_cases <- death_Azerbaijan_corona %>% mutate(cumsum((cases)))
+# cumsum_death_cases
+
+cumsum_recovered_cases <- recovered_Azerbaijan_corona %>% mutate(cumsum((cases)))
+# cumsum_recovered_cases
+
+azerbaijan_corona1 <- left_join(cumsum_confirmed_cases, cumsum_death_cases, by = "date") %>% left_join(cumsum_recovered_cases, by = "date")
+
+active_cases <- azerbaijan_corona1 %>% mutate(active = `cumsum((cases)).x` - `cumsum((cases)).y` - `cumsum((cases))`)
+# tail(active_cases)
+
+active_cases %>%
+  mutate(cuml = cumsum(cases)) %>%
+  ggplot(aes(x = date, y = active)) +
+  geom_line(color = "yellow") +
+  geom_point(size = 1.5) +
+  geom_area(fill = "yellow") +
+  theme_bw() +
+  ggtitle("Daily Active Cases in Azerbaijan") +
+  transition_reveal(date)
+```
+</center>
+
+Daily active cases increased during December month 2020 and its decreasing and again increasing,However daily active cases its increasing during this period(September)  that mean in September month in 2021 covid-19 highly effected in Azerbaijan.
+
+<center>
+
+```{R,out.width="80%"}
+
+covidDataAzerbaijanWide <- pivot_wider(azerbaijan_corona, names_from = type, values_from = cases)
+Active <- cumsum(covidDataAzerbaijanWide$confirmed) - cumsum(covidDataAzerbaijanWide$recovered) - cumsum(covidDataAzerbaijanWide$death)
+covidDataAzerbaijanWidewithActiveCases <- cbind(covidDataAzerbaijanWide, Active)
+# covidDataAzerbaijanWidewithActiveCases
+
+
+f1 <- plot_ly(covidDataAzerbaijanWidewithActiveCases, type = "scatter", mode = "markers", x = ~date, y = ~confirmed, name = "Confirmed Cases")
+f2 <- plot_ly(covidDataAzerbaijanWidewithActiveCases, type = "scatter", mode = "markers", x = ~date, y = ~death, name = "Death Cases")
+f3 <- plot_ly(covidDataAzerbaijanWidewithActiveCases, type = "scatter", mode = "markers", x = ~date, y = ~recovered, name = "Recovered Cases")
+f4 <- plot_ly(covidDataAzerbaijanWidewithActiveCases, type = "scatter", mode = "markers", x = ~date, y = ~Active, name = "Active Cases")
+f5 <- subplot(f1, f2, f3, f4, nrows = 4) %>%
+  layout(yaxis = list(type = "linear"))
+f5
+```
+</center>
+
+It seems in Azerbaijan covid-19 highly effecting and Azerbaijan is now in dangerous situation.
+
+#### **2.3 Comparison with other countries**
+Here we are comparing the effectiveness of Azerbaijan’s virus prevention plan with regards to several other countries. First and foremost the top 5 countries with the most number of confirmed cases are picked. In addition 3 handpicked countries have been picked with regards to how effective their virus prevention plan is in general.
+
+<center>
+
+```{r,out.width="80%"}
+library(htmltools)
+
+df <- read.csv(textConnection(
+  "Name,Lat,Long
+Azerbaijan,40.4076319308778, 48.13983086027659
+US,42.48403623660913, -106.96752346346977
+India,23.275096637375043, 78.72800712547912
+Brazil,-8.439258747031243, -55.5805366163166
+United Kingdom,54.86614659697742, -3.1914309137214385
+Russia,62.65169993266102, 92.80468809358749
+Sri Lanka,7.644901932409819, 80.7131748972552
+Italy,43.06181540914498, 12.370684471984784
+China,36.14975380447737, 103.65387695890672"
+))
+
+leaflet(df) %>%
+  addTiles() %>%
+  addMarkers(~Long, ~Lat, label = ~ htmlEscape(Name)) %>%
+  addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+</center>
+
+#### **2.3.1 Comparison - Total No. of Confirmed Cases**
+<center>
+
+```{r,out.width="80%"}
+coronaComparisonCountryWise <- coronavirus %>% filter(country == "Azerbaijan" |
+  country == "US" |
+  country == "India" |
+  country == "Brazil" |
+  country == "United Kingdom" |
+  country == "Russia" |
+  country == "Sri Lanka" |
+  country == "Italy" |
+  country == "China")
+coronaComparisonCountryWise <- transform(coronaComparisonCountryWise, cases = na.locf(cases))
+
+coronaComparisonCountryWiseConfirmedCases <- coronaComparisonCountryWise %>% filter(type == "confirmed")
+
+coronaComparisonCountryWiseConfirmedCases %>%
+  filter(country == "Azerbaijan" |
+    country == "US" |
+    country == "India" |
+    country == "Brazil" |
+    country == "United Kingdom" |
+    country == "Russia" |
+    country == "Sri Lanka" |
+    country == "Italy" |
+    country == "China") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  ggtitle("Total No. of Confirmed Cases of all the States") +
+  transition_reveal(date)
+```
+</center>
+
+<center>
+
+```{r,out.width="80%"}
+getCountry <- function(x) {
+  coronavirus %>% filter(country == x)
+}
+
+getCountryByType <- function(x, l) {
+  coronavirus %>% filter(country == x, type == l)
+}
+
+figure1 <- plot_ly() %>%
+  add_trace((getCountryByType("Azerbaijan", "confirmed")),
+    x = ~ getCountryByType("Azerbaijan", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("Azerbaijan", "confirmed")$cases),
+    name = "Azerbaijan Confirmed", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("US", "confirmed")),
+    x = ~ getCountryByType("US", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("US", "confirmed")$cases),
+    name = "US Confirmed", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("India", "confirmed")),
+    x = ~ getCountryByType("India", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("India", "confirmed")$cases),
+    name = "India ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Brazil", "confirmed")),
+    x = ~ getCountryByType("Brazil", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("Brazil", "confirmed")$cases),
+    name = "Brazil ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("United Kingdom", "confirmed")),
+    x = ~ getCountryByType("United Kingdom", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("United Kingdom", "confirmed")$cases),
+    name = "United Kingdom ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Russia", "confirmed")),
+    x = ~ getCountryByType("Russia", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("Russia", "confirmed")$cases),
+    name = "Russia ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Sri Lanka", "confirmed")),
+    x = ~ getCountryByType("Sri Lanka", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("Sri Lanka", "confirmed")$cases),
+    name = "Sri Lanka ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Italy", "confirmed")),
+    x = ~ getCountryByType("Italy", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("Italy", "confirmed")$cases),
+    name = "Italy ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("China", "confirmed")),
+    x = ~ getCountryByType("China", "confirmed")$date,
+    y = ~ cumsum(getCountryByType("China", "confirmed")$cases),
+    name = "China", type = "scatter", mode = "lines"
+  ) %>%
+  layout(
+    showlegend = T, title = "Confirmed cases", yaxis = list(title = "No. of Confirmed Cases"),
+    xaxis = list(title = "Date")
+  )
+figure1
+
+```
+</center>
+
+Azerbaijan has so far proven to have taken control of the situation and kept it under control and as every other country is slowly succumbing into the second wave, Azerbaijan is slowly going up in the curve but at a slower rate than other countries. With regards to counties that have had stricter regulations such as Germany and Austria, Azerbaijan has been on par with them as well, as they plateaued at the same day.
+
+#### **2.3.2 Comparison - Death Cases**
+<center>
+
+```{r,out.width="80%"}
+coronaComparisonCountryWiseDeathCases <- coronaComparisonCountryWise %>% filter(type == "death")
+
+coronaComparisonCountryWiseDeathCases %>%
+  filter(country == "Azerbaijan" |
+    country == "US" |
+    country == "India" |
+    country == "Brazil" |
+    country == "United Kingdom" |
+    country == "Russia" |
+    country == "Sri Lanka" |
+    country == "Italy" |
+    country == "China") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  ggtitle("Total No. of Death Cases of all the States") +
+  transition_reveal(date)
+```
+</center>
+
+<center>
+
+```{r,out.width="80%"}
+figure2 <- plot_ly() %>%
+  add_trace((getCountryByType("Azerbaijan", "death")),
+    x = ~ getCountryByType("Azerbaijan", "death")$date,
+    y = ~ cumsum(getCountryByType("Azerbaijan", "death")$cases),
+    name = "Azerbaijan ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("US", "death")),
+    x = ~ getCountryByType("US", "death")$date,
+    y = ~ cumsum(getCountryByType("US", "death")$cases),
+    name = "US ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("India", "death")),
+    x = ~ getCountryByType("India", "death")$date,
+    y = ~ cumsum(getCountryByType("India", "death")$cases),
+    name = "India ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Brazil", "death")),
+    x = ~ getCountryByType("Brazil", "death")$date,
+    y = ~ cumsum(getCountryByType("Brazil", "death")$cases),
+    name = "Azerbaijan ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("United Kingdom", "death")),
+    x = ~ getCountryByType("United Kingdom", "death")$date,
+    y = ~ cumsum(getCountryByType("United Kingdom", "death")$cases),
+    name = "United Kingdom ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Russia", "death")),
+    x = ~ getCountryByType("Russia", "death")$date,
+    y = ~ cumsum(getCountryByType("Russia", "death")$cases),
+    name = "Russia ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Sri Lanka", "death")),
+    x = ~ getCountryByType("Sri Lanka", "death")$date,
+    y = ~ cumsum(getCountryByType("Sri Lanka", "death")$cases),
+    name = "Sri Lanka ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Italy", "death")),
+    x = ~ getCountryByType("Italy", "death")$date,
+    y = ~ cumsum(getCountryByType("Italy", "death")$cases),
+    name = "Italy ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("China", "death")),
+    x = ~ getCountryByType("China", "death")$date,
+    y = ~ cumsum(getCountryByType("China", "death")$cases),
+    name = "China", type = "scatter", mode = "lines"
+  ) %>%
+  layout(
+    showlegend = T, title = "Death cases", yaxis = list(title = "No. of Death Cases"),
+    xaxis = list(title = "Date")
+  )
+figure2
+```
+</center>
+
+When comparing the number of deaths; it can be seen that in the case of both Uniteed Kingdom,Brazil and India, deaths were reported from mid-March onwards and reached their peaks by January and July 2021 and this high death rate soon reduced for France but continued on for UK. Azerbaijan reached its peak of deaths close to end of September which still increasing afterwards yet the peak death rate did not exceed India,Brazil and United States. 
+
+#### **2.3.1 Comparison - Recover Cases**
+<center>
+
+```{r,out.width="80%"}
+coronaComparisonCountryWiseRecoveredCases <- coronaComparisonCountryWise %>% filter(type == "recovered")
+
+coronaComparisonCountryWiseRecoveredCases %>%
+  filter(country == "Azerbaijan" |
+    # country == "US" |
+    country == "India" |
+    country == "Brazil" |
+    country == "United Kingdom" |
+    country == "Russia" |
+    country == "Sri Lanka" |
+    country == "Italy" |
+    country == "China") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  ggtitle("Total No. of Recovered Cases of all the States") +
+  transition_reveal(date)
+```
+</center>
+
+
+<center>
+
+```{r,out.width="80%"}
+# Recovered
+
+figure3 <- plot_ly() %>%
+  add_trace((getCountryByType("Azerbaijan", "recovered")),
+    x = ~ getCountryByType("Azerbaijan", "recovered")$date,
+    y = ~ cumsum(getCountryByType("Azerbaijan", "recovered")$cases),
+    name = "Azerbaijan ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("US", "recovered")),
+    x = ~ getCountryByType("US", "recovered")$date,
+    y = ~ cumsum(getCountryByType("US", "recovered")$cases),
+    name = "US ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("India", "recovered")),
+    x = ~ getCountryByType("India", "recovered")$date,
+    y = ~ cumsum(getCountryByType("India", "recovered")$cases),
+    name = "India ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Brazil", "recovered")),
+    x = ~ getCountryByType("Brazil", "recovered")$date,
+    y = ~ cumsum(getCountryByType("Brazil", "recovered")$cases),
+    name = "Azerbaijan ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("United Kingdom", "recovered")),
+    x = ~ getCountryByType("United Kingdom", "recovered")$date,
+    y = ~ cumsum(getCountryByType("United Kingdom", "recovered")$cases),
+    name = "United Kingdom ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Russia", "recovered")),
+    x = ~ getCountryByType("Russia", "recovered")$date,
+    y = ~ cumsum(getCountryByType("Russia", "recovered")$cases),
+    name = "Russia ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Sri Lanka", "recovered")),
+    x = ~ getCountryByType("Sri Lanka", "recovered")$date,
+    y = ~ cumsum(getCountryByType("Sri Lanka", "recovered")$cases),
+    name = "Sri Lanka ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("Italy", "recovered")),
+    x = ~ getCountryByType("Italy", "recovered")$date,
+    y = ~ cumsum(getCountryByType("Italy", "recovered")$cases),
+    name = "Italy ", type = "scatter", mode = "lines"
+  ) %>%
+  add_trace((getCountryByType("China", "recovered")),
+    x = ~ getCountryByType("China", "recovered")$date,
+    y = ~ cumsum(getCountryByType("China", "recovered")$cases),
+    name = "China", type = "scatter", mode = "lines"
+  ) %>%
+  layout(
+    showlegend = T, title = "Recovered cases", yaxis = list(title = "No. of Recovered Cases"),
+    xaxis = list(title = "Date")
+  )
+figure3
+```
+</center>
+
+When comparing the number of recovers; it can be seen that in the case of both Brazil and India, recovering were faster onwards and reached their peaks by January and May 2021. Azerbaijan reached its peak of recovering to end of December 2021.
+
+
+### **3. Discussion**
+
+The dataset is loaded by coronavirus dataset given in the package R. Azerbaijan dataset is obtained by it. The dataset has null values and minus value for cases.NA values were clean from the data set by using most recent value. Overall it can be seen, before March 2020 there were no confirmed or death cases but in now its become dangerous situation because no. of confirmed cases and death cases are increasing but recovered cases are not much increased with compared to other cases. When considering the all cases in country in details, it is ensuring those recover cases are impossible because Azerbaijan reported its first recovered case in April 11. Azerbaijan is caparisoned with other countries also. Those countries are selected due to a specific unique reasons. China is the first country which is founded corona virus in Hubei Province. Italy is victimized by the virus after the china. Sri Lanka also victimized in early and it’s have medium health facilities. Those three countries with tiop 5 countries with the greatest no.of cases could control this pandemic situation in their countries. Currently, US and India are popular because they had large number of coronavirus cases than other countries in world wide. Those date are obtained by coronavirus dataset but it happened to see some negative cases and null values. The all unusual observations are not considered. It is used manual method to obtain count of confirmed cases in each country in monthly so that country wise data clean method were ignored. Azerbaijan is caparisoned with 8 countries. All datasets are obtained in special way which is described previously.
+
+### **4. Conclusions**
+
+Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to March. However, it is directly affected to the other countries. At that time, most of countries had high risk but all countries did not expect serious situations like this. China is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population they taken action to preventing virus. Also Sri Lanka are taken immediate action while virus entering the virus in to the country. Somehow they could be able controlled confirmed cases in April 2020.
+At very first, US had several confirmed cases in early February and US is reported large number of confirmed cases day by day. Their death rate was very high than other countries at that time. In early April, US happened increase the confirmed case. In May, US reported their highest number of confirmed cases and death cases. Us is the country which has large number of population in Europe. After US is victimized, most of other countries in Europe also in risk.
+The Azerbaijan became a victim of virus in March and it happened to increase confirmed cases after October to December in 2020. and after that 2nd and 3rd wave happens in March to April in 2021 and 3rd wave still happening in  Azerbaijan. Azerbaijan government had started to take actions against this situation after March but at that time virus is spread to the society but not as large way as US or India. However, Azerbaijan could control the pandemic situation in their country nearly in July 2021. Azerbaijan keep the rules which are built by the government in order to prevent virus. The government website also crated to inform the Society. Azerbaijan has middle health facilities when comparing to US, China but they could reduce their death using those facilities. US is the first country which has modern technologies and highest health facilities but US could not controlled the situation until now. It is pointed out, prevent spread virus is the best thing to control this situation. Comparing US, India,  Brazil, Azerbaijan had low number of confirmed case than those countries.
+The continent of India has larger number of countries which has poor health facilities and suffering from so than other countries. India happened to start increasing the case. In May, it dramatically increasing much difficulties and no reducing. If this happened this way, it cannot be able to control the deaths. So that, all countries have same responsible for prevent the virus in order to preventing spread to the poor country.
+Lastly, at very first Azerbaijan could not able to control the situation but Azerbaijan is fought back against the virus near October 2020. Finally, Azerbaijan is now facing a 3rd wave spreading increased the confirmed case. 
+
+### **5. References**
+
+  1. https://www.worldometers.info/coronavirus/countries-where-coronavirus-has-spread/
+  2. https://learn.r-journalism.com/en/mapping/leaflet_maps/leaflet/
+  3. https://www.climatestotravel.com/climate/
+  4. https://www.aserbaidschan.ahk.de/en/news-covid-19/live-ticker-latest-updates-on-coronavirus
+  5. https://blog.wego.com/azerbaijan-travel-restrictions-and-quarantine-requirements/
+  6. https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/
+  7. https://plotly.com/r/line-and-scatter/
+  8. https://plotly.com/r/bar-charts/
+  9. https://youtube.com/playlist?list=PL34t5iLfZddtaJ0SB9kfYmytrmXjZLGpD
+  
+  

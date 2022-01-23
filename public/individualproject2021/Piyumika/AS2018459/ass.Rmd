@@ -1,0 +1,578 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+author: "Induma Nadeeshani - AS2018459"
+date: "9/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<br> <br> 
+<font style="color: #f68060" size="8"><b> Covid 19 Analysis in United Kingdom </b> </font>
+
+<br>
+<h1 style="color: maroon"> 01. Introduction</h1>
+<br>
+
+
+## 1.1 Background 
+
+United Kingdom, island country located off the northwestern coast of mainland Europe. The United Kingdom comprises the whole of the island of Great Britain—which contains England, Wales, and Scotland—as well as the northern portion of the island of Ireland. 
+
+### United Kingdom in World map
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE, fig.cap= "United Kingdom on World Map"}
+library(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+
+covid_in_uk <- coronavirus %>% filter(country == "United Kingdom")
+covid_in_uk <- covid_in_uk %>% drop_na()
+
+covid_in_uk$cases[covid_in_uk$cases < 0] <- abs(covid_in_uk$cases) 
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+uk_location <- tibble(lat=55.3781   , long=3.436) 
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  
+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = uk_location, aes(x = long, y = lat), color = "red", size = 1)
+
+```
+
+
+<br>
+
+### Closeup
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE , fig.cap= "United Kingdom"}
+library(maps)
+library(mapdata)
+map('worldHires','UK', xlim=c(-11,3), ylim=c(49,60.9))
+```
+
+
+
+
+## 1.2 Climate conditions
+
+The climate of the United Kingdom derives from its setting within atmospheric circulation patterns and from the position of its land forms in relation to the sea.
+
+Climatic systems do not pass through the country.
+Britain is in the temperate climate zone and does not have extremes of temperature or rainfall.
+The UK has a reputation for having cold, wet and dreary weather. Although this may be true for some times of the year.
+
+The north-to-south run of the 40 °F (4 °C) January isotherm, or line of equal temperature, from the coast in northwestern Scotland south to the Isle of Wight betrays the moderating influence of the winds blowing off the Atlantic Ocean. In summer polar maritime air is less common, and the 9° difference of latitude and the distance from the sea assume more importance, so that temperatures increase from north to south and from the coast inland.
+
+<center>![Temperature in UK](D:\INDU\UNI\Stat\Sem 5\R\assignment 3\climate.png)</center>
+
+<br>
+
+## 1.3 Lock-down status in the country
+
+There are four steps to easing UK's lockdown.<br>
+Step one was completed in two parts on 8 and 29 March, including schools returning and groups of six people allowed to meet outdoors.
+
+Step two was completed on 12 April when non-essential shops, gyms, hairdressers, nail salons, libraries and outdoor attractions reopened, while bars and restaurants were allowed to serve customers outdoors, and groups limited to two households or by the "rule of six".
+
+From 7 June, groups of 30 people will be allowed to meet outdoors, including private gardens, while up to three households will be allowed to meet indoors, as Wales moves in a phased transition to alert level one.
+
+After gyms, leisure centres and fitness facilities were allowed to reopen on 3 May, concerts and sporting events can go ahead for up to 4,000 people standing and 10,000 seated.
+
+The staged relaxing of restrictions will be reviewed ahead of 21 June to decide whether indoor events can restart.
+
+Welsh First Minister Mark Drakeford said the phased approach will allow more people to be vaccinated twice amid concern of the spread of the Indian variant, also known as the Delta variant, while also ruling out a travel ban.
+
+Community centre opening, indoor supervised activities for children, and indoor organised activities for up to 15 adults, such as exercise classes were earlier allowed and the outdoor reopening of pubs, restaurants, cafes and other hospitality businesses took place on 26 April.
+
+That came after other restrictions were eased on 24 April, allowing any six people to meet up outdoors.
+
+<center>![Lockdown Timeline in UK](D:\INDU\UNI\Stat\Sem 5\R\assignment 3\timeline-lockdown-updated.png)</center>
+
+<br>
+
+## 1.4 Actions taken by the government
+
+Significant outbreaks of disease are among the greatest risks faced by any society,
+threatening lives and causing extensive disruption to public services and the economy.
+The scale and nature of the current COVID-19 emergency and government’s response is
+unprecedented in recent history. 
+<br>
+
+The UK government mobilised a wide-ranging response to COVID-19:
+<ul>
+
+  <li>Lockdowns
+  <li>Travel and other Restrictions 
+  <li>Vaccination
+  <li>Health and social care
+</ul>
+
+
+
+<br><br><br>
+<h1 style="color: maroon"> 02. Exploratory Data Analysis</h1>
+<br>
+
+The relevant coronavirus dataframe as follows;
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+data(coronavirus)
+head(coronavirus)
+
+tail(coronavirus)
+```
+<br><br>
+
+## 2.1 Data summary of coronavirus in United Kingdom
+
+Among all the countries in the data frame the summary of the coronavirus data in United Kingdom as follows;
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+summary(covid_in_uk)
+
+```
+
+<br><br>
+When catogorise the coronavirus data according to the type There are three types as follows;
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+unique(covid_in_uk$type)
+
+```
+
+<br><br>
+Along with those three types the covid 19 cases vary as follows;
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+
+by_type <- covid_in_uk %>% filter(cases >= 0)
+
+ggplot(by_type, aes(x=date, y=cases, col=type)) + geom_col(fill="#f68060") + ggtitle("Covid-19 cases by type ") + facet_grid(type~.)
+
+```
+
+<br><br>
+
+### Confirmed cases
+
+Data frame for the confirmed cases in UK as follows.
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+confirmed_cases <- covid_in_uk %>% filter(type=="confirmed") 
+head(confirmed_cases)
+```
+
+<br>
+Visualization of the confirmed cases along with the dates.
+
+```{r echo=FALSE,  message=FALSE, warning=FALSE, comment=NA}
+
+ggplot(confirmed_cases, aes(x=date, y=cases)) + geom_line(col=rgb(0.3,0.3,0.5,0.7)) + ggtitle("Covid-19 Confirmed cases in UK")
+
+```
+
+
+<br><br>
+
+### Recoveries
+
+Following shows the Data frame for the Recoveries in UK.
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+recovered_cases <- covid_in_uk %>% filter(type=="recovered") 
+head(recovered_cases)
+```
+
+<br>
+Visualization for the recoveries.
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+ggplot(recovered_cases, aes(x=date, y=cases)) + geom_line(col=rgb(0.2,0.8,0.5,0.5)) + ggtitle("Covid-19 Recoveries in UK")
+```
+<br><br>
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+deaths <- covid_in_uk %>% filter(type=="death") 
+head(deaths)
+```
+This seems UK have increased the recovery count recently.
+
+### Deaths
+
+Following shows the Data frame for the Deaths in UK.
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+deaths <- covid_in_uk %>% filter(type=="death") 
+head(deaths)
+```
+
+### Active Cases
+
+<br>
+
+Visualization for the deaths
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+ggplot(deaths, aes(x=date, y=cases)) + geom_line(col=rgb(0.9,0.0,0.0,0.7)) + ggtitle("Covid-19 Deaths in UK")
+```
+<br>
+
+It seems that the deaths was increased around the time period of 2020 November to 2021 February.
+
+<br><br>
+
+
+
+
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+library(viridis)
+library(tidyr)
+library(dplyr)
+
+ggplot(confirmed_cases,aes(x=province, y=cases)) +
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    coord_flip() + ylim(0,6500) +
+    xlab("") 
+
+```
+<br>
+
+According to this all the states in UK except some few states have almost equally same count of Covid 19 confirmed cases reported.
+    
+<br>
+    
+When analyse the confirmed cases, Deaths, Recoveries provincially it will be as follows
+
+```{r comment=NA,echo=FALSE, message = FALSE, warning=FALSE}
+
+library(forcats)
+
+ covid_in_uk2 <- covid_in_uk %>% select(type,province,cases)
+
+ggplot(covid_in_uk2,
+       aes(x = province,
+           y = cases,
+           fill = type))  + coord_flip() +
+  geom_bar(stat = "identity",
+           position = "dodge")
+
+```
+
+
+## 2.2 The situation in UK compared to nearby countries
+
+<br>
+
+The UK is an island nation, but shares a open land border with Ireland. It neighbors several countries by sea, including Belgium, Denmark, France, Germany, the Netherlands, Norway.
+Let's take a look about the covid 19 situation of the other neighboring countries on United Kingdom.
+
+<br><br>
+
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_belgium <- coronavirus  %>% filter(country == "Belgium")
+confirmed_belgium <- covid_in_belgium %>% filter(type=="confirmed")
+
+belgium_vs_uk <- rbind(confirmed_cases, confirmed_belgium)
+
+ggplot(belgium_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK Vs Belgium") + ylim(0,10000)
+
+```
+
+<br><br>
+
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_denmark <- coronavirus  %>% filter(country == "Denmark")
+covid_in_denmark[(covid_in_denmark) < 0] <- NA
+
+confirmed_denmark <- covid_in_denmark %>% filter(type=="confirmed")
+
+denmark_vs_uk <- rbind(confirmed_cases, confirmed_denmark)
+
+ggplot(denmark_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK Vs Denmark") + ylim(0,10000)
+
+```
+
+<br><br>
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_france <- coronavirus  %>% filter(country == "France")
+
+covid_in_france[(covid_in_france) < 0] <- NA
+
+confirmed_france <- covid_in_france %>% filter(type=="confirmed")
+
+france_vs_uk <- rbind(confirmed_cases, confirmed_france)
+
+ggplot(france_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK vs France") + ylim(0,10000)
+
+```
+
+
+<br><br>
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_germany <- coronavirus  %>% filter(country == "Germany")
+
+covid_in_germany[(covid_in_germany) < 0] <- NA
+
+confirmed_germany <- covid_in_germany %>% filter(type=="confirmed")
+
+germany_vs_uk <- rbind(confirmed_cases, confirmed_germany)
+
+ggplot(germany_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK vs Germany") + ylim(0,10000)
+
+```
+
+
+<br><br>
+
+
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_ireland <- coronavirus  %>% filter(country == "Ireland")
+covid_in_ireland[(covid_in_ireland) < 0] <- NA
+
+confirmed_ireland <- covid_in_ireland %>% filter(type=="confirmed")
+
+ireland_vs_uk <- rbind(confirmed_cases, confirmed_ireland)
+
+ggplot(ireland_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK vs Ireland") + ylim(0,10000)
+
+```
+
+<br><br>
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_netherlands <- coronavirus  %>% filter(country == "Netherlands")
+covid_in_netherlands[(covid_in_netherlands) < 0] <- NA
+
+confirmed_netherlands <- covid_in_netherlands %>% filter(type=="confirmed")
+
+netherlands_vs_uk <- rbind(confirmed_cases, confirmed_netherlands)
+
+ggplot(netherlands_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK vs Netherlands") + ylim(0,10000)
+
+```
+
+
+<br><br><br><br>
+
+<font size="5"><b> Altogether (Confirmed Cases)</b> </font>
+<br><br>
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+confirmed_near <- rbind(confirmed_cases, confirmed_belgium, confirmed_denmark,confirmed_france, confirmed_germany, confirmed_ireland, confirmed_netherlands)
+
+ggplot(confirmed_near, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("Confirmed cases in the countries nearby UK in boxplot view")
+
+```
+
+By this graph it will be seen that the confirmed cases in UK is taken the lowest place compared to the neighboring countries.
+
+<br><br><br>
+<font size="5"><b> Deaths in the countries nearby UK</b> </font>
+<br><br>
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+death_france <- covid_in_france %>% filter(type=="death")
+
+death_belgium <- covid_in_belgium %>% filter(type=="death")
+
+death_denmark <- covid_in_denmark %>% filter(type=="death")
+
+death_germany <- covid_in_germany %>% filter(type=="death")
+
+death_ireland <- covid_in_ireland %>% filter(type=="death")
+
+death_netherlands <- covid_in_netherlands %>% filter(type=="death")
+
+
+Neighbor_death <- rbind(deaths, death_belgium, death_denmark,death_france, death_germany, death_ireland, death_netherlands)
+
+ggplot(Neighbor_death, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("Death cases in the countries nearby UK in boxplot view")
+
+```
+
+This plot shows that the deaths due to the covid 19 UK has the lowest deathscompared to its neighboring countries.
+
+<br><br><br>
+
+<font size="5"><b> Recoveries in the countries nearby UK</b> </font>
+<br><br>
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+recovered_france <- covid_in_france %>% filter(type=="recovered")
+
+recovered_belgium <- covid_in_belgium %>% filter(type=="recovered")
+
+recovered_denmark <- covid_in_denmark %>% filter(type=="recovered")
+
+recovered_germany <- covid_in_germany %>% filter(type=="recovered")
+
+recovered_ireland <- covid_in_ireland %>% filter(type=="recovered")
+
+recovered_netherlands <- covid_in_netherlands %>% filter(type=="recovered")
+
+
+Neighbor_recovered <- rbind(recovered_cases, recovered_belgium, recovered_denmark,recovered_france, recovered_germany, recovered_ireland, recovered_netherlands)
+
+ggplot(Neighbor_recovered, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("Recovered cases in the countries nearby UK in boxplot view")
+
+```
+
+By this plot it will be seen the covid 19 recovery rate is very low in UK comparing to the other neighboring countries.
+
+<br><br><br>
+
+## 2.3 The situation in UK compared to some other countries in the world
+
+<br>
+Let's take the countries which has most covid 19 cases and deaths.
+
+The country which has highest covid 19 confirmed cases as follows;
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+
+covid_confirmed <- coronavirus %>% filter((type=="confirmed") & (cases >= 0))
+
+#by_country <- covid_confirmed %>% filter(cases >= 0)
+
+confirmed_by_country <- count(covid_confirmed, vars = country)
+
+confirmed_by_country[which.max(confirmed_by_country$n),]
+
+```
+
+<br>
+
+As this shows China has the highest Covid 19 confirmed cases reported. Also China is important because the whole situation of Covid 19 was started in China.
+When compared the confirmed cases in UK to China it will be as follows;
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+covid_in_china <- covid_confirmed  %>% filter(country == "China")
+covid_in_china[(covid_in_china) < 0] <- NA
+
+china_vs_uk <- rbind(confirmed_cases, covid_in_china)
+
+ggplot(china_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in UK vs China") + ylim(0,10000)
+
+```
+
+
+let's see which country has highest covid 19 deaths;
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+
+covid_deaths <- coronavirus %>% filter((type=="death") 
+                                       & (cases >= 0))
+
+deaths_by_country <- count(covid_deaths, vars = country)
+
+deaths_by_country[which.max(deaths_by_country$n),]
+
+```
+
+According to the data set China has reported the most deaths in the world.
+Let's compare the covid 19 deaths in UK with China.
+
+```{r comment=NA, echo=FALSE, message = FALSE, warning=FALSE}
+
+deaths_in_china <- covid_deaths  %>% filter(country == "China")
+
+deaths_in_china[(deaths_in_china) < 0] <- NA
+
+china_vs_uk <- rbind(deaths, deaths_in_china)
+
+ggplot(china_vs_uk, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Deaths in UK vs China") + ylim(0,10000)
+
+```
+
+<br><br><br>
+
+
+<br>
+<h1 style="color: maroon"> 03. Conclusions</h1>
+<br>
+
+The COVID-19 pandemic in the United Kingdom is part of the worldwide pandemic of coronavirus disease (COVID-19). The virus reached the UK in late January 2020. After the disease discovered in China, the first UK case was reported on 31 January 2020, and COVID became a notifiable disease in the UK.
+
+According to the diagrams around 2021 January the covid 19 confirmed cases seems to be increased a little and also the deaths are increased accordingly. But recently there is a considerable increase in the confirm cases around 2021 July. It seems the increased level is highter than any other time period but not rather than increased the deaths like around around 2021 January  this time period the recovery level is increased.
+
+When consider the situation provincially, in most provinces are at the same level with respect to the confirmed cases except some including angulla, montserrant
+But overall there are not a large number of cases. when compared to the other countries in the world.
+
+And when we considering the covid 19 situation in UK the recoveries are at a very low level since there are lesser confirmed cases and when comparing to the neighboring countries UK has considerably low amount of covid 19 confirmed cases and deaths. And also UK has the lowest confirmed cases and death count. Therefore the the recovery level is also low compared to the neighboring countries of UK. during the time period from January 2020 to July 2021.
+
+When compared UK with China where it all started and has most confirmed cases, even if china has more cases with time China was able to reduce the confirmed cases but UK seems to increase the the covid 19 confirmed cases recently. But the death count is at a lower level.
+
+
+<br>
+<h1 style="color: maroon"> 04. Discussion</h1>
+<br>
+ 
+ 
+According to the analysis United Kingdom seems to be at a safe zone in the Covid 19 situation. And the lower death count implies that even though there are some cases they was able to manage the situation. 
+But recently it seems to have an increase of covid 19 cases may be due to the restrictions are loosen. But the increase of recovery level implies that UK was able to manage situation of increasing Covid 19 confirmed cases.
+And also it can be seen that UK has successfully faced for this pandemic unlike the other neighboring countries. 
+
+
+<br>
+<h1 style="color: maroon"> 05. References</h1>
+<br>
+
+<ul>
+<li> Institute for government: UK lockdowns <https://www.instituteforgovernment.org.uk/charts/uk-government-coronavirus-lockdowns>
+<li> Wikipedia: Covid in UK <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_United_Kingdom>
+<li> News.sky.com: lockdown in england <https://news.sky.com/story/covid-19-whats-allowed-from-12-april-as-lockdown-eases-in-england-12225770>
+<li> Nao.org.uk: Covid 19 responses <https://www.nao.org.uk/wp-content/uploads/2020/05/Overview-of-the-UK-governments-response-to-the-COVID-19-pandemic.pdf>
+<li>BBC News
+</ul>
+
+
+
+
+
+
+
+

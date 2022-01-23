@@ -1,0 +1,1018 @@
+---
+title: "COVID-19 Pandemic in Russia"
+author: "A.D.M.D Wijayawantha"
+output: 
+  html_document:
+    theme: united
+---
+
+```{css echo=FALSE}
+p {
+  font-size: 20px;
+}
+
+ul li{
+  font-size: 20px;
+}
+
+h1, h2, h3 {
+  font-weight: bold;
+  text-align: center;
+}
+
+h4 {
+  text-align: center;
+}
+
+caption {
+  color: #1F618D;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+} 
+
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data loading, include=FALSE}
+library(sta3262)
+library(tidyverse)
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(plotly)
+library(htmltools)
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+coronavirus$country
+summary(coronavirus)  ##since there are no missing values in number of cases, we can move forward
+```
+
+```{r obtain data corresponds to my country, include=FALSE}
+get_individual_project_country("AS2018585")
+
+russia_corona_full <- coronavirus %>% 
+  filter (country == "Russia")
+
+russia_corona_full
+
+summary(russia_corona_full) ##since there are no negative values in number of cases, we can move forward
+
+
+```
+
+&nbsp;
+
+# **1 Russia**    
+
+## **1.1 About Russia**   
+
+&nbsp;  
+
+**Russia** or the **Russian Federation** is a country spanning Eastern Europe & Asia. Once the preeminent republic of the Union of Soviet Socialist Republics (U.S.S.R.; commonly known as the Soviet Union), Russia became an independent country after the dissolution of the Soviet Union in December 1991.
+
+It is the largest country in the world by area, covering over 17 million square kilometers. It covers nearly twice the territory of Canada, the second largest. It encompasses over 1/8 th of Earth's inhabited land area. 
+
+It extends across the whole of northern Asia and the eastern third of Europe, spanning 11 time zones and incorporating a great range of environments and landforms, from deserts to semiarid steppes to deep forests and Arctic tundra. Russia contains Europe’s longest river, the Volga, and its largest lake, Ladoga. Russia also is home to the world’s deepest lake, Baikal, and the country recorded the world’s lowest temperature outside the North and South poles. It has the most borders of a country with 14 countries: **Norway, Finland, Estonia, Latvia, Lithuania, Poland, Belarus, Ukraine, Georgia, Azerbaijan, Kazakhstan, China, Mongolia & North Korea**.                                               
+&nbsp;  
+
+## **1.2 Where is Russia**   
+
+&nbsp;  
+
+```{r visualization, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+russia_map <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "grey"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+russia_map +
+  geom_point(
+    data = russia_corona_full, aes(x = long, y = lat), color = "red", size
+    = 3
+  )
+```
+
+&nbsp;  
+&nbsp;  
+
+## **1.3 Climate Conditions**                       
+
+&nbsp;  
+
+![](Russia_Köppen.svg)
+
+[By Adam Peterson - Own work, CC BY-SA 4.0](https://commons.wikimedia.org/w/index.php?curid=52904892)
+
+
+The above graphic illustrates the climate classification of Russia which was published by Wladimir Köppen.
+
+Throughout much of the territory, there are only two distinct seasons— winter and summer— as spring and autumn are usually brief periods of change between extremely low and extremely high temperatures. The coldest month is January (February on the coastline); the warmest is usually July. Great ranges of temperature are typical. In winter, temperatures get colder both from south to north and from west to east. Summers can be quite hot, even in Siberia.
+
+&nbsp;  
+
+## **1.4 COVID-19 pandemic in Russia**   
+
+&nbsp;  
+
+The virus was confirmed to have spread to Russia on 31 January 2020, when two Chinese citizens in Tyumen (Siberia) and Chita (Russian Far East) tested positive for the virus, with both cases being contained.
+
+But, by 17 April 2020, cases had been confirmed in all federal subjects. At the beginning of September 2020, the number of COVID-19 cases in Russia reached a million. The number of COVID-19 cases in the country also reached two million on 19 November 2020, three million on 26 December 2020, four million on 10 February 2021, five million on 23 May 2021, six million on 20 July 2021 & seven million on 05 September 2021.
+
+On 3 April 2021, the number of COVID-19 deaths in the country reached 100,000 while the current number is around 198,000 (20 September 2021).
+
+&nbsp; 
+
+
+### **1.4.1 Lock-down Status**   
+
+&nbsp;  
+
+* **March 2020**    
+    * On 27th, all international flights were grounded.
+
+    * On 29th, Mayor of Moscow issued a stay-at-home order starting the next day.
+    * On 30th, similar orders or recommendations were announced in numerous other federal jurisdictions, with many more announcing such restrictions over the next few days.
+    
+    * President Vladimir Putin announced that the week starting from 30th would be a non-working week & urged Russians to stay at home. Later, the non-working period prolonged until 11th of May 2020. 
+
+&nbsp;  
+
+* **April 2020**   
+    * On 11th of April 2020, Mayor of Moscow signed a decree introducing a    digital pass system to enforce the COVID-19 lock-down, in which residents would require such a permit to travel around the city and Moscow Oblast using personal and public transport, with different types of passes including travelling to work, visiting hospitals and clinics, and private trips. Such permits would become mandatory on 15 April.
+    
+    * Russia also indefinitely extended its entry ban for foreigners, which was originally set until 1 May, with Prime Minister Mishustin saying that the ban will be lifted when the corona-virus situation improves.
+
+&nbsp;  
+    
+* **May 2020**   
+    * On 11th, President Putin announced the end of the national non-working period on 12th of May and he also announced additional support measures. He also said that regional leaders can choose to keep restrictions.
+    
+    * On 27th, Mayor of Moscow announced that some restrictions in Moscow would be eased on 1st of June, with all non-food stores and some service sector businesses re-opening and residents would be able to go outside for walks and sport according to a schedule.
+
+&nbsp;      
+     
+* **June 2020**   
+    * On 8th, Moscow's mayor, Sobyanin, said that the city would lift COVID-19 restrictions.
+    
+    * Self-isolation rules and travel permits would be waived on 9th, with no more walking schedules. Residents would be able to freely travel around the city and visit public places. Places like beauty salons, hairdressers and veterinarian clinics would re-open, with other places like restaurants re-opening over the course of June. Residents were still required to wear face masks and gloves and were advised to maintain their distance from others. That day, Prime Minister Mishustin also announced the partial re-opening of the border for some travellers, saying that it would allow citizens to leave the country for work, studying, medical treatment or to take care of relatives. It would also allow foreign citizens to enter for medical treatment or those needing to care for relatives and family.
+    
+    * On 22nd, Moscow's mayor, Sobyanin, announced further easing of restrictions on 23rd of June with cafes and restaurants reopening as well as fitness centres and swimming pools. Restrictions on libraries and kindergartens would be lifted.
+
+&nbsp;    
+
+* **July 2020**    
+    * On 8th, the governor of Moscow Oblast, Andrey Vorobyov, signed a decree easing some restrictions in the region including allowing restaurants, cafes, bars and other catering establishments to reopen from 25th of July as well as a number of other places to reopen from 15th of July.
+    
+    * On 9th, Moscow's authorities announced further easing of some restrictions with cinemas allowed to reopen and concerts allowed to be held from 1st of August provided that they meet certain requirements. Attractions would be able to reopen and restrictions on places like parks and cultural centres would be removed on 13th of July. Universities and schools would also be able to return to normal and the use of face masks and gloves outdoors would no longer be required except in public transport, shops and crowded areas.
+    
+    * On 10th, Tatyana Golikova said that starting on 15th of July, authorities will start to gradually lift restrictions on flights abroad and will begin negotiations to restart international flights.
+    
+    * On 24th, Tatyana Golikova said that the country plans to resume some international flights on 1st of August.
+
+&nbsp;    
+    
+* **June 2021**    
+    * Bars, clubs and restaurants in Moscow will be closed between 11 p.m. and 6 a.m. from 13th to 20th of June.
+   
+    * On 13th, Moscow authorities announced a “non-working week” from 15th to 19th of June in an attempt to curb the growing number of infections. After that, businesses were advised to transfer at least 30% of their unvaccinated to working from home. Universities in Moscow have been advised to switch their students to remote learning by the Science and Higher Education Ministry.
+    
+    * On 18th, Moscow had extended its COVID-19 restrictions until June 29, Mayor Sobyanin announced. Outdoor theaters, playgrounds, food courts, children’s playrooms in malls, and zoos would be remained closed through June 29. Restaurants and bars must close from 11 p.m. to 6 a.m. Theaters, movie theaters, museums and other cultural venues would only be able to serve 1,000 people at a time. Fan zones, dance floors and other venues for mass events would be closed. At least 17 regions of Russia had reintroduced COVID-19 restrictions.
+    
+    * On 23rd,  the republic of Buryatia in Siberia had become the first Russian region to announce a new COVID-19 lock-down, with all non-essential shops and businesses ordered to close from June 27 to July 11.
+    
+    * On 25th, Moscow authorities reimposed work-from-home restrictions as the Russian capital posted a new daily record for COVID-19 deaths due to a surging outbreak of the Delta variant. In a decree published on his website, Mayor Sergei Sobyanin ordered that businesses cut their number of in-office workers by 30% from June 28. Vaccinated employees would be excluded, the decree said, adding that all workers aged over 65 as well as those with pre-existing conditions would have to work from home.
+
+&nbsp;  
+
+* **July 2021**   
+    * On 9th, St. Petersburg authorities would ban gatherings of more than 75 people from 13th of July.
+    
+    * On 13th, the republic of Buryatia in Siberia had lifted its lock-down after becoming the first Russian region to order all non-essential shops and businesses to close from June 27.
+    
+&nbsp;  
+
+
+### **1.4.2 Actions taken by Government**   
+
+&nbsp;  
+    
+* **April 2020**   
+    * On 29th, Mayor of Moscow said on social media that the city would start constructing temporary hospitals that would have a total of 10,000 hospital beds for COVID-19 patients.        
+    
+&nbsp;  
+
+* **June 2020**   
+    *  On 1st, Reuters news agency also reported that Russia would roll out its first approved drug to treat COVID-19 in the next week.
+    
+    * On 2nd, Prime Minister Mikhail Mishustin said that the government would launch a 5 trillion ruble ($73 billion) recovery plan in the next month to counteract the pandemic's economic impact.
+    
+    * On 23 June, President Putin announced changes to the tax system and further state benefits.
+
+&nbsp;      
+    
+* **July 2020**   
+    * On 16th, Reuters reported that 30 million doses of the experimental vaccine would be produced domestically in Russia and the potential for 170 million to be manufactured abroad, according to the head of RDIF, Kirill Dmitriev. He also said that a Phase III trial involving several thousand people is expected to start in August.       
+    
+&nbsp;      
+    
+* **August 2020**    
+    * On 11th, President Putin said in a meeting that the vaccine developed by the **Gamaleya Research Institute of Epidemiology and Microbiology** was the first vaccine against the COVID-19 to be registered. He said that one of his daughters was vaccinated. The previous day, the Association of Clinical Research Organizations, a union of pharmaceutical companies in Russia, urged the head of the Ministry of Health to delay the registration due to incomplete testing. The head of the RDIF stated that 20 countries had requested in total 1 billion doses of the vaccine, nicknamed **Sputnik V**.       
+    
+&nbsp;  
+    
+* **September 2020**    
+    * On 8th, the health ministry's press service said that the first batches of the vaccine developed by the Gamaleya Centre had entered civilian circulation.
+    
+    * On 17th, RBC reported that pharmacies in Russia would begin selling Coronavir and Areplivir for treatment of the virus.
+
+&nbsp;   
+    
+* **October 2020**    
+    * On 14th, **EpiVacCorona** developed by the **VECTOR center of Virology**, the second COVID-19 vaccine produced in Russia, got approved for public vaccination.        
+
+&nbsp;   
+
+* **December 2020**    
+    * Mass vaccination began in December.        
+
+&nbsp;     
+    
+* **February 2021**    
+    * On 20th, **CoviVac**, an inactivated virus-based COVID-19 vaccine developed by the **Chumakov Centre* got approved & became the third vaccine developed in Russia.          
+    
+&nbsp;  
+
+* **May 2021**     
+    * On 6th, Russia registered **Sputnik Light**, a single-dose COVID-19 vaccine  developed by the **Gamaleya Research Institute of Epidemiology and Microbiology**.
+    
+    * On 26th, Russia had started mass vaccination of pets against the COVID-19, the state-run RIA Novosti news agency reported, citing Rosselkhoznadzor representative. **Cornivac-Cov** vaccine, the **world’s first COVID-19 vaccine for pets**, is available in public and private veterinary clinics across several regions of Russia. 
+
+&nbsp;    
+    
+* **June 2021**     
+    * On 30th, Moscow would start offering booster shots of the Sputnik V vaccine for individuals who were vaccinated more than six months ago, Mayor Sergei Sobyanin announced.        
+    
+&nbsp;      
+    
+* **August 2021**       
+    * On 26th, Russia registered its fifth COVID-19 vaccine, **EpiVacCorona-N**, Interfax reported. The Health Ministry said it was an upgrade on the already-approved EpiVacCorona jab, which had been under scrutiny after clinical trial participants raised questions about the vaccine’s effectiveness. Both were developed by the state-run **VECTOR center of Virology**.         
+    
+&nbsp; 
+ 
+# **2 Exploratory Data Analysis**     
+
+&nbsp;  
+
+***(Here, data was available until 2021-05-27)***
+
+&nbsp;  
+
+## **2.1 COVID-19 Quarterly Statistics of Russia**    
+
+&nbsp;  
+
+```{r remove unnecessary columns, include=FALSE}
+russia_corona_location <- select(russia_corona_full, -c(province,lat,long))
+russia_corona_location
+```
+
+```{r pivoting, include=FALSE}
+russia_pivoted <- russia_corona_location %>% 
+  pivot_wider(names_from = type, values_from = cases)
+russia_pivoted
+```
+
+```{r getting total cases for each day, include=FALSE}
+total_values <- russia_pivoted %>% 
+  mutate(total_confirmed = cumsum(confirmed), 
+         total_death = cumsum(death),
+         total_recovered = cumsum(recovered))
+```
+
+```{r getting active cases on each day, include=FALSE}
+active_cases <- total_values %>% 
+  mutate(active = total_confirmed - total_death - total_recovered)
+
+```
+
+```{r confirmed set, include=FALSE}
+confirmed_russia_corona <- russia_corona_location %>% filter(type=="confirmed")
+confirmed_russia_corona
+sum(confirmed_russia_corona$cases)
+
+confirmed_numbers <- select(confirmed_russia_corona, cases)
+confirmed_numbers
+```
+
+```{r death set, include=FALSE}
+death_russia_corona <- russia_corona_location %>% filter(type=="death")
+death_russia_corona
+
+death_numbers <- select(death_russia_corona, cases)
+death_numbers
+```
+
+```{r recovered set, include=FALSE}
+recovered_russia_corona <- russia_corona_location %>% filter(type=="recovered")
+recovered_russia_corona
+
+recovered_numbers <- select(recovered_russia_corona, cases)
+recovered_numbers
+```
+
+```{r active set, include=FALSE}
+active_russia_corona <- select(active_cases, c("date","active"))
+active_russia_corona
+
+```
+
+```{r 1st quarter of 2020, include=FALSE}
+first_2020_confirmed <- confirmed_russia_corona %>% 
+  filter(date >= "2020-01-01" & date <= "2020-03-31")
+first_2020_confirmed
+sum_first_2020_confirmed <- sum(first_2020_confirmed$cases)
+
+first_2020_death <- death_russia_corona %>% 
+  filter(date >= "2020-01-01" & date <= "2020-03-31")
+first_2020_death
+sum_first_2020_death <- sum(first_2020_death$cases)
+
+first_2020_recovered <- recovered_russia_corona %>% 
+  filter(date >= "2020-01-01" & date <= "2020-03-31")
+first_2020_recovered
+sum_first_2020_recovered <- sum(first_2020_recovered$cases)
+
+first_2020_active <- active_russia_corona %>% 
+  filter(date >= "2020-01-01" & date <= "2020-03-31")
+first_2020_active
+first_2020_active_num_chr <- first_2020_active[first_2020_active$date == "2020-03-31", ] %>% 
+  select(active)
+first_2020_active_num <- as.integer(first_2020_active_num_chr)
+
+```
+
+```{r 2nd quarter of 2020, include=FALSE}
+second_2020_confirmed <- confirmed_russia_corona %>% 
+  filter(date >= "2020-04-01" & date <= "2020-06-30")
+second_2020_confirmed
+sum_second_2020_confirmed <- sum(second_2020_confirmed$cases)
+
+second_2020_death <- death_russia_corona %>% 
+  filter(date >= "2020-04-01" & date <= "2020-06-30")
+second_2020_death
+sum_second_2020_death <- sum(second_2020_death$cases)
+
+second_2020_recovered <- recovered_russia_corona %>% 
+  filter(date >= "2020-04-01" & date <= "2020-06-30")
+second_2020_recovered
+sum_second_2020_recovered <- sum(second_2020_recovered$cases)
+
+second_2020_active <- active_russia_corona %>% 
+  filter(date >= "2020-04-01" & date <= "2020-06-30")
+second_2020_active
+second_2020_active_num_chr <- second_2020_active[second_2020_active$date == "2020-06-30", ] %>% 
+  select(active)
+second_2020_active_num <- as.integer(second_2020_active_num_chr)
+
+```
+
+```{r 3rd quarter of 2020, include=FALSE}
+third_2020_confirmed <- confirmed_russia_corona %>% 
+  filter(date >= "2020-07-01" & date <= "2020-09-30")
+third_2020_confirmed
+sum_third_2020_confirmed <- sum(third_2020_confirmed$cases)
+
+third_2020_death <- death_russia_corona %>% 
+  filter(date >= "2020-07-01" & date <= "2020-09-30")
+third_2020_death
+sum_third_2020_death <- sum(third_2020_death$cases)
+
+third_2020_recovered <- recovered_russia_corona %>% 
+  filter(date >= "2020-07-01" & date <= "2020-09-30")
+third_2020_recovered
+sum_third_2020_recovered <- sum(third_2020_recovered$cases)
+
+third_2020_active <- active_russia_corona %>% 
+  filter(date >= "2020-07-01" & date <= "2020-09-30")
+third_2020_active
+third_2020_active_num_chr <- third_2020_active[third_2020_active$date == "2020-09-30", ] %>% 
+  select(active)
+third_2020_active_num <- as.integer(third_2020_active_num_chr)
+
+```
+
+```{r 4th quarter of 2020, include=FALSE}
+fourth_2020_confirmed <- confirmed_russia_corona %>% 
+  filter(date >= "2020-10-01" & date <= "2020-12-31")
+fourth_2020_confirmed
+sum_fourth_2020_confirmed <- sum(fourth_2020_confirmed$cases)
+
+fourth_2020_death <- death_russia_corona %>% 
+  filter(date >= "2020-10-01" & date <= "2020-12-31")
+fourth_2020_death
+sum_fourth_2020_death <- sum(fourth_2020_death$cases)
+
+fourth_2020_recovered <- recovered_russia_corona %>% 
+  filter(date >= "2020-10-01" & date <= "2020-12-31")
+fourth_2020_recovered
+sum_fourth_2020_recovered <- sum(fourth_2020_recovered$cases)
+
+fourth_2020_active <- active_russia_corona %>% 
+  filter(date >= "2020-10-01" & date <= "2020-12-31")
+fourth_2020_active
+fourth_2020_active_num_chr <- fourth_2020_active[fourth_2020_active$date == "2020-12-31", ] %>% 
+  select(active)
+fourth_2020_active_num <- as.integer(fourth_2020_active_num_chr)
+
+```
+
+```{r 1st quarter of 2021, include=FALSE}
+first_2021_confirmed <- confirmed_russia_corona %>% 
+  filter(date >= "2021-01-01" & date <= "2021-03-31")
+first_2021_confirmed
+sum_first_2021_confirmed <- sum(first_2021_confirmed$cases)
+
+first_2021_death <- death_russia_corona %>% 
+  filter(date >= "2021-01-01" & date <= "2021-03-31")
+first_2021_death
+sum_first_2021_death <- sum(first_2021_death$cases)
+
+first_2021_recovered <- recovered_russia_corona %>% 
+  filter(date >= "2021-01-01" & date <= "2021-03-31")
+first_2021_recovered
+sum_first_2021_recovered <- sum(first_2021_recovered$cases)
+
+first_2021_active <- active_russia_corona %>% 
+  filter(date >= "2021-01-01" & date <= "2021-03-31")
+first_2021_active
+first_2021_active_num_chr <- first_2021_active[first_2021_active$date == "2021-03-31", ] %>% 
+  select(active)
+first_2021_active_num <- as.integer(first_2021_active_num_chr)
+
+```
+
+```{r 2nd quarter of 2021, include=FALSE}
+second_2021_confirmed <- confirmed_russia_corona %>% 
+  filter(date >= "2021-04-01" & date <= "2021-05-27")
+second_2021_confirmed
+sum_second_2021_confirmed <- sum(second_2021_confirmed$cases)
+
+second_2021_death <- death_russia_corona %>% 
+  filter(date >= "2021-04-01" & date <= "2021-05-27")
+second_2021_death
+sum_second_2021_death <- sum(second_2021_death$cases)
+
+second_2021_recovered <- recovered_russia_corona %>% 
+  filter(date >= "2021-04-01" & date <= "2021-05-27")
+second_2021_recovered
+sum_second_2021_recovered <- sum(second_2021_recovered$cases)
+
+second_2021_active <- active_russia_corona %>% 
+  filter(date >= "2021-04-01" & date <= "2021-05-27")
+second_2021_active
+second_2021_active_num_chr <- second_2021_active[second_2021_active$date == "2021-05-27", ] %>% 
+  select(active)
+second_2021_active_num <- as.integer(second_2021_active_num_chr)
+```
+
+```{r quarterly table, echo=FALSE, message=FALSE, warning=FALSE}
+quarterly_corona <- data.frame(Quarter = c("Jan 2020 - Mar 2020", "Apr 2020 - Jun 2020", "Jul 2020 - Sep 2020", "Oct 2020 - Dec 2020", "Jan 2021 - Mar 2021", "Apr 2021 - Jun 2021", "Total"), 
+                               Confirmed = c(sum_first_2020_confirmed, sum_second_2020_confirmed, sum_third_2020_confirmed, sum_fourth_2020_confirmed, sum_first_2021_confirmed, sum_second_2021_confirmed, sum(confirmed_russia_corona$cases)),
+                               Deaths = c(sum_first_2020_death, sum_second_2020_death, sum_third_2020_death, sum_fourth_2020_death, sum_first_2021_death, sum_second_2021_death, sum(death_russia_corona$cases)),
+                               Recovered = c(sum_first_2020_recovered, sum_second_2020_recovered, sum_third_2020_recovered, sum_fourth_2020_recovered, sum_first_2021_recovered, sum_second_2021_recovered, sum(recovered_russia_corona$cases)),
+                               Active = c(first_2020_active_num, second_2020_active_num, third_2020_active_num, fourth_2020_active_num, first_2021_active_num, second_2021_active_num, "-"))
+                               
+
+
+quarterly_corona %>% 
+  kbl(caption = "Quarterly Distribution of COVID-19 cases in Russia") %>%
+  kable_styling(position = "center") %>%
+  row_spec(7, background = "#D6DBDF")
+
+```
+
+&nbsp;  
+
+## **2.2 COVID-19 Data Visualization of Russia**    
+
+&nbsp;  
+
+```{r visualization of confirmed cases, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+
+p1 <- ggplot(confirmed_russia_corona, 
+       aes(x=date, y=cases)) + 
+  geom_line() + 
+  ggtitle("Daily Cases: Russia") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold",  hjust = 0.5))
+
+p1_1 <- ggplotly(p1) %>%
+  config(displayModeBar = FALSE)
+
+div(p1_1, align = "center")
+```
+
+We can see that there was an increase in number of COVID-19 cases in Russia around May 2020. But then there was a small decline. But the second wave was bigger than the first wave & reached its peak around December last year. As of 27 - 05 - 2021, the number of confirmed cases had declined & seems steady.
+
+&nbsp;
+
+```{r visualization of confirmed cases & deaths & recoveries & active, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+p2 <- ggplot(russia_corona_full, 
+       aes(x=date, y=cases, col = type)) + 
+  geom_line() +
+  ggtitle("Daily Confirmed Cases, Deaths & Recoveries: Russia") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p2_1 <- ggplotly(p2) %>%
+  config(displayModeBar = FALSE)
+
+div(p2_1, align = "center")
+
+```
+
+&nbsp;  
+
+```{r total cases plots of Russia, echo=FALSE, fig.align='center'}
+df_russia <- select(russia_corona_full, c(type, cases))
+
+confirmed <- sum(confirmed_russia_corona$cases)
+
+death <- sum(death_russia_corona$cases)
+
+recovered <- sum(recovered_russia_corona$cases)
+
+df_numbers <- data.frame(Type = c("Confirmed", "Death", "Recovered"),
+                         Cases = c(confirmed, death, recovered))
+
+p3 <- ggplot(df_numbers,
+       aes(x = Type, y = Cases, fill = Type )) +
+  geom_bar(stat = "identity") +
+  ggtitle("Total Confirmed Cases, Deaths & Recoveries: Russia") +
+  labs(x = "Type", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p3_1 <- ggplotly(p3) %>%
+  config(displayModeBar = FALSE)
+
+div(p3_1, align = "center")
+```
+
+Here, we can see that the number of deaths are relatively very low compared to the number of confirmed cases & the number of recoveries. The recovery rate is very high which is a positive point.
+
+&nbsp;    
+
+## **2.3 COVID-19 Comparison between Russia, Bangladesh, Mexico**    
+
+&nbsp;
+
+This is a comparison of COVID-19 data between Russia, Bangladesh & Mexico. I've selected Bangladesh & Mexico because, according to the worldometer website, these two countries are ranked at number 8 & number 10 by population while Russia is ranked at number 9.
+
+&nbsp;  
+
+```{r obtain data of Bangladesh & Mexico, message=FALSE, warning=FALSE, include=FALSE}
+
+bd_corona <- coronavirus %>% 
+  filter (country == "Bangladesh") %>%
+  select(-c(province,lat,long))
+
+summary(bd_corona) ##since there are no negative values in number of cases, we can move forward
+
+mexico_corona <- coronavirus %>% 
+  filter (country == "Mexico") %>%
+  select(-c(province,lat,long))
+
+summary(mexico_corona) ##since there are negative values in cases, we can get absolute values of those numbers (-88158 can be considered data entry mistake)
+
+mexico_corona <- mexico_corona %>%
+  mutate(cases = abs(cases))
+```
+
+```{r confirmed sets of Bangladesh & Mexico, message=FALSE, warning=FALSE, include=FALSE}
+confirmed_bd_corona <- bd_corona %>% 
+  filter(type=="confirmed")
+confirmed_bd_corona
+
+
+confirmed_mexico_corona <- mexico_corona %>% 
+  filter(type=="confirmed")
+confirmed_mexico_corona
+
+```
+
+```{r death sets of Bangladesh & Mexico, message=FALSE, warning=FALSE, include=FALSE}
+death_bd_corona <- bd_corona %>% 
+  filter(type=="death")
+death_bd_corona
+
+death_mexico_corona <- mexico_corona %>% 
+  filter(type=="death")
+death_mexico_corona
+
+```
+
+```{r combine dataframes of popln, message=FALSE, warning=FALSE, include=FALSE}
+
+combined_confirmed_popln <- rbind(confirmed_russia_corona, 
+                            confirmed_bd_corona, 
+                            confirmed_mexico_corona)
+
+combined_death_popln <- rbind(death_russia_corona,
+                        death_bd_corona,
+                        death_mexico_corona)
+
+```
+
+```{r creating a data frame for Russia &  Bangladesh & Mexico, include=FALSE}
+df_popln <- data.frame(Type = c("Deaths", "Confirmed"),
+                            Russia = c(sum(death_russia_corona$cases),
+                                       sum(confirmed_russia_corona$cases)),
+                            Bangladesh = c(sum(death_bd_corona$cases),
+                                        sum(confirmed_bd_corona$cases)),
+                            Mexico = c(sum(death_mexico_corona$cases),
+                                        sum(confirmed_mexico_corona$cases))) %>%
+  pivot_longer(2:4, "Country", "value")
+
+```
+
+```{r confirmed cases visualize comparison with Bangladesh & Mexico, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+
+p4 <- ggplot(combined_confirmed_popln, 
+       aes(x=date, y=cases, col = country)) + 
+  geom_line() + 
+  ggtitle("Daily Cases: A Comparison between RUS, BAN & MEX") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+
+p4_1 <- ggplotly(p4) %>%
+  config(displayModeBar = FALSE)
+
+div(p4_1, align = "center")
+```
+
+We can see that Russia has recorded more number of cases than Mexico & Bangladesh. But by the mid of July, 2020, Mexico overtook Russia while Bangladesh recorded a relatively smaller number of daily cases. Mexico has recorded a huge spike on early October, 2020. Russia's numbers in the second wave were higher than the numbers of Mexico at that time. Bangladesh's cases were low comparatively.
+
+&nbsp;  
+
+```{r deaths visualize ccomparison with Bangladesh & Mexico, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+p5 <- ggplot(combined_death_popln, 
+       aes(x=date, y=cases, col = country)) + 
+  geom_line() + 
+  ggtitle("Daily Deaths: A Comparison between RUS, BAN & MEX") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p5_1 <- ggplotly(p5) %>%
+  config(displayModeBar = FALSE)
+
+div(p5_1, align = "center")
+```
+
+Daily umber of deaths of Mexico were clearly higher than Russia & Bangladesh. Mexico recorded a couple of big spikes while Bangladesh managed to keep their curve almost flat.
+
+&nbsp;  
+
+```{r bar graph of Russia & Bangladesh & Mexico, echo=FALSE, fig.align='center'}
+
+p6 <- ggplot(df_popln,
+       aes(x = Country, y = value, fill = Type)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  ggtitle("Total Cases & Deaths: A Comparison between RUS, BAN & MEX") +
+  labs(x = "Country", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p6_1 <- ggplotly(p6) %>%
+  config(displayModeBar = FALSE)
+
+div(p6_1, align = "center")
+```
+
+&nbsp;  
+
+## **2.4 COVID-19 Comparison between Russia's Neighbouring Countries **    
+
+&nbsp;  
+
+This is a comparison between Russia's neighbouring countries. Russia share a border with Norway, Finland, Estonia, Latvia, Lithuania, Poland, Belarus, Ukraine, Georgia, Azerbaijan, Kazakhstan, China, Mongolia & North Korea. Illegal border crossings could be a reason for the virus spread. Hence, it is important to analyze these countries.
+
+But since some small countries are listed here, let's consider the countries with most number of cases closer to that of Russia's as of 24 - 09 - 2021 according to the worldometer website.
+
+In the data set, the data for North Korea was not available. If we consider other countries, Ukraine & Poland has the most number of cases among Russian neighbours. ***(as of 26 - 05 - 2021)***
+
+&nbsp;
+
+```{r obtain data of Ukraine & Poland, message=FALSE, warning=FALSE, include=FALSE}
+
+ukraine_corona <- coronavirus %>% 
+  filter (country == "Ukraine") %>%
+  select(-c(province,lat,long)) ##since there are no negative values in number of cases, we can move forward
+
+summary(ukraine_corona) 
+
+poland_corona <- coronavirus %>% 
+  filter (country == "Poland") %>%
+  select(-c(province,lat,long))
+
+summary(poland_corona) ##since there are negative values in cases, we can get absolute values of those numbers (-2637 can be considered data entry mistake)
+
+poland_corona <- poland_corona %>%
+  mutate(cases = abs(cases))
+
+
+```
+
+```{r confirmed sets of Ukraine & Poland, message=FALSE, warning=FALSE, include=FALSE}
+confirmed_ukraine_corona <- ukraine_corona %>% 
+  filter(type=="confirmed")
+confirmed_ukraine_corona
+
+
+confirmed_poland_corona <- poland_corona %>% 
+  filter(type=="confirmed")
+confirmed_poland_corona
+
+```
+
+```{r death sets of Ukraine & Poland, message=FALSE, warning=FALSE, include=FALSE}
+death_ukraine_corona <- ukraine_corona %>% 
+  filter(type=="death")
+death_ukraine_corona
+
+death_poland_corona <- poland_corona %>% 
+  filter(type=="death")
+death_poland_corona
+
+
+```
+
+```{r combine dataframes of neighbours, message=FALSE, warning=FALSE, include=FALSE}
+
+combined_confirmed_neighbours <- rbind(confirmed_russia_corona, 
+                            confirmed_ukraine_corona, 
+                            confirmed_poland_corona)
+
+combined_death_neighbours <- rbind(death_russia_corona,
+                        death_ukraine_corona,
+                        death_poland_corona)
+
+```
+
+```{r creating a data frame for Russia & Ukraine & Poland, include=FALSE}
+df_neighbours <- data.frame(Type = c("Deaths", "Confirmed"),
+                            Russia = c(sum(death_russia_corona$cases),
+                                       sum(confirmed_russia_corona$cases)),
+                            Ukraine = c(sum(death_ukraine_corona$cases),
+                                        sum(confirmed_ukraine_corona$cases)),
+                            Poland=c(sum(death_poland_corona$cases), 
+                                sum(confirmed_poland_corona$cases))) %>%
+  pivot_longer(2:4, "Country", "value")
+
+```
+
+```{r confirmed cases visualize ccomparison with Ukraine & Poland, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+
+p7 <- ggplot(combined_confirmed_neighbours, 
+       aes(x=date, y=cases, col = country)) + 
+  geom_line() + 
+  ggtitle("Daily Cases: A Comparison between RUS, UKR & POL") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p7_1 <- ggplotly(p7) %>%
+  config(displayModeBar = FALSE)
+
+div(p7_1, align = "center")
+
+```
+
+Even though Russia recorded the most number of cases at the beginning, there are spikes in number of cases in Ukraine & Poland together with Russia around mid September, 2021 . Poland's daily number of cases surpassed that of Russia's around late October 2020. Then around mid February this year, both Poland & Ukraine faced their second waves where both countries' daily cases surpassed that of Russia's during a couple of weeks.
+
+&nbsp;  
+
+```{r deaths visualize comparison with Ukraine & Kazakhstan, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+p8 <- ggplot(combined_death_neighbours, 
+       aes(x=date, y=cases, col = country)) + 
+  geom_line() + 
+  ggtitle("Daily Deaths: A Comparison between RUS, UKR & POL") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5),
+        legend.position = "bottom")
+
+p8_1 <- ggplotly(p8) %>%
+  config(displayModeBar = FALSE)
+
+div(p8_1, align = "center")
+```
+
+Poland's daily number of deaths were varying between 50 & 1000 for a couple of months. Ukraine's numbers went past Russia's around late March- early April this year although the total number of deaths of Russia is much higher. 
+
+&nbsp;  
+
+```{r bar graph of Russia & Ukraine & Kazakhstan, echo=FALSE, fig.align='center'}
+
+p9 <- ggplot(df_neighbours,
+       aes(x = Country, y = value, fill = Type)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  ggtitle("Total Cases & Deaths: A Comparison between RUS, UKR & POL") +
+  labs(x = "Country", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p9_1 <- ggplotly(p9) %>%
+  config(displayModeBar = FALSE)
+
+div(p9_1, align = "center")
+
+```
+
+&nbsp;  
+
+## **2.5 COVID-19 Comparison between Russia, Germany, Iran**    
+
+&nbsp;
+
+This is a comparison of COVID-19 data between Russia, Germany & Iran. I've selected Germany & Iran because they have closer number of confirmed cases per 1 million people to Russia. Russia recorded 50,670 cases per 1 million people while Germany & Iran recorded 49,944 & 64,697 cases respectively (other countries that were closer to Russia had recorded relatively very small number of cases). 
+
+**(Data considered until 26 - 09 - 2021 & data were available until 27 - 05 - 2021)**
+
+&nbsp;  
+
+```{r obtain data of Germany & Iran, message=FALSE, warning=FALSE, include=FALSE}
+
+germany_corona <- coronavirus %>% 
+  filter (country == "Germany") %>%
+  select(-c(province,lat,long))
+
+summary(germany_corona) ##since there are negative values in cases, we can get absolute values of those numbers (-31 can be considered data entry mistake)
+germany_corona <- germany_corona %>%
+  mutate(cases = abs(cases))
+
+iran_corona <- coronavirus %>% 
+  filter (country == "Iran") %>%
+  select(-c(province,lat,long))
+
+summary(iran_corona) ##since there are no negative values in number of cases, we can move forward
+```
+
+```{r confirmed sets of Germany & Iran, message=FALSE, warning=FALSE, include=FALSE}
+confirmed_germany_corona <- germany_corona %>% 
+  filter(type=="confirmed")
+confirmed_germany_corona
+
+
+confirmed_iran_corona <- iran_corona %>% 
+  filter(type=="confirmed")
+confirmed_iran_corona
+
+```
+
+```{r death sets of Germany & Iran, message=FALSE, warning=FALSE, include=FALSE}
+death_germany_corona <- germany_corona %>% 
+  filter(type=="death")
+death_germany_corona
+
+death_iran_corona <- iran_corona %>% 
+  filter(type=="death")
+death_iran_corona
+
+```
+
+```{r combine dataframes of close cases, message=FALSE, warning=FALSE, include=FALSE}
+
+combined_confirmed_close <- rbind(confirmed_russia_corona, 
+                            confirmed_germany_corona, 
+                            confirmed_iran_corona)
+
+combined_death_close <- rbind(death_russia_corona,
+                        death_germany_corona,
+                        death_iran_corona)
+
+```
+
+```{r creating a data frame for Russia & Germany & Iran, include=FALSE}
+df_close <- data.frame(Type = c("Deaths", "Confirmed"),
+                            Russia = c(sum(death_russia_corona$cases),
+                                       sum(confirmed_russia_corona$cases)),
+                            Germany=c(sum(death_germany_corona$cases),
+                                    sum(confirmed_germany_corona$cases)),
+                            Iran=c(sum(death_iran_corona$cases),
+                                   sum(confirmed_iran_corona$cases))) %>%
+  pivot_longer(2:4, "Country", "value")
+
+```
+
+```{r confirmed cases visualize comparison with Germany & Iran, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+
+p10 <- ggplot(combined_confirmed_close, 
+       aes(x=date, y=cases, col = country)) + 
+  geom_line() + 
+  ggtitle("Daily Cases: A Comparison between RUS, GER & IRN") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+
+p10_1 <- ggplotly(p10) %>%
+  config(displayModeBar = FALSE)
+
+div(p10_1, align = "center")
+```
+
+We can see that Germany recorded a higher number of cases than Russia at the beginning but then there is a drop. South Africa's number of cases were almost steady until October 2020. All three countries had an increase in numbers around late October 2020. Since November 2020, there were some big spikes in Germany's numbers that went past Russia regularly. Iran's numbers went past Russia's around late March 2021.
+
+&nbsp;  
+
+```{r deaths visualize ccomparison with Germany & Iran, echo=FALSE, fig.align='center', message=FALSE, warning=FALSE}
+p11 <- ggplot(combined_death_close, 
+       aes(x=date, y=cases, col = country)) + 
+  geom_line() + 
+  ggtitle("Daily Deaths: A Comparison between RUS, GER & IRN") +
+  labs(x = "Date", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p11_1 <- ggplotly(p11) %>%
+  config(displayModeBar = FALSE)
+
+div(p11_1, align = "center")
+```
+
+Again, the graphs look almost similar with few more spikes. Here, the Iran's curve is wavy compared to their confirmed cases curve. Germany recorded over 1,500 daily deaths around mid January.
+
+&nbsp;  
+
+```{r bar graph of Russia & Germany & Iran, echo=FALSE, fig.align='center'}
+
+p12 <- ggplot(df_close,
+       aes(x = Country, y = value, fill = Type)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  ggtitle("Total Cases & Deaths: A Comparison between RUS, GER & IRN") +
+  labs(x = "Country", y = "Number of Cases") +
+  theme(plot.title =  element_text(color = "#1F618D", size = 14, face = "bold", hjust = 0.5))
+
+p12_1 <- ggplotly(p12) %>%
+  config(displayModeBar = FALSE)
+
+div(p12_1, align = "center")
+```
+
+&nbsp;  
+
+# **3 Conclusions & Discussion**    
+
+&nbsp;  
+
+We can see that Russia is one of the leading countries that harshly affected by the COVID-19 pandemic. Even though they controlled the first wave fairly well, the second wave hit them very badly. As of 26 - 09 - 2021, Russia is ranked at number five in most COVID-19 cases & most COVID-19 deaths.
+
+
+Russia has currently developed five COVID-19 vaccines. Government has currently taken action to vaccinate the population. But still most of the people are hesitant to get vaccinated. Government is taking extra efforts to make people aware of the pros of getting vaccinated.
+
+*(Here in the data set, data was available only until 27 - 05 - 2021. There were some negative values in number of cases & I decided to take the absolute values of them considering them as data entry mistakes.)*
+
+&nbsp;  
+
+
+# **4 References**   
+
+&nbsp;  
+
+* Russia (2021). Available at: https://en.wikipedia.org/wiki/Russia (Accessed: 20 September 2021)
+
+* COVID-19 pandemic in Russia (2021). Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Russia (Accessed: 20 September 2021)
+
+* Coronavirus: Russia (2021). Available at: https://www.worldometers.info/coronavirus/country/russia/ (Accessed: 20 September 2021)
+
+* Russia (2021). Available at: https://en.wikipedia.org/wiki/Russia (Accessed: 20 September 2021)
+
+* Grishkin, D. (2021) *Coronavirus in Russia: The Latest News | Sept. 19*. Available at: https://www.themoscowtimes.com/2021/09/19/coronavirus-in-russia-the-latest-news-sept-19-a69117 (Accessed: 20 September 2021)
+
+* Countries in the world by population (2021). Available at: https://www.worldometers.info/world-population/population-by-country/ (Accessed: 24 September 2021)
+
+* COVID-19 CORONAVIRUS PANDEMIC (2021). Available at:
+https://www.worldometers.info/coronavirus/ (Accessed: 26 September 2021)
+
+* Russian Flag: National Symbolics of Russia - Flag. Available at: https://www.advantour.com/russia/flag.htm (Accessed: 27 September 2021)
+
+* Vodovozov, S. (2021). *Russia* Available at: https://www.britannica.com/place/Russia (Accessed: 27 September 2021)
+
+&nbsp;  
+

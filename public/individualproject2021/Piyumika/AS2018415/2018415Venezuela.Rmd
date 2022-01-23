@@ -1,0 +1,261 @@
+---
+title: "Venezuela COVID-19 Pandemic"
+author: "AS2018415"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+# 1.Introduction
+
+Venezuela is a country on the northern coast of South America with diverse natural attractions.The COVID-19 pandemic in Venezuela is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first two cases in Venezuela were confirmed on 13 March 2020 and the first death was reported on 26 March.
+
+![People in Venezuela crisis mode, struggles to fight coronavirus](https://www.aljazeera.com/wp-content/uploads/2020/03/449475c8f021461eb1703ed25656819a_18.jpeg?resize=770%2C513)
+
+### 1.1 Visualization of the location
+
+Venezuela is located on the northern coast of South America, between 0 degrees 5’ and 12 degrees 15 N, and 59 degrees 45’ and 73 degrees 09 W. It covers 352,150 square miles. The capital, Caracas, is situated in the magnificent Avila Mountains on the north coast at about 2,700 feet above sea level, giving the city a permanent springtime climate.
+
+
+
+```{r,comment = NA,message = FALSE,warning = FALSE,echo = FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+library(coronavirus)
+data(coronavirus)
+venezuela_corona <- coronavirus %>% filter(country == "Venezuela")
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = venezuela_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+### 1.2 Climate condition
+
+The Climate of Venezuela is characterized for being tropical and isothermal as a result of its geographical location near the Equator, but because of the topography and the dominant wind direction, several climatic types occur which can be the same as found in temperate latitudes, and even polar regions. Latitude exerts little influence on the Venezuelan While the coastal cities of Maracaibo, Barcelona, Porlamar and Maiquetia can get extremely hot, cities located at valleys such as Mérida, Caracas, Los Teques and San Cristobal have cooler climates, and the highest towns of Mucuchies and Apartaderos have cold (tundra) climates.
+
+The hottest part of Venezuela is the northwest (Paraguana Peninsula and Guajira Peninsula), where temperatures of more than 38 °C (100 °F) are frequently recorded. The coldest part in the country are located in the highest areas of the Cordillera de Mérida, where temperatures lower than −2 °C (28 °F) are recorded. The Venezuelan Coastal Range and Guiana Highlands have average temperatures from 25 °C (77 °F) to 11 °C (52 °F), while the Llanos average temperature is over 23 °C (73 °F).
+
+The highest temperature recorded was 42 °C (108 °F) in Machiques,and the lowest temperature recorded was −11 °C (12 °F), it has been reported from an uninhabited high altitude at Páramo de Piedras Blancas (Mérida state), even though no official reports exist, lower temperatures in the mountains of the Sierra Nevada de Mérida are known.
+
+```{r, echo = FALSE, out.width = "50%", out.height = "50%"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/ClimateZones_Venezuela.png/1024px-ClimateZones_Venezuela.png")
+```
+
+### 1.3 Lock-down status of Venezuela
+
+#### Timeline of 2020
+
+Venezuela reported its first official cases of coronavirus disease on 13 March 2020. The first cases, two on 13 March, were registered in the state of Miranda. Colombian president Iván Duque closed the border with Venezuela effective from the next day. On 14 March, the official number of cases rose by eight (to ten), and had spread across four states (Miranda, Apure, Aragua and Cojedes).  Communication Minister Jorge Rodríguez announced that flights from Panama and the Dominican Republic to the country would be suspended for 30 days, beginning on 15 March.
+Stay-at-home orders were announced on 15 March, when the country registered another seven cases, and introduced the next day across six states and the Caracas area. The orders were dubbed "collective quarantine”. On 16 March, that the president of Venezuela, Nicolás Maduro announced that sixteen new cases were confirmed, bringing the total to 33. Based on this, the quarantine to the entire country was extended. The first confirmed death from the disease was announced on 26 March.
+Due to there were more recoveries than new infections in Venezuela on 11 April, the president  announced an extension of the national quarantine and state of alarm for 30 days. After a sudden rise of the number of cases in Margarita Island, the president announced a curfew the entire state of Nueva Esparta on 19 April.  On 12 May, extended the lockdown for 30 more days. The restrictions to national flights were also extended 30 days. The easing of the lockdown started on 1 June, with gyms and shopping centers opening. Schools, courts and bars remain closed.The state of alarm was extended a third time for an additional month on 12 June.
+
+#### Timeline of 2021 (Vaccination)
+In February 2021, Venezuela started vaccinating health care workers with the Russian Sputnik V COVID-19 vaccine and started using a vaccine produced by the Chinese company Sinopharm. It aimed to vaccinate 70 percent of the population by the end of 2021.
+
+### 1.4 Actions taken by the government  
+
+The Venezuelan government has announced an extension of the nationwide lockdown, in place to limit the spread of the coronavirus disease (COVID-19), until July 12. Local quarantines and bans on interstate movement are in place. Educational institutions and non-essential shops are to remain closed, and public gatherings are prohibited. Face masks must be worn at all times when not at home, and only one member per household is permitted to leave the house for essential purposes.
+
+To reduce the risk of transmission, travelers are advised to abide by the following measures:
+
+* Frequently clean hands by applying an alcohol-based hand rub or washing with soap and water.
+
+* When coughing and sneezing, cover mouth and nose with a flexed elbow or tissue; if used, throw the tissue away immediately and wash hands.
+
+* If experiencing a fever, cough, difficulty breathing, or any other symptoms suggestive of respiratory illness, including pneumonia, call emergency services before going to the doctor or hospital to prevent the potential spread of the disease.
+
+# 2.Exploratory Data Analysis
+
+*The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset* is used to analyze the data which is available in Rstudio packages. It contains daily summary of the Coronavirus (COVID-19) cases (confirmed, death, and recovered) by state/province. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website.
+The data frame contains 7 variables. 
+
+* Date - YYYY-MM-DD format
+
+* Province - Name of province/state
+
+* Country - Name of country/region
+
+* Lat - Latitude of center of geographic region
+
+* Long - Longitude of center of geographic region
+
+* Type - An indicator for the type of cases (confirmed, death, recovered)
+
+* Cases - Number of cases on given date
+
+The data were obtained from the period of 22nd of January 2020 to 18th of September 2021.
+
+
+```{r,include=FALSE}
+venezuela_corona[venezuela_corona < 0]
+venezuela_corona$cases <- abs(venezuela_corona$cases)
+venezuela_corona
+view(venezuela_corona)
+filter(venezuela_corona, cases >=0)
+view(filter(venezuela_corona, cases >=0))
+
+new_venezuela_corona <- filter(venezuela_corona, cases >=0)
+new_venezuela_corona
+view(new_venezuela_corona)
+```
+```{r,comment=NA}
+summary(new_venezuela_corona)
+```
+
+### 2.1 Death Cases
+
+
+```{r,comment = NA, message=FALSE, echo=FALSE,}
+death_new_venezuela_corona <- filter(new_venezuela_corona,type == "death")
+ggplot(death_new_venezuela_corona, aes(x=date, y=cases))+ geom_line() + ggtitle("Figure 01 :- COVID-19 death cases in Venezuela")
+```
+
+
+Figure 01 shows that till the end of February 2020, no death cases have been reported. The daily number of death cases had not topped ten by the end of March. Until March 2021, the number of reported death cases per day was below 20. However, the number of death cases surged after that, with more than 30 instances reported daily on several days in August and September.
+
+
+### 2.2 Confirmed Cases
+
+```{r,comment = NA, message=FALSE, echo=FALSE}
+confirmed_new_venezuela_corona <- filter(new_venezuela_corona,type == "confirmed")
+ggplot(confirmed_new_venezuela_corona, aes(x=date, y=cases))+ geom_line() + ggtitle("Figure 02 :- COVID-19 confirmed cases in Venezuela")
+```
+
+
+Figure 02 shows that no confirmed cases have been recorded since the beginning of February 2020. The number of confirmed cases reported on a daily basis rapidly grew after then. Figure 02 shows that over 1000 confirmed cases had been reported by September 2020. However, it progressively reduced to roughly 500 after that. The number of confirmed cases grew to over 1000 by February 2021. Then, after April 2021, there were days when there were more than 2000 cases reported, as well as days when there were none.
+
+
+### 2.3 Recovered Cases
+
+```{r,comment = NA, message=FALSE, echo=FALSE}
+recovered_new_venezuela_corona <- filter(new_venezuela_corona,type == "recovered")
+ggplot(recovered_new_venezuela_corona, aes(x=date, y=cases))+ geom_line() + ggtitle("Figure 03 :- COVID-19 recovered cases in Venezuela")
+```
+
+
+Since March 2020, there have been no recovered cases, as shown in Figure 3. Then it gradually increased, with more cases being recorded after July. It was once again reduced, with less than 1000 recovered cases reported from September 2020 to March 2021. Then the number of recovered cases grew again.
+
+### 2.4 Death cases, COnfirmed cases & Recovered cases  
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+ggplot(new_venezuela_corona,aes(date,cases,color=type),is.na=FALSE)+geom_line()+ggtitle("Figure 04 :- Daily COVID-19 status in Venezuela")
+```
+
+
+### 2.5 Comparison with other countries
+
+This world map can show us which countries were considered in this study. Venezuela is surrounded by the following countries.
+
+```{r, comment = NA,message = FALSE,warning = FALSE,echo = FALSE}
+pivot_corona <- coronavirus %>%
+pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+compare_corona <- coronavirus %>% filter(country == c("Venezuela", "Brazil", "Colombia", "Panama"))
+
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = compare_corona, aes(x = long, y = lat, col = country), size
+    = 1
+  )
+```
+
+
+
+```{r, include=FALSE}
+unique(coronavirus$country)
+brazil_corona<-coronavirus%>%filter(country=="Brazil")
+colombia_corona<-coronavirus%>%filter(country=="Colombia")
+panama_corona<-coronavirus%>%filter(country=="Panama")
+
+countries_corona<-as.data.frame(rbind(venezuela_corona,brazil_corona,colombia_corona,panama_corona))
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Figure 05 :- Comparison  of covid-19 deaths between the neighboring countries")
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+countries_confirmed<-countries_corona%>%filter(type=="confirmed")
+ggplot(countries_confirmed,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Figure 06 :- Comparison  of covid-19 Confirmed cases")
+```
+
+```{r, comment=NA, warning=FALSE, message=FALSE, echo=FALSE}
+countries_recovered<-countries_corona%>%filter(type=="recovered")
+ggplot(countries_recovered,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Figure 07 :- Comparison  of covid-19 Recovered cases")
+```
+
+
+# 3. Conclusions and Discussion
+
+#### Conclusions
+
+We may conclude from the analysis that there have been no deaths, confirmed cases, or recovered cases till March 2020. When we look at the number of recorded death cases on a daily basis, we may estimate that there were no more than 35 cases. And when we look at the number of recorded confirmed cases on a daily basis, we may estimate that there were no more than 2500 cases in Venezuela. When we compare all three cases (death cases, confirmed cases, and recovered cases) in Venezuela to those reported in surrounding countries (Brazil, Colombia, and Panama), we can find that all three cases reported from Venezuela were lower than those reported from Brazil and Colombia.
+
+
+#### Discussion 
+
+Venezuela is located in the north of South America; geologically, its mainland rests on the South American Plate.The COVID-19 pandemic was confirmed to have reached South America on 26 February 2020 when Brazil confirmed a case in São Paulo. By 3 April, all countries and territories in South America had recorded at least one case. As of 16 July 2021, South America had recorded 34,359,631 confirmed cases and 1,047,229 deaths from COVID-19. Due to a shortage of testing and medical facilities, it is believed that the outbreak is far larger than the official numbers show.
+
+The COVID-19 pandemic in Venezuela is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first two cases in Venezuela were confirmed on 13 March 2020; the first death was reported on 26 March. However, the first record of a patient claiming to have symptoms of coronavirus disease dates back to 29 February 2020, with government officials suspecting that the first person carrying the virus could have entered the country as early as 25 February.
+
+Venezuela is particularly vulnerable to the wider effects of the pandemic because of its ongoing socioeconomic and political crisis causing massive shortages of food staples and basic necessities, including medical supplies. The mass emigration of Venezuelan doctors has also caused chronic staff shortages in hospitals.
+
+To prevent the spread of the disease into Venezuela, the governments of Brazil and Colombia temporarily closed their borders with Venezuela. The Colombian government had placed 1 October as a tentative date for reopening the border.
+
+In February 2021, Venezuela started vaccinations with the Russian Sputnik V COVID-19 vaccine and a vaccine produced by the Chinese company Sinopharm. It aimed to vaccinate 70 percent of the population by the end of 2021. An academic survey found that by the 1st September 2021, 10% of the Venezuelan population was fully vaccinated.
+
+
+
+# 4. References
+
+
+https://www.csis.org/analysis/covid-19-venezuela-how-pandemic-deepened-humanitarian-crisis
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Venezuela
+
+https://hellor.netlify.app/coronareports/ 
+
+https://reliefweb.int/report/venezuela-bolivarian-republic/impact-covid-19-venezuelan-displacement-crisis?gclid=CjwKCAjw-sqKBhBjEiwAVaQ9ayRnjTpQQrSdj2BNkUu45VmmF6epuPs2fTMgo0hJbErykN1cD_sJZxoCOd4QAvD_BwE

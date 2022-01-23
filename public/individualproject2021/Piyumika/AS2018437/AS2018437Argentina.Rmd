@@ -1,0 +1,233 @@
+---
+title: "Covid-19 outbreak in Argentina"
+author: "AS2018437 - W.S.Madushani"
+date: "9/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+
+
+
+
+
+### **1. Introduction**
+The COVID-19 pandemic is an ongoing global pandemic of corona virus disease 2019 caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The novel virus was first identified in Wuhan,China, in December 2019 and it spread to other parts of mainland China and around the world. The World Health Organization (WHO) declared a Public Health Emergency of International Concern on 30 January 2020, and a pandemic on 11 March 2020. Since 2021 , variants of the virus  have emerged  and become a dominant in many countries, with Delta,Alpha and Beta variants being the most virulent.
+
+We discuss here how this pandemic affects to the survival of Argentina.
+
+
+<center>
+![](sampleimage.png){width=75% , height=50% }
+</center>
+
+
+
+
+
+#### **1.1 Visualization of the location**
+
+
+Argentina, country of South America, covering most of the southern portion of the continent. The world's eighth largest country, Argentina occupies an area more extensive than Mexico and U.S.state of Texas combined.It encompasses immense plains,deserts,tundra,and forests as well as tall mountains,rivers, and thousand of miles of ocean shoreline. Argentina also claims  a portion of Antarctica as well as several islands in the South Atlantic,including the British-ruled Falkland Islands.Argentina is shaped like an inverted triangle with its base at the top;it is some 880 miles (1420 km) across at its widest from east to west and stretches 2360 miles (3800 km) from the subtropical north to the subantarctic south.The country is bounded by  Chile to the south and west, Bolivia and Paraguay to the north and Brazil , Uruguay and Atlantic Ocean to the east. Its undulating Atlantic coastline stretches some 2900 miles(4700 km).
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library( devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+Argentina_corona <- coronavirus %>% filter(country == "Argentina")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "dark blue"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Argentina_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+#### **1.2 Climate condition**
+
+The climate in Argentina is very varied. Buenos Aires and the Pampas have a temperate climate which means it' can be pretty cold in winter, but hot and humid in summer. In the deserts of Cuyo it can be extremely hot and dry in summer and temperatures can reach to a staggering 50 degrees Celsius (122° Fahrenheit). During winter it is moderately cold and dry.
+
+The Andes and Patagonia are cool in summer and very cold in winter, varying according to altitude. Extreme temperature shifts within a single day are common here. Take note that seasons in Argentina are reversed from those in the Northern Hemisphere. This means summer takes place from December till February.
+
+
+
+#### **1.3 Lockdown status of the country**
+
+Argentina,went into a short,total to break its second corona virus wave on 21st May 2021.The country had recorded high number of daily infections and deaths.Most Argentines would be allowed out only from 6 a.m to 6 p.m. local time and they had to stay close to their homes. Schools and non-essential businesses would be closed. Social,religios and sporting events would be banned.With that circuit breaker lockdown which was extended until 31st of May, the government hoped to halt skyrocketing corona virus infections. There was another total lockdown on the weekend of June 5 and 6 in 2021.The president Alberto Fernandez said that they were living the worst moment since the pandemic began. In those weeks the country broke its pandemic records.When the strict lockdown ended, Argentines were able to return to the same measures that were previously in place. There was a curfew after the total lockdown.Nighttime lockdowns had been in place urban centers since early April. The protestors had taken to th the streets on several occasions this year to voice  their discontent about measures like curfew or school closures. Fernandez has now announced an economic rescue package to support the worst-hit sectors.
+
+
+
+#### **1.4 Actions taken by the government.**
+
+Argentina’s government announced on 7 August new measures to fight the coronavirus, including an extension of the existing border closure until 1 October, while also permitting limited capacity in-person gatherings that follow protocols.  Additionally, certain nonresident foreigners were once again allowed to temporarily enter the country. The stricter measures had been established to prevent the spread of new strains of COVID-19 in Argentina.   (For prior coverage, see GMS Flash Alert 2021-197, 13 July 2021.)The provisions aim to protect the Argentine population and prevent the further spread of coronavirus/COVID-19.
+
+The extended  border closures, have kept employers re-considering their personnel and work arrangements.  There also could be additional costs for employers to consider tied to (i) lodging in compulsory places for isolation purposes and (ii) sequencing tests administered.
+
+Given current circumstances, remote working may be a “best practice” for globally-mobile employees – apart from essential workers – to the extent possible and is a way for employers to foster the safety of their employees and help with business continuity.in-person gatherings in economic, industrial, commercial, cultural, sports, religious, educational, tourist, recreational, and social activities complying with approved protocols by the National or Provincial health authority or the Autonomous City of Buenos Aires. In closed spaces, these activities must be carried out using a maximum of seventy percent (70%) of the authorized capacity. In the gathering of people for moments of rest, recreation, meals, or any other type of activity, that is carried out in closed spaces without strict compliance with the social distance of two (2) meters between individuals and adequate ventilation in such environment.
+Additionally, Argentina’s government, reinforced the country’s borders would remain closed until 1 October,2 and flights are suspended coming from and going to Great Britain, Brazil, Chile, India, and countries of the African continent, due to the prevalence of new strains of the virus in those countries.
+
+Argentinean government decided to authorize the entry into national territory of nonresident foreigners who have Argentinean relatives and who temporarily enter the country for reasons of necessity and do not require a visa by virtue of bilateral agreements or unilateral measures.  
+
+**Compulsory Quarantine**:
+The National Civil Aviation Administration (Administración Nacional de Aviación Civil – ANAC), has determined until 5 September a weekly quota of 11,900 seats; and from 6 September until 1 October a weekly quota of 16,100 seats on passenger flights for re-entry to the country by Argentine nationals and foreign residents who are abroad.
+
+Those individuals who test negative for coronavirus in respect of the test administered upon arrival into the country must comply with mandatory isolation in such places as indicated by the provincial authorities and the Autonomous City of Buenos Aires for a seven-day period from the collection of the test sample performed at the time of entry into the country. A second test will be administered on the seventh day of the traveler’s arrival in the country and, if he or she tests negative, then open/free circulation will apply. However, if the individual tests positive for the coronavirus, the intervening laboratory must take precautions to genomically sequence the sample and the local health authority will trace the close contacts of the traveler and transfer him or her to a location for isolation.Not complying with these measures could result in between 15 days and up to two years of prison.
+
+**Continuance of Existing Measures**:
+Measures prohibiting group gatherings of more than 10 individuals, closing borders, advising people to keep at least 1.5 meters apart, and confining people to their homes, are still in place to prevent the spread of the coronavirus due to the lack of vaccines. 
+
+ Actually by considering the actions taken to prevent the spreading of COVID-19 by the government of Argentina, all the people shoud be responsible to hold their self discipline and adhere the given rules. 
+
+
+
+
+### **2. Exploratory  Data Analysis**
+
+
+####
+First in our dataset with respective to Argentina ,it can be identified with 1818 rows and 7 variables.
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE }
+
+as_tibble(Argentina_corona)
+```
+```{r, include=FALSE, comment=NA, echo=FALSE, warning=FALSE} 
+select(Argentina_corona, date, type, cases)
+Argentina_corona_1 <- select(Argentina_corona, date, type, cases)
+Argentina_corona_1
+```
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+summary(Argentina_corona_1)
+```
+#### 
+The summary shows that there are 45 NA's and no any negative values in the "cases".
+
+
+
+
+
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE }
+ggplot(Argentina_corona_1,aes(x=type,y=cases,col=type))+geom_jitter()+facet_wrap(~ type)+ggtitle("Figure 1: overall covid 19 status in Argentina")
+```
+
+####
+**This Figure 1** shows that the overall Covid 19 status in Argentina throughout the period we considered from 22/01/2020 to 18/09/2021.So when we compare the confirmed cases and recovered,we can see that majority of confirmed cases have been recovered.The death cases are very low when consider the confirmed cases.
+
+
+
+
+
+```{r,  comment=NA, echo=FALSE, warning=FALSE}
+ggplot(Argentina_corona_1,aes(date,cases,color=type),is.na=FALSE)+geom_line(size=1.0)+ggtitle("Figure2:daily covid-19 status in Argentina")
+```
+
+
+
+
+
+
+
+####
+**This Figure 2** shows that daily Covid-19 status in Argentina.According to it we can see that the daily death cases are very low when comparing the confirmed cases.Within the period from 2020/07 to 2021/01 we can see a considerable variation in recovered cases.AS well as we can see that the confirmed cases have been increased in 2021.
+
+
+
+
+
+
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+active_cases<- Argentina_corona_1 %>%
+pivot_wider(names_from = type, values_from = cases) %>%
+mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+```
+```{r,  comment=NA, echo=FALSE, warning=FALSE}
+library(ggthemes)
+ggplot(active_cases, aes(x=date, y=active),is.na=FALSE) + geom_line(size=1.5, alpha=0.8) + ggtitle(" figure3:Argentina Daily Covid-19 active cases")
+```
+```
+
+####
+**From Figure 3** we can see that, with the time there is a considerable variation of active people.In 2021 the amount of active people has been increased gradually.
+
+
+
+
+```{r,  comment=NA, echo=FALSE, warning=FALSE}
+other_countries <- filter(coronavirus,country %in% c("Argentina","India","Russia","Japan","Zambia"))
+other_confirmed <- other_countries %>% filter(type=="confirmed")
+
+```
+
+
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+library(gganimate)
+library(gifski)
+library(av)
+ggplot(other_confirmed, aes(date, cases, col=country))+ geom_point(alpha=0.7, show.legend=FALSE)+  scale_size(range=c(2,12))+facet_wrap(~country)+transition_time(date)+ease_aes('linear')
+```
+####
+**From figure 4** we can see that , a sudden increse in reporting corona cases in India when compared with Argentina.But when we see the other countries we can't see a sudden increment in reporting cases with Argentina. Among those considered India gets the highest rate.
+
+
+
+
+
+
+###4. **Discussion**
+The dataset is loaded by coronavirus dataset given in the package R. Argentina dataset was obtained by it. The dataset had 45 null values but no minus value for cases. From the figures we can see that the most of confirmed cases became recoverd.Death cases are very low.And also we can see the active cases reported shows a littele variation with the time. And also Argentina was compared with other four countries.They are India,Russia,Japan,Zambia. I selected India because India reported large number of covid cases recently.Though the figure 4 we can see it.
+
+
+
+### **Conclusion**
+Here wecan conclude that during the period considered it was somewhat a bad period for Argentina although the death cases were low.Because people had to face to soo many difficulties.Because of the actions taken by the Argentina government I think they could manage the situation to some extent.
+
+
+
+### **References**
+http://stats.idre.ucla.edu/stat/data/rmarkdown/rmarkdown_seminar_flat.html#html-documents
+
+https://www.britannica.com/place/Argentina
+
+https://weather-and-climate.com/average-monthly-Rainfall-Temperature-Sunshine-in-Argentina
+
+https://amp.dw.com/en/argentina-prepares-for-strict-lockdown-as-covid-cases-soar/a-57610622
+
+https://home.kpmg/xx/en/home/insights/2021/08/flash-alert-2021-214.html
+
+https://hpb.health.gov.lk/covid19-dashboard/

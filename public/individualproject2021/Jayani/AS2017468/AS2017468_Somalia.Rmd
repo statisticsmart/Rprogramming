@@ -1,0 +1,440 @@
+---
+title: " **COVID-19 Pandemic in Somalia** "
+author: "D.M.P. Perera"
+date: "9/19/2021"
+output: html_document
+---
+<center>
+![](COVID.jpg)
+</center>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,message=FALSE,warning=FALSE, echo=FALSE ,eval=FALSE}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2017468")
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+tail(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+```
+
+# **1.Introduction **
+
+
+## *1.1 Visualization of the location*
+
+Somalia is a country located in the Horn of Africa which officially consists of five federal member states, namely Galmudug, Hirshabelle, Jubaland, South West, Puntland and the municipality of Benadir. It is bordered by Ethiopia to the west, the Gulf of Aden to the north, the Somali Sea and Guardafui Channel to the east, and Kenya to the southwest. With a land area of 637,657 square kilometers, Somalia's terrain consists mainly of plateaus, plains and highlands. Its coastline is more than 3,333 kilometers in length, the longest of mainland Africa. It has been described as being roughly shaped "like a tilted number seven".
+
+```{r,message=FALSE,warning=FALSE, echo=FALSE, fig.cap="Figure 01: Location of Somalia", fig.align='center'}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+Somalia_location <- tibble(lat=5.152149, long= 46.199616) 
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "light blue"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Somalia_location, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+<center>
+![](Somalia.gif)
+</center>
+
+## *1.2 Climate condition of Somalia*
+
+Somalia’s current climate is hot and dry, with uneven rainfall and regular droughts . It experiences a northeast monsoon from December to February, at which time temperatures in the north become moderate while the south is hot, a southwest monsoon from May to October occurs when the north is extremely hot. Hot and humid conditions occur between monsoon periods. Land degradation is a prominent environmental issue in the country, driven by drought, desertification and poor agricultural and pastoral practices However, the rains in Somalia are quite irregular from year to year, in addition, they usually occur in the form of short showers and thunderstorms, and given the aridity of the soil, which absorbs water with difficulty, when they are more intense than usual, they can give rise to flash floods.
+
+The best time to visit Somalia in its entirety is winter, from December to February, to avoid both the summer heat in the north and the rains of the transitional seasons. It is worth while to recall that in the mountainous northern area, nights can be cold, while in the inland southwestern areas, the climate in this period is hot. Moreover, in December, especially in the first half, tropical cyclones are still possible
+
+<center>
+![ ](Rainfall.png)
+</center>
+<center>
+Figure 2:Annual rain distribution in Somalia
+</center>
+
+<center>
+![](drought.jpg) 
+</center>
+
+<center>
+Figure 3:Drought in Somalia
+</center>
+
+
+## *1.3 Lockdown status of the Somalia*
+
+On January 12, 2020, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, which was reported to the WHO on December 31, 2019.Somalia recorded its first case of the coronavirus mid-March in a student recently returned from China and  first confirmed  case on March 15 . On 16 March, the government banned passengers who had been to Iran, China, Italy, or South Korea in the past 14 days from entering Somalia. On 17 March, the government announced that schools and universities would be closed for 15 days effective from 19 March and that large gatherings were prohibited. The Somali Aviation Ministry ordered a suspension of all international flights for 15 days starting from  18 March, with the possibility of exceptions for humanitarian flights
+
+
+![](airport.jpg)  
+
+<center>
+Figure 4:Ugaas Khalif Airport in Somalia during lockdown
+</center>
+
+
+## *1.4 Actions taken by the Somalia goverment*
+
+As part of strategic initiatives to halt the spread of COVID-19, the Federal Government of Somalia set up a toll-free call center with the support of the United Nations . And they  formed a task force to respond to COVID-19.The Somali authorities have ramped up a national public information campaign on COVID-19, using both traditional and new ways of reaching the public. This includes using radio, billboards and outdoor posters to alert and inform citizens about coronavirus symptoms and preventive measures and guidelines, as well as social media platforms.
+Somalia’s federal and regional authorities, in conjunction with various organizations, have undertaken a wide range of measures to combat COVID-19’s spread. These measures include putting in place water points across Dhobley town, in Somalia’s Jubaland state, for visitors and locals to wash their hands with soap as well as screening travelers along the busy transit route connecting Somalia to Kenya in order to detect any carriers of the virus.Prime Minister Hassan Ali Khaire announced $5 million had been allocated to address the pandemic.
+
+![](action.jpg) 
+<center>
+Figure 5:Members of the Somali First Aid Association (SOFA) spray disinfectants at a camp
+</center>
+
+# **2.Data Analysis**
+
+## *2.1 Visualization of the Spread of COVID-19 in Somalia*
+
+```{r ,echo=FALSE,message=FALSE, warning=FALSE,  out.width= "100%"}
+
+library(coronavirus)
+library(plotly)
+
+Somalia_corona <- coronavirus %>% filter(country == "Somalia")
+ggplotly(ggplot(Somalia_corona, aes(x = date, y = cases, col=type)) + geom_line()  + 
+ggtitle("Figure 6: Distribution of  COVID-19 cases in Somalia"))
+
+```
+
+```{r ,echo=FALSE,message=FALSE, warning=FALSE,  out.width= "100%"}
+ggplotly(ggplot(Somalia_corona, aes(x = date, y = cases, col = type)) + geom_line() + facet_grid(type ~. , scales = "free_y") +
+ggtitle("Figure 7: Distribution of  COVID-19 cases in Somalia"))
+```
+
+ * This charts shows  that there has been a significant increase in the prevalence of corona virus in Somalia and there is significant increase in patient recovery also. However, there has been increase in the number of deaths in April 2021  
+ 
+ 
+```{r ,echo=FALSE,message=FALSE, warning=FALSE, out.width= "80%"}
+
+Somalia_corona <- coronavirus %>% filter(country == "Somalia")
+confirmed_corona_Somalia <- Somalia_corona %>% filter(type == "confirmed")
+ggplotly(ggplot(confirmed_corona_Somalia, aes(x = date, y = cases)) + geom_line(color= "yellow") +
+ggtitle("Figure 08: Daily COVID-19 confirmed in Somalia"))
+```
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE , out.width= "80%"}
+
+Total_confirmed<-confirmed_corona_Somalia %>%  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>% mutate (confirmed_total = cumsum(confirmed))
+ggplotly(ggplot(Total_confirmed,aes(x =date,y = confirmed_total))+ geom_line(color = "yellow", size =1) +
+ggtitle("Figure 09: Total confirmed COVID-19 cases in Somalia"))
+
+```
+
+* Figure 06 shows daily confirmed COVID-19 cases in Somalia. The 1st confirmed cases of the corona virus disease in Somalia is reported in 16 th of March 2020. Figure 07 shows that There is a rapid increase in total confirmed cases since February 2021 
+
+```{r ,echo=FALSE,message=FALSE, warning=FALSE, out.width= "80%"}
+
+recovered_corona_Somalia <- Somalia_corona %>% filter(type == "recovered")
+ggplotly(ggplot(recovered_corona_Somalia, aes(x = date, y= cases)) + geom_line(color = "green") +
+ggtitle("Figure 10: Daily COVID-19 recovered in Somalia"))
+```
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE, out.width= "80%"}
+
+Total_recovered<-recovered_corona_Somalia %>%  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>% mutate (recovered_total = cumsum(recovered))
+ggplotly(ggplot(Total_recovered,aes(x = date,y = recovered_total))+ geom_line(color="green", size =1) +
+ggtitle("Figure 11: Total recovered COVID-19 cases in Somalia"))
+```
+
+* Daily recovered COVID-19 cases are shown in the figure 08. The 1st recovered cases of the corona virus disease in Somalia is reported in 31 st of March 2020.Figure 09 shows that total covid 19 recovered cases were increased after of end of February 2021
+
+```{r ,echo=FALSE,message=FALSE, warning=FALSE, out.width= "80%"}
+
+death_corona_Somalia <- Somalia_corona %>% filter(type == "death")%>%
+mutate(cases=replace(cases,which(cases < 0),0))
+ggplotly(ggplot(death_corona_Somalia, aes(x = date, y = cases)) + geom_line(color= "red") +
+ggtitle("Figure 12: Daily COVID-19 Deaths in Somalia"))
+```
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE, out.width= "80%"}
+
+Total_death<-death_corona_Somalia %>%  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>% mutate (death_total = cumsum(death))
+ggplotly(ggplot(Total_death,aes(x = date, y = death_total)) + geom_line(color="red",  size =1) +
+ggtitle("Figure 13: Total Death COVID-19 cases in Somalia"))
+```
+
+* After reporting first patient on March first death reported on 08th of April 2020. Figure 11 shows that total death rapidly increasing beginning of February 2021 and Figure 10 shows that sudden spikes on February
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width= "80%"}
+
+library(ggplot2)
+library(coronavirus)
+library(tidyverse)
+library(plotly)
+Somalia_active <-coronavirus %>% filter(country=="Somalia")%>%
+  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  mutate(active_total = cumsum(active),
+         recovered_total = cumsum(recovered),
+         death_total = cumsum(death),
+         confirmed_total= cumsum(confirmed))
+ggplotly(ggplot(Somalia_active,aes(x =date,y =active_total))+geom_line(color="cyan",  size =1) +
+ggtitle("Figure 14: Total acive COVID-19 cases in Somalia"))
+```
+
+* Above figure 12 shows the total active COVID-19 cases in Somalia. There are 7162 active COVID-19 cases are reported when 27 th of May. It can be seen the active COVID-19 cases are increase with time.
+
+
+## *2.2 Comparison of COVID-19 in Somalia with neighboring countries*
+<center>
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "light blue"
+  ) +
+  coord_cartesian(xlim = c(25, 60), ylim = c(-30, 50)) +
+  scale_x_continuous(breaks = seq(25, 60,10)) +
+  scale_y_continuous(breaks = seq(-30,50,20))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+
+
+```
+</center>
+
+
+
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+nearcountries <- subset.data.frame(coronavirus, ( -30< lat & lat < 10) & (30 < long & long < 50) )
+
+count(nearcountries,country)
+
+near_countries <- filter(coronavirus, country == "Comoros"|country =="Eswatini"|country =="Ethiopia"|
+                           country =="France	"|country =="Kenya"|country =="Madagascar"|country =="Malawi"|
+                           country =="South Sudan"|country=="Tanzania"|country=="Uganda"|
+                           country =="Somalia")
+count(near_countries,country)
+```
+
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE  , out.width= "100%"}
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+
+ggplotly(ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_line(size=1) + theme(aspect.ratio = 2) +
+ggtitle("Figure 15:Daily Confirmed cases in neighboring countries"))
+```
+
+* Above graph shows that daily confirmed cases in Somalia less when compared to other countries in the same continent. Where Eswatini has the high no.of confirmed corona patients in the country
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,  out.width= "100%" }
+ggplotly(ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) +  facet_grid(country ~. , scales = "free_y") +
+ggtitle("Figure 16:Daily recovered cases in neighboring countries"))
+```
+
+* Uganda shows high peak in 26 th of March  and the recovered rate in Somalia is same when compared to other countries but it is effective if the prcentage of recovered rate with the total cases is compared.
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,  out.width= "100%"}
+ggplotly(ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+ggtitle("Figure 17:Daily deaths in neighboring countries"))
+```
+
+* Above graph also shows that even the daily death rate is high in Malawi and Ethiopia and the death rate in Somalia is negligle when compared to other countries but it is effective if the prcentage of death rate with the total cases is compared.
+
+
+### *2.2.1 Visualization  of COVID-19 in Somalia with Ethiopia*
+
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width= "100%"}
+
+Somalia_Ethiopia <- coronavirus %>% filter(country %in% c("Somalia", "Ethiopia"))
+confirmed <-Somalia_Ethiopia %>% filter(type == "confirmed")
+ggplotly(ggplot(confirmed, aes(x = date, y = cases, color = country)) + geom_line() +
+ggtitle("Figure 18: Daily Comfirmed COVID-19 cases in Somalia & Ethiopia"))
+```
+
+* Figure 18 shows the daily confirmed COVID-19 cases in Somalia and Ethiopia. It can be seen very clearly the number of daily confirmed cases in  Ethiopia is higher than Somalia.  Daily confirmed cases in  Ethiopia has been dropped after April .. The number of daily confirmed cases in Ethiopia exceeds the 2000 limit in March. 
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width= "100%"}
+
+Somalia_Ethiopia<- coronavirus %>% filter(country %in% c("Somalia", "Ethiopia"))
+recovered <- Somalia_Ethiopia %>% filter(type == "recovered")
+ggplotly(ggplot(recovered, aes(x = date, y = cases, color = country)) + geom_line() + facet_grid(country ~. , scales = "free_y") +
+ggtitle("Figure 19: Daily recovered COVID-19 cases in  Somalia & Ethiopia"))
+```
+
+* Ethiopia has the highest daily recovered COVID-19 cases. The number of highest recovered cases per day is 4493 and it is reported in Ethiopia. Compare with Ethiopia , the number of daily recovered cases in Somalia has  less value. 
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,out.width= "100%"}
+
+Somalia_Ethiopia <- coronavirus %>% filter(country %in% c("Somalia","Ethiopia" ))
+death <- Somalia_Ethiopia %>% filter(type == "death")
+ggplotly(ggplot(death, aes(x = date, y = cases, color = country)) + geom_line() +
+ggtitle("Figure 20: Daily death COVID-19 cases in Somalia & Ethiopia"))
+```
+
+* Above figure shows the number of daily deaths in Somalia and Ethiopia. The highest number of daily death reported in Ethiopia. Both countries have high Spikes in April 2021
+
+
+
+## *2.3 Comparison of COVID-19 in Somalia with Asian country*
+
+ 
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width= "100%"}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+
+Somalia_SriLanka <- coronavirus %>% filter(country %in% c("Somalia", "Sri Lanka"))
+confirmed <-Somalia_SriLanka %>% filter(type =="confirmed")
+ggplotly(ggplot(confirmed, aes(x = date,y = cases, color = country)) + geom_line() +
+ggtitle("Figure 21: Daily Comfirmed COVID-19 cases in Somalia & Sri Lanka"))
+```
+
+* Figure 15 shows the daily confirmed COVID-19 cases in Somalia and SL. It can be seen very clearly the number of daily confirmed cases in SL is higher than Somalia.  Daily confirmed cases in SL has been dropped after 09th of February while Somalia has started increasing the new confirmed cases significantly.But there is rapid increase of daily cases of SL after April. The number of daily confirmed cases in SL exceeds the 3000 limit in May. 
+
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width= "100%"}
+
+Somalia_SriLanka<- coronavirus %>% filter(country %in% c("Somalia", "Sri Lanka"))
+recovered <- Somalia_SriLanka %>% filter(type =="recovered")
+ggplotly(ggplot(recovered, aes(x = date,y = cases, color = country)) + geom_line() + facet_grid(country ~. , scales = "free_y") +
+ggtitle("Figure 22: Daily recovered COVID-19 cases in  Somalia & Sri Lanka"))
+```
+
+* SL has the highest daily recovered COVID-19 cases. The number of highest recovered cases per day is 11340 and it is reported in SL. Compare with SL , the number of daily recovered cases in Somalia has less value. 
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width= "100%"}
+
+Somalia_SriLanka <- coronavirus %>% filter(country %in% c("Somalia","Sri Lanka" ))
+death <- Somalia_SriLanka %>% filter(type =="death")
+ggplotly(ggplot(death, aes(x = date, y = cases, color = country)) + geom_line() +
+ggtitle("Figure 23: Daily death COVID-19 cases in Somalia & Sri Lanka"))
+```
+
+* Above figure shows the number of daily deaths in Somalia and SL. The highest number of daily death reported in SL. There is highly spike in daily death of SL in 21 of May and the value is recorded as 82. 
+
+
+
+## *2.4 Comparison of COVID-19 in Somalia with European country*
+
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,out.width= "100%"}
+
+Somalia_Germany<- coronavirus %>% filter(country %in% c("Somalia", "Germany"))
+recovered <- Somalia_Germany %>% filter(type =="confirmed")
+ggplotly(ggplot(recovered, aes(x = date,y = cases, color = country)) + geom_line( ) + facet_grid(country ~. , scales = "free_y") +
+ggtitle("Figure 24: Daily confirmed COVID-19 cases in Somalia & Germany"))
+```
+
+* Figure 21 shows the daily confirmed COVID-19 cases in Somalia and Germany. It can be seen very clearly the number of daily confirmed cases in Germany is higher than Somalia. The number of highest confirmed cases per day is 49044 and it is reported in Germany
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,out.width= "100%"}
+
+Somalia_Germany<- coronavirus %>% filter(country %in% c("Somalia", "Germany"))
+recovered <- Somalia_Germany %>% filter(type=="recovered")
+ggplotly(ggplot(recovered, aes(x = date, y = cases, color = country))+geom_line( ) + facet_grid(country ~. , scales = "free_y") +
+ggtitle("Figure 25: Daily recovered COVID-19 cases in Somalia & Germany"))
+```
+ 
+ * Germany has the highest daily recovered COVID-19 cases. The number of highest recovered cases per day is 44517 and it is reported in Germany. Compare with Germany , the number of daily recovered cases in Somalia has less value.
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, out.width= "100%"}
+
+Somalia_Germany<- coronavirus %>% filter(country %in% c("Somalia", "Germany"))
+recovered <- Somalia_Germany %>% filter(type=="death")
+ggplotly(ggplot(recovered, aes(x = date, y = cases, color = country))+geom_line( ) + facet_grid(country ~. , scales = "free_y") +
+ggtitle("Figure 26: Daily death COVID-19 cases in  Somalia & Germany"))
+```
+
+ * Above figure shows the number of daily deaths in Germany and Somalia. The highest number of daily death reported in Germany. There is highly spike in daily death of Germany in 19 th January and the value is recorded as 1734 
+
+# **3.Conclusions & Discussion**
+
+## *3.1 Conclusions*
+
+COVID-19 is still an unclear infectious global pandemic. In Somalia, the first confirmed case for COVID-19 was identified on  16 th of March 2020. By the end of the February 2021, pandemic situation showed a rapid spread among the community in Somalia. As of 27th May 2021, Somalia has reported a total of 7162 active cases with 6717
+recovered cases and 768 deaths. There was a negative value in deaths on May 2020.The majority of cases ware reported in March 2021. So, it can be conclude that March 2021 was the critical period of spread of COVID-19 in Somalia.
+
+The Confirmed and Recovered cases of Somalia is lower when comparing with the neighboring countries but death rate is approximately same in all neighboring countries. When comparing with Asian country(SL) the number of confirmed cases and death cases are higher than Somalia but recovered  rate cases approximately same. Both SL and Somalia show that deaths in May 2021 is higher than other months. When comparing European country(Germany) all the confirmed cases ,recovered cases and death cases are higher than Somalia.So comparing with Asian and European countries Somalia has not effected too much to covid 19 pandemic.   
+
+
+## *3.2 Discussion*
+ 
+The World Health Organization (WHO) reported Naval Coronavirus (COVID-19) as still an unclear infectious global pandemic. This report was focused on COVID-19 distribution of Somalia based on the data from 22nd of January 2020 to 27 th of May 2021. Number of COVID-19 confirmed cases, deaths and recovered cases in Somalia was analyzed by this report. Coronavirus data set was used to getting the data related to the Somalia There was a negative value in deaths on May 2020 . For that the negative value  was replaced as 0 . So new data set was used to visualized the graphs. This error may be happens due to  due to mistakes happen when data entry.  
+
+In this Somalia data set all the cases of Somalia reported for whole country. So it cant compare pandemic situation of Somalia by  province wise. So when comparing the Somalia with other countries this report used whole country cases to compare them. When comparing other countries it clearly show that Somalia was not affected too much for covid 19 pandemic compare to Asian and European countries. When compared to its neighboring countries although the reporting of the disease occurred for all countries in similar time periods, Somalia was able to control the situation and reach a much stable state than other countries. 
+
+The data was available for the period from 22 January 2020 to 27 May 2021 only therefore interpretations regarding the more recent status of the countries cannot be made.  Therefore, it can be said that more accurate and preferable conclusions would have been possible if more recent data was available.
+
+
+# **4.References**
+
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Somalia
+
+https://stackoverflow.com/questions/24677642/centering-image-and-text-in-r-markdown-for-a-pdf-report
+
+https://en.wikipedia.org/wiki/Geography_of_Somalia
+
+https://www.nationsencyclopedia.com/Africa/Somalia-CLIMATE.html
+
+https://www.britannica.com/place/Somalia
+
+https://www.adaptation-undp.org/explore/eastern-africa/somalia
+
+https://www.climatestotravel.com/climate/somalia
+
+https://weather-and-climate.com/average-monthly-Rainfall-Temperature-Sunshine-in-Somalia
+
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/somalia/
+
+https://www.un.org/en/coronavirus/somalia-braces-covid-19
+
+https://www.hrw.org/world-report/2020/country-chapters/somalia
+

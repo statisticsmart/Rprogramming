@@ -1,0 +1,193 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Corona Virus Report for Andorra
+
+###### Assignment 03
+###### AS2018357
+
+# 1.Introduction
+
+   Since late 2019, severe acute respiratory syndrome corona virus 2 (SARS-CoV-2) has
+spread worldwide, causing a serious pandemic. As of 28 September 2021, more than 4 million global deaths due to corona virus disease 2019 (COVID-19) have been reported.
+
+<img src="https://img.msf.org/AssetLink/q31g20415s8222p557288a8vgbx72aj7.jpg" alt="Medical staaf undertake awareness-raising sessions for vulnerable people" width="700" height="300">
+  
+Specific treatments and/or vaccines were not available at the beginning of the pandemic; therefore, in order to contain the spread of the virus many countries enforced different control measures, such as contact tracing for SARS-CoV-2 among ill patients and relatives due to the demonstrated effectiveness of screening for infectious diseases in at-risk populations. Moreover, personal contact and gatherings have been limited,e.g., by limiting or forbidding access to workplaces or educational institutions, up to the enforcement of nationwide lockdowns. Such measures have had notable impacts on the socioeconomic systems of many countries, as well as detrimental effects on the health and wellbeing of individuals.
+
+#### **Visualization of the location**
+  Andorra, small independent European co-principality situated among the southern peaks of the Pyrenees Mountains and bounded by France to the north and east and by Spain to the south and west. It is one of the smallest states in Europe, having an area of 468 square kilometers (181 sq mi) and a population of approximately 77,006. The capital is Andorra la Vella, is the highest capital city in Europe, at an elevation of 1,023 meters (3,356 feet) above sea level.
+      Andorra consists of a cluster of mountain valleys whose streams unite to form the Valira River. Two of these streams, the Madriu and the Perafita, flow into the Madriu-Perafita-Claror valley, which occupies about one-tenth of Andorra’s land area and is characterized by glacial landscapes, steep valleys, and open pastures. The valley was designated a UNESCO World Heritage site in 2004.
+      
+```{r,echo=FALSE,comment=NA,warning=FALSE,message=FALSE}      
+library(devtools)
+library(sta3262)
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+Andorra_corona <- coronavirus %>% filter(country == "Andorra")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Andorra_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+##### Neighboring Countries
+
+<img src="https://cdn.britannica.com/s:690x388,c:crop/80/183580-050-27967853/World-Data-Locator-Map-Andorra.jpg" alt="Neighboring countries of Andorra" width="500" height="300">
+
+#### **Climate condition**
+  Andorra's climate is typical for a mountainous country; it has cold winters and mild summers. The climate is also very dry, with a large number of sunny days. Autumn experiences the most rainfall, while in winter is has good skiing conditions. The average temperature range is between -2 degrees Celsius (28°Fahrenheit) and 26 degrees Celsius (79°Fahrenheit).
+
+#### **Lockdown status of the country**
+   On 2 March 2020, Andorra confirmed its first coronavirus case, a 20-year-old man who had returned from Milan,Italy.He was discharged on 8 March.On 12 March, a second case was confirmed, an 87-year-old woman whose daughter is a teacher. The Government announced that it would close all schools from 16 March.On 15 March, it was announced that there were four new active cases in Andorra, making a total of 6 cases,those infected persons were connected with previous 87-year-old lady.On 17 March, the toll of cases rose to 39. On 22 March, an 88-year-old man became the first confirmed death in the country as the number of cases rose to 112.On 24 March, the third death was confirmed.On 29 March, the Minister of Health announced that 80 of the active cases were health care staff. Further, Cuba was sending 27 nurses and 12 physicians to aid the SAAS staff.
+              On 12 October, it was announced that Minister of Finance Èric Jover tested positive for COVID-19.[34] The 7-day moving average number of daily new cases reached 112 on 27 October, more than 3 times higher than the first wave, while the number of active cases peaked at 1309 on the same day, compared to 504 in the first wave (11 April). The total number of cases reached 4756 and the total number of deaths 75 by the end of the month.
+              On June to 13 September 2021,during the last three months,  3 death cases were confirmed.
+              
+
+#### **Action taken by the government**
+
+   The government ordered schools closed beginning 16 March. In addition, all cultural activities planned by the government were cancelled.[9] In an appearance on March 13 the Head of Government (Prime Minister) Xavier Espot announced that all public establishments would be closed for two weeks except those that provide essential products, gas stations, and pharmacies. The next day, Constitution Day celebrations were cancelled. In addition, the borders were restricted, and people were only permitted to leave for health reasons, to transport goods, or for residents abroad. The sale of tobacco and alcohol to tourists was prohibited, and the quantity permitted to be sold to Andorran nationals and residents was restricted.
+
+On 16 March, Espot ordered the cessation of high-risk work activities, such as construction and "liberal" (high-education) professions, for a minimum of eight days, and public administration would be reduced to a minimal level to avoid the collapse of the healthcare system. Meanwhile, the government began working on legal steps to manage states of alarm and of emergency, provided for in the Constitution but never developed in any laws.
+
+The government procured antibody tests at a cost of €1.5 million. While the tests will not be obligatory, being able to prove that one has antibodies can give them access to less restrictive measures.
+
+The Andorran government has signed agreements to acquire 30 000 doses of the Pfizer BioNTech vaccine from the Spanish government at the price Spain paid and other doses of the Moderna vaccine from the French government.
+
+## Data Analysing
+
+#### Data Cleaning
+  Following outputs are given the summary of the Andorra Coronavirus data.The observations are taken from 22 January 2020 to 18 september 2021. The several variables are obtained such as date of the observation taken from, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given date.
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+Andorra_corona$Month <- months(as.Date(Andorra_corona$date))
+data_new_Andorra_corona<- Andorra_corona[ , colSums(is.na(Andorra_corona)) < nrow(Andorra_corona)]
+data_new1_Andorra_corona<-na.omit(data_new_Andorra_corona)
+head(data_new1_Andorra_corona)
+tail(data_new1_Andorra_corona)
+```
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+summary(data_new1_Andorra_corona)
+```
+
+
+
+# 2.Exploratory Data Analysis
+
+```{r,echo=FALSE,comment=NA,warning=FALSE,fig.height=4,fig.width=5}
+recover_Andorra_corona <- data_new1_Andorra_corona %>% filter(type=="recovered")
+death_Andorra_corona <- data_new1_Andorra_corona %>% filter(type=="death")
+confirm_Andorra_corona<-data_new1_Andorra_corona %>% filter(type=="confirmed")
+ggplot(data_new1_Andorra_corona,aes(x=type,y=cases,color=type),is.na=FALSE)+geom_boxplot()+ggtitle("Figure 1:Overall Covid-19 status in Andorra")
+```
+
+Figure 1 shows that,confirmed,death and, recovered cases in Andorra.At first, there were no cases but in shortly, number of confirmed case are increased and it is larger than death and confirmed cases. Especially,Andorra has small amount of death cases than confirmed cases. Andorra had considerable recoveries.
+
+
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+ggplot(data_new1_Andorra_corona,aes(date,cases,color=type),is.na=FALSE)+geom_line()+ggtitle("Figure 2:Daily Covid-19 cases in Andorra")
+```
+
+Figure 2 indicates, the number of Corona virus patients have been started increasing slowly,but, we can see clearly end of the 2020 confirmed cases have increased and again it went down like backward trend pattern. Relatively, death cases are very small whole time period.
+
+
+
+
+
+
+
+```{r,echo=FALSE,comment=NA,warning=FALSE}
+active_cases<-data_new1_Andorra_corona %>% pivot_wider(names_from = type, values_from = cases) %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+ggplot(active_cases, aes(x=date, y=active),is.na=FALSE) + geom_line() +  ggtitle(" figure 3:Andorra Daily Covid-19 active cases")
+```
+
+Figure 3 clearly shows the peak points of Covid-19 active cases.Among those peak points highest amount of active cases were recorded in last quater of 2020.
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+neighbour_countries <- filter(coronavirus,country %in% c("Andorra","Spain","France","Italy","Switzerland"))
+neighbor_confirmed <- neighbour_countries %>% filter(type=="confirmed")
+ggplot(neighbor_confirmed,aes(x=date,y=cases,col=country),is.na=FALSE)+ geom_line() + ggtitle("Figure 4:Daily confirmed cases of Andorra and neighbouring countries") 
+```
+
+Relevant to figure 4,it contains daily Covid-19 confirmed cases of Andorra and its neighboring countries.Figure shows, that relatively neighboring countries have daily highest reported cases than Andorra.
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+neighbour_countries <- filter(coronavirus,country %in% c("Andorra","Spain","France","Italy","Switzerland"))
+neighbor_recovered <- neighbour_countries %>% filter(type=="recovered")
+ggplot(neighbor_recovered,aes(x=date,y=cases,col=country),is.na=FALSE)+ geom_line() + ggtitle("Figure 5:Daily recovered cases of Andorra and neighbouring countries") 
+```
+
+According to figure 5,it clearly shows the Italy has the highest daily recovered cases among those countries in time period,end of 2020 to September of 2021.
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+ggplot(neighbor_confirmed, aes(x=country, y=cases,fill=country),is.na=FALSE) + geom_col() + ggtitle("Figure 6:Total confirmed cases")
+```
+
+By figure 6, we can clearly see the ,among those neighboring countries the high total confirmed cases reported in France and Italy than other  three countries.
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA}
+ggplot(neighbor_recovered, aes(x=country, y=cases,fill=country),is.na=FALSE) + geom_col() + ggtitle("Figure 7:Total recovered cases")
+```
+
+Figure 7 indicates the total recoverd cases of Andorra and neighboring countries.According to it Italy has the highest amount of total recovered cases and it shows the huge difference between Italy and other countries.
+
+
+# 3.Discussion
+
+  The dataset is loaded by coronavirus dataset given in the package R. Andorra dataset is obtained by it. The dataset has no null values or minus value for cases.In data set, there was not reported the province Covid-19 cases in the Andorra. That data was reported during from January 22, 2020 to September 18, 2021.
+    Andorra is one of the smallest countries in Europe.When considering Andorra with neighboring countries it was the lowest one in those figures.It has total cases 15,192 and 130 death cases.  In figure two, it can be seen, before March there were no confirmed or death cases.And also, during the last three months there were death cases reported.
+   
+   
+# 4.Conclusion
+    
+ Corona  virus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to March. However, it is directly affected to the other countries. At that time, most of countries in Asia had high risk but all countries did not expect serious situations like this.At that time it rapidly spread in Europe countries. 
+The Andorra became a victim of virus beginning of March and it happened to increase confirmed cases during the April. Andorra government had started to take actions against this situation after March but at that time virus is spread to the society but not as large way as Italy.Italy,Spain,France and, Switzerland are the neighborhood countries of the Andorra.A11  those countries victimized by the virus and damage is higher than Andorra.When considering the Andorra only,it was found,in  October 2020,there was high amount of cases were reported in Andorra.But after that they could be control the situation in positive way until now.
+
+
+# 5.References
+
+[1] Covid-19 Pandemic in Andorra,https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Andorra
+
+[2] Andorra Covid-Corona virus-Worldometer,https://www.worldometers.info/coronavirus/country/andorra/
+
+[3] An international, independent medical humanitarian organisation,https://www.msf.org/who-we-are?gclid=CjwKCAjwndCKBhAkEiwAgSDKQan4SmJIrccyaYfkXQF7-ek6UFc18X9Q41QWIf-GUJHd6Z6R4lLDuBoCgsAQAvD_BwE
+
+[4]https://cdn.britannica.com/404.html
+    
+
+

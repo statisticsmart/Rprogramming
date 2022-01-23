@@ -1,0 +1,317 @@
+---
+output: 
+  html_document: 
+    fig_width: 10
+    toc_depth: 5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, comment=NA, echo=FALSE, eval=FALSE}
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018406")
+```
+
+![](Image1.png)
+
+# <span style = "color:blue;">***--Introduction--***</span>
+
+### <span style = "color:green;">About Afghanistan</span>
+
+  Afghanistan, officially the Islamic Emirate of Afghanistan, is a landlocked country at the crossroads of Central and South Asia. It is bordered by Pakistan to the east and south, Iran to the west, Turkmenistan and Uzbekistan to the north, and Tajikistan and China to the northeast. Currently over 10 million youth and adults in Afghanistan are illiterate. 
+
+  Afghanistan has four seasons, spring, summer, autumn and winter. The  largest part of the country has a dry continental climate with hot summer and cold winter. In parts of the lowlands, especially in southern and eastern Afghanistan, the summer temperature can rise to 50 Celcius, but stays around 20 Celcius in the winter.In mountainous areas, winter temperatures may dip to -25 Celcius. In the higher mountain areas winter temperatures may even be considerably lower than that. Extensive snowfall is experienced in parts of the mountain region in the winter and many communities are isolated from the outside world for up to 4 months. Irrigated agriculture is largely dependent on their being enough snow in the mountains to melt in the spring. In many places, irrigated agriculture is totally dependent on sufficient snow in the mountains. The snow season is between October and April, but varies depending on altitude.
+
+```{r,  message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+data(wrld_simpl)
+
+Afghan_corona <- coronavirus %>% filter(country == "Afghanistan")
+
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "aquamarine", color = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + scale_x_continuous(breaks = seq(-180, 180, 120)) + scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p + geom_point(data = Afghan_corona, aes(x = long, y = lat), color = "red", size = 1.5) + theme(legend.position = "bottom", plot.background = element_rect(fill = "bisque"), panel.background = element_rect(fill= "dodgerblue")) + labs(title = "Location of Afghanistan")
+
+```
+
+### <span style = "color:green;">Beginning of the covid-19 pandemic</span>
+
+  The covid-19 pandemic is an ongoing global pandemic caused by severe acute respiratory syndrome coronavirus2. The novel virus was first defined in **Wuhan, China**, in December 2019. A lockdown in Wuhan and other cities in Hubei province Failed to contain the outbreak, and it spread to other parts of mainland China and around the world.The **World Health Organization (WHO)** declares a Public Health Emergency of International Concern on 30 January 2020, and a pandemic on 11 March 2020. Since 2021, variants of the virus have emerged and become dominant in many countries, with the **Delta**, **Alpha**, and **Beta** variants being the most virulent. As of 26 September 2021, more than **231 million** cases and **4.74 million** deaths have been confirmed, making it one of the deadliest pandemics in history.
+
+
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(magrittr)
+Afghan_corona <- coronavirus %>% filter(country == "Afghanistan")
+head(Afghan_corona)
+```
+
+
+### <span style = "color:green;">covid-19 situation in Afghanistan</span>
+
+Covid-19 pandemic was confirmed to have spread to Afghanistan when its index case, in Herat, was confirmed on 24 February 2020. On 27 March, it was announced that the Afghan cabinet had approved the lockdown of the capital of Afghanistan, Kabul, from 28 March for three weeks. On Saturday May 2, authorities extended the nationwide corona virus disease lockdown that was due to end Saturday, May 9 until Sunday May24. Lockdown measures in Kabul include a ban on inter-city travel, a reduction of all nonessential services, and the closure of nonessential businesses and public spaces. Individuals have also been asked not to venture outside. Government employees and those working in the health, food, telecommunication and media sectors are exempted from the restrictions, along with those shopping for basic necessities. Lock down measures vary on a province to province basis, though are generally based on the Kabul model. Food insecurity during the lockdown has been a major problem, with the government initiating a food distribution program to 250,000 poor families in Kabul. However, the UN estimates that as many as 14 million Afghans could face emergency levels of food insecurity if the crisis lasts until winter. 
+
+The number of covid-19 vaccination doses administered per 100 people in Afghanistan rose to eight as of September 25, 2021. This is counted as a single dose, and may not equal the total number of people vaccinated, depending on the specific dose regime.
+
+
+# <span style = "color:blue;">***--Exploratory Data Analysis--***</span>
+
+
+### <span style = "color:navy;">***Daily Covid-19 confirmed cases in Afghanistan***</span>
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+library(coronavirus)
+library(gganimate)
+library(dplyr)
+library(gifski)
+library(av)
+library(ggplot2)
+library(tidyr)
+library(lubridate)
+
+Afghan_corona <- coronavirus %>% filter(country == "Afghanistan")
+
+confirmed_corona_cases_afghan <- Afghan_corona %>% filter(type == "confirmed")
+
+confirmed_corona_cases_afghan %>% ggplot(aes(x = date, y=cases)) + geom_line(color="red") + theme(legend.position = "bottom", plot.background = element_rect(fill = "lightblue"), panel.background = element_rect(fill= "lightgoldenrodyellow")) + labs(title = "Confirmed covid-19 cases")
+```
+
+In the beginning of the year 2020, there are no confirmed cases recorded, but we can see,it takes a high value by June 2020. By August, that situation has dropped and there is no significant increase confirmed corona cases. But, by June 2021 it has begun to increase the number of cases have increased rapidly and around July 2021, it has taken a high value. However, by now that situation has greatly diminished. 
+
+
+### <span style = "color:navy;">***Daily Covid-19 recovered cases in Afghanistan***</span>
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+recovered_corona_cases_afghan <- Afghan_corona %>% filter(type == "recovered")
+
+recovered_corona_cases_afghan %>% ggplot(aes(x = date, y = cases)) + geom_line(color="blue") + theme(legend.position = "bottom", plot.background = element_rect(fill = "lightblue"), panel.background = element_rect(fill= "lightgoldenrodyellow")) + labs(title = "Recovered covid-19 cases")
+```
+
+By July count of recovered cases has increased. It is in good condition. we can see increments as well as decrements of recovered cases in the above graph. After the month of July in 2021 there is no recording shown in the graph.
+
+
+### <span style = "color:navy;">***Daily Deaths of Afghanistan due to covid-19***</span>
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+death_cases_afghan <- Afghan_corona %>% filter(type == "death")
+
+death_cases_afghan %>% ggplot(aes(x = date, y = cases)) + geom_line(color="darkgreen") + theme(legend.position = "bottom", plot.background = element_rect(fill = "lightblue"), panel.background = element_rect(fill= "lightgoldenrodyellow")) + labs(title = "Death cases")
+```
+
+Since April 2020, there can seen a increment of number of deaths until July 2020. The number of deaths, begin to increase gradually again in November 2020. However it was not been a high level comparing with previous. It has been a high increment of number of deaths since June in 2021. By the end of the months it has been a significant high value of the deaths count. After month  of August in 2021 we can see an increment of number of deaths due to covid_19 pandemic.
+
+
+### <span style = "color:navy;">***Summary of covid-19 cases in Afghanistan***</span>
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+Afghan_corona %>% ggplot(aes(x = date, y = cases)) + geom_point(aes(col=type)) + geom_line(aes(col=type)) + theme(legend.position = "bottom", plot.background = element_rect(fill = "lightblue"), panel.background = element_rect(fill= "lightgoldenrodyellow")) + labs(title = "Variation of Confirmed cases, Recovered cases and Deaths over time") + scale_color_manual(values = c("red", "darkgreen",  "blue")) + transition_reveal(date)
+
+```
+
+
+According to the time series pot, It has begun to spread covid-19 since March 2020. At the beginning there are not significant confirmed cases. By April, there can be see a increasing in confirmed cases. It has increased more than 1000 cases by June in 2020. By this time, it has begun to increase number of recovered cases. We can see in July 2020 it has closed to 2000. After June in 2020, the number of confirmed covid-19 cases has decreased over the time. By October it has begun to increase again but it is not significant. Corresponding recovered cases has increased over the time. Since April in 2021, we can see a high increment of confirmed cases and by now it has gradually decreased, and recovered cases has increased, Deaths have increased as well at this time period. However, Deaths have controlled in a lowest value in this time period.
+
+#### <span style = "color:violetred4;">***Summary Statistics of covid-19 cases in Afghanistan***</span>
+
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+Afghan_corona %>% select(date, type, cases) %>% pivot_wider(names_from = type, values_from = cases) %>% summary()
+```
+
+## <span style = "color:dodgerblue;">***Comparison of the effect of covid-19 pandemic of Afghanistan with neighboring countries***</span>
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+library(coronavirus)
+unique(coronavirus$country)
+```
+
+
+### <span style = "color:darkred;">***Comparison with our country, Sri Lanka***</span>
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+x <- filter(coronavirus, country %in% c("Afghanistan", "Sri Lanka"))
+
+x %>% ggplot(aes(x=date, y=cases)) + geom_line() + facet_grid(country ~ type) + labs(title = "Afghanistan with Sri Lanka") + theme(legend.position = "bottom", plot.background = element_rect(fill = "plum1"), panel.background = element_rect(fill= "lightgoldenrodyellow"))
+
+```
+
+
+
+Afghanistan shows an significant increment of confirmed cases since about April in 2020, but Sri Lanka has started to shows an increment by October 2020. Afghanistan has reported their number of confirmed cases below 4,000. Even Sri Lanka takes a significant time period compared to Afghanistan to spread, within one year Sri Lanka has reported more than 10,000 confirmed cases. Corresponding recovered cases has increased over the time. Afghanistan shows significant death cases by July 2021 as well as death cases in Sri Lanka has increased after July 2021.
+
+#### <span style = "color:violetred4;">***Summary Statistics of covid-19 cases in Sri Lanka***</span>
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+coronavirus %>% filter(country == "Sri Lanka") %>% select(date, type, cases) %>% pivot_wider(names_from = type, values_from = cases) %>% summary()
+```
+
+### <span style = "color:darkred;">***Comparison with China***</span>
+
+
+* We can consider the China as the country of beginning this covid-19 pandemic. Furthermore, Afghanistan is bordered by China to the northeast.
+
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+x <- filter(coronavirus, country %in% c("Afghanistan", "China"))
+
+x %>% ggplot(aes(x=date, y=cases)) + geom_line() + facet_grid(country ~ type) + labs(title = "Afghanistan with China") + theme(legend.position = "bottom", plot.background = element_rect(fill = "plum1"), panel.background = element_rect(fill= "lightgoldenrodyellow"))
+```
+
+By January in 2020, covid-19 pandemic has recorded in China, even it started in December 2019. It shows approximately 15,000 cases within this month. However after April in 2020, it does not show a significant increment of confirmed cases. Compared to China, when confirmed cases in China is decreasing, Afghanistan has begun to report their confirmed cases. Since then, Afghanistan shows a variation of number of covid-19 confirmed cases upto now. Even confirmed cases and deaths as well of China get high values at the beginning of the pandemic, now we can see they have controlled almost completely.
+
+
+
+### <span style = "color:darkred;">***Comparison with Tajikistan***</span>
+
+* Tajikistan is the other country that located in northeast to the Afghanistan.
+
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+x <- filter(coronavirus, country %in% c("Afghanistan", "Tajikistan"))
+
+x %>% ggplot(aes(x=date, y=cases)) + geom_line() + facet_grid(country ~ type) + labs(title = "Afghanistan with Tajikistan") + theme(legend.position = "bottom", plot.background = element_rect(fill = "plum1"), panel.background = element_rect(fill= "lightgoldenrodyellow"))
+```
+
+Around June in 2020, there is a high count of confirmed covid-19 cases. But it is not significant high campared to the Afghanistan. Since beginning, Tajikistan shows a count less than 1,000 in confirmed covid-19 cases. Compared to Afghanistan, Tajikistan is in good condition. we can see the count of deaths is almost less compared to the Afghanistan. 
+
+#### <span style = "color:violetred4;">***Summary Statistics of covid-19 cases in Tajikistan***</span>
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+coronavirus %>% filter(country == "Tajikistan") %>% select(date, type, cases) %>% pivot_wider(names_from = type, values_from = cases) %>% summary()
+```
+
+### <span style = "color:darkred;">***Comparison with Pakistan***</span>
+
+* Pakistan is the country that bordered in Pakistan to the east and south of Afghanistan.
+
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+x <- filter(coronavirus, country %in% c("Afghanistan", "Pakistan"))
+
+x %>% ggplot(aes(x=date, y=cases)) + geom_line() + facet_grid(country ~ type) + labs(title = "Afghanistan with Pakistan") + theme(legend.position = "bottom", plot.background = element_rect(fill = "plum1"), panel.background = element_rect(fill= "lightgoldenrodyellow"))
+```
+
+In the plot, we can see the pandemic has begun to spread in both Afghanistan and Pakistan at the same time approximately. By middle of the July in 2020, there are more than 10,000 covid-19 confirmed cases in Pakistan but in Afghanistan it takes a count less than 2,500. In this time Pakistan has recorded their maximum count in cases. There can be seen several increments and decrements of covid-19 confirmed cases over the time. Compared to Pakistan, Afghanistan shows a significant count of confirmed cases only in June 2021. Pakistan shows some high counts of deaths as well compared to Afghanistan.
+
+#### <span style = "color:violetred4;">***Summary Statistics of covid-19 cases in Pakistan***</span>
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+coronavirus %>% filter(country == "Pakistan") %>% select(date, type, cases) %>% pivot_wider(names_from = type, values_from = cases) %>% summary()
+```
+
+
+### <span style = "color:darkred;">***Comparison with Iran***</span>
+
+* Afghanistan is bordered by Iran to the west. 
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+x <- filter(coronavirus, country %in% c("Afghanistan", "Iran"))
+
+x %>% ggplot(aes(x=date, y=cases)) + geom_line() + facet_grid(country ~ type) + labs(title = "Afghanistan with Iran") + theme(legend.position = "bottom", plot.background = element_rect(fill = "plum1"), panel.background = element_rect(fill= "lightgoldenrodyellow"))
+```
+
+Even Afghanistan shows some high count of covid-19 confirmed cases around month of June in 2020, it shows a decrement by end of the July in 2020. But, when we consider the situation of Iran, confirmed cases has continuously decreased up to December in 2020. Even by January 2021 the count of cases was increasing, again by April it has begun to increase. In the middle of that month cases has gotten high count in confirmed cases and it has decreased by July 2021. But since then, by end of the July, the number of the covid-19 confirmed cases has exceeded 50,000. Corresponding recovered counts has increased. By now we can see it is decreasing. Iran shows some significant number of deaths due to pandemic campared to Afghanistan. 
+
+#### <span style = "color:violetred4;">***Summary Statistics of covid-19 cases in Iran***</span>
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+coronavirus %>% filter(country == "Iran") %>% select(date, type, cases) %>% pivot_wider(names_from = type, values_from = cases) %>% summary()
+```
+
+
+### <span style = "color:darkred;">***Comparison with Uzbekistan***</span>
+
+* Afghanistan is bordered by Turkmenistan and Uzbekistan to the north. Following graph shows the comparison of covid-19 pandemic of Afghanistan and Uzbekistan.
+
+
+```{r, message=FALSE, comment=NA, echo=FALSE, warning=FALSE}
+x <- filter(coronavirus, country %in% c("Afghanistan", "Uzbekistan"))
+
+x %>% ggplot(aes(x=date, y=cases)) + geom_line() + facet_grid(country ~ type) + labs(title = "Afghanistan with Uzbekistan") + theme(legend.position = "bottom", plot.background = element_rect(fill = "plum1"), panel.background = element_rect(fill= "lightgoldenrodyellow"))
+```
+
+We can see the beginning of the pandemic has occurred approximately at the same time. In June 2020 Afghanistan has recorded high confirmed covid-19 cases exceeded 1,000 , but the number of recorded cases has decreased by August 2020. Compared to Afghanistan, Uzbekistan has taken that whole time period to close 1,000. Uzbekistan is not exceeded the number of covid-19 confirmed cases than 1,000 , but Afghanistan has exceeded 3,000. Uzbekistan shows a less count of deaths due to pandemic than Afghanistan up to now.
+
+
+#### <span style = "color:violetred4;">***Summary Statistics of covid-19 cases in Uzbekistan***</span>
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+coronavirus %>% filter(country == "Uzbekistan") %>% select(date, type, cases) %>% pivot_wider(names_from = type, values_from = cases) %>% summary()
+```
+
+
+# <span style = "color:blue;">***--Conclusions--***</span>
+
+* Pandemic has begun to spread in Afghanistan after some months from the beginning of the pandemic in China.
+
+* Daily covid-19 confirmed count has exceeded 3,000 in some days about after one year since beginning.
+
+* Most of the time in this time period, Afghanistan has controlled their number of confirmed cases below 1,000.
+
+* There is a good progress in recovering compared to confirmed cases.
+
+* Apart few months around July in 2021, they have controlled the number of deaths occurred in a low value. We can consider it as a good condition.
+
+* When comparing the pandemic of Afghanistan with some neighboring countries, there are some cases that the facing of Afghanistan against this pandemic is good as well as some cases are bad.
+
+
+# <span style = "color:blue;">***--Discussion--***</span>
+
+Coronavirus disease 2019, in short COVID-19 is a new virus discovered in recent time. This virus has made a lot of people sick. Doctors and relevant institutions are still studying about this. Doctors and officers related to health are work with dedication to control this pandemic, and working hard to help people stay healthy. It should be give our support as well to them. We can practice healthy habits at home, workplaces and any other public place to help prevent spread of covid-19. As some of them we can do following things easily ; 
+
+  * Cough or sneeze into a tissue and throw back it in the dustbin right away.
+  
+  * Keep hands out of eyes, nose, face and mouth to keep germs out of the body.
+  
+  * Avoid crowded places and stay six feet away from one another and avoid touching surfaces in public places.
+  
+  * Wash hands with soap and water for at least 20 seconds, or else we can use hand sanitizer to clean the germs.
+  
+  * When we feel some sick with cough and fever, limit connecting with society and stay home.
+  
+Covid-19 can effect in different ways. Some people do not show any different even they get positive result from from a covid-19 test. Some people may show fever, cough or have a hard taking breaths. This has effected highly for people who are still have impact from other diseases like heart related diseases. 
+
+This pandemic has impacted to people in many ways. We can consider following few things as some of them.
+
+* Downward trends of family economic conditions and several lower hierarchy social classes facing unbearable economic hardships due to lack of daily or monthly earning. There are many people who are losing their jobs and incomes.
+
+* There have closed schools, universities and education institutes still. In most education has gone down by now.
+
+* Some people may face various kind of stress and depression conditions due to malfunction of the social system.
+
+There are some advantages as well due to this pandemic. 
+
+* People have learnt about ideal social behaviours.
+
+* People attracted to traditional foods consumption practices mainly based on the family. People grew their own vegetables as well.
+
+* Reduction in plastic and polythene use at the domestic level, thus reducing the environmental pollution. Mainly, air, sound and water pollution have reduced. Perhaps, there may be some climate changes in the environment.
+
+Safe and effective vaccines are an important way to protect people against covid-19. National regulatory authorities have granted emergency use authorizations for 23 covid-19 vaccines. There are seven vaccines approved for use by WHO. They are Moderna, Pfizer/BioNTech, Janssen, Oxford/AstraZenica, Covishield, Sinopharm, and Sinovax. Being vaccinated does not mean that there is no risk of infection of coronavirus, because researches are still ongoing.
+
+### <span style = "color:blue;">***--References--***</span>
+
+https://www.who.int
+
+https://www.en.m.wikipedia.org
+
+https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+
+https://hellor.netlify.app/coronareports/
+
+
+![](Image2.png)

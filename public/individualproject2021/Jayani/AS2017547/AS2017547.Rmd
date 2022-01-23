@@ -1,0 +1,323 @@
+---
+title: "**ASP458 2.0 Programming & Data Analysis with R** "
+author: "Nirmani Siriwardhana"
+
+
+---
+---
+<style>
+body{text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,command = NA, message = FALSE, warning = FALSE)
+```
+## **COVID-19 pandemic situation in Trinidad and Tobago** ![](Flag-Trinidad-and-Tobago.jpg){width=5%}
+
+### Trinidad and Tobago 
+
+
+![](Td-map.gif){width=25%} 
+ 
+
+Trinidad and Tobago, dual-island Caribbean nation (southeastern West Indies) near Venezuela. It consists of two main islands, Trinidad and Tobago and several smaller islands lie close to the continent of South America, northeast of Venezuela and northwest of Guyana.
+
+-**Largest city: San Fernando** 
+
+-**Capital: Port of Spain**
+
+-**Government: Unitary parliamentary constitution**
+
+-**Currency: Trinidad and Tobago dollar**
+
+-**population: 1.4 million (2020)**
+
+
+### Location of Trinidad and Tobago in World map
+
+
+
+```{r,out.width="50%"}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+data(wrld_simpl)
+TT_corona<-coronavirus%>%filter(country=="Trinidad and Tobago")
+
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", color = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90,90)) + scale_x_continuous(breaks = seq(-180, 180, 120)) + scale_y_continuous(breaks = seq(-90, 90, 100))
+p + geom_point(data = TT_corona, aes(x = long, y = lat), color = "red", size = 1.5)+ggtitle("Trinidad and Tobago")
+```
+
+
+
+### Nature and Lifestyle
+
+
+
+![](Beach-island-Tobago-Trinidad-and.jpg){width=35%}          ![](Fishermen-nets-Stonehaven-Bay-Trinidad-and-Tobago.jpg){width=35%}
+
+
+
+The island of Tobago is physio graphically an extension of the Venezuelan coastal range and the Northern Range of Trinidad. Its dominant feature is the Main Ridge, which runs from northeast to southwest, rising to heights of about 1,800 feet (550 meters). The ridge slopes more gently to the southwest onto a coral plain. The coral formation has given rise to a number of reefs, one of which, **Buccoo Coral Reef**, is known for its **marine life** and is popular for **scuba diving and snorkeling**. Over the years, the reef and its marine life have suffered serious damage from pollution and tourist activity. Tobago has only a few short streams.Numerous bird species inhabit sanctuaries such as the **Asa Wright Nature Center**. The smaller island of Tobago is known for its beaches and the Tobago Main Ridge Forest Reserve, which shelters **hummingbirds**.
+
+
+
+
+
+ ![](Port-of-Spain-Trinidad-Tobago.jpg){width=25%} ![](Port-of-Spain-National-Academy-Performing-Arts-Trinidad-Tobago.jpg){width=25%}  ![](dancers-Port-of-Spain-Carnival-Trinidad-and.jpg){width=25%}
+ 
+ 
+ 
+
+Trinidad and Tobago is a Caribbean nation,with distinctive **Creole traditions and cuisines**. Trinidad’s capital, Port of Spain, hosts a **boisterous carnival featuring calypso and soca music**. It is located on the northwestern coast of Trinidad. 
+Port of Spain, National Academy of Performing Arts and a cultural festival are shown in above photographs.
+
+
+
+
+### Climate
+
+![](Rain-shaft-Man-of-War-Bay-Trinidad.jpg){width=35%} 
+
+The climate of Trinidad and Tobago is **tropical**, with high relative humidity. The coolest months are January and February, when the average minimum temperature is about 68 °F (20 °C). The warmest months are April, May, and October, which have an average maximum temperature of about 89 °F (32 °C). In general, mean temperatures range between 77 °F (25 °C) in February and 85 °F (29 °C) in April. Temperatures vary significantly between day and night, and the climate along the coast is tempered by sea breezes.
+There is a main dry season from January to May and a lesser dry season (Petite Carême, or Indian Summer) in September and October. The prevailing winds are the northeast trades. The islands are outside the main hurricane zone, but Tobago occasionally is struck by disastrous hurricanes
+
+
+
+### Spread of Covid-19 in Trinidad and Tobago 
+
+
+Trinidad and Tobago is facing its highest numbers of COVID-19 cases yet. In fact, it has seen a total of 33,920 cases and 918 deaths. Of its 1.3 million population, 7,162 currently have COVID-19.
+
+On 12 March, Trinidad and Tobago recorded its first case of COVID-19. It was a 52-year-old man who had recently been to Switzerland. He was self-isolated before he began experiencing symptoms of COVID-19. Contact tracing for the passengers of the patient's flight is being conducted.
+
+On 13 March 2020, government announced that schools and universities would be closed across the nation for one week due to the corona virus fears. After that On 16 March 2020, the closure was extended until 20 April.
+
+Many Hindu associations cancelled Phagwa, Navratri, Ram Navami, and Hanuman Jayanti celebrations. Many other events were also cancelled or postponed.
+ 
+Restrictions were put in place with regards to prisons nationwide. BPTT closed their offices in their response to the corona virus. Labour Minister Jennifer Baptiste-Primus announced that pandemic leave would be made available to workers with children. On 21 March 2020, National Security Minister Stuart Young announced the closure of all borders to everyone (including nationals & non nationals) effective midnight on Sunday 22 March. He said no international flights would be allowed to enter the country. However, cargo vessels bringing food and pharmaceuticals into the country would be allowed entry
+
+On 6 April, government extended the stay-at-home order to 30 April (later extended again to 10 May). Then announced that until that date all restaurants would be closed, and several business such as supermarkets, bakeries, pharmacies and hardware would have adjusted opening hours.
+
+On August 25, Trinidad and Tobago crosses 1,000 active cases. Trinidad and Tobago recorded 153 new cases. The number of total cases and deaths now stands at 1,252 and 12 respectively.On 31 August 2020, citizens were required by law to wear masks once they were out in public.
+
+In May 2021, the twin island state was experiencing a third wave of COVID-19, and imposed a state of emergency with curfew from 9 p.m. to 5 a.m. with some exceptions to essential services including the energy sector, supermarkets, and pharmacies.
+
+
+
+### Actions taken by the government
+
+Government response consisted of closing the country’s borders, implementing stay-at-home orders and declaring a subsequent state of emergency. These measures have taken a toll on the country’s economy. The unprecedented loss of revenue has trickled down and affected various other sectors, disproportionately affecting the poorest Trinbagonians.
+
+Local media outlets have been covering farmers, vendors and bus drivers fighting to make a living, spreading awareness of their plight and prompting community members to help each other. The government has offered Salary Relief Grants to affected persons in certain sectors, receiving over 15,000 applications,  mainly from the retail, entertainment and food and restaurant sector.
+
+Lengthy processing times of these applications have encouraged other entities to address immediate needs. Communities have hosted food drives, and the Digicel Foundation, partnering with 10 NGOs, offered $500,000 in food vouchers to 1,000 families that COVID-19 affected. The Trinidad and Tobago Association of Psychologists has also been offering free calls to help those who have experienced poor mental health as a result of job loss and quarantine during the pandemic.
+
+COVID-19’s impact on Trinidad and Tobago extends to education as well. Online learning has taken place since schools closed in March 2020. However, The Ministry of Education estimates that the resources needed to participate in school online are inaccessible to 60,000 students. The Ministry has provided most teachers with laptops but has not resolved the accessibility issue for poorer students. The Catholic Board of Education stepped in during 2020, partnering with the Telecommunications Services of Trinidad and Tobago (TSTT) to bring internet connectivity to almost 2,000 students in need.
+
+Willing Trinbagonians aged 60+ are gradually receiving vaccinations, in addition to public officials, some essential workers and some high-risk cases. Trinidad and Tobago’s government found vaccines difficult to secure so it has been depending on gifted doses. Luckily, other countries stepped up as Barbados,  Grenada, St. Vincent, Bermuda, the Grenadines and India donated a total of 64,500 AstraZeneca vaccines, China donated 200,000 Sinopharm vaccines and the U.S. donated 400 Pfizer vaccines.
+
+Accessing critical medical supplies like test kits, personal protection equipment (PPE), ventilators, and pharmaceuticals is still the primary goal of the government. Initial shutdowns in China and India, and disruptions in supply chains for such supplies, were mitigated through other sources until these supplies resumed. Securing PPE was deemed paramount, with estimates that over 1000 pieces of PPE are required to treat one COVID-19 patient during his or her contagion. Since most  PPE is imported, arrangements were made to source such items worldwide.
+
+
+
+
+
+## Exploratory Data Analysis
+
+### Total Covid 19 status
+
+#### **Figure :01**
+
+```{r,out.width="100%"}
+
+TT_corona<-coronavirus %>% filter(country=="Trinidad and Tobago")
+confirm_TT_corona<-TT_corona%>%filter(type=="confirmed")
+death_TT_corona<-TT_corona%>%filter(type=="death")
+recovered_TT_corona<-TT_corona%>%filter(type=="recovered")
+TT_dis<-data.frame(Date=TT_corona$date,Confirm=confirm_TT_corona$cases,Death=death_TT_corona$cases, Recovered=recovered_TT_corona$cases)
+TT_Distribution<-pivot_longer(TT_dis,c(2,3,4),"type","values")
+
+
+library(plotly)
+
+
+f1 <- ggplot(TT_Distribution) + geom_bar(aes(x=type,y = value , fill= type), stat= "identity") +ggtitle("Daily Covid-19 status of Trinidad and Tobago (2020 - 2021)")
+
+
+ggplotly(f1)
+
+```
+According to the above plot, we can see total death cases are very few.
+
+
+
+
+
+#### **Figure :02**
+
+```{r, comment=NA}
+f2 <- ggplot(confirm_TT_corona, aes(x=date, y= cases))+ geom_line(size=0.5, color = "#0a2063")+ geom_point(size=0.2, color= "#d782d9")+ ggtitle( "Daily Covid-19 Confirm Cases 2020-2021") + theme_light()+ labs( y= "Number of Confirmed Cases", x = "Date")
+ggplotly(f2)
+
+```
+
+
+According to this time series plot, covid-19 confirmed cases are increased in last six month of  2020 and 2021. Furthermore confirmed cases are higher in 2021 than 2020.
+
+
+
+
+
+
+#### **Figure :03**
+   
+```{r, comment=NA}
+f3 <- ggplot(recovered_TT_corona, aes(x=date, y= cases))+ geom_line(size=0.5, color = "#03a326")+ geom_point(size=0.2, color= "#082b10")+ ggtitle( "Daily Covid-19 Recoverd Cases 2020-2021") + theme_light()+ labs( y= "Number of Recoverd Cases", x = "Date")
+ggplotly(f3)
+
+```
+ Most of the covid-19 patients are recovered in 2021 than 2020 due to increasing of covid-19 cases in 2021 is greater than 2020.
+There are only one negative value in the data set. It must be a data entry mistaken.
+
+
+
+#### **Figure :04**
+
+   
+```{r, comment=NA}
+f4 <- ggplot(death_TT_corona, aes(x=date, y= cases))+ geom_line(size=0.5, color = "#4f064d")+ geom_point(size=0.2, color= "#082b10")+ ggtitle( "Daily Covid-19 Death Cases 2020-2021") + theme_light()+ labs( y= "Number of Death Cases", x = "Date")
+ggplotly(f4)
+
+```
+
+
+Daily deaths in Trinidad and Tobago is increasing 2021 than 2020. Current situation in Trinidad and Tobago is critical.
+
+
+
+#### **Figure :05**
+
+
+```{r, out.width="100%", out.height= "100%"}
+
+TT_corona_wider <- TT_corona %>% pivot_wider(names_from = type, values_from = cases)
+
+newTT <- TT_corona_wider %>% mutate( active = confirmed-recovered-death)
+
+TT_corona_longer <- newTT %>% pivot_longer(6:9,names_to = "type", values_to = "cases")
+
+
+Active_TT_corona <- TT_corona_longer %>% filter(type == "active")
+
+
+f5 <- ggplot(Active_TT_corona, aes(x=date, y= cases))+ geom_line(size=0.5, color = "#03a326")+ geom_point(size=0.2, color= "#082b10")+ ggtitle( "Daily Covid-19 Active Cases 2020-2021") + theme_light()+ labs( y= "Number of Active Cases", x = "Date")
+ggplotly(f5)
+
+```
+
+Daily active cases are increased in between March and June in 2021 than other months.
+
+
+
+
+
+### Comparision with other countries close to Trinidad and Tobago
+
+Trinidad and Tobago are closest to Barbados, Guyana, Venezuela and Grenada. 
+Now we can compare covid-19 situations in nearest countries with Trinidad and Tobago.
+
+#### **Figure :06**
+
+```{r, out.width="100%", out.height= "100%"}
+
+world_corona <- filter(coronavirus,country %in% c("Barbados", "Guyana", "Venezuela", "Grenada","Trinidad and Tobago" ))
+confirm_world_corona <- world_corona %>% filter (type=="confirmed")
+ 
+a <- confirm_world_corona %>% group_by(country) %>% mutate (cum_cases=cumsum(cases))
+
+f6 <- ggplot(a, aes(x=date, y= cum_cases, color = country)) + geom_path(size=0.5) + ggtitle( "Daily Covid-19 Confirmed Cases by Countries 2020-2021") + theme_light()+ labs( y= "Number of confirmed Cases", x = "Date")
+ggplotly(f6)
+
+```
+According to this plot, we can see confirmed cases in Venezuela is greater than other countries includng Trinidad and Tobago.
+
+
+
+
+
+#### **Figure :07**
+
+```{r, out.width="100%", out.height= "100%"}
+
+world_corona <- filter(coronavirus,country %in% c("Barbados", "Guyana", "Venezuela", "Grenada","Trinidad and Tobago" ))
+Recovered_world_corona <- world_corona %>% filter (type=="recovered")
+ 
+b <- Recovered_world_corona %>% group_by(country) %>% mutate (cum_cases=cumsum(cases))
+
+f7 <- ggplot(b, aes(x=date, y= cum_cases, color = country)) + geom_path(size=0.5) + ggtitle( "Daily Covid-19 Recovered Cases by Countries 2020-2021") + theme_light()+ labs( y= "Number of Recovered Cases", x = "Date")
+ggplotly(f7)
+
+```
+
+Recovered cases are also same according to the figure 07.
+
+
+#### **Figure :08**
+
+```{r, out.width="100%", out.height= "100%"}
+
+world_corona <- filter(coronavirus,country %in% c("Barbados", "Guyana", "Venezuela", "Grenada","Trinidad and Tobago" ))
+Death_world_corona <- world_corona %>% filter (type=="death")
+ 
+d <- Death_world_corona %>% group_by(country) %>% mutate (cum_cases=cumsum(cases))
+
+f8 <- ggplot(d, aes(x=date, y= cum_cases, color = country)) + geom_path(size=0.5) + ggtitle( "Daily Covid-19 Death Cases by Countries 2020-2021") + theme_light()+ labs( y= "Number of Death Cases", x = "Date")
+ggplotly(f8)
+
+```
+But in this graph shows not only Venezuela, but also Guyana and Trinidad & Tobago shows increasing of covid-19 deaths than other two countries.
+
+
+## Conclusion and Discussion
+
+According to the exploratory data anaylsis of Trinidad and Tobago, infection of covid-19 is increased fast in 2021 than 2020.
+But,compare with other countries situated near to the Trinidad and Tobago, death rate is higher than other countries except Venezuela.
+
+Trinidad and Tobago has administered at least 1,045,498 doses of COVID vaccines so far.Assuming every person needs 2 doses, that's enough to have vaccinated about 37.5% of the country's population.
+
+The Ministry of Health, Trinidad and Tobago, advises the population of two more confirmed cases of Coronavirus Disease 2019 (COVID-19).
+
+Thus, in total, four persons have tested positive for COVID-19 in Trinidad and Tobago at this time.
+
+Additional information will be provided as the situation develops.
+
+Members of the public are urged to take the following personal hygiene measures to protect themselves and their loved ones from COVID-19.
+
+
+### References
+
+- [1] https://en.wikipedia.org/wiki/Trinidadians_and_Tobagonians
+- [2] https://www.britannica.com/place/Trinidad-and-Tobago
+- [3] https://www.diplomacy.edu/blog/first-month-covid-trinidad-and-tobago/
+- [4] https://borgenproject.org/covid-19s-impact-on-trinidad-and-tobago/
+- [5] https://health.gov.tt/covid-19/covid-19-news-and-updates
+
+
+
+
+
+
+
+
+
+
+
+

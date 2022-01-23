@@ -1,0 +1,446 @@
+---
+title: "China COVID-19 Analysis"
+author: "Amalsha Chamodi/AS2018557"
+date: "9/26/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction
+
+![](pic.png)
+
+The COVID-19 pandemic in mainland China is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). China was the first country to experience an outbreak of the disease, the first to impose drastic measures in response (including lockdowns and face mask mandates), and one of the first countries to bring the outbreak under control.
+
+The outbreak was first manifested as a cluster of mysterious pneumonia cases, mostly related to the Huanan Seafood Market, in Wuhan, the capital of Hubei province. It was first reported to the local government on 27 December 2019 and published on 31 December. On 8 January 2020, a new coronavirus (SARS-CoV-2) was identified as the cause of the pneumonia by Chinese scientists.
+
+
+
+## 1.1 Visualization of the location
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+
+
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+china_corona <- coronavirus %>% filter(country == "China")
+
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+
+
+
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+data(wrld_simpl)
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x = long, y = lat, group = group), fill = "gray", colours = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + scale_x_continuous(breaks = seq(-180, 180, 120)) + scale_y_continuous(breaks = seq(-90, 90, 100))
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+p + geom_point(data = china_corona, aes(x = long, y = lat), colour = "red", size = 1)
+
+```
+
+
+## 1.2 Climate Condition
+
+China is located in the eastern Asia, and faces the Pacific Ocean in the east and south. Due to geographic position, the eastern and southern China are influenced by monsoon, and have climates like tropical monsoon climate, subtropical monsoon climate and temperate monsoon climate. In the west of China, there are two types of climate, temperate continental climate and plateau climate and highland climate. Most regions are cold and dry in winter and have a warm and rainy climate in summer. Because of its varied topography and terrain conditions, its climate is complicated and diversified from region to region. For instance, there is a long winter but no summer in the northern part of Heilongjiang Province, while there is a long summer but no winter in Hainan Province. There are four distinct seasons in the Huaihe River valley. The weather in Yunnan is like the weather in spring all the year round. The climate in the hinterland of northwestern China varies greatly in winter and summer. In a summer day, it has a drastic fall in temperature, cold in morning and extremely hot in noon. The Qinghai-Tibet Plateau in the southwest has a highland climate with a low temperature throughout the year. Desert regions in Xinjiang has a temperate continental climate, with the weather of dryness and rainless throughout the year.
+
+### *Temperature Zone*
+
+China's complex and varied climate results in a great variety of temperature belts, and dry and moist zones. In terms of temperature, the nation can be sectioned from south to north into equatorial, tropical, sub-tropical, warm-temperate, temperate, and cold-temperate zones; in terms of moisture, it can be sectioned from southeast to northwest into humid (32 percent of land area), semi-humid (15 percent), semi-arid (22 percent) and arid zones (31 percent). In summer, the whole China is in a hot, sweltering days, with little difference in temperature between the south and the north. In the regions with a monsoon climate, the warm and moist monsoon from oceans brings abundant rainfalls. While in regions in the northwest which are in an arid zone, it could be very dry, with few rainfalls.
+ 
+
+Here are some details about climate in China.
+
+
+► All-year-round average temperature: 11.8 °C (53 °F)
+
+► Highest average temperature: 31 °C (88 °F)
+
+► Lowest average temperature: -10 °C (14 °F)
+
+► Hottest months: July & August
+
+► Coldest months: January & December
+
+► Rainfall situation: On average there are 66 days per year with more than 0.1 mm (0.004 in) of rainfall (precipitation) or 6 days with a quantity of rain, sleet, snow etc. per month.
+
+
+
+Rainfall in China is basically regular in every year. In spatial distribution, rainfall is increasing from southeast to northwest, because the eastern seashores are more influenced by the summer monsoon than inland areas, which brings vapor and rainfall. In places with heavy rainfalls, like Huoshaoliao in Taipei, the average annual rainfall can reach over 6,000 mm. Rainy season is mainly from May to September. In some areas, especially in the dry northwest, changes in rainfall every year are greater than in the coastal area. Based on rainfall, the area divides into four parts: wet area, semi-wet area, semi-dry area and dry area.
+
+
+### *Temperature Zone Divisions*
+
+
+Cold-temperate Zone: north part of Heilongjiang Province and Inner Mongolia (Representative city: Harbin)
+
+Warm-temperature Zone: Jilin, northern Xinjiang, and most of Heilongjiang, Liaoning, and Inner Mongolia (Representative cities: Beijing, Shenyang, Dalian, Urumqi, Hohhot, Dunhuang, Lanzhou)
+
+Temperature Zone: area of the middle and lower reaches of the Yellow River, Shandong, Shanxi, Shaanxi, and Hebei Province (Representative cities: Xian, Taiyuan, Luoyang, Jinan, Qingdao, Zhengzhou)
+
+Subtropical Zone: South of isotherm of Qinling Mountain-Huaihe River, east of Qinghai-Tibet Plateau (Representative cities: Shanghai, Guangzhou, Hong Kong, Macau, Guilin, Hangzhou, Suzhou, Kunming, Dali, Lijiang, Chengdu)
+
+Tropical Zone: Hainan province, southern Taiwan, Guangdong, and Yunnan Province (Representative cities: Haikou, Sanya)
+
+Qinghai-Tibet Plateau Temperate Zone: Qinghai-Tibet Plateau (Representative city: Lhasa)
+
+
+
+## 1.3 Lock-down Status of the Country
+
+
+
+China was the first country to enforce the quarantine and lockdown of cities and later whole provinces in late January 2020. Chinese Communist Party general secretary Xi Jinping said he personally authorized the unprecedented lockdown of Wuhan and other cities beginning on 23 January. Although such measures are a very old tool of epidemic control, their use at the scale of a large city such as Wuhan or the even larger scale of provinces was controversial among experts at the time, with questions about their effectiveness and their ethics. Some public health experts, while not always condemning the measure, raised the issue of the inevitable psychological toll such measures would have. An ex-World Health Organization (WHO) official who headed the organization's Western Pacific Region during the SARS outbreak said that "the containment of a city [hadn't] been done in the history of international public health policy". The WHO called the decision to quarantine Wuhan "new to science".[647] By early April, all lockdowns had ended or relaxed to a certain degree as the cases started to dwindle and the outbreak had come under control.
+
+
+
+23 January 2020, transport in Wuhan, Huanggang and Ezhou severely restricted, including closure of public transit, trains, airports, and major highways
+
+24 January 2020, travel restrictions enacted in 12 additional prefecture-level cities in Hubei
+
+13 February 2020, the Chinese government has issued extension of order to shut down all non-essential companies, including manufacturing plants, in Hubei Province until at least 24:00 20 February.
+
+20 February 2020, the Chinese government has issued extension of order to shut down all non-essential companies, including manufacturing plants, and all schools in Hubei Province until at least 24:00 10 March.
+
+13 March 2020: Huangshi removes controls and permits on road traffic within its urban area; Qianjiang does the same for its entire administrative area.
+
+14 March 2020: Hubei Sanitation and Health Committee Vice-chairperson Liu Dongru announces that only Wuhan remains a "high-risk area", and that the entirety of the rest of the province is considered medium- or "low-risk areas". Any low-risk township-level divisions, in addition to those medium- and high-risk divisions with no confirmed active cases, could lift their blockades and other mobility controls. Per China News Service reporting, by 14 March, besides the aforementioned Huangshi and Qianjiang, Yichang, Huanggang, Suizhou, Xiantao, Jingzhou, Jingmen, Shiyan, Xiangyang, Tianmen and Shennongjia had announced "measures to lessen controls" and for industries to incrementally resume work and production.
+
+17 March 2020: Jingzhou removes its permit requirements for transport, resuming normal transport operations, and also removes entry/exit controls on xiaoqu.
+
+18 March 2020: The Hubei taskforce to control COVID-19 announces that, with the exception of exit/entry into Wuhan and the province as a whole, all anti-COVID-19 traffic checkpoints within the province are to be removed.
+
+22 March 2020: Wuhan loosens its two-month lockdown.
+
+25 March 2020: Hubei lifts the lockdown outside of Wuhan, although people will still need to confirm their "Green Code" health classification, designated by Alipay's monitoring system, to travel.
+
+8 April 2020: Wuhan lifts its lockdown, resumes all transportation, with residents intending to leave the city facing similar "Green Code" requirements as those in the rest of the province.
+
+
+
+## 1.4 Action taken by the government
+
+What followed was China adhering to the starkest of containment measures in the city of 11 million people.
+
+To slow down the intensity of the epidemic and an increase in cases, the Chinese government took drastic steps on January 23rd and virtually put the area into lockdown.
+
+Mass gatherings and events were suspended, schools were shut, traffic was restricted and social distancing became the new norm.
+
+The following day, satellite cities in the Hubei province were also shut down. In an area of roughly 60 million people, all were asked to stay at home for a month. Nobody was strictly allowed to leave unless they needed food and medical care. International travel became limited and Irish citizens made global headlines as they were evacuated from the region.
+
+Timelapse pictures of hospitals being panic-built in a fortnight flooded TV screens as the government rushed to create clinics for the tens of thousands infected.
+
+For people with milder symptoms, they were separated from their families and friends placed in temporary isolation facilities like gyms, stadiums and event halls. New measures were also introduced to isolate close contacts of coronavirus patients, who were also quarantined.
+
+One of the hotels housing some of them collapsed at the beginning of March. There was universal temperature monitoring, face mask wearing, hand washing and extensive public monitoring of citizens.
+
+Tracking down coronavirus patients and separating them was also a key element in China’s battle against the virus. Checkpoints were established at building entrances while officials went door-to-door checking people’s temperatures.
+
+The eastern city of Hangzhou took steps to flush out potential people infected. Authorities in the area of 10 million said it would stop selling medicines for fever and cough so that people would go to hospital for treatment instead of self-medicating and staying at home.
+
+In Qianjiang, located in the epicentre of the Hubei province, authorities rewarded residents with money if they reported symptoms of the illness and it was confirmed after testing.
+
+China leaned too on their strong technology sector, using artificial intelligence and big data to manage its populations and find patients.
+
+What was first introduced in Hangzhou, and eventually rolled out to 200 cities across China, tech companies worked to give people a health rating which would determine if a person should be quarantined or allowed in public.
+
+After filling out a form about travel history and health history, citizens were given a colour-based QR code on their mobile phones. People’s health status became similar to a traffic light system - green, yellow and red. Red: You have to stay quarantined for 14 days and provide regular check-ins on a chat app called Ding Talk. Yellow: You have to stay inside for seven days. Green: You are allowed to travel freely.
+
+Subways, shops, public spaces, apartment blocks and other checkpoints reviewed people’s status before entry.
+
+Sophisticated facial recognition cameras are common across China and these technologies were upgraded to scan crowds for for fever and identify individuals not wearing masks. One Chinese firm developed a system to recognize the faces of those who were wearing a mask.
+
+
+
+
+# 2. Exploratory Data Analysis
+
+Following outputs are given the summary of the China coronavirus data. The 58509 obeservations are taken from 22 January 2020 to 18 September 2021.
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(coronavirus)
+data(coronavirus)
+
+```
+
+
+
+```{r, comment=NA, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+china_corona <- as.data.frame(china_corona)
+head(china_corona)
+
+```
+
+
+
+```{r, echo=FALSE, message=FALSE, results='hide', warning=FALSE}
+tail(china_corona)
+```
+
+
+
+
+
+
+
+```{r, comment=NA, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+summary(china_corona)
+```
+
+
+```{r, comment=NA, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+china_corona_new <- na.omit(china_corona)
+china_corona_new
+
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+summary(china_corona_new)
+
+```
+
+
+
+
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+confirmed_cases <- filter(china_corona_new, type == "confirmed")
+ggplot(confirmed_cases, aes(x = date, y = cases,)) + geom_path(size = 0.5) + ggtitle ("China: Daily Covid-19 Confirmed Cases")
+
+```
+
+Above graph shows the confirmed no of corona patients in China in daily basis. It shows that no of confirmed corona patients has been increasing in the first few months, 2020. The most amount cases have been confirmed in the first two months and confirmed cases are decreasing since February, 2020 up to September,2021. 
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+recovered_cases <- filter(china_corona_new, type == "recovered")
+ggplot(recovered_cases, aes(x = date, y = cases)) + geom_path(size = 0.5) + ggtitle("China: Daily covid-19 Recovered Cases")
+
+```
+
+Above graph shows the no of patients recovered from corona in China in daily basis. No of patients recovered in a day has also increased first few months in 2020.
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+death_cases <- filter(china_corona_new, type == "death")
+ggplot(death_cases, aes(x = date, y = cases)) + geom_path(size = 0.5) + ggtitle("China: Daily covid-19 Deaths Cases")
+
+```
+
+Above graph shows the no of death from corona in china in daily basis. This graph also shows that no of death increasing first few month in 2020. Although fluctuations shows that in some days no of deaths are greater than the previous days. Then again death cases are decreasing up to September, 2021.
+
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(china_corona_new, aes(x = date, y = cases, colour = type)) + geom_path(size = 1) + labs(title = "Confirmed, Death & Recovered cases in China")
+
+
+```
+
+Above graph shows the no of confirmed, death and recovered corona patients in China in daily basis in the same graph. 
+
+
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+china_corona_new <- china_corona_new %>% group_by(type) %>% mutate(cum_cases = cumsum(cases))
+
+ggplot(china_corona_new, aes(date, cum_cases, colour = type)) + geom_path(size = 0.5) + labs(title = "Total no of Confirmed, Death, Recovered Cases in China")
+
+
+```
+
+Above graph shows the Total no of confirmed, recovered and death cases in China
+
+
+### Provinces of China
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+unique(china_corona_new$province)
+
+```
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+province_corona <- coronavirus %>% filter(province == "Anhui"|province == "Beijing"|province == "Chongqing"|province == "Fujian"|province ==  "Gansu"|province == "Guangdong"|province == "Guangxi"|province == "Guizhou"|province == "Hainan"|province == "Hebei"|province == "Heilongjiang"|province == "Henan"|province == "Hong Kong"|province == "Hubei"|province == "Hunan"|province == "Inner Mongolia"|province == "Jiangsu"|province == "Jiangxi"|province == "Jilin"|province == "Liaoning"|province == "Macau"|province == "Ningxia"|province == "Qinghai"|province == "Shaanxi"|province == "Shandong"|province == "Shanghai"|province == "Shanxi"|province == "Sichuan"|province == "Tianjin"|province == "Tibet"|province == "Xinjiang"|province == "Yunnan"|province == "Zhejiang")
+
+
+
+```
+
+
+`
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+confirmed_province_corona<- filter(province_corona, type == "confirmed")
+
+ggplot(confirmed_province_corona,aes(x = date, y = cases, colour = province)) + geom_path(size = 1) + labs(title = "Daily Confirmed Cases in the Province in China")
+
+
+
+```
+
+Above graph shows the confirmed no of corona patients in provinces of china in daily basis.
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+china_corona_new <- coronavirus %>% filter(country == "China")
+recovered_province_corona <- china_corona_new %>% filter(type == "recovered")
+recovered_province_corona1 <- recovered_province_corona %>% filter(cases >= 0)
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(recovered_province_corona1, aes(x = date, y = cases, colour = province)) + geom_path(size = 1) + labs(title = "Daily Recovered Cases in the Province in China")
+```
+
+Above graph shows the recovered no of corona patients in Provinces of China in daily basis.
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+death_province_corona<- filter(province_corona, type == "death")
+
+ggplot(death_province_corona,aes(x = date, y = cases, colour = province)) + geom_path(size = 1) + labs(title = "Daily Death Cases in the Province in China")
+
+
+```
+
+Above graph shows the death cases in Provinces of China in daily basis.
+
+### Comparision with other Countries
+
+
+
+```{r, comment=NA, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+unique(coronavirus$country)
+china_corona_new <- coronavirus %>% filter(country == "China")
+us_corona <- coronavirus %>% filter(country == "US")
+india_corona <- coronavirus %>% filter(country == "India")
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+uk_corona <- coronavirus %>% filter(country == "united kindom")
+russia_corona <- coronavirus %>% filter(country == "Russia")
+turkey_corona <- coronavirus %>% filter(country == "Turkey")
+france_corona <- coronavirus %>% filter(country == "France")
+iran_corona <- coronavirus %>% filter(country == "Iran")
+argentina_corona <- coronavirus %>% filter(country == "Argentina")
+colombia_corona <- coronavirus %>% filter(country == "Colombia")
+
+
+```
+
+```{r, comment=NA, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+countries_corona <- as.data.frame(rbind(china_corona_new, us_corona, india_corona, brazil_corona, uk_corona, russia_corona, turkey_corona, france_corona, iran_corona, argentina_corona, colombia_corona))
+
+
+
+```
+
+
+
+
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+countries_death <- countries_corona %>% filter(type == "death", cases >= 0)
+ggplot(countries_death, aes(x = date, y = cases, fill = type, col = country)) + geom_line() + geom_point() + facet_wrap(~country, ncol = 2) + coord_flip() + ggtitle("Comparision Death Cases of the most affected Countries & China")
+
+
+
+```
+
+Above graph shows the Comparision Death Cases of the most affected Countries & China. US, India, Brazil were the worst affected among the other countries, china was the least affected. 
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+countries_confirmed <- countries_corona %>% filter(type == "confirmed", cases >= 0)
+ggplot(countries_confirmed, aes(x = date, y = cases, fill = type, col = country)) + geom_line() + geom_point() + facet_wrap(~country, ncol = 2) + coord_flip() + ggtitle("Comparision Confirmed Cases of the most affected Countries & China")
+                                                                                                    
+
+```
+Above graph shows the Comparision confirmed Cases of the most affected Countries & China. US, India, Turkey were the worst affected among the other countries, china was the least affected. 
+
+
+
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+
+countries_recovered <- countries_corona %>% filter(type == "recovered", cases >= 0)
+ggplot(countries_recovered, aes(x = date, y = cases, fill = type, col = country)) + geom_line() + geom_point() + facet_wrap(~country, ncol = 2) + coord_flip() + ggtitle("Comparision Recovered Cases of the most affected Countries & China")
+
+```
+
+
+Above graph shows the Comparision recovered Cases of the most affected Countries & China. Turkey, India, Brazil were the worst affected among the other countries, china was the least affected. 
+
+
+
+
+# 3. Discussion
+
+
+From the above analysis, it can be conclude that China's daily no of confirmed cases, recovered cases, death cases increased in the first few months, 2020. The first few month in 2020 recorded maximum confirmed, recovered, death cases. After that, the daily number of confirmed, recovered and death cases decreases. The decreases trend is a good sign and the spread can be controlled easily at this stage.
+
+The epidemic started due to the importation of cases from Wuhan/Hubei. Then we found a clear relationship between the lock-down of Hubei province, with only a handful of cases were imported from Wuhan/Hubei since early February, 2020. Most cities in Central and East China, with only some cities on the Qinghai-Tibet plateau not affected. In addition to the provincial capitals, the cities that are still affected by the epidemic are mainly distributed in Hubei province and the surrounding areas and in some urban agglomerations, such as Beijing-Tianjin-Hebei, the the Yangtze River Delta, Ha-Chang, and the Tianshan North slope. Wuhan was the worst affected among the provincial capitals, while Lhasa was the least affected.
+
+Then the China corona virus situation is compared to the most affected countries such as US, India, Brazil, Russia, Turkey, France, Iran, Argentina and Colombia. China is in a far better situation than them. 
+
+
+# 4. Conclusion
+
+
+Countries need to learn from China's response to COVID-19 and start implementing prevention and control strategies immediately as each one is at risk of becoming the new virus epicenter. Their response to the COVID-19 epidemic and the high level of collective action in a modern city with more than 11 million people are to be appraised and have stunned the whole world. This must seem easy in a society or political system as that available in China, it is actually not easy to get this kind of passion, commitment, interest, and an individual sense of duty.Finally we can be concluded that China is in a much safer situation with high possibility to control the spread and save lives.
+
+
+# 5. References
+
+lms Assignment 3:Discussion Forum
+
+https://hellor.netlify.app/
+
+https://www.topchinatravel.com
+
+https://www.worldometers.info
+
+https://www.en.wikipedia.org
+
+https://www.rte.ie
+
+https://www.journals.plos.org
+
+https://www.jamanetwork.com
+
+https://www.karger.com
+
+
+
+
+

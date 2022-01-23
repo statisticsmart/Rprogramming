@@ -1,0 +1,346 @@
+---
+title:  "COVID-19 Pandemic in Kuwait"
+author: "G.A.A.S.T.Perera" 
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018478")
+```
+#### AS2018478
+
+![](11.jpg){width=100%}
+
+
+### **1. Introduction**
+
+The COVID-19 pandemic is an ongoing global pandemic of corona virus disease 2019 (COVID-19) caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2).The novel virus was first identified in Wuhan, China, in December 2019. The disease transmits when people breathe in air contaminated by droplets and small airborne particles.More than 232,611,641  people in all over the world have been infected with the corona virus, at least 4,762,160 have died and over 209,246,990 recovered cases are reported so far.In this report, the Kuwait COVID-19 case will be analyzed and compared with few other neighboring countries.
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(magrittr)
+Kuwait_corona <- coronavirus %>% filter(country == "Kuwait")
+```
+
+
+#### **Visualization of the location on World Map**
+
+Kuwait is a tiny country nestling at the top of the Gulf. Flanked by powerful neighbors Saudi Arabia, Iraq and Iran, its strategic location and massive oil reserves make it one of the world's richest countries per capital.Kuwait has a coastal length of approximately 500 km. The Population of the Kuwait is 4 million. The native and official language in Kuwait is Arabic and English is the second language taught in public schools.Major religion of the country is Islam.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Kuwait_corona, aes(x = 29.3117, y = 47.4818), color = "red", size
+    = 2
+  ) +labs(title = "Location of Kuwait")
+```
+
+#### **Climate Condition**
+
+In Kuwait, there's a subtropical desert climate, with mild winters and very hot summers. The sun usually shines all year round. Rainfall, slightly higher than 100 millimeters (4 inches) per year, occurs mainly from November to April. If there is enough rainfall, the desert turns green from mid-March to the end of April.The frequent winds from the northwest are cool in winter and spring and hot in summer.
+
+Winter, from December to February, is mild: the daily average temperature in January is 13.5 degrees Celsius (56 °F).In winter, the sun often shines, but some cloudy days also possible, maybe with some rain.In spring, the prevailing weather is sunny; the temperature rises rapidly, and already in April, highs are around 33 °C (92 °F). The wind from the Arabian desert can raise the temperature and bring sandstorms.Summer in Kuwait is very hot and windy; the prevailing wind blows from the interior, and therefore the influence of the sea is minimal. From June to August, the temperature is normally around 45/46 °C (112/115 °F) during the day and around 29/30 °C (84/87 °F) at night.In autumn, the weather is still hot and sunny in October, while the temperature drops below 30 °C (86 °F) during the month of November.
+
+#### **Lockdown status of the country and Actions taken by the government**
+
+The first confirmed Covid-19 case in Kuwait was announced on 24 February 2020. After that Kuwait Government announced the first full curfew in the country and it was ended on 30 May 2020 and started taking steps towards a gradual return to normal life by placing a partial curfew from 6 pm until 6 am. Initially, the country started with a voluntary stay at home approach since midnight of 11 March on the assessment by the Ministry of Health , with the government suspending work across all government sectors except emergency services. All commercial air travel and border travel were suspended since midnight of 14 March 2020.Partial curfew was implemented since 22 March 2020 where curfew hours were between 5 pm until 4 am and this was amended on 6 April, where end of curfew hours were extended from 4 am to 6 am.With the start of the holy month of Ramadan on 24 April 2020, the partial curfew was further amended to 4 pm until 8 am with special permissions for deliveries from 5 pm until 1 am . On 10 May, the country was placed under full curfew based on the assessment of the Ministry of Health, until 31 May 2020.Then again, a curfew of one month was imposed from 5 p.m. until 5 a.m. starting 7 March 2021 until 8 April 2021, after 1,716 new corona virus cases were recorded on 4 March 2021.
+
+The government estimated the extra costs to equip the health care system with the necessary medical supplies at KWD 500 million.The Minister of Health designated Jabber Al Ahmad Hospital, with a clinical capacity of 1.130 beds, as the main hospital for corona virus cases. 
+Expecting demands for masks and ventilators, the government bought 12 million masks for the month of January 2020 alone and it increased the number of ventilators in hospitals
+It also bought tens of thousands of testing kits and medical supplies in order to create a  strategic stock.9 In addition,  the government supported the  Kuwait  Foundation  for  the Advancement of Science in this crisis, which in turn imported more than 170 ventilators and personal protective devices from China as part of the foundation's efforts in the Emergency Response Program for the Covid-19 crisis.The  government  commissioned  the  Ministry  of  Interior  to  establish mechanisms for the implementation of the curfew and asked the National Guard to assist the police during the 
+implementation process. Furthermore, the government closed all showrooms, shops and central markets and encouraged online sale. It also imposed penalties of up to three years of imprisonment and a fine of KWD 10.000 for curfew violators Under the guidance of His Highness Sheikh Sabah al-Ahmad al-Sabah, the government also announced an economic reform package to maintain the good living standards of the Kuwaitis and to support businesses. The package  included  “postponing the  payment of social  insurance  to the workers in  the private  and  oil companies, as well as for the owners of small and medium enterprises for six months.”12 Instructed by the government, the Federation of Kuwaiti Banks also suspended the repayment of loans and debts to citizens for six months. 
+
+Finally, the government ensured that the supplies of food and medicines to citizens and residents will continue with affordable prices. The Ministry of Trade and Industry also stabilized the prices in order to prevent companies from taking advantage of the citizens’ needs. During the crisis, the government was very transparent. It posted all information it possessed on Covid-19 as well as of its measures on the government communication platform, an official media website that gives the latest laws, facts, and statistics related to Covid-19.13 This information is also available on the media platform of the Ministry of Health, which gives information about the number of the new cases, recovered ones, and the latest developments of the pandemic.The Kuwaitis are already adapting their lives to deal with the era of social distancing: online shopping became preferable by most people, social gathering and professional meetings are taking place in the virtual space, and the government is providing its services through the portal of e-government.
+
+
+### **2. Exploratory Data Analysis**
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+Kuwait_corona$cases <- replace(Kuwait_corona$cases, which(Kuwait_corona$cases < 0),NA)
+Kuwait_corona
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+library(dplyr)
+library(zoo)
+Kuwait_corona<- transform(Kuwait_corona,cases=na.locf(cases))
+head(Kuwait_corona)
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+Kuwait_corona_summary <- Kuwait_corona %>% pivot_wider (values_from = cases , names_from = type)
+Kuwait_corona_summary
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+updated_list <- Kuwait_corona_summary %>% mutate(cum_confirmed = cumsum(confirmed)) %>% mutate(cum_recovered = cumsum(recovered)) %>% mutate(cum_death = cumsum(death)) 
+tail(updated_list)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+updated_list$active <- (updated_list$cum_confirmed)-(updated_list$cum_death + updated_list$cum_recovered )
+updated_list
+```
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+updated_list <-updated_list %>% mutate(cum_active = cumsum(active)) 
+tail(updated_list)
+
+```
+
+
+First we look at the summary of the corona virus cases in Kuwait
+(The data was collected from 2020-01-22 to 2021-09-18.)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+summary(Kuwait_corona , r, comment=NA)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+sum(updated_list[,'confirmed'],na.rm = TRUE)
+sum(updated_list[,'recovered'],na.rm = TRUE)
+sum(updated_list[,'death'],na.rm = TRUE)
+sum(updated_list[,'active'],na.rm = TRUE)
+```
+#### *Analysis of Death, Confirmed, Recovered and Active Cases in Kuwait*
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(updated_list,aes(x=date,y=confirmed,col="")) + geom_path(size=1) + labs(title = "Daily Covid-19 Confirmed cases in Kuwait",y = "Confirmed Cases")
+```
+
+
+Above graph shows the confirmed number of corona patients in Kuwait in daily basis. According to that number of confirmed Corona patients have been increased since begin of 2021 and the end half of 2021 confirmed number of Corona patients have been decreased.This shows the Kuwait government is having the situation under control for now. 
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(updated_list,aes(x=date,y =recovered ,col="")) + geom_path(size=1) + labs(title = "Daily Covid-19 Recovered cases in Kuwait",y="Recovered cases")
+```
+
+
+Above graph shows the number of patients recovered from corona in Kuwait in daily basis.Number of patients recovered in a day has also increased from begin of 2021 and again in the end half of 2021 number of patients recovered in a day has decreased.
+
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(updated_list,aes(x=date,y=death,col="")) + geom_path(size=1) + labs(title = "Daily Covid-19 Death cases in Kuwait",y="Death cases")
+```
+
+Above graph shows the number of death from Corona in Kuwait in daily basis.In the end half 2021, number of death from Corona has been reached to the peak.
+
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Kuwait_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Confirmed, Death and Recovered cases in Kuwait")
+```
+
+
+
+This graph shows the overlook of Corona virus status in Kuwait .So there is a exponential rise of confirmed cases and the number of recovered cases has also increased along with it.But the number of deaths are significantly low compared to the number of confirmed and recovered cases.  
+
+    * Total Confirmed Cases : 411124
+
+    * Total Death Cases     : 2438
+
+    * Total Recovered Cases : 388880
+
+    * Total Active Cases    : 4755372
+    
+    
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Kuwait_corona, aes(x=date, y=cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) + labs(title = "Confirmed, Death and Recovered cases in Kuwait",x="Date",y="Number of cases")
+
+```
+
+
+We can see number of corona virus patients started increase in middle of 2020.Begin of 2021 the number of confirmed cases getting lower but in the middle of the year confirmed cases again increased.But the recovered cases has increased and decreased along with confirmed cases. This implies that the situation has controlled by the country
+
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+Kuwait_corona_new <-  Kuwait_corona%>%group_by(type)%>%mutate(cum_cases = cumsum(cases))
+
+ggplot(Kuwait_corona_new, aes(date, cum_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Total Number of confirmed, death, recovered cases in Kuwait")
+```
+
+
+Above graph implies that the total number of confirmed cases and recovered cases has increased exponentially since mid half of 2020. The increment of total number of confirmed cases and recovered cases from corona is significantly equal.There is a large gap between total number of confirmed cases and recovered cases  with total number of death. Therefore it can be concluded that the country has taken  the steps to reduce death from corona virus.
+
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(updated_list,aes(x=date,y=active)) + geom_path(size=1) + labs(title = "Coivid-19 Active cases in Kuwait")
+```
+
+
+For this graph the number of active cases is calculated by excluding from cumulative values of confirmed cases the number of cumulative values of recoveries and deaths.
+
+
+#### *Comparison with other Countries*
+
+United Arab Emirates (UAE) ,Iran, Qatar and Iraq have been selected to compare the COVID 19 pandemic in Kuwait, because all these are neighboring countries
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(42,58), ylim = c(23,34)) +
+  scale_x_continuous(breaks = seq(42,58,2)) +
+  scale_y_continuous(breaks = seq(23,34,2))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))+labs(title = " Neighboring Countries of Kuwait ")
+
+
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+near_countries <- filter(coronavirus, country == "United Arab Emirates"|country =="Iran"|country =="Iraq"|country == "Qatar"|country == "Kuwait"  )
+count(near_countries,country)
+```
+
+```{r echo=FALSE, fig.width=9}
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+```
+
+```{r echo=FALSE, fig.width=9, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Covid-19 Confirmed cases  in  UAE ,Iran, Qatar, Iraq and Kuwait",y="Confirmed cases")
+```
+
+Above graph shows that daily confirmed cases in Kuwait and Qatar are very low compared to other countries in the same continent. Also, Iran has the high number of daily confirmed corona patients among other countries.
+
+
+
+
+```{r echo=FALSE, fig.width=9, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Covid-19 Recovered cases in  UAE ,Iran, Qatar, Iraq and Kuwait",y="Recovere cases")
+```
+
+
+Above graph shows that daily recovered cases in Iran  was larger than other four countries
+
+
+
+```{r echo=FALSE, fig.width=9, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Daily Covid-19 Death cases in UAE ,Iran, Qatar, Iraq and Kuwait",y="Death cases")
+```
+
+It can be seen that Iran has a higher proportion of daily death cases that resulted in deaths when compared with other four countries. UAE, Kuwait and Qatar have very low proportion of daily deaths with compare to the Iran.
+
+
+
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(near_countries, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in UAE ,Iran, Qatar, Iraq and Kuwait")
+```
+
+Above graph shows that daily confirmed, death and recovered cases in Kuwait and Qatar negligible when compared to other countries in the same continent.Both number of confirmed cases and recovered cases are higher in Iran.
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+count(near_countries, type)
+near_countries <- near_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+near_countries
+```
+
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(near_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases in UAE ,Iran, Qatar, Iraq and Kuwait")
+
+```
+This graph also confirms that  total number of confirmed, death and recovered cases in Kuwait and Qatar negligible when compared to other countries in the same continent.Also the number of confirmed cases and recovered cases are higher in Iran.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(subset(near_countries,type == "confirmed"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total number of Confirmed cases in UAE ,Iran, Qatar, Iraq and Kuwait")
+```
+
+Above plot shows that total number of confirmed cases in UAE is lower than Iran and Iraq but higher than Kuwait and Qatar.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(subset(near_countries,type == "death"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total number of Death cases in UAE ,Iran, Qatar, Iraq and Kuwait")
+```                          
+
+Above plot shows that total number of death cases in UAE are less than Iran and Iraq but almost equal to the Qatar and Kuwait.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(subset(near_countries,type == "recovered"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total number of Recovered cases in UAE ,Iran, Qatar, Iraq and Kuwait")
+```
+
+The above plot shows that even the total recovered corona patients in Kuwait is less than the countries Iran, UAE and Iraq but almost equal with Qatar.
+
+
+### **3. Discussion and conclusion**
+
+Here we consider COVID-19 pandemic in Kuwait.Since "coronavirus" package contain data about all the countries first we need to filter out Kuwait from the data set.In Kuwait there was no minus values, but there were NA values in cases.Since data are important in analysis we cannot remove the entire row that containing the negative value. Hence we replaced them with most resent values.In this dataset we considered data since 22nd January 2020 to 18th November 2021 ,there have been 41124 confirmed cases of COVID-19 with 2438 deaths and 388880 recovered cases in Kuwait according to the dataset. When consider monthly data, a large number of cases was reported in end half of 2021.
+
+Compared to its neighboring countries such as United Arab Emirates (UAE) ,Iran, Qatar and Iraq; Iran is reported high cases than other four countries.Death cases in Iran is higher but Kuwait and Qatar have lowest number of cases.Also confirmed cases are very high in Iran with respect to other four countries.Furthermore Iran has highest Recovered cases and Qatar has lowest.However confirmed ,recovered and death cases are high for both Iran and Iraq.Qatar and Kuwait reported less number of confirmed, death and recovered cases than other three countries There is a high difference between confirmed, death and recovered cases in Iran and Kuwait. According to the data analysed,the spreading of the virus in Kuwait is at a moderate level.In Kuwait the death cases are in a lower level compared to the Iraq and Iran and almost closer to the amount of Qatar.Recovering and active amount in Kuwait are also in a minimum level compared with its neighboring countries.
+
+Overall the Kuwait government is having the situation under control, yet positive cases are still surging through the country.Compared to the confirmed COVID-19 positive cases, speed of recovering in Kuwait is much better and able to keep the death toll at a minimum level. The amount of active cases are also tend to decrease day by day.
+
+
+### **4. References**
+
+1. https://www.worldometers.info/coronavirus/
+2. https://en.wikipedia.org/wiki/COVID-19_pandemic
+3. https://www.bbc.com/news/world-middle-east-14644252
+4. https://www.britannica.com/place/Kuwait/Climate
+5. https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Kuwait#Action_taken_on_the_deceased
+6. https://www.kas.de/documents/286298/8668222/Policy+Report+No+7+Kuwait+during+COVID+19.pdf/40823658-bedc-17ab-b2df-ee24ff82bc50?version=1.0&t=1592400225219

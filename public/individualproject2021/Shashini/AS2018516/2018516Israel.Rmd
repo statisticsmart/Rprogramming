@@ -1,0 +1,595 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#####  B.C.H. Sahabandu AS2018516
+## Introduction
+
+### Background
+
+---
+>Israel officially known as the State of Israel (Hebrew: מְדִינַת יִשְׂרָאֵל‎, Medinat Yisra'el), is a country in Western Asia. It is situated on the southeastern shore of the Mediterranean Sea and the northern shore of the Red Sea, and shares borders with Lebanon to the north, Syria to the northeast, Jordan on the east, the Palestinian territories of the West Bank and the Gaza Strip to the east and west, respectively, and Egypt to the southwest. Tel Aviv is the economic and technological center of the country, while its seat of government and proclaimed capital is Jerusalem, although international recognition of the state's sovereignty over the city is limited.
+
+
+###### _From_ [Wikipedia](https://en.wikipedia.org/wiki/Israel)
+
+## Location of Israel
+
+
+```{r include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(png)
+library(sp)
+library(plotly)
+israel_corona <- coronavirus %>% filter(country == "Israel")
+
+recovered_israel_corona <- israel_corona %>% filter(type=="recovered")
+recovered_israel_corona
+
+israel_corona <- coronavirus %>% filter(country == "Israel")
+confirmed_israel_corona <- israel_corona %>% filter(type=="confirmed")
+data(wrld_simpl)
+
+death_israel_corona <- israel_corona %>% filter(type=="death")
+death_israel_corona
+data(wrld_simpl)
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = israel_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+### Climate Condition in Israel
+<p>&nbsp;</p>
+Temperatures in Israel vary widely, especially during the winter. Coastal areas, such as those of Tel Aviv and Haifa, have a typical Mediterranean climate with cool, rainy winters and long, hot summers. The area of Beersheba and the Northern Negev have a semi-arid climate with hot summers, cool winters, and fewer rainy days than the Mediterranean climate. The Southern Negev and the Arava areas have a desert climate with very hot, dry summers, and mild winters with few days of rain. The highest temperature in the world outside Africa and North America as of 2021, 54°C (129°F), was recorded in 1942 at Tirat Zvi kibbutz in the northern Jordan River valley
+
+At the other extreme, mountainous regions can be windy and cold, and areas at elevation of 750 meters (2,460 ft) or more (same elevation as Jerusalem) will usually receive at least one snowfall each year From May to September, rain in Israel is rare. With scarce water resources, Israel has developed various water-saving technologies, including drip irrigation. Israelis also take advantage of the considerable sunlight available for solar energy, making Israel the leading nation in solar energy use per capita—practically every house uses solar panels for water heating.^3^
+
+```{r, echo=FALSE}
+knitr::include_graphics("wethermap.png")
+```
+<p>&nbsp;</p>
+
+## Lock down Status of country and actions took by government
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+#### **1st Wave**
+
+<p>&nbsp;</p>
+
+The first covid 19 patient of Israel was recorded on 21 february 2020. Patient was a passenger who had flown from japan. Israel suspended all the flights from china on january 30. On february 17 and 22nd they suspended flights from Thailand, Hong Kong, Macau Singapore and from South Korea. On march 15 Israel banned gathering of more than 10 people. On 12 March, Israel announced that all universities and schools would close until after the Passover (spring) break. After the break, schools remained closed. **On 19 March Israel announced nation wide lock down. On 24 April 2020**, the government approved the reopening of street stores and barbershops, effective 26 April 2020. Malls, gyms, and restaurants without delivery services remained closed. **On 7 May 2020, malls and outdoor markets reopened, with restrictions** on the number of people allowed. On 27 May 2020, restaurants reopened, with 1.6 meter distancing between diners, and masked staff.^1^  
+
+<p>&nbsp;</p>
+
+#### **2nd Wave  May to November 2020**
+
+<p>&nbsp;</p>
+
+On 6 July 2020, following over two weeks of continued increase in the number of new daily cases, Netanyahu announced new social distancing guidelines, approved by the government.These included
+
+* Restriction of social gatherings to 20 people.
+* Closure of gyms, night clubs, culture venues, and event halls.
+* Limiting the number of people on public buses to 20.
+* Limiting the number of restaurant guests to 20 indoors, or 30 for restaurants with outdoor seating.
+
+On 10 September 2020, Israel became the country with the highest rate of COVID-19 infections per capita. As confirmed infections continued to rise daily, Israeli officials warned that hospitals would eventually be unable to confront the crisis. On 13 September 2020, the government approved a 3-week country-wide lockdown, beginning Friday, 18 September at 2pm, and ending on 18 October^1^
+
+On 18 October 2020 Israel eased lockdown restrictions in non-'red' cities(Unsafe cities).
+
+* Reopening of kindergartens and nurseries
+* Eateries open to take-out in addition to delivery
+* Travel no longer restricted to 1 km from home.
+* Indoor gatherings of up to 10 people, and outdoor gatherings up to 20, allowed.
+* Reopening of elementary schools (grades 1–4).
+* Reopening of bed-and-breakfasts^1^
+
+<p>&nbsp;</p>
+
+#### **3rd Wave  November 2020 to April 2021**
+<p>&nbsp;</p>
+In December 2020, cases steadily increased, reaching over 3,000 new cases daily and over 5% test positivity rate. Multiple countries announced the appearance of new and more infectious COVID-19 strains; towards the end of December, first cases of the Alpha variant were detected in Israel. First cases of the Beta variant were detected in January 2021.^1^
+<p>&nbsp;</p>
+##### **Travel ban**
+<p>&nbsp;</p>
+On 20 December 2020, Israel announced an entry ban on all foreign travelers arriving from the United Kingdom, South Africa, and Denmark. Israelis returning from these countries were required to enter state-run quarantine hotels. On 24 January 2021, the government announced a week-long ban on most incoming and outgoing flights, effective on Monday January 25 at midnight, to prevent entry of new variants into Israel. The flight restrictions were extended multiple times: until 5 February 2021, then until 21 February 2021, and later until 6 March 2021. Daily flights, for new immigrants and for Israelis stranded outside Israel, were available as of 22 February 2021, for up to 2,000 passengers. The number of daily entries was increased to 3,000 on 7 March 2021^1^
+<p>&nbsp;</p>
+##### **Third nationwide lockdown**
+<p>&nbsp;</p>
+On 24 December 2020, the government declared a third nationwide lockdown, to begin on 27 December 2020
+ 
+* Traveling limited to 1,000 meter radius from home
+* Gatherings limited to 10 people indoors or 20 people outdoors, for approved events
+* Visiting another person's home is forbidden.
+* Closure of all non-essential stores and services.
+* Restaurants will open for delivery only.
+* Public transportation reduced to 50% capacity.
+* Closing the entire education system including preschools, except special education. Grade schools to continue online schooling.
+
+**On 7 February 2021 Israel began easing lockdown restrictions**
+
+* Restrictions on travel within and between towns were lifted.
+* Workplaces that do not receive customers were reopened.
+
+**During the third lockdown many Israelis were vaccinated against COVID-19. On 21 February 2021, the government implemented green passes for those who were fully vaccinated or were infected and recovered Green passes are required for the following**^1^
+
+* entry into gyms, theaters, hotels, and concerts.
+* entry into synagogues registered to the plan.
+
+On 7 March 2021, restrictions were eased further. Rules include
+
+* Gatherings of up to 20 people indoors and 50 outdoors are allowed.
+* Temperature checks for those entering public locations or businesses are canceled.
+* Events of up to 300 people and up to 50% venue capacity are allowed, with up to 5% non-green-pass-holders with negative test results allowed
+* Tourist attractions open for green pass holders.
+* Entry of Israeli citizens via Ben Gurion airport to increase to 3000 daily. Exit available to all those holding vaccination or recovery certificates
+* Indoor dining at restaurants allowed at 75% capacity with 2 meters between tables, for up to 100 green pass holders. Outdoor seating of up to 100 outdoors 
+
+Green passes can be generated for those who have recovered from the virus or who are fully vaccinated (1 week after the second dose) using the Ministry of Health's Traffic Light app.
+
+Preschools, kindergartens, and grades 1-4 reopened on 11 February 2021 in “yellow” and “green” areas, and in “light orange” areas that had at least 70% of their community vaccinated. Grades 5-6 and grades 11-12 returned to school in “yellow”, “green”, and “light orange” areas on 21 February 2021. Grades 7-10 returned to school in “yellow”, “green”, and “light orange” areas on 7 March 2021. Universities reopened with in-person classes for green pass holders on 7 March 2021. On 18 April 2021, schools reopened fully, with in-person classes and no special limitations on class size. Students are still required to wear masks indoors but are allowed to take them off during gym class, when they eat, and in between classes.^1^
+
+<p>&nbsp;</p>
+
+#### **4th wave  June 2021 to present**
+
+<p>&nbsp;</p>
+
+Daily case numbers began rising at the end of June 2021, reaching over 1000 daily cases on 17 July 2021 and over 2000 at the end of July 2021. The number of hospitalizations also rose.
+
+On 25 June 2021, the requirement for mask indoors was reinstituted due to the rise in cases. On 29 July 2021, the green pass requirement was reinstituted for indoor events with 100 or more participants.
+
+On 29 July 2021, a third vaccination was approved for persons aged 60 or older due to observed waning efficacy of the Pfizer vaccine to the prevalent Delta variant.
+
+On 8 August 2021, restrictions renewed by the government came into effect to slow the spread of the Delta variant and included expanding proof of vaccine and mask-wearing requirements for some gatherings, and a shift back to more work from home, quarantines, and travel restrictions.^1^
+
+<p>&nbsp;</p>
+
+### Vaccination
+<p>&nbsp;</p>
+
+Israel is the one of the first countries that roll out vaccination programs to citizens.Israeli Prime Minister Benjamin Netanyahu received a COVID-19 vaccine jab on December 19, kicking off a national roll-out.
+Netanyahu, 71, and his health minister were injected with the Pfizer-BioNTech vaccine live on TV at Sheba Medical Center in Ramat Gan, near Tel Aviv.^2^
+
+As of June 26, 2021, about 64% of eligible Israelis have received at least one dose (and a world-leading 60% with two doses), making Israel one of the populations with the highest vaccination rates in the world per capita. Coordinated vaccination drives by the country's health authorities, utilizing databases of personal information for Israeli patients, contributed to Israel's success in vaccinating a high proportion of its population in a short period of time, relative to the rest of the world.^1^
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+## Let's focus on overall big picture of covid 19 
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,comment=NA}
+
+
+totalDeaths <- sum(death_israel_corona$cases,na.rm = TRUE)
+totalRecovered <- sum(recovered_israel_corona$cases,na.rm = TRUE)
+totalConfirmed <- sum(confirmed_israel_corona$cases,na.rm = TRUE)
+
+cases <- tibble(CasesTypes=c("death","confirmed","recovered"),
+                AllTotal=c(totalDeaths,totalConfirmed,totalRecovered));
+
+
+fig <- plot_ly(
+  x = c("Confirmed cases", "Recovered", "Deaths"),
+  y = c(totalConfirmed,totalRecovered , totalDeaths),
+  type = "bar",
+  marker= list(color= c("darkblue","green","firebrick"))
+  )
+
+
+
+
+fig <- fig %>% layout(title = "Overall Covid Situation in Israel",
+         xaxis = list(title = "Type"),
+         yaxis = list (title = "Number of cases"))
+fig
+
+```
+  **Compared to Israel's population which is 9 millon, 1.2 million postive cases is significant**
+
+<p>&nbsp;</p>
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,comment=NA}
+active_cases <- totalConfirmed-totalDeaths-totalRecovered
+
+death_perce <- (totalDeaths/totalConfirmed)*100
+recovered_perce <- (totalRecovered/totalConfirmed)*100
+active_perce <- (active_cases/totalConfirmed)*100
+
+rates <- data_frame(case_type=c("death","recoved","active"),percentage=c(death_perce,recovered_perce,active_perce))
+
+
+ggplot(data = rates,aes(x=case_type, y=percentage)) + geom_bar(stat = "identity", width=0.4)+theme_minimal()
+
+```
+This plot shows us percentages of Recoverd patients active cases and deaths.  
+
+<p>&nbsp;</p>
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+alldates <- c(confirmed_israel_corona$date)
+death_dates <- c(death_israel_corona$cases)
+recovered_dates <- c(recovered_israel_corona$cases)
+confirmed_dates <- c(confirmed_israel_corona$cases)
+
+df2 <- data.frame(alldates,death_dates,recovered_dates,confirmed_dates)
+
+fig1 <- plot_ly(data=df2, x = ~alldates, y = ~confirmed_dates, name = 'confirmed', 
+                 type = 'scatter', mode = 'lines',
+                 line = list(width = 1))
+fig1 <- fig1 %>% add_trace(y = ~recovered_dates, name = 'recovered', 
+                             line = list( width = 1))
+fig1 <- fig1 %>% add_trace(y = ~death_dates, name = 'death', 
+                             line = list( width = 1))
+fig1 <- fig1 %>% layout(title = "Number of Cases by Date",
+                          xaxis = list(title = "Dates"),
+                          yaxis = list (title = "Cases"))
+fig1
+
+```
+
+The above figure show overall statistics throughout the years, we can see clear decrease in cases after lock downs
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+alldates <- c(death_israel_corona$date)
+death_dates <- c(death_israel_corona$cases)
+
+df3 <- data.frame(alldates,death_dates)
+
+fig2 <- plot_ly(data=df3, x = ~alldates, y = ~death_dates, name = 'confirmed', 
+                type = 'scatter', mode = 'lines',
+                line = list(color = 'red', width = 1))
+fig2 <- fig2 %>% layout(title = "Number of deaths by Date",
+                          xaxis = list(title = "Dates"),
+                          yaxis = list (title = "Number of deaths"))
+
+fig2
+
+```
+**Above figure shows us Number of deaths day by day during pandemic in this case even though number of postive cases increases we can see number of deaths is lesser compared t Jan 2021 to Apr 2021 period. We can assume that reason is  vaccination program that they started end of Dec 2020**
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+![](summary.png)
+**above figure shows us statistics during covid waves in Israel and how effective lock downs were**
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+active_cases_daily_israel <- 
+  (cumsum(confirmed_israel_corona$cases))-(cumsum(recovered_israel_corona$cases))-(cumsum(death_israel_corona$cases))
+active_daily <- c(active_cases_daily_israel)
+
+
+df4 <- data.frame(alldates,active_daily)
+
+fig3 <- plot_ly(data=df3, x = ~alldates, y = ~active_daily, name = 'Active Cases', 
+                type = 'scatter', mode = 'lines',
+                line = list( width = 1))
+
+fig3 <- fig3 %>% layout(title = "Number of active cases by Date",
+                          xaxis = list(title = "Dates"),
+                          yaxis = list (title = "active cases"))
+
+fig3
+
+
+```
+Above figure is about active cases through out the pandemic even though Israel vaccinated 60% of population we can see sudden spike after July 2021 even though vaccination causes clear decrease in death rates we can assume that to stop spreading we have to still follow covid restrictions
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+### Comparison with other countries
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+## Syria
+syria_corona <- coronavirus %>% filter(country == "Syria")
+confirmed_syria_corona <- syria_corona %>% filter(type=="confirmed")
+
+death_syria_corona <- syria_corona %>% filter(type=="death")
+
+
+recovered_syria_corona <- syria_corona %>% filter(type=="recovered")
+
+
+totalDeaths_syria<-sum(death_syria_corona$cases,na.rm = TRUE)
+totalRecovered_syria<-sum(recovered_syria_corona$cases,na.rm = TRUE)
+totalConfirmed_syria<-sum(confirmed_syria_corona$cases,na.rm = TRUE)
+
+active_cases_syria <- totalConfirmed_syria-totalDeaths_syria-totalRecovered_syria
+
+death_perce_syria <- (totalDeaths_syria/totalConfirmed_syria)*100
+active_perce_syria <- (active_cases_syria/totalConfirmed_syria)*100
+reover_perce_syria <- (totalRecovered_syria/totalConfirmed_syria)*100
+## Syria
+
+
+## Jordan
+jordan_corona <- coronavirus %>% filter(country == "Jordan")
+
+confirmed_jordan_corona <- jordan_corona %>% filter(type=="confirmed")
+
+death_jordan_corona <- jordan_corona %>% filter(type=="death")
+recovered_jordan_corona <- jordan_corona %>% filter(type=="recovered")
+
+
+totalDeaths_jordan<-sum(death_jordan_corona$cases,na.rm = TRUE)
+totalRecovered_jordan<-sum(recovered_jordan_corona$cases,na.rm = TRUE)
+totalConfirmed_jordan<-sum(confirmed_jordan_corona$cases,na.rm = TRUE)
+
+active_cases_jordan <- totalConfirmed_jordan-totalDeaths_jordan-totalRecovered_jordan
+
+death_perce_jordan <- (totalDeaths_jordan/totalConfirmed_jordan)*100
+active_perce_jordan <- (active_cases_jordan/totalConfirmed_jordan)*100
+reover_perce_jordan <- (totalRecovered_jordan/totalConfirmed_jordan)*100
+
+## Jordan
+
+
+## Lebanon
+lebanon_corona <- coronavirus %>% filter(country == "Lebanon")
+
+confirmed_lebanon_corona <- lebanon_corona %>% filter(type=="confirmed")
+
+death_lebanon_corona <- lebanon_corona %>% filter(type=="death")
+
+recovered_lebanon_corona <- lebanon_corona %>% filter(type=="recovered")
+
+
+totalDeaths_lebanon<-sum(death_lebanon_corona$cases,na.rm = TRUE)
+totalRecovered_lebanon<-sum(recovered_lebanon_corona$cases,na.rm = TRUE)
+totalConfirmed_lebanon<-sum(confirmed_lebanon_corona$cases,na.rm = TRUE)
+
+active_cases_lebanon <- totalConfirmed_lebanon-totalDeaths_lebanon-totalRecovered_lebanon
+
+death_perce_lebanon <- (totalDeaths_lebanon/totalConfirmed_lebanon)*100
+active_perce_lebanon <- (active_cases_lebanon/totalConfirmed_lebanon)*100
+reover_perce_lebanon <- (totalRecovered_lebanon/totalConfirmed_lebanon)*100
+## Lebanon
+
+## Egypt
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+confirmed_egypt_corona <- egypt_corona %>% filter(type=="confirmed")
+
+death_egypt_corona <- egypt_corona %>% filter(type=="death")
+
+recovered_egypt_corona <- egypt_corona %>% filter(type=="recovered")
+
+
+totalDeaths_egypt<-sum(death_egypt_corona$cases,na.rm = TRUE)
+totalRecovered_egypt<-sum(recovered_egypt_corona$cases,na.rm = TRUE)
+totalConfirmed_egypt<-sum(confirmed_egypt_corona$cases,na.rm = TRUE)
+
+active_cases_egypt <- totalConfirmed_egypt-totalDeaths_egypt-totalRecovered_egypt
+
+death_perce_egypt <- (totalDeaths_egypt/totalConfirmed_egypt)*100;
+active_perce_egypt <- (active_cases_egypt/totalConfirmed_egypt)*100
+reover_perce_egypt <- (totalRecovered_egypt/totalConfirmed_egypt)*100
+## Egypt
+
+## USA
+usa_corona <- coronavirus %>% filter(country == "US")
+confirmed_usa_corona <- usa_corona %>% filter(type=="confirmed")
+
+death_usa_corona <- usa_corona %>% filter(type=="death")
+
+recovered_usa_corona <- usa_corona %>% filter(type=="recovered")
+
+
+totalDeaths_usa<-sum(death_usa_corona$cases,na.rm = TRUE)
+totalRecovered_usa<-sum(recovered_usa_corona$cases,na.rm = TRUE)
+totalConfirmed_usa<-sum(confirmed_usa_corona$cases,na.rm = TRUE)
+
+active_cases_usa <- totalConfirmed_usa-totalDeaths_usa-totalRecovered_usa
+
+death_perce_usa <- (totalDeaths_usa/totalConfirmed_usa)*100
+active_perce_usa <- (active_cases_usa/totalConfirmed_usa)*100
+reover_perce_usa <- (totalRecovered_usa/totalConfirmed_usa)*100
+## USA
+
+## India
+india_corona <- coronavirus %>% filter(country == "India")
+confirmed_india_corona <- india_corona %>% filter(type=="confirmed")
+
+death_india_corona <- india_corona %>% filter(type=="death")
+
+recovered_india_corona <- india_corona %>% filter(type=="recovered")
+
+
+totalDeaths_india<-sum(death_india_corona$cases,na.rm = TRUE)
+totalRecovered_india<-sum(recovered_india_corona$cases,na.rm = TRUE)
+totalConfirmed_india<-sum(confirmed_india_corona$cases,na.rm = TRUE)
+
+active_cases_india <- totalConfirmed_india-totalDeaths_india-totalRecovered_india
+
+death_perce_india <- (totalDeaths_india/totalConfirmed_india)*100
+active_perce_india <- (active_cases_india/totalConfirmed_india)*100
+reover_perce_india <- (totalRecovered_india/totalConfirmed_india)*100
+## India
+
+## Italy
+italy_corona <- coronavirus %>% filter(country == "Italy")
+confirmed_italy_corona <- italy_corona %>% filter(type=="confirmed")
+
+death_italy_corona <- italy_corona %>% filter(type=="death")
+
+recovered_italy_corona <- italy_corona %>% filter(type=="recovered")
+
+
+totalDeaths_italy<-sum(death_italy_corona$cases,na.rm = TRUE)
+totalRecovered_italy<-sum(recovered_italy_corona$cases,na.rm = TRUE)
+totalConfirmed_italy<-sum(confirmed_italy_corona$cases,na.rm = TRUE)
+
+active_cases_italy <- totalConfirmed_italy-totalDeaths_italy-totalRecovered_italy
+
+death_perce_italy <- (totalDeaths_italy/totalConfirmed_italy)*100
+active_perce_italy <- (active_cases_italy/totalConfirmed_italy)*100
+reover_perce_italy <- (totalRecovered_italy/totalConfirmed_italy)*100
+## Italy
+
+## china
+china_corona <- coronavirus %>% filter(country == "China")
+
+confirmed_china_corona <- china_corona %>% filter(type=="confirmed")
+
+death_china_corona <- china_corona %>% filter(type=="death")
+
+recovered_china_corona <- china_corona %>% filter(type=="recovered")
+
+
+totalDeaths_china<-sum(death_china_corona$cases,na.rm = TRUE)
+totalRecovered_china<-sum(recovered_china_corona$cases,na.rm = TRUE)
+totalConfirmed_china<-sum(confirmed_china_corona$cases,na.rm = TRUE)
+
+active_cases_china <- totalConfirmed_china-totalDeaths_china-totalRecovered_china
+
+death_perce_china <- (totalDeaths_china/totalConfirmed_china)*100
+active_perce_china <- (active_cases_china/totalConfirmed_china)*100
+reover_perce_china <- (totalRecovered_china/totalConfirmed_china)*100
+
+## china
+countries <- c("Syria","Jordan","Lebonan","Egypt","USA","India","Italy","China","Israel")
+active_percentages <- c(active_perce_syria,active_perce_jordan,active_perce_lebanon,active_perce_egypt,active_perce_usa,
+                        active_perce_india,active_perce_italy,active_perce_china,active_perce)
+death_percentages <- c(death_perce_syria,death_perce_jordan,death_perce_lebanon,death_perce_egypt,death_perce_usa,
+                       death_perce_india,death_perce_italy,death_perce_china,death_perce)
+
+recover_percentages <- c(reover_perce_syria,reover_perce_jordan,reover_perce_lebanon,reover_perce_egypt,reover_perce_usa,reover_perce_india,reover_perce_italy,reover_perce_china,recovered_perce)
+
+dft <- data.frame(countries,active_percentages,death_percentages,recover_percentages)
+
+fignew <- plot_ly(data= dft, x = ~countries, y = ~active_percentages, type = 'bar', name = 'Active percentages')
+
+fignew <- fignew %>% add_trace(y = ~death_percentages, name = 'Death percentages')
+
+fignew <- fignew %>% add_trace(y = ~recover_percentages, name = 'Recover percentages')
+
+fignew <- fignew %>% layout(
+  title = "comparison",
+  xaxis = list(title = "Countries"),
+  yaxis = list(title = 'Percentage'), 
+  barmode = 'group')
+
+fignew
+
+```
+
+We can clearly see that lower death rates in Israel compared to near by countries and countries that had big impact due to covid 19. We can assume that due good medical care in Israel and vaccination program that they started in very beginning. How ever India shows the highest recovery rate
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+totalConfirmed_cases_all <- coronavirus %>% filter(type == "confirmed")
+
+totalConfirmed_cases_al_sum <- sum(totalConfirmed_cases_all$cases,na.rm = TRUE)
+
+totalConfirmed_cases_other_sum <- (totalConfirmed_cases_al_sum-totalConfirmed-totalConfirmed_syria
+                                   -totalConfirmed_jordan-totalConfirmed_lebanon-totalConfirmed_egypt-totalConfirmed_usa
+                                   -totalConfirmed_india-totalConfirmed_italy-totalConfirmed_china)
+
+
+confrm_per_israelw <- (totalConfirmed/totalConfirmed_cases_al_sum)*100
+
+confrm_per_syriaw <- (totalConfirmed_syria/totalConfirmed_cases_al_sum)*100
+
+confrm_per_jordanw <- (totalConfirmed_jordan/totalConfirmed_cases_al_sum)*100
+
+confrm_per_lebononw <- (totalConfirmed_lebanon/totalConfirmed_cases_al_sum)*100
+
+confrm_per_egyptw <- (totalConfirmed_egypt/totalConfirmed_cases_al_sum)*100
+
+confrm_per_usaw <- (totalConfirmed_usa/totalConfirmed_cases_al_sum)*100
+
+confrm_per_indiaw <- (totalConfirmed_india/totalConfirmed_cases_al_sum)*100
+
+confrm_per_italyw <- (totalConfirmed_italy/totalConfirmed_cases_al_sum)*100
+
+confrm_per_chinaw <- (totalConfirmed_china/totalConfirmed_cases_al_sum)*100
+
+confrm_per_otherw <- (totalConfirmed_cases_other_sum/totalConfirmed_cases_al_sum)*100
+
+
+# Data Preparation
+labels = c('Israel','Syria','Jordan','Lebonon','Egypt','USA','India','Italy','China','Other')
+values = c(confrm_per_israelw, confrm_per_syriaw, confrm_per_jordanw, confrm_per_lebononw, confrm_per_egyptw, confrm_per_usaw,
+           confrm_per_indiaw,confrm_per_italyw, confrm_per_chinaw, confrm_per_otherw)
+# Data Visualization
+figpie <- plot_ly(type='pie', labels=labels, values=values, 
+               textinfo='label+percent',
+               insidetextorientation='radial')
+figpie <- figpie %>% layout(title = "Percentages of covid 19 reported patients in countries")
+figpie
+
+```
+
+
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+## Conclusion and Discussion
+
+<p>&nbsp;</p>
+
+According to statistic Israel currently under going on their 4th covid wave. Reported cases numbers are way higher compared to their previous covid waves.But death rates are lower compared to previous waves We can assume that reason for that is Israel completed 60% of vaccination of their population. And also we can conclude that vaccination is not enough to eliminate pandemic we have to still follow some level of covid 19 restrictions.Overall Israel's response to covid 19 is acceptable.Beacause their death rate is lower copared to other countries. But they have to put some travel restrictions in order to face fourth covid wave.
+
+<p>&nbsp;</p>
+
+## References
+
+1. Wikipedia (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Israel)
+2. Alijazeera (https://www.aljazeera.com/news/2020/12/24/vaccine-rollout-which-countries-have-started)
+3. Wikipedia (https://en.wikipedia.org/wiki/Israel#Climate)
+4. worldometers (https://www.worldometers.info/coronavirus/country/israel)
+5. Plotly (https://plotly.com/r/line-charts)

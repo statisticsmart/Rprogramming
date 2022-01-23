@@ -1,0 +1,538 @@
+---
+title: "COVID-19 Pandemic in Botswana"
+author: "AS2018306"
+date: "9/26/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##  BOTSWANA
+## Introduction
+
+
+
+Botswana is a landlocked country in Southern Africa that borders the countries of Namibia, South Africa, Zimbabwe, and Zambia. The geography is flat, and up to 70% of Botswana is covered by the Kalahari Desert, thus making it a sparsely populated country with little agricultural activity. The government system is a parliamentary republic; the chief of state and head of government is the president. Botswana has a mixed economic system, which includes a variety of private freedom, combined with centralized economic planning and government regulation. Botswana is a member of the Southern African Development Community (SADC).
+
+A mid-sized country of slightly over 2.3 million people, it is one of the most sparsely populated countries in the world. About 11.6 percent of the population lives in the capital and largest city, Gaborone. Formerly one of the world's poorest countries—with a GDP per capita of about US$70 per year in the late 1960s—Botswana has since transformed itself into an upper middle income country, with one of the world's fastest-growing economies.
+
+![botswana-on-map](https://www.victoriafalls-guide.net/images/botswana-on-map.jpg)
+
+The nation of Botswana covers 581 730 square kilometres (224 610 square miles) - an area larger than California, but smaller than Texas; larger than France but smaller than Ukraine. It is the 48th largest country in the world, area-wise.
+
+
+```{r,echo = FALSE, message=FALSE ,comment=NA}
+
+library(devtools)
+library(sta3262)
+
+library(coronavirus)
+data(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+library(dygraphs)
+library(plotly)
+
+Botswana_corona <- coronavirus %>% filter(country == "Botswana")
+library(datasauRus)
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+```
+
+```{r,echo = FALSE,message=FALSE}
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Botswana_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+Botswana, the country in the center of Southern Africa. The territory is roughly triangular—approximately 600 miles (965 km) from north to south and 600 miles from east to west—with its eastern side protruding into a sharp point. Its eastern and southern borders are marked by river courses and an old wagon road; its western borders are lines of longitude and latitude through the Kalahari, and its northern borders combine straight lines with a river course. Within the confines of Botswana’s borders is a rich variety of wildlife, including many species of mammals, birds, reptiles, amphibians, and fish.
+
+## Climate of Botswana
+
+The annual climate ranges from months of dry temperate weather during winter to humid subtropical weather interspersed with drier periods of hot weather during summer. In summer, which lasts from October to March, temperatures rise to about 93 °F (34 °C) in the extreme north and southwest, the warmest parts of the country. In winter, which lasts from April to September, there is frequent frost at night, and temperatures may fall to near freezing in some high-altitude areas during the day. Summer is heralded by a windy season, the winds carrying dust from the Kalahari, from about late August to early October. Annual rainfall, brought by winds from the Indian Ocean, averages 18 inches (460 mm), representing a range from 25 inches (635 mm) in the extreme northeast to less than 5 inches (127 mm) in the extreme southwest. The rains are almost entirely limited to summer downpours between December and March, which also mark the season for plowing and planting. Cyclic droughts, often lasting up to five or six years in every two decades, can limit or eliminate harvests and reduce livestock to starvation.
+
+https://www.britannica.com/place/Botswana/Religion
+
+## Economy of Botswana
+
+Botswana has a free market economy with a strong tradition of central government planning to provide infrastructure for private investment. The economy has grown rapidly since the mid-1960s, with the gross domestic product per capita increasing more than a hundredfold.
+
+Relatively few rural households benefit from cattle sales: almost half of them have no cattle, and less than one-tenth own about half of the country’s cattle (averaging 100 head each). Few households produce enough crops to cover even their own subsistence, let alone to sell on the market. Many rural households survive on the income of a family member in town or abroad. That still leaves a significant number of rural households, usually female-headed, with no source of income known to statisticians.
+
+State revenues reaped from mining development have been spent on basic rural infrastructure and welfare services and on schemes to subsidize the development of cattle and crop production, which have in general benefited the richer rural households. Trade unions have had limited success penetrating the paid employment sector in Botswana.
+
+## Preparing Botswana prior to COVID-19
+
+Botswana’s response to COVID-19 is firmly grounded on the IHR 2005 as it is wholly incorporated in the country’s Public Health Act. The Public Health Act together with the Emergency Powers Act 2020, which was promulgated precisely to address the COVID-19 pandemic, provide the necessary emergency legal framework for a comprehensive response. The delayed arrival of the pandemic on the African continent allowed the WHO country office in Botswana to support the country’s readiness and preparedness, including learning from the situation unfolding in neighboring South Africa which has been the African epicenter for COVID-19 since the pandemic was announced.
+During that period, WHO was actively capacitating and working with the health sector across all the components of Botswana’s Emergency Preparedness and Response. These included early and pro-active Risk Communication and Engagement, provision of technical guidance, adaptation of WHO guidance for the country’s needs and specificities of Botswana’s health system, activation and refresher training for District Rapid Response Teams and coordination structures, training and screening at Points of Entry (POEs), development of a comprehensive multi-sectoral response plan, and active engagement with other sectors and communities. WHO provided its input and guidance to the country’s entire response effort. The response framework was established before a single case appeared within Botswana borders, a critical step in being prepared.
+One of the most crucial preemptive steps in the response effort was the early closure of borders. All but 12 points of entry were closed on 24 March 2020, six days before the first positive COVID-19 case was reported. As from 8 August 2020, there have been 804 confirmed cases of COVID-19 with 2 COVID-19 related deaths recorded. After reporting the first confirmed case on 30 March, the government of Botswana declared a state of emergency and subsequently imposed an initial 28-day lockdown on 2 April
+COVID-19: WHO’s Action in Countries | July 2020
+2
+World Health Organization teams at country, regional and global levels have helped verify and validate the
+information and data contained in this case study, at the time of the original publication (as of July 2020).
+that led to further restrictions on movement. This period allowed the country to prepare adequate quarantine and isolation facilities that would be used in case of an upsurge in cases. Furthermore, capacity for case management and Infection prevention and control (IPC) was developed in targeted hospitals and clinics. A gradual return to normalcy started on 8 May 2020 including re-opening of schools on 2 June 2020.
+The Ministry of Health and Wellness is coordinating the health response, based on the recommended response structure by WHO. The WHO Representative in Botswana and technical staff regularly consult with and advice Ministry of Health and Wellness senior management and Presidential Task Force on COVID-19. The Presidential Task Force provides overall oversight and coordination of the multi-sectoral response. WHO also enables engagement with other UN Agencies, development partners, civil society and government sectors. It participated in the development of the UN plan for supporting economic recovery and also ensured capacitation and activation of local district-level structures.
+Alongside technical support, WHO and the government of Botswana conducted nation-wide communication campaign to engage all of society on public health and social measures. WHO experts teamed up with highly respected members of communities that enabled the government to effectively interact with the population, convey key messages, build trust in various constituencies and achieve acceptance of the information on COVID-19.
+
+
+
+## Lockdown status
+
+Botswana's Vice President Slumber Tsogwane announced on Tuesday, March 24, that all borders have been closed as a precaution after the first coronavirus (COVID-19)-related fatality was reported in Zimbabwe. Only the movement of goods and services will be allowed across the border. Any citizen or resident returning from a neighboring country will be quarantined for 14 days. Additional soldiers will also be deployed to secure border crossing points. It is unclear how long the border closures will remain in effect.
+
+Other containment measures are also in place to prevent COVID-19 from spreading into the country. Travel to and from high-risk countries, including Austria, Australia, Belgium, Canada, China, Chechnya, Denmark, France, Germany, Japan, Iran, Italy, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, the UK, and the US is prohibited. All non-citizens or residents arriving from these countries will be denied entry. Returning citizens and residents will be subject to a 14-day quarantine. Bars and liquor restaurants are also closed until further notice.
+As of March 24, no cases of COVID-19 have been confirmed in the country.
+
+
+## Exploratory Data Analysis
+
+
+
+
+
+### Daily New Cases in Botswana
+
+```{r,echo = FALSE,message=FALSE}
+
+library(gifski)
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(hrbrthemes)
+
+
+Botswana_corona <- coronavirus %>% filter(country == "Botswana")
+
+confirmed_Botswana_corona <- Botswana_corona %>% filter(type=="confirmed")
+
+
+# Usual area chart
+p <- confirmed_Botswana_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("cases") +
+  theme_ipsum()
+
+# Turn it interactive with ggplotly
+p <- ggplotly(p)
+p
+
+
+```
+
+Daily new cases shows increasing pattern.
+
+### All confirmed cases 
+
+```{r,echo = FALSE,comment=NA}
+sum(confirmed_Botswana_corona$cases)
+
+```
+
+
+### Daily recovered Cases in Botswana
+
+```{r,echo = FALSE,message=FALSE ,warning=FALSE}
+
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(hrbrthemes)
+
+Botswana_corona <- coronavirus %>% filter(country == "Botswana")
+
+
+recover_Botswana_corona <- Botswana_corona %>% filter(type=="recovered")
+q <-mean(recover_Botswana_corona$cases,na.rm = TRUE)
+recover_Botswana_corona <-replace_na(recover_Botswana_corona,list(cases=172))
+
+
+
+
+# Usual area chart
+p <- recover_Botswana_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("cases") +
+  theme_ipsum()
+
+# Turn it interactive with ggplotly
+p <- ggplotly(p)
+p
+
+
+```
+
+### All Recover cases Sum
+```{r,echo = FALSE,comment=NA}
+sum(recover_Botswana_corona$cases)
+
+```
+
+### Daily New Deaths cases in Botswana
+```{r,echo = FALSE,message=FALSE ,warning=FALSE}
+
+
+
+Botswana_corona <- coronavirus %>% filter(country == "Botswana")
+
+
+death_Botswana_corona <- Botswana_corona %>% filter(type=="death")
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(hrbrthemes)
+
+
+
+# Usual area chart
+p <- death_Botswana_corona %>%
+  ggplot( aes(x=date, y=cases)) +
+  geom_area(fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2") +
+  ylab("cases") +
+  theme_ipsum()
+
+# Turn it interactive with ggplotly
+p <- ggplotly(p)
+p
+
+
+```
+
+### All Deaths cases
+```{r,echo = FALSE,comment=NA}
+sum(death_Botswana_corona$cases)
+
+```
+
+### Daily Covid-19 active Cases in Botswana
+```{r,echo = FALSE,message=FALSE ,warning=FALSE}
+
+
+
+recove_case<- cumsum(recover_Botswana_corona$cases)
+confirmed_case<-cumsum(confirmed_Botswana_corona$cases)
+death_case<-cumsum(death_Botswana_corona $cases )
+ active_case<-confirmed_case-(recove_case+death_case) 
+ active_Botswana_corona<- data.frame(date=recover_Botswana_corona$date,active_case)
+ 
+  
+  p <- active_Botswana_corona%>%
+    ggplot( aes(x=date, y=active_case)) +
+    geom_area(fill="#69b3a2", alpha=0.5) +
+    geom_line(color="#69b3a2") +
+    ylab("Daily Covid-19 active") +
+    theme_ipsum()
+  
+  # Turn it interactive with ggplotly
+  p <- ggplotly(p)
+  p
+
+
+```
+According to the plot, we can see an upward trend in active cases in Botswana.
+
+### All Coronavirus Cases and Date in Botswana
+```{r,echo = FALSE,message=FALSE ,warning=FALSE}
+
+
+library(ggplot2)
+library(gganimate)
+
+library(hrbrthemes)
+library(viridis)
+
+
+don <-  coronavirus %>% 
+  filter(type %in% c("confirmed", "recovered", "death")) %>%
+  filter(country == "Botswana")
+
+
+# Plot
+don %>%
+ggplot( aes(x=date, y=cases, group=type, color=type)) +
+  geom_line() +
+  geom_point() +
+  theme_ipsum() +
+  ylab("Number of cases") + scale_color_viridis(discrete = TRUE) +
+  transition_reveal(date)
+
+```
+
+
+
+### Daily cumulative cases by Botswana
+
+
+```{r,echo = FALSE,message=FALSE,warning=FALSE }
+
+
+all_case<-data.frame(date=confirmed_Botswana_corona$date ,recove_case, confirmed_case, death_case, active_case)
+dfplot <- all_case %>% gather(key, value, -date)
+ggplot(dfplot, mapping = aes(x = date, y = value, color = key) ) + geom_line()
+
+
+```
+
+
+## Comparison with other countries
+
+The progress of COVID-19 of Botswana cannot be clearly understood by solely analyzing Botswana data, therefore a comparison of Botswana with countries of neighbors during the COVID-19 pandemic has been carried out in order to reach the final conclusions.
+
+
+```{r,echo = FALSE,message=FALSE,warning=FALSE }
+
+
+
+library(dplyr)
+
+Botswana_corona <- coronavirus %>% filter(country == "Botswana")
+confirmed_Botswana_corona <- Botswana_corona %>% filter(type=="confirmed")
+death_Botswana_corona <- Botswana_corona %>% filter(type=="death")
+recover_Botswana_corona <- Botswana_corona %>% filter(type=="recovered")
+q <-mean(recover_Botswana_corona$cases,na.rm = TRUE)
+
+recover_Botswana_corona <-replace_na(recover_Botswana_corona,list(cases=173))
+
+Zimbabwe_corona <- coronavirus %>% filter(country == "Zimbabwe")
+confirmed_Zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="confirmed")
+death_Zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="death")
+recover_Zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="recovered")
+q <-mean(recover_Zimbabwe_corona$cases,na.rm = TRUE)
+
+recover_Zimbabwe_corona <-replace_na(recover_Zimbabwe_corona,list(cases=148))
+
+
+Zambia_corona <- coronavirus %>% filter(country == "Zambia")
+confirmed_Zambia_corona <- Zambia_corona %>% filter(type=="confirmed")
+death_Zambia_corona <- Zambia_corona %>% filter(type=="death")
+recover_Zambia_corona <- Zambia_corona %>% filter(type=="recovered")
+q <-mean(recover_Zambia_corona$cases,na.rm = TRUE)
+
+recover_Zambia_corona <-replace_na(recover_Zambia_corona,list(cases=338))
+
+South_Africa_corona<- coronavirus %>% filter(country == "South Africa")
+confirmed_South_Africa_corona <- South_Africa_corona %>% filter(type=="confirmed")
+death_South_Africa_corona <- South_Africa_corona %>% filter(type=="death")
+recover_South_Africa_corona <-South_Africa_corona %>% filter(type=="recovered")
+q <-mean(recover_South_Africa_corona$cases,na.rm = TRUE)
+
+recover_South_Africa_corona <-replace_na(recover_South_Africa_corona,list(cases=4026))
+
+
+Namibia_corona <- coronavirus %>% filter(country == "Namibia")
+confirmed_Namibia_corona <- Namibia_corona  %>% filter(type=="confirmed")
+death_Namibia_corona <- Namibia_corona %>% filter(type=="death")
+recover_Namibia_corona <- Namibia_corona %>% filter(type=="recovered")
+q <-mean(recover_Namibia_corona $cases,na.rm = TRUE)
+
+recover_Namibia_corona <-replace_na(recover_Namibia_corona ,list(cases=172))
+
+
+
+
+countries_confirm <- rbind(confirmed_Botswana_corona,confirmed_Zimbabwe_corona,confirmed_Zambia_corona,
+                             confirmed_South_Africa_corona,confirmed_Namibia_corona)
+
+countries_recover<- rbind(recover_Botswana_corona,recover_Zambia_corona  ,recover_Zambia_corona,
+                        recover_South_Africa_corona,recover_Namibia_corona)
+
+countries_death<- rbind(death_Botswana_corona,death_Zimbabwe_corona ,death_Zambia_corona,
+                        death_South_Africa_corona,death_Namibia_corona)
+
+ggplot( countries_confirm, aes(x=date, y=cases, col=country)) + geom_point() + 
+  ggtitle("Confirmed cases in Botswana neighbour countries") + ylim(0,10000)
+
+ggplot( countries_recover, aes(x=date, y=cases, col=country)) + geom_point() + 
+  ggtitle("Recover cases in Botswana neighbour countries") + ylim(0,10000)
+
+ggplot( countries_death, aes(x=date, y=cases, col=country)) + geom_point() + 
+  ggtitle("Death cases in Botswana neighbour countries") + ylim(0,10000)
+
+
+
+
+```
+
+When compared to the neighboring countries it shows that South Africa  highly affected by corona virus.there recognized more than 2.8 million confirmed cases.Zambia is the second most infected and Botswana is the third most infected  in coronavirus confirmed.
+
+### Comparision of death and confirmed cases
+
+```{r,echo = FALSE,message=FALSE,warning=FALSE}
+library(plotly)
+
+a<-sum(confirmed_Botswana_corona$cases)
+b<-sum(confirmed_Zimbabwe_corona$cases)
+c<-sum(confirmed_Zambia_corona$cases)
+d<-sum(confirmed_South_Africa_corona$cases)
+e<-sum(confirmed_Namibia_corona$cases)
+
+comfirmed <- c(a, b, c,d,e)
+
+x<-sum(death_Botswana_corona $cases )
+y <-sum(death_Zimbabwe_corona $cases )
+z<-sum(death_Zambia_corona $cases )
+u <-sum(death_South_Africa_corona $cases )
+v <-sum(death_Namibia_corona $cases )
+death <-c(x,y,z,u,v)
+
+Parts <- c("Botswana", "Zimbabwe", "zambia","South_Africa","Namibia  ")
+countries <- data.frame(Parts, comfirmed, death)
+
+# Data Visualization
+
+
+
+fig <- plot_ly(data= countries, x = ~Parts, y = ~comfirmed, type = 'bar', name = 'Comfirmed')
+
+fig <- fig %>% add_trace(y = ~death, name = 'Death')
+
+fig <- fig %>% layout(
+  title = "Coronavirus Cases in neighboring countries",
+  xaxis = list(title = "Country"),
+  yaxis = list(title = 'Number of cases'), 
+  barmode = 'group')
+
+fig
+
+
+
+```
+
+### Total Coronavirus confirmed  Cases in neighboring countries
+
+```{r,echo = FALSE,message=FALSE,warning=FALSE }
+
+confirmed_case_Botswana<-cumsum(confirmed_Botswana_corona$cases)
+confirmed_case_Zimbabwe<-cumsum(confirmed_Zimbabwe_corona $cases)
+confirmed_case_Zambia<-cumsum(confirmed_Zambia_corona$cases)
+confirmed_case_South_Africa<-cumsum(confirmed_South_Africa_corona$cases)
+confirmed_case_Namibia<-cumsum(confirmed_Namibia_corona$cases)
+
+
+countries_confirm_cumsum<-data.frame(date= coronavirus$date , confirmed_case_Botswana,confirmed_case_Zimbabwe,confirmed_case_Zambia,
+                     confirmed_case_South_Africa , confirmed_case_Namibia) 
+
+dfplot <-countries_confirm_cumsum %>% gather(key, value, -date)
+ggplot(dfplot, mapping = aes(x = date, y = value, color = key) ) + geom_line()+
+  theme(plot.background = element_rect(fill = "light blue" ,colour = "black" ,size = 2))
+
+
+```
+
+
+### Total Coronavirus Recovred Cases in neighbors countries
+
+```{r,echo = FALSE,message=FALSE,warning=FALSE }
+
+recove_case_Botswana<- cumsum(recover_Botswana_corona$cases)
+recove_case_Zimbabwe<- cumsum(recover_Zimbabwe_corona$cases)
+recove_case_Zambia<- cumsum(recover_Zambia_corona$cases)
+recove_case_South_Africa<- cumsum(recover_South_Africa_corona$cases)
+recove_case_Namibia<- cumsum(recover_Namibia_corona$cases)
+
+
+countries_recove_cumsum<- data.frame(date= coronavirus$date , recove_case_Botswana,recove_case_Zimbabwe,recove_case_Zambia,
+                                     recove_case_South_Africa ,recove_case_Namibia) 
+
+
+
+dfplot <-countries_recove_cumsum %>% gather(key, value, -date)
+ggplot(dfplot, mapping = aes(x = date, y = value, color = key) ) + geom_line() +
+  theme(plot.background = element_rect(fill = "light blue" ,colour = "black" ,size = 2))
+
+
+
+
+```
+
+### Total Coronavirus Deaths Cases in neighbors countries
+
+```{r,echo = FALSE,message=FALSE,warning=FALSE }
+
+death_case_Botswana <-cumsum(death_Botswana_corona $cases )
+death_case_Zimbabwe <-cumsum(death_Zimbabwe_corona $cases )
+death_case_Zambia <-cumsum(death_Zambia_corona $cases )
+death_case_South_Africa <-cumsum(death_South_Africa_corona $cases )
+death_case_Namibia <-cumsum(death_Namibia_corona $cases )
+
+
+countries_death_cumsum<- data.frame(date= coronavirus$date ,death_case_Botswana ,death_case_Zimbabwe ,death_case_Zambia ,
+                                    death_case_South_Africa,death_case_Namibia ) 
+
+dfplot <-countries_death_cumsum %>% gather(key, value, -date)
+ggplot(dfplot, mapping = aes(x = date, y = value, color = key) ) + geom_line()+
+  theme(plot.background = element_rect(fill = "light blue" ,colour = "black" ,size = 2))
+
+
+```
+
+
+## Conclusions and Discussion
+
+
+ 
+The coronavirus disease is not any ordinary viral infection; it has become a pandemic as it has an impact on the health, mortality, economy, and social well-being of the entire world.
+
+The progress of COVID-19 of Botswana cannot be clearly understood by solely analyzing Botswana data, therefore a comparison of Botswana with countries of neighbors during the COVID-19 pandemic has been carried out in order to reach the final conclusions.
+
+Compared to neighboring countries, Botswana is not yet affected by the corona virus. according to the above data exploration we can see coronavirus is starting to spread through Botswana as well as its neighboring countries. As we see South Africa is the most affected country among its neighboring country and on other hand, Namibia is the least affected country. South Africa has the highest number of infections and deaths. Zambia is the second most infected and Botswana is the third most infected in coronavirus confirmed. Zimbabwe has recorded the second-highest covid-19 death toll. The lowest covid-19 death toll is recorded in Botswana.
+Considering Botswana, the Covid-19 was well controlled at the beginning of Botswana. But since the beginning of June, there has been a significant increase in Covid-19 infections and deaths
+
+In conclusion, it can be said that Botswana currently stands at a much favorable stage regarding the COVID-19 Pandemic when compared to most countries. The Government of Botswana has been able to apply many successful public health response strategies and stabilize the progression of the disease. The main shortcomings that resulted in the high COVID-19 figures can be seen as the delay in testing due to a shortage of test kits and being unaccustomed to a face mask culture. However, the long-term effectiveness of the government’s public health strategies in completely mitigating the disease is yet to be seen.
+
+
+## References
+
+https://en.wikipedia.org/wiki/Botswana
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Botswana
+
+https://www.victoriafalls-guide.net/geography-of-botswana.html
+
+https://www.britannica.com/place/Botswana/Climate
+
+https://www.britannica.com/place/Botswana/Religion
+
+https://www.worldometers.info/coronavirus/countries-where-coronavirus-has-spread/?new=true
+
+https://www.worldometers.info/coronavirus/country/botswana/#graph-cases-daily
+
+https://covid19portal.gov.bw/
+
+https://stackoverflow.com/questions/41937236/trying-to-plot-graph-in-r-with-3-variables.
+
+https://www.r-graph-gallery.com/163-interactive-area-chart-plotly.html
+
+https://www.afro.who.int/news/learning-botswanas-covid-19-vaccine-rollout
+
+

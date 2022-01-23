@@ -1,0 +1,398 @@
+---
+title: "Covid -19 Pandemic status in Co-operative Republic of Guyana"
+author: "Thiruni De Vas Gunawardane - AS2017376"
+date: "9/25/2021"
+output: html_document
+bibiliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+library(sta3262)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(ggplot2)
+library(plotly)
+library(readxl)
+library(leaflet)
+library(viridis)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+
+
+<img src="covid-19.jpg" alt="covid-19" width="100%" length="50%"/>
+
+
+# Abstract
+<p align="justify">
+The Covid-19 disease broke out for the first time in Wuhan, China in December 2019. Since then the disease has spread all over the world and was declared as a global pandemic by the World Health Organization in March 2020. Covid-19 has caused mental and emotional distress in people all over the world and has disrupted economic activities, education, international trade and has caused an economic collapse in some countries. Therefore understanding the risks associated with the virus and responding appropriately is crucial to minimize the damage caused by pandemic and to recover from it. The objective of this report is to help the policy makers of the Republic of Guyana in decision making with regards to the pandemic. An exploratory analysis is performed to identify Confirmed cases, Deaths due to Covid-19 and Recoveries in Guyana and a comparison is done between three other neighboring countries. After analyzing data it can be concluded that the total deaths to total recovery ratio has been improving showcasing the successful attempt of Guyana s' Health Sector in preventing deaths due to covid-19.
+</p>
+\
+\
+
+
+
+# Introduction
+\
+
+### Background
+
+
+<p align="justify">
+Guyana, officially The Co-operative Republic of Guyana is a country in South American continent. Guyana is a part of the Caribbean Region. The country amounts to a total population of 786,552 people making it the second least-populous sovereign state in South America. The capital of Guyana is Georgetown and Guyana is the only South American country in which English is the official language. Guyana recorded the first case of covid -19 on 11th March 2020, a 52 year old woman traveling from New York.
+</p>
+
+\
+\
+
+
+
+### Location and Climatic Conditions of Guyana
+
+\
+
+```{r, echo=FALSE, warning=FALSE, fig.cap= "Location of Guyana on the World Map"}
+
+Guyana_map <- leaflet() %>% addTiles() %>% setView(lng = -58.93018, lat = 4.860416, zoom = 2) %>% addMarkers(lng = -58.93018, lat = 4.860416)
+Guyana_map %>% setMaxBounds(-180,-90,180,90)
+
+
+
+
+```
+
+<p align="justify">
+Guyana is geographically bounded by the Atlantic ocean to the north, Brazil to the south and south-west, Venezuela to the west and Suriname to the east. Guyana is the third smallest sovereign state by area in mainland South America with a geographical area of 214,970 km2. Guyana is a country with rich biodiversity and contrasting landscapes from rain forests to dry sand belts. Guyana has one of the largest unspoiled rain forests in South America with more than 80% of the country still covered by forests. 
+\
+High temperatures, heavy rainfall with small seasonal differences, high humidity, and high average cloud cover provide climatic characteristics of an equatorial lowland. Temperatures are remarkably uniform. The constant heat and high humidity are mitigated near the coast by the trade winds.
+</p>
+
+\
+
+### Demographic Summary of Guyana
+
+\
+
+<p align="justify">
+In this section we are trying to get a brief Demographic summary of Guyana to better understand the impact of covid-19 within Guyanese community. We discuss about the gender compostion  and the age composition of Guyanese people, because discussing about these two demographic measures is very important as it has been discovered in many studies all around the world, that Covid-19 infection indicates a special vulnerability towards older adults and high infection and mortality rate has been discovered among aged population. And it was also observed that While men and women show similar rate of getting infected, men tend to show a higher mortality, independent of age.
+</p>
+
+```{r, warning=FALSE, echo=FALSE, fig.cap=" Data Source : The World Bank Data "}
+
+
+Guyana_demographics <- read_excel("Guyana demographics.xls")
+Guyana_gender_composition <- Guyana_demographics[,c(1,2,3)]
+Guyana_gender_composition <- pivot_longer(Guyana_gender_composition, c(2,3), names_to = "Gender", values_to = "percentage_from_tot_pop")
+A <- ggplot(data = Guyana_gender_composition) + geom_line(aes(y = percentage_from_tot_pop, x = Year, color = Gender)) + theme_grey() + scale_color_viridis_d()
+ggplotly(A)
+
+
+
+```
+ 
+ \ 
+ 
+<p align="justify">
+According to the above graph the percentage of males in Guyana is higher than the pecentage of females indicating a small degree of vulnerablitiy in Guyanese population.
+</p>
+
+```{r,warning=FALSE,echo=FALSE, fig.cap=" Data Source : The World Bank Data "}
+
+Guyana_age_composition <- Guyana_demographics[, c(1,4,5,6)]
+Guyana_age_composition <- pivot_longer(Guyana_age_composition, c(2,3,4), names_to = "Age_group", values_to = "percent_from_tot_pop")
+Guyana_age2020 <- data.frame(Age = c("Age 0-14","Age 15-64","Age >65"), Year = c(rep(2020,3)), Perc = c(27.731924,65.268539,6.999537))
+Guyana_age2020$Age <- factor(Guyana_age2020$Age, levels =c("Age 0-14","Age 15-64","Age >65") )
+B <-ggplot(Guyana_age2020,aes(x= Age, y= Perc)) + geom_bar(stat = "identity", aes(fill = Age)) + labs(title = "Age Composition of Population in 2020") + scale_fill_viridis_d()
+ggplotly(B, tooltip = "y")
+```
+
+
+\
+
+<p align="justify">
+The above figure indicates that almost 65% of Guyanese community consist of  people in the age group 15  to 64. However the propotion of people over 65 years of age is at a low value of almost 7% taking away a small degree of risk due to aged population
+</p>
+
+\
+\
+
+### Lockdown status and Government Actions against Covid-19 in Guyana 
+\
+
+<p align="justify">
+ 
+| Date | Action taken by Government |
+|:------| :---------------------------|
+| 18th March 2020 | The Guyana Civil Aviation Authority closed the country's airports to incoming international passenger flights for 14 days and all schools were closed|
+| 19th March 2020 |  The Guyana Civil Aviation Authority (GCAA) closed Guyanese airspace to all international arrivals|
+| 25th March 2020 | The government decided people exhibiting signs of COVID-19 infection or who have traveled abroad to be tested |
+| 30th March 2020 | Curfew effecting from 6 am to 6 pm was imposed in the region Upper Demerara- Berbice |
+|31st March 2020 | The government decided not to impose lock downs or curfew contrasting to other countries in the region |
+| 2nd April 2020 | Bars, restaurants and places of entertainment were closed between 6 pm to 6 am |
+|3rd April 2020 | A nationwide curfew was imposed with reported cases being 19 and reported deaths being 4 |
+|8th April 2020| All the post offices were closed and Public transport may only carry half the number of passengers they are licensed to carry|
+|11th April 2020| The government set ip 4 quarantine facilities within the country|
+|12th April 2020| Government gave the approval for private hospitals to test for covid-19|
+|23rd April 2020| Government dispatched mobile COVID-19 testing units across the country |
+|1st May 2020| The curfew was extended till June 3rd|
+|3rd June 2020| The country remained in partial lock down until September 30th.only Guyana nationals, international workers and diplomats allowed to return on one of the scheduled repatriation flights once they have completed the repatriation form and process|
+|12th Oct 2020|   Return of some commercial flights for Guyanese citizens, international workers and diplomats|
+|29th January 2021| Guyana received first batch of vaccines by COVAX facility |
+|11th February 2021|Guyana commences the distribution of the COVID-19 Vaccine, AstraZeneca to Healthcare Workers|
+|17th September 2021| Almost 22% of the population is fully vaccinated and 43% partially vaccinated|
+
+
+</p>
+\
+\
+
+# Exploratory Data Analysis
+
+\
+
+### Structure of Data
+
+<p align="justify">
+The data set used under this study is available in the package "coronavirus" in RStudio and consist of daily data from 22nd january 2020 to 4th August 2021  all over the world. The data set consist of data under the following variables.
+</p>
+
+ * Date
+ * Country
+ * Province
+ * Lattitude of the location of country
+ * Longitude of the location of country
+ * Type of the recorded case : Confirmed cases / Deaths / Recoveries
+ * Number of daily cases
+\
+
+However for Guyana data for the occurrence of cases with respect to the province was not available, hence have been dropped in the analysis.
+\
+\
+
+### Summary Statistics for Guyana
+```{r, echo=FALSE,warning=FALSE,message=FALSE, fig.cap="Daily confirmed cases , deaths and recoveries from Covid-19 in Guyana"}
+Guyana_corona <- coronavirus %>% filter(country == "Guyana")
+Guyana_corona <- pivot_wider(Guyana_corona, names_from = "type", values_from = "cases")
+Guyana_corona$province <- NULL
+Guyana_corona <- Guyana_corona %>% filter(confirmed >= 0)
+Guyana_corona <- na.omit(Guyana_corona)
+```
+
+### Daily incidence of Covid-19 cases in Guyana
+
+```{r, echo=FALSE,message=FALSE,comment=NA}
+
+summary(Guyana_corona)
+
+```
+
+
+
+
+
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE,fig.cap="Daily confirmed cases, deaths and recoveries due to Covid-19 in Guyana"}
+Guyana_corona <- pivot_longer(Guyana_corona,5:7, names_to = "type", values_to = "cases")
+P1 <-ggplot(data = Guyana_corona, aes(x = date, y = cases)) + geom_line(aes( color = type))  + scale_color_viridis_d() + facet_grid(type~., scales = "free")  
+ggplotly(P1)
+
+```
+<p align="justify">
+Guyana have recorded 22,658 confirmed cases as of 8th August 2021 with the first covid-19 case being recorded on 11th March 2020. And the highest number of confirmed cases recorded in  a day amounts to 331 cases which was recorded on 24th June 2021. The highest number of deaths recorded within a day is 13 deaths being recorded on 26th May 2021. So far the highest number of recoveries has been recorded as 1144 people, on 3rd august 2021. The graph indicates two waves of covid-19, the first wave between July 2020 to January 2021 recording comparatively low occurrence of cases and the second wave between March 2021 to present. Somehow the numbers are decreasing currently.
+</p>
+
+\
+
+### Total incidence of Covid-19 cases in Guyana
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE, fig.cap="Total confirmed cases, deaths and recoveries due to Covid-19 in Guyana"}
+
+
+
+## Cumulative
+Guyana_corona <- coronavirus %>% filter(country == "Guyana")
+Guyana_corona <- pivot_wider(Guyana_corona, names_from = "type", values_from = "cases")
+Guyana_corona$province <- NULL
+Guyana_corona <- Guyana_corona %>% filter(confirmed >= 0)
+Guyana_corona <- na.omit(Guyana_corona)
+
+
+Guyana_corona <- Guyana_corona %>% mutate(tot.confirmed = Guyana_corona$confirmed %>% cumsum())
+Guyana_corona <- Guyana_corona %>% mutate(tot.deaths = Guyana_corona$death %>% cumsum())
+Guyana_corona <- Guyana_corona %>% mutate(tot.recovered = Guyana_corona$recovered %>% cumsum())
+Guyana_corona_cum <- select(Guyana_corona, date , tot.confirmed, tot.deaths, tot.recovered)
+a <- Guyana_corona_cum$tot.confirmed
+b <- Guyana_corona_cum$tot.deaths 
+c <- Guyana_corona_cum$tot.recovered
+Active.cases <- a-(b+c)
+Active.cases <- as.data.frame(Active.cases)
+
+Guyana_corona_cum1 <-cbind(Guyana_corona_cum, Active.cases)
+
+Guyana_corona_cum2 <- pivot_longer(Guyana_corona_cum1,2:5, names_to = "Type", values_to = "tot.cases")
+Guyana_corona_cum2 <- Guyana_corona_cum2[1:2232,]
+P2 <- ggplot(data = Guyana_corona_cum2, aes(x = date, y = tot.cases)) + geom_line(aes( color = Type))  + scale_color_viridis_d() + facet_grid(Type~., scales = "free", switch = "y") + theme(strip.text.y.left = element_text(angle = 0)) 
+ggplotly(P2)
+
+```
+<p align="justify">
+Guyana has recorded 22,538 total cases as of 2nd August 2021 and 541 total deaths due to corona virus. From the 22,538 confirmed cases 21,183 people have been recovered. The number of active cases in Guyana have been decreasing since May 2021. The active cases graphs indicates the above mentioned two waves of covid-19 as well, where we can see the impact of second wave to be higher than the first wave.
+</p>
+
+\
+\
+
+## Covid-19 status of Guyana Compared to other Neighbouring Countries
+\
+
+<p align="justify">
+In this study we compare the covid-19 statistics of Guyana with 3 other neighboring countries in the Caribbean region. The following figure shows the locations of the neighboring countries and also gives an idea about their population. Compared to Venezuela and Haiti, Guyana and Suriname is very less populous which gives us sense of comparative importance on  number of covid-19 cases against each countries' population.  
+</p>
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE, comment=NA}
+
+Countries <- c("Guyana","Haiti","Suriname","Venezueala")
+Population <- c(786552,11402528,586632,28435940)
+Longitudes <-c(-58.93018,-72.2852,-56.0278,-66.5897)
+Latitudes <- c(4.860416, 18.9712,3.9193, 6.4238)
+Pop_by_country <- data.frame(Countries,Population,Longitudes,Latitudes)
+Pop_by_country
+
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+ggplot(data = world) +
+  geom_sf() +
+  geom_point(data = Pop_by_country, aes(x = Longitudes, y = Latitudes, size = Population, color =Countries), 
+             shape = "circle" , alpha = 0.8) +
+  coord_sf(xlim = c(-180, 10), ylim = c(-50, 50), expand = TRUE) + scale_color_viridis_d() 
+
+
+
+
+
+```
+
+### Comparing Total confirmed Covid-19 cases
+
+\
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+
+## comparison of confirmed cases with other countries
+
+## Haiti 
+Haiti_corona <-coronavirus %>% filter(country== "Haiti")
+Haiti_corona <- pivot_wider(Haiti_corona, names_from = "type", values_from = "cases")
+Haiti_corona$province <- NULL
+Haiti_corona <- na.omit(Haiti_corona)
+Haiti_corona <- Haiti_corona[2:561,]
+Haiti_corona <- Haiti_corona %>% mutate(Cumulative_confirmed = Haiti_corona$confirmed %>% cumsum())
+Haiti_corona <- Haiti_corona %>% mutate(Cumulative_deaths = Haiti_corona$death %>% cumsum())
+Haiti_corona <- Haiti_corona %>% mutate(Cumulative_recovered = Haiti_corona$recovered %>% cumsum())
+Haiti_corona_cum <- select(Haiti_corona, date , Cumulative_confirmed, Cumulative_deaths, Cumulative_recovered)
+
+
+
+## Suriname
+Suriname_corona <-coronavirus %>% filter(country== "Suriname")
+Suriname_corona <- pivot_wider(Suriname_corona, names_from = "type", values_from = "cases")
+Suriname_corona$province <- NULL
+Suriname_corona <- na.omit(Suriname_corona)
+Suriname_corona <-Suriname_corona[2:561,]
+Suriname_corona <- Suriname_corona %>% mutate(Cumulative_confirmed = Suriname_corona$confirmed %>% cumsum())
+Suriname_corona <- Suriname_corona %>% mutate(Cumulative_deaths = Suriname_corona$death %>% cumsum())
+Suriname_corona <- Suriname_corona %>% mutate(Cumulative_recovered = Suriname_corona$recovered %>% cumsum())
+Suriname_corona_cum <- select(Suriname_corona, date , Cumulative_confirmed, Cumulative_deaths, Cumulative_recovered)
+
+## Venezuela
+Venezuela_corona <-coronavirus %>% filter(country== "Venezuela")
+Venezuela_corona <- pivot_wider(Venezuela_corona, names_from = "type", values_from = "cases")
+Venezuela_corona$province <- NULL
+Venezuela_corona <- Venezuela_corona %>% filter(death >= 0)
+Venezuela_corona <- na.omit(Venezuela_corona)
+Venezuela_corona <- Venezuela_corona %>% mutate(Cumulative_confirmed = Venezuela_corona$confirmed %>% cumsum())
+Venezuela_corona <- Venezuela_corona %>% mutate(Cumulative_deaths = Venezuela_corona$death %>% cumsum())
+Venezuela_corona <- Venezuela_corona %>% mutate(Cumulative_recovered = Venezuela_corona$recovered %>% cumsum())
+Venezuela_corona_cum <- select(Venezuela_corona, date , Cumulative_confirmed, Cumulative_deaths, Cumulative_recovered)
+
+
+Country_comparison_cum_confirmed <- data.frame(Date = Guyana_corona_cum$date  ,Guyana = Guyana_corona_cum$tot.confirmed , Suriname = Suriname_corona_cum$Cumulative_confirmed, Venezuela = Venezuela_corona_cum$Cumulative_confirmed ,Haiti = Haiti_corona_cum$Cumulative_confirmed )
+Country_comparison_cum_confirmed <- pivot_longer(Country_comparison_cum_confirmed, 2:5,names_to = "Country", values_to = "Cumulative_confirmed_cases")
+C1 <- ggplot(Country_comparison_cum_confirmed, aes(x = Date, y = Cumulative_confirmed_cases)) + geom_line(aes(color = Country)) + scale_color_viridis_d() 
+ggplotly(C1)
+
+```
+\
+
+<p align="justify">
+The above figure indicates that among the 4 countries chosen for the comparison Guyana has recorded the first incidence of confirmed case on 12th March 2020. By 12th of June 2020 all three of the other countries has surpassed the total number of confirmed covid-19 cases in Guyana. As of 4th august 2021 Guyana the total confirmed cases of Guyana is lower than Venezuela and Suriname but higher than Haiti.
+</p>
+
+
+### Comparing Total deaths from Covid-19
+
+\
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+## comparison of  total deaths with other countries
+
+Country_comparison_cum_deaths <- data.frame(Date = Guyana_corona_cum$date  ,Guyana = Guyana_corona_cum$tot.deaths, Haiti = Haiti_corona_cum$Cumulative_deaths , Suriname = Suriname_corona_cum$Cumulative_deaths, Venezuela = Venezuela_corona_cum$Cumulative_deaths)
+Country_comparison_cum_deaths <- pivot_longer(Country_comparison_cum_deaths, 2:5,names_to = "Country", values_to = "Cumulative_deaths")
+C2 <- ggplot(Country_comparison_cum_deaths, aes(x = Date, y = Cumulative_deaths)) + geom_line(aes(color = Country)) + scale_color_viridis_d() 
+ggplotly(C2)
+
+
+```
+\
+<p align="justify">
+When comparing the total deaths due to covid-19 with the neighboring countries the first death occurred in Guyana on 12th March 2020. By 8th of July 2020 all the other three countries surpassed Guyana with their total number of deaths due to covid-19.As of 4th August 2021 Guyana reports the lowest number of total deaths compared to the other three countries.
+</p>
+
+# Discussion and Conclusion
+
+<p align="justify">
+During the data analysis process some negative values were identified for confirmed cases of Guyana as well as other countries, this might be due to corrections done for some PCR tests that erroneously diagnosed patients as positive even when they are a not infected. Also there were some negative values for recorded deaths and recoveries. All these negative values were treated as missing values and dropped from the data set during the analysis. Also there were missing values for recoveries which were also dropped from the data set during the analysis.
+</p>
+
+\
+
+<p align="justify">
+In the case of comparing covid-19 status with other countries neighboring countries like Brazil was not taken into consideration due to the very large scale difference between data which made it hard to draw insights from the graphs.
+</p>
+
+```{r, echo=FALSE,warning=FALSE,message=FALSE, fig.cap="Total deaths to Total confirmed cases Ratio"}
+Tot.deaths <- Guyana_corona_cum1[51:560,3]
+Tot.Confirmed <- Guyana_corona_cum1[51:560,2] 
+Deaths_to_Confirmed_ratio <- Tot.deaths/Tot.Confirmed
+Deaths_to_Confirmed_ratio1 <-data.frame(Guyana_corona_cum[51:560,1], Deaths_to_Confirmed_ratio)
+
+
+N <-ggplot(Deaths_to_Confirmed_ratio1, aes(x=date, y= Deaths_to_Confirmed_ratio)) + geom_line()
+ggplotly(N)
+
+```
+
+<p align="justify">
+From the above figure we can see that total deaths to total confirmed ratio which was very high at the beginning of the pandemic now has become closer to zero, indicating that the health sector of Guyana is successful in preventing deaths due to covid-19. Therefore it is safe to say that Guyana is dealing with the pandemic situation pretty well.
+
+</p>
+\
+\
+
+# References
+
+* Jin, J.-M., Bai, P., He, W., Wu, F., Liu, X.-F., Han, D.-M., Liu, S. and Yang, J.-K. (2020). Gender Differences in Patients With COVID-19: Focus on Severity and Mortality. Frontiers in Public Health, 8(152).
+* Raftery, A.E., Li, N., Sevcikova, H., Gerland, P. and Heilig, G.K. (2012). Bayesian probabilistic population projections for all countries. Proceedings of the National Academy of Sciences, 109(35), pp.13915–13921.
+* Wikipedia Contributors (2019). Guyana. [online] Wikipedia. Available at: https://en.wikipedia.org/wiki/Guyana.
+* Worldometer (2021). Coronavirus toll update: Cases & deaths by country. [online] Worldometers. Available at: https://www.worldometers.info/coronavirus/.
+* www.health.gov.gy. (n.d.). Ministry of Health - COVID-19. [online] Available at: https://www.health.gov.gy/index.php/world-news-7 [Accessed 28 Sep. 2021].
+* World Bank Data. Population ages 65 and above (% of total population) - Guyana | Data. [online] Available at: https://data.worldbank.org/indicator/SP.POP.65UP.TO.ZS?locations=GY [Accessed 28 Sep. 2021].

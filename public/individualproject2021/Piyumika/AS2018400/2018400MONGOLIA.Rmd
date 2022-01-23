@@ -1,0 +1,246 @@
+---
+title: "Corona Virus Report - Mongolia"
+author: "K.Katheesan AS2018400"
+date: "27/09/2021"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+library(magrittr)
+library(lubridate)
+library(rmarkdown)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(png)
+library(sp)
+colour_for_types<-c("#065694","#14b542","#bf1f17")
+get_individual_project_country("AS2018400")
+install.packages("coronavirus")
+data("wrld_simpl")
+mongolia_corona <- coronavirus %>% filter(country == "Mongolia")
+summary(mongolia_corona)
+# after going through summary of Mongolia Corona data I have found one "cases" value to be negative
+# and there are 45 rows in which cases are Not Available (NA)
+# and also the class of "types" is character which should be converted to factor
+
+#cleaning up the NA values
+mongolia_corona<-mongolia_corona[complete.cases(mongolia_corona$cases),]
+#converting the negative cases values to positive
+mongolia_corona$cases<-abs(mongolia_corona$cases)
+#check the class of date and type columns
+class(mongolia_corona$type)
+class(mongolia_corona$date)
+#converting  "type" from character type to factor type
+mongolia_corona$type<-as.factor(mongolia_corona$type)
+summary(mongolia_corona)
+
+
+confirmed_mongolia_corona <- mongolia_corona %>% filter(type == "confirmed")
+recovered_mongolia_corona <- mongolia_corona %>% filter(type == "recovered")
+death_mongolia_corona <- mongolia_corona %>% filter(type == "death")
+
+total_cases_mongolia_by_category<-data.frame(c("confirmed","recovered","death"),c(sum(confirmed_mongolia_corona$cases),sum(recovered_mongolia_corona$cases),sum(death_mongolia_corona$cases)))
+colnames(total_cases_mongolia_by_category)<-c("type","cases")
+date_range<-c(ymd('2021-01-01'),ymd('2021-09-20'))
+
+```
+## Introduction
+Mongolia is a country in east Asia which covers an area of 1,564,116 km2 with a population of 3,3 million. It is located between Russia to the north and China to the south. This is the largest landlocked country.This country is situated between 41 and 52 latitudes and high elevation about 5180 feet.
+
+## Visulization of the location
+
+
+```{r , echo=FALSE}
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "#8c8c8c", colour = "#fafafa"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+cntr <- c('Mongolia') 
+plot(p +
+  geom_polygon(
+    data = wrld_simpl[wrld_simpl$NAME %in% cntr,],
+    aes(x = long, y = lat, group = group), fill = "red", colour = "white"
+  ))
+```
+
+## Climate and weather condition
+Mongolia is called the Country of Blue sky as it has more than 250 sunny days. Most of the country experiences hot in summer and extremely cold in winter. The country is subjected to an occasional harsh climate known as Zud. It is a natural disaster which results in destruction of livestock due to starvation or freezing temperatures.
+
+## COVID-19 and Mongolia
+
+The first case was found in a French man who travelled from Moscow to Dornogovi on 10th of March 2020.Mongolia is the third most affected country in East Asia. approximately 299,000  people were infected and more than 1200+ people died covid. 
+The response of Government to this situation
+Closure of air and land Border crossing between China and Mongolia from 27th of January 2021
+Suspension of international flights and passenger trains until 30th of April 2021
+Various businesses were closed, including churches, bars, and saunas. Sports, cultural activities, and restaurants were restricted.
+Mongolian evacuees (1000 people) were isolated for 21 days each individuals in separate rooms
+On November 11th lock down was imposed in  Ulaanbaatar for 5 days. 
+# Explanotory Data Analysis
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+mongolia_corona$month <- floor_date(mongolia_corona$date, "month")
+ggplot(mongolia_corona %>% group_by(month) %>% summarize(cases = sum(cases)), aes(x=month, y=cases)) + geom_line() + ggtitle("Mongolia: Overall spread of covid cases by month ")+scale_x_date(date_breaks="1 month", date_labels="%b %y")+ 
+  geom_rect(aes(xmin=ymd('2020-01-01'),
+                xmax = ymd('2020-12-31'),
+                ymin = -Inf,
+                ymax = Inf), fill = 'pink', alpha = 0.05)+
+  theme(axis.text.x     = element_text(angle=90),)+
+  labs(x = "Month", y = "Overall cases")
+```
+
+Here Overall cases include  confirmed, recovered and death cases in mongolia. In the plot the shaded area in pink represent the 2020 year. Overall spread of corona cases were more prominent in 2021 compared to 2020. 
+
+Hence in this report we will only focus in the year of 2021.
+
+```{r , echo=FALSE}
+confirmed_mongolia_corona <- mongolia_corona %>% filter(type == "confirmed")
+recovered_mongolia_corona <- mongolia_corona %>% filter(type == "recovered")
+death_mongolia_corona <- mongolia_corona %>% filter(type == "death")
+
+total_cases_mongolia_by_category<-data.frame(c("confirmed","recovered","death"),c(sum(confirmed_mongolia_corona$cases),sum(recovered_mongolia_corona$cases),sum(death_mongolia_corona$cases)))
+colnames(total_cases_mongolia_by_category)<-c("type","cases")
+
+date_range<-c(ymd('2021-01-01'),ymd('2021-09-20'))
+```
+## Confirmed Cases in Mongolia (2021)
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(confirmed_mongolia_corona, aes(x=date, y=cases)) + geom_line(colour=colour_for_types[1])+ ggtitle("Mongolia: Daily Confirmed Covid-19 cases in 2021")+
+  scale_x_date(date_breaks="1 month", date_labels="%b",limits = date_range)+geom_smooth(colour=colour_for_types[1])+
+  labs(x = "Month", y = "Confirmed cases")
+```
+In this plot  we can see there is gradual increase in the number of confirmed cases. And the numbers are at the peak in the month of September. 
+##  Cumulative Confirmed Cases in Mongolia (2021)
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(confirmed_mongolia_corona, aes(x=date, y=cumsum(cases))) + geom_line(colour=colour_for_types[1])+ ggtitle("Mongolia: Cumulative Confirmed Covid-19 cases in 2021")+
+  scale_x_date(date_breaks="1 month", date_labels="%b",limits = date_range)+
+  labs(x = "Month", y = "Cumulative Confirmed cases")
+```
+
+In the cumulative plot we can identify a steep increase in the september october period.
+
+## Recovered Cases in Mongolia (2021)
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(recovered_mongolia_corona, aes(x=date, y=cases)) + geom_line(colour=colour_for_types[2]) + ggtitle("Mongolia: Daily Recovered Covid-19 cases in 2021")+
+  scale_x_date(date_breaks="1 month", date_labels="%b",limits = date_range)+geom_smooth(colour=colour_for_types[2])+
+  labs(x = "Month", y = "Recovered cases")
+```
+## Cumulative Recovered Cases in Mongolia (2021)
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(recovered_mongolia_corona, aes(x=date, y=cumsum(cases))) + geom_line(colour=colour_for_types[2]) + ggtitle("Mongolia: Cumulative Recovered Covid-19 cases in 2021")+
+  scale_x_date(date_breaks="1 month", date_labels="%b",limits = date_range)+
+  labs(x = "Month", y = "Cumulative Recovered cases")
+```
+Recovered cases were also increasing but not as high as the confirmed cases.
+We don't have data for the recovered cases after the month of august. 
+
+## Death Cases in Mongolia (2021)
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(death_mongolia_corona, aes(x=date, y=cases)) + geom_line(colour=colour_for_types[3]) + ggtitle("Mongolia: Daily Death Covid-19 cases in 2021")+
+  scale_x_date(date_breaks="1 month", date_labels="%b",limits = date_range)+geom_smooth(colour=colour_for_types[3])+
+  labs(x = "Month", y = "Death cases")
+```
+##Cumulative Death Cases in Mongolia (2021)
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(death_mongolia_corona, aes(x=date, y=cumsum(cases))) + geom_line(colour=colour_for_types[3]) + ggtitle("Mongolia: Cumulative Death Covid-19 cases in 2021")+
+  scale_x_date(date_breaks="1 month", date_labels="%b",limits = date_range)+
+  labs(x = "Month", y = "Cumulative Death cases")
+```
+The death cases was at it's peak in the month of June and July. We can see a downward progression of the death cases. which implies the actions taken by the government are stopping the covid-19
+# Comparing Counties
+I have chosen Kazakhstan, Namibia to compare with Mongolia. Mongolia and Namibia has similar population density and population. As population and population density are crucial factors in spreading of covid 19. The reason I chose Kazakhstan is, it is neighbouring country to Mongolia.
+And moreover all these Countries are similar in economical factor which is another factor that determines the recovery rate of the covid patients.
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+countries_to_compare<-c("Mongolia", "Namibia", "Kazakhstan")
+compare_corona <- coronavirus %>% filter(country == countries_to_compare)
+```
+
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE eval=FALSE}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+wrld_simpl$NAME
+
+p +
+  geom_point(
+    data = compare_corona, aes(x = long, y = lat, col = country), size
+    = 3
+  )
+
+pivot_compare_corona <- compare_corona %>%
+  pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+
+```
+## Comparison of Confirmed Cases
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(pivot_compare_corona,
+  aes(x = date, y = confirmed, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of confirmed cases of comparing countries")+
+  ylim(0,10000)+
+  labs(x = " ", y = "Confirmed cases")
+```
+Mongolia when compared with Kazakhstan has a lower number of Confirmed cases. whereas the Namibia has much less confirmed cases compared with Mongolia. Moreover we can also identify that the Covid 19 has started in Kazakhstan before initially compared with namibia and Monogolia.
+## Comparison of Recovered Cases
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = recovered, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of recovered cases of comparing countries")+
+  ylim(0,10000)+
+  labs(x = " ", y = "Recovered cases")
+```
+The recovered and confirmed plots follows a similar patter of all the countries. which can be interpreted as the governments of all three countries are tring hard to fight against covid
+## Comparison of Death Cases
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = death, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of Death cases of comparing countries")+
+  ylim(0,100)+
+  labs(x = " ", y = "Death cases")
+```
+Death cases are high in both Kazakhstan and Namibia
+
+#Conclusion 
+Through the above results we can conclude Mongolia faced for coronavirus in severe in the second wave of corona
+
+the comparsion shows that all the three countires affected at the same rate
+The governments of these countries are doing their best recovering the patients
+#References
+https://www.worldometers.info/coronavirus/country/mongolia/
+https://asia.nikkei.com/Spotlight/Coronavirus/COVID-vaccines/Mongolia-s-mass-jabs-fail-to-suppress-COVID-spread2
+https://en.wikipedia.org/wiki/Mongolia

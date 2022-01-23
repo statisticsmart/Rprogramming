@@ -1,0 +1,401 @@
+---
+title: "Sweden COVID-19 Analysis"
+Author: "AS2018475"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,comment = NA,message=FALSE,warning=FALSE)
+```
+
+```{r}
+library(devtools)
+library(sta3262)
+```
+
+
+# Introduction
+
+
+On 31 December 2019, a cluster of cases of pneumonia of unknown cause, in the city of Wuhan, Hubei province in China, was reported to the World Health Organisation. In January 2020, a previously unknown new virus was identified, subsequently named the 2019 novel coronavirus, and samples obtained from cases and analysis of the virus’ genetics indicated that this was the cause of the outbreak. This novel coronavirus was named as Coronavirus Disease 2019 (COVID-19) by WHO in February 2020. The virus is referred to as SARS-CoV-2 and the associated disease is COVID-19.Here a covid-19 analysis is done in Sweden.
+
+
+
+![](sampleimage.jpg)
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+sweden_corona <- coronavirus %>% filter(country == "Sweden")
+```
+
+
+
+```{r}
+new_sweden_corona <- sweden_corona[ , colSums(is.na(sweden_corona)) < nrow(sweden_corona)]
+```
+
+
+```{r}
+df1<-new_sweden_corona  # to convert NA values to 0
+df1[is.na(df1 )]<-0
+```
+
+
+```{r}
+df2<-df1
+df2$cases[df2$cases<0] <-0  # to convert minus values to 0
+```
+
+
+
+Sweden is a Scandinavian nation with thousands of coastal islands and inland lakes, along with vast boreal forests and glaciated mountains. Its principal cities, eastern capital Stockholm and southwestern Gothenburg and Malmö, are all coastal. Stockholm is built on 14 islands. It has more than 50 bridges, as well as the medieval old town, Gamla Stan, royal palaces and museums such as open-air Skansen.
+
+Capital: Stockholm
+
+Currency: Swedish krona
+
+Population:Approximately 10.23 million 
+
+Official language: Swedish
+
+
+Source-Google
+
+
+
+##  Location of Sweden
+
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = sweden_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+
+##  Climate condition
+
+
+#### Swedish weather and climate
+
+About 15 percent of the country lies within the Arctic Circle. From about late May until mid-July, sunlight lasts around the clock north of the Arctic Circle, but, even as far south as Stockholm, the nights during this period have only a few hours of semidarkness. In mid-December, on the other hand, Stockholm experiences only about 5.5 hours of daylight; in areas as far north as Lappland, there are nearly 20 hours of total darkness relieved by a mere 4 hours of twilight.
+
+Winter and summer temperature differences in Sweden are extreme, but generally the country enjoys a temperate climate, thanks to the Gulf Stream.
+Above the Arctic Circle, winter is severe with temperatures going below -30°C, while summer temperatures here, and in the rest of the country, regularly hit +20°C. In the south, winter is generally mild with an average temperature above 0°C/32°F degrees. Sweden's northerly position has a definite summer advantage in that temperatures are rarely extreme and humidity levels are not high.
+
+
+
+
+## Lockdown status
+
+
+The COVID-19 pandemic in Sweden is part of the pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Sweden on 31 January 2020, when a woman returning from Wuhan tested positive. On 26 February, following outbreaks in Italy and in Iran, multiple travel-related clusters appeared in Sweden. Community transmission was confirmed on 9 March in the Stockholm Metropolitan Area. Since then, individuals in every län (county) have tested positive for COVID-19. The first death was reported on 11 March in Stockholm, a case of community transmission. However, it is believed that the virus could have reached Sweden as early as December 2019, when several individuals sought care for respiratory illness in Falun after contact with an individual with recent travel history to Wuhan.
+
+Months before the first COVID-19 cases were detected, public-health experts ranked Sweden as one of the most prepared countries to handle a pandemic.During the initial phase of the COVID-19 pandemic in spring 2020, Sweden drew attention from the rest of the world due to the way it handled the pandemic. Compared to many other countries, Sweden took softer measures to prevent the spread of the virus. Sweden did not implement a lockdown nor closed its borders. The government felt a more successful strategy would be to provide recommendations rather than regulations. Restaurants and bars remained open throughout the whole pandemic, although certain restrictions such as earlier closing times, were brought in at times. Sweden has recorded much more cases and deaths during the pandemic compared to the other Nordic countries, although it does have the largest population in the region.
+
+
+
+
+## Actions taken by the government
+
+
+Sweden's response to COVID-19 was less invasive than many other countries during the first eight months, with no general lockdown and a focus on slowing, not stopping, the pandemic.Physical distancing was strongly recommended, and mandatory in some situations, but facemasks were not recommended outside health care.
+
+But now the Swedish Government has presented a range of different measures to limit the spread of the COVID-19 virus and to mitigate the economic impact of it.
+The Government has adopted a Government Bill for a temporary Act to prevent the spread of COVID-19. The legislation is intended to give the Government the authority to adopt more binding communicable disease control measures than was previously possible.
+
+The new Act is intended to allow accurate measures, adapted to the conditions of different activities, and to not unnecessarily hinder activities that can be conducted in an infection-safe manner. If necessary to prevent infection, it will be possible to introduce special limitations regarding the following activities and places:
+
+  * public gatherings and events
+  * places for recreational or cultural activities that are open to the general public
+  * commercial centers that are open to the general public
+  * public transport and domestic flights
+  * places for private gatherings.
+
+**Educational**
+
+A new act allows the Government to temporarily close preschools, schools, out-of-school centres and other educational activities. The act also gives the responsible entity the right to temporarily close an educational activity in some cases. There are currently no plans to close compulsory schools and preschools. The Government has made preparations to ensure – should the situation change – that care is available for children and pupils whose parents work in areas vital to society.
+The Government has decided that schools that must be closed following a decision by an expert agency may adapt their educational activities to, for example, remote or distance learning. It is recommended that Sweden’s upper secondary schools, municipal adult education, vocational adult education and higher education institutions provide distance learning until further notice.
+
+
+
+**Vaccination campaign**
+
+As of August 30, 2021, Sweden had administered approximately 122 COVID-19 vaccine doses per 100 population. This has meant around two-thirds of Swedish adults were classed as fully vaccinated as of August 2021, which was around an average rate when compared to other countries in the EEA. Currently, vaccines from three different manufacturers are being used in Sweden, with the vast majority used so far coming from Comirnaty/BioNTech and smaller amounts of Moderna and Vaxzevria (previously called Astra-Zeneca) in circulation.
+
+
+**Entry ban on travel to Sweden has been extended**
+
+The Government has decided to extend the entry restrictions for travel from both the EU/EEA and from other countries until 31 October 2021. As of 30 June, the Swedish regulation has been adapted to the EU regulation on a COVID certificate on travel to Sweden from EU/EEA States. Entry from Denmark, Finland, Iceland and Norway is not subject to any entry restrictions.(By the time the report is being prepared)
+
+
+
+**sweden's response in the global fight**
+
+Sweden’s main strategy is to contribute core support that gives international actors such as the UN, the International Red Cross Movement and multilateral development banks the flexibility required to take effective action as needs arise. Sweden allocates one per cent of its GDP, a total of approximately SEK 52 billion, to official development assistance. Through international development cooperation, Sweden contributes directly and indirectly to fighting the COVID-19 virus, especially among the most vulnerable individuals and groups. Sweden’s support is aimed at building resilient health systems in low- and middle-income countries, increasing access to vaccines and diagnostics, and mitigating the socio-economic impacts of the pandemic. Equitable and gender-equal health care that is accessible to all is crucial to tackling global health challenges.
+
+
+
+
+
+# Exploratory Data Analysis
+
+
+```{r}
+confirmed_sweden_corona <- df2 %>% filter(type=="confirmed")
+ggplot(confirmed_sweden_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("sweden: Daily Covid-19 confirmed cases")
+
+```
+
+Figure 01:Daily Covid-19 confirmed cases in Sweden
+
+
+According to the plot of  daily confirmed cases in Sweden,the pattern has been changed over the time.In the period of 2021-01 it has come to a peak value.From January to July ,the confirmed count has been changed rapidly and it is higher than the other parts of the year.
+
+
+
+
+```{r}
+death<- df2 %>% filter(type=="death")
+ ggplot(death, aes(x=date, y=cases)) + geom_line() + ggtitle("sweden: Daily Covid-19 death cases")
+```
+
+Figure 02:Daily Covid-19 death cases in Sweden
+
+According Figure 02 during two periods a significant change can be seen.Deaths shows a decreasing pattern after 2021-01.Between 2020-07 and 2021-07 deaths have been decreased significantly.Then it shows a increasing and decreasing pattern respectively in deaths.
+
+
+
+
+
+```{r}
+recover_sweden_corona <- df2 %>% filter(type=="recovered")
+ggplot(recover_sweden_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("sweden: Daily Covid-19 recovered cases")
+```
+
+Figure 03:Daily covid-19  recovered cases in Sweden
+
+According to figure 03 ,  recovered cases can not be seen in the period.
+
+
+
+
+
+```{r}
+active_cases<-df2 %>%
+pivot_wider(names_from = type, values_from = cases) %>%
+mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+```
+
+```{r}
+ggplot(active_cases, aes(x=date, y=active)) + geom_line() + ggtitle("sweden: Daily Covid-19 active cases")
+```
+
+Figure 04:Daily active covid cases in Sweden
+
+
+Figure 04 shows that active covid 19 cases have been increased continuously from around January in 2021.In the earlier period it shows a less number of active cases and the pattern is remained same.Then it shows an upward trend pattern. After 2021-07 active cases have been remained same approximately and active cases have not been changed in the latter part.
+
+
+
+
+```{r}
+ggplot(df2, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Sweden: Daily Covid-19 cases by type") + facet_grid(type~.)+labs(x ="Date",y = "number of cases")
+```
+
+Figure 05:Daily confirmed,death and recovered cases in Sweden
+
+
+
+
+ ```{r,out.width="50%",out.height="50%"}
+knitr::include_graphics("World-Data-Locator-Map-Sweden.jpg")
+```
+
+Source:encyclpaedia Britannica
+
+
+
+
+
+
+Norway,Denmark and Finland are the nearest three countries of Sweden.Therefore  here an analysis of the confirmed,death and recovery cases related to Covid-19  has been done using the four countries.A comparison of the neighboring countries has been done as follows.
+
+ 
+ 
+```{r}
+neighbours <- filter(coronavirus,country %in% c("Sweden","Denmark","Finland","Norway"))
+neighbor_confirmed <- neighbours %>% filter(type=="confirmed")
+ggplot(neighbor_confirmed,aes(x=date,y=cases,col=country))+ geom_line() + ggtitle("Daily confirmed cases of Swedens' neighbouring countries") +ylim(0,10000)
+```
+
+Figure 06:Comparison of Daily confirmed cases
+
+
+ 
+```{r}
+ggplot(neighbor_confirmed, aes(x=country, y=cases,fill=country))+ geom_col() + ggtitle("Confirmed cases of neighboring countries")+ ylim(0,30000)
+```
+ 
+ Figure 07:Total confirmed cases of Sweden,Norway,Denmark,Finland
+ 
+ A comparison of the four countries can be understood by the graphical representation of confirmed cases according to the country.According to the graph most confirmed cases have been reported in Denmark.Finland has the lowest confirmed cases and number of confirmed cases of Sweden is greater than that of Finland.
+ 
+ 
+ 
+ 
+```{r}
+neighbours <- filter(coronavirus,country %in% c("Sweden","Denmark","Finland","Norway"))
+neighbor_recovered <- neighbours %>% filter(type=="recovered")
+ggplot(neighbor_recovered,aes(x=date,y=cases,col=country))+ geom_line() + ggtitle("Daily recovered cases of Swedens neighbouring countries") +ylim(0,10000)
+```
+
+Figure 08: Comparison of Daily recovered cases
+
+
+```{r}
+ggplot(neighbor_recovered, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("recovered cases") + ylim(0,30000)
+```
+
+Figure 09: Total recovered cases of Sweden,Norway,Denmark,Finland
+
+According to these graphs when compare  total recovered cases, any recovered case has not been recorded in Sweden in that time period.Denmark has the maximum number of recoveries .It may be due to the maximum number of cases have been recorded in Denmark when compare to other three countries.
+
+
+
+
+
+```{r}
+df3 <- sweden_corona
+df3$cases[df3$ cases <0] <-0
+```
+
+```{r}
+neighbours <- filter(coronavirus,country %in% c("Denmark","Finland","Norway"))
+neighbor_deaths <- neighbours %>% filter(type =="death")
+sweden_deaths <- df3 %>% filter(type=="death")
+all_deaths <- rbind(neighbor_deaths,sweden_deaths)
+ggplot(all_deaths,aes(x=date,y=cases,col=country))+ geom_line() + ggtitle("Daily death cases of Sweden's
+neighbouring countries") 
+```
+
+Figure 10:Comparison of Daily death cases
+
+
+```{r}
+ggplot(all_deaths, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Death cases") 
+```
+
+Figure 11: Total death cases of Sweden,Norway,Denmark,Finland
+
+
+Maximum number of deaths can be seen in Sweden.When compare to other three countries ,distribution of death cases is very large in Sweden.
+
+
+
+
+
+```{r}
+neighbours_europe <- filter(coronavirus,country %in% c("Sweden","Italy"))
+neighbor_confirmed_europe <- neighbours_europe %>% filter(type=="confirmed")
+ggplot(neighbor_confirmed_europe,aes(x=date,y=cases,col=country))+ geom_line()  + ggtitle("Daily confirmed cases Italy VS Sweden") 
+```
+
+Figure 12:Daily confirm cases:Itlay vs Sweden
+
+In the upper part sweden's daily confirmed cases are low in both countries.But Italy shows some increment at the beginning.In the middle confirmed cases have been increased in both countries.Italy increment is higher than the Sweden in the middle.Between 2021 January to July both countries shows a higher number of deaths.In the latter part Italy confirmed cases have been decreased continously till 2021-07 while Sweden confirmed cases are increasing.After July of 2021 both countries shows a reduced distribution of confirmed cases.
+
+
+
+
+```{r}
+neighbor_recovered_europe <- neighbours_europe %>% filter(type=="recovered")
+ggplot(neighbor_recovered_europe,aes(x=date,y=cases,col=country))+ geom_point() + ggtitle("Daily recovered cases:Italy vs Sweden")
+
+```
+
+Figure 13:Daily recovered cases Italy vs Sweden
+
+Sweden recovered cases does not have any pattern as recovered cases have not been found.But Itly shows a low number of recovered cases daily, in the upper part of the scatter plot.Around month January, number of recovered cases have been increased and around january , it shows the highest number of recovered cases in Italy.
+
+
+
+
+```{r}
+neighbours_europe <- filter(coronavirus,country %in% c("Italy"))
+neighbor_deaths_europe <- neighbours_europe %>% filter(type =="death")
+sweden_deaths <- df3 %>% filter(type=="death")
+all_deaths_europe <- rbind(neighbor_deaths_europe,sweden_deaths)
+ggplot(all_deaths_europe,aes(x=date,y=cases,col=country))+ geom_line() + ggtitle("Daily death cases: Italy vs Sweden") 
+```
+
+Figure 14: Daily death cases Italy vs Sweden
+
+According to figure 14 ,throughout the whole period Italy deaths are higher than Sweden.From 2020 January to July sweden has a very low distribution than Italy.In the middle Sweden death cases have been increased.But it is lower than Italy.In the latter part,Italy death cases have been decreased rapidly .Sweden death cases are also decreasing in the latter part and remained same.The gap of death cases between two countries are decreased while number of death cases are decreasing separately.
+
+
+ 
+ 
+
+# Discussion and conclusions
+
+
+Here the data set had some missing values and also negative values for death cases.The province column had completely NA values.So the column which had NA values,was removed as it did not make any sense.The negative values were also removed otherwise minimum would be a negative value.As well as due to the negative values death cases pattern has distributed to the negative side.Sonegative values were removed before the analysis. And also recovered cases were consistent with only 0 values and NAs.All the other remaining NA values of the cases were converted to 0 ,as latter part was consistent with NA values .If those were removed,the plots would not be a continuous one.Therefore missing values were converted to 0 values.Missing values did not make any sense for the plots.So removing is not necessary.
+
+The interpretation is not much efficient when consider only the situation of Sweden.Therefore a comparison was done to get a good overall idea of Swedish situation with the neighboring countries.Sweden is situated in the Europe continent and therefore four countries which are situated in the same continent were selected for the comparison.Finland,Denmark and Norway are the neighboring countries of Sweden.Therefore Daily confirmed ,death cases and recovered cases were analyzed separately.When compare to other neighboring countries Sweden has a huge variation in confirmed cases in the time period.Death cases are higher than the other three countries as an overall.In the earlier part in the pandemic ,Sweden has been known as a well prepared country to manage their states during the covid-19 period.But due to less restrictions of the country Sweden`s  confirmed cases and death cases have been increased very largely when compare to other neighboring countries.As an overall total confirmed cases have not been changed in the neighboring countries.
+
+When compare Daily recovered cases in the data set there is no any recovered case has been recorded.Therefore in the graph Sweden does not show any line.In the latter part of figure8 Denmark shows a more variation than other Finland and Norway.
+
+When compare daily death cases, according to figure 10 Sweden shows huge variation during January in 2021.It can be concluded that other three countries have  few deaths than Sweden according to the line variations.This may be the period that Swedens' cases have been increased due to the less restrictions of the government.Even wearing masks were not necessary in the earlier period in Sweden.Government had not well prepared and the regulations had not been tough in the earlier period.As social distance causes to peoples' harmony and well being the government had not taken necessary steps.Therefore the death cases and confirmed cases are higher than other neighboring countries.It can be seen by the analysis as well.
+
+In the earlier period period of pandemic Italy had the maximum number of death cases and confirmed cases.As well as Italy belongs to the same continent Europe.Therefore here Death,recovered and confirmed cases were compared separately with Italy in this analysis.When compare to Italy Swedens' death and confirmed cases have lower distributions.(Figure 12 and 14) But in the latter part Italy shows a downward pattern when compare to Sweden in confirmed cases.(Figure12) By this graphs it can be seen that Sweden cases are higher than the earlier stage of the pandemic.
+
+But now Some steps have been taken by the governmet to control the situation and also to  be a favor for controlling the global pandemic and nowadays entry bans have been extended in Sweden.
+
+With most adults vaccinated, Sweden has gradually eased some restrictions during a summer lull in the pandemic. While it has seen infections mount in recent weeks amid the rapid spread of the more contagious Delta variant, deaths from the disease have remained low.Sweden has been an outlier in aspects of its handling of the disease, shunning hard lockdowns throughout the pandemic and relying heavily on voluntary recommendations regarding issues such as social distancing and hygiene.
+
+
+
+
+
+References:
+
+
+https://onlinelibrary.wiley.com/doi/full/10.1111/apa.15582
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Sweden
+
+https://www.newyorker.com/news/dispatch/swedens-pandemic-experiment
+
+https://journals.sagepub.com/doi/full/10.1177/2516602620936048
+
+https://www.businessinsider.com/sweden-covid-no-lockdown-strategy-failed-higher-death-rate-2021-8
+
+https://abcnews.go.com/International/sweden-avoided-covid-19-lockdown-strategy-worked/story?id=76047258
+
+https://reliefweb.int
+

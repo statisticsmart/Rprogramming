@@ -1,0 +1,321 @@
+---
+title: " Coronavirus country report - Cambodia"
+author: "Pasan Nissanka AS2018471"
+date: "9/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE, message=FALSE}
+# Include libraries
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(scales)
+data(wrld_simpl)
+library(gganimate)
+# https://gganimate.com 
+# Requires gifski package, install.packages("gifski") (installation requires Rust compiler(https://www.rust-lang.org/tools/install)).
+```
+## Cambodia
+
+## Introduction
+
+Cambodia is a country in Southeastern Asia, between Thailand, Vietnam and Laos.
+
+### Location of Cambodia in World map
+
+```{r  message=FALSE, warning=FALSE}
+cambodia_corona_raw <- coronavirus %>% filter(country == "Cambodia")
+
+p1 <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), 
+    fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p1 +
+  geom_point(
+    data = cambodia_corona_raw, aes(x = long, y = lat), 
+    color = "red", size = 1
+  )
+
+```
+
+### Climate conditions of Cambodia
+
+Cambodia's climate, like that of the rest of Southeast Asia, is dominated by monsoons, which are known as tropical wet and dry because of the distinctly marked seasonal differences. Cambodia has two distinct seasons,  
+Monsoon season from May to October, can see temperatures drop to 22 °C (72 °F) and is generally accompanied with high humidity. Dry season from November to April when temperatures can rise up to 40 °C (104 °F) around April. Severe flooding also affected 17 provinces in Cambodia during the 2020 Pacific typhoon season, with some degree of flooding almost every year.
+
+
+### Lock-down status of the country and actions taken by the government.
+
+* 2020-01-27, first imported case in Cambodia were detected in Sihanoukville.
+* 2020-03-12, about 60 people were quarantined on river cruise ship and a british tourist were tested positive.  
+* 2020-03-14 Cambodia banned citizens from USA, Germany, Italy, Spain, France from entering the country. On 2020-04-09 Travel between provinces were banned and on 2020-04-17 land borders with Thailand, Vietnam and Laos were closed.  
+* 2020-05-20, cambodia lifted ban for travellers from USA and europe, if they have valid health certificate and subject to 14 day quarantine. On 2020-07-12 travel ban between provinces were lifted. As of 2020-10-28 most of the restrictions were lifted.  
+* 2020-11-09 reported its first known local community transmission on a woman in Phnom Penh with no history of overseas travel.  
+* 2021-03-09 government imposed a ban on larger gatherings, and work from home if possible after a increased number of cases.  
+* 2021-03-18 the Cambodian authorities published a map with establishments that should be avoided due to the current infection.  
+* 2021-04-01 a night curfew between 08:00 p.m. to 05:00 a.m. was introduced in the capital Phnom Penh for 14 day period.  
+* 2021-04-06 travel between provinces were banned for 14 days. 2021-04-10 a lockdown was imposed in multiple districts and cities and on 2021-04-19 cambodian government extended the ban on inter-provincial travel and the temporary closure of tourism infrastructure.  
+* 2021-04-23 multiple highly infected areas were color coded with red-zones, all residents of the red zones were subject to mandatory COVID-19 test.  
+* 2021-04-28 all areas under lockdown were divided into red, dark yellow and yellow zones.  
+* 2021-07-29 cambodia closed its borders with Thailand.  
+* As of 2021-09-09 COVID-19 containment measures in the capital Phnom Penh have been extended unchanged for two weeks until at least 23 September.  
+
+## Exploratory Data Analysis
+
+```{r} 
+# Drop NA
+cambodia_corona <- drop_na(cambodia_corona_raw, "cases")
+summary(cambodia_corona)
+```
+
+The table cambodia_corona is consist of the no.of confirmed, death and recovered corona patients from 2020 January 22 to September 2021 of the country Cambodia and the location of the country in the worls map with its latitude and longitude.
+
+### Confirmed cases in cambodia
+
+```{r}
+confirmed_corona <- cambodia_corona %>%
+  filter(type=="confirmed")
+
+summary(confirmed_corona)
+
+ggplot(confirmed_corona, aes(x=date, y=cases)) +
+  geom_line() +
+  ggtitle("Confirmed cases in cambodia")
+
+```
+
+There have been ``r sum(confirmed_corona$cases)`` infections in the country since the pandemic began, average of ``r round(mean(confirmed_corona$cases))`` daily cases. The above graph shows the no. of confirmed COVID-19 patients in Cambodia in daily basis. It shows that for the most part of year 2020 there's small number of cases, however after 2021 February there is a growing number of daily cases with fluctuations, and after 2021 April growth rate of confirmed cases were increased significantly. This is inline with the government's mandatory Covid-19 test on residents in red zones. With An all time high of ``r max(confirmed_corona$cases)`` daily cases in ``r subset(confirmed_corona, cases == max(confirmed_corona$cases))$date``.
+
+### Death cases in cambodia
+
+```{r}
+death_corona <- 
+  cambodia_corona %>%
+  filter(type=="death")
+
+summary(death_corona)
+
+ggplot(death_corona, aes(x=date, y=cases)) +
+  geom_line() +
+  ggtitle("Death cases in cambodia")
+```
+
+The above graph shows no. of deaths from COVID-19 in daily basis. There have been total of ```r sum(death_corona$cases)``` deaths in the country related to COVID-19 infections since the pandemic began, with an average of ```r round(mean(death_corona$cases))``` daily cases. This is approximately ``r label_percent()(sum(death_corona$cases) / sum(confirmed_corona$cases))`` from the confirmed cases.  
+For the year 2020 there have been zero death due to COVID-19 while first confirmed death reported in ``r  death_corona[which(death_corona$cases != 0)[1L],]$date``. However after 2021 March there has been a steady growth of daily deaths with all time high of ``r max(death_corona$cases)`` deaths occurring in ``r subset(death_corona, cases == max(death_corona$cases))$date`` and downward trend after its peak on 2021 July.
+
+### Recovered cases in cambodia
+
+```{r}
+recovered_corona <-
+  cambodia_corona %>%
+  filter(type=="recovered")
+
+summary(recovered_corona)
+
+ggplot(recovered_corona, aes(x=date, y=cases)) +
+  geom_line() +
+  ggtitle("Recovered cases in cambodia")
+```
+```{r include=FALSE}
+recovered_corona_raw <-
+  cambodia_corona_raw %>%
+  filter(type=="recovered")
+```
+
+There have been total of ```r sum(recovered_corona$cases)``` recovers in the country. This is approximately ``r label_percent()(sum(recovered_corona$cases) / sum(confirmed_corona$cases))`` from the confirmed cases. The Above graph shows no. of recovered cases in daily basis. No. of patients recovered in a day has also increased from 2021 March with fluctuations. The recovered patients follow a trend similar to confirmed cases. Please not that recovered cases after ```r recovered_corona_raw[which(is.na(recovered_corona_raw$cases))[1L],]$date``` contains NA values.  
+
+### Confirmed, Death and Recovered cases in Cambodia
+
+```{r message=FALSE} 
+p2 <- ggplot(cambodia_corona, aes(date, cases, group = 1)) +
+  geom_line() +
+  geom_point() +
+  facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Cambodia") + 
+  transition_reveal(date)
+
+animate(p2, renderer = gifski_renderer())
+```
+
+```{r}
+ggplot(cambodia_corona, aes(x = date, y = cases, colour = type)) +
+  geom_line() + 
+  labs(title="Confirmed, Death and Recovered cases in Cambodia")
+```
+
+Above graphs shows confirmed, death and recovered cases in the same graph and in the same plot. This graph implies that the country suffered multiple surges in corona cases after 2021 February. Recovered cases follow a trend similar to confirmed cases.  
+
+```{r}
+cumsum_corona <-  cambodia_corona %>%
+  group_by(type) %>%
+  mutate(total_cases = cumsum(cases))
+
+ggplot(cumsum_corona, aes(date, total_cases, colour = type)) +
+  geom_line() +
+  labs(title = "Total no.of confirmed, death, recovered cases in cambodia")
+```
+
+Above graph shows total no. of confirmed, death and recovered cases. The total confirmed cases has increased exponentially since 2021 February. Confirmed cases and recovered cases follow a similar trend therefore it can be concluded that country has taken necessary measures to increase medical facility in the country.  
+
+### Active cases in Cambodia
+
+```{r}
+active_cases <- 
+  cambodia_corona_raw %>%
+  pivot_wider(names_from = type, values_from = cases) %>%
+  mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered)) %>%
+  drop_na(active)
+
+summary(active_cases)
+
+ggplot(active_cases, aes(x=date, y=active)) +
+  geom_line() +
+  ggtitle("Active cases in cambodia")
+
+```
+
+Above graph shows active cases in the country, There are ```r tail(active_cases$active, n=1)``` active cases as of ```r tail(active_cases$date, n=1)```, with an all time high of ```r max(active_cases$active)``` active cases in ```r subset(active_cases, active == max(active_cases$active))$date```. Active cases has increased exponentially after 2021 February, however after its peak in ```r subset(active_cases, active == max(active_cases$active))$date```, active cases follows a downward trend with fluctuations. Please note that recovered cases after 2021-08-05 contains NA values (as of 2021-09-26) thus it is inconclusive about the current situation in the country, according to worldometers active cases in Cambodia is rising as of September 26.
+
+## Comparison with countries in Southeast Asia
+
+```{r}
+southeast_asia <-
+  filter(coronavirus, 
+         country == "Cambodia"
+         |country == "Thailand"
+         |country =="Vietnam"
+         |country =="Laos"
+         |country =="Malaysia"
+         |country == "Burma"
+         |country == "Singapore"
+         |country == "Brunei"
+         |country == "Indonesia"
+         |country == "Philippines")
+
+#southeast_asia <- drop_na(southeast_asia, "cases")
+count(southeast_asia,country)
+
+p3 <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(80, 130), ylim = c(-10, 25)) +
+  scale_x_continuous(breaks = seq(80, 110, 130)) +
+  scale_y_continuous(breaks = seq(-10, 10, 25))
+
+p3 +
+  geom_point(
+    data = southeast_asia , aes(x = long, y = lat), color = "red", size = 1
+  )  + geom_text(aes(x=southeast_asia$long, y=southeast_asia$lat, label=southeast_asia$country))
+
+southeast_asia_wider <- 
+  southeast_asia %>%
+  pivot_wider(names_from = type, values_from = cases)
+```
+
+### Daily Confirmed, Death and Recovered cases in countries in Southeast asia.
+
+
+```{r} 
+ggplot(
+  southeast_asia %>% drop_na(cases),
+  aes(date, cases,colour = country)) +
+  geom_path() + 
+  facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in Southeast asia")
+```
+```{r include=FALSE}
+sea_recovered <- drop_na(southeast_asia_wider, "recovered")
+```
+
+Above graph shows confirmed, death and recovered cases in this region. Most Countries in the region follows a similar trend, however Indonesia has higher cases.
+There are total of ```r sum(southeast_asia_wider$confirmed)``` confirmed cases in the region. ```r sum(southeast_asia_wider$death)``` deaths which is ```r label_percent()(sum(southeast_asia_wider$death) / sum(southeast_asia_wider$confirmed))``` of confirmed cases. And ```r sum(sea_recovered$recovered) ``` recovered cases, which is ```r label_percent()(sum(sea_recovered$recovered) / sum(southeast_asia_wider$confirmed))``` of confirmed cases.    
+Cambodia amount to ```r label_percent()(sum(confirmed_corona$cases) / sum(southeast_asia_wider$confirmed))``` of Confirmed cases in the region. Indonesia, highest in the region, amounts to ```r label_percent()(sum(subset(southeast_asia_wider, southeast_asia_wider$country == "Indonesia")$confirmed) / sum(southeast_asia_wider$confirmed))``` of confirmed cases in the region.
+
+### Total no.of confirmed, death, recovered cases in Southeast Asia
+
+```{r}
+southeast_asia_tot <- southeast_asia %>%
+  drop_na(cases) %>%
+  group_by(country,type) %>%
+  mutate(cum_cases = cumsum(cases)) 
+
+summary(southeast_asia_tot)
+
+ggplot(southeast_asia_tot, aes(date, cum_cases, colour = country)) +
+  geom_path() +
+  facet_grid(rows= vars(type)) +
+  labs(title = "Total no.of confirmed, death, recovered cases in Southeast Asia")
+```
+
+Above graph shows total no. of confirmed, death and recovered cases of each country in the region. The no. of confirmed patient graph for Indonesia have been starting to flatten, while nearly all the other countries are on the rise.
+
+### Active cases in Southeast Asia
+
+```{r}
+
+active_cases_sean <- 
+  southeast_asia %>%
+  pivot_wider(names_from = type, values_from = cases) %>%
+  group_by(country) %>%
+  mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered)) %>%
+  drop_na("active")
+
+summary_sean <- active_cases_sean %>%
+  group_by(country) %>%
+  filter(row_number()==n()) %>%
+  select(date, country, confirmed, death, recovered, active)
+
+# Active cases of Southeast asian countries
+summary_sean
+
+ggplot(active_cases_sean, aes(x = date, y = active, colour = country)) +
+  geom_path(size=0.5) + 
+  labs(title="Daily active cases of countries in Southeast Asia")
+```
+
+The above graph shows active cases of countries in southeast asia. There are total of ```r sum(summary_sean$active)``` active cases as of ```r max(summary_sean$date)```. Thailand (```r summary_sean %>% filter(country == 'Thailand') %>% unique() %>% .$active```), Indonesia (```r summary_sean %>% filter(country == 'Indonesia') %>% unique() %>% .$active```) and Malaysia (```r summary_sean %>% filter(country == 'Malaysia') %>% unique() %>% .$active```) has the highest no. of active cases. Cambodia amounts to ```r summary_sean %>% filter(country == 'Cambodia') %>% unique() %>% .$active``` of active cases in the region.
+
+```{r}
+p4 <-p3 + geom_point(data = active_cases_sean, aes(x = long, y = lat, colour = active), size = 10) +
+  geom_text(aes(x= active_cases_sean$long, y= active_cases_sean$lat, label= active_cases_sean$country)) +
+  labs(title = 'Date: {frame_time}', x = 'long', y = 'lat') +
+  transition_time(date) +
+  ease_aes('linear')
+
+animate(p4, renderer = gifski_renderer())
+```
+
+
+## Conclusions and Discussion
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus. In Cambodia, the first imported case in Cambodia was detected on 27 January 2020. Although a number of imported cases and transmissions to direct contacts were confirmed through 2020, no community transmission was detected untill November 2020. Although there are less cases reported in throughtout 2020, there has been a increase in cases after 2021 February. Most notabaly after 2021 April. However as confirmed cases and recovered cases follows a similar trend, it can conclude that overall country has been taken measures to reliable measures to control the desease. However as of 2021 September according to WHO 240 new cases detected on 3 week average. As per the WHO cambodia has administrated 20,554,497 vaccine doses. ([WHO](https://covid19.who.int/region/wpro/country/kh)), Assuming every person needs 2 doses, that’s enough to have vaccinated about 71.4% of the country’s population. ([Reuters](https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/cambodia/))
+
+
+## References
+
+* Cambodia - https://en.wikipedia.org/wiki/Cambodia  
+* COVID-19 pandemic - Cambodia - https://global-monitoring.com/gm/page/events/epidemic-0001993.jA9rmyHuGYTs.html?lang=en
+* Reuters COVID-19 Tracker - Cambodia - https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/cambodia/
+* Worldometer's COVID-19 data - Cambodia - https://www.worldometers.info/coronavirus/country/cambodia/

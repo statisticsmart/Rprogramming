@@ -1,0 +1,467 @@
+---
+title: "<center> <h1>**COVID-19 PANDEMIC IN HONDURAS**</h1> </center>"
+author: "I.T.M.S.S.B.Thennakoon - AS2018555"
+date: "9/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, fig.align='center', fig.cap='...', message=FALSE, warning=FALSE, comment=NA}
+knitr::include_graphics('https://www.henryford.com/-/media/henry-ford-blog/images/interior-banner-images/2020/03/coronavirus.jpg?h=785&la=en&w=1920&hash=F9391C32556FBF7060CB5F267F1F1B56')
+```
+
+```{r, include=FALSE}
+#Step 1
+library(devtools)
+#Step 2
+devtools::install_github("thiyangt/sta3262")
+#Step 3
+library(sta3262)
+#Step 4
+get_individual_project_country("AS2018555")
+
+
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(gganimate)
+library(gifski)
+library(av)
+library(gapminder)
+library(plotrix)
+
+data("coronavirus")
+Honduras_corona <- coronavirus %>% filter(country == "Honduras")
+```
+
+# **1. Introduction**
+
+### **Honduras**
+
+Honduras is a Central American country with Caribbean Sea coastlines to the north and the Pacific Ocean to the south. In the tropical rainforest near Guatemala, the ancient Mayan ceremonial site Copán has stone-carved hieroglyphics and stelae, tall stone monuments. In the Caribbean Sea are the Bay Islands, a diving destination that's part of the 1,000km-long Mesoamerican Barrier Reef. 
+
+### **Flag of Honduras**
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE,out.width='25%', fig.align='center', fig.cap='...'}
+knitr::include_graphics('https://upload.wikimedia.org/wikipedia/commons/c/c7/Flag_of_Honduras_%283-2%29.svg')
+```
+
+
+
+## **1.1 location**
+
+Honduras, officially Republic of Honduras, Spanish República de Honduras, country of Central America situated between Guatemala and El Salvador to the west and Nicaragua to the south and east. The Caribbean Sea washes its northern coast, the Pacific Ocean its narrow coast to the south.
+Capital: Tegucigalpa
+
+```{r,  comment=NA, echo=FALSE,message=FALSE, warning=FALSE}
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group),
+    fill = "royalblue2",
+    colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = Honduras_corona,
+             aes(x = long, y = lat),
+             color = "red",
+             size
+             = 1)
+
+```
+
+
+## **1.2 Climate condition**
+
+The climate is tropical with cooler, more temperate weather in the mountains with temperatures ranging from 16°C (61°F) to 20°C (68°F). The north coast is very hot with rain throughout the year, and though the offshore breezes temper the climate, the sun is very strong.
+
+## **1.3 Lock-down status of the honduras**
+
+### **March 2020**
+
+On 15 March, Honduras also closed all of its air, land and maritime borders to contain the virus.
+
+On 19 March, The total curfew was extended to the cities of Puerto Cortés, Santa Cruz de Yojoa, and El Triunfo since new cases were reported on these locations, the curfew now extends to a total of seven cities nationwide.
+
+On 20 March, the government has announced no new cases for the coronavirus after 27 lab tests. Additionally, the total curfew has been extended to the rest of the country, placing Honduras into a lockdown in efforts to contain the spread of the virus.
+
+On 29 March, it was announced by the Secretary for Security that the nationwide curfew will be extended until 12 April.
+
+### **April 2020**
+
+On 8 April, the National Police announced that the curfew would continue until 19 April
+
+On 26 April, The curfew has been extended to 3 May 2020, following the already stablished circulation rules, the total curfew has been extended to the municipality of Las Vegas, Santa Barbara.
+
+On 30 April,  the municipality of El Progreso Yoro, and the municipality of Las Vegas Santa Barbara would be entirely locked down .
+
+
+## **1.4 Actions taken by the government**
+
+### **March 2020**
+
+On 15 March, three more cases were confirmed in the country, two in Tegucigalpa and the first in the Choluteca department for a total of 6 cases. Honduras also closed all of its air, land and maritime borders to contain the virus.
+
+On 16 March, Honduras confirmed two more cases of coronavirus in the City of Tegucigalpa, raising the confirmed cases to eight. At the same time, with the country in voluntary quarantine, further measures were taken, banning use of public transport and forcing some public and private labor to work from home where possible and abstain from presenting themselves to work. Additionally, stronger measures were taken in the Central District, Choluteca, and La Ceiba, where a total curfew is currently imposed and all nonessential movements of people are banned until further notice, including those in and out of those cities.
+
+On the morning of 17 March, an epidemiological fence was set in the neighborhoods of El Carrizal and Abraham Lincoln in the Central District, as an individual that had tested positive was among those in a neighborhood gathering. The first case in San Pedro Sula was confirmed on that afternoon, totaling nine confirmed cases nationwide. It has been reported that the patient had previous contact with nine other individuals, they have been placed under medical observation and self-quarantine, the total curfew has been extended to San Pedro Sula, now covering four cities.The Health Secretary has reported 35 suspicious cases in Tegucigalpa.
+
+On 18 March, three new cases where confirmed, one in Francisco Morazan, one in Cortes, and one in Choluteca. Raising the number of confirmed nationwide cases to twelve. Additionally, it was announced by the Government that on the cities placed under total curfew, 19 March has been designated as the designated day for citizens to gather or purchase their supplies, and to avoid price inflation, price freezes for designated foods and all personal and household hygiene products.
+
+On 19 March, twelve new cases were confirmed, raising the number of confirmed cases nationwide to 24. Additionally, 90 suspected cases have been reported.The total curfew was extended to the cities of Puerto Cortés, Santa Cruz de Yojoa, and El Triunfo since new cases were reported on these locations, the curfew now extends to a total of seven cities nationwide.
+
+On 20 March, the government has announced no new cases for the coronavirus after 27 lab tests. Additionally, the total curfew has been extended to the rest of the country, placing Honduras into a lockdown in efforts to contain the spread of the virus.
+
+On 29 March, it was announced by the Secretary for Security that the nationwide curfew will be extended until 12 April. Later that day, 29 new cases were confirmed in the country, for a total of 139 cases nationwide. Additionally, the third death was officially confirmed by the Virology Institute of the country. Three deaths will be confirmed the next day if it was caused by COVID-19. Cortes has now 79 cases, the most of any department in the country.
+
+### **April 2020**
+
+On 6 April, 7 new cases were confirmed in the country, 6 in Francisco Morazan and 1 in Comayagua. Additionally, the government, via the Health Minister, has announced that the use of masks is now mandatory for anyone circulating in the country.
+
+On 8 April, the National Police announced that the curfew would continue until 19 April, alongside changes to the segmented circulation of the population, distributing it for five days instead of the initial three, in efforts to reduce the number of people circulating, maintaining the protocol utilizing the last digit of a person's ID card or passport in order to enter commercial establishments.
+
+On 15 April,  the government is seeking support from private laboratories across the country.
+
+On 18 April,  the first tests performed in conjunction with private laboratories in the country.
+
+On 21 April, In the departments of Colon, Cortes, and Yoro a new segmentation for circulation has been implemented, which will be effective until 1 May 2020.
+
+On 23 April, 43 new cases were confirmed, most of them in Cortes; alongside 19 recoveries and various suspicious deaths from the virus and its complications. During that announcement, it was confirmed that San Pedro Sula performed their first tests in the region, increasing the amount of tests per day to 172. Valle Department also confirm its first case in the municipality of Aramecina, making Valle the twelfth department with a confirmed case.
+
+On 26 April, The curfew has been extended to 3 May 2020, following the already stablished circulation rules, the total curfew has been extended to the municipality of Las Vegas, Santa Barbara.
+
+On 29 April, 33 new cases were confirmed, 19 in Francisco Morazan, 4 in Yoro, 3 in Choluteca, 2 in Cortes, 2 in Colon, 2 in Intibuca, and 1 in Valle; alongside 6 recoveries and 5 deaths.[citation needed]
+
+On 30 April, it was announced that the department of Cortes, the municipality of El Progreso Yoro, and the municipality of Las Vegas Santa Barbara would be entirely locked down in order to prevent uncontrollable spread of the virus.
+
+### **2021**
+
+The Government of Honduras reported 144,007 confirmed cases of COVID-19 within its borders and 3,512 COVID-19 related deaths as of 28 January 2021. The government announced the continuation of the national curfew from 9:00 p.m. to 5:00 a.m. During the week, shopping and essential activities are allowed daily from 5:00 a.m. to 9:00 p.m. Businesses are only allowed to have 50% capacity.
+
+## **1.5**
+### **The COVID-19 Threat**
+
+The current COVID-19 pandemic has further weakened the already fragile state of healthcare in Honduras. Hospitals have an overabundance of patients and are lacking ventilators. For people who live far from the cities’ hospitals, access to health care is almost impossible. A shortage of personal protective equipment, including masks, gloves and gowns, leave the doctors who are at the forefront of this pandemic particularly vulnerable.
+
+### **Vaccination**
+
+The roll out of the vaccination against the virus is relatively slow in Honduras compared to other Central American countries. By May 31, 2021, Honduras reports only 2.52 doses administered per 100 people while other countries in the region already vaccinated up to a quarter of their populations. Honduras is one of the recipients of vaccines distributed by the COVAX mechanism, which is a worldwide initiative that seeks equitable access to Covid-19 vaccines. By end of May 2021, Honduras has received 238,000 doses of the AstraZeneca/Oxford Vaccine and 253,832 doses have been administered nationwide.The total supply of vaccines covers 7.5% of the Honduran population. In contrast to other Latin American countries, Honduras, along with Guatemala, Nicaragua and Paraguay, has not received vaccine donations from China as a result of vaccine diplomacy. The reason for that is that these countries have diplomatic ties with Taiwan instead of China and recognize Taipei over Beijing. Indeed, the Honduran president Juan Orlando Hernández has expressed interest in opening a trade office for China in order to access more vaccines. While neighbouring country El Salvador has received thousands of doses of Chinese vaccines, the number of contracted doses in Honduras remains very low and most of them come through the COVAX mechanism. The need for vaccine supply remains urgent, which has led the Salvadorian President Nayib Bukele to donate 34,000 doses to seven towns in Honduras where the mayors have posted pleas for vaccines on social media.
+
+# **2. Exploratory Data Analysis**
+
+## **2.1 Visualization of death, confirmed, recovered, active cases**
+
+
+Number of NA values in Honduras covide data set
+```{r,  comment=NA, echo=FALSE,message=FALSE, warning=FALSE}
+sum(is.na(Honduras_corona$cases))
+```
+Number of NA values in world covide data set
+```{r,  comment=NA, echo=FALSE,message=FALSE, warning=FALSE}
+sum(is.na(coronavirus$cases))
+```
+This Summary table provide summary of number of confirmed, death and recovered corona patients from 2020-01-22 to 2021-09-18 of the world .(Removed “NA” values in data set)
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+coronavirus <- as.data.frame(coronavirus)
+data_subset <- coronavirus[ , c("cases")]  
+coronavirus <- coronavirus[complete.cases(data_subset), ] # Omit NAs by columns
+summary(coronavirus)
+
+```
+
+
+This Summary table provide summary of number of confirmed, death and recovered corona patients from 2020-01-22 to 2021-09-18 of the Honduras .(Removed “NA” values in data set)
+```{r,  comment=NA, echo=FALSE,message=FALSE, warning=FALSE}
+Honduras_corona <- as.data.frame(Honduras_corona)
+data_subset <- Honduras_corona[ , c("cases")]  
+Honduras_corona <- Honduras_corona[complete.cases(data_subset), ] # Omit NAs by columns
+summary(Honduras_corona)
+
+```
+
+
+
+This chart illustrates the number of confirmed Corona patients in Honduras in daily.Number of confirmed Corona patients has been increasing.
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+
+confirmed_cases <- filter(Honduras_corona, type == "confirmed")
+death_cases <- filter(Honduras_corona, type == "death")
+recovered_cases <- filter(Honduras_corona, type == "recovered")
+
+ggplot(confirmed_cases, aes(x = date, y = cases)) + geom_line() + ggtitle("Honduras: Daily Covid-19 confirmed")
+
+
+confirmed_cases_Anim = confirmed_cases %>% group_by(date) %>%
+  ggplot(aes(x = date, y = confirmed_cases$cases)) +
+  geom_line(color = 'red') +
+  ggtitle("Honduras: Daily Covid-19 confirmed") +
+  geom_point(size = 1.5) +
+  geom_area(fill = 'pink') + theme_bw() +
+  transition_reveal(date)
+animate(confirmed_cases_Anim, nframes = 303, fps = 25)
+```
+
+This chart illustrates the number of death Corona patients in Honduras in daily.Number of death Corona patients has been increasing.
+
+```{r,  comment=NA,fig.show="hold",out.width="50%",echo=FALSE,message=FALSE, warning=FALSE}
+ggplot(death_cases, aes(x = date, y = cases)) + geom_line() + ggtitle("Honduras: Daily Covid-19 death")
+
+death_cases_Anim = death_cases %>% group_by(date) %>%
+  ggplot(aes(x = date, y = death_cases$cases)) +
+  geom_line(color = 'red') +
+  ggtitle("Honduras: Daily Covid-19 death") +
+  geom_point(size = 1.5) +
+  geom_area(fill = 'pink') + theme_bw() +
+  transition_reveal(date)
+animate(death_cases_Anim, nframes = 303, fps = 25)
+```
+
+In this chart illustrates the number of Recoveries Corona patients in Honduras in daily .this chart showing number of Recoveries Corona patients has been increasing from 2020 January to October and decreasing October to 2021 February and again increasing.
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+ggplot(recovered_cases, aes(x = date, y = cases)) + geom_line() + ggtitle("Honduras: Daily Covid-19 Recoveries")
+
+recovered_cases_Anim = recovered_cases %>% group_by(date) %>%
+  ggplot(aes(x = date, y = recovered_cases$cases)) +
+  geom_line(color = 'red') +
+  ggtitle("Honduras: Daily Covid-19 Recoveries") +
+  geom_point(size = 1.5) +
+  geom_area(fill = 'pink') + theme_bw() +
+  transition_reveal(date)
+animate(recovered_cases_Anim, nframes = 303, fps = 25)
+```
+
+
+This graph showing the number of confirmed, death and recovered corona patients in Honduras in one graph and number of confirmed, death and recovered Corona patients has been increasing in daily
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+ggplot(Honduras_corona, aes(x = date, y = cases, colour = type)) + geom_path(size =
+                                                                               1) + labs(title = "Confirmed, Death and Recovered cases in Honduras")
+
+Honduras_corona_Anim1 = Honduras_corona %>% group_by(date) %>%
+  ggplot(aes(
+    x = date,
+    y = Honduras_corona$cases,
+    colour = type
+  )) + geom_path(size = 1) +
+  geom_line(color = 'red') +
+  ggtitle("Confirmed, Death and Recovered cases in Honduras") +
+  geom_point(size = 1.5) +
+  geom_area(fill = 'pink') + theme_bw() +
+  transition_reveal(date)
+animate(Honduras_corona_Anim1, nframes = 303, fps = 25)
+```
+Total number of confirmed, death, recovered cases in Honduras in cumulative graph with animation graph. Total cases has been increasing .
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+Honduras_corona <-  Honduras_corona %>%
+  group_by(type) %>%
+  mutate(cumulative_cases = cumsum(cases))
+
+ggplot(Honduras_corona, aes(date, cumulative_cases, colour = type)) + geom_path(size = 1) +
+  labs(title = "Cumulative number of cases in Honduras")
+
+Honduras_corona_Anim2 = Honduras_corona %>% group_by(date) %>%
+  ggplot(aes(x = date, cumulative_cases, colour = type)) + geom_path(size =
+                                                                       1) +
+  ggtitle("Cumulative number of cases in Honduras") + theme_bw() +
+  transition_reveal(date)
+animate(Honduras_corona_Anim2, nframes = 303, fps = 25)
+```
+
+
+
+## **2.2 Comparison with other countries**
+
+### **Countries Of Central America**
+
+```{r,  comment=NA, echo=FALSE,message=FALSE, warning=FALSE}
+central_America <-
+  subset.data.frame(coronavirus, (5 < lat &
+                                    lat < 18) & (-100 < long & long < -80))
+count(central_America, country)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group, ),
+    fill = "royalblue2",
+    colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-100,-80), ylim = c(5, 17)) +
+  scale_x_continuous(breaks = seq(-100, 10, 10)) +
+  scale_y_continuous(breaks = seq(-90, 90, 10))
+
+
+p + geom_point(data = coronavirus ,
+               aes(x = long, y = lat),
+               color = "red",
+               size = 1)  + geom_text(aes(
+                 x = coronavirus$long,
+                 y = coronavirus$lat,
+                 label = coronavirus$country
+               ))
+
+```
+
+Graphs show that daily confirmed cases,death and recovered corona patients in Central America.  Costa Rica has the high number of confirmed and recovered corona patients in the Central America.Honduras has the high number of death corona patients in the Central America
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+confirmed_central_America <- filter(central_America, type == "confirmed")
+death_central_America <- filter(central_America, type == "death")
+recovered_central_America <- filter(central_America, type == "recovered")
+
+ggplot(confirmed_central_America, aes(x = date, y = cases, colour = country)) + geom_path(size=1) +
+  labs(title="Daily Confirmed cases in the Central America")
+
+ggplot(death_central_America, aes(x = date, y = cases, colour = country)) + geom_path(size=1) +
+  labs(title="Daily Death cases in the Central America")
+
+ggplot(recovered_central_America, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) +
+  labs(title="Daily Recovered cases in the Central America")
+
+ggplot(central_America, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in the Central America")
+```
+
+Total number of confirmed, death, recovered cases in central America in cumulative graph with animation graph. Total cases has been increasing .
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+central_America <- central_America%>%
+  group_by(country,type)%>%
+  mutate(cumulative_cases = cumsum(cases))
+ggplot(central_America, aes(date,cumulative_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Cumulative number of cases in Centerl America")
+
+central_America_Anim=central_America %>% group_by(date)%>%
+  ggplot(aes(x = date,cumulative_cases, colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type))+
+  ggtitle("Cumulative number of cases in central America") +theme_bw()+
+  transition_reveal(date)
+animate(central_America_Anim, nframes =303,fps = 25 )
+
+```
+
+## **Central America cases distribution**
+
+This pie chart gives Percentage of cases in Central America countries .The more cases in central America is in Panama. 
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+Belize <- coronavirus %>% filter(country == "Belize")
+CostaRica <- coronavirus %>% filter(country == "Costa Rica")
+ElSalvador <- coronavirus %>% filter(country == "El Salvador")
+Guatemala <- coronavirus %>% filter(country == "Guatemala")
+Nicaragua <- coronavirus %>% filter(country == "Nicaragua")
+Panama <- coronavirus %>% filter(country == "Panama")
+Honduras_corona <- coronavirus %>% filter(country == "Honduras")
+
+x <- c(sum(Belize$cases), sum(CostaRica$cases), sum(ElSalvador$cases), sum(Guatemala$cases),sum(Honduras_corona$cases),sum(Nicaragua$cases),sum(Panama$cases))
+labels <-c("Belize", "CostaRica", "ElSalvador", "Guatemala", "Honduras", "Nicaragua", "Panama")
+
+lb = paste0(round(prop.table(x)*100,2),"%")
+
+
+pie(x, labels = lb, main = "Distribution cases in Central America",col = rainbow(length(x)))
+legend("topright", c("Belize", "CostaRica", "ElSalvador", "Guatemala", "Honduras", "Nicaragua", "Panama"), cex = 0.8,
+   fill = rainbow(length(x)))
+pie3D(x, labels = lb, main = "Distribution cases in Central America",col = rainbow(length(x)))
+legend("topright", c("Belize", "CostaRica", "ElSalvador", "Guatemala", "Honduras", "Nicaragua", "Panama"), cex = 0.8,
+   fill = rainbow(length(x)))
+
+```
+
+
+## **2.3**
+
+## **Comparison with World**
+
+Considering the indicator of deaths, Honduras is above the world average
+
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+world_confirmed_cases <- filter(coronavirus, type == "confirmed")
+world_death_cases <- filter(coronavirus, type == "death")
+world_recovered_cases <- filter(coronavirus, type == "recovered")
+
+x2 <- c(sum(world_confirmed_cases$cases), sum(world_death_cases$cases), sum(world_recovered_cases$cases))
+x3 <- c(sum(confirmed_cases$cases), sum(death_cases$cases), sum(recovered_cases$cases))
+
+lb_World = paste0(round(prop.table(x2)*100,2),"%")
+lb_Honduras = paste0(round(prop.table(x3)*100,2),"%")
+
+world <- data.frame(
+  name=c("world_confirmed_cases","world_death_cases","world_recovered_cases") ,  
+  value=lb_World)
+Honduras<-data.frame(
+  name=c("Honduras_confirmed_cases","Honduras_death_cases","Honduras_recovered_cases") ,  
+  value=lb_Honduras)
+ggplot( world, aes(x=name, y=value)) + ggtitle("Percentage of confirmed, death, recovered cases in world")+
+  geom_bar(stat = "identity",color="Blue", fill="royalblue2")+
+   geom_text(aes(label = value), vjust = -0.15)+theme_classic()+ labs(x = 'case', y = 'Percentage', fill = 'gear')
+ggplot( Honduras, aes(x=name, y=value)) + ggtitle("Percentage of confirmed, death, recovered cases in Honduras")+
+  geom_bar(stat = "identity",color="Blue", fill="royalblue2")+ 
+    geom_text(aes(label = value), vjust = -0.15)+theme_classic()+ labs(x = 'case', y = 'Percentage', fill = 'gear')
+
+
+
+```
+```{r,  comment=NA, fig.show="hold", out.width="50%", echo=FALSE,message=FALSE, warning=FALSE}
+  
+  pie3D(x2, labels = lb_World, main = "Pie Chart of confirmed, death, recovered cases in World ",col = rainbow(length(x2)))
+legend("topright", c("world_confirmed_cases","world_death_cases","world_recovered_cases"), cex = 0.8,
+   fill = rainbow(length(x2)))
+
+  pie3D(x3, labels = lb_Honduras, main = "Pie Chart of confirmed, death, recovered cases in Honduras ",col = rainbow(length(x3)))
+legend("topright", c("Honduras_confirmed_cases","Honduras_death_cases","Honduras_recovered_cases"), cex = 0.8,
+   fill = rainbow(length(x3)))
+
+```
+
+# **3. Conclusions and Discussion**
+
+The COVID-19 pandemic in Honduras is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was first confirmed to have spread to Honduras on 10 March 2020, when two women tested positive for the virus after one of them landed on Toncontín International Airport in a flight from Madrid, Spain, and the other on Ramón Villeda Morales International Airport in a flight from Geneva, Switzerland.Confirmed cases have been reported in all 18 departments of the country, with the majority of cases located in Cortés and Francisco Morazán.
+
+Since the first cases were recorded in March, the country has implemented various measures to address the pandemic, including closing maritime, aerial, and land borders, suspending classes at all levels of education nationwide, ordering a nationwide curfew, and freezing prices for basic food items and certain medical supplies and equipment.
+
+The roll out of the vaccination against the virus is relatively slow in Honduras compared to other Central American countries. By May 31, 2021, Honduras reports only 2.52 doses administered per 100 people.
+
+As of 20 September 2021, a total of 359,768 confirmed cases, 108,566 recoveries, and 9,537 deaths have been reported in the country.
+
+# **4. References**
+
+colors -  http://sape.inf.usi.ch/quick-reference/ggplot2/colour
+
+inserting images  - https://www.youtube.com/watch?v=afFb_DcBBdA&ab_channel=MikeDane
+
+vaccine  -  https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Honduras
+
+Animated Visualizations with R - https://youtu.be/7DgORwK8pKA
+
+Political Corruption and Healthcare in Honduras - https://www.borgenmagazine.com/healthcare-in-honduras/
+
+NA Omit in R - https://statisticsglobe.com/na-omit-r-example/
+
+Pie Chart - https://stackoverflow.com/questions/54508782/display-pie-chart-percentages-in-r-studio-from-dataset
+
+3D Pie Chart - https://www.tutorialspoint.com/r/r_pie_charts.htm

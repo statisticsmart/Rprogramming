@@ -1,0 +1,708 @@
+---
+title: "Coronavirus Country Report - **Jordan**"
+author: "AS2018460"
+date: "9/26/2021"
+output: html_document
+---
+
+<div align="center"></div>
+
+<h1><p style = "text-align: left ;" ><span style="color:red"> **Background** </span></p></h1>
+ 
+ <p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:2em;"> Location </span></p>
+ <p style = "text-align: left ;" >*Jordan , officially the **Hashemite Kingdom of Jordan**,is a country in Western Asia. It is situated at the crossroads of Asia, Africa and Europe,within the Levant region, on the East Bank of the Jordan River. Jordan is bordered by Saudi Arabia, Iraq, Syria, Israel and the West Bank of Palestine. The Dead Sea is located along its western borders, and the country has a 26-kilometre (16 mi) coastline on the Red Sea in its extreme south-west.[9] Amman is the nation's capital and largest city, as well as the economic, political and cultural centre.*</p>
+<p style = "text-align: left ;" >[Wikipedia](https://en.wikipedia.org/wiki/Jordan).</p>
+
+
+```{r, echo=FALSE ,message=FALSE ,warning=FALSE}
+library(leaflet)
+m <- leaflet() %>% setView(36.9303,30.9631,6.25)
+m %>%
+addProviderTiles(providers$Esri.WorldStreetMap) %>%
+addMiniMap()
+```
+<p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:2em;"> Climate </span></p>
+<p style = "text-align: left ;" >*The climate in Jordan varies greatly. Generally, the further inland from the Mediterranean, there are greater contrasts in temperature and less rainfall.The country's average elevation is 812 m (2,664 ft) (SL).The highlands above the Jordan Valley, mountains of the Dead Sea and Wadi Araba and as far south as Ras Al-Naqab are dominated by a Mediterranean climate, while the eastern and northeastern areas of the country are arid desert.Although the desert parts of the kingdom reach high temperatures, the heat is usually moderated by low humidity and a daytime breeze, while the nights are cool.*</p>
+<p style = "text-align: left ;" >*Summers, lasting from May to September, are hot and dry, with temperatures averaging around 32 °C (90 °F) and sometimes exceeding 40 °C (104 °F) between July and August.The winter, lasting from November to March, is relatively cool, with temperatures averaging around 13 °C (55 °F).Winter also sees frequent showers and occasional snowfall in some western elevated areas.*</p>
+<p style = "text-align: left ;" >[Wikipedia](https://en.wikipedia.org/wiki/Jordan#Climate).</p>
+
+ <h1><p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus;"> What happened during the pandemic - <span style="color:red ; font-family:Papyrus;">**Timeline** </span></span></p></h1>
+ 
+
+```{r, echo=FALSE ,message=FALSE ,warning=FALSE}
+
+url <- "https://www.frontiersin.org/files/Articles/536820/fpubh-08-00216-HTML/image_m/fpubh-08-00216-g001.jpg"
+
+```
+<center><img src="`r url`"></center>
+
+
+<br>
+<p style = "text-align: left ;" > 
+- On 27 February 
+     + Jordan temporarily banned people entering from China, South Korea, and Iran.
+     + The kingdom has been screening everyone who enters Jordanian border crossings and airports, with mandatory chest and throat examinations as well as temperature checks.
+     + Jordanians who test positive will be quarantined for 2 weeks.
+     
+- On 2 March 2020,
+     + The Prime Ministry of Jordan reported the first case of coronavirus in Jordan.
+     + The Jordanian had returned from Italy two weeks prior, before quarantine procedures for Jordanians returning from Italy had been put in place.
+- 3–14 March
+     + There were no new reported cases of COVID-19 in the second week. 
+     + Jordan remained coronavirus-free after the recovery of the first infection.
+     + On 6 March, the Jordanian government made an agreement with Facebook to launch an awareness campaign regarding COVID-19.
+     + On 10 March, the following measures were announced: 
+        - Halt on travel to/from Lebanon.
+        - Halt all travel to/from Syria except for trucks.
+        - Closing of Northern crossing with Israel, King Hussein/Allenby Bridge with the West Bank, Southern crossing with Israel for all passengers except official delegations,cargo personnel and Jordanian workers using the Wadi Araba crossing.
+        - Prevention of arrivals from France, Spain and Germany starting 16 March 2020, and prevention of Jordanians from travelling to those countries.
+        - Closing of sea crossings with Egypt, and reducing planes incoming from Egypt by 50% and allowing only urgent travel to Egypt while maintaining trade operations as normal.
+     + On 14 March,
+        - Halting all educational institutions operations starting the morning of March 15 for the duration of two weeks.
+        - Ministry of Education to coordinate administrative staff work/shifts.
+
+
+- 15–21 March
+     + Total number of cases were 99, including one recovery.
+     + The Jordanian government declared a state of emergency on 19 March and imposed a curfew on 21 March. 
+     + There were long lines at bakeries and groceries before curfew took effect.
+
+- 22–28 March
+     + On 28 March, the first death resulting from COVID-19 was confirmed in the kingdom. 
+     + Total confirmed cases rose to 246 after 11 new cases were confirmed.
+29–31 March
+Total confirmed cases rose to 274.
+
+- 01–30 April
+     + On 6 April, the government launched a website for citizens to request permits to leave their homes for urgent matters
+     + Total confirmed cases rose to 453
+
+- 01 May-23 July
+     + On 3 May, the prime minister issued Defense Order pertaining to the use of protective equipment by people.
+     + In summary individuals in public places will be expected to wear a protective mask and gloves
+     + Total confirmed cases rose to 1131
+
+
+- March 2021
+     + On 9 March, Jordan registered 7072 new COVID-19 cases and 59 deaths. 
+     + The Jordanian authorities announced the closure of schools until further notice, noting that it had been only one month since they opened.
+     + On 13 March, seven COVID-19 patients died at a hospital in Al-Salt, due to shortage of oxygen supplies. The Minister of Health, Nazir Obeidat, was fired following the incident.
+     + On 25 March, Jordan said that it was planning to create a "coronavirus-free zone" for tourists where only vaccinated people can have access. The zone includes Wadi Rum, Petra and the Dead Sea.
+- latest
+     + Jordan remains highly vulnerable to COVID-19. By mid-June 2021, there have been over 739,000 confirmed cumulative cases, with more than 9,500 confirmed deaths. Jordan started its COVID-19 vaccination campaign in January 13, 2021.
+     + More than 2 million adults were vaccinated with the first dose, while over 800,000 adults are fully vaccinated, 33% and 13% of the eligible adult population, respectively
+     + home quarantine conditions imposed on
+        - A person arriving from a suspected or epidemic country within the last 14-24 days.
+        - A person who is in contact with another person who has been in an affected country or is suspected of having a pandemic within the last 14-24 days, if symptoms of the infection appear.
+        - A person who is in contact with a person who has been infected with the Coronavirus during the last 14-24 days (friends, relatives, family, and health care providers in the primary health centers)All residents of the district / neighborhood / city in case the government approve it.
+    + Jordan has launched a comprehensive COVID-19 vaccination program for refugees and asylum seekers. It is one of the first countries in the world to address the particular risk situation of refugees. </p>
+<p style = "text-align: left ;" >[infomigrants](https://www.infomigrants.net/en/post/29674/jordan-launched-covid-vaccination-program-for-refugees)</p>
+
+
+
+<p style = "text-align: left ;" >[Wikipedia](https://en.wikipedia.org/wiki/Jordan#Climate).</p>
+
+</br>
+
+<p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:2em;"> What happened during the pandemic - <span style="color:red ; font-family:Papyrus; font-size:0.5em;">**COVID-19 Impact on Households in Jordan** </span></span></p> 
+<br>
+<p style = "text-align: left ;" > 
+This report is part of a series of rapid assessments to explore the impact of COVID-19 and government response measures on households and businesses in Jordan. It focuses on the *impact on households across Jordan* and is based on an online survey of 12,084 respondents.The survey took place during the *lockdown* (last week of April until 3 May 2020) and highlights the significant impact the measures had on the livelihoods of many. As lockdown measures are gradually easing and the economy is opening up, some of the challenges will ease yet many respondents feel that the COVID-19 crisis will have a long-term impact on their livelihoods.
+  - Only 6.8% reported that they were still employed as compared to before lockdown measures were introduced.
+
+  - More than a half (58.6%) of respondents who were employed before the crisis indicated to have lost their entire income, 17.1% reported their income was “much lower”, 9.4% reported a “slightly lower” income, leaving only 11.3% reporting that their income had been unaffected by the crisis.
+
+  - Almost three-quarters of respondents (72.5%) indicated having difficulties covering basic needs (rent, food, heating and medicine) due to the lockdown measures in place at the time of the survey (60.4% strongly agreed with this position, and a further 16.9% somewhat agreed). Only 10.6% of respondents reported not struggling to cover basic needs.
+
+  - Access to clean drinking water was a concern for 38.3% of respondents. Even more concerning was access to basic healthcare, with 69.3% reporting challenges.
+
+  - A significant minority of respondents (21.9%) do not have the internet access they would need for work, education or e-commerce.This is compounded by the very low availability of computers and tablets, at 17.7% and 4.2% respectively
+
+  - A large majority (66%) of respondents indicated that their financial resources will last less than one week should conditions continue. Another 20.3% indicated to have enough to last between 1 and 2 weeks. 7.7% can last between 2-4 weeks with their current resources, leaving less than 6% of respondents who can last over a month in their current situation
+
+  - Many fear the long-term impact of the crisis on income levels and livelihoods, lasting beyond lockdown.58.6% strongly agree there will be a long-term impact, another 17.8% somewhat agree; a further 12.3% say they don’t know, showing the uncertainty felt by many. 
+</p>  
+<p style = "text-align: left ;" >[United Nations Development Programme](https://reliefweb.int/sites/reliefweb.int/files/resources/77030.pdf)</p>
+ 
+</br>
+<br>
+<h1> <p style = "text-align: left ;" ><span style="color:red"> **What does the data say** </span></p></h1>
+ 
+</br> 
+```{r barchart-typeVcases, echo=FALSE ,message=FALSE ,warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(gganimate)
+library(hrbrthemes)
+library(gifski)
+library(extrafont)
+library(extrafont)
+loadfonts(device = "postscript")
+jordan_corona <- coronavirus %>% filter(country == "Jordan")
+jordan_corona <- jordan_corona %>% select(where(~!all(is.na(.))))
+confirmed_jordan_corona <- jordan_corona %>% filter(type=="confirmed")
+recovered_jordan_corona <- jordan_corona %>% filter(type=="recovered")
+death_jordan_corona <- jordan_corona %>% filter(type=="death")
+jordan_corona <-jordan_corona %>% mutate(cases = replace(cases, which(date == "2020-11-17" & type == "recovered"), 2436))
+md<- median(recovered_jordan_corona$cases ,na.rm = TRUE)
+recovered_jordan_corona <- replace_na(recovered_jordan_corona,list(cases=md))
+jordan_corona <- replace_na(jordan_corona,list(cases=127))
+jordan_corona_type <- jordan_corona %>%
+pivot_wider(names_from = type, values_from = cases)
+jordan_corona_type <-jordan_corona_type %>% mutate(cumulative_confirmed = cumsum(confirmed) , cumulative_recovered = cumsum(recovered),cumulative_death = cumsum(death), active= cumulative_confirmed - cumulative_death - cumulative_recovered  )
+jordan_corona_active <- jordan_corona_type$active
+avg_det <- mean(jordan_corona_type$death)
+avg_rec <- mean(jordan_corona_type$recovered)
+avg_con <- mean(jordan_corona_type$confirmed)
+avg_act <- mean(jordan_corona_type$active)
+
+```
+
+```{r, echo=FALSE ,message=FALSE ,warning=FALSE}
+library(extrafont)
+#font_import() only do this one time - it takes a while
+loadfonts(device = "win")
+windowsFonts(Times=windowsFont("TT Times New Roman"))
+library(tidyverse)
+theme_set(theme_bw(base_size=12, base_family = 'Times New Roman')+ 
+  theme(panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank()))
+```
+
+Data can be analyzed considering the confirmed cases,death cases and recovered cases. Using the coronavirus dataset, the analysis was performed. The data were obtained from the period of 22nd of January to 18th of Sep 2021.
+
+
+
+<br>
+```{r, echo=FALSE ,message=FALSE ,warning=FALSE}
+con <- jordan_corona%>% 
+  filter(type =="confirmed")
+con%>% ggplot(aes(x=date, y=cases)) +
+    geom_line(colour = "Blue") +
+    geom_point(size = 3 ,colour = "Black") +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Confirmed Cases ") +
+    #view_follow(fixed_y = TRUE) +
+    theme_ipsum() +
+    ylab("confirmed covid cases") +
+    transition_reveal(date)
+  
+```
+Using the above  plot it can be seen that until the end of the February no confirmed case was reported.Also until first week of September confirmed cases were under 100. But After 2nd week of September more than 150 cases per day reported.There was a significant increase of the confirmed cases in 3rd week of September.On 18th of November confirmed cases reached to the highest number recorded in First wave of pandemic in Jordan. From 4th week of November to end of January 2021, the confirmed cases were significantly reduced.
+After 2nd week of February confirmed cases significantly increased till 3rd week of March 2021. More than 9000 cases per day reported.There was a  decreasing patten of the confirmed cases after start of April 2021.
+After second wave Jordan confirmed cases are lying between 500-1500 per day.
+</br>
+<br>
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+rec <- jordan_corona%>% 
+  filter(type =="recovered")
+rec%>% ggplot(aes(x=date, y=cases)) +
+    geom_line(colour = "Green") +
+    geom_point(size = 3 ,colour = "Black") +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Recovered Cases ") +
+    #view_follow(fixed_y = TRUE) +
+    theme_ipsum() +
+    ylab("Recovered covid cases") +
+    transition_reveal(date)
+  
+```
+
+Using the above  plot it can be seen that until the end of the March no many patients were recovered.But in the beginning of the 1st week of December the highest number of recoveries per day in Jordan of 7933 recoveries were reported.
+ From 2th week of December to end of January 2021, the recovered cases were significantly reduced.
+After 2nd week of February recovered cases significantly increased again till 3rd week of March 2021. More than 9000 recoveries per day reported.There was a  decreasing patten of the recovered cases after start of April 2021 along with confirmed cases.
+After second wave Jordan recovered cases are below 1200 per day.
+</br>
+<br>
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+
+det <- jordan_corona%>% 
+  filter(type =="death")
+det%>% ggplot(aes(x=date, y=cases)) +
+    geom_line(colour = "Red") +
+    geom_point(size = 3 ,colour = "Black") +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Death Cases") +
+    #view_follow(fixed_y = TRUE) +
+    theme_ipsum() +
+    ylab("Death covid cases") +
+    transition_reveal(date)
+  
+```
+
+Above  plot shows us that  that until 27th March 2020 no death case was reported.Also until 2nd of October death cases were under 10. But After 1st week of October death toll increased rapidly.At highest point more than 90 cases per day reported. From 2th week of November to end of February 2021, the death cases were significantly reduced.
+After 2nd week of March confirmed cases significantly increased  again till 3rd week of March 2021. More than 100 cases per day reported.There was a  decreasing patten of the confirmed cases after start of April 2021.
+After second wave Jordan death cases are lying between 0-30 per day.
+
+</br>
+
+<br>
+
+```{r, figures-side, fig.show="hold", out.width="33%", echo=FALSE ,message=FALSE ,warning=FALSE}
+par(mar = c(4, 4, .1, .1))
+ggplot(jordan_corona_type,aes(x= date, y=confirmed))+ geom_line(stat = "identity" , colour="Blue")+ggtitle("Confirmed Cases")
+ggplot(jordan_corona_type,aes(x= date, y=recovered))+ geom_line(stat = "identity", colour="Green")+ggtitle("Recovered Cases")
+ggplot(jordan_corona_type,aes(x= date, y=death))+ geom_line(stat = "identity", colour="Red")+ggtitle("Death Cases")
+```
+
+
+
+
+
+
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+ library(tidyverse)
+    library(lubridate)
+    jordan_corona_type<-as.data.frame(jordan_corona_type) 
+    jordan_corona_type$active <- unlist(jordan_corona_type$active)
+    ggplot(jordan_corona_type,aes(x=date, y=jordan_corona_type$active)) +
+    geom_line(colour = "Orange") +
+    geom_point(size = 3 ,colour = "Red") +
+    scale_color_viridis(discrete = TRUE) +
+    ggtitle("Active Cases") +
+    #view_follow(fixed_y = TRUE) +
+    theme_ipsum() +
+    ylab("Active covid cases") +
+    transition_reveal(date)
+  
+```
+
+The country had seen  an “exponential” rise, with about 10,000 cases confirmed in just more than a week – a near-doubling of the total number of infections since the first cases in early March and a reversal of what had been among the lowest infection and death rates in the Middle East
+With ease  lockown restrictions on june 6th 2020 onwards, active cases significantly increased.Then again travel restrictions imposed on  9th October 2021 onwards.Above plot shows that it helped to decrease active cases.
+
+</br>
+<br>
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+library(tidyverse)
+library(hrbrthemes)
+library(ggplot2)
+library(plotly)
+
+  
+ det_h <- jordan_corona%>% 
+  filter(type =="confirmed")
+det_h%>% ggplot( aes(x=date,y= cases)) +
+    geom_area (binwidth=3, fill="#51b3a6", alpha=0.5) +
+  geom_line(color="#51b3a6")+
+    ylab("Confirmed Cases") +
+    theme_ipsum()+ggtitle("Daily Confirmed Cases Average = 1341.05") +
+  geom_hline(yintercept=avg_con, linetype="dashed", color = "red", size=1)
+  
+```
+
+
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+library(tidyverse)
+library(hrbrthemes)
+library(ggplot2)
+library(plotly)
+
+  
+ det_h <- jordan_corona%>% 
+  filter(type =="recovered")
+det_h%>% ggplot( aes(x=date,y= cases)) +
+    geom_area (binwidth=3, fill="#61b3a6", alpha=0.5) +
+  geom_line(color="#61b3a6")+
+    ylab("Recovered Cases") +ggtitle("Daily Recovered Cases Average = 1123.46") +
+    theme_ipsum()+
+  geom_hline(yintercept=avg_rec, linetype="dashed", color = "red", size=1)
+  
+```
+
+
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+library(tidyverse)
+library(hrbrthemes)
+library(ggplot2)
+library(plotly)
+
+  
+ det_h <- jordan_corona%>% 
+  filter(type =="death")
+det_h%>% ggplot( aes(x=date,y= cases)) +
+    geom_area (binwidth=3, fill="#69b3a2", alpha=0.5) +
+  geom_line(color="#69b3a2")+
+    ylab("Death Cases") +ggtitle("Death Cases Average = 17.50 ") +
+    theme_ipsum()+
+  geom_hline(yintercept=avg_det, linetype="dashed", color = "red", size=1  )
+  
+```
+  
+We can clearly see two waves of pandemic in Jordan using above plots.In each wave time period, number of confirmed cases,recovered cases and death cases significantly gone high.
+All the waves were came along with ease travel restrictions.After one week of lockdown imposed ,numbers were getting high always.
+</br> 
+<br>  
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+library(tidyverse)
+library(lubridate)
+library(hrbrthemes)
+library(ggplot2)
+library(plotly)
+
+    jordan_corona_type<-as.data.frame(jordan_corona_type) 
+    jordan_corona_type$active <- unlist(jordan_corona_type$active)
+    ggplot(jordan_corona_type,aes(x=date, y=jordan_corona_type$active)) +
+    geom_area (binwidth=3, fill="#51b3a6", alpha=0.5) +
+  geom_line(color="#51b3a6")+
+    ylab("Daily Active Cases") +
+    theme_ipsum()+ ggtitle("Daily Active Cases Average = 58259.55") +
+  geom_hline(yintercept=avg_act, linetype="dashed", color = "red", size=1)
+```
+
+
+
+</br>
+
+<br>
+
+
+ <h1> <p style = "text-align: left ;" ><span style="color:red"> **Comparison with other countries** </span></p></h1>
+
+</br>
+
+<br>
+
+
+```{r, echo=FALSE ,message=FALSE ,warning=FALSE}
+
+url <- "https://www.timbestdirect.com/wp-content/uploads/2017/02/Jordan_Map.png"
+```
+<center><img src="`r url`"></center>
+<p style = "text-align: left ;" >[timberdirect](https://www.timbestdirect.com).</p>
+</br>
+
+<br><p style = "text-align: left ;" > 
+Jordan is bounded to the north by Syria, to the east by Iraq, to the southeast and south by Saudi Arabia, and to the west by Israel and the West Bank.</p>
+
+</br>
+
+<br>
+<p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:2em;"> Comparison with other countries - <span style="color:red ; font-family:Papyrus; font-size:1em;">**Confirmed Cases** </span></span></p> 
+
+</br>
+
+
+<br>
+
+```{r , echo=FALSE,message=FALSE ,warning=FALSE}
+library(ggpubr)
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+confirmedcases_egypt_corona <- egypt_corona %>% filter(type=="confirmed") 
+
+israel_corona <- coronavirus  %>% filter(country == "Israel")
+confirmed_israel_corona <- israel_corona %>% filter(type=="confirmed")
+
+saudi_corona <- coronavirus  %>% filter(country == "Saudi Arabia")
+confirmed_saudi_corona <- saudi_corona %>% filter(type=="confirmed")
+
+iraq_corona <- coronavirus  %>% filter(country == "Iraq")
+confirmed_iraq_corona <- iraq_corona %>% filter(type=="confirmed")
+
+gaza_corona <- coronavirus  %>% filter(country == "West Bank and Gaza")
+confirmed_gaza_corona <- gaza_corona %>% filter(type=="confirmed")
+
+syria_corona <- coronavirus  %>% filter(country == "Syria")
+confirmed_syria_corona <- syria_corona %>% filter(type=="confirmed")
+
+Jordan_corona <- coronavirus  %>% filter(country == "Jordan")
+confirmed_Jordan_corona <- Jordan_corona %>% filter(type=="confirmed")
+
+confirmed_neighbor1 <- rbind(confirmedcases_egypt_corona,confirmed_Jordan_corona )
+confirmed_neighbor2 <- rbind(confirmed_israel_corona,confirmed_Jordan_corona )
+confirmed_neighbor3 <- rbind(confirmed_saudi_corona,confirmed_Jordan_corona )
+confirmed_neighbor4 <- rbind(confirmed_iraq_corona,confirmed_Jordan_corona )
+confirmed_neighbor5 <- rbind(confirmed_gaza_corona,confirmed_Jordan_corona )
+confirmed_neighbor6 <- rbind(confirmed_syria_corona,confirmed_Jordan_corona )
+
+ap<- ggplot(confirmed_neighbor1, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Confirmed cases - Jordan vs Egypt") + ylim(0,10000)
+bp<-ggplot(confirmed_neighbor2, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Confirmed cases - Jordan vs Israel") + ylim(0,10000)
+cp<-ggplot(confirmed_neighbor3, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Confirmed cases - Jordan vs Saudi Arabia") + ylim(0,10000)
+dp<-ggplot(confirmed_neighbor4, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Confirmed cases - Jordan vs Iraq") + ylim(0,10000)
+ep<-ggplot(confirmed_neighbor5, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Confirmed cases - Jordan vs West Bank") + ylim(0,10000)
+fp<-ggplot(confirmed_neighbor6, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Confirmed cases - Jordan vs Syria") + ylim(0,10000)
+
+multi.page <- ggarrange(ap, bp, cp, dp,ep,fp,
+                        nrow = 2, ncol = 1)
+multi.page[[1]]
+multi.page[[2]] 
+multi.page[[3]]
+```
+</br>
+<br>
+When comparing confirmed cases of Jordan with Egypt, we can see Jordan have very high values of confirmed cases. Jordan have 812681 total cases  which are way bigger than Egypt.We can clearly see two waves of covid hitted hard Jordan rather than Egypt.
+When comparing confirmed cases of Jordan with Israel and Iraq,Israel and Iraq started to face pandemic earlier than Jordan.Israel and Iraq have higher numbers of confirmed cases than Jordan.Also these days Israel and Iraq both are facing covid 3rd wave.
+Saudi Arabia has been perfectly managed covid cases rather than Jordan
+Gasa and Syria have not enough data to compare.
+
+</br>
+
+<br>
+
+```{r , echo=FALSE,message=FALSE ,warning=FALSE}
+
+confirmed_neighbor <- rbind(confirmedcases_egypt_corona,confirmed_israel_corona,confirmed_saudi_corona,confirmed_iraq_corona,confirmed_gaza_corona ,confirmed_syria_corona,confirmed_Jordan_corona )
+ggplot(confirmed_neighbor, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed cases in Jordan neighbour countries")+ylim(0,15000)
+```
+</br>
+<br>
+From these graphs we can see that Egypt and Syria has low coronavirus cases compared to neighbor countries(.Reasons may be lack of data provided by governments.) Iraq, Israel have approximately same confirmed cases as Jordan. Iraq and Israel recorded higher outlier cases than other countries.
+
+</br>
+<br>
+
+<p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:2em;"> Comparison with other countries - <span style="color:red ; font-family:Papyrus; font-size:1em;">**Recovered Cases** </span></span></p> 
+</br>
+<br>
+
+```{r , echo=FALSE,message=FALSE ,warning=FALSE}
+library(ggpubr)
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+recovered_egypt_corona <- egypt_corona %>% filter(type=="recovered") 
+
+israel_corona <- coronavirus  %>% filter(country == "Israel")
+recovered_israel_corona <- israel_corona %>% filter(type=="recovered")
+
+saudi_corona <- coronavirus  %>% filter(country == "Saudi Arabia")
+recovered_saudi_corona <- saudi_corona %>% filter(type=="recovered")
+
+iraq_corona <- coronavirus  %>% filter(country == "Iraq")
+recovered_iraq_corona <- iraq_corona %>% filter(type=="recovered")
+
+gaza_corona <- coronavirus  %>% filter(country == "West Bank and Gaza")
+recovered_gaza_corona <- gaza_corona %>% filter(type=="recovered")
+
+syria_corona <- coronavirus  %>% filter(country == "Syria")
+recovered_syria_corona <- syria_corona %>% filter(type=="recovered")
+
+Jordan_corona <- coronavirus  %>% filter(country == "Jordan")
+recovered_Jordan_corona <- Jordan_corona %>% filter(type=="recovered")
+
+recovered_neighbor1 <- rbind(recovered_egypt_corona,recovered_Jordan_corona )
+recovered_neighbor2 <- rbind(recovered_israel_corona,recovered_Jordan_corona )
+recovered_neighbor3 <- rbind(recovered_saudi_corona,recovered_Jordan_corona )
+recovered_neighbor4 <- rbind(recovered_iraq_corona,recovered_Jordan_corona )
+recovered_neighbor5 <- rbind(recovered_gaza_corona,recovered_Jordan_corona )
+recovered_neighbor6 <- rbind(recovered_syria_corona,recovered_Jordan_corona )
+
+gp <- ggplot(recovered_neighbor1, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Recovered cases - Jordan vs Egypt") + ylim(0,10000)
+hp <- ggplot(recovered_neighbor2, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Recovered cases - Jordan vs Israel") + ylim(0,10000)
+ip <- ggplot(recovered_neighbor3, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Recovered cases - Jordan vs Saudi ") + ylim(0,10000)
+jp <- ggplot(recovered_neighbor4, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Recovered cases - Jordan vs Iraq") + ylim(0,10000)
+kp <- ggplot(recovered_neighbor5, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Recovered cases - Jordan vs West Bank") + ylim(0,10000)
+lp <- ggplot(recovered_neighbor6, aes(x=date, y=cases, col=country)) + geom_point(size = 0.8) + ggtitle("Recovered cases - Jordan vs Syria") + ylim(0,10000)
+
+multi.page <- ggarrange(gp, hp, ip, jp,kp,lp,
+                        nrow = 2, ncol = 1)
+multi.page[[1]]
+multi.page[[2]] 
+multi.page[[3]]
+
+
+```
+</br>
+<br>
+As you can see in plots Egypt  have very low recovered cases than Jordan.Syria shows very low recovered cases since they have reported low confirmed cases.Saudi Arabia and Gasa have law recovered cases along with their confirmed cases.Israel and Iraq have much more Recovered cases than Jordan along with their confirmed cases.
+   
+</br>
+
+<br>
+
+```{r, echo=FALSE,message=FALSE ,warning=FALSE}
+recovered_neighbor <- rbind(recovered_egypt_corona,recovered_israel_corona,recovered_saudi_corona,recovered_iraq_corona,recovered_gaza_corona ,confirmed_syria_corona,confirmed_Jordan_corona )
+ggplot(recovered_neighbor, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of recovered cases in Jordan neighbour countries")+ylim(0,20000)
+```
+In this case Israel shows high outlier cases.
+</br>
+<br>
+<p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:2em;"> Comparison with other countries - <span style="color:red ; font-family:Papyrus; font-size:1em;">**Death Cases** </span></span></p> 
+</br>
+<br>
+
+```{r , echo=FALSE,message=FALSE ,warning=FALSE}
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+death_egypt_corona <- egypt_corona %>% filter(type=="death") 
+
+israel_corona <- coronavirus  %>% filter(country == "Israel")
+death_israel_corona <- israel_corona %>% filter(type=="death")
+
+saudi_corona <- coronavirus  %>% filter(country == "Saudi Arabia")
+death_saudi_corona <- saudi_corona %>% filter(type=="death")
+
+iraq_corona <- coronavirus  %>% filter(country == "Iraq")
+death_iraq_corona <- iraq_corona %>% filter(type=="death")
+
+gaza_corona <- coronavirus  %>% filter(country == "West Bank and Gaza")
+death_gaza_corona <- gaza_corona %>% filter(type=="death")
+
+syria_corona <- coronavirus  %>% filter(country == "Syria")
+death_syria_corona <- syria_corona %>% filter(type=="death")
+
+Jordan_corona <- coronavirus  %>% filter(country == "Jordan")
+death_Jordan_corona <- Jordan_corona %>% filter(type=="death")
+
+death_neighbor <- rbind(death_egypt_corona,death_israel_corona,death_saudi_corona,death_iraq_corona,death_gaza_corona ,death_Jordan_corona )
+
+ggplot(death_neighbor, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Death cases in Jordan neighbour countries")
+
+
+```
+
+In this case all countries show high outlier cases and most death cases in this region reported in Iraq.
+</br>
+<br>
+
+```{r , echo=FALSE,message=FALSE ,warning=FALSE}
+ggplot(death_neighbor, aes(x=country, y=cases)) + geom_col() + ggtitle("Death cases in Jordan neighbour countries") + ylim(0,30000)
+```
+
+
+According to Box plot Israel have low death cases with their high confirmed cases  compared to other regional countries.Their Vaccination Program highly affects their death rate.Although they Are facing 3rd wave of corona their death rate still low.
+Iraq and Egypt have more death cases than Jordn. 
+Egypt have less confirmed cases than Jordan but their death cases still very high.That means their death ratio is high compared to Jordan.
+Iraq have more death cases along with their high confirmed cases while Saudi Arabia and Gasa have low death cases along with their low confirmed cases.
+
+
+ <h1><p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:1em;"> Vaccination Program Worldwide </span></p>
+</h1>
+</br>
+```{r ,include=FALSE}
+library(coronavirus)
+library(dplyr)
+library(plotly)
+
+data("covid19_vaccine")
+head(covid19_vaccine)
+
+
+df <- covid19_vaccine %>% 
+  filter(date == max(date),
+         !is.na(population)) 
+
+df <- df %>% 
+  mutate(fully_vaccinated_ratio = people_fully_vaccinated / population) %>%
+  arrange(- fully_vaccinated_ratio)
+head(df, 10)
+
+
+top_20 <- df %>% 
+  slice_head(n = 20) %>%
+  arrange(fully_vaccinated_ratio) %>%
+  mutate(country = factor(country_region, levels = country_region))
+  
+
+
+data("coronavirus")
+jordan_vcases <- coronavirus %>% 
+  filter(country == "Jordan", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "JO") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+ tail(jordan_vcases)
+    
+jordan_vcases <- jordan_vcases %>%
+  mutate(cases_normalized = (cases - min(cases)) / (max(cases) - min(cases)),
+         people_fully_vaccinated_normilized = (people_fully_vaccinated - min(people_fully_vaccinated, na.rm = TRUE)) / 
+           (max(people_fully_vaccinated, na.rm = TRUE) - 
+              min(people_fully_vaccinated, na.rm = TRUE)))
+tail(jordan_vcases)
+
+
+```
+<br>
+
+<h2><p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:1em;"> Vaccination Program Worldwide - <span style="color:red ; font-family:Papyrus; font-size:1em;">Top 20 Countries </span></span></p> </h2>
+</br>
+
+```{r ,height=10, out.width="80%", echo=FALSE,message=FALSE ,warning=FALSE}
+plot_ly(data = top_20,
+        y = ~ country,
+        x = ~ round(100 * fully_vaccinated_ratio, 2),
+        text = ~ paste(round(100 * fully_vaccinated_ratio, 1), "%"),
+        textposition = 'auto',
+        orientation = "h",
+        type = "bar") %>%
+  layout(title = "Percentage of Fully Vaccineted Population - Top 20 Countries",
+         yaxis = list(title = ""),
+         xaxis = list(title = "Percentage", ticksuffix = "%"))
+```
+<br>
+<h2><p style = "text-align: left ;" > <span style="color:blue ; font-family:Papyrus; font-size:1em;"> Vaccination Program Worldwide - <span style="color:red ; font-family:Papyrus; font-size:1em;">Jordan New cases vs Total popolation</span></span></p> </h2>
+</br>
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, , height=10, out.width="80%"}
+plot_ly(data = jordan_vcases,
+        x = ~ date,
+        y = ~ cases_normalized,
+        type = "scatter",
+        mode = "line",
+        name = "Daily Cases (Normalized)") %>%
+  add_lines(x = ~ date,
+            y = ~ people_fully_vaccinated_normilized,
+            name = "Fully Vaccinated - Aggregate (Normalized)") %>%
+  layout(title = "Jordan - Daily New Cases vs. Total Vaccinated Population (Normalized)",
+         legend = list(orientation = 'h'),
+         yaxis = list(title = "Normalized Daily Cases/Total Vaccinated"),
+         xaxis = list(title = ""),
+         margin = list(b = 60))
+```
+
+
+
+<br>
+<h1> <p style = "text-align: left ;" ><span style="color:red"> **Discussion & Conclusions** </span></p></h1>
+</br>
+<br><p style = "text-align: left ;" > 
+This project was done to analysis the coronovirus effect of the country Jordan. To do the analysis with comparisons, I have used six other neighboring countries. they are Saudi Arabia,Syria,Israel,Gasa,Egypt and Iraq. All these 7 countries have similar climate conditions. But coronavirus spreading is different in countries.
+
+With this COVID-19 outbreak, Jordan maintained their confirmed cases below 30. But unfortunately in March 2020, a wedding in Jordan led to a large outbreak of coronavirus.Authorities collected data on 350 wedding attendees, 76 who of whom developed COVID-19. What was the mistake Jordan did.
+
+Jordan have created new websites and apps to alert people about all data about pandemic and impose travel restrictions to control pandemic.
+</p>
+
+<table>
+|data                              |  count   |
+|----------------------------------|----------|
+|Avg PCR tests per million pop     |    707117|
+|total confirmed rate per mil. pop |     70630|
+|total death rate per mil. pop     |       910|
+|daily positive rate               |      3.05|
+|daily death rate per mil. pop     |       2.7|
+-----------------------------------------------
+</table>
+<p style = "text-align: left ;" >[Jordan Government](https://corona.moh.gov.jo/en)</p>
+</br>
+<br>
+<p style = "text-align: left ;" > 
+AS shown in data (upto 28/09/21) Jordan government is having the situation under control compared to region, however careful attention should be paid towards vaccination program as it bringing more fatal cases down in the long run. However with regards to other countries as mentioned earlier, Jordan is doing well as a non-island country.
+Everyone is being advised to keep their distance from other people to help stop the spread od coronavirus and get vaccinated, Some people with underlying health conditions need to take even more precautions to protect themselves, that includes people over the age of 70.
+</p>
+</br>
+
+<br>
+<h1> <p style = "text-align: left ;" ><span style="color:red"> **References** </span></p></h1>
+</br>
+<br>
+
+- [Jordan Background](https://en.wikipedia.org/wiki/Jordan)
+- [Jordan Climate](https://en.wikipedia.org/wiki/Jordan#Climate)
+- [Jordan: Authorities to impose lockdown](https://www.garda.com/crisis24/news-alerts/398061/jordan-authorities-to-impose-lockdown-from-november-10-15-update-47)
+- [Impact on households across Jordan](https://reliefweb.int/sites/reliefweb.int/files/resources/77030.pdf)
+- [Vaccination for refugees](https://www.infomigrants.net/en/post/29674/jordan-launched-covid-vaccination-program-for-refugees)
+- [Jordan Neighbor Countries](www.timbestdirect.com)
+- [Jordan Health](https://corona.moh.gov.jo/en)
+- [Latest Jordan covid data](https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/jordan/)
+
+
+</br>
+
+
+  

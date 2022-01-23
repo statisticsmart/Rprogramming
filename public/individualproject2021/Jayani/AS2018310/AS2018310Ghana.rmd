@@ -1,0 +1,923 @@
+---
+output: 
+  html_document :
+    fig caption : yes
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(devtools)
+#devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+library(coronavirus)
+library(maptools)
+library(grid)
+library(ggplot2)
+library(sp)
+library(png)
+library(ggrepel)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(bslib)
+library(shiny)
+library(rmarkdown)
+library(knitr)
+#install.packages("plotly")
+library(plotly)
+library(here)
+library(tidyverse)
+#install.packages("kable")
+library(kableExtra)
+#install.packages("knitr")
+library(plotly)
+library(htmlwidgets)
+library(zoo)
+library(lubridate)
+library(xts)
+library(dygraphs)
+library(googleVis)
+library(shiny)
+library(reactable)
+library(ggiraph)
+library(kableExtra)
+library(formattable)
+library(dygraphs)
+library(xts)          # To make the convertion data-frame / xts format
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(vistime)
+```
+
+<body style="background-color:White;">
+
+
+<center>
+
+### **University of Sri Jayawardhanapure** 
+
+
+### **Faculty Of Applied Sciences**
+
+
+### **B.Sc. (Honors) Statistics Degree**
+
+
+
+
+### STA 326 2.0 Programming and Data Analysis with R
+              
+#### A.M.K.N.Atapattu
+
+#### Index No : AS2018310
+
+
+
+
+![](Picture1.png){width=20%}
+<br>
+<br>
+<br>
+
+# **COVID-19 Pandemic in the Republic of Ghana**
+
+![](pic2.jpg)
+<br>
+
+## **1. Introduction** 
+
+</center> 
+
+<br>
+
+#### 1.1 The Republic of Ghana
+
+<br>
+
+Ghana, officially the Republic of Ghana, is a country in West Africa. It spans the Gulf of Guinea and the Atlantic Ocean to the south, sharing borders with the Ivory Coast in the west, Burkina Faso in the north, and Togo in the east.Ghana covers 238,535 km2, spanning diverse geography and ecology from coastal savannahs to tropical rain forests. With over 31 million people, Ghana is the second-most populous country in West Africa, after Nigeria. The capital and largest city are Accra,other major cities include Kumasi, Tamale, and Sekondi-Takoradi.[Wikipedia](https://en.wikipedia.org/wiki/Ghana)
+
+<br> 
+
+```{r,echo = FALSE, out.width="50%"}
+myimages<-list.files("sim/", pattern = ".png", full.names = TRUE )
+include_graphics(myimages)
+```
+
+*Fig 1: National Flag and National Emblem of Republic of Ghana,source:Wikipedia*
+
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE,comment = NA,include=FALSE}
+data(coronavirus)
+get_individual_project_country("AS2018310")
+ghana_corona <- coronavirus %>% filter(country == "Ghana")
+
+```
+
+<br>
+$\underline{1.11\space Global\space Location}$
+<center>
+```{r,echo= FALSE,message=FALSE,warning=FALSE,comment=NA,fig.cap="*Fig 2: Geographical location of Ghana*",fig.align = "center"}
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = ghana_corona, aes(x = long, y = lat), color = "red", size= 1 )
+```
+</center>
+
+<br>
+
+
+
+$\underline{Climate\space Condition\space and\space Average\space Wheather }$
+
+<br>
+
+Ghana is a warm tropical country with a 41.2% forested area. The climate of Ghana is tropical, and there are two main seasons, the wet season and the dry season. The annual mean temperature is varied between 26C and 29C. They have a dry season in winter and a rainy season in summer due to the African monsoon. The rainy season ends from May to September in the Northern region, from April to October in the central, and from April to November in the southern part. Conversely, the rainy season is shorter along the eastern coast and occurs from April to June, with a break in July and August. And again, a slight recovery in September and October.
+
+The southern region has the rainiest weather in Ghana. The precipitation is above 1,500 millimeters (60 inches) per year. The driest parts happen to be in the north. The rainfall amounts to around 1,000 mm (40 in) per year, There’s only one rainy season in the Northern region, which reaches its maximum in the summer months, while on the coast there are two rainy seasons as Rainy coast and Ami-arid coast.
+
+<br>
+<br>
+
+![*Fig 3: Spirit of Ghanians , Source: Ghanalive.TV*](cli1.jpg)
+
+<br>
+<br>
+
+$\underline{1.12\space Background\space and\space Livelihood\space in\space Ghana }$
+
+<br>
+
+In Africa, Ghana is one of the fastest growing economies and has faced huge challenges in poverty successfully.But abnormal climate change plays a top threat to growth and development of the country. Rising sea levels, drought, higher temperatures and bizarre rainfall negatively impact infrastructure, hydro power production, food security and coastal and agricultural livelihoods.45% of the workforce in Ghana still depends on rain-fed agriculture. The fisheries sector contributes 4.5 percent to GDP and is another vital source of income and nutrition, providing livelihoods for as many as 2.2 million people.
+
+<br>
+
+$\underline{1.13\space Covid-19\space in\space Ghana }$
+
+<br>
+
+###### **Beginning**
+
+As we all know, COVID-19 pandemic in Ghana is also part of the worldwide pandemic of corona virus disease 2019 (COVID-19).On 12 January 2020, the World Health Organization (WHO) confirmed that the novel corona virus was the cause of a respiratory illness that affected a cluster of people in Wuhan City, Hubei Province, China.This is caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2).
+The first two cases in Ghana were confirmed on 12 March 2020, when two infected people came to Ghana, one from Norway and the other from Turkey.
+
+<br>
+$\underline{1.14\space Actions\space taken\space by\space the\space Government }$
+
+<br>
+
+###### **Ban and Restrictions**
+
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces and international borders in order to contain the spread of the virus.
+
+Initially the Government of Ghana banned all public gatherings including conferences, workshops, funerals, festivals, political rallies, church activities and other related events to reduce the spread of the virus. Beaches were also closed. Basic schools, senior high schools and universities, both public and private, were also closed. Only Basic Education Certificate Examination and West African Senior School Certificate Examination candidates were permitted to remain in school under social distancing protocols.
+
+Traveling to Ghana from countries which had recorded over 200 positive COVID-19 cases was strongly discouraged with non-admittance of such travellers during earliest reported cases.
+
+The border closure was extended by the president, for another two week effective midnight of Sunday 5 April 2020.
+
+The president lifted the ban on COVID-19 related restrictions on transport.He also lifted restrictions on tourist sites in the country and eased restrictions on religious worships in the country.
+During September,2020 the President made wearing of face masks compulsory.
+And later, major and minor lock downs were implemented in paricular regions occasionally when COVID-19 cases continue to rise.
+[Wikipedia](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Ghana)
+
+<br>
+
+![*Fig 4: Travelling rules*](news1.png)
+<br>
+<br>
+
+###### **Raising Awareness, Promoting Safety and Protecting Essential Services**
+
+<br>
+For Ghana, COVID-19 is exacerbating poverty and disproportionately impacting the poor and vulnerable. Economic growth has slowed, and the labor market has been hard hit 77% of the population reported a decline in household income during the first three months of the pandemic.
+
+In order to contain the virus, guard against risks such as increased maternal and child mortality, and safely reopen socioeconomic activities and schools.
+
+To establish trust and rapidly disperse information about the pandemic, the project supported extensive, nationwide awareness campaigns delivered in sign language, local languages, and even Braille. Call Centers and COVID-19 Information Centers were established in all 16 regions of the country. And communication caravans were deployed to disseminate information about preventive measures and where to seek care.
+
+To contain the virus and expand the capacity of the laboratory system, streamlined digital solutions for timely case detection, diagnosis, and reporting were introduced As a result, the number of national laboratories increased from two to 16 in less than a year.
+
+In Accra, the epicenter of the country’s COVID-19 outbreak, contact tracing capacity was strengthened by training 1,340 surveillance officers during the first three months of the project.In addition,21 treatment centers and 129 Intensive Care Unit beds were established to handle cases.The project also provided psycho social support, wheelchairs,and protective gear to over 20,000 persons with disabilities.
+
+These interventions allowed for the continuity of essential health and nutrition service delivery, despite the ongoing public health crises. With the introduction of infection prevention and control measures, socioeconomic activities, health facilities, and schools were able to reopen safely.
+
+Now, with the continued support of IDA, the government can focus on the deployment of COVID-19 vaccines nationwide, the establishment of a national Center for Disease Control, and promote equal access to routine primary health care services to improve the health of all citizens.
+
+
+<br>
+
+###### **Vaccination Programmes**
+<br>
+Currently four vaccines approved are approved for use in Ghana.
+<br>
+
+- **Sputnik V**
+- **Jhonson and Jhonson**
+- **Oxford/ AstraZeneca**
+- **Covisheild**
+<br>
+
+[covid19 vaccine tracker](https://covid19.trackvaccines.org/country/ghana/)
+
+<br>
+As of September 25, 2021, Ghana had administered approximately 1.64 million doses of corona virus (COVID-19) vaccine. On February 24, 2021, the country obtained 600,000 doses of the vaccine, the first African economy to receive them from the COVAX Facility. Overall, the number of COVID-19 cases in the country reached 126,621 as of September 25, 2021.[Statista](https://www.statista.com/statistics/1227780/total-number-of-covid-19-vaccination-doses-in-ghana/)      
+     
+     
+<center> <h2> **2.Exploratory Data Analysis** </h2> </center>     
+        
+<br>
+
+<center>
+
+#### 2.1 Overall Structure of Covid-19 data
+
+```{r,include=FALSE,echo=TRUE}
+#RESHAPING DATA
+summary(ghana_corona)
+#minimum of cases is a negative value.So we get absolute values of cases
+ghana_corona$cases <- abs(ghana_corona$cases)
+summary(ghana_corona)
+
+#checking missing values in cases
+sum(is.na(ghana_corona$cases)) 
+#Changing NA values to zero
+is.data.frame(ghana_corona) 
+ghana_corona <-mutate_at(ghana_corona,c("cases"),~replace(.,is.na(.),0))
+summary(ghana_corona)
+
+
+
+
+
+#boxplot to identify outliers
+
+
+
+
+
+#p1 <-ggplot(ghana_corona,aes(x=cases,y=type))+geom_boxplot(aes(frame=cases),color="blue")
+#ggplotly(p1)
+
+#ggplot(ghana_corona, aes(x=cases, y=type)) +geom_boxplot(fill="skyblue")
+
+
+#dataframes for each type of cases
+
+recovered_data <- ghana_corona[ghana_corona$type=="recovered", ]
+colnames(recovered_data) <- c("date", "region", "country", "latitudtes","longitudes","type","recoverd.cases")
+head(recovered_data)
+
+death_data <- ghana_corona[ghana_corona$type=="death", ]
+colnames(death_data) <- c("date", "region", "country", "latitudtes","longitudes","type","death.cases")
+head(death_data)
+
+confirmed_data <- ghana_corona[ghana_corona$type=="confirmed", ]
+colnames(confirmed_data) <- c("date", "region", "country", "latitudtes","longitudes","type","confirmed.cases")
+head(confirmed_data)
+
+
+
+
+#Recoverd data has an outlier
+
+
+
+box1 <- ggplot(ghana_corona, aes(x=cases, y=type, fill=type))+ geom_jitter()+ geom_boxplot(alpha=0.5)
+box2 <- ggplotly(box1)
+
+#identifying outlier
+#according to box plot outlier case has 5526 recorded cases
+
+#Assign a value to outlier
+recovered_data %>% filter(date == "2020-06-19")
+beforevalue =80
+recovered_data %>% filter(date == "2020-06-21")
+aftervalue = 399
+solved_outlier <- (beforevalue+aftervalue)/2
+
+notedited <- recovered_data %>% filter(date == "2020-06-20")
+edited <-recovered_data %>% filter(date == "2020-06-20") %>% mutate(recoverd.cases=239.5)
+
+recovered_data_new <-recovered_data %>%
+  rows_update(edited, by = "date")
+summary(recovered_data_new)
+
+
+#editing big data frame with solved outlier
+ghana_corona$ID <- seq.int(nrow(ghana_corona))
+
+which.max((ghana_corona$cases))
+ghana_corona[1363,]
+edited.1<-ghana_corona%>% filter(cases == 5526) %>% mutate(cases=239.5) 
+
+ghana_corona <-ghana_corona %>%
+  rows_update(edited.1, by = "ID")
+summary(ghana_corona)
+
+
+ghana_corona_new = ghana_corona[,-8]
+
+seperate_types <- ghana_corona_new %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases)
+
+summary(seperate_types)
+sum(is.na(ghana_corona_new$recovered)) 
+sum(is.na(ghana_corona_new$death)) 
+sum(is.na(ghana_corona_new$confirmed)) 
+summary(ghana_corona_new)
+
+#Getting Active cases
+cumsum_confirmed <-cumsum(seperate_types$confirmed)
+cumsum_death <-cumsum(seperate_types$death)
+cumsum_recovered <- cumsum(seperate_types$recovered)
+
+
+new1 <-seperate_types %>% mutate(seperate_types,cum_sum_recov=cumsum(recovered),cum_sum_confirmed=cumsum(death),cum_sum_conf=cumsum(confirmed))
+view(new1)
+
+new2<-seperate_types %>% mutate(new1,active= cumsum_confirmed-(cumsum_recovered+cumsum_death))
+view(new2)
+
+
+
+```
+<br>
+The 2019 Novel Coronavirus COVID-19 (2019-nCoV) dataset which can be easily obtain through Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website. 
+[COVID-19 Content Portal](https://systems.jhu.edu/research/public-health/ncov/)
+
+<br>
+
+The data set includes the daily summary of Coronavirus(COVID-19) cases around the globe.The cases are categorized according to seven variables as follows;
+
+- **Date of reported case**
+- **Name of province/state [ if available]**
+- **Name of country/region**
+- **Latitude of center of geographic region, defined as either country or, if available, province**
+- **Longitude of center of geographic region, defined as either country or, if available, province**
+- **Type of the reported case [ Confirmed / Death / Recovered ]**
+- **Number of cases for reported cases**
+
+```{r,include=FALSE,echo=TRUE}
+str(coronavirus)
+(unique(coronavirus$country))
+
+```
+<br>
+Data contains daily data from 22 January 2020 to 18 Sep 2022 for 195 countries around the world.The main aim of this study is to explore the covid-19 situation in **Ghana**.
+
+<br>
+
+
+#### 2.2 Covid-19 Statistics of Republic of Ghana
+<br>
+<br>
+$\underline{2.21\space Analysis\space of\space Covod-19\space cases\ }$
+<br>
+<br>
+
+When considering a pandemic like Covid-19,governments and the public are usually interested about the progress of the prevention and control of the disease. Mainly this progress can be identified clearly by observing the behavior of daily cases. So in fig 4 we can see the daily reported cases under three main types of cases namely. confirmed,recovered and death cases.
+Behavior of number of confirmed and recovered cases are very similar.(blue and green color)The fig 4 reveals that there is a some kind of seasonality in both cases.Peak of each cases are around the mid of year 2020, first quarter of year 2021 and again can be seen in the mid of year 2021.
+The daily death count continuously shows a low value compared to confirmed cases.(in red color).But relative to the other daily deaths, the peak periods which mentioned earlier have highest death counts.
+
+```{r,include=FALSE,echo=TRUE}
+
+Recovered <- ts(seperate_types$recovered)
+Confirmed <- ts(seperate_types$confirmed)
+Deaths <- ts(seperate_types$death)
+Active <- ts(new2$active)
+Date <- seperate_types$date
+
+p1 <- cbind(Recovered,Confirmed,Deaths)
+p2<- ts(p1,frequency=356,start=c(2020,1,22))
+
+p3<- zoo(p1, seq(from = as.Date("2020-01-22"), to = as.Date("2021-09-18"), by = 1))
+
+
+don <- xts(x =ghana_corona_new$cases , order.by = ghana_corona_new$date)
+
+
+graph11 <- dygraph(p3,ylab = "No. of cases") 
+
+graph22 <-dySeries(graph11, name = NULL, label = NULL, axis = "y",
+                  pointSize = 0.1, pointShape = "diamond")%>%
+  dyOptions(labelsUTC = TRUE, fillGraph=TRUE, fillAlpha=0.1, drawGrid = FALSE,colors=c("#0066CC","#FF0000","#006600")) %>%
+  dyRangeSelector() %>%
+  dyCrosshair(direction = "vertical") %>%
+  dyHighlight(highlightCircleSize = 5, highlightSeriesBackgroundAlpha = 0.2, hideOnMouseOut = FALSE)  %>%
+  dyRoller(rollPeriod = 1)
+
+```
+
+```{r,include=TRUE,echo=FALSE,fig.cap="*Fig 5 :Covid-19 Cases - 2020 onwards*"}
+graph22 
+
+```
+<br>
+<br>
+$\underline{2.22\space Comparison\space of\space Covid-19\space cases\space in\space 2020\space and\space 2021\space }$
+<br>
+<br>
+
+```{r,include=FALSE,echo=TRUE}
+
+#2020 and 2021 Statistics
+data_2020 <- filter(seperate_types, date < "2021-01-01") 
+data_2021 <- filter(seperate_types, date > "2020-12-31") 
+
+
+
+summary(data_2020)
+sum(data_2020$recovered)
+sum(data_2020$death)
+sum(data_2020$confirmed)
+
+summary(data_2021)
+sum(data_2021$recovered)
+sum(data_2021$death)
+sum(data_2021$confirmed)
+
+
+Covid_case <- c("Recovered cases", "Death cases","Confirmed cases")
+Total_2020 <- c(48307,335,54771)
+Max_2020 <-c(1711,15,"")
+Mean_2020<- c(140.2,0.971,"")
+Rate_2020 <-c(88,0.6,"")
+Total_2021 <- c(45039,783,70234)
+Max_2021 <-c(1892,28,"")
+Mean_2021 <-c(172.6,3.0,"")
+Rate_2021 <-c(64,1.1,"")
+
+sta <-data.frame(Covid_case,Total_2020,Max_2020,Mean_2020,Rate_2020,Total_2021,Max_2021,Mean_2021,Rate_2021)
+
+
+
+table_1 <-kable(sta) %>%
+kable_classic(full_width = F, html_font = "Cambria") %>%
+add_header_above(c(" " = 1, "Year 2020" = 4, "Year 2021" = 4 ))%>%
+  column_spec(1, bold = T, border_right = T) %>%
+  column_spec(1, width = "30em")
+
+```
+
+```{r,include=FALSE,echo=TRUE}
+df1 <- data.frame(
+  year = c("Year 2020", "Year 2021"),
+  reported_dates= c( "57%","43%" )
+  )
+
+
+pie <-ggplot(df1, aes(x = "", y = reported_dates, fill = year)) +
+  geom_col(color = "black") +
+  geom_text(aes(label = reported_dates),
+            position = position_stack(vjust = 0.5)) +
+  coord_polar(theta = "y") +
+  scale_fill_brewer() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "#ebf2ff"),
+        plot.background = element_rect(fill = "#ebf2ff"),
+        legend.background = element_rect(fill = "#ebf2ff"))
+
+```
+
+Year 2020 consists with 345 data points from 22nd of January to 31st of December (57%). And from 1st of January to 18th September we have 261 data points related to year 2021 (43%).
+Even though 2021 year has a lesser number of dates, total number of death cases in 2021 is more than the twice of the death count in 2020.
+
+```{r,include=TRUE,echo=FALSE,fig.cap="*Fig 6 :Composition of data by year*",fig.align='center',fig.width=3,fig.height=3,}
+pie
+```
+<br>
+
+The true severity of a disease can be described by the Infection Fatality Ratio.
+As serological studies need an investment of time and resources, there are many situations in which they may not be conducted timely, or even at all. Nevertheless, it remains crucial to monitor trends in severity in real time. In such situations, estimates need to be made with routinely available lookout data, which generally as in this case that consist of time-series of cases and deaths reported in aggregate.[(WHO)](https://www.who.int/news-room/commentaries/detail/estimating-mortality-from-covid-19)
+<br>
+<br>
+<center>
+$$
+Recovery\space Rate = \frac{No\space of\space known\space recoveries\space during\space a\space period }{No\space of\space Confirmed\space cases\space during\space a\space period{}}\space {100}-------Equation 1
+$$
+<br>
+$$
+Infection\space Fatality\space Rate\space (IFR) = \frac{No\space of\space known\space Deaths\space during\space a\space period }{No\space of\space Confirmed\space cases\space during\space a\space period{}}\space {100}-------Equation 2
+$$
+<br>
+
+<br>
+
+</center>
+
+Moreover,it can be further analyse using mean deaths in each year. Mean death in 2021 is 3 deaths per day while year 2020 holds a value less than zero. And the highest daily deaths also announced in year 2021 which is approximately the maximum daily deaths in year 2020.
+<br>
+<br>
+<center>Table 1 : Comparison of 2020 and 2021 Covid Statistics </center>
+```{r,include=TRUE,echo=FALSE}
+table_1
+```
+
+
+  When we consider about recoveries, 2021 has an approximately equal number recoveries but the recovery rate is comparatively low due to high confirmed cases in 2021.(see table 1).
+  So by looking at the overall picture we can say that severity of covid-19 has increased in 2021.
+  
+<br>
+<center>
+
+![](deaths.png)
+ <br>         
+*Fig 7:COVID-19 funerals in Ghana , Source: Swiss Medical Weekly*
+
+<br>
+</center>
+<br>
+<br>
+$\underline{2.23\space Analysis\space of\space Active\space cases\space in\space Ghana}$
+<br>
+```{r,include=FALSE,echo=TRUE}
+cumsum_confirmed <-cumsum(seperate_types$confirmed)
+cumsum_death <-cumsum(seperate_types$death)
+cumsum_recovered <- cumsum(seperate_types$recovered)
+
+
+new1 <-seperate_types %>% mutate(seperate_types,cum_sum_recov=cumsum(recovered),cum_sum_confirmed=cumsum(death),cum_sum_conf=cumsum(confirmed))
+view(new1)
+
+new2<-seperate_types %>% mutate(new1,active= cumsum_confirmed-(cumsum_recovered+cumsum_death))
+view(new2)
+
+
+Recovered <- ts(seperate_types$recovered)
+Confirmed <- ts(seperate_types$confirmed)
+Deaths <- ts(seperate_types$death)
+Active <- ts(new2$active)
+Date <- seperate_types$date
+
+ts.1 <- ts(ghana_corona_new$cases)
+ts.2 <- as.data.frame(ts.1)
+
+p.1 <- cbind(Confirmed,Active)
+p.2<- ts(p.1,frequency=356,start=c(2020,1,22))
+
+p.3 <- zoo(p.1, seq(from = as.Date("2020-01-22"), to = as.Date("2021-09-18"), by = 1))
+
+
+don <- xts(x =ghana_corona_new$cases , order.by = ghana_corona_new$date)
+
+
+#active and recovered
+graph1 <- dygraph(p.3,ylab = "No. of cases") 
+
+graph2 <-dySeries(graph1, name = NULL, label = NULL, axis = "y",
+           pointSize = 0.1, pointShape = "diamond")%>%
+  dyOptions(labelsUTC = TRUE, fillGraph=TRUE, fillAlpha=0.1, drawGrid = FALSE,colors=c("#0066CC","#CC6699")) %>%
+    dyRangeSelector() %>%
+    dyCrosshair(direction = "vertical") %>%
+    dyHighlight(highlightCircleSize = 5, highlightSeriesBackgroundAlpha = 0.2, hideOnMouseOut = FALSE)  %>%
+    dyRoller(rollPeriod = 1)
+
+
+```
+
+<br>
+
+```{r,include=TRUE,echo=FALSE,fig.cap="*Fig 8 :Daily Confirmed and Active cases*",fig.align='center'}
+graph2
+```
+<br>
+ According to fig 6, the curve of daily active cases runs continuously above the curve of confirmed cases.That implies a very low recovery rate as well as a low fatality rate throughout the period.
+ 
+Except at the beginning of 2020, Active cases shows somewhat steady behavior during September,2020 to January, 2021.And also again in April-July in 2021. However this can be due to low confirmed cases with a relatively high recovery speed during those periods.
+Three noticeable peaks can be seen in Active cases specially where the confirmed cases score high values.The variability increases with the time. At present, active cases are reaching the highest peak(third).
+<br>
+<br>
+
+
+#### 2.3 Comparison of Covid-19 Pandemic with neighboring countries 
+
+
+
+<br>
+<br>
+$\underline{2.31\space Geographical\space Location\space of\space neighbouring \space countries }$
+<br>
+<br>
+
+
+```{r,include=FALSE,echo=TRUE}
+cote_corona <- coronavirus %>% filter(country == "Cote d'Ivoire")
+faso_corona <- coronavirus %>% filter(country == "Burkina Faso")
+togo_corona <- coronavirus %>% filter(country == "Togo")
+
+
+dataframe3 <- rbind(cote_corona,faso_corona,togo_corona)
+
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+
+neighbours <- p + geom_point(data = dataframe3, aes(x = long, y = lat), color = "blue", size= 1)
+    
+```
+
+
+```{r,include=TRUE,echo=FALSE,fig.cap="*Fig 9: Geographical location of Neighbouring countries*",fig.align = "center"}
+neighbours
+```
+<br>
+
+Ghana, which is a West African country on thr Gilf of Guinea. Its neighbours are Cote d' Ivoire,to the west, Burkina Faso,which lies north and Togo to the east. 
+<br>
+<center>
+
+![](nei.png)
+
+
+*Fig 10:Neighbours of Ghana ,  Source : UNODC*
+<br>
+</center>
+
+
+```{r,include=FALSE,echo=FALSE}
+cote_corona <-mutate_at(cote_corona,c("cases"),~replace(.,is.na(.),0))
+faso_corona <-mutate_at(faso_corona,c("cases"),~replace(.,is.na(.),0))
+togo_corona <-mutate_at(togo_corona,c("cases"),~replace(.,is.na(.),0))
+cote_corona$cases <- abs(cote_corona$cases)
+faso_corona$cases <- abs(faso_corona$cases)
+togo_corona$cases <- abs(togo_corona$cases)
+
+cote_seperate <- cote_corona %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases)
+summary(cote_seperate)
+
+faso_seperate <- faso_corona %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases)
+summary(faso_seperate)
+
+togo_seperate <- togo_corona %>% 
+  pivot_wider(names_from=type, 
+              values_from=cases)
+summary(togo_seperate)
+
+```
+
+```{r,include=FALSE,echo=FALSE}
+full_4 <- rbind(seperate_types,
+                  cote_seperate,
+                  faso_seperate,
+                  togo_seperate)
+full_5 <- rbind(ghana_corona_new,cote_corona,faso_corona,togo_corona)
+Ghana <-seperate_types$death  
+Cote_d_Ivoire <- cote_seperate$death
+Burkina_Faso <-faso_seperate$death
+Togo <- togo_seperate$death
+
+
+deaths_neighbours <- cbind(Ghana,Cote_d_Ivoire,Burkina_Faso,Togo)
+don11 <- xts(x =full_4$death , order.by = full_4$date)
+p11 <- zoo(deaths_neighbours, seq(from = as.Date("2020-01-22"), to = as.Date("2021-09-18"), by = 1))
+
+graph11 <- dygraph(p11,ylab = "No. of cases") 
+
+graph22 <-dySeries(graph11, name = NULL, label = NULL, axis = "y",
+                   pointSize = 0.1, pointShape = "diamond")%>%
+  dyOptions(labelsUTC = TRUE, fillGraph=TRUE, fillAlpha=0.1, drawGrid = FALSE,colors=c("#0066CC","#FF0000","#006600","#E69E00")) %>%
+  dyRangeSelector() %>%
+  dyCrosshair(direction = "vertical") %>%
+  dyHighlight(highlightCircleSize = 5, highlightSeriesBackgroundAlpha = 0.2, hideOnMouseOut = FALSE)  %>%
+  dyRoller(rollPeriod = 1)
+
+```
+<br>
+<br>
+
+$\underline{2.32\space Comparison\space of\space Covid\space Cases\space between\space countries}$
+<br>
+
+```{r,include=TRUE,echo=FALSE,fig.cap="*Fig 11:Daily deaths of four countries *",fig.align = "center"}
+graph22
+```
+<br>
+When sharply looking at the beginning of curves,it can be seen that the first COVID-19 death was confirmed in Burkina Faso before it was confirmed in Ghana and other countries. But the daily death cases in Republic of Ghana shows a considerably severe behaviour with respect to other countries. Maximum daily deaths in Cote d Ivoire,Burkina Faso and Togo are less than 15 throughout the period of consideration. But maximum deaths in Ghana shows a value around 30.
+The time periods where highest death cases reported in other 3 countries is very much similar to Ghana.Thus,the peaks of daily death cases of countries are approximately coincided. Burkina Faso and Togo have a good death control. They have a relatively constant variance when compared to Ghana and Cote d Ivoire.
+<br>
+
+```{r,include=FALSE,echo=TRUE,}
+Countries <- c("Cote_d_Ivoire", "Burkina_Faso","Togo","Ghana")
+Confirmed_Total <- c(58957,14025,24519,125005)
+Confirmed_Max <-c(767,315,523,1975)
+Confirmed_Mean<- c(97.29,23.14,40.46,206)
+
+statis <-data.frame(Countries,Confirmed_Total,Confirmed_Max,Confirmed_Mean)
+
+library(kableExtra)
+library(formattable)
+
+table_2 <-kable(statis) %>%
+   kable_classic() %>%
+  column_spec(2, width = "30em")
+
+
+
+
+
+```
+```{r,include=TRUE,echo=FALSE}
+table_2
+```
+<center>Table 2 : Comparison of Covid-19 Confirmed cases between countries </center>
+<br>
+<br>
+```{r,include=FALSE,echo=TRUE,}
+Countries <- c("Cote_d_Ivoire", "Burkina_Faso","Togo","Ghana")
+Recovered_Total <- c(52088,13385,14654,93408)
+Recovered_Max <-c(1108,758,427,1892)
+Recovered_Mean<- c(85.95,22.08,24.18,154)
+Recovered_percentage<- c(88.3,95.4,59.8,74.7)
+
+statis1 <-data.frame(Countries,Recovered_Total,Recovered_Max,Recovered_Mean,Recovered_percentage)
+
+library(kableExtra)
+library(formattable)
+
+table_3 <-kable(statis1) %>%
+   kable_classic() %>%
+  column_spec(2, width = "30em")
+
+
+
+
+
+```
+```{r,include=TRUE,echo=FALSE}
+table_3
+```
+<center>Table 3 : Comparison of Covid-19 Recoveries between countries </center>
+<br>
+
+In table 2 we can see that the Ghana has ranked top in total confirmed cases which is almost twice the total confirmations of Cote d Ivoire. Deaths and Confirmed cases have very similar rankings for these four countries.
+Ghana and Cote d Ivoire confirm the top two places in covid 19 cases confirmations.
+
+In table 3 we can see that Ghana has the highest mean recovery, Maximum daily recoveries and also the highest total recoveries. But when consider that recoveries as a portion of confirmed cases, Burkina Faso is in the first place and Ghana is in the third place(74.7 %)
+
+
+```{r,include=FALSE,echo=TRUE}
+country <- c(rep("Ghana" , 2) , rep("Cote_d_Ivoire" , 2) , rep("Burkina_Faso" , 2) , rep("Togo" , 2) )
+case_type <- rep(c("Recovered","Confirmed") , 4)
+no_of_cases <- c(93408,125005,52088,58957,13385,14025,14654,24519)
+dataf <- data.frame(country,case_type,no_of_cases)
+
+# Grouped
+plott <-ggplot(dataf, aes(fill=case_type, y=no_of_cases, x=country)) + 
+  geom_bar(position="dodge", stat="identity")
+
+graph33 <-ggplotly(plott)
+
+```
+
+
+```{r,include=TRUE,echo=FALSE,fig.cap= "*Fig 12:Comparison of Recovered cases*",fig.align = "center"}
+graph33
+```
+<br>
+Figure 9 confirmed the above facts graphically. Recoveries and Confirmed cases in Burkina Faso is approximately equal. But Ghana shows a reasonable gap between those cases.
+
+
+
+
+<br>
+<center> <h2> **3.Discussion** </h2> </center>     
+        
+<br>
+Clearly the dataset consists data for two years.We know that, annual change of a time series is very important to be observed and clear out things for the future.year 2020 and 2021 occupies nearly same space in the dataset, so that no bias would occur when considering years separately.Annual statistics can be used as a measure of annual progress of any activity. Specially for a pandemic covid-19, people would like to know how this year differ from the previous year with respect to the severity of the disease.
+And also it should be noted that the calculation behind equations 1 and 2 may not hold in an ongoing epidemic, because it makes two assumptions:
+<br>
+<center> 
+
+- **Assumption 1: The likelihood of detecting cases and deaths is consistent over the course of the outbreak.**
+
+- **Assumption 2: All detected cases have resolved (that is, reported cases have either recovered or died).**
+</center>
+<br>
+At present, it is tempting to estimate the case fatality rate by dividing the number of known deaths by the number of confirmed cases. The resulting number, however, does not represent the true case fatality rate and might be off by orders of magnitude.A precise estimate of the case fatality rate is therefore impossible at present.[(Swiss Medical Weekly)](https://smw.ch/article/doi/smw.2020.20203).
+<br>
+And also the active cases which derived with the cumulative values of each confirmed,recovered and death cases are useful to catch the deficiency and also to check up on the availability of resources.
+
+The behaviour of COVID-19 in republic of Ghana cannot be fully understood by solely analyzing Ghana’s data. Therefore a comparison of Ghana with few neighbouring countries has been carried out in order to reach the final conclusions.
+
+At the beginning of data analysis process it was observed that the minimum value for cases is a negative value in summary data.As a possible reason we can say in that in preliminary stages of testing some patients may have been diagnosed as COVID-19 positive and later on diagnosed as negative. Therefore, the data was pre-processed before the actual analysis by coding the negative values as missing values. To overcome this issue all cases were replaced with absolute values.
+Also 45 missing values were identified at the beginning and replaced with 0 in order to ease the analysis.Only one outlier was observed by using boxplot in recovered cases with a high deviation with the rest of data, and replaced by the mean value of the data points in the either sides. 
+
+In the comparisons of covid 19 situation between neighbouring countries, Ghana showed a significance in every angle.
+When compared Ghana to its neighboring countries Ghana is in a difficult condition which is unable to control the situation and reach a much stable state during the pandemic.Eventhough Ghana shows good statistics relative to other countries under recovery cases, recovery rate is not yet satisfactory.Active cases show a huge peak up situation during end of timeline(September,2021).
+
+As of 13 July 2021,only 2.95% of the African population had received one dose of a COVID-19 vaccine. In Ghana, this figure is just 2.8%. West Africa has handled the pandemic response relatively well thus far, with lessons learned from the 2014/15 Ebola outbreak. 
+
+However, with the highly transmissible Delta variant now known to be present in Ghana, the vaccine roll out is arguably more important than ever. The Ghanaian population has very little immunity to this novel coronavirus, and is thus almost entirely susceptible to infection. It is essential that people accept vaccines when doses arrive in the country.[(THE CONVERSATION)](https://theconversation.com/vaccine-hesitancy-has-risen-in-ghana-a-closer-look-at-whos-worried-164733)
+This low immunity level can be a major reason for reporting more confirmed covid cases in Ghana. Evenethough they have a control in deaths, improvements in the vaccination procedure can lead Ghana to a better place.
+<br>
+
+```{r,include=FALSE, echo=TRUE}
+#vaccinations
+covid19_vaccine <- covid19_vaccine %>% filter(country_region=="Ghana")
+
+Fully_vaccinated <- covid19_vaccine$people_fully_vaccinated
+date_of_vaccination <- covid19_vaccine$date
+
+
+os<- ts(Fully_vaccinated,frequency=356,start=c(2021,03,01))
+
+don7 <- xts(x =os , order.by =date_of_vaccination )
+
+graph1111 <- dygraph(don7,ylab = "No of Vaccinated people") 
+
+
+graphhh <- dySeries(graph1111, label = "Fully_Vaccinated", color = "#56B4E9", axis = "y")
+
+
+```
+
+```{r,include=TRUE, echo=FALSE,fig.cap= "*Fig 13:Fully vaccinated cases*",fig.align = "center"}
+graphhh
+
+```
+<br>
+Figure 13 shows that the first date of the fully vaccinated cases were recorded in the mid of year 2021.The increase of fully vaccinated cases are not in a satisfactory level. Eventhough there are enough data on partially vaccinated cases, to coverup the covid risk, getting fully vaccinated is very much important (WHO).
+When talking about the recent vaccination programmes, on Sunday Ghana received 1.5 million doses of the AstraZeneca COVID-19 vaccine from Germany.[(AA)](https://www.aa.com.tr/en/africa/ghana-receives-15m-doses-of-astrazeneca-covid-19-vaccine-from-germany/2375540).
+
+
+
+ 
+</center>
+
+
+
+
+<br>
+
+<center> <h2> **4.Conclusions** </h2> </center>     
+        
+<br>
+In conclusion, it can be said that Ghana currently stands at a much unfavorable stage regarding the COVID-19 Pandemic when compared to neighbouring countries. The Government of Ghana has been able to implement many successful strategies and restrictions to stabilize the spread of the disease.But government need to be more focused on the vaccinations programmes as well as to regain the lost immunity of Ghanians. Reduction of confirmed cases can be done successfully by motivating vaccinations and increment of recoveries can be done by enpowering the immunity within the nation.Also, health workers need to be equitably allocated to respond to covid-related illness in hard-hit areas and others to deliver routine care.Emphasis should be on stakeholder involvement in designing mitigation measures, adopting health technologies for patient teaching and consultations and applying lessons learnt to contain future health emergencies. 
+<br>
+
+<center> <h2> **5.References** </h2> </center>     
+<br>
+
+- Brackstone, K., Boateng, L. and Head, M. (n.d.). Vaccine hesitancy has risen in Ghana: a closer look at who’s worried. [online] The Conversation. Available at: https://theconversation.com/vaccine-hesitancy-has-risen-in-ghana-a-closer-look-at-whos-worried-164733.
+<br>
+- covid19.trackvaccines.org. (n.d.). Ghana – COVID19 Vaccine Tracker. [online] Available at: https://covid19.trackvaccines.org/country/ghana/ [Accessed 29 Sep. 2021].
+<br>
+- Wikipedia. (2020). COVID-19 pandemic in Ghana. [online] Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Ghana.
+<br>
+- www.aa.com.tr. (n.d.). Ghana receives 1.5M doses of AstraZeneca COVID-19 vaccine from Germany. [online] Available at: https://www.aa.com.tr/en/africa/ghana-receives-15m-doses-of-astrazeneca-covid-19-vaccine-from-germany/2375540 [Accessed 29 Sep. 2021].
+<br>
+- ReliefWeb. (n.d.). Reinforcing key health services amid COVID-19 - Ghana. [online] Available at: https://reliefweb.int/report/ghana/reinforcing-key-health-services-amid-covid-19?gclid=CjwKCAjw-sqKBhBjEiwAVaQ9ay9UrB2GtIvzGORVfap_JWeO420Kjs3ew3LG-j7DNkZsTuaXKtv6dRoCUB0QAvD_BwE [Accessed 29 Sep. 2021].
+<br>
+- World Health Organization (2020). Coronavirus disease (COVID-19): Vaccines. [online] www.who.int. Available at: https://www.who.int/news-room/q-a-detail/coronavirus-disease-(covid-19)-vaccines?adgroupsurvey=.
+<br>
+- Statista. (n.d.). Ghana: total COVID-19 jabs received 2021. [online] Available at: https://www.statista.com/statistics/1227780/total-number-of-covid-19-vaccination-doses-in-ghana/ [Accessed 29 Sep. 2021]
+<br>
+- www.unicef.org. (n.d.). Information on the COVID-19 Vaccine. [online] Available at: https://www.unicef.org/ghana/information-covid-19-vaccine.
+<br>
+- Oxford Business Group. (2020). Ghana lifts Covid-19 lockdown amid health care expansion plans. [online] Available at: https://oxfordbusinessgroup.com/news/ghana-lifts-covid-19-lockdown-amid-health-care-expansion-plans [Accessed 29 Sep. 2021].
+<br>
+- World Bank. (n.d.). COVID-19 in Ghana: Raising awareness, promoting safety and protecting essential services. [online] Available at: https://www.worldbank.org/en/news/feature/2021/07/06/covid-19-in-ghana-raising-awareness-promoting-safety-and-protecting-essential-services [Accessed 29 Sep. 2021].
+<br>
+- www.ghanahealthservice.org. (n.d.). COVID-19 Updates | Ghana. [online] Available at: https://www.ghanahealthservice.org/covid19/.
+
+- www.worldometers.info. (n.d.). Ghana Coronavirus: 48,124 Cases and 320 Deaths - Worldometer. [online] Available at: https://www.worldometers.info/coronavirus/country/ghana/.
+<br>
+- Holtz, Y. (n.d.). Time Series | the R Graph Gallery. [online] www.r-graph-gallery.com. Available at: https://www.r-graph-gallery.com/time-series.html.
+<br>
+- https://www.rstudio.com/rviews/author/billrstudio-com (2019). RStudio. [online] RStudio. Available at: https://www.rstudio.com/.
+
+
+ 

@@ -1,0 +1,491 @@
+---
+title: Covid-19 Pandemic Situation in Turkey 
+output: html_document
+---
+
+```{r setup, echo=FALSE, warning=FALSE, comment=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE,out.width = "80%") 
+```
+
+<style>
+  p{ text-align: justify; }
+  body{text-align: justify;}
+</style>
+
+<center>
+
+![](turkey.jpg)
+
+</center>
+<br/>
+
+### *Let's get to know about Turkey*
+
+
+| Property| Description |
+| ---| ---|
+| Location| Western Asia|
+| Capital City| Ankara (+2 GMT)|
+| Chief of State| President Recep Tayyip Erdogan|
+| Head of Govt.| President Recep Tayyip Erdogan |
+| Currency | Turkish Lira (TRY) |
+| Major Languages| Turkish (official), Kurdish other minority languages|
+| Primary Religions | Muslim 99.8% (mostly Sunni),other 0.2% (mostly Christians and Jews) |
+|Population| 82 million (2019)|
+|  |  |
+
+
+**Strengths**
+
+-   Young and educated workforce
+
+-   Well developed and flexible manufacturing tissue
+
+-   Strategic geopolitical location
+
+-   Strong economic recovery after COVID-19 Recovering export
+    performance that reduces current account risks
+
+**Weaknesses**
+
+-   Large dependence on external financing Import-dependent structure of
+    the manufacturing sector
+
+-   High inflationary pressures resulting from the lira's weakness
+
+-   Weakened central bank reserves, higher public debt
+
+-   Increased regional and geopolitical tensions
+
+<br/>
+
+#### <b><u> Location Details</b></u>
+
+```{r Chunk 1, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+
+
+```
+
+```{r,echo=FALSE, message=FALSE,out.width = "75%"}
+turkey_corona <- coronavirus %>% filter(country == "Turkey")
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = turkey_corona, aes(x = long, y = lat), color = "red", size
+    = 1)+ labs(
+    x = "Longtitude",
+    y = "Latitude",
+    title = "Location of Turkey in the World map"
+  )
+
+```
+
+<br/>
+
+Turkey, a country with a unique status, lies in part in Asia and in part
+in Europe. Throughout its history it has served as a bridge and a bridge
+between the two continents. Turkey is located at the crossroads of the
+Balkans, the Caucasus, the Middle East, and the eastern Mediterranean.
+It is among the **largest countries in the region geographically and
+geographically**, and its land area is larger than that of any European
+empire. Almost the whole country is in Asia, which consists of the
+southern peninsula of Asia Minor also known as Anatolia (Anadolu) and,
+to the east, part of the mountainous region sometimes known as the
+Armenian Highland. The remnant of Turkey's Trace (Trakya) lies in the
+southeastern part of Europe, a small remnant of the empire that once
+stretched over most of the Balkans. The country has a northwestern range
+from a distance of about 300 to 400 kilometers (480 to 640 kilometers),
+and from a distance of 1,000 kilometers from west to east. Turkey is
+bordered north by the Black Sea, northeast by Georgia and Armenia, east
+by Azerbaijan and Iran, southeast by Iraq and Syria, southwest and west
+by the Mediterranean Sea and the Aegean Sea, and northwest by Greece and
+Bulgaria. The capital city is Ankara, and the largest city with its
+largest harbor is Istanbul. The country has a northwestern range from a
+distance of about 300 to 400 kilometers (480 to 640 kilometers), and
+from a distance of 1,000 kilometers from west to east. Turkey is
+bordered north by the Black Sea, northeast by Georgia and Armenia, east
+by Azerbaijan and Iran, southeast by Iraq and Syria, southwest and west
+by the Mediterranean Sea and the Aegean Sea, and northwest by Greece and
+Bulgaria. The capital city is Ankara, and the largest city with its
+largest harbor is well known Istanbul.
+
+<br/>
+
+#### <u><b> Climate </b></u>
+
+Coastal Regions: The Aegean, Mediterranean, and coastal regions of
+Turkey reflect the typical Mediterranean climate with hot summers and
+mild winters, although Istanbul may experience extremely cold
+temperatures and snow in winter. July and August are the hottest months
+with the highest humidity in summer.In south, temperatures rise by a few
+degrees and water temperatures warm up. The swimming season runs from
+June to September along the shores of Marmara and the North Aegean, and
+from April to October along the coast of the South Aegean and the
+Mediterranean.The Black Sea region is temperate. The summer months are
+warm and the winter months are mild. Rainfall is heavier here than in
+other regions. The swimming season runs from June to early September,
+although the weather is very unpredictable. Inland: There are
+significant differences between the climate of the coastal regions and
+the rural areas, which are usually located at higher elevations. The
+climate reaches its peak in Turkey's Central and Eastern Anatolia
+regions, with hot and dry summers, and freezing temperatures and
+winters.In mountainous areas, summer months are difficult and winter
+months are difficult.
+
+<br/>
+
+#### <u><b> Lockdown Status </b></u>
+
+From 6 September, Turkish citizens must have proof of the discovery of
+two Covid vaccines or the latest Covid rescue (linked to the HES code)
+or a negative PCR test (within 48 hours) of all domestic air travel, and
+travel. provincial, including buses, trains or other public transport
+vehicles. HES (Hayat Eve Sigar) code for domestic and international
+flights, as well as train and boat travel are also required. In
+addition, the HES code will be required when looking for accommodation
+including hotels, motels, residential areas, pensions, camps etc. Some
+states also require an HES code to enter public buildings, shopping
+malls, and banks. This does not apply to foreign tourists. This can be
+done through the e-Devlet program, the 'Hayat Eve Sıgar' app and SMS.
+
+
+<br/>
+
+#### <u><b> Actions taken by government regarding Covid-19 </b></u>
+
+Turkey has launched a 21-point stimulus package (Economic Stability
+Shield) worth USD 15.4 billion to deal with the epidemic. In addition,
+Turkey has promised a "series of measures" related to fiscal policy,
+including tax evasion and money transfers, as well as debt guarantees
+and delays in repayment of loans.A three-month deferral of loan payments
+to affected businesses, accommodation tax will be cancelled until
+November, social security premiums will be deferred by six months for
+several sectors and stock financing assistance to importers who are
+affected by the global pandemic.
+
+**Other**
+
+-   Introduced online education system Closed gyms, bars, night clubs and other places of social gatherings to minimize human contact
+
+-   Placed pilgrims in quarantine(14 day self quarantine)
+
+-   Suspended friday prayers
+
+-   Promote work from home for elderly persons
+
+-    Imposed a curfew for people aged 65 and over
+
+-   Banned flights to/from many countries(about 68) Launched public awareness campaigns
+
+
+
+
+<br/>
+
+#### <u><b> Covid-19 Summary in Turkey </b></u>
+
+
+```{r include=FALSE}
+
+turkey_corona <- coronavirus %>% filter(country == "Turkey")
+turkey_corona$cases[turkey_corona$cases < 0] <- 0
+
+confirmed_cases_turkey <- turkey_corona %>% filter(type=="confirmed")
+death_cases_turkey <- turkey_corona %>% filter(type=="death")
+recovered_cases_turkey <- turkey_corona %>% filter(type=="recovered")
+recovered_cases_turkey[is.na(recovered_cases_turkey)] <- 0
+
+
+conf_cases <- select(confirmed_cases_turkey,cases)
+confirmed_cases <- sum(conf_cases)
+mean_confirmed_cases <- confirmed_cases/606
+confirmed_cases
+mean_confirmed_cases
+
+de_cases <- select(death_cases_turkey,cases)
+death_cases <- sum(de_cases)
+mean_death_cases <- death_cases/606
+death_cases
+mean_death_cases
+
+recov_cases <- select(recovered_cases_turkey,cases)
+recovered_cases <- sum(recov_cases)
+mean_recovered_cases <- recovered_cases/606
+recovered_cases
+mean_recovered_cases
+```
+
+<br/>
+
+
+
+|Type| Total counts| Average cases per day|
+| ---| ---| ---|
+|Confirmed Cases| 6794670|11212.33 |
+|Death Cases| 61140|100.8911|
+|Recovered Cases| 5478185|9039.909|
+
+Since the first step of data analysis process is data tidying,I did replace NA values and negative values with zeros, to increase accuracy of my conclusions. Most of recovered cases were not available. 
+
+
+
+<br/>
+
+```{r echo=FALSE,out.width="45%",figures-side, fig.show="hold"}
+
+ggplot(confirmed_cases_turkey, aes(x=date, y=cases/1000))+ 
+  geom_line(color = "red")+labs(
+    x = "Date",
+    y = "Total confirmed cases in thousands(x1000)",
+    title = "Daily counts of new Coronavirus cases recorded",
+  )
+
+
+ggplot(death_cases_turkey, aes(x=date, y=cases/1000))+ 
+  geom_line(color = "green")+labs(
+    x = "Date",
+    y = "Total Death cases in thousands(x1000)",
+    title = "Daily counts of Coronavirus death cases",
+  )
+
+ggplot(recovered_cases_turkey, aes(x=date, y=cases/1000))+ 
+  geom_line(color = "blue")+labs(
+    x = "Date",
+    y = "Total Recovered cases in thousands(x1000)",
+    title = "Daily counts of Coronavirus recovered cases ",
+  )
+
+```
+<br/>
+
+These figures will help us to identify current corona situation in Turkey and as you can see maximum number of both recovered and confirmed cases had occurred in the end of 2020 while death counts were also increasing.
+
+
+<br/>
+
+
+```{r echo=FALSE,fig.align='left',warning=FALSE, comment=FALSE, message=FALSE}
+turkey_corona %>% 
+  group_by(date, type) %>%
+  summarize(cases = sum(cases)) %>%
+  ggplot() +
+  geom_col(aes(x = date, y = cases, fill = type))+
+labs(
+    x = "Date",
+    y = "Total cases",
+    title = "Daily counts of Coronavirus cases",
+  )
+```
+
+Death count is constant while both confirmed and recovered cases increasing. But that means daily confirmed case and recovered cases are approximately eqaul.  
+
+<br/>
+
+#### <u><b> Comparison to the countries with same size of population </b></u>
+
+
+```{r echo=FALSE,warning=FALSE, comment=FALSE, message=FALSE, out.width="50%", fig.show="hold"}
+
+group_by(turkey_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "Turkey",
+  ) 
+
+```
+```{r echo=FALSE,warning=FALSE, comment=FALSE, message=FALSE, out.width="50%", fig.show="hold"}
+
+italy_corona <- coronavirus %>% filter(country == "Italy")
+group_by(italy_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "Italy",
+  )
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+
+group_by(germany_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "Germany",
+  )
+
+```
+<br/>
+Germany, Italy and Turkey have approximately equal populations and tourism attractive countries. All three of of them are in the top ten ranking countries by international tourists arrivals.
+
+<br/>
+
+#### <u><b> Comparison to the countries with larger population size </b></u>
+```{r echo=FALSE,warning=FALSE, comment=FALSE, message=FALSE, out.width="50%", fig.show="hold"}
+
+china_corona <- coronavirus %>% filter(country == "China")
+group_by(china_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "China",
+  )
+
+india_corona <- coronavirus %>% filter(country == "India")
+
+group_by(india_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "India",
+  )
+
+
+```
+
+India also showing approximately similar trend but in China trend is quite differ since they well controlled corona virus with various selfcare and self quarantined methods, so that when it comes to begining of 2021, China was able to beat corona with their experience through past years.But still with high population density we can see higher number of confirmed cases, recovered and death cases.
+
+<br/>
+
+#### <u><b> Comparison to the countries with smaller population size </b></u>
+
+```{r echo=FALSE,warning=FALSE, comment=FALSE, message=FALSE, out.width="50%", fig.show="hold"}
+
+iraq_corona <- coronavirus %>% filter(country == "Iraq")
+group_by(iraq_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "Iraq",
+  )
+
+canada_corona <- coronavirus %>% filter(country == "Canada")
+
+group_by(canada_corona, date, type) %>%
+  summarise(cases = sum(cases)) %>% 
+  group_by(type) %>%
+  mutate(cases=cumsum(cases)) %>%
+  ggplot() +
+  geom_line(aes(x=date, y= cases/1000, color=type))+
+labs(
+    x = "Date",
+    y = "Total cases in thousands",
+    title = "Canada",
+  )
+
+```
+
+These figures also showing same trend as Turkey.
+
+<br/>
+
+#### <u><b> Death Rate Calculation </b></u>
+
+Eventhough most of figures shows same trending,likewise 2021 was a dark year for most of countries. 
+Let us take calculate death rates with respect to total population and number of deaths to check whether there is a relationship between total population and death rate and explore more about Turkey. 
+
+<br/>
+
+$Death Rate=\frac{Death Count}{Total Population}*100,000$
+
+<br/>
+
+```{r comment=NA, include=FALSE}
+
+Country = c("Turkey","Germany","Italy","Iraq","Canada")
+Total_Population = c(83614362, 83121363,59126079,41190700,38418261)
+Death_counts = c(61361, 92964,130284,21775,27434)
+Crude_Death_rate = (Death_counts/Total_Population)*100000
+
+df <- data.frame(Country,Total_Population,Death_counts,Crude_Death_rate);
+df
+
+```
+
+
+| Country| Total Population| Death counts| Crude Death rate|
+| ---| ---| ---| ---|
+| Turkey	| 83614362	| 61361	| 73.38572|	
+| Germany	| 83121363	|92964	| 111.84128|	
+| Italy	| 59126079	| 130284	| 220.34947|	
+| Iraq	| 41190700	| 21775	| 52.86387|
+| Canada | 38418261	| 27434 |	71.40875|	
+
+<br/>
+
+#### <u><b> Conclusions and Discussion </b></u>
+
+The first case of COVID-19 was reported in Turkey on 11th March 2020 from a local resident who was recently visited Europe. By 18th September 20201, the total 6,794,670 people are infected in Turkey by coronavirus out of which 5,478,185 have recovered, while it is fatal for 61,140 residents.
+Government of Turkey providing many facilities during covid-19 pandemic, but Spread has not slowed down yet. There are different population sizes in the countries, here has shown with different population sizes regarding to Turkey population. Similar sizes, smaller and larger population sizes but yet accuracy of the conclusions is limited since important facts such as population density is not in the data set.
+By examining the death rates,we can say death rates have been decreased, when the total population is decreasing. But comparing to other countries Turkey takes smaller death rate. Turkey was in the red list in April,2021 but currently removed from high risk list.And now open for tourist as well, under restrictions. Turkey is controlling covid-19 quite efficiently while being one of the largest country and the sixth most visited country in the world.
+
+
+
+<br/>
+
+#### <u><b> References </b></u>
+
+
+
+1.    (n.d.). Retrieved from W3 Schools: https://www.w3schools.com/default.asp
+2.    Grolemund , & Wickham. (n.d.). In R for Data Science (pp. Chapter 3.1-3.6 and Chapter 3.7-3.10).
+3.    Hannah Ritchie, Edouard Mathieu, Lucas Rodés-Guirao, Cameron Appel, Charlie Giattino, Esteban Ortiz-Ospina, Joe Hasell, Bobbie Macdonald, Diana Beltekian and Max Roser (2020) - "Coronavirus Pandemic (COVID-19)". Published online at OurWorldInData.org. Retrieved from: 'https://ourworldindata.org/coronavirus' [Online Resource]
+4.    Kaymaz, M., & AL SHARQ FORUM. (09 April 2020). How is Turkey Responding to the Covid-19 Pandemic?
+5.    Mukherjee, A., Sarkar, K., & Bhadra, A. (2021). Impact of population density on Covid-19 6.   infected and mortality rate in India. Modeling Earth Systems and Environment , pages623–629 .
+7.    Yapp, M. E. (2000). Turkey. Britannica.
+8.    [https://www.climatestotravel.com/climate/turkey]
+
+<br/>

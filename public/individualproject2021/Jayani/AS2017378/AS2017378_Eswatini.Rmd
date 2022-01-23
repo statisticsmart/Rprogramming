@@ -1,0 +1,947 @@
+---
+title: "Eswatini : COVID-19 pandemic report"
+author: "Kasuni Harshika"
+date: "AS2017378"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, comment = NA)
+```
+
+
+
+# 1. Introduction
+
+
+<div align="justify">
+Eswatini is a country in Southern Africa, lying between Mozambique and South Africa. The country is located at the geographic coordinates 26°30′S 31°30′E. It has an area of 17,363 square kilometres, of which 160 are water. The major regions of the country are Lowveld, Midveld and Highveld. Eswatini, formerly known as Swaziland, is a landlocked country located in Southern Africa. It is bordered to the north, west, and south by South Africa and to the east by Mozambique. Eswatini has a varied geography from mountains along the Mozambique border to savannas and rainforests. The government system is a monarchy; the chief of state is the king, and the head of government is the prime minister. Eswatini has a traditional economy in which a majority of the population engages in subsistence agriculture. Eswatini is a member of the Common Market for Eastern and Southern Africa (COMESA) and the Southern African Development Community (SADC).
+
+</div>
+
+```{r include=FALSE }
+library(sta3262)
+get_individual_project_country("AS2017378")
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+```
+
+##### Location of Eswatini in the world map
+
+```{r}
+
+library(tidyverse)
+library(magrittr)
+Eswatini <- coronavirus %>% filter(country == "Eswatini")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p <- p + geom_point(data = Eswatini, aes(x = long, y = lat), color = "red", size = 3)
+p
+
+```
+
+### 1.1 Climate condition
+
+<div align="justify">
+The climate of Eswatini varies from tropical to near temperate. The seasons are the reverse of those in the Northern Hemisphere with December being mid-summer and June mid-winter. Generally speaking, rain falls mostly during the summer months, often in the form of thunderstorms. Winter is the dry season. Annual rainfall is highest on the Highveld in the West, between 1,000 and 2,000 mm (39.4 and 78.7 in) depending on the year. The further East, the less rain, with the Lowveld recording 500 to 900 mm (19.7 to 35.4 in) per annum. Variations in temperature are also related to the altitude of the different regions. The Highveld temperature is temperate and, seldom, uncomfortably hot while the Lowveld may record temperatures around 40 °C (104 °F) in summer.
+
+</div>
+
+The average temperatures at Mbabane, according to seasons:
+
+| Seasons        | Months          | Temperature  |
+| ------------- |:-------------:| -----:|
+| Spring      | September – October | 18 °C (64.4 °F) |
+| Summer     | November – March      |  20 °C (68 °F) |
+| Autumn | April – May      |    17 °C (62.6 °F) |
+| Winter | June – August   |   13 °C (55.4 °F) |
+
+
+### 1.2 Culture, Language and Key factors
+
+<div align="justify">
+
+**Capital city** : Mbabane 
+ 
+**Currency** : Swazi Lilangeni(SZL)
+
+**Language** :
+English (official, government business conducted in English), siSwati (official)
+
+**Ethic groups** :
+African 97%, European 3%
+
+**Religions** : 
+Zionist 40% (a blend of Christianity and indigenous ancestral worship), Roman Catholic 20%, other 30% (includes Aglican, Methodist, Mormon, Jehovah's Witness), Muslim 2%, other 8% (includes Baha'i, Buddhist, Hindu, indigenous, Jewish)
+
+**Population**
+1,160,164 people at mid year according to UN data
+
+**Ease of doing business rank** :
+59.5(120 out of 189)(2020)
+
+**Social conventions** : 
+Traditional ways of life are still upheld and Swazi culture, in the form of music, dance, poetry and craftsmanship, plays an important part in daily life. Casual wear is standard, although formal wear is customary at casinos and sophisticated hotels.
+
+</div>
+
+
+
+
+### 1.3 Lock-down status of the country
+
+<div align="justify">
+
+The virus does not move in itself but people move it and thus spread the risk of infecting others. Therefore, authorities in eSwatini (Swaziland) tighten restrictions. The lockdown allow to travel only for food supplies, medication, and for the workers in essential services, all other travel remains strictly prohibited. 
+
+* Domestic Measures
+    + Public gatherings will be heavily restricted. According to authorities, all gatherings of all sizes are prohobited, except for funerals, which are limited to two hours with a maximum attendence of 50 people
+    + Businesses are to close by 1800
+    + Restrictions are placed on the sale and consumption of alcohol
+    + Public transport systems are required to limit their carrying capacity to 80 percent and overall availability at 50 percent
+    + Individuals from different households are required to observe social distancing of at least 1 meter
+    + Facemasks are mandatory on public transport and many additional public spaces. Authorities continue to advise working from home where possible
+    + A nightly 2300-0400 curfew remains in effect
+    
+* International Travel
+    + Travel abroad prohibit except for essential purpose, including for medical, schooling, work, and business purpose. The measure is likely to impact locals only
+    + Cross-border freight transport don't permitted during the nightly 2300-0400 curfew period, except for industries involved in essential medical services
+    + The government reopened King Mswati 111 International Airport(SHO) and Matsapa Airport(Mts) in October, allowing international commercial passenger travel to resume
+    + Travelers entering eSwatini is required to provide a negative COVID-19 test taken no longer than 72 hours before arrival in the country
+    
+</div>
+
+
+### 1.4 Action taken by the government
+
+<div align="justify">
+
+* Government has made several interventions
+    + The Central Bank has reduced the discount rate by 100 basis points. This reduces the cost of debt by 1%
+    + Government has reduced the price of fuel with effect from midnight 2 April 2020
+    + The increase in the price of electricity has been suspended for two months
+    + The renewal of motor vehicles registration has been extended without attracting penalties to the 29th May
+    + Taxpayers projecting losses are expected to file loss provisional returns and no payment will be required
+    + Government is engaging the transport sector with a view to assist with a small subsidy to ensure the industry to continue transporting workers in essential services and citizens embarking on essential travel
+
+* Monetary-fiscal financial practices and advice in response to the pandemic
+    + Increased emergency health spending
+        + E100 million supplementary budget for COVID-19 emergency was approved by Cabinet and Parliament
+        + A portion of the Capital budget is redirected towards urgently refurbishing hospitals and completing wings of new hospitals
+    + Targeted monetary-fiscal measures to protect vulnerable groups and sectors
+        1. Widen social protection and extend social benefits for vulnerable groups
+            + Provisional tax payments: Taxpayers projecting losses file loss provisional returns, hence no payment is be required. 
+            + Decreasing electricity price
+        2. Protect vulnerable economic activities: tax reliefs and VAT tax extensions
+            + Extension of returns filling deadlines by 3 months before penalties kick-in
+            + The Banks have announced that those individuals and companies that need short term financial support or relief can approach them and each application is assessed on a risk based approach.
+            + Payment arrangements: Taxpayers facing cash flow problems should provide evidence to be considered for payment arrangements.
+            + Government to compensate public transport for profit loss during the period of partial shut down
+    + Accommodative monetary policy, financial measures to increase liquidity and broad-based fiscal stimulus to ease stress, boost aggregate demand and restore confidence
+        + The Central Bank has reduced the liquidity requirement for the banks from 25% to 20% giving the banks more liquidity.
+        + The Central Bank has reduced the discount rate with 100 basis points that will reduce the cost of debt with 1%
+
+</div>
+
+### 1.5 COVID-19 vaccines if live in Eswatini
+
+<div align="justify">
+The Eswatini national vaccine programme started in March 2021 and is using the AstraZeneca vaccine. The government of Eswatini has stated that British nationals resident in Eswatini are eligible for vaccination. People wishing to access a vaccine should register on the Eswatini Ministry of Health website.
+
+</div>
+
+### 1.6 Eswatini COVID-19, Response gets a Boots
+
+<div align="justify">
+
+The Kingdom of Eswatini's response to COVID-19 got a boost today following the approval of US$5 million loan in additional financing by the World Bank Group Board. The added funds will assist the Government of Eswatini accelerate its ongoing efforts to purchase and deploy COVID-19 vaccines and strengthen its critical health systems.Through the additional funds, the government also plans to expand activities under the World Bank-funded Eswatini COVID-19 Emergency Response Project, which aims to prevent, detect and response to the threat posed by COVID-19. These include extending testing coverage, procurement of personal protective equipment, and sustained communications and promotions of non-pharmaceutical interventions which are essential to sustain throughout the vaccine roll-out. Since its approval in April 2020, the COVID-19 response project has contributed to the government's rapid adoption of public measures to contain the spread of the infection throughout the country at the start of the pandemic. They include substantially increasing laboratory and testing capacity, rigorous surveillance and contact-tracing, training of health care workers and strategic communication and community engagement campaigns which helped increase awareness on COVID-19 to more than 900,000 people across the country. Under this project, case management of severe COVID-19 patients improved with the increase of the number of hospitals with ICU beds in the country. COVID-19 laboratory testing increased from 0 to 140,000 between April 2020 and March 2021. In addition, regional surveillance of new cases improved with the provision of 12 additional vehicles, the provision of training to some 6,273 healthcare workers and the supply of sanitation facilities in health care centers to allow for people to observe non-pharmaceutical COVID-19 interventions such as hand washing.   
+
+</div>
+
+# 2 Data Analysis
+
+ *Data Structure*
+ 
+<div align="justify"> 
+The time period of recorded data is 22-Jan-2020 : 27-May-2021. There are seven variables such as date, province, country, lat, long, type and cases. 399996 observations are analyzed to collect data.
+
+**date** : Date in YYYY-MM-DD format
+**province** : Name of province/state, for countries where data is provided split across multiple provinces/states
+**country** : Name of country/region
+**lat** : Latitude of center of geographic region, defined as either country or, if available, province
+**long** : Longitude of center of geographic region, defined as either country or, if available, province
+**type** : An indicator for the type of cases (confirmed, death, recovered)
+cases : Number of cases on given date
+
+</div>
+
+
+
+### 2.1 Visualization of death, confirmed, recovered, active cases in Eswatini
+
+
+```{r include=FALSE}
+
+Eswatini_corona <- coronavirus %>%
+  filter(country == "Eswatini") %>%
+  pivot_wider(names_from=type, values_from=cases) %>%
+  mutate(active = cumsum(confirmed)-cumsum(death)-cumsum(recovered))
+
+Eswatini_corona <- Eswatini_corona %>%
+  separate(date, into=c("year", "month", "day"), sep="-") %>%
+  group_by(year, month) %>%
+  summarise(confirmed = round(mean(confirmed)),death = round(mean(death)), recovered = round(mean(recovered)),active = round(mean(active)))
+
+
+Eswatini_corona <- Eswatini_corona %>%
+  pivot_longer(3:6, names_to="type", values_to = "cases") %>%
+  arrange(desc(cases))
+
+```
+
+
+```{r}
+g <- Eswatini_corona %>%
+  ggplot(aes(month, exp(log(cases, base = 10)), fill=type, scales = "free")) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(year~., ncol = 1) +
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+ 
+  labs(title = "Eswatini : recorded data during Covid-19 pandemic",
+       subtitle = "confirmed, recovered, deaths and active cases (Jan-2020 : May-2021)",
+       x = "Months", y = "log(Cases)",
+       caption = "Data: Covid-19 dataset in Eswatini", fill = "Description")
+ 
+g
+
+```  
+
+
+
+<div align="justify">
+
+This figure shows COVID-19 pandemic situation of Eswatini in various types such as Confirmed, Death, Recovered and active cases. It is ploted in the time period from 22-Jan-20202 to 27-May-2021 and it is scaled as x-axis for months and Y-axis for log(cases). In according to above plot, when consider the active cases, there are peak cases in August of 2020 and January of 2021. As it is shown, the monthly confirmed cases are in similar levels in a some extent. Also there are low values of death cases with respect to other cases. 
+
+
+</div>
+
+
+
+### 2.2 Eswatini COVID-19 with other countries
+
+#### 2.2.1 Comparison with Southern African countries
+
+```{r include=FALSE}
+library(coronavirus)
+data(coronavirus)
+
+Eswatini_corona <- coronavirus %>%
+  filter(country == "Eswatini")%>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Eswatini_corona)
+
+Botswana_corona <- coronavirus %>%
+  filter(country == "Botswana") %>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Botswana_corona)
+
+
+Mozambique_corona <- coronavirus %>%
+  filter(country == "Mozambique") %>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Mozambique_corona)
+
+Angola_corona <- coronavirus %>%
+  filter(country == "Angola") %>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Angola_corona)
+
+
+Zambia_corona <- coronavirus %>%
+  filter(country == "Zambia") %>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Zambia_corona)
+
+
+Kenya_corona <- coronavirus %>%
+  filter(country == "Kenya")%>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Kenya_corona)
+
+Rwanda_corona <- coronavirus %>%
+  filter(country == "Rwanda") %>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Rwanda_corona)
+
+
+Seychelles_corona <- coronavirus %>%
+  filter(country == "Seychelles") %>%
+  pivot_wider(names_from=type, values_from=cases)
+summary(Seychelles_corona)
+
+```
+
+<div align="justify">
+
+There 20 countries in Southern Africa, in this report, we consider seven countries to compare with Eswatini. They are Botswana, Mozambique, Angola, Zambia, Kenya, Rwanda and SEychelles. 
+</div>
+
+
+```{r}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p <- p +
+  geom_point(data = Eswatini_corona, aes(x = long, y = lat), color = "red", size = 3) +
+  geom_point(data = Botswana_corona, aes(x = long, y = lat), color = "blue", size = 3) +
+  geom_point(data = Mozambique_corona, aes(x = long, y = lat), color = "green", size = 3) +
+  geom_point(data = Angola_corona, aes(x = long, y = lat), color = "yellow", size = 3) +
+  geom_point(data = Zambia_corona, aes(x = long, y = lat), color = "black", size = 3) +
+  geom_point(data = Kenya_corona, aes(x = long, y = lat), color = "purple", size = 3) +
+  geom_point(data = Rwanda_corona, aes(x = long, y = lat), color = "orange", size = 3) +
+  geom_point(data = Seychelles_corona, aes(x = long, y = lat), color = "brown", size = 3)
+p
+
+```
+
+
+```{r include=FALSE}
+Eswatini_confirmed <- Eswatini_corona %>%
+  select(date, confirmed)
+summary(Eswatini_confirmed)
+
+Botswana_confirmed <- Botswana_corona %>%
+  select(confirmed)
+summary(Botswana_confirmed)
+
+Mozambique_confirmed <- Mozambique_corona %>%
+  select(confirmed)
+summary(Mozambique_confirmed)
+Mozambique_confirmed <- Mozambique_confirmed %>%
+  filter(confirmed != "NA")
+
+Mozambique_confirmed[Mozambique_confirmed < 0] <- mean(Mozambique_confirmed$confirmed > 0)
+Mozambique_confirmed
+summary(Mozambique_confirmed)
+
+Angola_confirmed <- Angola_corona %>%
+  select(confirmed)
+summary(Angola_confirmed)
+
+Zambia_confirmed <- Zambia_corona %>%
+  select(confirmed)
+summary(Zambia_confirmed)
+
+Kenya_confirmed <- Kenya_corona %>%
+  select(confirmed)
+summary(Kenya_confirmed)
+
+Rwanda_confirmed <- Rwanda_corona %>%
+  select(confirmed)
+summary(Rwanda_confirmed)
+
+Seychelles_confirmed <- Seychelles_corona %>%
+  select(confirmed)
+summary(Seychelles_confirmed )
+
+Southern_African_countries <- bind_cols(Eswatini_confirmed,
+                       Botswana_confirmed,
+                       Mozambique_confirmed,
+                      Angola_confirmed,
+                      Zambia_confirmed,
+                      Kenya_confirmed,
+                      Rwanda_confirmed,
+                      Seychelles_confirmed) %>%
+  rename(Eswatini = confirmed...2,
+         Botswana = confirmed...3,
+         Mozambique = confirmed...4,
+         Angola  = confirmed...5,
+        Zambia  = confirmed...6,
+        Kenya  = confirmed...7,
+         Rwanda = confirmed...8,
+        Seychelles = confirmed...9) %>%
+  pivot_longer(2:9, names_to="country", values_to = "cases")
+          
+         
+Southern_African_countries
+
+```
+
+```{r}
+
+Southern_African_countries <- Southern_African_countries %>%
+  group_by(country) %>% 
+  summarise(date, cases = cumsum(cases))
+
+g <- ggplot(Southern_African_countries, aes(date, 
+                                            cases, color = country)) +
+  geom_line(size = 0.8, alpha = 0.7) +
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+  
+  labs(title = "Eswatini : Compare with Southern African countries",
+       subtitle = "Key factors : Angola, Botswana, Kenya, Mozamique, Rwanda, Seychelles, Zambia",
+       x = "Time Period", y = "Confirmed cases",
+       caption = "Data: Covid-19 dataset (WHO)", fill = "Discription") +
+  theme(legend.position = "bottom")
+
+library(plotly)
+ggplotly(g)
+
+```
+
+
+<div align="justify">
+
+Above plot show the cumulative confirmed cases in mentioned Southern African countries during Jan-2020 : May-2021. Since mid year of 2020, there are higher confirmed cases in Kenya than others, also Seychelles has lower confirmed cases in this pandemic period. Eswatini has large confirmed cases than Seychelles. Except Kenya, the cases of all other countries start to increase since about end of the September. When consider overall plot, Eswatini get a lower place for confirmed cases. 
+
+</div>
+
+```{r include=FALSE}
+Eswatini_death <- Eswatini_corona %>%
+  select(date, death)
+summary(Eswatini_death)
+
+Botswana_death <- Botswana_corona %>%
+  select(death)
+summary(Botswana_death)
+
+Mozambique_death <- Mozambique_corona %>%
+  select(death)
+summary(Mozambique_death)
+Mozambique_death <- Mozambique_death %>% filter(death != "NA")
+Mozambique_death[Mozambique_death < 0] <- mean(Mozambique_death$death > 0)
+Mozambique_death
+summary(Mozambique_death)
+
+
+Angola_death <- Angola_corona %>%
+  select(death)
+summary(Angola_death)
+Angola_death[Angola_death < 0] <- mean(Angola_death$death > 0)
+Angola_death
+summary(Angola_death)
+
+
+Zambia_death <- Zambia_corona %>%
+  select(death)
+summary(Zambia_death)
+
+Kenya_death <- Kenya_corona %>%
+  select(death)
+summary(Kenya_death)
+
+Rwanda_death <- Rwanda_corona %>%
+  select(death)
+summary(Rwanda_death)
+
+Seychelles_death <- Seychelles_corona %>%
+  select(death)
+summary(Seychelles_death)
+
+
+Southern_African_countries <- bind_cols(Eswatini_death,
+                       Botswana_death,
+                       Mozambique_death,
+                      Angola_death,
+                      Zambia_death,
+                      Kenya_death,
+                      Rwanda_death,
+                      Seychelles_death) %>%
+  rename(Eswatini = death...2,
+         Botswana = death...3,
+         Mozambique = death...4,
+         Angola  = death...5,
+        Zambia  = death...6,
+        Kenya  = death...7,
+         Rwanda = death...8,
+        Seychelles = death...9) %>%
+  pivot_longer(2:9, names_to="country", values_to = "cases")
+          
+         
+Southern_African_countries
+
+
+```
+
+
+```{r}
+
+Southern_African_countries <- Southern_African_countries %>%
+  group_by(country) %>% 
+  summarise(date, cases = cumsum(cases))
+
+g <- ggplot(Southern_African_countries, aes(date, 
+                                            cases, color = country)) +
+  geom_line(size = 1) +
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+  
+  labs(title = "Eswatini : Compare with Southern African countries",
+       subtitle = "Key factors : Angola, Botswana, Kenya, Mozamique, Rwanda, Seychelles, Zambia",
+       x = "Time Period", y = "Death cases",
+       caption = "Data: Covid-19 dataset (WHO)", fill = "Discription") +
+  theme(legend.position = "bottom")
+
+library(plotly)
+ggplotly(g)
+
+```
+ 
+<div align="justify">
+
+Also this plot shows cumulative death cases during above period. Kenya has larger number of cases in this period like above confirmed cases. A middle level of death cases is got by Eswatini among these African countries.
+
+Both above plots are behaved in approximately similar manner for deaths and confirmed cases which were reported in these countries.
+
+</div>
+
+#### 2.2.2 Comparison with highly affected countries 
+
+**Highly Confirmed Rate Countries**
+```{r}
+
+High_effected_countries <- coronavirus %>%
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(cases = sum(cases[cases > 0], rm.na = TRUE)) %>%
+  arrange(desc(cases)) %>%
+  head(10)
+
+View(High_effected_countries)
+
+```
+
+<div align="justify">
+US, India, Brazil and France have most higher Covid-19 confirmed cases among all these countries. Therefore, the report is going to compare Eswatini's cases with theses country.
+
+</div>
+
+
+
+```{r include=FALSE}
+
+Eswatini_corona <- coronavirus %>%
+  filter(country == "Eswatini") %>%
+  pivot_wider(names_from=type, values_from=cases)
+ 
+summary(Eswatini_corona)
+
+
+# Highly affected countries
+
+US_corona <- coronavirus %>%
+  filter(country == "US") %>%
+  pivot_wider(names_from=type, values_from=cases)
+  
+summary(US_corona)
+
+
+India_corona <- coronavirus %>%
+  filter(country == "India") %>%
+  pivot_wider(names_from=type, values_from=cases)
+  
+summary(India_corona)
+
+
+Brazil_corona <- coronavirus %>%
+  filter(country == "Brazil") %>%
+  pivot_wider(names_from=type, values_from=cases)
+ 
+summary(Brazil_corona)
+
+
+France_corona <- coronavirus %>%
+  filter(country == "France") %>%
+  pivot_wider(names_from=type, values_from=cases) 
+summary(France_corona)
+
+
+
+
+```
+
+```{r include=FALSE}
+
+# covid-19 in Eswatini 
+# population = 1160164
+Eswatini_confirmed <- Eswatini_corona %>%
+  select(date, confirmed) %>%
+  summarise(date, confirmed = round((confirmed/1160164)*1000000))
+Eswatini_confirmed 
+str(Eswatini_confirmed)
+
+
+# covid-19 in US
+# population = 331002651
+US_confirmed <- US_corona %>%
+  select(confirmed) %>%
+  summarise(confirmed = round((confirmed/331002651)*1000000))
+US_confirmed
+str(US_confirmed)
+
+
+# covid-19 in India
+# population = 1380004385
+India_confirmed <- India_corona %>%
+  select(confirmed) %>%
+  summarise(confirmed = round((confirmed/1380004385)*1000000))
+India_confirmed
+str(India_confirmed)
+
+
+# covid-19 in Brazil
+# population = 212559417
+Brazil_confirmed <- Brazil_corona %>%
+  select(confirmed) %>%
+  summarise(confirmed = round((confirmed/212559417)*1000000))
+Brazil_confirmed
+str(Brazil_confirmed)
+
+
+# covid-19 in France
+# population = 65273511
+France_confirmed <- France_corona %>%
+  select(date, confirmed)
+France_confirmed[France_confirmed < 0] <- mean(France_confirmed$confirmed > 0)
+France_confirmed <- France_confirmed %>% 
+  group_by(date)%>%
+  summarise(confirmed = round(mean(confirmed)))
+France_confirmed <- France_confirmed %>% 
+  summarise(confirmed = round((confirmed/65273511)*1000000))
+str(France_confirmed)
+
+
+
+
+countries <- bind_cols(Eswatini_confirmed,
+                       US_confirmed,
+                       India_confirmed,
+                       Brazil_confirmed,
+                       France_confirmed) %>%
+  rename(Eswatini = confirmed...2,
+         US = confirmed...3,
+         India = confirmed...4,
+         Brazil = confirmed...5,
+         France = confirmed...6) %>%
+  
+  pivot_longer(2:6, names_to="country", values_to = "cases")%>%
+  separate(date, into=c("year", "month", "day"), sep="-")%>%
+  group_by(year) %>%
+  unite("Date", c("month", "day"), sep="-")
+
+
+
+countries
+
+
+```
+
+
+
+```{r }
+
+g <- ggplot(data = countries, aes(x = Date, y = log(cases, base = 10), color = country)) +
+  geom_point() +
+  facet_wrap(year~., ncol = 1) +
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+  
+  labs(title = "Eswatini : Compare with highly Covid-19 affected countries",
+       subtitle = "Key factors : US, India, Brazil, France, Turkey, Jan-2020 : May-2021",
+       x = "Date", y = "log(Number of cases in Per milion(1000,000) of population)",
+       caption = "Data: Covid-19 dataset (WHO)", fill = "Description")
+
+library(plotly)
+ggplotly(g)
+
+```
+
+
+
+<div align="justify">
+
+This plot shows the log number of confirmed cases in per milion (1000,000) of population in each country with rspect to this pandemic period. when consider the plot, eventhogh there are some differences between Eswatini and higher confirmed rate countries, for some time period, there are intersected. All country cases are fluctuated during this period.
+
+</div>
+
+**Highly Death Rate Countries**
+
+```{r}   
+High_effected_countries <- coronavirus %>%
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(cases = sum(cases[cases > 0], rm.na = TRUE)) %>%
+  arrange(desc(cases)) %>%
+  head(10)
+
+View(High_effected_countries)
+
+```
+
+<div align="justify">
+US, Brazil, India, Mexico and UK have higher death rate in this pandemic period. US, Brazil and India will be compared with Eswatini death cases.
+</div>
+ 
+```{r include=FALSE}
+
+# covid-19 in Eswatini 
+
+Eswatini_death <- Eswatini_corona %>%
+  select(date, death) 
+str(Eswatini_death)
+
+
+# covid-19 in US
+
+US_death <- US_corona %>%
+  select(death)
+str(US_death)
+
+
+# covid-19 in Brazil
+
+Brazil_death <- Brazil_corona %>%
+  select(death)
+str(Brazil_death)
+
+
+# covid-19 in India
+
+India_death <- India_corona %>%
+  select(death)
+India_death[India_death < 0] <- mean(India_death$death > 0 )
+str(India_death)
+
+
+
+
+
+countries <- bind_cols(Eswatini_death,
+                       US_death,
+                       Brazil_death,
+                       India_death,) %>%
+  rename(Eswatini = death...2,
+         US = death...3,
+         India = death...4,
+         Brazil = death...5) %>%
+  
+  pivot_longer(2:5, names_to="country", values_to = "cases")%>%
+  separate(date, into=c("year", "month", "day"), sep="-")%>%
+  group_by(year) %>%
+  unite("Date", c("month", "day"), sep="-")
+
+
+
+countries
+
+
+```
+
+
+```{r }
+
+g <- ggplot(data = countries, aes(x = Date, log(cases, base = 10), color = country)) +
+  geom_point() +
+  facet_wrap(year~., ncol = 1) +
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+  
+  labs(title = "Eswatini : Compare with highly Covid-19 affected countries",
+       subtitle = "Key factors : US, Brazil, India, Jan-2020 : May-2021",
+       x = "Date", y = "log(Death Cases)",
+       caption = "Data: Covid-19 dataset (WHO)", fill = "Description")
+
+library(plotly)
+ggplotly(g)
+
+```
+
+<div align="justify">
+This plot is shown noticeable difference for Eswatini's death cases than others, such that there is a lower level of death rate in Eswatini. There are no any points to intersect with other contries' death cases. 
+
+</div>
+
+
+### 2.2.3 Comparison with Asian countries
+
+<div align="justify">
+In additionally, Sri Lanka and Bangladesh are selected from South Asian countries to compare with Eswatini's cases.
+</div>
+
+```{r include=FALSE}
+
+
+Eswatini_COVID <- Eswatini_corona %>%
+  select(date, country, death, confirmed)
+str(Eswatini_COVID)
+
+
+# Sri Lanka COVID-19
+
+SL_COVID <- coronavirus %>%
+  filter(country == "Sri Lanka") %>%
+  pivot_wider(names_from=type, values_from=cases)%>%
+  select(date, country, death, confirmed)
+str(SL_COVID)
+
+
+SL_Eswatini <- bind_rows(Eswatini_COVID, SL_COVID)
+SL_Eswatini <- SL_Eswatini %>%
+  group_by(country) %>% 
+  summarise(date, country, death = cumsum(death), confirmed = cumsum(confirmed))%>%
+   pivot_longer(3:4, names_to="type", values_to = "cases")
+
+  
+```
+
+
+
+```{r}
+g <- ggplot(SL_Eswatini, aes(date,
+                      log(cases, base = 10), color = country))+
+  
+  geom_line(size = 1) +
+  facet_wrap(type~., nrow = 1) +
+    
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+  
+  labs(title = "Eswatini : Compare with Sri Lanka",
+       subtitle = "Key factors : Eswatini, Sri Lanka",
+       x = "Time Period", y = "log(Cases)",
+       caption = "Data: Covid-19 dataset (WHO)", fill = "Discription") +
+  theme(legend.position = "bottom")
+
+library(plotly)
+ggplotly(g)
+
+```
+`
+
+
+<div align="justify">
+When consider both confirmed cases and death cases, Sri Lanka and Eswatini are behaved in similar manner. 
+In the confirmed cases plot, there are two intercepts in 07-Aug-2020 and 22--Oct-2020. That is, in these days reported cumulative confirmed cases are equal.
+In the death cases plot, also there are four intercepts like confirmed cases plot.
+
+</div>
+
+
+```{r include=FALSE}
+
+
+Eswatini_COVID <- Eswatini_corona %>%
+  select(date, country, death, confirmed)
+str(Eswatini_COVID)
+
+
+# Bangladesh COVID-19
+
+Bangladesh_COVID <- coronavirus %>%
+  filter(country == "Bangladesh") %>%
+  pivot_wider(names_from=type, values_from=cases)%>%
+  select(date, country, death, confirmed)
+str(Bangladesh_COVID)
+
+
+SL_Bangladesh <- bind_rows(Eswatini_COVID, Bangladesh_COVID)
+SL_Bangladesh <- SL_Bangladesh %>%
+  group_by(country) %>% 
+  summarise(date, country, death = cumsum(death), confirmed = cumsum(confirmed))%>%
+   pivot_longer(3:4, names_to="type", values_to = "cases")
+
+
+
+```
+
+
+```{r}
+g <- ggplot(SL_Bangladesh, aes(date,
+                      log(cases, base = 10), color = country))+
+  
+  geom_line(size = 1) +
+  facet_wrap(type~., nrow = 1) +
+    
+  scale_y_continuous(labels = NULL) +
+  theme_bw() +
+  
+  labs(title = "Eswatini : Compare with Bangladesh",
+       subtitle = "Key factors : Eswatini, Bangladesh",
+       x = "Time Period", y = "log(Cases)",
+       caption = "Data: Covid-19 dataset (WHO)", fill = "Discription") +
+  theme(legend.position = "bottom")
+
+library(plotly)
+ggplotly(g)
+
+
+```
+
+<div align="justify">
+Bangladesh cases are not similar to Eswatini like in Sri Lanka in the both confirmed cases and death cases.
+
+</div>
+
+# 3 Conclusion and Discussion
+
+<div align="justify">
+From this considered time period (Jan/2020 - May/2021), Eswatini has some symmetric distributed active cases in 2020 year, That is, the reported active cases are increased upto August and after it is decreased when go to December. Also there are small number of death cases in this country when compare with active cases. After we considered some Southern African countries such as Botswana, Mozambique, Angola, Zambia, Kenya, Rwanda and Seychelles. By that comparison, it was an idea such that Eswatini has lower confirmed cases and death cases with respect to thse African countries. Through this Coronavirus package, we are identified that US, India, Brazil and France have higher confirmed cases than others. Then compare these countries with Eswatini, it was noticed that there are some similar confirmed rate in some days for all. But the death rate of Eswatini was mostly lower than the countries which has higher number of deaths in this package. Finally, when we consider Sri Lanka and Bangladesh from Southern Asian countries, Sri Lanka showed similar behaviour with Eswatini in both confirmed and death cases, but Bangladesh is not like.      
+</div>
+
+# 4 References
+
+<div align="justify">
+1. United Nations Common country analysis of the Kingdom of Eswatini
+2. The Potential Scocio-Economic Impact of COVID-19 outbreak in Esawatini, Economic situation report, 30-March-2020, UNRCO ECONOMIST, MPHUCUKO MAMBA
+3. MTI Practice Notice, Simulating the impact of COVID-19 on formal firms in Eswatini, August 2020
+4. https://rmarkdown.rstudio.com/
+5. https://youtu.be/nQDURKIF4og
+("Bargraph in R, Arrange bars of barplot using Rand GGplot2")
+6. https://youtu.be/Xau4LRpuoVk
+("Draw Multiple Variables as Lines to Same ggplot2 Plot in R")
+7. https://youtu.be/_gl-CNA7wck
+8. https://youtu.be/u2qtt-UFIWs
+9. https://youtu.be/srrW_7k_Br4
+10. https://youtu.be/xFFisol9T2k
+11. https://youtu.be/S1mU6-pWyqQ
+
+</div>
+

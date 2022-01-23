@@ -1,0 +1,525 @@
+---
+title: "**Bulgaria's fight against COVID-19**"
+author: "Thisaakhya Jayakody AS2018390"
+date: "September 28, 2021"
+output: 
+  html_document:
+    theme: sandstone
+---
+
+<style>
+body{
+text-align: justify;
+}
+a{
+color: #1212FE;
+text-decoration: none;
+}
+a:hover{
+color: #1212FE;
+text-decoration: none;
+}
+.center {
+  display: table;
+  margin-right: auto;
+  margin-left: auto;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+```{r, results='hide', eval=TRUE}
+# Packages 
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(devtools)
+library(sta3262)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(plotly)
+library(dplyr)
+
+# Main data frames 
+Country_corona<-coronavirus
+Bulgaria_corona<- coronavirus %>% filter(country == "Bulgaria")
+Bulgaria_corona_deleted<- coronavirus %>% filter(country == "Bulgaria") %>% 
+  pivot_wider(names_from = type, values_from=cases) %>% subset(recovered!= "NA") %>%
+  pivot_longer(c("confirmed","recovered","death"),names_to="type",
+               values_to= "cases")
+Bulg_full<-pivot_wider(Bulgaria_corona_deleted, names_from = type, values_from=cases) %>%
+  mutate(active=cumsum(confirmed-(recovered+death)))%>%
+  pivot_longer(c("active","confirmed","recovered","death"),names_to="type",
+               values_to= "cases")
+Vaccine<-covid19_vaccine
+Bulg_vaccine<-filter(Vaccine, country_region == "Bulgaria")
+comparison<-coronavirus %>% filter(country %in% c("Peru","North Macedonia","Bulgaria", "Singapore"))
+comparison_totals<-comparison %>% pivot_wider(names_from = type,values_from=cases) %>% 
+  group_by(country) %>% mutate (death = replace(death, which(death<0), 0)) %>%
+  mutate(confirmed_total=cumsum(confirmed), 
+         recovered_total=cumsum(recovered),death_total=cumsum(death)) %>%rename(Country=country)
+```
+![](COVID.jpg)
+
+## **Introduction**
+### **What is COVID-19?**
+At present, mankind is fighting a health war; a constant battle against a deadly virus that has spread exponentially around the globe within a span of two years. Amidst an outbreak of respiratory illness cases in Wuhan city, Hubei province, China, the World Health Organization (WHO) identified SARS-CoV-2 as a new type of corona virus on December 31, 2019. Post the initial declaration of the COVID-19 outbreak as a global health emergency, on March 11, 2020, it was declared as a global pandemic within a very short time period by the WHO (Cennimo, 2021). Ever since then, the virus has replicated itself and branched out into new variants. 
+
+The virus spreads from one infected person to another from his or her mouth or nose in the form of small liquid particles; coughing, sneezing, speaking and breathing being the most common forms of transmission. Furthermore, infection is possible through contact of eyes, nose or mouth with a contaminated surface. Infection by the virus does not always end with death. Patient’s medical history, variant of the virus and healthcare provided are some of the factors that decide a patient’s fate. Travel restrictions and social distancing alone to reduce the spread was not enough and the development of vaccines were initiated by global pharma giants. We have come a long way since the first COVID-19 human vaccine trials that initiated with the Modern mRNA vaccine. New vaccines were developed in record time and more than 6.06 billion vaccines have been administered worldwide as of now (Holder, 2021). COVID-19 takes a new form every day and we need to take responsibility for our protection from it. 
+
+### **Why Bulgaria?** 
+```{r echo=FALSE, figures-side, fig.show="hold", out.width="33%"}
+knitr::include_graphics(c('./protests.jpg','./flagmask.jpg','./Bulgunicef.jpg'))
+```
+
+
+Bulgaria is located in South East Europe with Sofia as its capital and it is the 16^th^ largest country in Europe with a population of 6.8 million (Bulgaria Population (2021) - Worldometer, 2021). Bulgaria is one of the oldest states in Europe with a rich history. Historically significant routes from northern and eastern Europe to the Mediterranean basin and from western and central Europe to the Middle East go through Bulgaria, making its placement significant on the world map. The country is known for a variety of beautiful sceneries. Their architecture, cuisine and religious heritage are a mixture of western and eastern cultures. Krushuna Waterfalls, Alexander Nevsky Cathedral and the Vitosha Mountain are amongst the many tourist attractions of the country (12 Top Tourist Attractions in Bulgaria, 2021). The negative impact of the pandemic was seen across all sectors of the economy. However, the tourism industry saw the biggest downfall with the current crisis. On the contrary, the constant visits of tourists into the country did play a role in spreading the virus.
+
+Bulgaria was quick in handling the pandemic by closing borders and imposing lockdown at the inception. However, a sudden spike was seen in mid-June 2020 once the measures were relaxed. Although the government has done a commendable job at the beginning in containing the virus, the mutations of the virus and other related factors affected the roadmap of COVID-19 in Bulgaria. After many dips and peaks, Bulgaria is within the top 10 countries with the highest number of deaths per 100 000 population as of now with a case fatality rate of 4.2% (Mortality Analyses - Johns Hopkins Coronavirus Resource Centre, 2021). 
+
+Bulgarians have had a history of believing in conspiracy theories and drawing relationships between myths, superstitions and scientific events. This was visible during the inception of the COVID-19 pandemic as well. In a trend poll that covered the period between June 1, 2020 to June 7, 2020, it was revealed that 43% of the respondents believed that the virus was artificially created for pharmaceutical companies to acquire additional profits (Dandolov, 2021). Certain individuals believed that there was a strong relationship between the spread of the virus and 5G technology. 
+
+Considering the positioning of Bulgaria in the list of deaths per 100,000 population, its tourist attraction sites, the mindset of their citizens a deep dive into data will be helpful to parties such as the government, and most importantly, the people of Bulgaria. Accordingly, this article is an attempt to educate people, communicate the severity of the virus and help in the decision-making process of relevant institutions. 
+
+### **Where is Bulgaria?** 
+```{r, fig.cap="*Figure 1 : Visualization of Bulgaria on the world map*", fig.align='center'}
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "#51f1e3", colour = "gray"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Bulgaria_corona, aes(x = long, y = lat), color = "#FF1764", size
+    = 1
+  )
+```
+The Republic of Bulgaria is a unitary state on the Balkan Peninsula in southeastern Europe. The country occupies an area of 110,879 km^2^. It is larger than Iceland which is 103,000 km^2^ and somewhat larger than the U.S. state of Tennessee (Bulgaria, 2021). Bulgaria is positioned in both northern and eastern hemispheres of the earth and bordered by 5 countries with Romania in the north, Turkey and Greece in the south, North Macedonia in the southwest, Serbia in the west and also the Black Sea in the east. The following map provides an understanding of the surroundings of Bulgaria.
+
+```{r echo=FALSE, fig.cap = "*Figure 2: Location map of Bulgaria (Source: Worldatlas)*", fig.show="hold", out.width="70%", fig.align='center'}
+knitr::include_graphics("https://www.worldatlas.com/upload/a9/50/e9/provinces-of-bulgaria-map.png")
+```
+### **Climate in Bulgaria** 
+Bulgaria has a moderate continental climate which has been influenced by the Mediterranean Sea in the South. It is characterized by hot summers, long and cold winters and very distinct seasons. Snowfall occurs throughout the country from December to mid-March. The annual average temperature ranges from 8 degrees Celsius in the north and 11 degrees Celsius in the south. Generally, during daytime, the temperature varies between 0 degrees Celsius and 5 degrees Celsius in the Winter while it varies between 25 degrees Celsius and 30 degrees Celsius in the Summer (Climate of the World: Bulgaria | weatheronline.co.uk, 2021). By the exploration of exogenous variations of weather variables, it has been found that temperature can reduce COVID-19 transmissions up to 8.98%. Although it is still not clear whether climatic conditions can slow down the spread of the virus, we can infer that the continental climate in Bulgaria might have influenced the spread of the virus to a certain extent (Palialol, Pereda and Azzoni, 2020).
+
+### **Healthcare in Bulgaria**
+Bulgaria is known for having exceptionally trained medical professionals. However, due to the lack of infrastructure and funding, their facilities are of very poor standards.  The National Health Policy and the overall organization of the health system in Bulgaria directly fall under the scope of the Ministry of Health. Healthcare in Bulgaria can be mainly divided into two segments: public healthcare and private healthcare (The Bulgarian Healthcare System, 2021).Public healthcare has limitations such as poor facilities, understaffing and simple lack of funding. Therefore, most citizens opt for private centres that are more reliable and efficient. These are more advanced and well equipped. However, not all citizens can afford this facility. The existing healthcare system has had an impact on the inability to contain the spread.
+
+After the second wave of the virus hit the country hard, Bulgaria failed to take sufficient containment measures, and as a result, there was a spike in the number of cases in November 2020. The dysfunctional health system that has weakened due to the migration of medical professionals has further added fuel to the matter. Basically, the system is overwhelming and unable to handle the pandemic that has gone through multiple phases. The spokesperson of the Emergency Medical Services in Sofia states that the system cannot respond the way it should and that the capital should have 80 emergency teams to adequately cover the population with 15-17 on each 12-hour shift (Bulgaria’s health system is on brink of collapse from the coronavirus crisis, 2021). Healthcare is just one variable affecting the spread of the virus.  Prior to making any conclusions, it is crucial that we check the consistency of the behaviour of the virus with the existing system.
+
+### **Lockdown status of Bulgaria**
+On March 13, 2020, after the identification of a least of 23 cases including one death in Bulgaria, a state of emergency was announced with the imposing of a nationwide lockdown for the first time to combat the pandemic (Foundation, 2020). Since then, Bulgaria has experienced 3 lockdowns pertaining to the 3 waves. However, there were certain relaxations in between each period. The below timeframe captures the overall picture of the 3 major lockdowns. Click [here](https://global-monitoring.com/gm/page/events/epidemic-0002006.SyGNWMtdKA6m.html?lang=en) for a detailed breakdown of events during these periods.
+
+```{r}
+lockdown<-tibble(Lockdown=c(1,2,3), `Start date`=c("March 13, 2020", "November 28, 2020", "March 22, 2021"), `End date`=c("June 15, 2020", "January 31, 2021", "March 31, 2021"), `Number of days`=c("94 days","65 days", "10 days" ))
+library(kableExtra)
+lockdown %>%
+  kbl(caption = "Table 1: Lockdown summary of Bulgaria") %>%
+  kable_classic()
+```
+The 1^st^ state of emergency was voted in unanimously by the Parliament. This was done by imposing travel bans to and from countries with large coronavirus outbreaks, closing of schools and universities. Police was allowed to intervene when restrictions were violated. However, after the 1^st^ lockdown, a sudden spike in confirmed cases were seen. This is elaborated further under the section ‘Deep dive into data’. 
+
+In comparison to Bulgaria’s initial approach to handling the pandemic in 2020, the restrictive measures put in place currently are more liberal. It has been reported that the increased mortality rate from COVID-19 may lead to another lockdown (Nikolov, 2021). As of the most recent developments, the newest restrictions will stay in force until the end of October 2021 with the ban of music festivals. However, cinemas and theatres are allowed to operate at 50% capacity while students were allowed to physically attend school from September 15, 2021, with the commencement of the academic year (Bulgaria imposes new restrictions to curb surge in COVID cases, 2021). 
+
+### **What are the actions taken by the Bulgarian Government to fight the health war?**
+As of now, there is a high political instability in Bulgaria with the expectation of the elections of a new government and president of the Republic. Vaccination is strongly encouraged with an online registration put in place by the government, although less than 20% of the overall population is only currently vaccinated. Furthermore, the temporary government has planned to continue the socio-economic support to affected people with extra attention to families with children and elderly people (Bulgaria-COVID-response-update-100921, 2021). Some of the significant actions taken by the Bulgarian Government to combat the virus are as follows (Information by the republic of Bulgaria, 2021). 
+
+**Protection of various groups at risk and indigenous people**
+<br>
+Bulgarian authorities have identified elderly persons and persons with disabilities as vulnerable groups during the State of Emergency. Hence, extra attention has been given to these groups. Furthermore, health counselling on prevention and symptoms of the illness, health care for people without health insurance and distribution of sanitary products, food and water are some of the actions taken by the authorities in this regard.
+
+**Awareness raising and technology**
+<br>
+A separate section that provides up-to-date information on COVID-19 for citizens and healthcare professionals (exclusive for Bulgarians) has been created by the Ministry of Health on their website. It regularly updates information regarding measures and the restrictions in Europe. Additionally, the Bulgarian National Radio maintains a separate section on the spread of the virus on its website. Furthermore, information is provided in 9 other languages apart from Bulgarian.
+
+**Internet**
+<br>
+Spreading of false information about prices of drugs against COVID-19 and other medical product and creation of bogus news and spreading fear amongst the population through the internet are problem common to all countries. In order to combat this issue, General Directorate Combating Organized Crime with the Ministry of Interior (GDCOC) has introduced a 24/7 working mode where officers monitor the daily internet space and the open sources. Furthermore, they have joined together with the Europol and Interpol to raise awareness through advice. The relevant information is published on the GDCOC's website.
+
+### **COVID-19 vaccination in Bulgaria**
+The immunization campaign against the coronavirus began on December 27, 2020 in Bulgaria by following suit of most European Union countries. However, most citizens were reluctant to take the vaccine due to their lack of trust in the authorities as well as their preconceived notions about the virus. Even after starting the immunization programmes at the end of 2020, only 20% of the total population has been vaccinated as of mid-September 2021. This is also the lowest percentage of vaccinated people in the European Union which has an average of 69% fully vaccinated (McGrath, 2021). 
+
+As of now, Bulgaria has access to all 4 vaccines approved by the European Union; Pfizer, Moderna, AstraZeneca and Johnson & Johnson. However, the strong reluctance by the public to take the jab and the lack of good governance have impacted the COVID death rate in a drastic manner. It was reported that 95% of Bulgarians admitted at the hospitals for the treatment of the virus were not vaccinated. However, it was also reported that the number of deaths among those vaccinated is 1 in 1000 while it is 4 in 100 among those who are not vaccinated. This alone is proof that more corporation from the public is crucial to tackling the current situation in Bulgaria that has gone out of control (Nikolov, 2021). 
+
+## **Deep dive into data**
+The 2019 Novel Coronavirus COVID-19 (2019-nCoV) dataset which is available on RStudio has been used to understand the statistics related to the pandemic in Bulgaria. Johns Hopkins University Centre for Systems Science and Engineering (JHU CCSE) Coronavirus is the primary source of the data set. It contains the daily summary of coronavirus cases by country; for certain countries, provincial and state wise data have been provided as well. This analysis has been conducted using data from January 22, 2020 to September 18, 2021.
+
+The analysis related to the vaccinations has been conducted using data from December 29, 2020 to September 17, 2021 in relation to Bulgaria. The number of people who have been fully and partially vaccinated by country has been used for the analysis. The variables used in this section are as follows:
+
+*	Date
+*	Country
+*	Type of case - confirmed, death, recovered
+*	Number of cases per type on a given date
+*	People partially vaccinated - Cumulative number of people who received at least one vaccine dose. When the person receives a prescribed second dose, it is not counted twice.
+*	People fully vaccinated - Cumulative number of people who received all prescribed doses necessary to be considered fully vaccinated.
+
+### **Limitations in data**
+*	In the latest update of the data set, the recovered number of cases from August 5, 2021 to September 18, 2021 (45 days) for all countries has not been recorded. Therefore, analysis in relation to recovered cases has been using data up to August 5, 2021. However, the full-time span has been considered in the remaining parts of the analysis as some countries have undergone a significant change in those 45 days.
+*	Due to the inconsistency in the recovered number of cases, the current status illustrated under this section is that as of August 5, 2021. This is due to the inability to calculate the number of active cases as of September 18, 2021 in the absence of the recovered number of cases of the last 45 days. This step has been taken to avoid misinterpretation of the current situation in Bulgaria.
+
+```{r, results='hide'}
+Recovered <- Bulgaria_corona_deleted %>% filter(type=="recovered")
+Confirmed<-Bulgaria_corona_deleted %>% filter(type == "confirmed")
+Death<- Bulgaria_corona_deleted %>% filter(type == "death")
+Active<-Bulg_full %>% filter(type == "active")
+
+confirmed_total<-sum(Confirmed$cases)
+death_total<-sum(Death$cases)
+recovered_total<-sum(Recovered$cases)
+
+death_percent<-(death_total/confirmed_total)*100
+recovered_percent<-(recovered_total/confirmed_total)*100
+active_percent<-(9482/confirmed_total)*100
+colors<- c("#FF1764", "#FF9B05", "#51f1e3")
+percentages<-tibble(Type= c("Death", "Recovered", "Active"), 
+                    Percentage= c(death_percent,recovered_percent ,active_percent),
+                    colors)
+```
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 3: Breakdown of COVID-19 patients as of August 5, 2021*",fig.align='center'}
+plot_ly(percentages %>% mutate(Type = fct_reorder(Type,Percentage),
+                               colors = fct_reorder(colors,Percentage)), x = ~Type, y = ~Percentage, type = 'bar',
+        color = ~Type,marker = list(color = percentages$colors))%>%
+  layout(title=list(text="<b>Snapshot of Bulgaria’s COVID-19 status as of August 5, 2021</b>", size=14), 
+         xaxis = list(title = "Type"),
+         yaxis = list(title = "Percentage from confirmed cases")) %>%
+  layout(legend = list(x=0.1, y=0.95, title=list(text='<b> Type </b>')))%>% 
+  add_annotations( x = percentages$Type,
+                   y = c(7,96,5),
+                   text = c("4.27%","93.50%","2.22%"),
+                   xref = "x",
+                   yref = "y",
+                   showarrow = FALSE, font=list(size=16))
+```
+</div>
+Figure 3 gives us an overall idea of the status in Bulgaria as of August 5, 2021. However, this might not be the actual case. It tells us that a large number of infected patients have recovered as of now while the death toll, in comparison to the number of confirmed cases, is quite low. It also informs us that the number of active patients is very low. Does this mean that Bulgaria is handling the pandemic well? 
+
+### **What has happened to the reported number of cases with time?**
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 4: Comparison of daily cases over time*",fig.align='center'}
+Bulgaria_corona %>% pivot_wider(names_from = type,values_from=cases) %>%
+  plot_ly(x = ~date, y = ~log(confirmed), name = 'Confirmed', type = 'scatter', mode = 'lines', line = list(color ="#FF1764")) %>%
+  add_trace(y = ~log(death), name = 'Death', mode = 'lines', line = list(color ="#FF9B05")) %>%
+  add_trace(y = ~log(recovered), name = 'Recovered', mode = 'lines', line = list(color = "#51f1e3")) %>%
+  layout(hovermode = "compare") %>%
+  layout(legend = list (x =0.1, y= 0.95, title=list(text='<b> Type </b>'))) %>%
+  layout(title=list(text="<b>Cases reported with time</b>", size=14), xaxis = list(title = "Date", tickangle=45, dtick = "M1") ,
+         yaxis = list(title = "Daily cases in log scale"))
+```
+</div>
+Figure 4 tells us that within two weeks after the 1^st^ confirmed case, the 1^st^ death was reported in March 2020. This figure clearly tells us that there is a seasonal and cyclical pattern in all types of reported cases with an increase and decrease in trend within each cycle.
+
+**Cyclical pattern and overall trend**
+<br>
+After a steady increase in the trends for all types of cases, we see the first dip towards the end of July 2020. This marks the end of the 1^st^ wave in Bulgaria as well. A declining trend is seen for approximately 2 months and the previous cycle is repeated twice until the end of July 2021. However, the increasing and decreasing trends in the later 2 cycles are steeper in comparison to the 1^st^ cycle. The decline in cases maybe due to the introduction of vaccines to Bulgaria. However, the same cyclic pattern is evident for the confirmed cases and deaths starting from end July 2021. Observing the cycle for these two types, a similar behaviour can be expected in the recovered cases as well. Furthermore, confirmed cases and deaths have followed a similar cycle while a slightly shifted cycle is seen in the recovered cases. However, the general pattern is similar. 
+
+**Seasonal pattern**
+<br>
+We can clearly identify a seasonality in all types of cases. Approximately, we can see a 7-day seasonality with deviations in between. The seasonality in the confirmed number of cases appears to be more regular in comparison to the recovered cases and deaths. This maybe due to not conducting PCR tests on certain days of the week (e.g.: weekend). Considering the patterns shown in Figure 4, the time series data can be used to build a seasonal ARIMA model to predict the future cases of all 3 types in Bulgaria.
+
+Finally, we can clearly see that the number of deaths is low in comparison to the confirmed cases, and that the recovery rate has been somewhat similar to the number of confirmed cases throughout. 
+
+### **Breakdown of daily cases with time**
+```{r,results='hide'}
+avg_con<- mean((Bulgaria_corona %>% filter(type=="confirmed"))$cases)
+```
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 5: Behaviour of daily confirmed cases with time*", fig.align='center'}
+h1line <- function(y = 0, color = "black") {
+  list(
+    type = "line",
+    x0 = 0,
+    x1 = 1,
+    xref = "paper",
+    y0 = y,
+    y1 = y,
+    line = list(color = color)
+  )
+}
+Bulgaria_corona %>% pivot_wider(names_from = type,values_from=cases) %>%
+  plot_ly(x = ~date, y = ~confirmed, type = 'bar', marker = list(color ="#FF1764")) %>% 
+  layout(title=list(text="<b>Confirmed cases with time</b>", size=14),
+    xaxis = list(title = 'Date', tickangle=45, dtick = "M1"), 
+         yaxis = list(title = 'Daily confirmed cases')) %>%
+  layout(shapes = list(h1line(avg_con))) %>%
+  add_annotations( x = as.Date("2020-04-22"),
+                   y = 1100,
+                   text = "Average: 794.93",
+                   xref = "x",
+                   yref = "y",
+                   showarrow = FALSE, font=list(size=16)) %>% 
+  layout(hovermode = "compare")
+
+```
+</div>
+Figure 5 tells us that the number of cases has remained below the daily average even after the first lockdown. This is consistent with the fact that the Bulgarian Government has imposed strict measures at the inception of the pandemic. Therefore, the spread has been controlled better during this period. However, after the start of the second wave in October 2020, we can see that a larger number of confirmed cases has been above the daily average even after the end of the 3^rd^ wave in April 2021. Even after initiating vaccination programmes in Bulgaria on December 27, 2021, there is no change in the cycle. It might be due to a higher number of Bulgarians opposing to the vaccine as mentioned before. 
+
+It is clear that approximately the number of confirmed tests spikes up every 4 days. This might be due to more PCR tests being conducted on certain days of the spike. The sudden spike in the confirmed cases on April 8, 2021 followed by a sudden drop is an indication of more PCR tests being conducted on that day. 
+
+```{r,results='hide'}
+avg_rec<- mean((Bulgaria_corona %>% filter(type=="recovered"))$cases, na.rm=TRUE)
+```
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 6: Behaviour of daily recovered cases with time*",eval=TRUE, fig.align='center'}
+
+h2line <- function(y = 0, color = "black") {
+  list(
+    type = "line",
+    x0 = 0,
+    x1 = 1,
+    xref = "paper",
+    y0 = y,
+    y1 = y,
+    line = list(color = color)
+  )
+}
+Bulgaria_corona %>% pivot_wider(names_from = type,values_from=cases) %>%
+  plot_ly(x = ~date, y = ~recovered, type = 'bar', marker = list(color ="#FF1764")) %>% 
+  layout(title=list(text="<b>Recovered cases with time</b>", size=14),
+         xaxis = list(title = 'Date', tickangle=45, dtick = "M1"), 
+         yaxis = list(title = 'Daily recovered cases')) %>%
+  layout(shapes = list(h2line(avg_rec))) %>%
+  add_annotations( x = as.Date("2020-04-22"),
+                   y = 1000,
+                   text = "Average: 710.73",
+                   xref = "x",
+                   yref = "y",
+                   showarrow = FALSE, size = 22, font=list(size=16)) %>% 
+  layout(hovermode = "compare")
+
+```
+</div>
+
+The recovery rate on most days have been above the daily average. However, there are drops in the numbers regularly. This might be due to the lack of medical infrastructure, poor facilities and lack of medical professionals which are results of the existing healthcare system that is overwhelming. As of now, Bulgaria is about to be struck by a 4^th^ wave, and it is evident from Figure 5 that the confirmed number of cases is on an uphill. Considering this and the exhausted healthcare system in Bulgaria, there is a high possibility of the number of recovered cases not increasing as seen during the previous 3 cycles. This might be a red flag for Bulgaria.
+<br>
+```{r,results='hide'}
+avg_death<- mean((Bulgaria_corona %>% filter(type=="death"))$cases, na.rm=TRUE)
+```
+<br>
+
+<div class="center">
+```{r, fig.cap="*Figure 7: Behaviour of daily deaths with time*",fig.align='center', eval=TRUE}
+
+h3line <- function(y = 0, color = "black") {
+  list(
+    type = "line",
+    x0 = 0,
+    x1 = 1,
+    xref = "paper",
+    y0 = y,
+    y1 = y,
+    line = list(color = color)
+  )
+}
+Bulgaria_corona %>% pivot_wider(names_from = type,values_from=cases) %>%
+  plot_ly(x = ~date, y = ~death, type = 'bar', marker = list(color ="#FF1764")) %>% 
+  layout(title=list(text="<b>Deaths with time</b>", size=14),
+         xaxis = list(title = 'Date', tickangle=45, dtick = "M1"), 
+         yaxis = list(title = 'Daily deaths')) %>%
+  layout(shapes = list(h3line(avg_death))) %>%
+  add_annotations( x = as.Date("2020-04-22"),
+                   y = 43,
+                   text = "Average: 32.98",
+                   xref = "x",
+                   yref = "y",
+                   showarrow = FALSE, size = 22, font=list(size=16)) %>% 
+  layout(hovermode = "compare")
+```
+</div>
+The average number of daily deaths of 32.98 is staggering low in comparison to the average number of daily confirmed cases. Although this appears to be a positive sign at a glance, the fact that the number of daily deaths has been above the daily average from November 2020 to May 2021 is a negative sign. Furthermore, Bulgaria has the 2^nd^ highest rate of deaths per 100 000 population in Europe (292.77) (Mortality Analyses - Johns Hopkins Coronavirus Resource Center, 2021). Additionally, a start of an increasing trend in deaths is visible at the end of our considered timeframe. These insights are clear signals that Bulgaria needs to take better control of the situation. 
+
+### **What will happen to the curve?**
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 8: Behaviour of total confirmed cases with time*",fig.align='center'}
+Bulgaria_corona %>% pivot_wider(names_from = type,values_from=cases) %>%
+  plot_ly(x = ~date, y = ~cumsum(confirmed), type = 'scatter', mode = 'lines', line = list(color ="#FF1764")) %>% 
+  layout(title=list(text="<b>Total confirmed cases with time</b>", size=14),
+    xaxis = list(title = 'Date', tickangle=45, dtick = "M1"), 
+         yaxis = list(title = 'Total confirmed cases'), hovermode ="compare")
+```
+</div>
+As per Figure 8, it is evident that the cumulative confirmed cases have been rising at a high rate at regular time intervals. Although the curve has remained flat for 3 months in 2021 after the 3^rd^ wave, the uphill that follows tells us that the curve will not flatten anytime soon. Owing to the negative healthcare conditions and the instability of the Bulgarian Government, we cannot be hopeful as in the case of the previous cycles unless a drastic change is done in the existing system.
+
+### **Has the vaccine done the magic for Bulgaria?**
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 9: Vaccination doses administered in Bulgaria*",fig.align='center'}
+Bulg_vaccine %>%
+  plot_ly(x = ~date, y = ~people_partially_vaccinated, name = 'Partially vaccinated', type = 'scatter', mode = 'lines+markers', line = list(color ="#FF1764"), marker = list(color ="#FF1764")) %>%
+  add_trace(y = ~people_fully_vaccinated, name = 'Fully vaccinated', mode = 'lines+markers', line = list(color ="#51f1e3"), marker = list(color ="#51f1e3")) %>%
+  layout(hovermode = "compare") %>%
+  layout(legend = list (x =0.06, y= 0.95, title=list(text='<b> Vaccination status </b>'))) %>%
+  layout(title=list(text="<b>Number of vaccinations administered by date</b>", size=14),
+    xaxis = list(title = "Date", tickangle=45, dtick = "M1") ,
+         yaxis = list(title = "Cumalative count"))
+
+```
+</div>
+Figure 9 tells us that after the introduction of the immunization programme to Bulgaria in December 2020, the slope of the number of people partially vaccinated has remained somewhat flat for approximately 2 months. This confirms the initial reluctance of the Bulgarians to take the jab. However, the slope has become steeper in mid-February 2021 and continued in this manner until the end of July. The slope corresponding to the number of people fully vaccinated has become steeper much later in May which is a natural occurrence. Yet, on average, that slope should have ideally picked up pace much earlier because the second dose has to be administered after a time lapse of one month from the first dose. 
+
+From August onwards, we could see the curve of the number of people partially vaccinated becoming flat and the curve of the number of people fully vaccinated becoming steep. This might be due to the significant percentage of people who are not willing to change their mindset at any cost. This further confirms that Bulgaria is the country with the lowest percentage of vaccinated people in the European Union. We can rule out a lack of supply in vaccines because Bulgaria recently donated 172,500 doses to Bhutan due to the excess of vaccines (Kantchev, 2021). 
+
+## **Where does Bulgaria stand with the rest of the world?**
+Doing a comparison of Bulgaria’s COVID-19 data with other countries will help us understand the impact of the pandemic on the nation from a different angle. This section is an analysis of Bulgaria’s confirmed cases, deaths and vaccination rates with the same of 3 other countries. The 3 countries for the analysis have been selected based on their positioning in the list of number of deaths per a 100,000 population. The statistics used for the selection of countries for the comparison have been extracted from the Johns Hopkins University of Medicine. 
+
+As of now, Peru has the highest number of deaths per a 100,000 population worldwide (612.67) with a case fatality rate of 9.2% while Singapore falls under the countries with a low number of deaths per 100 000 population (1.28). Furthermore, Singapore has been quick in responding to the virus and its new variants. North Macedonia stands as the 3^rd^ highest number of deaths per 100,000 population globally (315.72) and it is also an adjoining neighbour of Bulgaria. Comparison of Bulgaria’s situation with the country with the highest covid death rate and a country with a low covid death rate will give us some sort of understanding about Bulgaria’s position on a global scale. The comparison with North Macedonia will allow us to understand it’s position within Europe. As of now, Bulgaria is second only to North Macedonia in terms of the worst Covid death rate in Europe. Hence, this selection is effective. 
+
+### **Overall big picture**
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 10: Comparison of deaths relative to confirmed cases by country*",fig.align='center'}
+Country<-c("Singapore", "North Macedonia", "Bulgaria", "Peru")
+Confirmed1<-c(76792,186549,481728,2166419)
+Death1<- c(60,6437,19985, 199655)
+breakdown<-tibble (Country, Confirmed1, Death1)
+
+breakdown %>% plot_ly(x = ~Country, y = ~Confirmed1, type = 'bar', name = 'Confirmed', marker = list(color ="#FF1764")) %>% 
+  add_trace(y = ~Death1, name = 'Death', marker = list(color ="#51f1e3")) %>% 
+  layout(title=list(text="<b>Proportion of deaths from confirmed cases by country</b>", size=14),
+    yaxis = list(title = 'Total cases'), barmode = 'stack',
+    xaxis = list(categoryorder="array", categoryarray=c("Singapore", "North Macedonia","Bulgaria", "Peru"))) %>%
+  layout(hovermode = "compare") %>%
+  layout(legend = list (x =0.1, y= 0.97, title=list(text='<b> Type </b>')))
+```
+</div>
+Figure 10 tells us that Peru has a larger proportion of confirmed cases that has resulted in deaths in comparison to the other 3 countries. Furthermore, we can say that the proportion of confirmed cases that resulted in deaths in North Macedonia and Bulgaria are somewhat similar. However, we can say that it is slightly greater in Bulgaria. This is inconsistent with the statistics related to the number of COVID deaths per a 100,000 population. Hence, one measure cannot be explicitly used to decide the country with the worst impact from the pandemic. In Singapore, the number of confirmed cases that results in deaths is almost nil.
+
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 11: Comparison of total confirmed cases by country*",fig.align='center'}
+comparison_totals %>% select(Country, date, confirmed_total) %>%
+  pivot_wider(names_from = Country,values_from=confirmed_total) %>%
+  plot_ly(x = ~date, y = ~log(Bulgaria), name = 'Bulgaria', type = 'scatter', mode = 'lines', line = list(color ="#FF1764")) %>%
+  add_trace(y = ~log(`North Macedonia`), name = 'North Macedonia', mode = 'lines', line = list(color ="#FF9B05")) %>%
+  add_trace(y = ~log(Peru), name = 'Peru', mode = 'lines', line = list(color = "#51f1e3")) %>%
+  add_trace(y = ~log(Singapore), name = 'Singapore', mode = 'lines', line = list(color = "#bfff00")) %>%
+  layout(hovermode = "compare") %>%
+  layout(legend = list (x = 0.1, y = -0.2, orientation= "h", title=list(text='<b> Country </b>'))) %>%
+  layout(title=list(text="<b>Total confirmed cases by country</b>", size=14),
+         xaxis = list(title = "Date", tickangle=45, dtick = "M1") ,yaxis = list(title = "Total confirmed cases in log scale"))
+```
+
+</div>
+According to Figure 11, it is evident that COVID-19 became a threat to Singapore before it happened to the other 3 countries. After the first case was confirmed in Singapore in late January 2020, the first case was confirmed in North Macedonia, Bulgaria and Peru in early March. We can see that the number of confirmed cases in Singapore has risen at a slower rate in comparison to the other 3 countries and by July 2020, they have managed to flatten their curve. This may be due to their exceptional medical facilities and health professionals. Further, the citizens in Singapore adhere to COVID-19 guidelines which has had a huge impact on flattening the curve. After a year of reporting a very little number of cases per day (on certain days, the number of confirmed cases was nil), we can see a slight increase in the total number of confirmed cases starting from September 2021.
+
+Bulgaria and North Macedonia show a very similar trend in the number of confirmed cases reported. It has started to increase at a lower rate approximately during the same time; from December 2020 to September 2021. The similar pattern of reporting cases maybe due to them being adjoining countries and the outbreak of the Delta variant badly affecting European countries. Although Peru has managed to flatten the curve to some extent, the number of confirmed cases reported is very high in relation to Bulgaria, North Macedonia and Singapore.
+
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 12: Comparison of total deaths by country*",fig.align='center'}
+comparison_totals %>% select(Country, date, death_total) %>%
+  pivot_wider(names_from = Country,values_from=death_total) %>%
+  plot_ly(x = ~date, y = ~log(Bulgaria), name = 'Bulgaria', type = 'scatter', mode = 'lines', line = list(color ="#FF1764")) %>%
+  add_trace(y = ~log(`North Macedonia`), name = 'North Macedonia', mode = 'lines', line = list(color ="#FF9B05")) %>%
+  add_trace(y = ~log(Peru), name = 'Peru', mode = 'lines', line = list(color = "#51f1e3")) %>%
+  add_trace(y = ~log(Singapore), name = 'Singapore', mode = 'lines', line = list(color = "#bfff00")) %>%
+  layout(hovermode = "compare") %>%
+  layout(legend = list (x = 0.1, y = -0.2, orientation="h", title=list(text='<b> Country </b>'))) %>%
+  layout(title=list(text="<b>Total deaths by country</b>", size=14),
+         xaxis = list(title = "Date", tickangle=45, dtick = "M1") ,yaxis = list(title = "Total deaths in log scale"))
+
+```
+</div>
+According to Figure 12, although Singapore was attacked by COVID-19 first out of the 4 countries, its first death was reported after 2 months from the first confirmed case. Although Singapore reports a significant number of deaths after the first death which is seen from the increase in the steepness of the curve, they have managed to flatten their death curve from June 2020 to August 2021. Figure 12 also informs us that the number of deaths reported in Singapore is almost nil in comparison to that of Bulgaria, North Macedonia and Peru. 
+
+Bulgaria and North Macedonia show the same trend in relation to the total number of deaths reported as well. This too might be due to the same reasons mentioned under their similar behaviour corresponding to the total number of confirmed cases. However, from November 2020 onwards, the number of total deaths in Bulgaria has increased significantly relative to North Macedonia. This might be due to the growing negligence of the citizens, mistrusting the government due to its instability and, most importantly, lack of proper healthcare. 
+
+On the contrary, as per the above figure, Peru has had a very large number of deaths in the first 6 months of the pandemic. This rise in deaths makes the death toll in the other countries almost insignificant. Although Peru has managed to flatten the death curve to some extent, the number of deaths appears to increase at a slow rate. On the whole, Bulgaria’s position in relation to deaths reported is closest to that of Peru. 
+
+<br>
+<div class="center">
+```{r, fig.cap="*Figure 13: Comparison of vaccination rates of selected countries *",fig.align='center'}
+Vaccine2<-tibble(Country=c("Singapore", "North Macedonia", "Bulgaria", "Peru"),
+                 vaccinated=c(4544159,667739, 1272680, 8916987 ), 
+                 pop=c(5850343, 2083380, 6948445, 32971846),
+                 percent=(vaccinated/pop)*100) 
+
+
+mutate(Vaccine2, Country=fct_reorder(Country, percent)) %>% plot_ly(x =~percent, y =~Country, 
+        type = 'bar', orientation='h', marker=list(color="#51f1e3"))%>%
+  layout(title=list(text="<b>Proportion of fully vaccinated people by country</b>", size=14), 
+         xaxis = list(title = "Percentage"),
+         yaxis = list(title = "Country")) %>%
+  add_annotations( x = c(85, 40, 28, 35),
+                   y = Vaccine$Country,
+                   text = c("77.67%","32.05%","18.32%", "27.04%"),
+                   xref = "x",
+                   yref = "y",  
+                   showarrow = FALSE) 
+
+```
+</div>
+By the above figure it is evident that Singapore has the maximum percentage of fully vaccinated people. This explains Singapore’s low death rates and total number of confirmed cases. The vaccination rates of the other 3 countries are way below that of Singapore which also confirms that this might be a reason for the staggeringly high COVID numbers in the other 3 countries. Although Peru has the highest death rate, it has a better vaccination rate than Bulgaria. Furthermore, there is a considerable difference between the vaccination rates of Bulgaria and its neighbour North Macedonia as well. Bulgaria’s position in this list can become a bigger threat to them in terms of the virus, if it is not controlled soon. 
+
+## **Discussion**
+The above analysis has been done purely based on the data the particular country has provided to the world. The decision to give out the data is solely based on the country’s government. Additionally, the inconsistency in data such as presence of negative values and large numbers of missing values maybe due to incorrect data entry. Incorrect data entry can come in the form of recording wrong values for the wrong date or by simply omitting values. As mentioned under the limitations of data, we have removed the last missing values for certain comparisons and since only one negative death was seen in our filtered data, the mean of the two adjoining values, which was 0, replaced the negative value. Although this will affect the validity of results of the analysis to some extent, we can use this analysis as a solid foundation for identifying possible trends and decision making.
+
+By the breakdown of daily cases in Bulgaria and their comparison, we identified that all cases follow more or less the same trend and cycle. This is rather problematic because Bulgaria should start investigating why it is so and take steps to flatten curves for deaths and confirmed cases. Furthermore, if the recovered and confirmed cases show a similar trend, then, the positive effect of recovery will be nullified. 
+
+The number of confirmed cases being low during a period does not essentially mean that the country is doing well. With a presence of strong seasonality, it is highly possible that sufficient tests are not being conducted thereby painting the wrong picture of the actual scenario. As an example, the snapshot of the status as of August 5, 2021 illustrated in this report can easily give out the wrong message because the active number of cases is very low.
+
+The fluctuating levels of all cases and the low percentages of vaccinated citizens call for the government to take strict measures similar to those taken during the inception of the pandemic. Furthermore, the healthcare system needs to be reconstructed from scratch for better results. During the comparison of Bulgaria with selected countries, it was evident that Bulgaria was way behind Singapore. The prompt response within 21 days of the news of the virus and taking a preventive approach was the reason behind their success story. Bulgaria may not have state-of-the-art facilities available in Singapore; however, they can improve the current situation by winning the trust of the public. Lack of hope in the government and the spread of false information are some of the key reasons for the spread of the virus. This implies that the government must take more effective steps other than the ones mentioned in this report in order to see positive results. 
+
+## **Areas for further study**
+* A better analysis can be conducted, and a better picture can be drawn at the end of September after extracting the recovered number of cases of the last 45 days. This analysis can be used by various institutions to identify their shortcomings; for example, conducting more PCR tests.
+
+* The exploratory data analysis in this report identified major components in time series data: Cyclical component with trend and seasonal component. This can be used to develop a seasonal ARIMA model relating the number of cases with time. This model can be used to predict the future behaviour of the number of cases for each type thereby providing enough time for relevant institutions to take necessary preventive measures.
+
+## **Conclusion**
+In conclusion, as of September 18, 2021, Bulgaria is at an unfavourable stage in relation to COVID-19, and in comparison, to most countries globally. Had the Bulgarian Government continued its actions taken from March to July 2020, a favourable status could have been expected by now. The low percentage of vaccinated people is worsening the country’s situation. Furthermore, the results of this analysis confirm the existing statistics about the staggeringly high death rate and case fatality rate of Bulgaria. With a change of the Bulgarians attitude, increase of trust in the government supported by substantial actions and improved medical facilities, the country will be able to fight the pandemic and adapt to the new normal in a more effective and efficient manner. 
+
+## **References**
+<div align="left">
+Cennimo, D., 2021. Coronavirus Disease 2019 (COVID-19): Practice Essentials, Background, Route of Transmission. [online] Emedicine.medscape.com. Available at: <https://emedicine.medscape.com/article/2500114-overview> [Accessed 25 September 2021].     
+
+Dandolov, P., 2021. Coronavirus in Bulgaria: Conspiracy Theories and Mass Indifference | Geopolitical Monitor. [online] Geopolitical Monitor. Available at: <https://www.geopoliticalmonitor.com/coronavirus-in-bulgaria-conspiracies-theories-and-mass-indifference/> [Accessed 25 September 2021].
+
+Foundation, T., 2020. Bulgaria declares state of emergency over coronavirus. [online] news.trust.org. Available at: <https://news.trust.org/item/20200313085517-41uxh/> [Accessed 25 September 2021].
+
+HealthManagement. 2021. The Bulgarian Healthcare System. [online] Available at: <https://healthmanagement.org/c/hospital/issuearticle/the-bulgarian-healthcare-system-1> [Accessed 25 September 2021].
+
+Holder, J., 2021. Tracking Coronavirus Vaccinations Around the World. [online] Nytimes.com. Available at: <https://www.nytimes.com/interactive/2021/world/covid-vaccinations-tracker.html> [Accessed 25 September 2021].
+
+IFRC. 2021. Bulgaria-COVID-response-update-100921. [online] Available at: <https://go.ifrc.org/reports/14731> [Accessed 25 September 2021].
+
+Johns Hopkins Coronavirus Resource Center. 2021. Mortality Analyses - Johns Hopkins Coronavirus Resource Center. [online] Available at: <https://coronavirus.jhu.edu/data/mortality> [Accessed 25 September 2021].
+
+Kantchev, G., 2021. Covid-19 Vaccine Rollout Falters in Bulgaria Amid ‘Perfect Storm’ of Mistrust, Fake News. [online] WSJ. Available at: <https://www.wsj.com/articles/covid-19-vaccine-rollout-falters-in-bulgaria-amid-perfect-storm-of-mistrust-fake-news-11632133548> [Accessed 26 September 2021].
+
+McGrath, S., 2021. Bulgaria, EU's least vaccinated nation, faces deadly surge. [online] AP NEWS. Available at: <https://apnews.com/article/europe-business-health-coronavirus-pandemic-coronavirus-vaccine-ecba7cca33182bf329ff2a5f0fb9e5fb> [Accessed 26 September 2021].
+
+nationsonline.org. 2021. Bulgaria. [online] Available at: <https://www.nationsonline.org/oneworld/bulgaria.htm> [Accessed 25 September 2021].
+
+Nikolov, K., 2021. Vaccination failure may lead to new lockdown in Bulgaria. [online] www.euractiv.com. Available at: <https://www.euractiv.com/section/politics/short_news/vaccination-failure-may-lead-to-new-lockdown-in-bulgaria/> [Accessed 25 September 2021].
+
+Ohchr.org. 2021. Information by the republic of Bulgaria. [online] Available at:<https://www.ohchr.org/_layouts/15/WopiFrame.aspx?sourcedoc=/Documents/HRBodies/SP/COVID/States/Bulgaria.docx&action=default&DefaultItemOpen=1> [Accessed 25 September 2021].
+
+Palialol, B., Pereda, P. and Azzoni, C., 2020. Does weather influence COVID‐19 transmission?. Regional Science Policy & Practice, [online] 12(6), pp.981-1004. Available at: <https://rsaiconnect.onlinelibrary.wiley.com/doi/10.1111/rsp3.12367> [Accessed 25 September 2021].
+
+POLITICO. 2021. Bulgaria’s health system on brink of collapse from coronavirus crisis. [online] Available at: <https://www.politico.eu/article/bulgaria-health-crisis-coronavirus-hospitals-deaths/> [Accessed 25 September 2021].
+
+Reuters. 2021. Bulgaria imposes new restrictions to curb surge in COVID cases. [online] Available at: <https://www.reuters.com/world/europe/bulgaria-imposes-new-restrictions-curb-surge-covid-cases-2021-09-02/> [Accessed 25 September 2021].
+
+Touropia. 2021. 12 Top Tourist Attractions in Bulgaria. [online] Available at: <https://www.touropia.com/tourist-attractions-in-bulgaria/> [Accessed 25 September 2021].
+
+Weatheronline.co.uk. 2021. Climate of the World: Bulgaria | weatheronline.co.uk. [online] Available at: <https://www.weatheronline.co.uk/reports/climate/Bulgaria.htm> [Accessed 25 September 2021].
+
+Worldometers.info. 2021. Bulgaria Population (2021) - Worldometer. [online] Available at: <https://www.worldometers.info/world-population/bulgaria-population/> [Accessed 25 September 2021].
+</div>

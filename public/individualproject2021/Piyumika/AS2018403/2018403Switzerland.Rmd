@@ -1,0 +1,411 @@
+---
+title: "Corona Status in Switzerland"
+author: "Savindu Kodikara"
+date: "9/26/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment=NA, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center')
+```
+
+## **1. Background**
+
+### **1.1 Introduction**
+
+Switzerland is a landlocked country in Central Europe. Switzerland’s administrative capital is Bern and Lausanne serves as its judicial center. Neighboring countries are Austria, France, Italy, Liechtenstein and Germany. The geography of Switzerland is mostly contains with mountains (Jura in northwest and Alps in south) with a central plateau of rolling hills, plains and large lakes. The government system is formally a confederation but similar in structure to a federal republic. The chief of state and head of government is the president. Switzerland is one of the founding members of the European Free Trade Association (EFTA) in 1959.
+
+```{r,  out.width="30%", fig.cap="Switzerland National Flag"}
+knitr::include_graphics("Flag-Switzerland.jpg")
+```
+
+
+```{r}
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r}
+library(tidyverse)
+library(magrittr)
+```
+
+```{r}
+Switzerland_Corona <- coronavirus %>% filter((country == "Switzerland"),cases >= 0)
+```
+
+### **1.2 Geographical Location of Switzerland**
+
+```{r location of Switzerland}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() + 
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Switzerland_Corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+```{r}
+library(maps)
+library(mapdata)
+map('worldHires','Switzerland', xlim=c(6,11), ylim=c(45,49))
+points(8.2275,46.8182,col=2,pch=18)
+```
+
+```{r,  out.width="60%", fig.cap="Map of Switzerland"}
+knitr::include_graphics("map-of-switzerland-vector-1249254.jpg")
+```
+
+### **1.3 Climate condition**
+
+Climate in Switzerland is moderate without excessive heat, cold and humidity. Switzerland have all the four seasons. In July and August (Summer) the daytime temperature varies from 18 to 28 °C (65° - 82° F). In January and February (Winter) the daytime temperature varies from -2 to 7 °C (28° - 45° F). In spring and autumn, the daytime temperature range is 8 to 15 °C (46° - 59° F).
+
+### **1.4 Lock-down status of Switzerland**
+
+
+The first positive COVID-19 result was reported on 25th February 2020. Swiss government didn't placed restrictions straightaway after the identification of first COVID-19 patient in their country. Instead of that Swiss government launched certain events to make the public aware of COVID-19.On 28th February, 2020 the national government banned all the events with more than 1,000 participants. The first impact on immigration was the closure of nine border crossings between the southern part of Switzerland and Italy on 11 March 2020. On 16 March 2020, the federal government declared the state of an extraordinary situation. After confirmed cases were over 2000, schools and most of the shops were closed On 16th March. Border checks and entry restrictions for non-eligible people were extended to all neighboring countries (except for Liechtenstein). On 19 March 2020, restrictions were extended to Spain as well as all Non-EU(European Union) / EFTA states outside of the Schengen area. On 20 March, all gatherings of more than 5 people in public places were banned. On 24 March 2020, the entry restrictions were finally extended to all remaining Schengen states, except Liechtenstein.So after 24th March 2020 Swiss borders were closed, only allowing permit/visa holders, Swiss citizens, people in cases of hardship and  people in cases of national public interest to enter Switzerland. 11 May marked the first easing of entry restrictions, allowing specific categories of people to enter Switzerland. On 15 June, a substantial step toward normalization of conditions was taken by lifting restrictions on people entering Switzerland from Schengen countries. On 23 December 2020, the vaccination campaign started in Switzerland. Four days earlier for the vaccination campaign, Swiss medic approved the first COVID-19 vaccine for regular use. On August 1st 2021 Switzerland achieved a vaccination rate of 52%. Access to indoor public spaces like restaurants, bars, museums or fitness centers is only permitted with a valid COVID certificate from 13 September 2021.
+
+### **1.5 Actions taken by the government**
+
+
+The following points shows the rules and bans that currently apply nationwide.
+
+* Recommendation to work from home - Working from home is recommended in all areas where it is possible to work from home
+* COVID certificate - Employees must have this certificate which consists their status in health
+* Masks compulsory indoors
+* Protection in the workplace
+* Private gatherings and parties
+    * Rule indoors - Maximum of 30 people is allowed
+    * Rule outdoors - Maximum of 50 people is allowed
+* Only people with valid COVID certificates can attend large scale events - Maximum of 1000 people is allowed
+* Schools and Universities - Must wear masks 
+* Restaurants and bars - Only for people with valid COVID certificates
+* Quarantine - People who have been in close contact with someone who has tested positive must go into quarantine.
+
+## **2. Exploratory Data Analysis**
+
+### **2.1 Visualization of death, confirmed, recovered, active cases**
+
+#### Qualitative data
+* date - The date of the summary
+* province - The province or state, when applicable
+* country - The country or region name
+* type - The type of case (confirmed, death, recovered)
+
+
+#### Quantitative data
+* lat - Latitude point
+* long - Longitude point
+* cases - The number of daily cases (corresponding to the case type)
+
+```{r}
+summary(Switzerland_Corona)
+```
+
+#### **Total number of Death cases reported in Switzerland**
+
+```{r}
+Switzerland_Corona_Death <- filter(Switzerland_Corona, type == "death")
+sum(abs(Switzerland_Corona_Death$cases))
+```
+
+#### **Graphical Representation of deaths over time in Switzerland** 
+
+```{r fig.cap="Figure 1"}
+ggplot(Switzerland_Corona_Death, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 Death Cases in Switzerland")
+```
+
+
+#### **Total number of Confirmed cases reported in Switzerland**
+
+```{r}
+Switzerland_Corona_Confirmed <- filter(Switzerland_Corona, type == "confirmed")
+sum(abs(Switzerland_Corona_Confirmed$cases))
+```
+
+#### **Graphical Representation of Confirmed cases over time in Switzerland** 
+
+```{r fig.cap="Figure 2"}
+ggplot(Switzerland_Corona_Confirmed, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 Confirmed Cases in Switzerland")
+```
+
+#### **Total number of Recovered cases reported in Switzerland**
+
+```{r}
+Switzerland_Corona_Recovered <- filter(Switzerland_Corona, type == "recovered")
+sum(abs(Switzerland_Corona_Recovered$cases))
+```
+
+#### **Graphical Representation of Recovered cases over time in Switzerland** 
+
+```{r fig.cap="Figure 3"}
+ggplot(Switzerland_Corona_Recovered, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 Recovered Cases in Switzerland")
+```
+
+#### **Total number of Active cases reported in Switzerland**
+
+```{r}
+Switzerland_Corona_Overall <-Switzerland_Corona %>% pivot_wider(values_from=cases, names_from=type)
+```
+
+```{r}
+Switzerland_Corona_Overall$Switzerland_Corona_Active <- cumsum(Switzerland_Corona_Overall$confirmed - Switzerland_Corona_Overall$death - Switzerland_Corona_Overall$recovered)
+```
+
+```{r fig.cap="Figure 4"}
+ggplot(Switzerland_Corona_Overall, aes(x=date, y= Switzerland_Corona_Active)) + geom_line() + ggtitle("Daily Covid-19 Active cases in Switzerland")
+```
+
+#### **Graphical Representation of Confirmed, Death and Recovered cases over time in Switzerland**
+
+```{r fig.cap="Figure 5"}
+ggplot(Switzerland_Corona, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Daily Covid-19 cases by type in Switzerland") + facet_grid(type~.) + ylim(0,25000)
+```
+
+```{r fig.cap="Figure 6"}
+ggplot(Switzerland_Corona, aes(x=date, y=log(cases), col=type)) + geom_col() + ggtitle("Daily Covid-19 cases by log(type) in Switzerland") + facet_grid(type~.) + ylim(0,11)
+```
+
+
+### **2.2 Comparison with other countries**
+
+Countries to compare was chosen considering two factors. Those are population in the country and the geographical location of that country. Selected countries are as follows; 
+
+* Austria
+* Portugal
+* Greece
+* Belgium
+
+```{r}
+library(coronavirus)
+library(ggplot2)
+```
+
+
+```{r}
+Switzerland_Corona <- coronavirus %>% filter(country == "Switzerland")
+Austria_Corona <- coronavirus %>% filter(country == "Austria")
+Portugal_Corona <- coronavirus %>% filter(country == "Portugal")
+Greece_Corona <- coronavirus %>% filter(country == "Greece")
+Belgium_Corona <- coronavirus %>% filter(country == "Belgium")
+```
+
+
+```{r fig.cap="Figure 7"}
+Switzerland_Corona_Death <- filter(Switzerland_Corona, type == "death")
+Austria_Corona_Death <- filter(Austria_Corona, type == "death")
+Portugal_Corona_Death <- filter(Portugal_Corona, type == "death")
+Greece_Corona_Death <- filter(Greece_Corona, type == "death")
+Belgium_Corona_Death <- filter(Belgium_Corona, type == "death")
+
+Country_comparison_Death <- rbind(Switzerland_Corona_Death, Austria_Corona_Death, Portugal_Corona_Death, Greece_Corona_Death, Belgium_Corona_Death)
+
+ggplot(Country_comparison_Death , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Comparison of Death cases with respect to countries") + ylim(0,300)
+```
+
+
+```{r fig.cap="Figure 8"}
+Switzerland_Corona_Confirmed <- filter(Switzerland_Corona, type == "confirmed")
+Austria_Corona_Confirmed <- filter(Austria_Corona, type == "confirmed")
+Portugal_Corona_Confirmed <- filter(Portugal_Corona, type == "confirmed")
+Greece_Corona_Confirmed <- filter(Greece_Corona, type == "confirmed")
+Belgium_Corona_Confirmed <- filter(Belgium_Corona, type == "confirmed")
+
+Country_comparison_Confirmed <- rbind(Switzerland_Corona_Confirmed, Austria_Corona_Confirmed, Portugal_Corona_Confirmed, Greece_Corona_Confirmed, Belgium_Corona_Confirmed)
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Comparison of Confirmed cases with respect to countries") + ylim(0,10000)
+```
+
+```{r fig.cap="Figure 9"}
+Switzerland_Corona_Recovered <- filter(Switzerland_Corona, type == "recovered")
+Austria_Corona_Recovered <- filter(Austria_Corona, type == "recovered")
+Portugal_Corona_Recovered <- filter(Portugal_Corona, type == "recovered")
+Greece_Corona_Recovered <- filter(Greece_Corona, type == "recovered")
+Belgium_Corona_Recovered <- filter(Belgium_Corona, type == "recovered")
+
+Country_comparison_Recovered <- rbind(Switzerland_Corona_Recovered, Austria_Corona_Recovered, Portugal_Corona_Recovered, Greece_Corona_Recovered, Belgium_Corona_Recovered)
+
+ggplot(Country_comparison_Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Comparison of Recovered cases with respect to countries") + ylim(0,1000)
+```
+
+
+```{r}
+Covid19 <- rbind(Switzerland_Corona, Austria_Corona, Portugal_Corona, Greece_Corona, Belgium_Corona)
+```
+
+```{r fig.cap="Figure 10"}
+Covid19_Deaths <- Covid19 %>% filter(type=="death")
+ggplot(Covid19_Deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Total No.of Deaths") + ylim(0,30000)
+```
+
+```{r fig.cap="Figure 11"}
+Covid19_Confirmed <- Covid19 %>% filter(type=="confirmed")
+ggplot(Covid19_Confirmed, aes(x=country, y=cases)) + geom_col() + ggtitle("Total No.of Confirmed Cases") + ylim(0,1250000)
+```
+
+```{r fig.cap="Figure 12"}
+Covid19_Recovered <- Covid19 %>% filter(type=="recovered") 
+ggplot(Covid19_Recovered, aes(x=country, y=cases)) + geom_col() + ggtitle("Total No.of Recovered Cases") + ylim(0,1000000)
+```
+
+```{r}
+Switzerland_Corona_Overall <- Switzerland_Corona %>% pivot_wider(names_from=type, values_from=cases)
+Switzerland_Corona_Overall$Switzerland_Corona_Active <- cumsum(Switzerland_Corona_Overall$confirmed - Switzerland_Corona_Overall$death - Switzerland_Corona_Overall$recovered)
+
+Austria_Corona_Overall <- Austria_Corona %>% pivot_wider(names_from=type, values_from=cases)
+Austria_Corona_Overall$Austria_Corona_Active <- cumsum(Austria_Corona_Overall$confirmed - Austria_Corona_Overall$death - Austria_Corona_Overall$recovered)
+
+Portugal_Corona_Overall <- Portugal_Corona %>% pivot_wider(names_from=type, values_from=cases)
+Portugal_Corona_Overall$Portugal_Corona_Active <- cumsum(Portugal_Corona_Overall$confirmed - Portugal_Corona_Overall$death - Portugal_Corona_Overall$recovered)
+
+Greece_Corona_Overall <- Greece_Corona %>% pivot_wider(names_from=type, values_from=cases)
+Greece_Corona_Overall$Greece_Corona_Active <- cumsum(Greece_Corona_Overall$confirmed - Greece_Corona_Overall$death - Greece_Corona_Overall$recovered)
+
+Belgium_Corona_Overall <- Belgium_Corona %>% pivot_wider(names_from=type, values_from=cases)
+Belgium_Corona_Overall$Belgium_Corona_Active <- cumsum(Belgium_Corona_Overall$confirmed - Belgium_Corona_Overall$death - Belgium_Corona_Overall$recovered)
+```
+
+```{r fig.cap="Figure 13"}
+ggplot(Switzerland_Corona_Overall, aes(x=date, y= Switzerland_Corona_Active)) + geom_line() + ggtitle("Daily Covid-19 Active cases in Switzerland") + ylim(0,1000000)
+```
+
+```{r fig.cap="Figure 14"}
+ggplot(Austria_Corona_Overall, aes(x=date, y= Austria_Corona_Active)) + geom_line() + ggtitle("Daily Covid-19 Active cases in Austria") + ylim(0,100000)
+```
+
+```{r fig.cap="Figure 15"}
+ggplot(Portugal_Corona_Overall, aes(x=date, y= Portugal_Corona_Active)) + geom_line() + ggtitle("Daily Covid-19 Active cases in Portugal") + ylim(0,200000)
+```
+
+```{r fig.cap="Figure 16"}
+ggplot(Greece_Corona_Overall, aes(x=date, y= Greece_Corona_Active)) + geom_line() + ggtitle("Daily Covid-19 Active cases in Greece") + ylim(0,1000000)
+```
+
+```{r fig.cap="Figure 17"}
+ggplot(Belgium_Corona_Overall, aes(x=date, y= Belgium_Corona_Active)) + geom_line() + ggtitle("Daily Covid-19 Active cases in Belgium") + ylim(0,1200000)
+```
+
+#### **Death Percentage in Switzerland due to COVID 19**
+
+```{r}
+Death_Percentage_Switzerland <- (sum(abs(Switzerland_Corona_Death$cases))/sum(abs(Switzerland_Corona_Confirmed$cases)))*100
+Death_Percentage_Switzerland
+```
+
+#### **Percentage of COVID-19 Confirmed cases with respect to Population of Switzerland**
+
+```{r}
+Covid19_Percentage_Switzerland <- (sum(abs(Switzerland_Corona_Confirmed$cases))/8696088)*100 #Population was taken from Wikipedia as at 30th June 2021
+Covid19_Percentage_Switzerland
+```
+
+#### **Death Percentage in Austria due to COVID 19**
+
+```{r}
+Death_Percentage_Austria <- (sum(abs(Austria_Corona_Death$cases))/sum(abs(Austria_Corona_Confirmed$cases)))*100
+Death_Percentage_Austria
+```
+
+#### **Percentage of COVID-19 Confirmed cases with respect to Population of Austria**
+
+```{r}
+Covid19_Percentage_Austria <- (sum(abs(Austria_Corona_Confirmed$cases))/8950544)*100 #Population was taken from Wikipedia as at 1st July 2021
+Covid19_Percentage_Austria
+```
+
+#### **Death Percentage in Portugal due to COVID 19**
+
+```{r}
+Death_Percentage_Portugal <- (sum(abs(Portugal_Corona_Death$cases))/sum(abs(Portugal_Corona_Confirmed$cases)))*100
+Death_Percentage_Portugal
+```
+
+#### **Percentage of COVID-19 Confirmed cases with respect to Population of Portugal**
+
+```{r}
+Covid19_Percentage_Portugal <- (sum(abs(Portugal_Corona_Confirmed$cases))/10298252)*100 #Population was taken from Wikipedia as at 31st Dec 2021
+Covid19_Percentage_Portugal
+```
+
+#### **Death Percentage in Greece due to COVID 19**
+
+```{r}
+Death_Percentage_Greece <- (sum(abs(Greece_Corona_Death$cases))/sum(abs(Greece_Corona_Confirmed$cases)))*100
+Death_Percentage_Greece
+```
+
+#### **Percentage of COVID-19 Confirmed cases with respect to Population of Greece**
+
+```{r}
+Covid19_Percentage_Greece <- (sum(abs(Greece_Corona_Confirmed$cases))/10718565)*100 #Population was taken from Wikipedia as at 1st Jan 2021
+Covid19_Percentage_Greece
+```
+
+#### **Death Percentage in Belgium due to COVID 19**
+
+```{r}
+Death_Percentage_Belgium <- (sum(abs(Belgium_Corona_Death$cases))/sum(abs(Belgium_Corona_Confirmed$cases)))*100
+Death_Percentage_Belgium
+```
+
+#### **Percentage of COVID-19 Confirmed cases with respect to Population of Belgium**
+
+```{r}
+Covid19_Percentage_Belgium <- (sum(abs(Belgium_Corona_Confirmed$cases))/11521238)*100 #Population was taken from Wikipedia as at 1st Jan 2021
+Covid19_Percentage_Belgium
+```
+
+## **3. Discussion**
+The status of COVID-19 in Switzerland can't be compared only with the visualizations from Switzerland data. So four countries have been selected according to certain factors.
+
+Figure 1 illustrates the death cases that was reported in Switzerland per each day. According to that graph death cases are controlled by now. Most death cases have been happened at the end of 2020 and the start of 2021. Figure 2 illustrates the confirmed cases that was reported in Switzerland per each day. According to that graph COVID-19 have been controlled nicely until the end of 2020 by Switzerland. But from after that there is a significant growth in confirmed cases. Figure 3 illustrates the recovered cases that was reported in Switzerland per each day. Lot of recovered cases have been reported at the end of 2020 and at the start of 2021. Figure 4 illustrates the active cases that was reported in Switzerland per each day. It was taken by cumulative sum(Confirmed cases-Deaths-Recovered cases). According to the graph active cases shows an increasing pattern with slight deviations. That means active cases are increasing with time. Figure 5 is the combination of Figure 1, Figure 2 and Figure 3. Reason for taking this graph is to compare type of cases all together. But in the graph death cases section is very small which shows a straight line in the graph. This was due to number of death cases were lot below than the both number of confirmed cases and number of recovered cases. Therefore by that graph comparison between types can't be performed. For that figure 6 was drawn. Instead of types, log(types) was used for this graph. 
+
+Figure 7 illustrates the death cases with respect to countries. When drawing the graph outliers were removed in order to see the distribution of points very clearly. According to the graph deaths in Belgium and Portugal are higher than other countries. Figure 8 illustrates the confirmed cases with respect to countries. Here also outliers were removed by putting a limit to y axis. Confirmed cases in Belgium are higher than the other countries. But the countries can't be compared easily because of the variations. Figure 9 illustrates the recovered cases with respect to countries. Here also outliers were removed. Recovered cases in Portugal and Austria are higher than the other countries. Figure 10 illustrates the total number of deaths. Highest number of deaths happened in Belgium. Second highest deaths happened in Portugal. Third highest deaths happened in Greece. Figure 11 illustrates the total number of confirmed cases. Highest number of confirmed cases happened in Belgium. Second highest confirmed cases happened in Portugal. Third highest confirmed cases happened in Switzerland. Figure 12 illustrates the total number of recovered cases. Highest number of recovered cases happened in Portugal. Second highest recovered cases happened in Austria. Third highest recovered cases happened in Switzerland.
+
+Figure 13, Figure 14, Figure 15, Figure 16 and Figure 17 illustrates the active cases that was reported in the country per each day. Figure 4 and Figure 13 are same. It was drawn again to compare active cases in Switzerland with other countries. Portugal and Austria shows a decreasing graph of active cases while Switzerland, Greece and Belgium shows an increasing graph of active cases. Finally the death percentage of the country and the percentage of COVID-19 confirmed cases with respect to population of that country were calculated. Switzerland has the lowest death percentage. Austria has the second lowest death percentage. Portugal has the third lowest death percentage. Belgium has the second highest death percentage while Greece has the highest death percentage among the selected countries. Greece has the lowest percentage of COVID-19 confirmed cases with respect to population. Austria has the second lowest percentage of COVID-19 confirmed cases with respect to population. Switzerland has the third lowest percentage of COVID-19 confirmed cases with respect to population. Portugal has the second highest percentage of COVID-19 confirmed cases with respect to population while Greece has the highest percentage of COVID-19 confirmed cases with respect to population.
+
+## **4. Conclusions**
+
+Switzerland is currently in a difficult situation. Confirmed cases have been increased in last months. Switzerland faced such difficult situation at the end of 2020 and at the start of 2021. Somehow they have controlled that situation and they have managed to decrease the confirmed cases. But once again confirmed cases are increasing. The government of Switzerland has been able to apply many successful public health response strategies and stabilize the progress of the disease. Once again those strategies should be restablish in order to minimize the impact of COVID-19 virus. When comparing death percentage in Switzerland it has the lowest among the selected countries even though Switzerland has the third highest percentage of COVID-19 confirmed cases with respect to population. This implies that Switzerland health sector have done a great job to minimize the number of deaths happened due to COVID-19 pandemic.
+
+## **5. References**
+
+https://www.swissinfo.ch/eng/covid-19_coronavirus--the-situation-in-switzerland/45592192
+
+https://www.google.com/search?q=climate+in+switzerland&rlz=1C1CHBF_enLK782LK782&oq=climate+in+sw&aqs=chrome.1.69i57j0i512l3j0i20i263i512l2j0i512l4.5260j0j7&sourceid=chrome&ie=UTF-8
+
+https://globaledge.msu.edu/countries/switzerland
+
+https://www.fragomen.com/insights/blog/swiss-covid-19-response-timeline-status-and-outlook
+
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7414737/
+
+https://newbedev.com/how-to-right-align-and-justify-align-in-markdown
+
+https://www.bag.admin.ch/bag/en/home/krankheiten/ausbrueche-epidemien-pandemien/aktuelle-ausbrueche-epidemien/novel-cov/massnahmen-des-bundes.html
+
+https://en.wikipedia.org/wiki/List_of_European_countries_by_population
+
+https://stackoverflow.com/questions/37116632/r-markdown-html-number-figures
+
+https://newbedev.com/r-how-to-center-output-in-r-markdown

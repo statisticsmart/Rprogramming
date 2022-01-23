@@ -1,0 +1,263 @@
+---
+title: "Covid 19 Pandemic in Brazil"
+author: "Prabhath Tharinda"
+date: "9/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+library(coronavirus)
+data(coronavirus)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Brazil_corona <- coronavirus %>% filter((country == "Brazil"),cases >= 0)
+
+```
+## **1 Background**
+
+![](Rio.jpg)
+
+### **1.1 Introduction**
+
+Brazil is the largest country in South America and the fifth largest nation in the world. It forms an enormous triangle on the eastern side of the continent with a 4,500-mile (7,400-kilometer) coastline along the Atlantic Ocean. It has borders with every South American country except Chile and Ecuador.
+The Brazilian landscape is very varied. It is most well known for its dense forests, including the Amazon, the world's largest jungle, in the north. But there are also dry grasslands (called pampas), rugged hills, pine forests, sprawling wetlands, immense plateaus, and a long coastal plain.
+Northern Brazil is dominated by the Amazon River and the jungles that surround it. The Amazon is not one river but a network of many hundreds of waterways. Its total length stretches 4,250 miles (6,840 kilometers). Thousands of species live in the river, including the infamous piranha and the boto, or pink river dolphin.
+
+### **1.2 Location of Brazil**
+
+```{r location of Brazil, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Brazil_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+```
+
+
+Geographical location of Brazil
+
+
+### **1.3 Climate condition**
+
+Brazil has a humid tropical and subtropical climate except for a drier area in the Northeast, sometimes called the drought quadrilateral or drought polygon, that extends from northern Bahia to the coast between Natal and São Luís; that zone receives about 15–30 inches (375–750 mm) of precipitation a year. Much of Brazil receives 40–70 inches (1,000–1,800 mm) annually, but precipitation often is much heavier in parts of the Amazon basin and the sea-facing rim of the Serra do Mar.
+The central parts of the Brazilian Highlands receive most of their precipitation during the summer months (November to April), often in the form of torrential downpours. Storms and floods may strike the Northeast at that time, depending on weather patterns, but the region may also experience prolonged drought. These shifting conditions make life difficult in the sertão, the backlands of the Northeast, and are a major cause for migration out of the region. Summer temperatures are largely uniform. In January most of the lowlands average roughly 79 °F (26 °C), and the highlands are a few degrees cooler, depending on elevation. The coast of Rio Grande do Sul is also somewhat cooler, averaging around 73 °F (23 °C), whereas the Northeast backland’s drought quadrilateral, the hottest region of the country, averages some 84 °F (29 °C), with daytime temperatures exceeding 100 °F (38 °C). However, the Northeast’s low humidity makes the heat less oppressive than in Rio de Janeiro.
+In the winter (May to October) the Brazilian Highlands are generally dry, and snow falls in only a few of the southernmost states. Regular frosts accompany winter air patterns from the south, and near-freezing temperatures can reach as far north as São Paulo. Cool, rainy weather may extend along the coast as far north as Recife and, in the west, to the Pantanal. Cool air occasionally spills over from the Paraguay lowlands into the western Amazon basin and may travel as far north as the Guyana border. Winter temperatures in the Amazon lowlands remain virtually unchanged from those of the summer months, but temperatures in the drought quadrilateral drop to about 79 °F (26 °C). Temperatures in the Brazilian Highlands average about 68 °F (20 °C) in the central and northern regions and are cooler toward the south: Curitiba, at an elevation of some 3,000 feet (900 metres), averages 57 °F (14 °C) in June and July. During those months the mean temperature at Porto Alegre is the same, but Rio de Janeiro is much hotter, averaging 73 °F (23 °C), partly because of the warm currents that bathe the entire Brazilian coast.
+
+
+### **1.4 Lock-down status of Brazil**
+
+In these days(26 September 2021) Brazil is not lock down.Because President and the Government has pursued a herd immunity strategy. 
+
+### **1.5 Actions taken by the government**
+
+Under the leadership of president Jair Bolsonaro, the federal government in Brazil has failed to implement a systematic plan to prevent the spread covid-19. Instead, under the pretext of shortening the public health crisis and protecting the economy, the Brazilian government has pursued a herd immunity strategy. That is  one of the resons of increasing covid active cases and deaths. Thousands of people infacted and die in day by day. 
+
+## **2 Exploratory Data Analysis**
+
+### **2.1 Visualization of death, confirmed, recovered, active cases**
+
+### Qualitative data
+
+date - The date of the summary,
+
+province - The province or state, when applicable,
+
+country - The country or region name,
+
+type - the type of case (i.e., confirmed, death),
+
+
+### Quantitative data
+
+lat - Latitude point,
+
+long - Longitude point,
+
+cases - the number of daily cases (corresponding to the case type),
+
+### **Summary of Brazil data set**
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+summary(Brazil_corona)
+```
+### **Total number of confirmed cases reported from Brazil**
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Brazil_corona_confirmed <- filter(Brazil_corona, type == "confirmed")
+sum(Brazil_corona_confirmed$cases)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Brazil_corona_confirmed , aes(x=date, y=cases)) + geom_line() + ggtitle("Brazil: Daily Covid-19 confirmed cases") 
+
+```
+
+This is the graphical interpret daily confirmed cases have been changed over the time.There is a random increasing and decreasing pattern in data.
+
+
+### **Total number of death cases reported from Brazil**
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Brazil_corona_death <- filter(Brazil_corona, type == "death")
+sum(Brazil_corona_death$cases)
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Brazil_corona_death, aes(x=date, y=cases)) + geom_line() + ggtitle("Brazil: Daily Covid-19 death cases")
+
+```
+
+According to the graph we can see that there is an increasing and decreasing deaths with time.But since July the variance of cases are increasing. 
+
+### **Total number of recovered cases reported from Brazil**
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Brazil_corona_recovered <- filter(Brazil_corona, type == "recovered")
+sum(Brazil_corona_recovered$cases)
+```
+This is the graphical interpret daily recovered cases have been changed over the time.
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Brazil_corona_recovered, aes(x=date, y=cases)) + geom_line() + ylim(0,100000) + ggtitle("Brazil: Daily Covid-19 recovered cases") 
+
+```
+
+This is the graphical interpret daily recovered cases have been changed over the time. According to the data recovering rate is law precentage than confirmed cases.
+
+### **Total number of active cases reported from Brazil**
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+corona_Brazil_wider <-Brazil_corona %>% pivot_wider(names_from=type, values_from=cases)
+corona_Brazil_wider$active_Brazil_corona <- corona_Brazil_wider$confirmed - corona_Brazil_wider$death - corona_Brazil_wider$recovered
+ggplot(corona_Brazil_wider, aes(x=date, y= active_Brazil_corona)) + geom_line() +ylim(0,100000) + ggtitle("Brazil: Daily Covid-19 Active cases")
+```
+`
+
+ 
+### **Graphically represent all three confirmed,recovered & death cases**
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Brazil_corona, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Brazil: Daily Covid-19 cases by type") + facet_grid(type~.) + ylim(0,25000)
+```
+
+
+### **Percentage of deaths due to covid 19 in Brazil**
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+death_rate <- (sum(Brazil_corona_death$cases)/sum(Brazil_corona_confirmed$cases))* 100
+death_rate
+
+```
+
+### **2.2 Comparison with other countries**
+
+```{r , echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(ggpubr)
+
+Brazil_corona <- coronavirus %>% filter(country == "Brazil")
+usa_corona <- coronavirus %>% filter(country == "US")
+china_corona <- coronavirus %>% filter(country == "China")
+
+corona <- rbind(Brazil_corona, usa_corona, china_corona)
+corona_confirmed <- corona %>% filter(type=="confirmed")
+gg9 <- ggplot(corona_confirmed, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,25000)
+
+corona_deaths <- corona %>% filter(type=="death")
+gg10 <- ggplot(corona_deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Deaths") + ylim(0,25000)
+
+corona_recovered <- corona %>% filter(type=="recovered") 
+gg11 <- ggplot(corona_recovered, aes(x=country, y=cases)) + geom_col() + ggtitle("Recoveries") + ylim(0,25000)
+
+theme_set(theme_pubr())
+figureB <- ggarrange(gg9, gg10, gg11)
+figureB
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+corona_Brazil_wider <- Brazil_corona %>% pivot_wider(names_from=type, values_from=cases)
+corona_Brazil_wider$active_Brazil_corona <- corona_Brazil_wider$confirmed - corona_Brazil_wider$death - corona_Brazil_wider$recovered
+
+corona_USA_wider <- usa_corona %>% pivot_wider(names_from=type, values_from=cases)
+corona_USA_wider$active_USA_corona <- corona_USA_wider$confirmed - corona_USA_wider$death - corona_USA_wider$recovered
+
+corona_China_wider <- china_corona %>% pivot_wider(names_from=type, values_from=cases)
+corona_China_wider$active_China_corona <- corona_China_wider$confirmed - corona_China_wider$death - corona_China_wider$recovered
+
+gg12 <- ggplot(corona_Brazil_wider, aes(x=date, y=active_Brazil_corona)) + geom_line() + ylim(0,100000)  + ggtitle("Brazil: Daily Covid-19 Active cases")
+gg13 <- ggplot(corona_USA_wider, aes(x=date, y=active_USA_corona)) + geom_line() +ylim(0,100000) + ggtitle("USA: Daily Covid-19 Active cases")
+gg14 <- ggplot(corona_China_wider, aes(x=date, y=active_China_corona)) + geom_line() + ylim(0,100) + ggtitle("China: Daily Covid-19 Active cases")
+
+theme_set(theme_pubr())
+figureC <- ggarrange(gg12, gg13, gg14)
+figureC
+``` 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Brazil_corona <- coronavirus %>% filter(country == "Brazil")
+confirmedcases_Brazil_corona <- Brazil_corona %>% filter(type=="confirmed") 
+
+France_corona <- coronavirus  %>% filter(country == "France")
+confirmed_france_corona <- France_corona %>% filter(type=="confirmed")
+
+Germany_corona <- coronavirus  %>% filter(country == "Germany")
+confirmed_germany_corona <- Germany_corona %>% filter(type=="confirmed")
+
+Italy_corona <- coronavirus  %>% filter(country == "Italy")
+confirmed_Italy_corona <- Italy_corona %>% filter(type=="confirmed")
+
+comparison_confirm <- rbind(confirmedcases_Brazil_corona,confirmed_france_corona, confirmed_germany_corona, confirmed_Italy_corona)
+
+ggplot(comparison_confirm , aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in  leading countries") + ylim(0,10000)
+```
+
+
+## **3 Discission**
+
+In Feb 21, 2020, the first patient of corona was recorded in the Brazil.The number of active cases  in the Brazil has increased. In to  September 26 21.3M total cases and 594K deaths were recorded.The latest data captures more than only the hospital deaths of patients who had tested positive for coronavirus and so definitely had the infection. It looks at community deaths - people who died at home or in residential care who doctors recorded on the death certificate as probably having Covid-19. The percentage of patients who have died from the corona virus in the Brazil currently stands at 2 per cent. This must be mainly because of no follow-up for cases outside the hospitals.
+
+## **4 Conclusion**
+
+Accordimg to the Brazil corona virus data set it is clearly observable that Brazil's number of recovered Cases are in a low level and number of deaths are increasing significantly. Therefore, Brazil government should pay attention to recover more patients, the health care facilities provided by the hospitals should be increased. While everyone is being advised to keep their distance from other people to help stop the spread od corona virus, some people with underlying health conditions need to take even more precautions to protect themselves, that includes people over the age of 60. All people in Brazil should vaccinate immediately, President of Brazil should pay his attention about that because his political campaigns are big reason to spread covid in Brazil. 
+
+## **5 References** 
+
+
+https://www.aljazeera.com 
+
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/brazil/
+
+https://www.bbc.com/news/world-latin-america-18909529
+https://www.bbc.com/news/world-latin-america-18909529

@@ -1,0 +1,258 @@
+---
+title: "Angola COVID-19 Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# 1. Introduction
+
+Angola is a large Southern African nation whose varied terrain encompasses tropical Atlantic beaches, a labyrinthine system of rivers and Sub-Saharan desert that extends across the border into Namibia. The COVID-19 pandemic in Angola is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to Angola in late March 2020, with the first two cases being confirmed on 21 March.
+ 
+```{r, echo=FALSE, out.width="100%", out.height="100%"}
+knitr::include_graphics("images_cms-image-000028460.jpg")
+```
+
+##  Visualization of the location
+
+```{r, message = FALSE, warning = FALSE, include=FALSE}
+library(coronavirus)
+data(coronavirus)
+unique(coronavirus$country)
+head(coronavirus)
+```
+
+Angola is located on the western Atlantic Coast of Central Africa between Namibia and the Republic of the Congo. It also is bordered by the Democratic Republic of the Congo and Zambia to the east. The country consists of a sparsely watered and somewhat sterile coastal plain extending inland for a distance varying from 50 to 160 km (31 to 99 mi). Slightly inland and parallel to the coast is a belt of hills and mountains and behind those a large plateau. The total land size is 1,246,700 km2 (481,400 sq mi). It has an Exclusive Economic Zone of 518,433 km2 (200,168 sq mi).
+
+
+```{r, message = FALSE, warning = FALSE, include=FALSE}
+library(tidyverse)
+library(magrittr)
+angola_corona <- coronavirus %>% filter(country == "Angola")
+library(ggplot2)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+```
+
+```{r, echo = FALSE,message = FALSE, warning = FALSE, out.width="100%", out.height="100%"}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = angola_corona, aes(x = long, y = lat), color = "red", size
+    = 3
+  )
+
+```
+
+**Figure 01 : Location of Angola in World map**
+
+## Climate Condition
+
+Like the rest of tropical Africa, Angola experiences distinct, alternating rainy and dry seasons. The coastal strip is tempered by the cool Benguela Current, resulting in a climate similar to coastal Peru or Baja California. It is semiarid in the South and along the coast to Luanda. There are two rainy seasons in the steppe; the short rains from November to February, and the high rains from March and April. Summers are hot and humid, while winters are mild and dry. The north has a cool, dry season. The climate is greatly influenced by the prevailing winds, which arc W., S.W. and S.S.W. Two seasons are distinguished – the cool, from June to September; and the rainy, from November to April. The heaviest rainfall occurs in April, and is accompanied by violent storms. The far north and Cabinda have the highest annual rainfall.
+
+## Lockdown status of the country
+
+Angola reimposed movement restrictions and increased fines for people flouting measures to limit a second wave of Covid-19 infections. Government offices will operate with only 50% of staff, while the private sector will be allowed 75%, Minister of State Adao de Almeida told reporters in the capital, Luanda, on Wednesday. Home gatherings will be restricted to 15 people and a 10 p.m. to 5 a.m. curfew introduced.
+Angola: Authorities lift COVID-19 lockdown in Luanda Sept. 1
+
+
+## Actions taken by the government
+
+**1.The majority of COVID-19 cases are in the capital city of Luanda, but COVID-19 has been confirmed throughout the provinces.  Officials continue to monitor the individuals who have tested positive.**
+
+**2.The use of a face mask is required in all public areas, including anytime you leave your house or hotel room, while using public transport, and in all establishments.  Face masks are not required if you are operating a vehicle alone or exercising outside.**
+
+**3.In the city of Luanda, individual and group exercise is permitted between the hours of 5 a.m. to 8 p.m.**
+
+**4.Groups exercising together are limited to no more than five people.Everyone is encouraged to adhere to social distancing.**
+
+**5.Within Luanda, health centers and hospitals are fully operational.  Restaurants can be open Monday to Friday from 6:00 a.m. to 10 p.m.  In person dining is limited to 50 percent capacity with no more than four guests per table. Stores, including supermarkets, can remain open until 8:00 p.m.**
+
+**6.Museums and monuments, libraries, and media centers must close by 6 p.m.; cultural and art fairs by 8 p.m.**
+
+**7.movie theaters by 10 p.m., and all are limited to 50 percent capacity.  Night clubs remain closed.  Religious activities are limited to 50 percent capacity up to a maximum of 100 people with a maximum duration of two hours if held in enclosed spaces.**
+
+**8.Beaches and public swimming pools will reopen for recreational use on September 15.  Recreational use of boats is permitted, up to 50 percent of capacity.**
+
+# 2.Explotary Data Analysis
+
+## Visualization of death, confirmed,recovered and active cases
+
+## Summary
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+angola_corona <- coronavirus %>% filter(country == "Angola")
+summary(angola_corona)
+```
+
+```{r}
+new_angola_corona <- angola_corona[ , colSums(is.na(angola_corona)) < nrow(angola_corona)]
+```
+
+```{r}
+df1<-new_angola_corona  # to convert na values to 0
+df1[is.na(df1 )]<-0
+```
+
+```{r}
+df2<-df1
+df2$cases[df2$cases <0] <-0
+```
+
+```{r}
+df2$Month <- months(as.Date(df2$date))
+```
+
+```{r,  message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+confirmed_angola_corona <- df2 %>% filter(type=="confirmed")
+ggplot(confirmed_angola_corona, aes(x=date, y=cases)) + geom_line()  + ggtitle("Angola: Daily Covid-19 confirmed cases")
+```
+
+**Figure 02 : Daily Covid-19 confirmed cases in Angola**
+
+
+```{r,  message = FALSE, warning = FALSE,  out.width="1000%", out.height="100%"}
+death <- df2 %>% filter(type=="death")
+ggplot(death, aes(x=date, y=cases)) + geom_line() + ggtitle("Angola: Daily Covid-19 death cases")
+```
+
+
+**Figure 03 : Daily Covid-19 death cases in Angola**
+
+
+```{r message=FALSE, warning=FALSE, out.height="50%", out.width="100%"}
+recover_angola_corona <- df2 %>% filter(type=="recovered")
+ggplot(recover_angola_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Angola: Daily Covid-19 recovered cases")
+```
+
+
+**Figure 04 : Daily Covid-19 recovered cases in Angola**
+
+
+
+```{r, message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+active_cases <- df2 %>% pivot_wider(names_from = type, values_from = cases) %>% mutate(active = cumsum(confirmed) - cumsum(death) - cumsum(recovered))
+ggplot(active_cases, aes(x=date, y=active)) + geom_line()  + ggtitle("Angola: Daily Covid-19 active cases")
+```
+
+
+**Figure 05 : Daily Covid-19 active cases in Angola**
+
+```{r, echo = FALSE,message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+ggplot(new_angola_corona, aes(x = date, y = cases, col = type)) + geom_point() + facet_grid(type ~.) + labs(title = " Angola : Daily Covid-19 confirmed, death, recovered cases", x ="Date", y = "Number of cases")
+
+```
+
+
+**Figure 06 : Daily Covid-19  confirmed, death, recovered cases in Angola**
+
+```{r,echo = FALSE,message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+ ggplot(df2,aes(date, cases, color = type), is.na=FALSE) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Angola : Time series analysis")
+ 
+```
+
+**Figure 07 : Daily Covid-19  confirmed, death, recovered cases in Angola**
+
+## Comparison with other countries
+
+```{r, echo = FALSE,message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+all_country_corona <- filter(coronavirus, country %in% c("Angola","Namibia","Zambia","Congo(Kinshasa)","Zimbabwe","Tanzania"))
+confirmed_all_country_corona <-all_country_corona %>% filter(type=="confirmed")
+ggplot(confirmed_all_country_corona, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("Neighbouring countries of Angola: Daily Covid-19 Confirmed Cases")
+```
+
+**Figure 08 : Daily Covid-19 confirmed cases in Neighbouring countries of Angola**
+
+```{r, echo = FALSE,message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+all_country_corona <- filter(coronavirus, country %in% c("Angola","Namibia","Zambia","Congo(Kinshasa)","Zimbabwe","Tanzania"))
+confirmed_all_country_corona <-all_country_corona %>% filter(type=="death")
+ggplot(confirmed_all_country_corona, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("Neighbouring countries of Angola: Daily Covid-19 death Cases")
+```
+
+**Figure 09 : Daily Covid-19 death cases in Neighbouring countries of Angola**
+
+```{r, echo = FALSE,message = FALSE, warning = FALSE,  out.width="100%", out.height="100%"}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+all_country_corona <- filter(coronavirus, country %in% c("Angola","Namibia","Zambia","Congo(Kinshasa)","Zimbabwe","Tanzania"))
+confirmed_all_country_corona <-all_country_corona %>% filter(type=="recovered")
+ggplot(confirmed_all_country_corona, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("Neighbouring countries of Angola: Daily Covid-19 recovered Cases")
+```
+
+**Figure 10 : Daily Covid-19 recovered cases in Neighbouring countries of Angola**
+
+
+# 3.Discussion
+
+The results on COVID-19 obtained in this study seem to be valuable data that should be shared, especially since they are from under-resourced areas and are important for the present COVID-19 situation. The dataset is loaded by coronavirus dataset given in the R package. Angola dataset is obtained by using it. There are null values and minus values in cases. First of all all of them are removed and continue analysis by using R software.
+
+According to the Figure 02 we can see that Angola started to report daily Covid-19 confirmed cases in the beginning of 2020. Maximum number of daily confirmed cases was reported October 2020 and again started to reduce up to March, 2021. But rate of increasing confirmed cases in 2021 was higher than 2020. According to the figure of recovered case of Angola, it can be seen that  daily Covid-19 recoverd cases increased rapidly up to end of January 2021 but it began to reduce up to the April 2021 and again increased speedy up to the August 2021. Figure 02 shows that speedy increasing for the death and spread of SARS-CoV-2 infection in Luanda, the capital city of Angola in end of year 2020.
+
+As Figure 05 shows, daily active cases in Angola were increased July 2020 and maximum no of active cases was reported in November 2020. Rate of increasing active cases in 2021 is higher  than 2020. There are so many countries in coronavirus data set that given us. But I selected very few countries for comparison since when I selected more countries, It may be very difficult to get an overall idea and also it may not be important. There are Namibia, Tanzania, Zambia and Zimbabwe. The reason for selected those countries is all are neighbouring countries of Angola. Tanzania is the first when considering population and also population of Angola is larger than other countries that I selected. 
+
+According to the Figure 08, Both Angola and Tanzania show a little bit similar pattern reporting daily Covid-19 confirmed cases. As well as Namibia, Zambia and Zimbabwe show nearly equal pattern by considering daily Covid-19 confirmed cases.  When considering daily Covid-19 death cases  Angola shows difficult situation than other countries. And also maximum number of death cases shows Namibia as 150 in end of July. Tanzania reported daily Covid-19 recovered cases more than other countries and Angola shows a nearly equal pattern.
+
+By considering population of Angola and all other countries situated in continent of Africa we can conclude that current situation of Angola is dangerous by comparing others.
+
+
+# 4.Conclusions
+
+Currently, the world is facing a global pandemic of SARS-CoV-2, with many countries experiencing a second wave of infections. In Angola, there is a continuous trend of an increase in the number of infections and deaths related to COVID-19. Community transmission and increased screening capacity for SARS-CoV-2 can help explain the growing number of infected and deaths related to COVID-19 in Angola. The same pattern has been noticed in the African region, mainly in South Africa, Ethiopia, Kenya, and Botswana which also have community transmission and notable increases in cases of infection and deaths related to COVID-19.
+
+The continent of Africa has larger number of countries which has poor health facilities and suffering from more than other countries. South Africa happened to start increasing the case in May, 2020. It was widely increasing much difficulties and no reducing. When it happened this way, it couldn’t control the deaths.
+
+Therefore, all the countries have same responsible for prevent the virus in order to preventing spread to poor country. However, we can suggest that the Ministry of Health of Angola should pay special attention to the safety of healthcare professionals, as well as their mental wellbeing. Moreover, increasing the number of professionals in health units in Luanda, as well as increasing access and availability of personal protective equipment, especially for healthcare professionals, must be guaranteed for their protection and to increment the response capacity of the COVID-19 pandemic in Angola. Furthermore, studies on the mental health of healthcare professionals during the COVID-19 pandemic should be carried out in Angola, to help define strategies to improve the response capacity.
+
+
+
+# 5.References
+
+https://www.garda.com › crisis24 › news-alerts › angola...
+
+https://ao.usembassy.gov › covid-19-information
+
+https://www.worldometers.info › coronavirus › country
+
+https://www.britannica.com › ... › Countries of the World
+
+https://en.wikipedia.org › wiki › Angola
+
+https://www.britannica.com › ... › Countries of the World
+
+https://www.csis.org › analysis › angolan-government-r...
+
+
+

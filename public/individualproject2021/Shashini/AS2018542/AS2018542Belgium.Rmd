@@ -1,0 +1,551 @@
+---
+title: "Covid-19 Pandemic in the Kingdom of Belgium"
+author: "T.C.E SILVA - AS2018542"
+date: "9/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE,comment=NA)
+```
+
+![](Ilustration_belgium-commisioner-coronavirus_Mesa-de-trabajo-1.jpg)
+
+# Introduction of the country : The Kingdom of Belgium
+
+
+Belgium is a sovereign state and a federal constitutional monarchy with a parliamentary system. Its institutional organization is complex and is structured on both regional and linguistic grounds. It is divided into three highly autonomous regions: the Flemish Region (Flanders) in the north, the Walloon Region (Wallonia) in the south, and the Brussels-Capital Region. Brussels is the smallest and most densely populated region, as well as the richest region in terms of GDP per capita.
+Belgium is home to two main linguistic communities: the Dutch-speaking Flemish Community, which constitutes about 60 percent of the population, and the French-speaking Community, which constitutes about 40 percent of the population. A small German-speaking Community, numbering around one percent, exists in the East Cantons. The Brussels-Capital Region is officially bilingual in French and Dutch, although French is the dominant language. Belgium's linguistic diversity and related political conflicts are reflected in its complex system of governance, made up of six different governments.
+
+![flag](Flag_of_Belgium.svg.png){width=25%}$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$![coat of arms](coat arms of belguim.png){width=25%}
+
+#  Visualization of the location
+The Kingdom of Belgium is a country in Western Europe. It is bordered by the Netherlands to the north, Germany to the east, Luxembourg to the southeast, France to the southwest, and the North Sea to the northwest. It covers an area of 30,689 km2 (11,849 sq mi) and has a population of more than 11.5 million, making it the 22nd most densely populated country in the world and the 6th most densely populated country in Europe, with a density of 376 per square kilometre (970/sq mi). The capital and largest city is Brussels; other major cities are Antwerp, Ghent, Charleroi, Liège, Bruges, Namur, and Leuven.
+
+```{r,comment=NA,echo=FALSE, message=FALSE, warning=FALSE}
+#step2
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+#step 3
+library(sta3262)
+#step4
+get_country <- get_individual_project_country("AS2018542") 
+#question 2
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+```
+
+```{r, comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+Belgium_corona <- coronavirus %>% filter(country == "Belgium")
+```
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Belgium_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+#  Climate Condition Kingdom of Belgium
+
+Belgium has a temperate, maritime climate predominantly influenced by air masses from the Atlantic. Rapid and frequent alternation of different air masses separated by fronts gives Belgium considerable variability in weather. Frontal conditions moving from the west produce heavy and frequent rainfall, averaging 30 to 40 inches (750 to 1,000 mm) a year. Winters are damp and cool with frequent fogs; summers are rather mild. The annual mean temperature is around 50 °F (10 °C). Brussels, which is roughly in the middle of the country, has a mean minimum temperature of just below 32 °F (0 °C) in January and a mean maximum of about 71 °F (22 °C) in July.
+
+![](belgium-meteo-average-weather.png)
+
+Regional climatic differences are determined by elevation and distance inland. Farther inland, maritime influences become weaker, and the climate becomes more continental, characterized by greater seasonal extremes of temperature. The Ardennes region, the highest and farthest inland, is the coldest. In winter, frost occurs on about 120 days, snow falls on 30 to 35 days, and January mean minimum temperatures are lower than elsewhere. In summer, the elevation counteracts the effect of distance inland, and July mean maximum temperatures are the lowest in the country. Because of the topography, the region has the highest rainfall in Belgium. In contrast, the Flanders region enjoys generally higher temperatures throughout the year. There are fewer than 60 days of frost and fewer than 15 of snow. On the seacoast these figures are reduced to below 50 and 10, respectively. There are a few hot days, especially on the coast, where the annual rainfall is the lowest in the country.
+
+# Background of Belgium covid-19 pandemic
+The COVID-19 pandemic in Belgium is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to Belgium on 4 February 2020, when one of a group of nine Belgians repatriated from Wuhan to Brussels was reported to have tested positive for the coronavirus. Transmission within Belgium was confirmed in early March; authorities linked this to holidaymakers returning from Northern Italy at the end of the half-term holidays. The epidemic increased rapidly in March–April 2020. By the end of March all 10 provinces of the country had registered cases.
+
+## Lock-down status of the Belgium
+Belgium announced on first lackdown Tuesday, March 17 2020, that a nationwide lockdown will come into effect at 12:00 (local time) on Wednesday, March 18, to prevent further spread of coronavirus (COVID-19) in the country. The lockdown will remain in place until April 5 and will restrict the movement of people. after that Starting 4 May 2020, Belgium began gradually to ease the lockdown measures, which were the measures taken from 18 March to combat the spread of the coronavirus. For example, as of 11 May, all shops are allowed to be open for the public but under certain conditions (e.g. visits are limited to 30 minutes). Cafes and restaurants were allowed to be open as of 8 June.
+Belgium went into second lockdown as of Monday 2 November 2020 to tackle the serious spike of COVID-19 infections across the country.The measures will stay in effect until 13 December 2020, with a review scheduled for the 1 December.
+Belgium will begin easing coronavirus restrictions over the april 2021 , when schools will start to reopen and a ban on non-essential travel will be lifted, the government said Wednesday
+
+![](l0ck down status.jpg){width=75%}
+
+
+## Actions taken by the Belgium government
+The government is assisted by experts in various fields. These experts advise the government on the measures to be taken. These experts sit together in an evaluation cell (CELEVAL).
+
+Celeval is chaired by the FPS Public Health and consists of:
+
++ Health experts
++ Virologists
++ Economists
++ Psychologists
++ Behavioural experts
++ Communication experts
+
+### Specific cells to prepare and concretise the decisions
+Given the major impact of this pandemic on the entire socio-economic fabric, various crisis units have been put together to operationalise the crisis management:
+
++ **The Operational Unit**, coordinated by the NCCN. Via the on-call service (24/7), this unit facilitates the flow of information between the authorities, ensures that the crisis infrastructures are fully operational, and guarantees that the crisis units will be alerted if necessary.
+
++ **The Socio-economic Unit** is chaired by the FPS Economy and is made up of representatives of the Ministers for the Economy, Employment and Public Health and for SMEs, as well as from the FPS Economy, Employment, and Labour, Mobility, Social Security and from the Government Department (POD) Social Integration. It carries out analyses and provides advice on the socio-economic impact of the measures already taken or that will be taken.
+
++ **The Information Unit** is jointly chaired by the FPS Public Health and the NCCN. It ensures the coordination of all local, regional, community and federal authorities so that the crisis communication strategies and actions are coherent. It provides strategic advice to the competent authorities by basing its actions on the identified information needs of the public.
+
++ **The Legal Units** are responsible for drafting the legal texts and providing answers to various legal questions raised in the context of this complex crisis management.
+
++ **The International Unit** facilitates the flow of information at European level between the equivalent crisis management authorities.
+
++ **The Task Force Integrated Police** coordinates the actions of the police services. Other units have been activated to answer various frequently asked questions, and to verify the translations of the published texts.
+
+Since Thursday 19 March, the Economic Risk Management Group (ERMG) has also been operational to manage the economic and macroeconomic risks associated with the spread of the COVID-19 virus in Belgium.
+
+
+$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$![](belgium-sophie-wilmes.jpg){width=25%}
+
+
+### Strategic and policy-making bodies for decision-making
+Since the start of this pandemic, the political authorities have taken decisions based on the recommendations of the health experts in this field.
+
++ **The National Security Council (NSC)**, which essentially consists of the Prime Minister and the Deputy Prime Ministers, has been extended to include the Ministers-President of the Regions and Communities. This collegiate body takes the policy decisions for managing the crisis.
+
++ **The Federal Coordination Committee (COFECO)**is chaired by the NCCN. Management of the medical aspects is specifically coordinated by the FPS Public Health (hospital capacity, personal protective equipment, testing, etc.). COFECO is made up of the Chair of the RMG and representatives of the Prime Minister, the Federal Ministers for Home Affairs, Justice, Finance, Foreign Affairs, Public Health, Budget, Mobility, Defence, Employment and Labour, as well as the Ministers-President of the Regions and Communities. The following administrations are also represented: the FPSs Public Health, Mobility, Economy and Defence as well as the regional crisis centres and the federal police. The committee prepares and coordinates the implementation of the policy decisions of the NSC at strategic level.
+
+To operationalise these strategic and policy decisions, consultations are organised with the Provincial Governors, the Senior Official of Brussels and the Minister-President of the Brussels-Capital Region, so that they in turn can coordinate actions at municipal level.
+
+Health authority experts are constantly developing procedures for health professionals. They know how to quickly identify a patient who may be infected by the coronavirus and what to do in this case. Several laboratories can quickly identify the virus. All hospitals in our country know how to treat patients infected by the coronavirus in safe conditions.
+
+### Flemish Government measures
++ When businesses suffer a loss of turnover of at least 60%, they can apply for a tax-free premium as a compensation (‘New Flemish protection mechanism’)
++ The conditions and tax incentives linked to the ‘Winwinlening’ (loans) are loosened and made more attractive. A similar regime will be introduced for share participations (‘vriendenaandelen’).
++ Individuals investing in the Flemish ‘Welvaartsfonds’ can benefit from a tax reduction. The shares in the fund are also subject to reduced inheritance tax. Businesses can go to the fund for a capital increase or a loan.
++ Registration and inheritance tax: extension of deadlines to comply with tax obligations until 31 January 2021 (declaration of inheritance, registration of act, conditions of favorable regimes)
++ The assessment notices regarding immovable withholding taxes for businesses will only be sent as from September 2020 (instead of May) – payment can be deferred for 4 months
++ Businesses can defer payment of road taxes for 4 months
++ Flexibility in judging requests for payment plans
++ The Flemish legislator has introduced an additional possibility for the heirs of a deceased person whose inheritance contains an investment portfolio of listed securities. The heirs already had the choice to declare in the inheritance tax return (1) the value of these securities at the date of death, (2) one month after the date or (3) two months after the date of death.
+
+### Tax Measures
+
++ Immovable withholding tax assessment notices for AY 2020 are postponed to August/September
++ Inheritance tax and registration duties: suspension of the deadlines to comply with tax obligations (filing, payment, conditions of favorable regimes, procedure)
++ Tax on automatic entertainment devices, which particularly affects the horeca sector, will be reduced by 1/12 per month or part of a month of mandatory closure.
+
+### Other measures
+
++ (Very) small businesses suffering an impact from the decisions of the National Security Council can ask for a tax-free compensation of 5.000 EUR
++ Mobilization of regional agencies (SOWALFIN, SOGEPA-Wallonie Santé Group, SRIW) via loans (e.g. « ricochet loan »), guarantees, frozen reimbursements, etc.
+Brussels Government measures
++ The postponement of the payment deadline for road taxes and immovable withholding tax.
++ Inheritance tax and registration duties: suspension of the deadlines to comply with tax obligations (filing, payment, conditions of favorable regimes)
++ Support (premiums, loans, …) for affected sectors (horeca, events, cultural sector, …)
++ Tax incentive for loans by individuals to SMEs (proxi-loan)
++ Government guarantees on bank loans
++ The accelerated treatment of grants of expansion support for certain sectors (horeca, tourism, culture and events)
++ The abolition of the regional City Tax for 2020
+
+
+# Exploratory Data Analysis
+The given data set was analysis from the coronavirus . This coronavirus data set which is avaliable as installing in R package. This coronavirusinclude information about 195 countries that have been affected from the covid 19. 
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
++ Date
++ Country
++ Province/state- Specific province of the country available
++ lat - Latitude of center of geographic region defined by country/province
++ long - Longtitude of center of geographic region defined by country/province
++ type - Type of reported case – confirmed, death, recovered
++ cases - Number of cases on given date
+
+Belgium was my seleceted data set to analysis coronavirus
+
+
+## Visualization of confirmed cases
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+
+Belgium_corona <- coronavirus %>% filter(country == "Belgium")
+
+new_corona_Belgium <- filter(Belgium_corona, cases >=0)
+Belgium_wider_form <- pivot_wider(new_corona_Belgium, names_from = type, values_from = cases)
+new_Belgium_corona <- filter(Belgium_wider_form, recovered >=0 )  # we remove NA values in recovered set
+clear_Belgium_corona <- filter(new_Belgium_corona, death >=0 )  
+
+active_with_Belgium_corona <- clear_Belgium_corona %>% mutate(active= confirmed-(death+recovered))
+
+clear_all_Belgium_corona <- filter(active_with_Belgium_corona, active >=0 )
+
+new_clear_Belgium_corona <- pivot_longer(clear_all_Belgium_corona, cols=6:9, names_to = "type", values_to = "cases")
+
+```
+
+```{r, echo=FALSE, fig.cap="Daily Covid-19 confirmed cases in Belgium"}
+confirm_Belgium_corona <- new_clear_Belgium_corona %>% filter(type=="confirmed")
+
+ggplot(confirm_Belgium_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Belgium: Daily Covid-19 confirmed cases")
+
+```
+
+According to the this plot first Covid-19 patient was confirmed in Belgium at the beginning of the February 2020 . It was 04th February 2020. After that Confirmed cases has increased except February to may 2020. The period of February to July it was the first wave of the Belgium.The second coronavirus confirmed wave was shown July to December 2020. The majority Confirmed cases were reported on middle of the October 2020.
+In year 2021 there was some increasing and decreasing confirmed cases reported.
+
+
+## Visualization of recovered cases
+
+```{r, echo=FALSE, fig.cap="Daily Covid-19 recovered cases in Belgium"}
+recover_Belgium_corona <- new_clear_Belgium_corona %>% filter(type=="recovered")
+
+ggplot(recover_Belgium_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Belgium: Daily Covid-19 Recoveries")
+
+
+```
+
+According to the this plot first Covid-19 recovered patient was confirmed in Belgium at the middle of the march 2020 . It was 18th march 2020. After that recovered cases has increased except march to april 2020.The Highest number of patient have recovered on 28th October 2020. 
+
+
+## Visualization of death cases
+
+```{r, echo=FALSE, fig.cap="Daily Covid-19 death cases in Belgium"}
+death_Belgium_corona <- new_clear_Belgium_corona %>% filter(type=="death")
+
+ggplot(death_Belgium_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Belgium: Daily Covid-19 death cases")
+
+
+```
+
+According to the this plot first Covid-19 death cases was confirmed in Belgium at the  march 2020 . It was 11th march 2020.Three covid patient was reported. After that death cases was slowly increased.first and second corona wave period there have many death patient was reported .The Highest number of death patient was reported 10th April 2020. 
+
+
+## Visualization of active cases
+
+```{r, echo=FALSE, fig.cap="Daily Covid-19 active cases in Belgium"}
+active_Belgium_corona <- new_clear_Belgium_corona %>% filter(type=="active")
+
+ggplot(active_Belgium_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Belgium: Daily Covid-19 active")
+
+```
+
+
+According to the this plot shows the Corona virus active cases in Belgium. After the First Covid-19 Patient was confirmed there was a active cases daily report in Belgium.
+
+
+## Visualization of all cases in single plot
+
+
+$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$
+
+```{r, echo=FALSE}
+library(plotly)
+Belgium_corona %>% 
+  group_by(type, date) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type, values_from = total_cases) %>%
+  arrange(date) %>%
+  mutate(active = confirmed - death - recovered) %>%
+  mutate(active_total = cumsum(active),
+         recovered_total = cumsum(recovered),
+         death_total = cumsum(death)) %>%
+  plot_ly(x = ~ date,
+          y = ~ active_total,
+          name = 'Active', 
+          fillcolor = '#1f77b4',
+          type = 'scatter',
+          mode = 'none', 
+          stackgroup = 'one') %>%
+  add_trace(y = ~ death_total, 
+            name = "Death",
+            fillcolor = '#E41317') %>%
+  add_trace(y = ~recovered_total, 
+            name = 'Recovered', 
+            fillcolor = 'forestgreen') %>%
+  layout(title = "Belgium - Distribution of Covid19 Cases ",
+         legend = list(x = 0.1, y = 0.9),
+         yaxis = list(title = "Number of Cases"),
+         xaxis = list(title = "Source: Johns Hopkins University Center for Systems Science and Engineering"))
+
+```
+
+
+
+
+```{r, echo=FALSE, fig.cap="Daily all the Covid-19  cases in Belgium"}
+
+ggplot(new_clear_Belgium_corona, aes(x=date, y=cases, color=type)) + geom_point()
+
+```
+
+
+These two plot shows the daily cases in each type of Corona virus data set. We can take the idea of the all the daily type of Covid-19 cases. 
+
+
+# Vaccination of Countries
+$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$
+
+```{r, echo=FALSE}
+data(covid19_vaccine)
+covid19_vaccine %>% 
+  filter(date == max(date),
+         !is.na(population)) %>% 
+  mutate(fully_vaccinated_ratio = people_fully_vaccinated / population) %>%
+  arrange(- fully_vaccinated_ratio) %>%
+  slice_head(n = 15) %>%
+  arrange(fully_vaccinated_ratio) %>%
+  mutate(country = factor(country_region, levels = country_region)) %>%
+  plot_ly(y = ~ country,
+          x = ~ round(100 * fully_vaccinated_ratio, 2),
+          text = ~ paste(round(100 * fully_vaccinated_ratio, 1), "%"),
+          textposition = 'auto',
+          orientation = "h",
+          type = "bar") %>%
+  layout(title = "Percentage of Fully Vaccineted Population - Top 15 Countries",
+         yaxis = list(title = ""),
+         xaxis = list(title = "Source: Johns Hopkins Centers for Civic Impact",
+                      ticksuffix = "%"))
+```
+
+$~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$
+
+
+# Comparison with other countries
+
+**In this section we were comparing the Covid-19 data other countries with my selected country Belgium. Cuba, Bolivia and Tunisia were selected for the comparison with Belgium.** 
+
+
+
+
+### Country wise Comparison of the confirmed covid-19 Patient
+
+```{r, echo=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+Belgium_corona <- coronavirus %>% filter(country == "Belgium")
+Belgium_corona$cases <- abs(Belgium_corona$cases) # change the minus values to positive value
+
+Tunisia_corona <- coronavirus %>% filter(country == "Tunisia" )
+
+Bolivia_corona <- coronavirus %>% filter(country == "Bolivia" )
+
+Cuba_corona<- coronavirus %>% filter(country == "Cuba" )
+Cuba_corona$cases <- abs(Cuba_corona$cases) # change the minus values to positive values
+
+countries_corona<- tibble(rbind(Belgium_corona,Bolivia_corona, Tunisia_corona, Cuba_corona))
+countries_corona_wider_form <- pivot_wider(countries_corona, names_from = type, values_from = cases)
+new_countries_corona <- filter(countries_corona_wider_form, recovered >=0 )  # we remove NA values in recovered set
+
+new_clear_countries_corona <- pivot_longer(new_countries_corona, cols=6:8, names_to = "type", values_to = "cases")
+
+
+```
+
+
+
+```{r, echo=FALSE, fig.cap="Daily all the Covid-19  confirmed cases by each counrty"}
+ggplot(new_countries_corona, aes(x=date, y=confirmed, colour=country))+
+   geom_point()
+
+```
+
+
+```{r,echo=FALSE}
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+ggplot(countries_cases,
+       aes(y=date,x=cases,fill=type,col=country))+
+  geom_point()+ 
+  facet_wrap(~country,nrow = 4)+coord_flip()+ theme(legend.position = "bottom")+
+  ggtitle("Comparison between the confirmed covid-19 
+          patients by countries")
+
+```
+
+According to the Above two plot we can clearly see that comparison between each countries. In above plots Belgium has highest number of confirmed cases than other countries. To looking at this plots Belgium has three covid-19 confirmed peaks. After the July 2021 Tunisia and Cuba shows many confirmed cases than Belgium. we can see Bolivia also has three confirmed peak but it less than Belgium.
+
+
+
+### Country wise Comparison of the death covid-19 Patient
+
+```{r, echo=FALSE, fig.cap="Daily all the Covid-19  death cases by each counrty" }
+ggplot(new_countries_corona, aes(x=date, y=death, colour=country))+
+   geom_point()
+
+```
+
+
+```{r,echo=FALSE}
+countries_cases<-countries_corona%>%filter(type=="death")
+ggplot(countries_cases,
+       aes(y=date,x=cases,fill=type,col=country))+
+  geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+ theme(legend.position = "bottom")+
+  ggtitle("Comparison between the death covid-19 
+          patients by countries")
+
+```
+
+According to the above two death cases plots  Belgium shows many death cases than other countries. Considering 2020 and 2021 Belgium 2021 covid-19 death patient lower than other countries. In year 2021 many death cases was reported Tunisia and Bolivia.
+
+
+
+### Country wise Comparison of the recovered covid-19 Patient
+
+```{r, echo=FALSE, fig.cap="Daily all the Covid-19  recovered cases by each counrty" }
+ggplot(new_countries_corona, aes(x=date, y=recovered, colour=country))+
+   geom_point()
+
+```
+
+
+```{r,echo=FALSE}
+countries_cases<-countries_corona%>%filter(type=="recovered")
+ggplot(countries_cases,
+       aes(y=date,x=cases,fill=type,col=country))+
+  geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+ theme(legend.position = "bottom")+
+  ggtitle("Comparison between the recovered covid-19 
+          patients by countries")
+
+```
+
+According to the plots highest Covid-19 Patient recovered in Tunisia and Cuba. The Belgium and Bolivia was lower amount of recovered patient reported. 
+
+
+### Type wise comparison of Cases in each coutries
+
+
+```{r, echo=FALSE}
+ggplot(new_clear_countries_corona,
+       aes(x = date, 
+           y = cases,
+           col = country))+
+  geom_point()+
+  facet_grid(~type)
+```
+
+## Summary of the all Covid-19 data
+
+```{r, echo=FALSE}
+Cuba_wider_form <- pivot_wider(Cuba_corona, names_from = type, values_from = cases)
+new_Cuba_corona <- filter(Cuba_wider_form, recovered >=0 ) 
+Cu <-new_Cuba_corona %>%
+  summarise(
+    death_Total=sum(death),
+    recovered_Total=sum(recovered),
+    confirmed_Total=sum(confirmed))
+
+Belgium_wider_form <- pivot_wider(Belgium_corona, names_from = type, values_from = cases)
+new_Belgium_corona <- filter(Belgium_wider_form, recovered >=0 ) 
+Be <- new_Belgium_corona %>%
+  summarise(
+    death_Total=sum(death),
+    recovered_Total=sum(recovered),
+    confirmed_Total=sum(confirmed))
+
+
+Bolivia_wider_form <- pivot_wider(Bolivia_corona, names_from = type, values_from = cases)
+new_Bolivia_corona <- filter(Bolivia_wider_form, recovered >=0 ) 
+Bo <- new_Bolivia_corona %>%
+  summarise(
+    death_Total=sum(death),
+    recovered_Total=sum(recovered),
+    confirmed_Total=sum(confirmed))
+
+Tunisia_wider_form <- pivot_wider(Tunisia_corona, names_from = type, values_from = cases)
+new_Tunisia_corona <- filter(Tunisia_wider_form, recovered >=0 ) 
+Tu <- new_Tunisia_corona %>%
+  summarise(
+    death_Total=sum(death),
+    recovered_Total=sum(recovered),
+    confirmed_Total=sum(confirmed))
+
+Tu_rate <- Tu %>%
+          summarise( 
+          death_rate_by_population=(death_Total/11565201)*100,
+          recovered_rate_by_population=(recovered_Total/11565201)*100,
+          confirmed_rate_by_population=(confirmed_Total/11565201)*100)
+
+Be_rate <- Be %>%
+  summarise( 
+    death_rate_by_population=(death_Total/11482178)*100,
+    recovered_rate_by_population=(recovered_Total/11482178)*100,
+    confirmed_rate_by_population=(confirmed_Total/11482178)*100)
+
+Bo_rate <- Bo %>%
+  summarise( 
+    death_rate_by_population=(death_Total/11353142)*100,
+    recovered_rate_by_population=(recovered_Total/11353142)*100,
+    confirmed_rate_by_population=(confirmed_Total/11353142)*100)
+
+Cu_rate <- Cu %>%
+  summarise( 
+    death_rate_by_population=(death_Total/11338134)*100,
+    recovered_rate_by_population=(recovered_Total/11338134)*100,
+    confirmed_rate_by_population=(confirmed_Total/11338134)*100)
+
+
+```
+
+
+$$ Total-rate=\frac{Total values of each cases}{Population of each country}*100$$
+
+
+
+Country | death_Total | death_Total_rate(%) | recovered_Total |recovered_Total_rate(%) | confirmed_Total | confirmed_Total_rate(%)
+--- | --- | --- | --- | --- | --- | ---
+Belgium | 25492 |  0.222 | 62424 | 0.544 | 1132934 | 9.87
+Cuba | 3093 |  0.0273 | 373354 | 3.29 | 422614 | 3.73
+Bolivia | 17910 | 0.158 | 411830 | 3.63 | 476097 | 4.19
+Tunisia | 20550 | 0.178 | 530545 | 4.59 | 602757 | 5.21
+
+
+
+# Conclusions and Discussion
+
++ **This report is based on the data available at the coronavirus package. The Belgium data set analysis process it was found that there was an negative values from death and recovered cases and missing values from the recovered cases. The negative values and missing values can occur when there is change in the counting methodology and some data resources,updating new cases and due to errors in raw data. when I considering these problems i remove all negative values and missing(NA) values using filter command.So in my data set I found 4 negative and 45 NA values.**
++ **The Country of Belgium after the Identify first covid-19 patient Belgium did not impose any lackdowns and any covid-19 measurement like social distancing and give up on mass events. If Belgium took immediate action at early, the confirmed cases and death count could be minimized covid-19 first stage**
++ **In year 2020 Belgium shows many active Confirmed case and death cases but In year 2021 Belgium government can be minimizing Covid-19 death cases and active cases beacause of that  Belgium follows mass Vaccination Program in year 2021. Belgium was belong to Top 15 most Covid-19 Vaccination Country list. The end of the July 2021 Belgium was vaccinated 71.6% Total population in the country.**
++ **I took Bolivia, Cuba and Tunisia to Compariosn with Belgium. Because of that These four Countries has a approximately equal population. It was around 11 Million.**
++ **In Summary We can see that Belgium has the highest population death rate and also higher Covid-19 population Confirmed rate. We can clearly saw that Considering the approximately equal Population of all four Countries Covid-19 seriously effect from Belgium.**
+   
+
+
+
+# References
+
++ https://hellor.netlify.app/coronareports/ viewed by 28 september 2021
++ These search terms appeat in the result of Belgium Coronavirus data. Data available[online]
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Belgium viewed by 27 september 2021
++ These search terms appear in the result: covid, 19, and belgium Data available[online] https://www.worldometers.info/coronavirus/country/belgium/ viewed by 27 september 2021
++ These search terms appear in the results of the vaccination program in all country:Data available[online]
+https://github.com/RamiKrispin/coronavirus  viewed by 27 september 2021
++ These search terms appear in the result: population and country,Data available[online]
+https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations) viewed by 27 september 2021
++ These search terms appear in the result: belgium, climate, and map, climatestotravel.com was first indexed by Google in November 2013, Data available[online] 
+https://www.climatestotravel.com/climate/belgium  viewed by 25 september 2021
++ These search terms appear in the result: belgium, climate, and map,britannica.com was first indexed by Google more than 10 years ago, Data available[online]
+https://www.britannica.com/place/Belgium/Climate viewed by 25 september 2021
++ These search terms appear in the result: taken, belgium, government, covid, and 1, info-coronavirus.be was first indexed by Google in January 2020,Data available[online] 
+https://www.info-coronavirus.be/en/faq/ viewed by 25 september 2021
++ These search terms appear in the result: taken, belgium, government, covid, and 1,home.kpmg was first indexed by Google in December 2017, Data available[online] https://home.kpmg/xx/en/home/insights/2020/04/belgium-government-and-institution-measures-in-response-to-covid.html viewed by 25 september 2021
++ These search terms appear in the result: lock, down, and belgium, The Times of India is an Indian English-language daily newspaper and digital news media owned and managed by The Times Group.Data available[online] https://timesofindia.indiatimes.com/world/europe/belgium-imposes-new-lockdown-to-fight-third-covid-19-wave/articleshow/81672856.cms viewed by 24 september 2021
++ These search terms appear in the result: lock, down, and belgium,,Politico Europe is the European edition of the American news organization Politico reporting on political affairs of the European Union.Data available[online] https://www.politico.eu/article/belgium-easing-lockdown-monday-including-travel-schools-terraces/ viewed by 24 september 2021
++ These search terms appear in the result: lock, down, and belgium,These search terms appear in the result: lock, down, and belgium,Data available[online] 
+https://apnews.com/article/europe-belgium-entertainment-music-coronavirus-pandemic-9b86e1305527975d3f23af5eee605934 viewed by 24 september 2021

@@ -1,0 +1,455 @@
+---
+title: "Dominican Republic COVID-19 Analysis"
+author: "S.A.M.P. Udeshika - AS2018563"
+date: "25/9/2021"
+output: html_document
+---
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(devtools)
+library(sta3262)
+library(coronavirus)
+my_country <- get_individual_project_country("AS2018563")
+
+```
+### **1. Introduction**
+
+Corona viruses are a broad family of viruses that can cause a variety of conditions, from the common cold to more serious illnesses, such as the Middle East respiratory syndrome corona virus (MERS-CoV) and the respiratory syndrome corona virus.
+A novel corona virus is a new strain of corona virus that has not been previously identified in humans. The new corona virus, now known as 2019-nCoV or COVID-19 , had not been detected before the outbreak was reported in Wuhan, China, in December 2019.
+
+Corona viruses can be spread from animals to people. Based on extensive studies, we know that SARS-CoV was transmitted from the civet to humans and that MERS-CoV has been transmitted from dromedary to humans. In addition, it is known that there are other corona viruses circulating among animals, which have not yet infected humans.
+
+![](images\image1.jpg)
+<br>
+<br>
+
+####  **Visualization of the location**
+
+Dominican Republic, country of the West Indies that occupies the eastern two-thirds of Hispaniola, the second largest island of the Greater Antilles chain in the Caribbean Sea. Haiti, also an independent republic, occupies the western third of the island. The Dominican Republic’s shores are washed by the Caribbean to the south and the Atlantic Ocean to the north. Between the eastern tip of the island and Puerto Rico flows the Mona Passage, a channel about 80 miles (130 km) wide. The Turks and Caicos Islands are located some 90 miles (145 km) to the north, and Colombia lies about 300 miles (500 km) to the south. The republic’s area, which includes such adjacent islands as Saona, Beata, and Catalina, is about half the size of Portugal. The national capital is Santo Domingo, on the southern coast.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(magrittr)
+Dominican_Republic_corona <- coronavirus %>% filter(country == "Dominican Republic")
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+library(leaflet)
+map_DR <- leaflet() %>% addTiles() %>% addMarkers(lng = -70.1627, lat = 18.7357, popup = "Dominican Republic")
+map_DR
+
+```
+
+<br>
+
+####  **Climate condition**
+
+The Dominican Republic has a moderate, relatively mild tropical climate, although it lies well within the tropical zone. Conditions are ameliorated in many areas by elevation and by the northeast trade winds, which blow steadily from the Atlantic all year long. The annual mean temperature is 77 °F (25 °C); regional mean temperatures range from 69 °F (21 °C) in the heart of the Cordillera Central to as high as 82 °F (28 °C) on the coastal plains. Temperatures rarely rise above 90 °F (32 °C), and freezing temperatures are unknown.
+
+The heaviest precipitation is in the mountainous northeast (the windward side of the island), where the average annual rainfall is more than 100 inches (2,540 mm). As the trade winds pass over the country, they lose their moisture on various mountain slopes, so that the far western and southwestern valleys, along the Haitian border, remain relatively dry, with less than 30 inches (760 mm) of annual precipitation. The northwestern and southeastern extremes of the country are also arid. The Dominican Republic is occasionally damaged by tropical storms and hurricanes, which originate in the mid-Atlantic and southeastern Caribbean from August until October each year.
+
+<br>
+
+#### **Lock-down status of the country**
+
+The Dominican Republic’s Ministry of Health confirmed the first case of corona virus (COVID-19) in the country on Sunday, March 1. According to officials, a tourist visiting the country from Italy tested positive for the virus. The individual is being treated in isolation at a hospital near Santo Domingo. A second individual from France is reportedly being monitored for the virus as well. Dominican Republic’s President Danilo Medina declared from 20.07.2020 state of emergency for 45 days due to an increase in corona virus cases. The curfew starts at different evening hours in Dominican cities, changing between 5 p.m. and 8 p.m. (2100 GMT and 0000GMT) and ends at 5 a.m. (0900 GMT). Also use of face masks in public places is ratified as an “essential measure” and those who do not wear will be sanctioned.
+
+Currently, most travelers do not need to present a negative COVID-19 test upon arrival to enter the Dominican Republic. Airports and other ports of entry will perform a quick, aleatory breath test to a percentage of passengers, and all those who present symptoms, upon arrival. Passengers under the age of five and crew members are exempt from this procedure. 
+
+Passengers who present a vaccination card no less than 3 weeks after the last dose was placed or a negative PCR test taken within 72 hours prior to arrival in the Dominican Republic will be exempted from the random test. All passengers will also need to perform a temperature check. Passengers who present symptoms or whose test results are positive will be isolated and attended at authorized locations. 
+
+Visiting hours for protected areas and national parks will be Monday through Friday from 8:00 a.m. to 5:00 p.m.; Saturdays and Sundays from 8:00 a.m. to 4:00 p.m. Salto El Limón, Saltos de Jima, and 27 Saltos de Damajagua are open to the public.
+Outside of the airports, social distancing of at least 6.5 feet (2 meters) and the use of face masks in public places are required for the general and traveling public within indoor spaces and in areas where social distancing is not possible. 
+
+<br>
+
+#### **Actions taken by the government**  
+
+The immediate actions taken are broadly classified into three sections:
+
+1. General trends
+2. Fiscal policy
+3. Monetary and exchange-rate policy
+
+##### <span style="color:blue"> 1. General trends</span style>
+The Government of the Dominican Republic has implemented various measures to curb the spread of COVID-19 in the population. On 16 March 2020, all inbound flights from China, Europe, the Islamic Republic of Iran and the Republic of Korea were suspended. On 19 March 2020, the government expanded the restrictions and declared a state of emergency, closing the land border (with Haiti) and sea and air borders, suspending classes in all schools and universities and cancelling all mass gatherings and events. A nation-wide curfew between 8 p.m. and 6 a.m. was introduced on 20 March 2020. Thanks to the slowdown in the rate of infection, a plan for the phased reopening of the economy was implemented, with the first phase beginning on 20 May 2020.
+
+##### <span style="color:blue"> 2. Fiscal policy</span style>
+In response to the challenges of COVID-19, the Government of the Dominican Republic introduced social protection programmes and other programmes intended to safeguard employment in the private sector. It launched three cash transfer programmes targeting various sectors of the population, at a total cost of 42 billion Dominican pesos (approximately US$ 750 million). The Stay at Home programme grants 5,000 Dominican pesos (RD$ 5,000) to low-income individuals and covers a total of 1.5 million households. Under the Employee Solidarity Assistance Fund (FASE) programme, formal sector workers who have been unable to work because of the restrictions implemented receive 70% of their salary, with a minimum amount of RD$ 5,000 and a maximum of RD$ 8,500 per month. Under the third programme, Pa’ Ti, informal workers receive a cash transfer of 5,000 pesos per month for an indefinite period. Public health spending is expected to increase by approximately RD$ 10 billion (US$ 171 million).
+
+The payment of taxes and contributions was deferred for the hotel sector. The Bureau of Internal Revenue also exempted most taxpayers from the advance payment of income tax for May 2020, and companies will have the option to pay the industrialized goods and services transfer tax (ITBIS) on their sales on a quarterly basis, instead of monthly. Micro- and small enterprises were also exempted from the payment of the first instalment of the tax on assets, which was due on 29 June 2020.
+
+
+##### <span style="color:blue"> 3. Monetary and exchange-rate policy</span style>
+On 18 March 2020, the central bank announced a number of measures to stimulate economic activity and safeguard liquidity. These included cutting the monetary policy rate by 100 basis points (from 4.5% to 3.5%), reducing the interest rate of the permanent liquidity facility (overnight repo) by 150 basis points (from 6.0% to 4.5%), and lowering the interest rate on short-term interest-bearing deposits at the central bank (overnight), from 3.0% to 2.5%.
+
+<br>
+
+#### **Vaccination details** 
+3 Vaccines Approved for Use in :
+
+1. Pfizer/BioNTech       -   BNT162b2
+2. Oxford/AstraZeneca    -   AZD1222
+3. Sinovac               -   CoronaVac
+    
+1 Vaccine in Clinical Trials : 
+
+* Curevac    -   CVnCoV
+
+Dominican Republic has administered at least 11,741,680 doses of COVID vaccines so far. Assuming every person needs 2 doses, that’s enough to have vaccinated about 54.7% of the country’s population.
+During the last week reported, Dominican Republic averaged about 25,773 doses administered each day. At that rate, it will take a further 84 days to administer enough doses for another 10% of the population.
+
+<br>
+<br>
+
+### **2. Exploratory Data Analysis**
+<br>  
+
+####  **Visualization of COVID-19 cases in Dominican Republic**    
+  
+<br>
+Following outputs are given the summary of the Dominican Republic corona virus data. The 1818 observations are taken 606 days from 22 January 2020 to 18 September 2021. The several variables are obtained such as date of the observation taken from, province of the case identified, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given type in given date.
+<br>
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+Dominican_Republic_corona <- coronavirus %>% filter(country == "Dominican Republic")
+head(Dominican_Republic_corona)
+
+# Convert data set to wider format
+DR_corona_wider <- pivot_wider( Dominican_Republic_corona, names_from = type, values_from = cases)
+summary(DR_corona_wider)
+
+```
+<br>
+
+Using above summary we can see there is some missing values in recovered type of our data set. Therefore, I removed those data from my data set. Since final data set has 561 days from 22 January 2020 to 04 August 2021.
+
+<br>
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+# We can see last 45 days data in recovered cases are NA. Therefore we remove it.
+wide_DR_corona <- DR_corona_wider[complete.cases(DR_corona_wider[ , 6:8]),]
+summary(wide_DR_corona)
+
+```
+<br>
+
+Below graph simply shows number of cases in confirmed, recovered and death cases in Dominican Republic.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+barplot(colSums(wide_DR_corona[,8:6]), main = "Figure 01 : COVID-19 cases of Dominican Republic", ylab = "Type of cases", xlab = "No. of cases", horiz = TRUE, col=c("green", "red", "blue"))
+
+```
+<br>
+
+According to the Figure 01 we can see confirmed and recovered cases are likely same. Also number of death cases are very smaller than other two types of cases.
+
+<br>
+
+When we look at daily COVID-19 confirmed, recovered and death cases separately we can see follow figure show there variations simply.
+
+<br>
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+# Convert data set again into pivot longer format to analysis
+long_DR_corona <- pivot_longer(wide_DR_corona,6:8, names_to = "type", values_to = "cases" )
+
+long_DR_corona %>% ggplot(aes(x = date, y = cases, col = type))+geom_jitter()+facet_grid(~type)+ggtitle("Figure 02 : Visualization of COVID-19 confirmed, death, recovered cases")
+
+```
+<br>
+
+Confirmed and recovered cases show the same variability, with fewer cases occurring in the beginning and then each two types are increasing and decreasing again and again. But death cases are variate in each day like equally. 
+Also, below Figure 03 shows how to variate confirmed, death and recovered cases in Dominican Republic in terms of time in same graph. 
+
+<br>
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(gganimate)
+
+# Plot
+p1 <- long_DR_corona %>%
+  ggplot( aes(x=date, y=cases, group=type, color=type)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("Figure 03 : Time series plot for COVID-19 in Dominican Republic") +
+  ylab("no. of cases in each day") +
+  transition_reveal(date)
+
+animate(p1, height = 400, width =800)
+
+```
+<br>
+
+According to that figure 03, it can be much easy to understand the fluctuation of the deaths, confirmed cases and recovered cases in each day. At first 06 months, there were no much cases but in shortly, number of confirmed case are increased speedily and it is too much larger than death and confirmed cases. After some times confirmed cases are decreasing and recovered cases are larger than it. Using this figure we can see this type of variation at three times during in this period.
+Especially, Dominican Republic has small amount of death cases than confirmed cases in all the time period and it controlled certain range. Recovered cases are stared to increase nearly in confirmed cases. It means recovering procedure is better in Dominican Republic.
+
+<br>
+
+####  **Visualization of COVID-19 active cases in Dominican Republic**
+
+<br>
+Figure 04 : Total number of Active COVID-19 cases in Dominican Republic
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(dplyr)
+DR_active <- wide_DR_corona %>%
+  mutate(active = confirmed - recovered - death)
+
+DR_active_tot <- DR_active %>%
+  mutate(active_total = cumsum(active),
+         recovered_total = cumsum(recovered),
+         death_total = cumsum(death))
+ggplot(DR_active_tot,aes(x=date, y=active_total)) + geom_line() + ggtitle("Total Active COVID-19 cases in Dominican Republic")
+
+```
+<br>
+
+The above Figure 04 shows the total active COVIDD-19 cases in Dominican Republic from January 2020 to August 2021. According to that the total number of active cases reported increased continuously but in sometime active cases are decreased, then after some days it is increased again. But in July of 2021 the active cases are decreased rapidly.
+
+<br>
+<br>
+
+#### **Comparison COVID-19 cases in Dominican Republic with nearest countries**
+
+In below Figure 05 shows selected specific countries considering the special reasons. These four counties are Cuba, US, Colombia and China. 
+<br>
+<br>
+
+######   Figure 05 : Comparisopn country Locations map
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+US_corona <- coronavirus %>% filter(country == "US")
+Colombia_corona <- coronavirus %>% filter(country == "Colombia")
+Cuba_corona <- coronavirus %>% filter(country == "Cuba")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = Dominican_Republic_corona, aes(x = long, y = lat), color = "black", size = 1) +
+  geom_point(data = Cuba_corona, aes(x = long, y = lat), color = "red", size = 1) +
+  geom_point(data = US_corona, aes(x = long, y = lat), color = "red", size = 1) +
+  geom_point(data = Colombia_corona, aes(x = long, y = lat), color = "red", size = 1) 
+
+```
+<br>
+
+Dominican Republic is an island. Cuba, US and Colombia are geographically near to it. On 06th March 2020 Colombia confirmed there first case and on 11th of March 2020 the first three cases were found in Cuba. Also on 20th January 2020 America was found there first COVID-19 confirmed case. After that it was spread all over these countries. There are large outbreaks of the disease in multiple places and the United States has the worst outbreak of any country in the world.
+
+Therefore to compare the corona virus pandemic in Dominican Republic, I choose Cuba, US and Colombia as the neighboring countries, and also US as having the worst outbreak from the virus.
+
+In this part,I compare the corona virus cases of Dominican Republic with Cuba, US and Colombia.
+
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results=FALSE}
+
+###########################################################
+
+Cuba_corona <- coronavirus %>% filter(country == "Cuba")
+summary(Cuba_corona)
+
+Cuba_corona_wider <- pivot_wider( Cuba_corona, names_from = type, values_from = cases)
+head(Cuba_corona_wider)
+summary(Cuba_corona_wider)
+
+wide_Cuba_corona <- Cuba_corona_wider[complete.cases(Cuba_corona_wider[ , 6:8]),]
+summary(wide_Cuba_corona)
+
+wide_Cuba_corona$death <- abs(wide_Cuba_corona$death)
+summary(wide_Cuba_corona)
+
+#############################################################
+
+US_corona <- coronavirus %>% filter(country == "US")
+summary(US_corona)
+
+US_corona_wider <- pivot_wider( US_corona, names_from = type, values_from = cases)
+head(US_corona_wider)
+summary(US_corona_wider)
+
+wide_US_corona <- US_corona_wider[complete.cases(US_corona_wider[ , 6:8]),]
+summary(wide_US_corona)
+
+# Minus value is too smaller. Therefore, it will replace from zero
+wide_US_corona$recovered <- replace(wide_US_corona$recovered, wide_US_corona$recovered<0, 0)
+wide_US_corona$recovered
+summary(wide_US_corona)
+
+######################################################################
+
+Colombia_corona <- coronavirus %>% filter(country == "Colombia")
+summary(Colombia_corona)
+
+Colombia_corona_wider <- pivot_wider( Colombia_corona, names_from = type, values_from = cases)
+head(Colombia_corona_wider)
+summary(Colombia_corona_wider)
+
+wide_Colombia_corona <- Colombia_corona_wider[complete.cases(Colombia_corona_wider[ , 6:8]),]
+summary(wide_Colombia_corona)
+
+wide_Colombia_corona$recovered <- abs(wide_Colombia_corona$recovered)
+summary(wide_Colombia_corona)
+
+```
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(gganimate)
+compair_confirmed <- tibble(date = rep(wide_DR_corona$date, 4),
+                            country = rep(c("Dominican Republic", "Cuba", "US", "Colombia"), each = 561),
+                            cases = c( wide_DR_corona$confirmed, 
+                                       wide_Cuba_corona$confirmed, 
+                                       wide_US_corona$confirmed, 
+                                       wide_Colombia_corona$confirmed))
+
+c1 <- compair_confirmed %>% 
+      ggplot(aes(x=date, y= cases, color=country))+
+      geom_line(size = 0.7) +
+      geom_point() +
+      ggtitle("Figure 06 : Daily COVID-19 confirmed cases in Dominican Republic,Cuba,US & Colombia") +
+      ylab("no. of cases in each day") +
+      transition_reveal(date)
+
+animate(c1, height = 400, width =800)
+
+```
+<br>
+
+Figure 06 shows that the confirmed cases of Dominican Republic and Cuba were quite smaller when compared to US between two of this years. In beginning of the 2021, number of confirmed cases of US is very higher compare to Dominican Republic, Colombia and Cuba. Also there are number of confirmed cases in Colombia compare than Dominican Republic and Cuba. 
+
+<br>
+<br>
+
+Below Figure 07 shows number of recovered cases of selected countries.
+
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(gganimate)
+compair_recovered <- tibble(date = rep(wide_DR_corona$date, 4),
+                            country = rep(c("Dominican Republic", "Cuba", "US", "Colombia"), each = 561),
+                            cases = c( wide_DR_corona$recovered, 
+                                       wide_Cuba_corona$recovered, 
+                                       wide_US_corona$recovered, 
+                                       wide_Colombia_corona$recovered))
+
+c2 <- compair_recovered %>% 
+  ggplot(aes(x=date, y= cases, color=country))+
+  geom_line(size = 0.7) +
+  geom_point() +
+  ggtitle("Figure 07 : Daily COVID-19 recovered cases in Dominican Republic,Cuba,US & Colombia") +
+  ylab("no.of recovered cases") +
+  transition_reveal(date)
+
+animate(c2, height = 400, width =800)
+
+```
+<br>
+
+Due to the declining the number of confirmed cases, the number of recovered cases in Dominican Republic and Cuba is also relatively low. The number of all recovered cases in USA from the end of December 2020 is stated as zero. Therefore, recovered data in US is not correct in 2021 year. But we can see recovered cases of Colombia is increased smoothly. Cuba and Dominican Republic shows equally same variation in Figure 07 graph.
+
+<br>
+<br>
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(gganimate)
+compair_death <- tibble(date = rep(wide_DR_corona$date, 4),
+                            country = rep(c("Dominican Republic", "Cuba", "US", "Colombia"), each = 561),
+                            cases = c( wide_DR_corona$death, 
+                                       wide_Cuba_corona$death, 
+                                       wide_US_corona$death, 
+                                       wide_Colombia_corona$death))
+
+c3 <- compair_death %>% 
+  ggplot(aes(x=date, y= cases, color=country))+
+  geom_line(size = 0.7) +
+  geom_point() +
+  ggtitle("Figure 08 : Daily COVID-19 death cases in Dominican Republic,Cuba,US & Colombia") +
+  ylab("no.of death cases") +
+  transition_reveal(date)
+
+animate(c3, height = 400, width =800)
+
+```
+<br>
+
+According to Figure 08 we can see number of death cases in Dominican Republic and Cuba are very smaller than US. In America has maximum number of daily death cases in beginning of the 2021. Although Colombia has some number of death cases in daily larger than Dominican Republic and Cuba.
+
+<br>
+<br>
+<br>
+
+### **3. Conclusions and Discussion**
+
+<br>
+The data set is loaded by corona virus data set given in the package R. Dominican Republic data set is obtained from it. The data set doesn't has any minus values, but it also have 45 missing values in recovered cases. Also this data set doesn't has any provinces in the country and there are no any cases in before the march of 2020. Last daily recovered cases data are missing this data set therefore, I decided to remove all the types of data in particular days. 
+
+Also when I selected the other countries for comparison I chooser geographically nearest countries for Dominican Republic. Because, those countries has equally same climate conditions and some other conditions. These countries are Cuba, USA and Colombia. those data sets have some missing values and negative values too. I removed all the missing values in the data set and covert minus values in to absolute values. But in special case USA have too smaller minus value and it is very harder to analysis. Therefore, I replace this value from zero. All data sets are obtained in special way which is described previously.
+<br>
+
+Corona virus disease 2019 is identified in December 2019 in Wuhan China, but it is spread speedily on January to up to now in the other countries. At that time, most of countries in North America had high risk but all countries did not expect serious situations like this. US is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population they taken action to preventing virus. 
+Dominican Republic became a victim of virus after March and it happened to increase confirmed cases after May to July. Dominican Republic government had started to take actions against this situation after March but at that time virus is spread to the society but not as large way as US. However, Dominican Republic controlled the pandemic situation in their country nearly in August. They keep the rules which are built by the government in order to prevent virus. It has middle health facilities when comparing to US but they could reduce their death cases using those facilities. Then we can say prevent spread virus is the best thing to control this situation.
+
+When we see the time series plot in cases of COVID-19 in Dominican Republic, there is properly increasing and decreasing pattern of confirmed and recovered cases in three times in the whole time period. As the spread of corona virus increases, it will decrease again due to the formal and good actions taken by the government and the people, but it can be assumed that it will increase again due to the negligence of the people and government. But in the all time period death cases are in small range.  
+
+During the 561 days period from 22nd January 2020 to 04th August 2021, the total number of confirmation cases of corona infection in the Dominican Republic was 343,186 cases, of which 324,861 cases were recovered. It is 94.66% of the total infected population. There have also been 3,971 death cases during this period,  which is only about 1.16% of the total infection rate. As of 04th of August 2021, there were 14,354 active corona cases, a small percentage of about 4.18%. Compared to other countries, the COVID-19 outbreak in Dominican Republic is not much worse than US. 
+There are several limitations to keep in mind when interpreting the results of this study. Due to limited laboratory capacity, the actual epidemic may not be reflected by counts of laboratory confirmed cases reported. Sometimes, the government may be hide the actual counts of positive cases.Due to these reasons our findings can be change.
+
+
+### **4. References**
+
+* https://www.paho.org/es/temas/coronavirus
+* https://www.britannica.com/place/Dominican-Republic
+* https://www.godominicanrepublic.com/newsroom/coronavirus/
+* https://covid19.trackvaccines.org/country/dominican-republic/
+* https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/dominican-republic/
+* https://www.garda.com/fr/crisis24/alertes-de-securite/318906/dominican-republic-government-confirms-first-covid-19-case-march-1
+* https://www.aa.com.tr/en/americas/dominican-republic-issues-state-of-emergency-over-virus/1916882 
+* https://en.wikipedia.org/wiki/
+* https://www.who.int/emergencies/diseases/novel-coronavirus-2019/interactive-timeline?
+* https://gist.githubusercontent.com/dataprofessor/995c2cf324fc21f0b00b3ec2e6d2fa9d/raw/f4b0e217ef94c2e3924d6be77825a927dcdfc143/gganimate-animation-minimal.R
+* https://rstudio.github.io/leaflet/

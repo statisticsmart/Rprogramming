@@ -1,0 +1,435 @@
+---
+title : COVID-19 Pandemic in the Philippines
+author : R.H.T.O.Wickramarathne AS2018581
+date : "September 28,2021"
+output : 
+ html_document :
+   theme : flatly
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE,warning = FALSE)
+```
+
+![](https://www.emeraldgrouppublishing.com/sites/default/files/image/covid-cells.jpg)
+
+```{r}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(dplyr)
+library(hrbrthemes)
+library(gganimate)
+```
+```{r,reults="hide",include=FALSE}
+data(coronavirus) 
+head(coronavirus)
+tail(coronavirus)
+unique(coronavirus$country)
+
+Philippines_corona <- coronavirus %>% filter(country == "Philippines")
+
+ph <- Philippines_corona %>% pivot_wider(names_from = "type",values_from="cases")
+
+
+#removing negative cases
+
+ph[ph == -2] <-4
+ph[ph == -3] <-3060
+ph[ph == -34] <-180
+ph[ph == -64] <-10479
+ph[ph == -152] <-10479
+ph[ph == -26] <-5770
+ph[ph == -8] <-5770
+ph[ph == -190] <-3864
+
+view(ph)
+
+#new data set with NA rows
+
+philippines <- ph %>% pivot_longer(c("confirmed","death","recovered"),names_to="type",values_to="cases")
+
+philip <- ph %>% 
+  rename(Confirmed=confirmed, Death=death,Recovered=recovered) %>%
+  pivot_longer(c("Confirmed","Death","Recovered"),names_to="type",values_to="cases")
+view(philip)
+
+#with NA
+recover_Philip_corona <- philip %>% filter(type=="Recovered")
+confirm_Philip_corona <- philip %>% filter(type=="Confirmed")
+death_Philip_corona <- philip %>% filter(type=="Death")
+
+#dataframe withot NA rows
+phi = ph[-c(562:606),]
+view(phi)
+#new data set without NA rows
+philip1 <- phi %>% 
+  rename(Confirmed=confirmed, Death=death,Recovered=recovered) %>%
+  pivot_longer(c("Confirmed","Death","Recovered"),names_to="type",values_to="cases")
+view(philip1)
+
+```
+
+#Introduction
+The Philippines is a Southeast Asian island nation in the western Pacific Ocean. It is an archipelago of about 7,000 islands and islets located around 500 miles (800 kilometers) off the coast of Vietnam. It has 17 regions, 81 provinces, and 146 cities. Although Manila is the country's capital, Quezon City is its most populous city. Both are located on Luzon, the largest island, and are part of the National Capital Region (Metro Manila). The Philippines had a population of approximately 109 million people and covers an area of 300,000 km^2^. In the Philippines, Ethnologue counts 186 distinct languages and there are over a hundred ethnic groups in the country. It is the world's third-largest English-speaking nation. The Philippines is a founding member of the United Nations, World Trade Organization, ASEAN, Asia-Pacific Economic Cooperation Forum, and East Asia Summit.
+
+##Visualization of the country
+The Philippines shares maritime borders with Taiwan to the north, Japan to the northeast, Palau to the east and southeast, Indonesia to the south, Malaysia and Brunei to the southwest, Vietnam to the west, and China to the northwest, and is bounded by the South China Sea to the west, the Philippine Sea to the east, and the Celebes Sea to the southwest.
+
+```{r}
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "lightskyblue2", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))+
+  ylab("Latitude") +xlab("Longtitude")+
+  ggtitle("Location of the Philippines")
+
+map<- p +
+  geom_point(
+    data = Philippines_corona, aes(x = long, y = lat), color = "darkred", size
+    = 1
+)
+
+
+ggplotly(map)
+```
+
+##Climate Condition of the Philippines
+The Philippines is highly vulnerable to climate change's effects, such as rising sea levels, increased frequency of extreme weather events, rising temperatures, and heavy rainfall. Tropical rainforest, tropical monsoon, tropical savanna, humid subtropical, and oceanic climates (both in higher-altitude locations) are the five types of climates found in the Philippines. They are all characterized by high temperatures, oppressive humidity, and rain. The country has two seasons, the rainy season and the dry season, which are determined by the amount of rainfall. March through October are the warmest months of the year, with the winter monsoon bringing colder air from November to February. The hottest month is May, and the coldest month is January. The average yearly temperature is around 26.6 degrees Celsius. The Philippines is located in the world's most cyclone-prone zone. The islands experience 19-20 typhoons annually from July to October, with around nineteen typhoons entering the Philippine area of responsibility in a typical year and 7-9 making landfall.
+
+
+#COVID-19 situation in the Philippines
+The COVID-19 pandemic in the Philippines is part of the global coronavirus disease pandemic of 2019 (COVID-19), which is caused by the coronavirus 2 that causes severe acute respiratory syndrome (SARS-CoV-2). On January 30, 2020, the first instance in the Philippines was discovered, involving a 38-year-old Chinese lady who was being treated at San Lazaro Hospital in Metro Manila. A posthumous test result from a 44-year-old Chinese man came back positive for the virus on February 1, making the Philippines the first country outside of China to have a verified death from the sickness. The Philippines confirmed its first local transmission on March 7, 2020, after more than a month without reporting any cases. Since then, the virus has spread to all 81 provinces in the country.
+Since January 2020, more than 2.4 million cases have been recorded, resulting in more than 37,400 deaths, second only to Indonesia in Southeast Asia. On September 11, 2021, the Department of Health (DOH) recorded the largest single-day increase in the number of confirmed cases, with 26,303 new cases.
+
+
+##Lockdown status
+The Philippine response to COVID-19 has been described as being one of the longest and strictest lockdowns in the world.
+
+* The Inter-Agency Task Force for the Management of Emerging Infectious Diseases (IATF-EID)      executed a series of stay-at-home orders and cordon sanitaire measures across the island of    Luzon and its associated islands as part of the increased community quarantine in Luzon. It's   part of the Philippines' COVID-19 community quarantines, which are a wider scale of COVID-19   confinement measures with varied degrees of strictness. The "enhanced community quarantine"    (ECQ), which is effectively a total lockdown, is the strictest of these methods.
+
+* In Luzon, there were three instances of the ECQ being used. The first was put in place         between March 17 and May 31, 2020, and it remained in place until May 31 in locations where    there was a significant danger of infection. During the month of May, the IATF-EID introduced   new degrees such as "modified enhanced community quarantine" (MECQ) and "general community     quarantine" (GCQ) as restrictions were eased, until all restrictions under ECQ and MECQ were   downgraded to GCQ and "modified general community quarantine" (MGCQ) on June 1.
+
+* On August 4, a second MECQ was re-implemented in Metro Manila and its immediate neighboring    provinces after two months of a reduced GCQ status, and it was lifted on August 18. Finally,   a third ECQ was restored in Tabuk on January 24, 2021, while a MECQ was elevated in four more   municipalities in Kalinga. On February 15, it was lifted. Due to a recent increase in COVID    cases, particularly in the Greater Manila Area, a new ECQ was introduced for Holy Week,        beginning March 29 and ending April 4, and has now been extended until April 11, 2021.During   its peak, the ECQ affected around 57 million people in Luzon.
+
+* The Philippines reimposed a virus lockdown in Manila on Tuesday (Sept. 7), a day after         lifting stay-at-home orders for more than 13 million people.
+
+![Implementation of community quarantine in Luzon from March 17 to June 15](https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/COVID-19_community_quarantine_in_Luzon.svg/1500px-COVID-19_community_quarantine_in_Luzon.svg.png)
+
+##Actions taken by the Government
+On March 12, 2020, President Duterte announced a partial lockdown covering the entirety of Metro Manila that was later put into place on March 15. The lockdown was further expanded on March 16, when President Duterte imposed an enhanced community quarantine (ECQ) throughout the entire island of Luzon and its associated islands. The two main levels of community quarantine measures are the enhanced community quarantine (ECQ) and the general community quarantine (GCQ). 
+*	Restriction on all modes of transportation.
+
+* Work stoppages and the establishment of alternative work arrangements, such as teleworking.
+
+* Ensuring the availability of food and medical supplies.
+
+* Prohibition of profiteering and stockpiling of essential goods.
+
+*	During the quarantine period, a 30-day grace period for loan and rental payments is allowed.
+
+*	Mass gatherings are canceled.
+
+*	Non-essential businesses will be closed.
+
+*	24/7 opening of essential businesses and utilities in 100% operational capacity.
+
+
+When ECQ was reintroduced in March 2021 in the Greater Manila Area 
+*	All households must adhere to a strict home quarantine policy.
+
+*	Mass gatherings (more than 10 persons outside and non-household members indoors) and face-to-face classes are not allowed in ECQ zones. Religious gatherings and dine-in services are not allowed. Shopping malls are allowed to operate for essential services.
+
+*	Restrictions on public transportation.
+
+*	In addition to front-line services (health and other emergency services), certain operations, such as agriculture, forestry, aquaculture, and delivery and courier services of essential goods, are allowed full operations.
+
+*	Some sectors have limited operations.
+
+During the most recent extended community quarantine (ECQ), which lasted two weeks, local administrations paid low-income households 1,000-4,000 PHP (20-80 USD)
+By mid-2020, most of the Philippines were placed in a more relaxed and centralized general community quarantine (GCQ), although certain parts of the country remained with stricter measures.
+
+on June 28, 2021, the government announces new quarantine status under GCQ.
+
+* Only non-contact sports are permitted.
+
+* Lotteries and horse races with off-track betting stations are currently permitted.
+
+* Personal care services are allowed to operate at 30% as long as mask removal is not required. If the establishment has a Safety Seal, it is allowed to operate at a 10% higher capacity.
+* Outdoor tourist attractions are allowed to be 30 percent full, but only if strict public health protocols are followed.
+
+* Staycation hotels may operate at up to 100% venue capacity, while other DOT-accredited establishments may only operate at 30% capacity. Staycations are open to people of all ages.
+
+* Indoor dining is limited to 20% capacity, while outdoor dining is limited to 50% capacity. If the establishment has the Safety Seal, the capacity of indoor dining can be increased by 10%.
+
+##COVID-19 Vaccination program in the Philippines
+In response to the ongoing pandemic in the Philippines, the COVID-19 vaccination program is an ongoing mass immunization campaign against severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2), the virus that causes coronavirus disease 2019 (COVID-19).Pfizer-BioNTech, Oxford-AstraZeneca, Sinovac, Sputnik V, Janssen, Covaxin, Moderna, Sinopharm, and Sputnik Light have all received emergency use authorizations (EUA) from the Food and Drug Administration (FDA). There are eight more vaccines in the pipeline for the program, all of which are in various stages of development. On October 26, 2020, the COVID-19 Immunization Program Management Organizational Structure was established to aid in the distribution of COVID-19 vaccines in the Philippines. However, by November 6, 2020, it had been replaced by a vaccine cluster within the Inter-Agency Task Force for the Management of Emerging Infectious Diseases (IATF-EID). Carlito Galvez Jr. was named vaccine czar and given the task of leading the cluster. The Philippine National Vaccination Program and Implementation Plan were also approved on November 6, 2020.As of September 27, 2021, a total of 44,361,285 vaccine doses had been administered across the country, with 20,583,580 people receiving full vaccinations.
+
+
+#Exploratory Data Analysis
+###An Overview of cumulative statistics in the Philippines
+```{r,results="hide",include = FALSE}
+#without NA
+recover_Philip_corona1 <- philip1 %>% filter(type=="Recovered")
+confirm_Philip_corona1 <- philip1 %>% filter(type=="Confirmed")
+death_Philip_corona1 <- philip1 %>% filter(type=="Death")
+
+ph1 <- philip1 %>% pivot_wider(names_from = "type",values_from="cases") %>%
+  mutate(active=cumsum(Confirmed)-cumsum(Recovered)-cumsum(Death))
+view(ph1)
+
+confirmed_sum <- sum(confirm_Philip_corona1$cases)
+confirmed_sum
+recover_sum <- sum(recover_Philip_corona1$cases)
+recover_sum
+death_sum <- sum(death_Philip_corona1$cases)
+death_sum
+
+#percentage
+recover_per <- (recover_sum/(confirmed_sum))*100
+recover_per
+death_per <- (death_sum/(confirmed_sum))*100
+death_per
+active_per <- (23086/(confirmed_sum))*100
+active_per
+confirm_per <- 100
+
+corona <- tibble(Type = c("Active", "Recover", "Death"),
+                 Percentage = c(active_per, recover_per, death_per ))
+corona
+```
+
+```{r}
+#barchart
+ggplot(corona, aes(x = Type, y = Percentage,fill=Type)) +  scale_fill_manual(values = c("seagreen2", "royalblue1","hotpink4")) +ylab("Percentage from total cases")+
+geom_bar (stat = "identity")+ ylim(0,100) + annotate(geom="text", x=1,y=5,label="1.43%",color="seagreen2",fontface="bold") +
+  annotate(geom="text", x=2,y=6,label="1.74%",color="royalblue1",fontface="bold")+
+  annotate(geom="text", x=3,y=99,label="96.8%",color="hotpink4",fontface="bold")
+```
+ 
+This bar chart depicts the deaths, recovered and active percentage from total confirmed cases. The graph indicates that nearly 97 percent of the patients have been recovered out of the total number of confirmed cases.Both the death rate and the active rate are lower when compared with the recovery rate. Therefore, a clear deduction can be made regarding the Philippines' better performance in a pandemic situation.
+
+###Total number of cases in log scale
+```{r}
+#line plot for 3 categories
+p1 <- ggplot(philip ,aes(date, cases, color=type), is.na=FALSE) +
+  geom_line() +
+  ylab("Daily cases in log scale")+xlab("Date")
+p2<-p1 +scale_y_continuous(trans="log10")
+ggplotly(p2 + scale_x_date(date_breaks = "1 month", date_labels = " %b-%y") + scale_color_manual(values = c("hotpink4", "yellow","royalblue3"))+
+           theme(axis.text.x=element_text(angle=60, hjust=1)))%>% layout(legend=list(x=0.3,y=-0.3,orientation="h"))%>% 
+  layout(legend=list(title=list(text='Type')))
+``` 
+The graph depicts that the number of confirmed, recovered, and death cases followed a seasonal pattern. The graph indicates that in the first few months of the pandemic, the number of confirmed cases and recovered cases has rapidly increased. The number of deaths rises for the first few months and then falls, while the number of confirmed and recovered cases rises. The log-transformed series indicates the same pattern for all confirmed, recovered, and death cases and it seems to be a constant over the 1^st^ September 2020 to 1^st^ September 2021.
+
+```{r}
+p2 <- ph %>% 
+  ggplot( aes(x=date, y=confirmed), is.na=FALSE) +
+  geom_line(color="royalblue",size=0.4) +
+  xlab("Date")+ylab("Confirmed cases")+
+  geom_hline(aes(yintercept = 3873.845))+geom_point(color="royalblue",size=0.2)
+p3 <- p2 + scale_x_date(date_breaks = "1 month", date_labels = " %b - %y") + theme(axis.text.x=element_text(angle=60, hjust=1))+
+  ggtitle("Philippines: Daily Covid-19 confirmed cases")
+ggplotly(p3) 
+
+```
+__Average Confirmed cases = 3873.85__
+
+This graph indicates that the seasonal variation and upward trending of daily Covid-19 confirmed cases in the Philippines. During the first few months from January 2020 to September 2020, daily confirmed cases slightly increased but remained below the average of 3857.85 instances. There has been a decrease in daily confirmed cases from 2020-09-21 to 2020-12-26 and it remains below the average confirmed cases. After December 2020, the number of confirmed cases increased drastically and reached its peak. Again, the graph followed the same pattern from April 2021 to Sep 2021.The highest number of confirmed cases was reported on 09^th^ of September 2021.
+
+```{r}
+p4 <- ph %>% 
+  ggplot( aes(x=date, y=recovered), is.na=FALSE) +
+  geom_line(color="hotpink4") +
+ xlab("Date")+ylab("Recovered cases")+
+  geom_hline(aes(yintercept = 2795.90))
+ 
+p5 <- p4 + scale_x_date(date_breaks = "1 month", date_labels = "  %b - %y") +
+  theme(axis.text.x=element_text(angle=60, hjust=1))+ggtitle("Philippines: Daily Covid-19 recoveries")
+ggplotly(p5)
+
+```
+__Average Recovered cases = 2795.90__
+
+This graph indicates the seasonal variation of daily Covid-19 recovered cases in the Philippines.According to the graph, from January to July of 2020, the number of recovered cases fluctuated below the average line. The number of cases increases rapidly at the end of July 2020. After July, the number of cases fluctuated above the average line. Then the graph reached its peak level on 18^th^ of April 2021. After reaching its peak, the number of cases decreases drastically.
+
+```{r}
+p6 <- ph %>% 
+  ggplot( aes(x=date, y=death), is.na=FALSE) +
+  geom_line(color="springgreen3") +
+  xlab("Date")+ylab("Death cases")+
+  geom_hline(aes(yintercept = 60.37129)) 
+
+p7 <- p6 + scale_x_date(date_breaks = "1 month", date_labels = " %b - %y") +
+  theme(axis.text.x=element_text(angle=60, hjust=1)) +ggtitle("Philippines: Daily Covid-19 death cases")
+ggplotly(p7)
+```
+__Average Death cases = 60.37__
+
+The graph indicates that the number of deaths is increasing slowly, but it is below the average line up to July 2020. The number of daily deaths has drastically increased from July 2020 to September 2020.After that, the number of cases fluctuates on the average line. Then the graph reached its peak level on 09^th^ of April 2021. From April to September, death cases fluctuated above the average line, and again the graph reached its maximum level in September. According to the graph, an assumption can be made about the increasing number of deaths due to the government's mishandling of the pandemic and hospitals' being overwhelmed owing to a lack of beds and insufficient health personnel and they are facing a critical situation since, number of deaths has been increasing day by day in recent weeks.
+
+###COVID-19 vaccination program in the Philippines
+```{r,results="hide",include = FALSE}
+#covid vaccination
+data(`covid19_vaccine`) 
+head(covid19_vaccine)
+unique(covid19_vaccine$country)
+
+Philip_vacc <- covid19_vaccine %>% filter(country_region== "Philippines")
+summary(Philip_vacc)
+v3<- Philip_vacc %>% pivot_longer(c("people_partially_vaccinated","people_fully_vaccinated"),names_to="type",values_to="cases")
+```
+  
+```{r}
+v1 <- ggplot(v3 ,aes(date, cases, color=type)) +
+  geom_line() +
+  xlab("Date")+ylab("Total number of people who are vaccinated")
+v2<-v1 + scale_x_date(date_breaks = "1 month", date_labels = "%b - %y") 
+
+ggplotly(v2 + scale_color_manual(values = c("hotpink3","blue2"))+
+    theme(axis.text.x=element_text(angle=60, hjust=1)))%>% layout(legend=list(x=0.3,y=-0.3,orientation="h"))%>% layout(legend=list(title=list(text='Type')))  
+```
+
+This graph shows that the number of people who are fully vaccinated is lower than the number of people who are partially vaccinated. The number of people who are vaccinated has also moderately increased since mid-March of 2021. The highest number of people who have been vaccinated was reported on the 28th of September. In recent weeks, the number of people who are fully vaccinated has increased, while the number of people who are partially vaccinated has remained constant.
+
+##Comparison with neighbouring countries
+The comparison is done by taking neighbour countries of the Philippines,such as Japan,Vietnam and Malaysia.
+
+```{r,results="hide",include = FALSE}
+#borders of Philippines
+
+border_line <- coronavirus %>%filter(country %in% c("Japan","Vietnam", "Malaysia","Philippines")) 
+view(border_line)
+
+border_line[border_line== -2] <-4
+border_line[border_line== -1] <-0
+view(border_line)
+
+border_tot <- border_line %>%  pivot_wider(names_from = "type",values_from="cases") %>% 
+  group_by(country) %>%
+  mutate(confirmed_tot = cumsum(confirmed),
+         recovered_tot = cumsum(recovered), death_tot = cumsum(death))
+view(border_tot)
+```
+
+###Comparison of the total number of confirmed cases with neighbouring countries
+```{r}
+#confirmed
+b1 <- border_tot %>% 
+  ggplot(aes(x=date, y=confirmed_tot,color=country)) + 
+  geom_line(size=.7)+
+  scale_color_manual(values=c("deeppink","blueviolet","#00A5FF","yellow"))+scale_y_continuous(trans="log10") +
+xlab("Date") +
+  ylab("Total confirmed cases in log scale")+scale_x_date(date_breaks = "1 month", date_labels = "%b - %y") + theme(axis.text.x=element_text(angle=60, hjust=1))+ggtitle("Total number of confirmed cases in log scale")
+ggplotly(b1)%>% layout(legend=list(x=0.3,y=-0.3,orientation="h"))%>% layout(legend=list(title=list(text='Country'))) 
+
+```
+When compared with neighboring countries, the graph indicates that the Philippines' number of confirmed cases has increased and higher than the other countries. However, Vietnam appears to be doing better than other countries, as their rate of growth in confirmed cases is lower than the Philippines's rate of increase in confirmed cases. In recent weeks, Japan, Malaysia, and the Philippines have reached a total number of confirmed cases of more than 100000. The daily confirmed cases in all countries have begun to increase since March 2020.
+
+###Comparison of the total number of death cases with neighbouring countries
+```{r}
+
+#death
+b2 <- border_tot %>% 
+  ggplot(aes(x=date, y=death_tot,color=country)) + 
+  geom_line(size=.7)+
+  scale_color_manual(values=c("deeppink","blueviolet","#00A5FF","yellow"))+scale_y_continuous(trans="log10") +
+  xlab("Date") +
+  ylab("Total death cases in log scale")+
+  scale_x_date(date_breaks = "1 month", date_labels = " %b - %y") + theme(axis.text.x=element_text(angle=60, hjust=1))+ggtitle("Total number of death cases in log scale")
+ggplotly(b2)%>% layout(legend=list(x=0.3,y=-0.3,orientation="h"))%>% layout(legend=list(title=list(text='Country')))  
+```
+When comparing the number of deaths, it can be seen that in the case of the Philippines, Japan, and Malaysia, deaths increased from mid-March onwards and reached their peaks by May.And it has continually increased for all countries. But Vietnam's death rate remained constant from September 2020 to May 2021, while other countries' death rates increased. According to the graph, the number of deaths in the Philippines is higher when compared to the other neighboring countries.
+
+###Comparison of deaths and confirmed cases with neighbouring countries
+```{r,results="hide",include = FALSE}
+Country <- c("Vietnam","Japan","Malaysia","Philippines")
+Death <- c(16658,17184,23067,36589)
+Confirmed <- c(677023,1674684,2082876,2347550)
+data2 <- data.frame(Country,Death,Confirmed)
+view(data2)
+```
+
+```{r}
+fig <- plot_ly(data2, x = ~Country, y = ~Confirmed, type = 'bar', name = 'Confirmed',marker = list(color = 'deepskyblue1'))
+fig <- fig %>% add_trace(y = ~Death, name = 'Death',marker=list(color='deeppink'))
+fig <- fig %>% layout(yaxis = list(title = ' Total cases'), barmode = 'stack')
+
+fig
+```
+The above graph represents a comparison of confirmed cases and death cases in neighboring countries and the Philippines. According to the graph, all the countries have a very low proportion of deaths with respect to the number of confirmed cases, and the total number of confirmed and death cases is higher in the Philippines. When compared to Vietnam, Japan, and Malaysia, the Philippines has a larger proportion of confirmed cases that resulted in deaths.
+
+###Comparison of the Covid-19 vaccination process with neighbouring countries
+```{r,results="hide",include = FALSE}
+Country <- c("Vietnam","Japan","Malaysia","Philippines")
+partially <- c(82677879,21863951,26307653,18697647)
+fully <- c(67204659, 18135561, 5988864,17977462)
+data3 <- data.frame(Country,fully,partially)
+view(data3)
+```
+
+
+```{r}
+fig1 <- plot_ly(data3, x = ~Country, y = ~partially, type = 'bar', name = 'Partially vaccinated',marker = list(color = 'lightskyblue2'))
+fig1 <- fig1 %>% add_trace(y = ~fully, name = 'Fully vaccinated',marker=list(color='hotpink'))
+fig1 <- fig1 %>% layout(yaxis = list(title = 'Total number of people who are vaccinated'), barmode = 'stack')
+
+fig1
+```
+As of September 17, 2021, about 40518845 total vaccine doses have been administered throughout the country, with 17977462 being fully vaccinated.According to the graph in the Philippines, the total number of people who are fully vaccinated and the total number of people who are partially vaccinated are approximately equal. When compared with other neighbouring countries, they are performing better than the Philippines.
+
+##Conclusion and Discussion
+This report provides a snapshot of the Philippines' COVID-19 situation. The situation in the Philippines as a result of COVID-19 is examined in terms of deaths, confirmed cases, and recovered cases. In the Philippines, the provided data set contains misreported negative values for recoveries and deaths. Then, using mean values, I replaced all of the negative values in the data set. I also removed 45 missing values from the data set when calculating active cases.
+
+After clearing the data set, we can see that the Philippine government performed better during the first few months of the pandemic, since they imposed lockdown several times and one of the world's longest and strictest lockdowns has been described as the Philippine response to COVID-19. They reported a lower number of deaths during the first lockdown period. However, starting in mid-July 2020, the number of death cases skyrocketed. In April 2021, the highest number of deaths was recorded, after which the number of deaths fluctuated at random. In the middle of August, 2021, it reached its highest point. Since mid-August, the number of confirmed cases has rapidly increased. In April 2021, the number of cases recovered per day was at an all-time high. We can assume that the rising number of daily deaths and confirmed cases in recent weeks is due to the government's mishandling of the pandemic, as well as hospitals being being overwhelmed owing to a lack of beds and insufficient health personnel. In recent weeks, the Philippines' COVID-19 situation has weakened in comparison to neighboring countries.
+
+The Philippines has administered at least 40,518,845 doses of the COVID vaccine so far. If each person requires two doses, that would be enough to vaccinate 19.9% of the population of the country. Approximately 17% of the total population has been fully vaccinated, with the remaining 16% having only received a partial vaccination. As a result, the government must implement many strategies and they have to look at how other countries control the virus in order to reduce the number of deaths and increase the rate of recovery. They also need to develop a vaccination program that will be implemented all over the country.
+
+
+##References
+<div align="left">
+
+* Amnesty International. 2021. Health and human rights crisis in the Philippines, one year into pandemic. [online] Available at: <https://www.amnesty.org/en/latest/press-release/2021/04/philippines-faces-health-human-rights-crisis-covid/> [Accessed 25 September 2021].
+
+* Climatelinks.org. 2021. Climate Risk Profile: Philippines. [online] Available at: <https://www.climatelinks.org/resources/climate-risk-profile-philippines> [Accessed 25 September 2021].
+
+* CNA. 2021. Philippines reimposes COVID-19 lockdown in capital. [online] Available at: <https://www.channelnewsasia.com/asia/philippines-reimposes-covid-19-lockdown-manila-2161861> [Accessed 27 September 2021].
+
+* En.wikipedia.org. 2021. Climate of the Philippines - Wikipedia. [online] Available at: <https://en.wikipedia.org/wiki/Climate_of_the_Philippines> [Accessed 25 September 2021].
+
+* En.wikipedia.org. 2021. COVID-19 community quarantines in the Philippines - Wikipedia. [online] Available at: <https://en.wikipedia.org/wiki/COVID-19_community_quarantines_in_the_Philippines> [Accessed 25 September 2021].
+
+* En.wikipedia.org. 2021. COVID-19 lockdowns - Wikipedia. [online] Available at: <https://en.wikipedia.org/wiki/COVID-19_lockdowns> [Accessed 25 September 2021].
+
+* GardaWorld. 2021. Philippines: Authorities extend GCQ and lockdown in Manila and Cebu City until July 15 /update 24. [online] Available at: <https://www.garda.com/crisis24/news-alerts/355801/philippines-authorities-extend-gcq-and-lockdown-in-manila-and-cebu-city-until-july-15-update-24> [Accessed 25 September 2021].
+
+* Hallare, K., 2021. Metro Manila, 4 provinces under ECQ due to COVID-19 surge - Palace. [online] INQUIRER.net. Available at: <https://newsinfo.inquirer.net/1412020/metro-manila-4-provinces-under-ecq-due-to-covid-19-surge-palace-2> [Accessed 27 September 2021].
+
+* Jamaine Punzalan, A., 2021. COVID-19: PH fully vaccinates 1/4 of target population. [online] ABS-CBN News. Available at: <https://news.abs-cbn.com/news/09/23/21/covid-19-ph-fully-vaccinates-14-of-target-population> [Accessed 28 September 2021].
+
+* Reuters. 2021. Philippines: the latest coronavirus counts, charts and maps. [online] Available at: <https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/philippines/> [Accessed 27 September 2021].
+
+* Santos, A., 2021. Coronavirus: Philippines quarantines island of 57 million people. [online] Aljazeera.com. Available at: <https://www.aljazeera.com/news/2020/3/16/coronavirus-philippines-quarantines-island-of-57-million-people> [Accessed 27 September 2021].
+</div>

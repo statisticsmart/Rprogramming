@@ -1,0 +1,331 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<div align="center"> 
+<h1>COVID-19 Outbreak in Malaysia</h1></p>
+</div>
+
+![](img1.jpg){width=250%}
+
+
+
+## 1. Background
+### 1.1 Introduction
+
+<p align="justify">
+At the end of 2019, the World Health Organization had become aware of pneumonia cases of unknown causes from Wuhan City, China. This undefined virus was identified as the coronavirus by the Chinese authorities on January 7, 2020.So far, the coronavirus has been responsible for at least 230,403,000 reported infections and 4,928,000 reported deaths.
+</p>
+
+<p align="justify">
+Following the announcement of the first case outside of China in Thailand, Malaysia implemented a strict screening procedure at all airports. Malaysia had reported two waves of COVID-19 cases as of April 14, 2020, with the first wave ending successfully in less than two months. The second wave arrived in early March 2020, bringing with it troubling circumstances. Badly, Malaysia reported a record high of 6,075 new COVID-19 cases on May 19, 2021, as the country continues to battle a third wave of infections.
+</p>
+
+<p align="justify">
+Malaysia is the 21<sup>st </sup> country among other countries with the highest numbers of reported COVID-19 cases as at September 25, 2021 [Worldometer, 2021](https://www.worldometers.info/coronavirus/).The Covid tracker showed that 365 infections per 100K people were reported in the last 7 days.This analysis will be helpful for the implication of necessary steps to prevent from this pandemic by studying past data in Malaysia.
+</p>
+
+
+### 1.2 Geographical location of Malaysia  
+
+<p align="center"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8150345.215042481!2d105.0529958770054!3d4.089292544186099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3034d3975f6730af%3A0x745969328211cd8!2sMalaysia!5e0!3m2!1sen!2slk!4v1632070757512!5m2!1sen!2slk" width="900" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></p>  
+<br>
+<figcaption align = "center">Figure 1. Geographical location of Malaysia
+</figcaption>  
+<br>
+<p align="justify">
+Malaysia is a Southeast Asian country located just north of the equator.It is the 66th largest country by total land area, with a land area of 329,613 km2.Malaysia is an union of two noncontiguous regions named Peninsular Malaysia (West Malaysia), which is located on the Malay Peninsula, and East Malaysia, which is located on the island of Borneo.Thailand is its northern neighbor, with whom it shares a 300-mile land border.To the south, at the tip of the peninsula, is the island republic of Singapore, with which Malaysia is connected by a causeway and also by a separate bridge. The Indonesian island of Sumatra is to the southwest, across the Malacca Strait.  
+</p>
+
+<p align="justify">
+East Malaysia is made up of the country's two largest states, Sarawak and Sabah, and is separated from Peninsular Malaysia by the South China Sea, which stretches over 400 miles. Peninsular Malaysia accounts for around 40% of the country's total size, which includes about 265 square miles of inland water. East Malaysia accounts for about 60%.These details are clearly featured in figure 1.
+</p>
+
+
+### 1.3 Climate condition 
+
+<p align="justify">
+Both east and west Malaysia are located in the same tropical latitudes and are influenced by similar airstreams. They feature high temperatures and humidity, abundant rainfall, and a climatic year centered on the northeast and southwest monsoons. The four seasons of the climatic year are the northeast monsoon (November or December to March), the first intermonsoonal period (March to April or May), the southwest monsoon (May or June to September or early October), and the second intermonsoonal period (March to April or May) (October to November). The beginning and retreat of the two monsoons are not clearly defined.  
+</p>
+
+<p align="justify">
+Although Malaysia has an equatorial climate, the narrowness and physical arrangement of each portion—central mountainous cores with flat, surrounding coastal plains—allows maritime climatic influences to penetrate inland. The monsoon season alters the climate much further. The northeast monsoon brings heavy rain and stormy seas to the exposed shores of southwestern Sarawak and northern and northeastern Sabah, and it occasionally causes flooding in the peninsula's eastern half. The southwest monsoon mostly impacts Sabah's southwestern coastal strip, where flooding is widespread.Although neither peninsular nor insular Malaysia is located in the tropical cyclone (typhoon) belt, their coasts are occasionally vulnerable to the severe rainstorms associated with squalls.  
+</p>
+
+<p align="justify">
+Throughout the year, temperatures are consistently high. In most lowland sections of the peninsula, temperatures average around 27 °C. Minimum temperatures in East Malaysia's coastal parts range from low to mid 23 °C, with maximum temperatures hovering around 32 °C; temperatures are lower in the interior highland regions. The average annual rainfall in the peninsula is roughly 2,540 mm; the driest site, Kuala Kelawang, near Kuala Lumpur, receives approximately 1,650 mm of rain per year, while the wettest, Maxwell's Hill, northwest of Ipoh, receives approximately 5,000 mm. The average annual precipitation in Sabah ranges from roughly 2,030 to 3,560 mm, whereas most regions of Sarawak receive at least 3,050 mm.
+</p>
+
+### 1.4 Actions taken by the government
+
+<p align="justify">
+Malaysians were first unaware of the virus's lethality. However, with the number of positive COVID-19 cases in Malaysia increasing in less than a week, and the first two deaths reported in mid of the March, the Malaysian government took actions to calm the public and protect Malaysian residents' health. According to the Director General of the Ministry of Health, Datuk Dr. Noor Hisham Abdullah, one of the ways was the placement of thermal scanners.This was done to improve the detection of fever among returning tourists and locals from overseas. Malaysians who returned from Wuhan were inspected, identified, and quarantined for COVID-19 in specific quarantine sites. At the same time the government took a critical move to increase the number of facilities that could treat COVID-19 cases.
+</p>
+
+<p align="justify">
+Another measure adopted by the MoH to mitigate the impact of COVID-19 was the establishment of a special fund known as the COVID-19 Fund to gather money for patients, particularly those who financially impacted by the quarantine procedure. Aside from that, to ensure the effectiveness of the discovery procedure, the MoH has been taking strong measures, such as closely collaborating with the police to seek potential virus carriers, identify them, conduct testing, and impose a 14-day self-quarantine. Furthermore, Malaysia's quick vaccine distribution, which began in mid-July, provides a silver lining. On August 18, 2021, the nation's daily rate of vaccination administration per 100 individuals was 1.64. Vaccines from Pfizer BioNTech, Sinovac, and AstraZeneca are presently used in the national immunization program. Walk-in immunizations are now offered to anyone aged 18 and over.
+</p>
+
+### 1.5 Lockdown status of the country
+
+<p align="justify">
+As COVID-19 infections began to be reported around the world, many countries responded by closing down venues such as schools, workplaces, and international borders in try to stop the virus's spread. On March 18, 2020, a Movement Control Order (MCO) was implemented to supplement the MoH's efforts. The MCO referred to the restriction of people's mobility into and out of a specific area. The order was supposed to be in force from March 18 to March 31, however it has been extended four times as an additional two-week extension over the course of two months.
+</p>
+
+<p align="justify">
+Following the third wave, on October 12, Senior Minister declared that the government had agreed to enforce Conditional Movement Control Order (CMCO). The administration gradually reimposed loosened MCO limits for most states, with the exception of a few. Immediately following the increase in cases associated to the Sri Petaling Tabligh event, Prime Minister declared that religious, social, and sporting mass gatherings must be cancelled or postponed until 30 April 2020.
+</p>
+
+
+## 2. Exploratory Data Analysis
+
+This study examined four separate categories of data,
+including confirmed, death, active and recovered cases
+in Malaysia, for the period from January 22, 2020 to September 18, 2021.
+
+### 2.1 Overview of COVID-19 situation in Malaysia
+
+
+```{r, comment=NA, echo=FALSE,message=FALSE,warning=FALSE,fig.align='center'}
+
+library(magrittr)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(tibble)
+library(plotly)
+library(viridis)
+library(scales)
+
+data("coronavirus") 
+malaysia_corona <- coronavirus %>% filter(country == "Malaysia") %>%
+                                   select(c("date","type","cases"))
+m <- malaysia_corona %>%
+  pivot_wider(names_from = type,values_from = cases) %>%
+  summarise(cum_confirmed = sum(confirmed,na.rm = TRUE),
+            cum_death = sum(death,na.rm = TRUE),
+            cum_recovered = sum(recovered,na.rm = TRUE),
+            cum_active = cum_confirmed-cum_recovered-cum_death ,
+            Active = round(cum_active/cum_confirmed,2),
+            Death = round(cum_death/cum_confirmed,2),
+            Recovered = round(cum_recovered/cum_confirmed,2))%>%
+  select(c("Active","Death","Recovered")) %>%
+  pivot_longer(col=c(1:3),names_to = "type",values_to = "proportions")
+m1 <-as.data.frame(m)
+m1$type <- factor(m1$type,levels=c("Death","Recovered","Active"))
+ggplot(m1,aes(x=type,y=proportions,fill=type,label = scales::percent(proportions))) +
+  geom_col()+
+  labs(x="Type",y="Percentage of cases ")+
+  geom_text(vjust=-0.2, color="black", size=3.5)+
+  scale_fill_discrete(name = "Type",labels=c("Death","Recovered","Active"))+
+  scale_fill_manual(values=c("#3b528b", "#E69F00", "#21918c"))+ 
+  scale_y_continuous(labels = scales::percent)+
+  theme(legend.position = "none")
+
+```
+<figcaption align = "center">Figure 2. Reported confirmed, active and death cases
+</figcaption>  
+<br>
+<p align="justify">
+The above graph  represents the percentage of deaths, confirmed cases, and active cases in Malaysia. In this analysis, the death rate is considered in terms of the number of deaths over the number of confirmed cases. At the same time, the difference between confirmed and summation of death and recovered cases were treated as active cases. Among the confirmed cases, 1% of the deaths are reported. Although 46% of covid positive patients healed, more than half of positive patients are still on medication.
+ </p>
+
+
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE,fig.width=10}
+p1 <- malaysia_corona %>%
+  filter(type == "confirmed") %>%
+  ggplot(aes(x=date, y=cases,col=type))+
+  geom_line(col="violetred2")+
+  labs(y="Daily confirmed cases",x="Date")+
+  theme(legend.position="none")
+p44 <- ggplotly(p1,tooltip = c("x","y"))
+
+htmltools::div(p44, align ="center")
+```
+
+<figcaption align = "center">Figure 3. Confirmed cases
+</figcaption>  
+<br>
+<p align="justify">
+According to the figure 3, it shows the number of confirmed cases in Malaysia over time. It began to record a substantial number of positive cases at the end of September. It can be seen that the confirmed cases have a significantly sharp increment from the first week of July 2021 to the end of August 2021. On August 26, 2021, the most confirmed instances were reported. It is observed that since early September 2020,  the number of confirmed cases have become somewhat stable.
+</p>
+
+
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE,fig.align='center'}
+malaysia_corona %>%
+  mutate(cases = replace(cases,is.na(cases),0)) %>%
+    pivot_wider(names_from = type,values_from=cases) %>%
+    mutate(cum_confirmed = cumsum(confirmed),
+              cum_death = cumsum(death),
+              cum_recovered = cumsum(recovered),
+              death_rate = cum_death/cum_confirmed,
+              recovered_rate = cum_recovered/cum_confirmed)%>%
+  select(date,death_rate,recovered_rate)%>%
+  pivot_longer(2:3,names_to="rate",values_to="cases")%>%
+  ggplot(aes(x=date,y=cases,col=rate))+
+  geom_line()+
+    labs(x="Date",y="")+
+    facet_wrap(vars(rate),nrow=2,scale="free",labeller=as_labeller(c("death_rate"="Daily  Death  Rate","recovered_rate"="Daily  Recovery  Rate")))+
+    scale_y_continuous(labels = scales::percent)+
+  geom_vline(xintercept = as.Date("2021-02-23"))+
+  theme(legend.position = "none")+
+  scale_color_manual(values=c("#3b528b", "#E69F00"))+
+  scale_x_date(labels = date_format("%y/%m"),breaks = date_breaks("2 months")) 
+
+```
+<figcaption align = "center">Figure 4. Daily Recovery and Death rate in Malaysia
+</figcaption>  
+<br>
+<p align="justify">
+Figure 4 shows the plots of the death rate and recovery rate over time. In this case, recovery/death rate is defined as the ratio of recovery/death to confirmed cases. It can be seen that the recovery rate has significantly increased from January to the end of February. However, it significantly decreased from the first week of March to the third week of April 2020. The recovery rate has increased since early April 2020, which indicates that the number of active cases has reduced as many active patients have recovered. On the other hand, the death rate has increased from below 0.05% in early April 2020 to around 2.0% in May 2020. It significatly decreased from October 2020 to February 2021. After that, it can be seen that the death rates have been steady for three months.
+</p>
+
+### 2.2 Comparison with other nations
+
+Malaysia is located relatively close to the Philippines, and Indonesia can also be considered one of its neighboring countries; hence, this section focusses on Malaysia's COVID-19 situation in comparison to its Regional neighbours.
+
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE,fig.align='center'}
+country_data <- coronavirus %>%
+  filter(country %in% c("Malaysia","Philippines","Indonesia")) %>%
+  filter(date >= as.Date("2020-03-02"))
+p4 <- country_data %>%
+  filter(type =="confirmed") %>%
+  rename("Country" = "country") %>%
+ggplot() +
+  geom_area(aes(x = date, y = cases, fill = Country))+
+  labs(x="Date",y="Daily confirmed cases")+
+  scale_fill_manual(values=c("#481567FF","#238A8DFF","#FDE725FF"))
+p44 <- ggplotly(p4)
+
+htmltools::div(p44, align ="center")
+```
+<figcaption align = "center">Figure 5. Comparison of confirmed cases
+</figcaption>  
+<br>
+<p align="justify">
+The above chart shows confirmed cases in different countries that are situated around Malaysia. It indicates that the number of confirmed cases are significantly higher in Indonesia than in the other two countries and Philippines has the lowest confirmed cases. An important point to note here is that there has been an approximate pattern of increasing confirmed cases from the beginning of 2021.
+</p>
+
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE,fig.align='center'}
+data("covid19_vaccine")
+
+m_v <- covid19_vaccine %>%
+filter(country_region == "Malaysia") %>%
+select(c("date","people_fully_vaccinated","people_partially_vaccinated","country_region"))%>%
+   mutate(percent_fully = people_fully_vaccinated/ 32365998,
+          percent_par = people_partially_vaccinated/32365998)%>%
+pivot_longer(5:6,names_to="vaccine_status",values_to="counts")%>%
+  select(c("date","vaccine_status","country_region","counts"))
+
+p_v <- covid19_vaccine %>%
+filter(country_region == "Philippines") %>%
+select(c("date","people_fully_vaccinated","people_partially_vaccinated","country_region"))%>%
+   mutate(percent_fully = people_fully_vaccinated/ 109581085,
+          percent_par = people_partially_vaccinated/109581085)%>%
+pivot_longer(5:6,names_to="vaccine_status",values_to="counts")%>%
+  select(c("date","vaccine_status","country_region","counts"))
+
+i_v <- covid19_vaccine %>%
+filter(country_region == "Indonesia") %>%
+select(c("date","people_fully_vaccinated","people_partially_vaccinated","country_region"))%>%
+   mutate(percent_fully = people_fully_vaccinated/ 273523621,
+          percent_par = people_partially_vaccinated/273523621)%>%
+pivot_longer(5:6,names_to="vaccine_status",values_to="counts")%>%
+  select(c("date","vaccine_status","country_region","counts"))
+
+bind_rows(m_v,p_v,i_v)%>%
+  filter(!is.na(counts)) %>%
+    rename("Country"="country_region")%>%
+  ggplot(aes(x=date,y=counts,col=Country))+
+geom_line(size=1)+
+  facet_wrap(vaccine_status~.,labeller=as_labeller(c("percent_fully"="Fully  vaccinated","percent_par"="Partially  vaccinated")))+
+   labs(x="Date",y="Number of vaccinated people")+
+  scale_color_manual(values=c("#481567FF","#238A8DFF","#FDE725FF"))+
+  scale_y_continuous(labels = scales::percent)
+
+
+```
+<figcaption align = "center">Figure 6. The percentage of COVID-19 vaccinations administrated
+</figcaption>  
+<br>
+<p align="justify">
+The above chart shows the percentage of vaccinated people daily. The number of partially vaccinated people indicates the cumulative number of people who have received at least one vaccine dose. When the person receives a prescribed second dose, it is not counted twice. The number of fully vaccinated people represents the cumulative number of people who have received all the prescribed doses necessary to be considered fully vaccinated. Malaysia has the highest daily percentage of vaccination processes compared to the other two countries. Since the Philippines has a lower percentage of partially vaccinated people. At the same time, the Philippines had a higher percentage of fully vaccinated people at the end of August than Indonesia had.
+</p>
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE,fig.align='center'}
+  coronavirus %>%
+  filter(country %in% c("Malaysia","Philippines","Indonesia")) %>%
+  filter(date >= as.Date("2020-03-02"),
+         type == c("recovered","death"))%>%
+  ggplot() +
+  geom_area(aes(x = date, y = cases,fill=country))+
+  labs(x="Date",y="Number of cases")+
+  facet_wrap(vars(type),nrow=2,scale ="free",labeller=as_labeller(c("death"="Death","recovered"="Recovered")))+
+  scale_fill_manual(values = c("#481567FF","#238A8DFF","#FDE725FF"))
+
+
+
+```
+<figcaption align = "center">Figure 7. Comparison of death and recovered cases 
+</figcaption>  
+<br>
+<p align="justify">
+According to the chart, it shows death cases and recovered cases in different countries that are closer to Malaysia. It indicates that the number of death cases is significantly higher in Indonesia than in the other two countries, and the Philippines has the lowest death cases. From the beginning of April 2021, both deaths and recovered cases have increased in all three countries. 
+</p>
+```{r, comment=NA, echo=FALSE,message=FALSE, warning=FALSE}
+
+library(knitr)
+coronavirus %>%
+  filter(country %in% c("Malaysia","Philippines","Indonesia","Thailand","Vietnam","Colombia")) %>% 
+  group_by(country) %>%
+  pivot_wider(names_from = type,values_from=cases) %>%
+  summarise(cum_confirmed = sum(confirmed,na.rm = TRUE),
+            cum_death = sum(death,na.rm = TRUE),
+            cum_recovered = sum(recovered,na.rm = TRUE),
+            cum_active = cum_confirmed-(cum_recovered + cum_death),
+            death_rate = round(cum_death*100/cum_confirmed,2),
+            recovered_rate = round(cum_recovered*100/cum_confirmed,2),
+            active_rate = round(cum_active*100/cum_confirmed,2)) %>%
+  arrange(desc(cum_confirmed))%>%
+  kable(col.names = c("Country","Confirmed cases","Death cases","Active  cases","Recovered cases","Death Rate","Recovery Rate","Active Rate"))
+
+```
+<figcaption align = "center">Table 1. Spread of COVID-19 near Malaysia
+</figcaption>  
+<br>
+<p align="justify">
+Table 1 shows 5 countries that are closer to Malaysia.  It can be seen that among them most 
+of the confirmed cases are in the Colombia. Apart from the number of confirmed infection cases, Table 1 also presents the number of recovered patients, the number of active cases, the number of deaths, death rate and recovery rate.  An important point to note here is that although Indonesia has fewer confirmed cases than Colombia it has the highest death rate.
+</p>
+
+## 3. Discussion
+
+<p align="justify">
+The COVID-19 pandemic has become a global crisis that is still rising across the world.It is more than enough to alert us about the importance of controlling the pandemic.  The first confirmed corona case has reported on  January 25, 2020 in Malaysia wich was an imported case from china.The first Malaysian testing positive for COVID-19 was reported on February 3, 2020.Since the start of the pandemic, Malaysia has reported 2,142,924 infections and 24,565 coronavirus related deaths. 
+</p>
+
+<p align="justify">
+Since its first official appearance in China in December 2019, COVID-19 has become a global pandemic. This research provides an overview of the COVID-19 situation in Malaysia. As can be observed, the Malaysian government has successfully regulated, but there has recently been an increase in the number of positive cases.  This indicates the Malaysian government's failure to control the virus's spread.
+</p>
+
+<p align="justify">
+In this study, we compared the number of completely vaccinated people towards the country's population. In comparison to other countries, Malaysia has seen a massive spike in the vaccination procedure throughout time. It implies that the Malaysia's government has taken the required efforts to provide COVID vaccinations to its residents. However, there is no obvious decrease in COVID positive cases. It might happen when people do not follow health guidelines adequately. 
+</p>
+
+## 4. References
+* COVID-19 pandemic in Malaysia - Wikipedia , Accessed : Sep. 23, 2021  
+  (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Malaysia)
+* Malaysia COVID - Coronavirus cases - Worldometer , Accessed : Sep. 22, 2021  
+  (https://www.worldometers.info/coronavirus/country/malaysia/)
+* Malaysia | Facts, Geography, History, & Points of Interest , Accessed : Sep. 23, 2021  
+  (https://www.britannica.com/place/Malaysia)
+* Malaysia: the latest coronavirus counts, charts and maps , Accessed : Sep. 24, 2021  
+ (https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/malaysia/)
+* Malaysia - Wikipedia , Accessed : Sep. 23, 2021  
+  (https://en.wikipedia.org/wiki/Malaysia)
+* Shah AUM, Safri SNA, Thevadas R, Noordin NK, Rahman AA, Sekawi Z, et al. COVID-19 outbreak in Malaysia: Actions taken by the Malaysian government. Int J Infect Dis. 2020;97:108–16.
+  

@@ -1,0 +1,446 @@
+---
+title: "Covid-19 Pandemic and Australia"
+author: "R.V.P.S.Akesh-AS2018305"
+date: "9/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction
+
+##    1.1. Australia:-
+Australia is a country in Oceania bordering the Indian Ocean and the Southern Pacific Ocean. Australia is comprised of mainland Australia, the island of Tasmania, and several small islands in the Indian and Pacific Oceans. The terrain is mostly low plateau with deserts. The government system is a federal parliamentary democracy and a commonwealth realm. The chief of state is the queen and the head of government is the prime minister. Australia has a mixed economic system in which the economy includes a variety of private freedom, combined with centralized economic planning and government regulation. Australia is a member of Asian Pacific Economic Cooperation (APEC) and the Trans-Pacific Partnership (TPP).
+
+Capital City-Canberra.
+
+Australia’s population was 25,704,340 people at 31 March 2021.
+
+Australia is divided into six states and two territories.They are <span style="text-decoration:underline">**Australian Capital Territory**,**New South Wales**,**Northern Territory**,**Queensland**,**South Australia**,**Tasmania**,**Victoria**,**Western Australia**</span>.
+
+```{r locations,echo=FALSE,out.width='75%',fig.align='center'}
+knitr::include_graphics("location.PNG")
+```
+
+## 1.2. Climate:-
+
+Due to the huge size of the country, Australia has serveral different climate zones. The northern section of Australia has a more tropical influenced climate, hot and humid in the summer, and quite warm and dry in the winter, while the southern parts are cooler with mild summers and cool, sometimes rainy winters.
+
+## 1.3. What are the major pandemic that Australia faced before covid-19?
+
+*1918*-The Spanish flu swept across the world in three waves between 1918 and 1919. It tended to affect an area for up to 12 weeks and then would suddenly disappear, almost as quickly as it had arrived, only to return several months later. This wave pattern matches descriptions of some earlier pandemics, and occurred in a less pronounced form in the milder pandemics of 1957-58 and 1968-70.
+
+*1957*-The influenza pandemic of 1957-58 was called the Asian flu. Although the proportion of people infected was high, the illness was relatively mild compared to the Spanish flu, resulting in milder effects and fewer deaths. The first wave of the pandemic was concentrated in school-children and the second in the elderly. Infants and the elderly were more likely to die. It is estimated that the Asian flu caused two million deaths worldwide.
+
+*1968*-The 1968-70 pandemic or Hong Kong flu was also relatively mild compared to the Spanish flu. It affected mainly the elderly and is thought to have caused about one million deaths worldwide.
+
+*2009*-A new H1N1 influenza virus derived from human, swine and avian strains was initially reported in April 2009 in Mexico and subsequently spread around the world. Cases of pandemic (H1N1) influenza 2009 have been confirmed in most other countries throughout the world by the World Health Organization.
+
+## 1.4. Covid-19 with Australia.
+
+In this report we mainly focus how **Australia face to covid-19 pandemic**, so that let’s see *what happened before?*,*what is happening now in each state and Territories?*,*what is the population in each state by age* also we see what are  the *steps government take*. 
+
+### 1.4.1. Initiala Situation of covid-19.
+
++ First wave: March–April 2020
+Australia reported its 100th case on 10 March 2020 roughly corresponding the start of Australia's first wave.[70] Case numbers and deaths continued to climb during March and April, but by late April the first wave had effectively ended. On 6 June, both New South Wales and Victoria reported no new cases for the previous 24 hours, with only Queensland and Western Australia reporting one new (international) case each, the lowest national total since February
+
++ Second wave: June–October 2020
+On 20 June, the Victorian Government announced the re-tightening of restrictions on household gatherings following a spike in community transmitted cases over the previous week, reported to be mainly caused by family-to-family transmission in large household gatherings, most easing of restrictions that were to take place were postponed.[72] The same day restrictions were re-tightened in Victoria, the Western Australian Government announced the state would move into "Phase 4" from 27 June, permitting some of the most relaxed restrictions in the country.
+
++ Third wave: June 2021 – present
+On 18 June in NSW, a delta variant COVID-19 cluster in Sydney's Eastern Suburbs had grown to 4 cases.[77] On 25 June in NSW, after 22 new cases of the delta variant brought infections linked to the Bondi cluster to 65 total, an initial lockdown was announced for four Sydney local government areas (LGAs).
+
+### 1.4.2. what is happening now?
+Let's see what is the current situation of states and Territories(09/24/2021) and how covid cases vary on age groups.
+
+* Australian Capital Territory:-
+  + Total cases – 849
+  + Total recovered – 492
+  + Live lost – 3
+```{r actp1,echo=FALSE,fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("actp1.PNG")
+```
+  
+  + According to above chart we can say in this state majority of the population inside the age range 20-40.
+  
+* New South Wales:-
+  + Total cases – 56799
+  + Total recovered – 8,581	
+  + Live lost – 333
+```{r nswp1,echo=FALSE, fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("nswp1.PNG")
+    knitr::include_graphics("nswp2.PNG")
+```
+  
+  + According to above charts we can say in this state majority of the population inside the age range 20-40 also lot of corona     cases can find from 20-29 age range but most death cases happen in 70-90+ age range.
+
+* Northern Territory:-
+  + Total cases – 208
+  + Total recovered – 200
+  + Live lost – 0
+```{r ntp1,echo=FALSE, fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("ntp1.PNG")
+```
+  
+  + According to above chart we can say in this state majority of the population inside the age range 20-40.
+
+* Queensland:-
+  + Total cases – 2,021
+  + Total recovered – 1924
+  + Live lost –  7
+```{r qp1,echo=FALSE, fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("qp1.PNG")
+    knitr::include_graphics("qp2.PNG")
+```
+  
+  + According to above charts we can say in this state majority of the population inside the age range 15-64 also lot of corona     cases can find from that range.
+  
+* South Australia:-
+  + Total cases – 900
+  + Total recovered – 864
+  + Live lost –  4
+```{r sap1,echo=FALSE, fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("sap1.PNG")
+    knitr::include_graphics("sap2.PNG")
+```
+  
+  + According to above charts we can say in this state majority of the population inside the age range 20-35 also lot of corona     cases can find from age range 20-69.
+
+* Tasmania:-
+  + Total cases – 233
+  + Total recovered – 219
+  + Live lost –  13
+```{r tp1,echo=FALSE, fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("tp1.PNG")
+```
+  
+  + According to above chart we can say in this state majority of the population inside the age range 50-70.
+
+* Victoria:-
+  + Total cases – 31679
+  + Total recovered – 23678
+  + Live lost –  841
+```{r vp1,echo=FALSE,fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("vp1.PNG")
+    knitr::include_graphics("vp2.PNG")
+```
+  
+  + According to above charts we can say in this state majority of the population inside the age range 20-45 also lot of corona     cases can find from age range 20-29.
+
+* Western Australia:-
+  + Total cases – 1095
+  + Total recovered – 1051
+  + Live lost –  9
+```{r wap1,echo=FALSE, fig.width = 3, fig.height = 3,fig.align='center'}
+     knitr::include_graphics("wap1.PNG")
+    knitr::include_graphics("wap2.PNG")
+```
+  
+  + According to above charts we can say in this state population is equally distributed inside the whole age ranges but a lots of corona cases can find with in the age range 20-39.
+
+### 1.4.3. What does Australia do?
+
++ The first confirmed case in Australia was identified on 25 January 2020, in Victoria, when a man who had returned from Wuhan, Hubei, China, tested positive for the virus
++ Australian borders were closed to all non-residents on 20 March
++ Social distancing rules were imposed on 21 March, and state governments started to close "non-essential" services.
+
++ many more... 
+
+### 1.4.4. Steps of government...
+
+* The Australian Government has developed and funded a comprehensive response to the COVID-19 pandemic.
+The Government is:
+  +	rolling out the Pfizer/BioNTech vaccine to priority groups from February
+  +	securing early access for the University of Oxford COVID-19 vaccine, should     trials prove it to be successful, safe and effective
+  +	delivering a $17.6 billion economic support package to encourage investment     and keep people in jobs
+  +	delivering a $2.4 billion health package to protect all Australians
+  +	providing $669 million to expand Medicare-subsidised telehealth services       for all Australians so everyone has access to quality healthcare while at      home
+  
+  
+  
+# 2. Exploratory Data Analysis.
+In my data set I saw negative value cases and Null value cases. There fore I replace the negative values with the absolute value because It may be a typing error, also I replace the Null values with the 0.
+
+
+```{r c, echo=FALSE}
+library(sta3262)
+```
+
+```{r c1, echo=FALSE,warning=FALSE,include=FALSE}
+#loading relevent packages
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+```
+
+
+```{r c2, echo=FALSE,message=FALSE,eval=FALSE}
+get_individual_project_country("AS2018305")
+```
+
+```{r c3, echo=FALSE,warning=FALSE}
+#filter Australia cororna data 
+australia_corona <- coronavirus %>% filter(country == "Australia")
+
+#replace minus value from their absolute value.
+australia_corona1 <- australia_corona %>%
+  mutate(Abc=abs(cases))
+
+#replace "NA" values with zero
+australia_corona1[is.na(australia_corona1)] = 0
+
+#extract recovered cases from 'australia_corona'
+recovered <- australia_corona1[australia_corona1$type=="recovered",]
+
+#extract confirmed cases from 'australia_corona'
+confirmed <- australia_corona1[australia_corona1$type=="confirmed",]
+
+#extract death cases from 'australia_corona'
+death <- australia_corona1[australia_corona1$type=="death",]
+
+#extract all casesin Australian Capital Territory from 'australia_corona'
+ACT <- australia_corona1[australia_corona1$province=="Australian Capital Territory",]
+
+#extract all cases in New South Wales from 'australia_corona'
+NSW <- australia_corona1[australia_corona1$province=="New South Wales",]
+
+#extract all cases in Northern Territory from 'australia_corona'
+NT <- australia_corona1[australia_corona1$province=="Northern Territory",]
+
+#extract all cases in Queensland from 'australia_corona'
+Q <- australia_corona1[australia_corona1$province=="Queensland",]
+
+#extract all cases in South Australia from 'australia_corona'
+SA <- australia_corona1[australia_corona1$province=="South Australia",]
+
+#extract all cases in Tasmania from 'australia_corona'
+T <- australia_corona1[australia_corona1$province=="Tasmania",]
+
+#extract all cases in Victoria from 'australia_corona'
+V <- australia_corona1[australia_corona1$province=="Victoria",]
+
+#extract all cases in Western Australia from 'australia_corona'
+WA <- australia_corona1[australia_corona1$province=="Western Australia",]
+
+```
+
+## 2.1. Big picture of Australia
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(australia_corona1, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Daily Covid-19 cases by Confirmed,Recovered,Deaths in Australia") + facet_grid(type~.)
+```
+
+* As we mentioned before, we can approximately see in the first and second corona wave in Australia daily covid-19 confirmed cases less than the third wave of corona confirmed cases, also we can roughly say in the first and second wave they are able to balance confirmed and recovered cases but in the third wave it seems like they are unable to control the recovered cases with confirmed cases. How ever they are lucky because they are able to control death cases in each wave.
+
+## 2.2. How cases vary according to the state.
+### 2.2.1. How Confirmed cases vary according to the state
+
+```{r echo=FALSE}
+#draw plot
+ggplot(confirmed, aes(date,Abc, colour = province)) + geom_path(size = 1) +
+  labs(title = "Daily Covid-19 confirmed cases in each state")
+```
+
+* As you can see above chart in New South Wales state the number of covid-19 cases is higher than other states and territories in first and third waves but they are able to control the confirmed cases in the second wave with respect to Victoria state.Hence most of the time New South Wale state report more confirmed cases with other states and territories.Secondly Victoria state report confirmed cases.
+
+### 2.2.2. How recovered cases vary according to the state
+
+```{r echo=FALSE}
+#draw plot
+ggplot(recovered, aes(date,Abc, colour = province)) + geom_path(size = 1) +
+  labs(title = "Daily Covid-19 recovered cases in each state")
+```
+
+* In above graph we say New south wales and Victoria state report more confirm cases.when we examine this graph we can say in the first and second wave both sates are able to control covid-19 to the considerable limit because although their confirmed cases are higher than other states but their recovered cases also higher than other states.
+
+### 2.2.3. How death cases vary according to the state
+
+```{r echo=FALSE}
+#draw plot
+ggplot(death, aes(date,Abc, colour = province)) + geom_path(size = 1) +
+  labs(title = "Daily Covid-19 death cases in each state")
+```
+
+* When we examine this graph we can say in every wave lot of state report very few number of live lost cases. In the the first wave and third wave New south wales report more death cases than others.Victoria state more death cases in second wave than other states and territories.
+
+* When we are summing above graphs we can say New south Wales and Victoria reports more cases than other states and territories. From those two states, Victoria state is being able to control covid-19 more than New South Wales. Above mentioned results also ensure that.  
+
+## 2.3. what happen in each state?
+Here we mainly focus how each state and territory face to the first, second and third waves with number of cases with in that state or territory.
+
+* ***2.3.1. Australia Capital Territory***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(ACT, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Australia Capital Territory: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* According to the above graph in first wave we can see few number of covid-19 cases but we can say they faced to that situation very goodly because their death cases is very less number and recovered cases is high number. In second wave actually they are able to control the covid-19. In the third wave we can roughly say they are able to control covid-19 because their death cases are very low numbers.  
+
+* ***2.3.2. New South Wales***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(NSW, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("New South Wales: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* According to the above graph in first wave we can see few number of covid-19 cases but we can say they faced to that situation very goodly because their death cases is very less number and recovered cases is high number. In second wave actually they are able to control the covid-19 because their daily death cases are high. In the third wave we can roughly say they are able to control covid-19 because their death cases are very low numbers.  
+
+* ***2.3.3. Nothern Territory***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(NT, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Nothern Territory: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* According to the above graph in first wave we can see number of covid-19 cases but we can say they faced to that situation very goodly because their death cases is very very low number and recovered cases is high number. In second wave actually they are able to control the covid-19. In the third wave we can say they are able to control covid-19 because their death cases are very low numbers.But when we examine this graph we can see they faced third wave approximately one or two month before other state.
+
+* ***2.3.4. Queensland***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(Q, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Queenslands: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* According to the above graph in first wave we can see number of covid-19 cases but we can say they faced to that situation very goodly because their death cases is very very low number and recovered cases is high number. In second and third wave actually they are able to control the covid-19.
+
+
+* ***2.3.5. South Australia***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(SA, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("South Australia: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* According to the above graph we can see number of covid cases in first wave,and we can say they controlled the situation.also we can say they controlled the second and third wave with respect to the first wave because confirmed,recovered and death cases are very low numbers with respect to the first wave.  
+
+
+* ***2.3.6. Tasmania***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(T, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Tasmania: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* This graph depicts Tasmania faced to first way and they got some live lost cases with respect to other states. But from that experience they are able to control the second wave and third wave in good way.
+
+* ***2.3.7. Victoria***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(V, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Victoria: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* According to the above graph we can see very few number of covid cases in first wave,and we can say they controlled the situation.also we can see there are more cases in second wave with respect to the two other waves. It means, controlled is missed from them in the second wave. We can't actually say they are able to manage the third waves like first wave.
+
+* ***2.3.8. Western Australia***
+
+```{r echo=FALSE}
+library(ggplot2)
+#draw plot
+ggplot(WA, aes(x=date, y=Abc, col=type)) + geom_col() + ggtitle("Western Australia: Daily Covid-19 cases by Confirmed,Recovered,Deaths") + facet_grid(type~.)
+```
+
+* In this state there are lot of cases report in the beginning of first wave. Cases are gradually decreased but we can't identify three waves clearly in this state. It means whole the year they face to covid-19 in same manner while other states face second and third waves.  
+
+## 2.4. what happen in near countries?
+
+* Here we only consider New Zealand and Indonesia because these two countries are near to Australia. 
+
+```{r echo=FALSE}
+#filter data in near countries from 'coronavirus' with the Australia
+near_countries <- filter(coronavirus, country == "New Zealand"|country =="Indonesia"|country == "Australia")
+
+#replace minus value with their absolute value
+near_countries <- near_countries %>%
+  mutate(Abc=abs(cases))
+
+#replace 'NA' values with zero
+near_countries[is.na(near_countries)] = 0
+
+#extract recovered cases in near countries
+near_countries_recovered <- near_countries[near_countries$type=="recovered",]
+
+#extract confirmed cases in near countries
+near_countries_confirmed <- near_countries[near_countries$type=="confirmed",]
+
+#extract death cases in near countries
+near_countries_death <- near_countries[near_countries$type=="death",]
+```
+
+
+* ***2.4.1. Comparison daily covid-19 confirmed cases in Australia,New Zealand and Indonesia.***
+```{r echo=FALSE}
+
+ggplot(near_countries_confirmed, aes(date, Abc, colour = country)) + geom_point() +
+  labs(title = "Daily covid-19 confirmed cases in Australia and near countries")
+```
+
+* When we look above graph we can clearly identify Indonesia report more confirmed cases other than two countries in every waves. Secondly Australia report more confirmed cases. New Zealand always report few number of confirmed cases throught the every waves.
+
+* ***2.4.2. Comparison daily covid-19 recovered cases in Australia,New Zealand and Indonesia.***
+```{r echo=FALSE}
+ggplot(near_countries_recovered, aes(date, Abc, colour = country)) + geom_point() +
+  labs(title = "Daily covid-19 recovered cases in Australia and near countries")
+```
+
+* When we look above graph we can clearly identify Indonesia report more recovered cases other than two countries in second and third waves. Secondly Australia report more recovered cases. New Zealand always report few number of recovered cases throught the every waves.
+
+* ***2.4.3. Comparison daily covid-19 death cases in Australia,New Zealand and Indonesia.***
+```{r echo=FALSE}
+ggplot(near_countries_death, aes(date, Abc, colour = country)) + geom_point() +
+  labs(title = "Daily covid-19 death cases in Australia and near countries")
+```
+
+* When we look above graph we can clearly identify Indonesia report more death cases other than two countries in second and third waves. Secondly Australia report more death cases. New Zealand always report few number of death cases throught the every waves.
+
+* Finally We can say When we compare Australia with Indonesia and New Zealand Covid-19 is being able to controlled by Australia more than Indonesia but less than New Zealand. 
+
+# 3. Discussion and Conclussion
+
+As we know Corona is problem for every country. Some countries are able to controlled that situation and some others can't control.And we know most of the countries have to face corona three waves.How ever Australia also faced those three waves and they are being able to control corona situation in with their systematic way.When we look inside of the Australia we saw a lots of state and territories are being able to control the situation in each of corona waves. That's why their daily death cases get less number and recovered cases get high number also lots of states have very less number of confirmed cases because they are able to manage the situation.
+
+When we compare Australia with other countries we can say Australia is in a good place in the list that consist of countries that controlled the covid-19. When we consider countries that are near to the Australia like New Zealand and Indonesia.we can say, New Zealand is able to mange the pandemic in efficient way rather than Australia but most of the time Indonesia can't control the situation.
+
+In conclusion we can say with the help of Australian people and the Australian government, Australia is defeating the corona virus.
+
+# 4. References
+1. https://globaledge.msu.edu/countries/australia
+2. https://www.australia.com/en/facts-and-planning/about-australia/cities-states-and-territories.html
+3. https://www.google.com/url?sa=i&url=https%3A%2F%2Fpaintmaps.com%2Fmap-charts%2F15%2FAustralia-map-chart&psig=AOvVaw0pdvA8V4T_TPRKk45R661G&ust=1632589932020000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPjUhMqNmPMCFQAAAAAdAAAAABAN
+4. https://www.weatheronline.co.uk/reports/climate/Australia.htm
+5. https://www.abs.gov.au/statistics/people/population/regional-population-age-and-sex/latest-release#australian-capital-territory
+6. http://www.healthstats.nsw.gov.au/Indicator/dem_pop_age/dem_pop_age
+7. https://nteconomy.nt.gov.au/population
+8. https://www.qgso.qld.gov.au/statistics/theme/population/population-estimates/regions
+9. https://www.abs.gov.au/statistics/people/population/regional-population-age-and-sex/latest-release#south-australia
+10. https://www.abs.gov.au/statistics/people/population/regional-population-age-and-sex/latest-release#tasmania
+11. https://www.abs.gov.au/statistics/people/population/regional-population-age-and-sex/latest-release#victoria
+12. https://www.abs.gov.au/statistics/people/population/regional-population-age-and-sex/latest-release#western-australia
+13. https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Australia#First_wave:_March%E2%80%93April_2020
+14. https://www.google.com/search?q=australian+capital+territory+coronavirus+stats&oq=Australian+Capital+Territory+coron&aqs=chrome.0.0i512j69i57j0i22i30l3j0i390l3.10495j0j15&sourceid=chrome&ie=UTF-8
+15. https://www.covid19.act.gov.au/
+16. https://www.nsw.gov.au/covid-19/find-the-facts-about-covid-19
+17. https://www.google.com/search?q=northern+territory+coronavirus&sxsrf=AOaemvK7AKNvr1raujiSH5-Wg9CMUnUjSw%3A1632512813064&ei=LStOYYCPA8iN4-EPk92zyAs&oq=Northern+Territory+coronavirus&gs_lcp=Cgdnd3Mtd2l6EAEYADIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgARKBAhBGABQtZoPWLWaD2Ccpg9oAHACeACAAfcBiAH3AZIBAzItMZgBAKABAqABAcABAQ&sclient=gws-wiz
+18. https://www.qld.gov.au/health/conditions/health-alerts/coronavirus-covid-19/current-status/statistics
+19. https://www.covid-19.sa.gov.au/home/dashboard
+20. https://www.coronavirus.tas.gov.au/facts/tasmanian-statistics
+21. https://www.coronavirus.vic.gov.au/victorian-coronavirus-covid-19-data
+22. https://experience.arcgis.com/experience/359bca83a1264e3fb8d3b6f0a028d768
+23. https://www.health.gov.au/news/health-alerts/novel-coronavirus-2019-ncov-health-alert/government-response-to-the-covid-19-outbreak
+
+
+
+

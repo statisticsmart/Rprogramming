@@ -1,0 +1,712 @@
+---
+title: "COVID-19 Pandemic in Republic of Serbia"
+author: "P.P.E Perera AS2018486"
+date: "9/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(coronavirus)
+library(tidyverse)
+
+serbia_corona <- filter(coronavirus %>% filter(country == "Serbia"), cases >= 0)
+```
+
+
+
+
+
+![](thumbs_b_c_24a1bd9983683f957f78971b6ba7ba68.jpg)
+
+
+## **Background**
+### **Introduction**
+
+**Coronavirus disease 2019 (COVID-19)** is a contagious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first known case was identified in Wuhan, China, in December 2019. The disease has since spread worldwide, leading to an ongoing pandemic. Outbreak of COVID – 19 was declared a Public Health Emergency of International Concern (PHEIC) by the World Health Organization (WHO) on 30 January 2020. Since then, the virus has spread across many countries and territories; Serbia being among those countries which has relatively moderated impact on their population due to COVID-19. Therefore, this report attempts to analyze the COVID – 19 related data of Serbia in order to communicate it to any parties of interest.
+
+
+###	**Location of Serbia**
+
+```{r location of Serbia, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = serbia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+Serbia, officially the Republic of Serbia is a country in Central and Southeast Europe. It is situated in the southern Pannonian Plain and borders Hungary to the north, Romania to the northeast, Bulgaria to the southeast, North Macedonia to the south, Croatia and Bosnia and Herzegovina to the west, and Montenegro to the southwest; while claiming a border with Albania through the disputed territory of Kosovo. Serbia has a population of roughly 7 million, with Belgrade as its capital and largest city.
+
+![](Serbia-part-Balkan-Peninsula-most-Yugoslavia.jpg)
+
+
+### **Climate conditions in Serbia**
+
+The Serbian climate is between a continental climate in the north, with cold dry winters, and warm, humid summers with well distributed rainfall patterns, and a more Mediterranean climate in the south with hot, dry summers and autumns and average relatively cool and more rainy winters with heavy mountain snowfall. Northern Serbia possesses typical continental climate, with air masses from northern and western Europe which shape its climatic profile. South and South-east of Serbia is subject to strong Mediterranean influences (hotter summers and milder winters). However, the Dinaric Alps and other mountain ranges contribute to the cooling down a large part of the warm air masses. Winters are quite harsh in Raška (region) because of the mountains which encircle the plateau. Mediterranean micro-regions exist throughout southern Serbia, in Zlatibor and the Pčinja District around valley and river Pčinja. The average annual air temperature for the period 1981–2017 for the area with an altitude of up to 300 m (984 ft) is 11.6 °C (52.9 °F). 
+![](SerbiaKoppenClimate.svg.png) 
+The areas with an altitude of 300 to 500 m (984 to 1,640 ft) have an average annual temperature of around 11.0 °C (51.8 °F), and over 1,000 m (3,281 ft) of altitude around 7.5 °C (45.5 °F). The lowest recorded temperature in Serbia was −31.4 °C (−24.5 °F) (January 26, 2006, Karajukića Bunari in Pešter), and the highest was 45.2 °C or 113.4 °F (July 24, 2007, Leskovac). 
+
+
+### **Lockdown status of the country**
+
+The first covid 19 case was identified on 6 March 2020, and confirmed by Minister of Health Zlatibor Lončar, the case was a 43-year-old man from Bačka Topola who had travelled to Budapest. Since 15 march 2020, the government of Serbia declared state of emergency due to COVID-19 pandemic and closed borders to foreign nationals & restrict public gatherings for locals. Despite they have faced the 1st wave successfully, again the authorities announced that several restrictions previously implemented in an effort to halt the spread of the virus will be tightened from 24 November 2020. Under these restrictions’ bars, restaurants, shopping malls and cafes will be required to close at a given time. As Delta variant dominated the world, in September 2021 many embassies in Serbia have raised travel Advisory to “Level 4: Do not travel to Serbia due to COVID-19” to their citizens.
+
+
+### **Actions taken by the Serbian government**
+
+*	There are nationwide rules in place restricting movement and limiting activity: bans on public gatherings involving more than five people, indoors or outdoors, and limits on the number of people present at all times in relation to the square footage of a facility (4 m² per person in shopping malls and similar facilities); mandatory use of protective face masks in all public spaces, both outdoors and indoors when the area is crowded. The restaurants and cafes are open until 20:00, while grocery stores and shopping malls are open until 21:00. All pharmacies work according to regular working hours.
+
+* Visitors from abroad (domestic and foreign nationals) can only enter Serbia with a negative PCR test not older than 48 hours. Serbian citizens who do not possess negative PCR tests must spend ten days in isolation at home.
+
+* The Government of Serbia has approved the use of COVID-19 vaccines. The country has received the first COVID-19 vaccines developed by Pfizer/BioNTech as well as Russia’s Sputnik V. Serbia has started with the vaccination of health workers at the highest risk of infection and then elderly people. After the arrival of the first million doses of the Chinese Sinopharm, Serbia began mass vaccinations on 19 January.
+
+
+
+## **Exploratory Data Analysis**
+### **Overview of the dataset**
+
+The data set used for this analysis is The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.The relevant part of dataset contains the daily summary of Coronavirus cases of Serbia. All cases are recorded according to the following variables.
+
+    * Date
+    * Province(if available)
+    * Country
+    * Latitude of center of geographic region defined by country/province
+    * Longtitude of center of geographic region defined by country/province
+    * Type of reported case – confirmed, death, recovered
+    * Number of cases on given date
+    
+* **The dataset contains data from the 21th January 2020 to 19th September 2021. **
+* **Negative values & NA values of "cases" variable is deleted to make sure the data is cleaned. **
+
+* Let's import the dataset relevant to Serbia first
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+summary(serbia_corona)
+```
+
+Let's consider confirmed cases.
+
+* Total confirmed cases reported from Serbia
+
+```{r}
+serbia_corona_confirmed <- filter(serbia_corona, type == "confirmed")
+sum(serbia_corona_confirmed$cases)
+```
+
+* let's see how the daily number of confirmed cases  changed over the time. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(serbia_corona_confirmed, aes(x=date, y=cases)) + geom_line() + ggtitle("Serbia: Daily Covid-19 Confirmed cases")
+```
+
+As the graph illustrate, there are few considerable fluctuations has been occured in past. This is due to number of COVID 19 waves the world had to face to. In november & december time period of 2020 the confirmed cases had been increased as well as march to april 2021. due to rise of the Delta varient there are high number of confirmed cases are reporting in these days.
+
+
+
+Let's consider about death cases 
+
+* Total number of death cases reported from Serbia
+
+```{r}
+serbia_corona_death <- filter(serbia_corona, type == "death")
+sum(serbia_corona_death$cases)
+```
+
+
+* let's see how the daily number of death cases changed over the time.
+
+```{r echo=FALSE}
+ggplot(serbia_corona_death, aes(x=date, y=cases)) + geom_line() + ggtitle("Serbia: Daily Covid-19 death cases")
+
+```
+
+As the graph shows, death count is considerably increasing over past few months.in 2021, fluctuations shows that in some days number of deaths are less than the previous day, still the no.of deaths per day has incresed than the previous week.
+
+
+Let's consider about recoveries
+
+* Total number of recovered cases reported from Serbia
+
+```{r}
+serbia_corona_recovered <- filter(serbia_corona, type == "recovered")
+sum(serbia_corona_recovered$cases)
+```
+
+
+* let's see how the daily number of recovered cases changed over the time.
+
+```{r echo=FALSE}
+ggplot(serbia_corona_recovered, aes(x=date, y=cases)) + geom_line() + ggtitle("Serbia: Daily Covid-19 recovered cases")
+```
+
+
+* Now consider about active cases. Let's plot the active cases accoording to the data.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+corona_serbia_wider <-serbia_corona %>% pivot_wider(names_from=type, values_from=cases)
+corona_serbia_wider$active_serbia_corona <- corona_serbia_wider$confirmed - corona_serbia_wider$death - corona_serbia_wider$recovered
+ggplot(corona_serbia_wider, aes(x=date, y=active_serbia_corona)) + geom_line() + ggtitle("Serbia: Daily Covid-19 Active cases")
+```
+
+
+
+* Let's graphically represent all three confirmed,recovered & death cases 
+
+```{r echo=FALSE}
+ggplot(serbia_corona, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Serbia: Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+
+As the graph shows comparing to confirmed cases, death cases are very low. 
+
+* Death percentage due to covid 19 in Serbia:
+```{r}
+death_rate_serbia <- (sum(serbia_corona_death$cases)/sum(serbia_corona_confirmed$cases))* 100
+death_rate_serbia
+
+```
+
+
+<br/>
+<br/>
+
+
+### **Comparison with other countries**
+
+### 1. **Serbia vs United Kingdom**
+
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h4> *Demographics comparison *</h4>
+
+<table>
+  <tr>
+    <th>Characteristic</th>
+    <th>Serbia</th>
+    <th>UK</th>
+  </tr>
+  <tr>
+    <td>Population</td>
+    <td>8,737,371</td>
+    <td>67,886,011</td>
+  </tr>
+  <tr>
+    <td>Population density (per square kilometer)</td>
+    <td>100</td>
+    <td>281</td>
+  </tr>
+  <tr>
+    <td>Life expentancy (in years) </td>
+    <td>74.2</td>
+    <td>80.9</td>
+  </tr>
+  <tr>
+    <td>Propotion of urban population </td>
+    <td>56.45%</td>
+    <td>83%</td>
+  </tr>
+
+</table>
+
+</body>
+</html>
+
+
+```{r echo=FALSE}
+uk_corona <- filter(coronavirus %>% filter(country == "United Kingdom"), cases >= 0)
+uk_corona_confirmed <- filter(uk_corona, type == "confirmed")
+uk_corona_death<- filter(uk_corona, type == "death")
+uk_corona_recovered<- filter(uk_corona, type == "recovered")
+```
+
+<br/>
+<br/>
+
+
+* Let's see how the confirmed cases have been changed over the time in both countries.
+
+```{r echo=FALSE}
+serbia_uk_corona_confirmed <-  rbind(serbia_corona_confirmed,uk_corona_confirmed)
+
+ggplot(serbia_uk_corona_confirmed, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Confirmed cases in Serbia & UK")
+```
+
+When comparing confimred cases in two countries, we can see in november 2020 onwards number of confirmed cases were increasing in while confirmed cases of UK were decreasing. But in March/April 2021 period, there was a huge increament in confirmed cases in UK while confirmed cases of Serbia was decreasing. As the spread of Delta variant since June 2021, both countries have reported high number of confirmed cases.
+
+
+
+* Let's see how the death cases have been changed over the time in both countries.
+
+```{r echo=FALSE}
+serbia_uk_corona_death <- rbind(serbia_corona_death,uk_corona_death)
+
+ggplot(serbia_uk_corona_death, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Death cases in Serbia & UK")
+```
+
+* Death rate in UK due to COVID-19
+
+```{r}
+death_rate_uk <- (sum(uk_corona_death$cases)/sum(uk_corona_confirmed$cases))*100
+death_rate_uk
+```
+
+When comparing death cases in two countries, we can see in november 2020 onwards number of death cases were increasing in both countries. But in March/April 2021 period, there was a huge increament in death cases in UK while death cases of Serbia was decreasing.
+
+
+* Let's see how the recovered cases changed over the time in both countries.
+
+
+
+```{r echo=FALSE}
+serbia_uk_corona_recovered <- rbind(serbia_corona_recovered,uk_corona_recovered)
+
+ggplot(serbia_uk_corona_recovered, aes(x = date, y = cases, colour = country)) + geom_point(size=1) + 
+  labs(title="Recovered cases in Serbia & UK")
+```
+
+
+<br/>
+
+
+### 2. **Serbia vs Switzerland**
+
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h4> *Demographics comparison *</h4>
+
+<table>
+  <tr>
+    <th>Characteristic</th>
+    <th>Serbia</th>
+    <th>Switzerland</th>
+  </tr>
+  <tr>
+    <td>Population</td>
+    <td>8,737,371</td>
+    <td>8,654,622</td>
+  </tr>
+  <tr>
+    <td>Population density (per square kilometer)</td>
+    <td>100</td>
+    <td>219</td>
+  </tr>
+  <tr>
+    <td>Life expentancy (in years) </td>
+    <td>74.2</td>
+    <td>80.9</td>
+  </tr>
+  <tr>
+    <td>Propotion of urban population </td>
+    <td>56.45%</td>
+    <td>74%</td>
+  </tr>
+
+</table>
+
+</body>
+</html>
+
+```{r echo=FALSE}
+swiz_corona <- filter(coronavirus %>% filter(country == "Switzerland"), cases >= 0)
+swiz_corona_confirmed <- filter(swiz_corona, type == "confirmed")
+swiz_corona_death<- filter(swiz_corona, type == "death")
+swiz_corona_recovered<- filter(swiz_corona, type == "recovered")
+
+```
+
+
+* Let's see how the confirmed cases  changed over the time in both countries.
+
+```{r echo=FALSE}
+serbia_swiz_corona_confirmed <-  rbind(serbia_corona_confirmed,swiz_corona_confirmed)
+
+ggplot(serbia_swiz_corona_confirmed, aes(x = date, y = cases, colour = country)) + geom_point(size=1) + 
+  labs(title="Confirmed cases in Serbia & Switzerland")
+```
+
+As the graph illustrate both number of confirmed cases are comparatively same. But until March 2021 Switzerland had considerabaly higher confirmed cases. Since that time period Serbia had higher number of confirmed cases than Switzerland.
+
+* Death percentage in Switzerland due to COVID-19
+```{r}
+death_rate_switzerland <- (sum(swiz_corona_death$cases)/sum(swiz_corona_confirmed$cases))*100
+death_rate_switzerland
+```
+
+* Let's see how the death cases  changed over the time in both countries.
+
+```{r echo=FALSE}
+serbia_swiz_corona_death <- rbind(serbia_corona_death,swiz_corona_death)
+
+ggplot(serbia_swiz_corona_death, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Death cases in Serbia & Switzerland")
+```
+
+As the graph shows Switzerland has reported bit higher number of deaths than Serbia in 1st COVID-19 wave in initial days of the pandemic. In July,August season in 2020, there were slightly higher number of deaths has reported in Serbia. From the November 2020 both countries have reported higher number of deaths than the initial days of the pandemic. Since that time period Switzerland was able to reduce their number of death cases in first few months of 2021, but Serbia wasn't. Meanwhile spread of Delta variant in these days, Switzerland has reported lower number of death rate. 
+
+
+* Let's see how the recovered cases changed over the time in both countries.
+
+```{r echo=FALSE}
+serbia_swiz_corona_recovered <- rbind(serbia_corona_recovered,swiz_corona_recovered)
+
+ggplot(serbia_swiz_corona_recovered, aes(x = date, y = cases, colour = country)) + geom_point() + 
+  labs(title="Recovered cases in Serbia & Switzerland")
+```
+
+
+
+### 3. **Serbia vs Singapore**
+
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+<br/>
+<h4> *Demographics comparison *</h4>
+
+<table>
+  <tr>
+    <th>Characteristic</th>
+    <th>Serbia</th>
+    <th>Singapore</th>
+  </tr>
+  <tr>
+    <td>Population</td>
+    <td>8,737,371</td>
+    <td>5,850,342</td>
+  </tr>
+  <tr>
+    <td>Population density (per square kilometer)</td>
+    <td>100</td>
+    <td>8,358</td>
+  </tr>
+  <tr>
+    <td>Life expentancy (in years) </td>
+    <td>74.2</td>
+    <td>83.15</td>
+  </tr>
+  <tr>
+    <td>Propotion of urban population </td>
+    <td>56.45%</td>
+    <td>NA</td>
+  </tr>
+
+</table>
+
+</body>
+</html>
+
+<br/>
+```{r echo=FALSE}
+singapore_corona <- filter(coronavirus %>% filter(country == "Singapore"), cases >= 0)
+singapore_corona_confirmed <- filter(singapore_corona, type == "confirmed")
+singapore_corona_death<- filter(singapore_corona, type == "death")
+singapore_corona_recovered<- filter(singapore_corona, type == "recovered")
+```
+
+
+* Let's see how the confirmed cases  changed over the time in Singapore & Serbia.
+
+```{r echo=FALSE}
+serbia_singapore_corona_confirmed <-  rbind(serbia_corona_confirmed,singapore_corona_confirmed)
+
+ggplot(serbia_singapore_corona_confirmed, aes(x = date, y = cases, colour = country)) + geom_point() + 
+  labs(title="Confirmed cases in Serbia & Singapore")
+```
+
+As the graph shows, In May to June months in 2020, Singapore has reported more confirmed cases than Serbia. since the, throughout a year time period Singapore has reported lesser confirmed cases. But due to spread of Delta variant, from august to now there is a increasment.
+
+
+* Let's see how the death cases changed over the time in Singapore & Serbia.
+
+```{r echo=FALSE}
+serbia_singapore_corona_death <- rbind(serbia_corona_death,singapore_corona_death)
+
+ggplot(serbia_singapore_corona_death, aes(x = date, y = cases, colour = country)) + geom_point(size=1) + 
+  labs(title="Death cases in Serbia & Singapore")
+```
+
+Since the day pandemic has started, Singapore has been doing a great job to reduce their death cases. As the graph shows when comparing a european country like Serbia, Singapore has reported lesser COVID-19 deaths throughout the pandemic. Let's see the death percntage of Singapore due to covid-19.
+
+```{r}
+death_rate_singapore <- (sum(singapore_corona_death$cases)/sum(singapore_corona_confirmed$cases))*100
+death_rate_singapore
+```
+
+
+*  Let's see how the recovered cases changed over the time in Singapore & Serbia.
+
+```{r echo=FALSE}
+serbia_singapore_corona_recovered <- rbind(serbia_corona_recovered,singapore_corona_recovered)
+
+ggplot(serbia_singapore_corona_recovered, aes(x = date, y = cases, colour = country)) + geom_point() + 
+  labs(title="Recovered cases in Serbia & Singapore")
+```
+
+Throughout March to September in 2020, there is a clear gap between recovered cases in both countries. 
+
+
+* Let's compare another three countries from different continents which has bit same population comparing to Serbia.
+
+```{r echo=FALSE}
+UAE_corona <- filter(coronavirus %>% filter(country == "United Arab Emirates"), cases >= 0)
+UAE_corona_confirmed <- filter(UAE_corona, type == "confirmed")
+UAE_corona_death<- filter(UAE_corona, type == "death")
+UAE_corona_recovered<- filter(UAE_corona, type == "recovered")
+
+
+
+aus_corona <- filter(coronavirus %>% filter(country == "Austria"), cases >= 0)
+aus_corona_confirmed <- filter(aus_corona, type == "confirmed")
+aus_corona_death<- filter(aus_corona, type == "death")
+aus_corona_recovered<- filter(aus_corona, type == "recovered")
+
+
+par_corona <- filter(coronavirus %>% filter(country == "Paraguay"), cases >= 0)
+par_corona_confirmed <- filter(par_corona, type == "confirmed")
+par_corona_death<- filter(par_corona, type == "death")
+par_corona_recovered<- filter(par_corona, type == "recovered")
+
+
+all_corona <- rbind(serbia_corona,UAE_corona,aus_corona,par_corona)
+all_corona_confirmed <- rbind(serbia_corona_confirmed,UAE_corona_confirmed,aus_corona_confirmed,par_corona_confirmed)
+
+all_corona_death <- rbind(serbia_corona_death,UAE_corona_death,aus_corona_death,par_corona_death)
+
+all_corona_recovered <- rbind(serbia_corona_recovered,UAE_corona_recovered,aus_corona_recovered,par_corona_recovered)
+```
+
+
+
+
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h4> *Demographics comparison *</h4>
+
+<table>
+  <tr>
+    <th>Characteristic</th>
+    <th>Serbia</th>
+    <th>UAE</th>
+    <th>Austria </th>
+    <th>Paraguay </th>
+    
+  </tr>
+  <tr>
+    <td>Population</td>
+    <td>8,737,371</td>
+    <td>9,890,402</td>
+    <td>9,006,398</td>
+    <td>7,132,538</td>
+  </tr>
+  <tr>
+    <td>Population density (per square kilometer)</td>
+    <td>100</td>
+    <td>118</td>
+    <td>109</td>
+    <td>18</td>
+  </tr>
+  <tr>
+    <td>Propotion of urban population </td>
+    <td>56.45%</td>
+    <td>86%</td>
+    <td>57%</td>
+    <td>62%</td>
+  </tr>
+  <tr>
+    <td>Continent </td>
+    <td>Europe</td>
+    <td>Asia</td>
+    <td>Europe</td>
+    <td>South America</td>
+  </tr>
+
+</table>
+
+</body>
+</html>
+
+```{r echo=FALSE}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = all_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+* Let's compare how these countries have faced to the COVID-19 virus.
+
+### Confirmed cases
+
+```{r echo=FALSE}
+ggplot(all_corona_confirmed, aes(x=type, y=cases, fill=country)) +
+  geom_bar(stat = "identity", position = position_dodge())
+```
+
+* Austria & Serbia have reported higher number of confirmed cases than other countries in this pandemic.
+
+
+
+### Death cases
+
+```{r echo=FALSE}
+ggplot(all_corona_death, aes(x=type, y=cases, fill=country)) +
+  geom_bar(stat = "identity", position = position_dodge())
+```
+
+* But lowest number of death cases have been recorded from UAE among these countries.
+
+
+### Recovered cases
+
+```{r echo=FALSE}
+ggplot(all_corona_recovered, aes(x=type, y=cases, fill=country)) +
+  geom_bar(stat = "identity", position = position_dodge())
+```
+
+
+
+
+
+
+## **Conclusion & Discussion**
+
+It can be said that, Serbia currently doesn't stands at a much favorable stage regarding the COVID-19 pandemic when compared to other european countries; despite it being sucessfully faced in the earlier months of 2020. The Government of Serbia has been able to apply many successful public health response strategies and stabilize the progress of the disease at initial stages. but comparing to early days of the pandemic, the country has reported higher number of confirmed & death cases since end of december 2020.Comparing to other european countries like Austria & Switzerland the confirmed rate is considerabaly higher. Despite the demographics of those countries are slightly same to Serbia, higher death & confirmed cases are shown how the virus has been spread throughout Serbia dangerously.
+
+The main reason for this increament of confirmed & death cases is the late decisions that Serbian goverment took in initial stages at dfferent waves.Countries took the accurate decision like imposing lockdown and imposing new rules to obtain social distancing were able to survive from the pandemic with relatively small loss. but Serbia isn't an example for that type of countries. Yes, Serbia took early decision to lockdown down the country when the intial stages of the pandemic but when the time is passing they were unable to take quick decisions to avoid from higher death cases. The decisons that they took lately like travel restrictions are also not enough.
+
+The vaccination is key to save the lives from this virus.Serbia started their mass vaccination in 21 January 2021 Serbian goverment has give 6,392,974 vaccine doses for their citizens untill now. you can see, from March 2021 death cases over time has been decreased compared to November 2020 to february 2021. One of main reason for this can be vaccination. But due to the spread of delta variant, death rate has increased again. At the present, fully vaccinated percentage of Serbia is 41.25%. So that if the country wants reduce COVID-19 deaths in future, the citizens of Serbia should take their vaccine as soon as possible. And the goverment should encourage their people to get vaccinated.
+
+
+
+
+## **References**
+
+* Demographics data -> https://www.worldometers.info/world-population/population-by-country/
+
+* https://en.wikipedia.org/wiki/Serbia
+
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Serbia
+
+* https://www.cia.gov/the-world-factbook/countries/serbia/
+
+* https://covid19.who.int/region/euro/country/rs
+
+* https://en.wikipedia.org/wiki/Climate_of_Serbia
+
+* https://rs.usembassy.gov/travel-advisory-serbia-level-4-do-not-travel-due-to-covid-19/

@@ -1,0 +1,542 @@
+---
+title: "AS2018573_Solvenia"
+author: "W.P.Tharushi Thashmila Weerakkody"
+date: "9/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment=NA, message=FALSE,warning=FALSE)
+```
+
+
+```{r}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2018573") 
+```
+
+![Slovenia](https://cdn.getyourguide.com/img/country/5dd2d62fc8059.jpeg/88.jpg){width=80%}
+
+```{r}
+##Loading Packages
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(tidyr)
+library(norm)
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+Slovenia_corona <- coronavirus%>%filter(country == "Slovenia")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(ggmap)
+library(plotly)
+library(gganimate)
+library(RColorBrewer)
+library(dbplyr)
+```
+
+# **Introduction**
+
+
+![The National Flag of Slovenia](https://www.nationalflags.shop/WebRoot/vilkasfi01/Shops/2014080403/53E6/2F66/A481/2919/C29C/0A28/100B/04C4/Flag_of_Slovenia_ml.png){width=60%}
+
+Slovenia, country in central Europe that was part of Yugoslavia for most of the 20th century. Slovenia is a small but topographically diverse country made up of portions of four major European geographic landscapes—the European Alps, the karstic Dinaric Alps, the Pannonian and Danubian lowlands and hills, and the Mediterranean coast. Easily accessible mountain passes (now superseded by tunnels) through Slovenia’s present-day territory have long served as routes for those crossing the Mediterranean and transalpine regions of Europe.
+
+The Slovenes are a South Slavic people with a unique language. For most of its history, Slovenia was largely controlled by the Habsburgs of Austria, who ruled the Holy Roman Empire and its successor states, the Austrian Empire and Austria-Hungary; in addition, coastal portions were held for a time by Venice. As part of Yugoslavia, Slovenia came under communist rule for the bulk of the post-World War II period. With the dissolution of the Yugoslav federation in 1991, a multiparty democratic political system emerged. Slovenia’s economic prosperity in the late 20th century attracted hundreds of thousands of migrants from elsewhere in the Balkans. In the early 21st century, Slovenia integrated economically and politically with western Europe, joining the North Atlantic Treaty Organization as well as the European Union in 2004. Slovenia’s capital and most important city is Ljubljana.
+
+
+## **Location of Slovenia in World map**
+```{r}
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +scale_x_continuous(breaks = seq(-180, 180, 120)) 
+p +
+  geom_point(
+    data = Slovenia_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+Slovenia is a country in Europe continent as shown above map.
+
+```{r}
+fr <- c(left = 5, bottom = 40, right = 25, top = 53)
+fond <- get_stamenmap(fr, zoom = 5,"toner-lite")
+Slovenia <- data.frame(lon=15,lat=46.5)
+ggmap(fond)+geom_point(data=Slovenia,aes(x=lon,y=lat),color="red",size=2)
+```
+
+Slovenia is bordered by Austria to the north and Hungary to the far northeast. To the east, southeast, and south, Slovenia shares a 416-mile- (670-km-) long border with Croatia. To the southwest Slovenia is adjacent to the Italian port city of Trieste and occupies a portion of the Istrian Peninsula, where it has an important coastline along the Gulf of Venice. Italy’s Friuli-Venezia Giulia region is situated to the west.Slovenia is mostly elevated. Outside the coastal area, its terrain consists largely of karstic plateaus and ridges, magnificently precipitous Alpine peaks, and (between the elevated areas) valleys, basins, and arable or pastorally useful karstic poljes. The only major flat area is in the northeast. Tectonic fault lines cross the country, and Ljubljana suffered a devastating earthquake in 1895.
+
+## **Climatic condition in Solvenia**
+
+Slovenia may be divided into three climatic zones. Conditions in Istria indicate a transition from the Mediterranean climate of the Dalmatian coast to a moderate continental climate. In the moderate zone the highest monthly precipitation (up to 15 inches [381 mm]) occurs in spring and autumn, and the highest temperatures (often rising above 80 °F [27 °C]) occur in June and July. Winter temperatures rarely drop below 50 °F (10 °C), but this mildness is sometimes interrupted by the strong bora, a cold northerly wind.
+
+Central and northern Slovenia have a continental “cool summer” climate; the eastern third of the country also falls into the continental category but has warm summers. Monthly summer rainfall in the cool belt is more than 3 inches (80 mm), and high temperatures average in the upper 60s F (about 20 °C), although there are uncomfortable hot spells. The east and northeast have much less overall precipitation, and midsummer highs reach well past 70 °F (21 °C). From November to February, temperature readings below freezing occur frequently, but snow cover has become less frequent and usually melts rapidly.
+
+## **Lockdown status of the country and actions taken by the country**
+
+In Slovenia, the first infection with the novel coronavirus was confirmed on 4 March 2020. An increase in testing helps us monitor the epidemiological situation in the country and, on the basis of the number of positive tests, measures to contain the spread of the novel coronavirus in the population are adopted and adjusted.In Slovenia, from 3 January 2020 to 5:41pm CEST, 21 September 2021, there have been 283,770 confirmed cases of COVID-19 with 4,824 deaths, reported to WHO. As of 17 September 2021, a total of 2,053,257 vaccine doses have been administered.
+
+Slovenia has administered at least 2,065,115 doses of COVID vaccines so far. Assuming every person needs 2 doses, that’s enough to have vaccinated about 49.5% of the country’s population.The government of Solvenia has decided to extend the majority of existing coronavirus restrictions while slightly easing them in the cultural sector, where serving food and drinks will once again be permitted during cultural events.Solvenia has been released Useful information and safety guidelines for carefree travel to Slovenia.Also Solvenia has been released entry requirements to foreigners that A foreigner who is not a resident of Slovenia will be allowed to enter Slovenia and ordered to undergo a 10-day quarantine only if they can prove beyond any doubt that they have a guaranteed place to quarantine. Otherwise, they are denied entry. It is not possible to quarantine in tourist accommodations.
+
+![Lockdown in Slovenia](https://www.euractiv.com/wp-content/uploads/sites/2/2020/04/Ljubljana-coronavirus-800x450.jpg){width=60%}
+
+# **Explotary Data analysis**
+
+
+```{r}
+Slovenia_corona <- as.data.frame(Slovenia_corona)
+head(Slovenia_corona)
+tail(Slovenia_corona)
+summary(Slovenia_corona)
+```
+
+The above table consists the number of confirmed, death and recovered corona patients from 22th January 2020 to 18th September 2021 of the country Slovenia and the location of the country in the worlds map with its latitude and longitude.
+
+### **Confirmed cases in Slovenia**
+```{r}
+confirmed_cases <- filter(Slovenia_corona, type == "confirmed")
+
+confirmed_cases$cases[is.na(confirmed_cases$cases)]<-mean(confirmed_cases $cases,na.rm=TRUE)
+confirmed_cases$cases<-round(confirmed_cases$cases,digits=0)
+
+ggplot(confirmed_cases,aes(x=date,y=cases)) + geom_path(size=0.5) + labs(title = "Confirmed cases in Slovenia")
+```
+
+The above graph shows the confirmed number of corona patients in Slovenia in daily basis. It shows that number of confirmed Corona patients has been increasing since November 2020.According to the graph the highest number of confirmed corona patients reported at the beginning of February 2021.After mid of February 2021,there are some decrease patterns and increase patterns of number of confirmed Corona patients shown respectively. This shows the less efficient control of the situation in some extent.
+
+### **Death cases in Slovenia**
+```{r}
+death_cases <- filter(Slovenia_corona, type == "death")
+
+death_cases$cases[is.na(death_cases$cases)]<-mean(death_cases $cases,na.rm=TRUE)
+death_cases$cases<-round(death_cases$cases,digits=0)
+
+ggplot(death_cases,aes(x=date,y= cases))+ geom_path(size=0.5) +  labs(title = "Death cases in Slovenia")
+```
+
+The above graph shows the death number of corona patients in Slovenia in daily basis.It shows that number of death Corona patients has been increasing since end of November 2020 to end of December 2020.According to the graph the highest number of death corona patients reported in end of December 2021.After end of December 2020,number of death Corona patients has been decreasing gradually according to the graph.But graph shows that in some days number of deaths are less than the previous day, also the number of deaths per day has increased than the previous day.
+
+### **Recovered cases in Slovenia**
+```{r}
+recovered_cases <- filter(Slovenia_corona, type == "recovered")
+
+recovered_cases$cases[is.na(recovered_cases$cases)]<-mean(recovered_cases $cases,na.rm=TRUE)
+recovered_cases$cases<-round(recovered_cases$cases,digits=0)
+
+ggplot(recovered_cases, aes(date, cases)) + geom_path(size=0.5) + labs(title = "Recovered cases in Slovenia")
+```
+
+The above graph shows the recovered number of corona patients in Slovenia in daily basis.It shows that number of recovered Corona patients has been increasing since end of November 2020.According to the graph the highest number of recovered corona patients reported in mid of January 2021. 
+
+### **Active cases in Slovenia**
+```{r}
+Slovenia_corona_wider<-Slovenia_corona%>%pivot_wider(names_from = "type",values_from = "cases")
+
+Slovenia_corona_wider<-Slovenia_corona_wider%>%mutate(active=cumsum(confirmed)-cumsum(death)-cumsum(recovered))
+
+Slovenia_corona_wider$active<-replace(Slovenia_corona_wider$active,Slovenia_corona_wider$active<0,0)
+
+ggplot(Slovenia_corona_wider, aes(date, active)) + geom_path(size=0.5) + labs(title = "Active cases in Slovenia")
+```
+
+The above graph shows the active number of corona patients in Slovenia in daily basis.It shows that number of active corona patients has been increasing since end of November 2020.According to the graph the highest number of active corona patients reported in February 2021. 
+
+```{r}
+ggplot(Slovenia_corona, aes(date, cases)) + geom_path(size=0.5) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Slovenia")
+```
+
+```{r}
+ggplot(Slovenia_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=0.5) + 
+  labs(title="Confirmed, Death and Recovered cases in Slovenia")
+```
+
+Above two graphs show the number of confirmed, death and recovered corona patients in Slovenia in daily basis in the same graph.According to this graph the number of death Corona patients has been increasing since end of November 2020 to end of December 2020.Also It shows that the number of confirmed and recovered Corona patients has been increasing since November 2020.
+
+```{r}
+Slovenia_corona <-  Slovenia_corona%>%group_by(type)%>%mutate(cum_cases = cumsum(cases))
+ggplot(Slovenia_corona, aes(date, cum_cases, colour = type)) + geom_path(size =1) +
+  labs(title = "Total no.of confirmed, death, recovered cases in Slovenia")
+```
+
+The above graph shows the total number of confirmed, death and recovered corona patients in Slovenia in the same graph.It shows that the number of confirmed and recovered Corona patients has been increasing since November 2020.So there is no considerable gap between confirmed and recovered Corona patients.So we can conclude that the Slovenia had gotten efficient actions to some extent for covid cases in the country. 
+
+```{r}
+Slovenia_corona_spread <- spread(select(Slovenia_corona, 1,6,8), key = type, value = cum_cases)
+
+Slovenia_corona_spread$per_confirmed <- (Slovenia_corona_spread$confirmed / Slovenia_corona_spread$confirmed)*100
+Slovenia_corona_spread$per_death <- (Slovenia_corona_spread$death / Slovenia_corona_spread$confirmed)*100
+Slovenia_corona_spread$per_recovered <- (Slovenia_corona_spread$recovered / Slovenia_corona_spread$confirmed)*100
+
+Slovenia_corona_gather <- gather(Slovenia_corona_spread, key = "type_1" , value = "Per_cum_with_confirmed",5:7)
+
+Slovenia_corona <- cbind.data.frame(Slovenia_corona, select(Slovenia_corona_gather, 5,6))
+Slovenia_corona[is.na(Slovenia_corona)] <- 0
+
+ggplot(Slovenia_corona, aes(date, Per_cum_with_confirmed , colour = type)) + geom_path(size=1) +
+  labs(title = "Percentage of total death, recovered cases with confirmed cases in Slovenia")
+```
+
+Above graph shows the total number of death and recovered cases in Slovenia as a percentage of total confirmed cases in daily basis. This implies that percentage of total number recovered patients with the total number of confirmed cases is increasing daily. And the percentage of total number of death cases with total number of confirmed cases is decreasing after November 2020.
+
+
+
+![Slovenia Struggles to contain surge in COVID-19 cases](https://static.dw.com/image/55359339_101.jpg){width=60%}
+
+
+
+## **Comparing with the countries in the same continent**
+
+```{r}
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-10, 50), ylim = c(30, 60)) +
+  scale_x_continuous(breaks = seq(10, 25,40)) +
+  scale_y_continuous(breaks = seq(30,45,60))
+
+
+p +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+
+```
+
+The above map shows the nearby countries to Slovenia.
+
+```{r}
+nearcountries <- subset.data.frame(coronavirus, ( 35< lat & lat < 50) & (5< long & long < 25) )
+
+count(nearcountries,country)
+```
+
+The above table shows the list of countries near Solvenia.
+
+```{r}
+near_countries <- filter(coronavirus, country == "Albania"|country =="Austria"|country ==" Bosnia and Herzegovina"|
+                           country =="Croatia"|country =="Czechia"|country == "Greece"|country =="Holy See"|country =="Hungary "|
+                           country ==" Italy"|country ==" Kosovo"|country == "Liechtenstein" |country =="Luxembourg"|country =="Malta"|country =="Monaco"|
+                           country =="Montenegro"|country =="North Macedonia"|country =="Romania "|country =="San Marino"|
+                           country =="Serbia"|country =="Slovakia"|country =="Slovenia"|country ==" Switzerland")
+
+count(near_countries,country)
+```
+
+The countries in the same continent which Slovenia belong which is the continent Europe has been sorted to a new data frame for further analysis from the countries near Slovenia.
+
+```{r}
+p +
+  geom_point(
+    data = near_countries , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=near_countries$long, y=near_countries$lat, label=near_countries$country))
+```
+
+The above map was generated in order to confirm whether all the countries in the Europe Continent is in the relevant data frame. Therefore it can be concluded that all the countries in the same continent has been considered.
+
+```{r}
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+
+confirmed_near_countries$cases[is.na(confirmed_near_countries$cases)]<-mean(confirmed_near_countries$cases,na.rm=TRUE)
+confirmed_near_countries$cases<-round(confirmed_near_countries$cases,digits=0)
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Confirmed cases in the countries in Europe")
+```
+
+Above graph shows that daily confirmed cases in Slovenia is negligible in some extent with compared to other countries in the same continent.According to the graph, Czechia has the high number of confirmed corona patients in the country.
+
+```{r}
+death_near_countries$cases[is.na(death_near_countries$cases)]<-mean(death_near_countries$cases,na.rm=TRUE)
+death_near_countries$cases<-round(death_near_countries$cases,digits=0)
+
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Death cases in the countries in Europe")
+```
+
+Above graph shows that daily death cases in Slovenia is negligible in some extent with compared to other countries in the same continent.According to the graph, Czechia has the high number of death corona patients in the country.
+
+```{r}
+recovered_near_countries$cases[is.na(recovered_near_countries$cases)]<-mean(recovered_near_countries$cases,na.rm=TRUE)
+recovered_near_countries$cases<-round(recovered_near_countries$cases,digits=0)
+
+ggplot(recovered_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.5) + 
+  labs(title="Daily Recovered cases in the countries in Europe")
+```
+
+Above graph shows that daily recovered cases in Slovenia is negligible in some extent with compared to other countries in the same continent.According to the graph, Czechia has the high number of recovered corona patients in the country.But Greece has the high number of recovered corona patients in the country at the end of the December 2020.
+
+```{r}
+ggplot(near_countries, aes(date, cases,colour = country)) + geom_path(size=0.5) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in Europe")
+```
+
+The above graph shows Czechia has the high number of recovered and confirmed corona patients in the country.Also we can conclude that the Slovenia is negligible in some extent with compared to other countries in the same continent.
+
+```{r}
+count(near_countries, type)
+```
+
+```{r}
+near_countries$cases[is.na(near_countries$cases)]<-mean(near_countries$cases,na.rm=TRUE)
+near_countries$cases<-round(near_countries$cases,digits=0)
+
+near_countries <- near_countries%>%
+  group_by(country,type)%>%
+  mutate(cum_cases = cumsum(cases))
+near_countries
+```
+
+Above table shows the table with total cases relevant to each type and country in daily basis.
+
+```{r}
+ggplot(near_countries, aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases in Europe")
+```
+
+Above graph also confirms that total number of corona confirmed, death and recovered patients in Slovenia is negligible in some extent with compared to the other countries in the same continent.
+
+```{r}
+ggplot(subset(near_countries,type == "confirmed"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of confirmed cases in near countries")
+```
+
+Above graph shows that the total number of confirmed cases of Slovenia is less than Austria,Croatia,Czechia,Greece,Serbia and Slovakia.
+
+```{r}
+conf_df <- near_countries %>% 
+  filter(type == "confirmed") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "confirmed") %>%
+  ungroup() 
+  
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "confirmed",
+          textinfo="label+value+percent parent")
+```
+
+Above tree map plot shows the distribution of the total number of confirmed cases by near countries in Slovenia.
+
+```{r}
+ggplot(subset(near_countries,type == "death"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of death cases in near counties")
+```
+
+Above graph shows that the total number of death cases of Slovenia is less than Austria,Croatia,Czechia,Greece,North Macedonia,Serbia and Slovakia.
+
+```{r}
+conf_df <- near_countries %>% 
+  filter(type == "death") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "death") %>%
+  ungroup() 
+  
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "death",
+          textinfo="label+value+percent parent")
+```
+
+Above tree map plot shows the distribution of the total number of death cases by near countries in Slovenia.
+
+```{r}
+ggplot(subset(near_countries,type == "recovered"), aes(date,cum_cases, colour = country)) + geom_path(size=1) +
+  labs(title = "Total no.of recovered cases in near countries")
+```
+
+Above graph shows that the total number of recovered cases of Slovenia is less than Austria,Croatia,Czechia and Slovakia.
+
+```{r}
+conf_df <- near_countries %>% 
+  filter(type == "recovered") %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases) %>%
+  mutate(parents = "recovered") %>%
+  ungroup() 
+  
+
+  plot_ly(data = conf_df,
+          type= "treemap",
+          values = ~total_cases,
+          labels= ~ country,
+          parents=  ~parents,
+          domain = list(column=0),
+          name = "recovered",
+          textinfo="label+value+percent parent")
+```
+
+Above tree map plot shows the distribution of the total number of recovered cases by near countries in Slovenia.
+
+```{r}
+corona_final <- filter(near_countries, date == "2020-09-18")
+
+corona_final_confirmed <- filter(corona_final, type == "confirmed" )
+
+corona_final_confirmed$cases[is.na(corona_final_confirmed$cases)]<-mean(corona_final_confirmed$cases,na.rm=TRUE)
+corona_final_confirmed$cases<-round(corona_final_confirmed$cases,digits=0)
+
+p + geom_point(data = corona_final_confirmed, aes(x = long, y = lat, colour = cum_cases), size = 7) +
+  geom_text(aes(x=corona_final_confirmed$long, y=corona_final_confirmed$lat, label=corona_final_confirmed$country)) +
+  labs(title = "Total no.of confirmed cases as at 18-09-2020")
+```
+
+Above plot shows that Crezia has a high number of confirmed corona cases where as Slovenia has a low number of confirmed corona cases as at 18th September 2021. 
+
+```{r}
+corona_final_death <- filter(corona_final, type == "death" )
+
+corona_final_death$cases[is.na(corona_final_death$cases)]<-mean(corona_final_death$cases,na.rm=TRUE)
+corona_final_death$cases<-round(corona_final_death$cases,digits=0)
+
+p + geom_point(data = corona_final_death, aes(x = long, y = lat, colour = cum_cases), size = 7) +
+  geom_text(aes(x=corona_final_death$long, y=corona_final_death$lat, label=corona_final_death$country))+
+  labs(title = "Total no.of death cases as at 18-09-2020")
+```
+
+Above plot shows that North Macedonia has a high number of confirmed corona cases where as Slovenia has a low number of death corona cases as at 18th September 2021.
+
+```{r}
+corona_final_recovered <- filter(corona_final, type == "recovered" )
+
+corona_final_recovered$cases[is.na(corona_final_recovered$cases)]<-mean(corona_final_recovered$cases,na.rm=TRUE)
+corona_final_recovered$cases<-round(corona_final_recovered$cases,digits=0)
+
+p + geom_point(data = corona_final_recovered, aes(x = long, y = lat, colour = cum_cases), size = 7) +
+  geom_text(aes(x=corona_final_recovered$long, y=corona_final_recovered$lat, label=corona_final_recovered$country)) +
+  labs(title = "Total no.of recovered cases as at 18-09-2020")
+```
+
+Above plot shows that Serbia has a high number of recovered corona cases where as Slovenia has a low number of confirmed corona cases as at 18th September 2021.
+
+## **Vaccine Process**
+
+### **Slovenia Vaccine Process**
+
+![Slovenia Vaccine Process](https://static.toiimg.com/thumb/msid-84801364,width-1200,height-900,resizemode-4/.jpg){width=60%}
+```{r}
+data("covid19_vaccine")
+data("coronavirus")
+Slovenia_cases <- coronavirus %>% 
+  filter(country == "Slovenia", 
+         type == "confirmed") %>%
+  arrange(date) %>%
+  select(date, cases) %>%
+  left_join(
+    covid19_vaccine %>% 
+      filter(country_region == "Slovenia") %>%
+      select(date, people_fully_vaccinated),
+    by = "date")
+
+Slovenia_cases$people_fully_vaccinated[is.na(Slovenia_cases$people_fully_vaccinated)]<-mean(Slovenia_cases$people_fully_vaccinated,na.rm=TRUE)
+Slovenia_cases$people_fully_vaccinated<-round(Slovenia_cases$people_fully_vaccinated,digits=0)
+
+head(Slovenia_cases)
+
+tail(Slovenia_cases)
+
+```
+
+```{r}
+Slovenia_cases <- Slovenia_cases %>%
+  mutate(cases_normalized = (cases - min(cases)) / (max(cases) - min(cases)),
+         people_fully_vaccinated_normilized = (people_fully_vaccinated - min(people_fully_vaccinated, na.rm = TRUE)) / 
+           (max(people_fully_vaccinated, na.rm = TRUE) - 
+              min(people_fully_vaccinated, na.rm = TRUE)))
+
+head(Slovenia_cases)
+
+tail(Slovenia_cases)
+
+summary(Slovenia_corona)
+```
+
+The above table consists the number of covid 19 cases and fully vaccinated cases from 22th January 2020 to 18th September 2021 of the country Slovenia.
+
+```{r}
+plot_ly(data = Slovenia_cases,
+        x = ~ date,
+        y = ~ cases_normalized,
+        type = "scatter",
+        mode = "line",
+        name = "Daily Cases (Normalized)") %>%
+  add_lines(x = ~ date,
+            y = ~ people_fully_vaccinated_normilized,
+            name = "Fully Vaccinated - Aggregate (Normalized)") %>%
+  layout(title = "Slovenia - Daily New Cases vs. Total Vaccinated Population (Normalized)",
+         legend = list(orientation = 'h'),
+         yaxis = list(title = "Normalized Daily Cases/Total Vaccinated"),
+         xaxis = list(title = ""),
+         margin = list(b = 60))
+```
+
+The above plot shows the Daily Covid 19 Cases (Normalized)in Slovenia Vs Fully Vaccinated - Aggregate (Normalized) in Slovenia in daily basis.
+
+# **Discussion and Conclusion**
+
+Slovenia is a country in Europe Continent.Covid 19 or else Corona virus is now a World pandemic.As other countries in the world Slovenia also has to gone through that.In Slovenia, the first infection with the novel corona virus was confirmed on 4 March 2020.The government of Slovenia has decided to extend the majority of existing corona virus restrictions while slightly easing them in the cultural sector, where serving food and drinks will once again be permitted during cultural events.Slovenia has been released Useful information and safety guidelines for carefree travel to Slovenia.
+
+According to the above graphs and details we can conclude that the number of confirmed Corona patients has been increasing since November 2020 and number of death Corona patients has been increasing since end of November 2020 to end of December 2020. And also number of recovered and active Corona patients has been increasing since end of November 2020.The highest number of confirmed corona patients reported at the beginning of February 2021.The highest number of death corona patients reported in end of December 2021.the highest number of recovered corona patients reported in mid of January 2021.The highest number of active corona patients reported in February 2021.Also we can conclude that the  total number of corona confirmed, death and recovered patients in Slovenia is negligible in some extent with compared to the other countries in the same continent.Then we can say that the actions which are taken by Slovenia to avoid from Covid 19 is successful in some extent.
+
+According to above graphs,the total number of confirmed cases of Slovenia is less than Austria,Croatia,Czechia,Greece,Serbia and Slovakia.Further we can say that The total number of death cases of Slovenia is less than Austria,Croatia,Czechia,Greece,North Macedonia,Serbia and Solvakia.And also the total number of recovered cases of Slovenia is less than Austria,Croatia,Czechia and Slovakia.The we can say according to above details Crezia has a high number of confirmed corona cases,North Macedonia has a high number of confirmed corona cases and Serbia has a high number of confirmed corona cases at 18th September 2021.Finally,according to above all details,We can satisfy some extent about the actions which are taken by Slovenia to avoid Covid 19 by comparing other countries.So we can conclude that those actions are efficient and successful in some extent.
+
+![Slovenia](https://img.theculturetrip.com/x/smart/wp-content/uploads/2019/04/slovenia--rudy-balasko-shutterstock.jpg){width=80%}
+
+# **References**
+ 
+ + https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+ 
+ + https://github.com/RamiKrispin/coronavirus/blob/master/vignettes/covid19_vaccine.Rmd
+ 
+ + https://stackoverflow.com/questions/8161836/how-do-i-replace-na-values-with-zeros-in-an-r-dataframe
+
+ + https://youtu.be/Mh0Of4LzEfk
+
+ + https://youtu.be/afFb_DcBBdA
+
+ + https://youtu.be/UFXB28OabIo
+
+ + https://www.britannica.com/place/Slovenia
+
+ + https://covid19.who.int/region/euro/country/si
+
+ + https://the-slovenia.com/news/coronavirus-lockdown-slovenia/
+
+ 

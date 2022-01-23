@@ -1,0 +1,137 @@
+---
+title: 'Bahrain: A Brief Study of Covid-19 Situation'
+author: "B.S.A.Senadeera"
+date: "28/09/2021"
+output: html_document
+---
+## 1. Introduction 
+  The Kingdom of Bahrain or more commonly known as Bahrain is an island nation situated in the Gulf of Persia. The state consists of one main island in which the capital and the largest city **Manama** is situated in and several small islands. The islands are interconnected via bridges and causeways. The population of Bahrain is approximately around 1.58 million, including 53% of non-nationals. The majority of the population (70%) are Muslims and Arabic is used as the main language for communication in the country.\ 
+  Bahrain declared independence from the British in 1971. Now, the country is ruled as a Unitary Islamic constitutional monarchy headed by the King Shaik Hamad bin Isa Al Khalifa. Bahrain is considered as a country which has a fast growing economy in the Arab world. Crude oil exportation, natural gases and aluminium production are the prominent means of income of the country. As per today, 85% budget revenues are earned by crude oil and natural gas exportation.\ 
+  Similar to the neighboring countries in the Gulf Region, Bahrain has a subtropical climate and desert characteristics.The average annual temperature lies between 23C to 40C. Bahrain is a renown producer of dates due to the ideal climate for date palm cultivation. Bahrain is a popular tourist destination, specially among the Arab States due to advanced medical facilities,Islamic banking facilities,  kingdom's heritage, enhanced by the modern Arab culture and Bahrain International F1 Circuit. 
+  
+```{r, include= FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+```
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, echo = FALSE, fig.cap = "**Figure 01: Manama, the Capital of Bahrain**"}
+knitr::include_graphics("http://lrnconsulting.eu/wp-content/uploads/2020/10/manama-bahrain.png")
+```
+
+
+
+## 2. The Location of Bahrain
+
+
+
+
+![**Figure 02: Locating Bahrain on the World Map**](MAP.png)
+
+
+
+
+
+```{r, echo= FALSE, fig.cap= "**Figure 03: The Map of Bahrain**"}
+knitr::include_graphics("https://billtammeus.typepad.com/.a/6a00d834515f9b69e201bb09da523e970d-800wi")
+```
+
+
+
+## 3. Bahrain under Covid-19 Pandemic
+
+Corona Virus Disease (Covid-19) was first discovered in Wuhan,
+China in November, 2019. It has a high capability to spread from 
+one person to another person via nasal or oral droplets and aerosols 
+containing the virus. Due to this reason, the disease was quickly spread 
+worldwide and it was declared as a global pandemic by the World Health
+Organization (WHO) by March, 2020. Global governments did not hesitate 
+to impose strict rules and regulations to control the spread of the virus
+as much as possible. \
+In Bahrain, the first patient infected by the corona virus was 
+identified in February, 2020. 
+Within next few days considerable amount of patients, mostly 
+among air-passengers enter the country, were identified. 
+Therefore the Bahraini government officials suspended public gatherings 
+including schools, universities, shopping malls etc.By the March, 2020 Bahrain
+started witnessing an increasing growth in Covid-19 patients therefore the 
+government took several necessary steps to avoid the spread by turning large centers to isolations centers and starting private healthcare facilities for people who were willing to undergo treatments on their own expenses. The Bahraini government appointed National Task Force for Combating Coronavirus to make more precise and accurate desicions in order to defeat the pandemic in Bahrain. The task force introduced _BeAware Bahrain_, a Cloud based mobile application to track and treat infected patients more efficiently. In the mean time the government imposed lockdown curfews and introduced new laws to minimize public gathering to avoid the transmission of the disease.  The vaccination program in Bahrain started in January, 2021. The authorities prioritized vaccinating the Bahraini people as the best precaution against Covid-19 virus. Currently 6 vaccines are used in Bahrain and according to WHO 70% of the country's population (including non-nationals) has received both doses of Covid-19 vaccines free of charge.  
+
+
+
+
+### 3.1 Covid-19 Timeline
+
+1. 20/02/2020 - The first corona virus infected patient was discovered
+2. 25/02/2020 - All schools, nurseries and universities were suspended
+3. 16/03/2020 - The first death due to Covid-19 was reported (a female aged 65, suffered from chronic diseases) 
+4. 31/03/2020 - __BeAware Bahrain__ mobile phone application was launched
+5. 17/05/2020 - Active cases raised to 7000
+6. June-December, 2020 - The National Health Regulatory Authority approved Sinopharm and Pfizer/BioNTech Covid-19, AstraZeneca and SputnikV vaccines
+7. January-April, 2021 - Mobile vaccination programs were conducted to vaccinate elderly and bedbound patients, Placed as the third most vaccinated country in the world during the period
+8. May, 2021-Present - The Ministry of Health announced the capability of vaccinating 31,000 patients per day 
+
+
+
+```{r, echo = FALSE, fig.cap = "**Figure 04: Bahraini healthcare officials engaging in Covid-19 task force duties**"}
+knitr::include_graphics("https://images.zawya.com/images/cia/zXlarge/200415073555YNRC.jpg")
+```
+
+
+### 3.2 Reported Active, Recovered and Death cases from 22/01/2020 to 18/09/2021
+
+After the first Covid-19 infected person was reported in February, 2020, it can be observed that reported numbers of different type of cases (confirmed, death and recovered) show varying patterns in time to time. In all three types of cases, the relevant highest-peaks can be observed in May-June, 2021. **Figure 05** the shows number of cases reported under types 'confirmed', 'recovered' and 'death'. The line plots of confirmed cases and recovered cases have approximately similar patterns  **Table 01** displays the highest number of cases recorded under each type. Apart from the highest peaks which have occurred in May-June, 2021, two small peaks for each curve can be observed between July and November in 2020. This feature indicates that Bahrain has been through two waves of Covid-19(periods in which increasing numbers of cases have been recorded in a short time interval). Compared to the number of confirmed and recovered cases it is little bit difficult to get an idea on how the number of deaths have varied across the time period observing **Figure05**. A clear observations on the variation of reported number of deaths can be obtained using **Figure06**. The plot of number of deaths varies almost the same as two other plots, showing the highest peak between May-June, 2021. In both **Figure05** and **Figure06**, it is possible to observe that by the months of August-September, 2021, how all plots have reached the minimum number of cases since the first recorded. There is a high chance that the rapid vaccination programs conducted across Bahrain making a strong impact to control Covid-19 pandemic. 
+
+```{r, comment=NA}
+Type <- c("Confirmed", "Recovered", "Deaths")
+Date <- c("29/05/2021", "05/06/2021", "01/06/2021")
+Cases <- c(3273, 3651, 29)
+Bah <- data.frame(Type, Date, Cases)
+knitr::kable(Bah, "pipe", align = "c",caption = "**Table01: Days with the highest number of cases for each type**" )
+```
+
+
+
+![**Figure05: Covid-19 Cases in Bahrain between 22/01/2020 - 18/09/2021**](Rplot02.png)
+
+
+
+![**Figure06: Number of Covid-19 Deaths recorded between 22/01/2020 - 18/09/2021**](deaths3.png)
+
+
+
+## 4. Covid-19 Pandemic in Gulf Countries
+
+
+As an island nation situated in the Persian gulf, Bahrain is surrounded by some Arabian nations such as Saudi Arabia, United Arab Emirates, Oman, Kuwait, Qatar etc. To conduct a comparison among Bahrain and other Gulf States during the Covid-19 pandemic, two countries were chosen based on the recorded number of Covid-19 cases. Kuwait and Qatar has shown approximately equal number of confirmed number of Covid-19 cases between 22/01/2020 and 18/09/2021. When comparing the three countries (**Figure07**), Bahrain has reported the most number of cases. Kuwait and Bahrain have showed the highest respective peaks in the months of May-June,2021. During that time interval Qatar too has shown a peak yet it is much shorter than the highest peak which Qatar has reached in May,2020.
+
+
+
+
+![**Figure07: Confirmed Covid-19 cases of Bahrain, Kuwait and Qatar**](Rplot3.png)
+
+
+
+
+Considering the number of deaths recorded in each of selected countries, by observing **Figure08** it is fair to state that Bahrain has recorded that highest number of death troll due to Covid-19 and the lowest number was recorded by Qatar. All three countries have reached the highest peaks of the respective plots roughly at the same time point. Currently the countries have started to record the low amounts of death trolls. If the countries are able continue the disease control, soon it would be possible to witness flatten curves.  
+
+
+
+
+![**Figure08: Death Covid-19 cases of Bahrain, Kuwait and Qatar**](Rplot4.png)
+
+
+
+## 5. Conclusions
+
+* In Bahrain, the highest number of Covid-19 cases recorded is 3273 and the highest number of deaths recorded is 29 in a single day.
+
+* Bahrain is conducting a rapid vaccination program, thereby maintaining the spread of the disease at a commendable level.
+
+## 6. References
+
+1. [World Health Organization-Regional Office for The Eastern Mediterranean(2021)](http://www.emro.who.int/media/news/bahrain-successfully-vaccinates-60-of-population-with-2-doses-of-covid-19-vaccines.html)  
+2. [Bahrain-A Country Profile](https://www.nationsonline.org/oneworld/bahrain.htm)
+3. [Bahrain](https://www.britannica.com/place/Bahrain)

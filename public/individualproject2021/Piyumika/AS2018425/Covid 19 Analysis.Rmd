@@ -1,0 +1,319 @@
+---
+title: "Covid 19 Data Analysis - Luxembourg"
+author: "AS2018425"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE )
+```
+
+# **Introduction**
+
+Luxembourg is a landlocked country in Western Europe. Its capital is Luxembourg City. With an area of 2,586 square kilometers (998 sq mi), it is one of the smallest sovereign states in Europe. In 2019, Luxembourg had a population of 626,108, which makes it one of the least-populous countries in Europe,but by far the one with the highest population growth rate. Foreigners account for nearly half of Luxembourg's population.
+
+### Visualization of Luxembourg
+
+```{r, out.width="30%", out.height="30%"}
+knitr::include_graphics("luxembourg-physical-map.jpg")
+```
+
+
+Luxembourg is a small country located in the Low Countries, part of North-West Europe It borders Belgium for 148 kilometers (92 miles) to the west and north, France (73 km [45 mi]) to the south, and Germany (138 km [86 mi]) to the east. Luxembourg is landlocked, separated from the North Sea by Belgium.
+
+The topography of the country is divided very clearly between the hilly Oesling of the northern third of the Grand Duchy and the flat Gutland, which occupies the southern two-thirds. The country's longest river is the Sauer, which is a tributary of the Moselle, the basin of which includes almost all of Luxembourg's area. Other major rivers include the Alzette in the south and the Wiltz in the north.
+
+
+### Climatic condition of Luxembourg
+
+Luxembourg has a moderately continental climate, with cold winters and mild summers. Summers are generally cool, with a mean temperature of about 17° C (63° F ); winters are seldom severe, average temperature being about 0° C (32° F ). The high peaks of the Ardennes in the north shelter the country from rigorous north winds, and the prevailing northwesterly winds have a cooling effect. Rainfall is plentiful in the extreme southwest; precipitation throughout the country averages about 75 cm (30 in) annually.
+
+### Lock-down status of the country and Actions taken by the government
+
+The virus was confirmed to have reached Luxembourg on 29 February 2020. 
+
+* On 29 February the Ministry of Health of Luxembourg confirmed the first   case of the corona virus in the country. 
+ 
+* On 12 March,the Ministry of Health confirmed 19 new cases in Luxembourg, bringing the total number of cases to 26. The ministry also announced that schools would close from 16 to 27 March following the recent number of cases in Luxembourg.
+
+* On 13 March, Ministry of Health held a press conference to confirm another 8 cases and Luxembourg's first death, which was a 94-year-old who had been in critical condition.
+
+* On 15 March, They stated that most non-food shops and restaurants would close at midnight following the spike in cases. Among non-food business permitted to remain open were post offices, banks and pet supply stores. It was also decreed that buses would not open their front doors and that passengers had to get on at the rear of the bus; also, the front row of seats on all buses were physically blocked off with tape or chains. 
+
+* On 17 March, the Prime Minister announced his intention to declare a state of emergency. This would allow the government to "put in place urgent measures to deal with this crisis".It was a period marked by the closure of borders in neighboring countries and all the complications that this would imply for cross-border workers. It is also the time of supermarket hoarding in Luxembourg as well as across the border.
+
+* On 20 March,  Public transport services were significantly reduced, with trains running once an hour instead of four times an hour on some lines, and all Sunday services for trams and regional buses cancelled.
+
+* Luxembourg remained in a state of emergency until 22 June.
+
+* Around October, Luxembourg returned to a more "flexible" lockdown. The closure of restaurants, bars and cafes, as well as the two-guest rule and curfew remain in place.
+    
+As of 24 September 2021, there are 77762 confirmed cases, with 835 deaths and 75765 recoveries in Luxembourg.
+
+**Restrictions apply with regard to persons authorized to enter Luxembourg.**
+
+Citizens of the European Union and of the countries associated with the Schengen area, as well as citizens of San Marino, Andorra, Monaco and the Vatican/Saint See, are free to enter the territory of the Grand Duchy of Luxembourg, regardless of the purpose of the stay and not only to return to their homes.
+
+Third-country nationals may no longer enter the territory of the Grand Duchy until 31 December 2021 (inclusive), except in one of the following cases: 
+
+* If they are residents of the third-countries stated by Luxembourg, Special administrative regions and entities and territorial authorities not recognized as States by at least one Member State of the European Union.
+
+* Entities and territorial authorities not recognized as States by at least one Member State of the European Union.
+
+* If their travel is considered essential.
+
+* If they hold a certificate proving a complete vaccination pattern that is considered equivalent in Luxembourg.
+
+For any person, aged 12 years or older, authorised to enter Luxembourg (regardless of nationality), it is compulsory to present, before boarding a flight to Luxembourg,
+
+* either a vaccination certificate attesting to a complete vaccination pattern carried out with a vaccine that has been authorised for use by the European Medicines Agency, issued by a public or medical authority of a Member State of the European Union or of a Member State of the Schengen Area, or a vaccination certificate, issued by a third country, attesting to a complete vaccination pattern and considered as equivalent in Luxembourg.
+
+* or a recovery certificate issued by a practitioner or national authority of an EU Member State or Schengen Area Member State for persons who have had a recent SARS-CoV-2 infection within 6 months prior to travel and who have completed the applicable isolation period in the respective country with resolution of all symptoms of infection
+
+* or the negative result of a nucleic acid amplification test (NAAT) for the detection of SARS-CoV-2 viral RNA (PCR, TMA or LAMP methods) carried out less than 72 hours before the flight or of a SARS-CoV-2 rapid antigen test carried out less than 48 hours before the flight, by a medical analysis laboratory or any other entity authorized for this purpose.
+
+* This applies to all departures to Luxembourg, including those from Member States of the European Union or the Schengen area.
+
+
+
+
+```{r}
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2018425")
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(hrbrthemes)
+library(gganimate)
+library(gifski)
+library(plotly)
+library(viridis)
+library(ggplot2)
+library(dplyr)
+
+luxembourg_corona <- coronavirus %>% filter(country == "Luxembourg")
+
+luxembourg_corona_new <- filter(luxembourg_corona, cases >= 0)
+
+Luxembourg_corona_newcases <- tibble(luxembourg_corona_new)
+
+Luxembourg_pivot_wider <- pivot_wider(Luxembourg_corona_newcases, names_from = "type", values_from = "cases")
+
+Luxembourg_cases_and_types <- Luxembourg_corona_newcases %>% select(type,cases)
+
+lat_long_without <- select(Luxembourg_pivot_wider, -c(lat, long, province))
+
+```
+
+
+# **Exploratory Data Analysis**
+
+###  **Total Confirmed cases, Recovered cases and deaths due to thr Covid 19 pandemic** 
+
+```{r}
+ 
+ ggplot(Luxembourg_corona_newcases) +
+  geom_bar(mapping = aes(x = type, y = cases), stat = "identity", na.rm=TRUE) +
+  aes(fill=type) +
+  ggtitle("A bar chart for the total cases of Luxembourg")
+ 
+```
+ 
+According to this graph summary of the total confirmed covid patients, recovered patients and deaths can be clearly seen. It can be seen that more than the half of the confirmed Covid 19 cases have been recovered and less than half of the deaths when compared with the confirmed cases can be seen.
+
+
+### **Number of confirmed Covid 19 cases over the time in Luxembourg**
+
+```{r}
+p <- Luxembourg_pivot_wider %>%
+  ggplot( aes(x=date, y=confirmed)) +
+    geom_area(fill="#69b3a2", alpha=0.5) +
+    geom_line(color="#69b3a2") +
+    ylab("Number of confirmed cases") +
+    xlab("Date") +
+    theme_ipsum() +
+    ggtitle("Graph of confirmed cases of Luxembourg")
+
+p <- ggplotly(p)
+p
+
+```
+According to this graph we can see that in the later part of the year 2020 daily covid 19 case in Luxembourg has increased rapidly. After the with the start of the year 2021 the it has gradually decreased. But we can also see that agian in the mid year part of 2021 again the daily confirmed cases has increased and has gradually decreased with the time.
+
+###  **Number of recovered Covid 19 cases over the time in Luxembourg**
+
+```{r}
+p1 <- Luxembourg_pivot_wider %>%
+  ggplot( aes(x=date, y=recovered)) +
+    geom_area(fill="#69b3a2", alpha=0.5) +
+    geom_line(color="#69b3a2") +
+    ylab("No of recovered cases") +
+    xlab("Date") +
+    theme_ipsum() +
+     ggtitle("Graph of recovered cases of Luxembourg")
+
+p1 <- ggplotly(p1)
+p1
+
+```
+
+According to this graph we can seee that the number of recovered cases were very low in the begining due to the lower number of confirmed cases. But when the confirmed cases are increasing the recovered number has also increased. There are fluctuations time to time in the number of recovered cases and we can assume that it is due to the fluctuatins of the confirmed cases.
+
+### **Number of Covid 19 death cases over the time in Luxembourg**
+
+```{r}
+
+p2 <- Luxembourg_pivot_wider %>%
+  ggplot( aes(x=date, y=death)) +
+    geom_area(fill="#69b3a2", alpha=0.5) +
+    geom_line(color="#69b3a2") +
+    ylab("No of deaths") +
+    xlab("Date") +
+    theme_ipsum() +
+    ggtitle("Graph of number of deaths in Luxembourg")
+
+p2 <- ggplotly(p2)
+p2
+
+```
+
+This graph depicts the number of deaths of the time in Luxembourg and maximum number of deaths were 29. (2020-12-28). This has happened in a when the number of confirmed cases were reaching it's peak. When looking at the confirmed number of graph and its values we can see that even there was an incresement in deaths in the later part of the year 2020 the total number deaths are low.
+
+### **Number of Covid 19 confirmed cases comparison with the neighbouring countries of Luxembourg**
+
+```{r}
+
+confirmed_Luxembourg_corona <- luxembourg_corona %>% filter(type=="confirmed", cases >= 0)
+
+France_corona <- coronavirus  %>% filter(country == "France")
+confirmed_france_corona <- France_corona %>% filter(type=="confirmed", cases >= 0)
+
+Belgium_corona <- coronavirus  %>% filter(country == "Belgium")
+confirmed_belgium_corona <- Belgium_corona %>% filter(type=="confirmed", cases >= 0)
+
+Germany_corona <- coronavirus  %>% filter(country == "Germany")
+confirmed_germany_corona <- Germany_corona %>% filter(type=="confirmed", cases >= 0)
+
+boarder_country_confirm <- rbind( confirmed_belgium_corona, confirmed_france_corona, confirmed_germany_corona, confirmed_Luxembourg_corona)
+
+ggplot(boarder_country_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot for the confirmed cases of the boarder countries of Luxembourg")
+
+```
+
+The above graph displays a comparison between the number of confirmed case in Luxemborg with its neighbouring countries France, Germany and  Belgium. We can seee that the number of confirmed cases in Luxembourg is really low when vcompared with its neighbouring countries. France and Germany confirmed cases are higher than both Belgium and france.
+
+### **Number of Covid 19 recovered cases comparison with the neighbouring countries of Luxembourg**
+
+```{r}
+
+
+recovered_Luxembourg_corona <- luxembourg_corona %>% filter(type=="recovered", cases >= 0)
+
+
+recovered_france_corona <- France_corona %>% filter(type=="recovered", cases >= 0)
+
+
+recovered_belgium_corona <- Belgium_corona %>% filter(type=="recovered", cases >= 0)
+
+
+recovered_germany_corona <- Germany_corona %>% filter(type=="recovered", cases >= 0)
+
+boarder_country_recovered <- rbind(recovered_Luxembourg_corona, recovered_france_corona, recovered_belgium_corona, recovered_germany_corona)
+
+
+b <- boarder_country_recovered %>%
+  ggplot( aes(date,cases, color=country)) +
+    geom_point() +
+    theme_bw() +
+    ylab("Number of cases") + 
+   ggtitle("Graph for the comparison of recovered cases in the neighbouring countries of Luxembourg")
+  
+ggplotly(b)
+
+```
+
+This graph illustrates a comparison of recovered covid 19 cases of the neighbouring countries of Luxembourg. We can see that with the high population and with the high number of confirmed cases the number of recoverd cases are also high in Germany. When comparing with France we can see that Luxembourg has a similar rate of recovered cases as France though the confirmed cases and populations in Franc is high.
+
+### **Number of Covid 19 deaths cases comparison with the neighbouring countries of Luxembourg**
+
+```{r}
+
+death_Luxembourg_corona <- luxembourg_corona %>% filter(type=="death", cases >= 0)
+
+
+death_france_corona <- France_corona %>% filter(type=="death", cases >= 0)
+
+
+death_belgium_corona <- Belgium_corona %>% filter(type=="death", cases >= 0)
+
+
+death_germany_corona <- Germany_corona %>% filter(type=="death", cases >= 0)
+
+boarder_country_death<- rbind(death_Luxembourg_corona, death_france_corona, death_belgium_corona, death_germany_corona)
+
+ggplot( boarder_country_death , aes(x=date, y=cases, color=as.factor(country)  )) + 
+  geom_line() +  
+  facet_wrap(~country , scales="free" ) +
+  theme(legend.position="none") +
+   ggtitle("Graph for the comparison of death cases in the neighbouring countries of Luxembourg")
+
+```
+
+Above four graphs diplay the number of deaths in Luxembourg and neighbouring countries. We can see that the deaths in France, Germany and Belgium is really high when compared to Luxembourg. This can be due to the high number of confirmed cases and population.
+
+# **Discussion**
+
+According to the analysis done we can clearly see that there is there had been several fluctuations in the number of confirmed cases in Luxembourg and with that variation the number of recovered case and the number of deaths have also fluctuated. With the comparison done with the neighbouring countries we can see that Luxembourg has a very low number of confirmed cases. 
+
+# **Conclusion**
+
+Due to the low population and due to the immediate restrictions and policies implimented by the government of luxembourg we can say that Luxembourg has mananged their confirmed number of Covid 19 cases and therefore have managed the recovered number of cases and deaths.
+
+# **References**
+
+* En.wikipedia.org. 2021. COVID-19 pandemic in Luxembourg - Wikipedia. [online] Available at: <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Luxembourg> [Accessed 28 September 2021].
+
+* 2021. [online] Available at: <https://www.nationsonline.org/oneworld/luxembourg.htm#:~:text=The%20Grand%20Duchy%20of%20Luxembourg,landlocked%20country%20in%20Western%20Europe.&text=The%20Grand%20Duchy%20has%20a,French%2C%20German%2C%20and%20Luxembourgish.> [Accessed 28 September 2021].
+
+* Climatestotravel.com. 2021. Luxembourg climate: average weather, temperature, precipitation, when to go. [online] Available at: <https://www.climatestotravel.com/climate/luxembourg> [Accessed 28 September 2021].
+
+* Nationsencyclopedia.com. 2021. Climate - Luxembourg - average, temperature. [online] Available at: <https://www.nationsencyclopedia.com/Europe/Luxembourg-CLIMATE.html> [Accessed 28 September 2021].
+
+* Encyclopedia Britannica. 2021. Luxembourg | History - Geography. [online] Available at: <https://www.britannica.com/place/Luxembourg> [Accessed 28 September 2021].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,495 @@
+---
+title: "Report of COVID-19 Data Analysis"
+author: "S.D.T.Jananji - AS2018389"
+date: "9/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE,comment=NA, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<p style = "text-align: center;" > ![](flag.png)<font size="11" color="navy"> <span style = "font-family:Algerian;"> **Rwanda - COVID-19 Case**</span></font></p>
+
+
+```{r message=FALSE, echo=FALSE, eval=FALSE}
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2018389") 
+
+```
+
+
+```{r echo=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+Rwanda_corona <- coronavirus %>% filter(country == "Rwanda")
+
+```
+
+<span style = "font-family:serif;"><font size="7" color="seagreen">Introduction</font></span>
+
+<span style = "font-family:serif;">
+Rwanda is a unitary republic in central and eastern Africa at the co-ordinates  2°00′S 30°0′E. Uganda is to its north, Andorra to the east, Burundi to the south, and the Democratic Republic of Congo to the west. While the country is landlocked, it is noted for its lakes. Despite being close to the equator, the climate is temperate due to the altitude.
+<p style = "text-align: center;" > ![](image1.png) </p>
+<p style = "text-align: center;" > **Figure 1** </p>
+
+considered to be among the smallest countries on the continent, Rwanda’s total area is estimated to be KM2 26,338. According to Rwanda’s National Institute of Statistics (NISR), in 2015, the population density in Rwanda was estimated to be 445 people per KM2 and the total population is approximately 12.30 million.
+
+<font size="5">**Visualization of the Location on World Map**</font>
+
+
+This world map visualize the location of Rwanda.
+
+<p style = "text-align: center;" > 
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+Rwanda_corona <- coronavirus %>% filter(country == "Rwanda")
+confirmed_Rwanda_corona <- Rwanda_corona %>% filter(type=="confirmed")
+recovered_Rwanda_corona <- Rwanda_corona %>% filter(type=="recovered")
+death_Rwanda_corona <- Rwanda_corona %>% filter(type=="death")
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Rwanda_corona, aes(x = long, y = lat), color = "red", size
+    = 3
+  )
+```
+ </p>
+ <p style = "text-align: center;" > **Figure 2** </p>
+
+<font size="5">**Climate Condition**</font>
+
+
+Rwanda has a temperate tropical highland climate, with lower temperatures than are typical for equatorial countries due to its high elevation.The temperatures across the country differ greatly from one area to another based on their altitude. Generally, during the day, the temperature ranges between 22°C and 27°C while at night they drop to between 16°C and 21°C. Unlike many other African countries away from the equator, it is neither too hot nor too cold.There are some temperature variations across the country; the mountainous west and north are generally cooler than the lower-lying east. In the higher mountains, which take up a lot of the country, temperatures range between 10°C to 15°C.In the capital, Kigali, temperatures are stable all year round and hover around 26/27 °C (79/81 °F) during the day and around 15/16 °C (59/61 °F) at night. Evergreen Rwanda can be visited at any time of year with this perfect weather.
+
+<p style = "text-align: center;" > ![](image2.jpg) </p>
+<p style = "text-align: center;" > **Figure 3** </p>
+
+<font size="5">**Lockdown Status of Rwanda**</font>
+
+The COVID-19 pandemic in Rwanda is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Rwanda in March 2020. Rwanda's response to the pandemic has received international praise for its effectiveness. Despite limited resources, the country's well organised healthcare system, rapid deployment of testing procedures and high public trust in medical authorities have led to a successful public health response.
+
+On 14 March 2020, Rwanda reported the first confirmed case of SARS-CoV-2, an asymptomatic traveller who arrived in Kigali on 8 March, presented with symptoms on 13 March and tested positive the following day. Like much of the world, Rwanda braced for the challenge ahead, expecting that without implementing intensive distancing measures, it would experience a rapidly spreading epidemic and subsequent deaths. Many observers predicted that Rwanda, along with other African countries, would experience an even more devastating pandemic than had occurred in the Europe and the USA, citing insufficient capacity of health systems, comorbidities and overcrowded housing conditions as factors that were expected to impact both infection and death rates.
+
+Rwanda initiated SARS-CoV-2 infection testing using real-time PCR (RT-PCR) in February 2020; at first, SARS-CoV-2 testing was centralised at the National Reference Laboratory,8 which tested between 1000 and 1500 samples daily. Over the last 10 months, testing capacity has been decentralised—first expanding to four main public laboratories, three in Kigali and one in Southern Province, and then to seven additional sites in the Northern and Eastern Provinces. As of 14 January 2021, 506 health centers, and 52 district, provincial, and referral hospitals, spread across all five provinces, are equipped for SARS-CoV-2 sample collection and testing (11 of which were employing RT-PCR and the rest COVID-19 rapid tests). An average of 251 tests per million individuals are conducted daily, as compared with 76, 91, 2413, 4020 and 5183 per million in Kenya, Nigeria, Italy, Spain and the USA, respectively.
+Seven tertiary and all 37 district hospitals in Rwanda, along with 6 additional designated testing sites, have staff capable of performing clinical screening and collecting samples/testing suspected cases or contacts of confirmed cases, defined as anyone reported to have been within 1 m of the confirmed case for more than 1 min or participants in social events like marriage ceremonies and government meetings. Both groups wait in isolation at home until their result is available, usually between 8 and 24 hours. Rwanda also screens people entering the country at land borders and airports, including returning citizens and residents and truck drivers. These individuals are housed at quarantine sites near the point of entry for 24 hours while they await results. From July 2020, Rwanda began random testing, with individuals sampled from roadways (passengers of cars, buses or motorcycles or pedestrians), markets or communities where a cluster of cases have been identified. These individuals are screened for symptoms and provide samples on the spot and then receive their results via text message within 8 and 24 hours. As of 14 January 2021, 779511 SARS-CoV-2 tests have been performed (5951/100 000), of which 10316 (1.3%) were positive.
+
+
+<font size="5">**Actions taken by the government of Rwanda**</font>
+
+Government publications describing Rwanda's healthcare capacity were first consulted to obtain the country's baseline context. Next, official government and healthcare system communications, including case counts, prevention and screening protocols, treatment facility practices, and behavioral guidelines for the public, were read thoroughly to understand the course of the pandemic in Rwanda and the specific measures in the response.
+The Ministry of Health, Rwanda Biomedical Centre, and the Epidemic and Surveillance Response division have collaborated on preparative measures since the pandemic began in January 2020. The formation of a Joint Task Force in early March led to the Coronavirus National Preparedness and Response Plan, an extensive six-month plan that established a national incident management system and detailed four phases of a comprehensive national response. Notable strategies have included disseminating public information through drones, robots for screening and inpatient care, and official communications through social media platforms to combat misinformation and mobilize a cohesive response from the population.
+
+<font size="7" color="seagreen">Exploratory Data Analysis</font>
+
+<font size="5">**Analysis of the data for Rwanda**</font>
+
+This section analyzes the number of confirmed cases, the number of recoveries and the number of deaths cases by the covid-19 virus in Rwanda.
+
+
+<font size="5">Daily confirmed cases </font>
+
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+library(plotly)
+ggplotly(ggplot(confirmed_Rwanda_corona, aes(x=date, y=cases)) + geom_bar(aes(y = cases), stat = "identity", fill = "darkmagenta") + ggtitle("Figure 4 : Daily Covid-19 Confirmed cases in Rwanda"))
+```
+
+
+The above plot shows that the number of cases reported within a particular day.The 1st confirmed case within Rwanda was reported on the 14th of March 2020. So far, the 3072 highest number of confirmed cases were reported in 26th July 2021.
+
+<font size="5">Daily Recovered cases </font>
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+ggplotly(ggplot(recovered_Rwanda_corona, aes(x=date, y=cases)) + geom_bar(aes(y = cases), stat = "identity", fill = "lawngreen") + ggtitle("Figure 5 : Daily Covid-19 Confirmed cases in Rwanda"))
+
+```
+
+
+
+The above plot shows that the number of recovered cases within a particular day.
+
+<font size="5">Daily Death cases </font>
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+ggplotly(ggplot(death_Rwanda_corona, aes(x=date, y=cases)) + geom_bar(aes(y = cases), stat = "identity", fill = "firebrick1") + ggtitle("Figure 6: Daily Covid-19 death cases in Rwanda"))
+
+```
+
+
+The above plot shows that the number of death cases within a particular day.The 1st death case within Rwanda was reported on the 30th of May 2020.This chart shows an increase in the number of deaths by June.
+
+<font size="5">Daily Active cases </font>
+
+The sum of all the cases recorded daily on the basis of the data received can be charted as follows.
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+n_Rwanda_corona <- Rwanda_corona %>% pivot_wider(names_from=type,values_from=cases)
+n_Rwanda_corona$active_cases<- cumsum(n_Rwanda_corona$confirmed - (n_Rwanda_corona$recovered +n_Rwanda_corona$death ))
+
+n_Rwanda_corona$confirmed_sum <- cumsum(n_Rwanda_corona$confirmed)
+n_Rwanda_corona$death_sum <- cumsum(n_Rwanda_corona$death)
+n_Rwanda_corona$recovered_sum <- cumsum(n_Rwanda_corona$recovered)
+
+nn <- select(n_Rwanda_corona,date,country,active_cases,confirmed_sum,death_sum,recovered_sum)
+t <- nn %>% pivot_longer(3:6, names_to="type",values_to="cases")
+ggplot(t, aes(x=date,y=cases,col=type)) + geom_line(size=1)+ ggtitle("Figure 7:Total Covid-19 cases")
+
+```
+
+The chart above does not show data on patients who have recovered in the last few days. Accordingly, the number of active cases has not been calculate during this days.Therefore, as the data of the last few days cannot be adequately displayed, the non-entry dates of those days can be removed and the data can be re-charted as follows.
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+nnn <- na.omit(nn)
+tt <- nnn %>% pivot_longer(3:6, names_to="type",values_to="cases")
+ggplot(tt, aes(x=date,y=cases, col=type,)) + geom_line(size=1)+ ggtitle("Figure 8:Total Covid-19 cases")
+
+```
+
+According to the chart above, the number of corona confirmed cases since the beginning of July has increased rapidly. At the same time, the number of recovered cases has increased. But a significant change in the death cases is not clearly visible in this chart.
+
+
+<font size="5">**Comparison with other countries :Zimbabwe, Andorra, Belize, Cyprus, Uzbekistan**</font>
+
+
+
+
+<p> ![](image3.png)<font size="4"> - **Zimbabwe**</font></p>
+
+Zimbabwe is also a landlocked country located in Southern Africa. Zimbabwe is one of neighboring country of Rwanda.The COVID-19 pandemic was confirmed to have reached Zimbabwe in March 2020.Some of Zimbabwe's provinces, especially Manicaland, Masvingo and Marshland East, also struggled with a malaria outbreak at the same time. Though malaria is treatable, the healthcare system faces drug shortages and increase strain with the spread of COVID-19.Zimbabwe’s Health Minister in a press conference announced that the first case of COVID-19 from a patient who had recently traveled from England had been recorded.Corona cases are also on the rise in Zimbabwe, according to WHO reports.
+
+
+<p > ![](Andorra.png)<font size="4"> - **Andorra**</font></p>
+
+Andorra is the sixth-smallest state in Europe, having an area of 468 square kilometers (181 sq mi) and a population of approximately 77,006. The Andorran people are a Romance ethnic group of originally Catalan descent. Andorra is the 16th-smallest country in the world by land and the 11th-smallest by population.The COVID-19 pandemic in Andorra is part of the worldwide pandemic of corona virus.Andorra is carrying out a mass vaccination campaign. At the same time, in order to contain the spread of the virus, the strategy of carrying out regular screening remains in force.
+
+
+
+
+<p > ![](belize.png)<font size="4"> - **Belize**</font></p>
+
+Belize is a country in Central America bordering the Caribbean Sea.The COVID-19 pandemic in Belize is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2. The virus was confirmed to have reached Belize on 23 March 2020.Belize is currently experiencing low COVID-19 infection rates 
+
+<p > ![](cyprus.png)<font size="4"> - **Cyprus**</font></p>
+
+Cyprus is an island country in the Middle East in the Eastern Mediterranean Sea.Cyprus is the third largest island in the Mediterranean Sea with 648 km of coastline. At its largest point, the island measures 225 km and it is also 97 km wide in its widest point. The COVID-19 pandemic was confirmed to have reached Cyprus in March 2020. The released data from the Cyprus government includes cases in the British Overseas Territory of Akrotiri and Dhekelia but, due to the long-running Cyprus dispute, does not include cases in Northern Cyprus.
+
+<p > ![](uzbekistan.png)<font size="4"> - **Uzbekistan**</font></p>
+
+zbekistan is a doubly landlocked country located in Central Asia.The country has a diverse economy and a relatively young population.  
+The virus was confirmed to have spread to Uzbekistan when its first case was confirmed on 15 March 2020, an Uzbek citizen returning from France. The number of current COVID-19 cases in Uzbekistan has declined since its peak in late summer 2020. However, the infection rate is increasing significantly again. 
+
+<p style = "text-align: center;" > 
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+Zimbabwe_corona <- coronavirus %>% filter(country == "Zimbabwe")
+Andorra_corona <- coronavirus %>% filter(country == "Andorra")
+Uzbekistan_corona <- coronavirus %>% filter(country == "Uzbekistan")
+Belize_corona <- coronavirus %>% filter(country == "Belize")
+Cyprus_corona <- coronavirus %>% filter(country == "Cyprus")
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+
+q <- p + geom_point(data = Rwanda_corona, aes(x = long, y = lat,label=country), color = "deepskyblue", size= 3, shape=17) + geom_point(data = Zimbabwe_corona, aes(x = long, y = lat,label=country), color = "magenta", size= 3, shape=17)+ geom_point(data = Andorra_corona, aes(x = long, y = lat,label=country), color = "brown1", size= 3, shape=17)+geom_point(data = Uzbekistan_corona, aes(x = long, y = lat,label=country), color = "blue", size= 3, shape=17)+geom_point(data = Belize_corona, aes(x = long, y = lat,label=country), color = "darkgoldenrod4", size= 3, shape=17) +geom_point(data = Cyprus_corona, aes(x = long, y = lat,label=country), color = "darkgreen", size= 3, shape=17)
+
+ggplotly(q)
+
+```
+ </p>
+ <p style = "text-align: center;" > **Figure 9** </p>
+
+The map above shows the location of Zimbabwe, Andorra, Belize, Cyprus and Uzbekistan relative to Rwanda.
+
+<font size="5">Confirmed cases </font>
+
+The chart below shows the total number of confirmed cases in Rwanda, Zimbabwe, Andorra, Belize, Cyprus and Uzbekistan.
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+c <- data.frame(confirmed_Rwanda_corona) 
+c$cases_total <- cumsum(c$cases)
+
+confirmed_Zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="confirmed")
+c1 <- data.frame(confirmed_Zimbabwe_corona) 
+c1$cases_total <- cumsum(c1$cases)
+
+confirmed_Andorra_corona <- Andorra_corona %>% filter(type=="confirmed")
+c2 <- data.frame(confirmed_Andorra_corona) 
+c2$cases_total <- cumsum(c2$cases)
+
+confirmed_Uzbekistan_corona <- Uzbekistan_corona %>% filter(type=="confirmed")
+c3 <- data.frame(confirmed_Uzbekistan_corona) 
+c3$cases_total <- cumsum(c3$cases)
+
+confirmed_Belize_corona <- Belize_corona %>% filter(type=="confirmed")
+c4 <- data.frame(confirmed_Belize_corona) 
+c4$cases_total <- cumsum(c4$cases)
+
+confirmed_Cyprus_corona <- Cyprus_corona %>% filter(type=="confirmed")
+c5 <- data.frame(confirmed_Cyprus_corona) 
+c5$cases_total <- cumsum(c5$cases)
+
+dd<- tibble(rbind(c,c2,c1,c3,c4,c5))
+
+
+ggplotly(ggplot(dd, aes(x=date, y=cases_total ,col=country)) + geom_line() + ggtitle("Figure 10 : Total Covid-19 confirmed cases"))
+```
+
+Since July 2020, the number of reported cases in all countries has risen rapidly. Uzbekistan has highest confirmed cases since the beginning of the pandemic.It can be clearly seen at this graph. 
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+cdc<- tibble(rbind(confirmed_Rwanda_corona, confirmed_Zimbabwe_corona, confirmed_Andorra_corona,confirmed_Uzbekistan_corona,confirmed_Belize_corona,confirmed_Cyprus_corona))
+
+ggplot(cdc, aes(x=date, y=cases ,col=country)) + geom_point(alpha=0.3)+geom_line() + ggtitle("Figure 11 : Daily Covid-19 confirmed cases")+facet_wrap(~country, ncol=2 )
+
+```
+
+
+The charts above show separately the number of daily confirmed cases in the all six countries.
+
+<font size="5">Recovered cases </font>
+
+
+The chart below represents the total number of recovered cases in the all six countries.
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+r <- data.frame(recovered_Rwanda_corona) 
+r$cases_total <- cumsum(r$cases)
+
+
+recovered_Zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="recovered")
+r1 <- data.frame(recovered_Zimbabwe_corona) 
+r1$cases_total <- cumsum(r1$cases)
+
+recovered_Andorra_corona <- Andorra_corona %>% filter(type=="recovered")
+r2 <- data.frame(recovered_Andorra_corona) 
+r2$cases_total <- cumsum(r2$cases)
+
+recovered_Uzbekistan_corona <- Uzbekistan_corona %>% filter(type=="recovered")
+r3 <- data.frame(recovered_Uzbekistan_corona) 
+r3$cases_total <- cumsum(r3$cases)
+
+recovered_Belize_corona <- Belize_corona %>% filter(type=="recovered")
+r4 <- data.frame(recovered_Belize_corona) 
+r4$cases_total <- cumsum(r4$cases)
+
+recovered_Cyprus_corona <- Cyprus_corona %>% filter(type=="recovered")
+r5 <- data.frame(recovered_Cyprus_corona) 
+r5$cases_total <- cumsum(r5$cases)
+
+dd<- tibble(rbind(r,r2,r1,r3,r4,r5))
+
+
+ggplotly(ggplot(dd, aes(x=date, y=cases_total ,col=country)) + geom_line() + ggtitle("Figure 12: Total Covid-19 recovered cases"))
+
+```
+
+The number of recovered cases of Cyprus is increase within one day show according to the chart above. It can be seen that the increase value of recovered cases of Cyprus is very high compared to the other countries.The number of recovered cases reported daily in those countries is as follows.
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+rdc<- tibble(rbind(recovered_Rwanda_corona, recovered_Zimbabwe_corona, recovered_Andorra_corona, recovered_Uzbekistan_corona,recovered_Belize_corona, recovered_Cyprus_corona))
+
+ggplot(rdc, aes(x=date, y=cases ,col=country)) + geom_point(size=1.5,alpha=0.3) +geom_line()+ ggtitle("Figure 13 : Daily Covid-19 recovered cases")+facet_wrap(~country, ncol=2 )
+
+```
+
+<font size="5">Death cases </font>
+
+The chart below represents the total number of death cases ofn the six countries.
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+d <- data.frame(death_Rwanda_corona) 
+d$cases_total <- cumsum(d$cases)
+
+death_Zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="death")
+d1 <- data.frame(death_Zimbabwe_corona) 
+d1$cases_total <- cumsum(d1$cases)
+
+death_Andorra_corona <- Andorra_corona %>% filter(type=="death")
+d2 <- data.frame(death_Andorra_corona) 
+d2$cases_total <- cumsum(d2$cases)
+
+death_Uzbekistan_corona <- Uzbekistan_corona %>% filter(type=="death")
+d3 <- data.frame(death_Uzbekistan_corona) 
+d3$cases_total <- cumsum(d3$cases)
+
+death_Belize_corona <- Belize_corona %>% filter(type=="death")
+d4 <- data.frame(death_Belize_corona) 
+d4$cases_total <- cumsum(d4$cases)
+
+death_Cyprus_corona <- Cyprus_corona %>% filter(type=="death")
+d5 <- data.frame(death_Cyprus_corona) 
+d5$cases_total <- cumsum(d5$cases)
+
+dd<- tibble(rbind(d,d2,d1,d3,d4,d5))
+
+ggplotly(ggplot(dd, aes(x=date, y=cases_total ,col=country)) + geom_line() + ggtitle("Figure 14 : Total Covid-19 death cases"))
+```
+
+
+The chart above shows that the death cases of Zimbabwe is high compared to the other countries.This graph shows that the death cases in Rwanda has been on the rise since January 2021. And also, this graph shows that the death cases in Andorra is very low.The following graphs show the number of deaths per day in each country.
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+ddc <- tibble(rbind(death_Rwanda_corona, death_Zimbabwe_corona, death_Andorra_corona, death_Uzbekistan_corona,death_Belize_corona, death_Cyprus_corona))
+
+ggplot(ddc, aes(x=date, y=cases ,col=country)) + geom_point(alpha=0.3)+geom_line()+ ggtitle("Figure 15 : Daily Covid-19 death cases")+facet_wrap(~country, ncol=2 )
+
+```
+
+The study of these six charts shows that the number of daily death cases in Zimbabwe is higher among the other countries.
+
+<font size="5">Active cases </font>
+
+
+The following chart represents the active case of the Rwanda, Zimbabwe and Tazania.
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+n_Zimbabwe_corona <- Zimbabwe_corona %>% pivot_wider(names_from=type,values_from=cases)
+n_Zimbabwe_corona$active_cases<- cumsum(n_Zimbabwe_corona$confirmed - (n_Zimbabwe_corona$recovered +n_Zimbabwe_corona$death ))
+
+n_Zimbabwe_corona$confirmed_sum <- cumsum(n_Zimbabwe_corona$confirmed)
+n_Zimbabwe_corona$death_sum <- cumsum(n_Zimbabwe_corona$death)
+n_Zimbabwe_corona$recovered_sum <- cumsum(n_Zimbabwe_corona$recovered)
+
+znn <- select(n_Zimbabwe_corona,date,country,active_cases,confirmed_sum,death_sum,recovered_sum)
+
+n_Andorra_corona <- Andorra_corona %>% pivot_wider(names_from=type,values_from=cases)
+n_Andorra_corona$active_cases<- cumsum(n_Andorra_corona$confirmed - (n_Andorra_corona$recovered +n_Andorra_corona$death ))
+
+n_Andorra_corona$confirmed_sum <- cumsum(n_Andorra_corona$confirmed)
+n_Andorra_corona$death_sum <- cumsum(n_Andorra_corona$death)
+n_Andorra_corona$recovered_sum <- cumsum(n_Andorra_corona$recovered)
+
+tnn <- select(n_Andorra_corona,date,country,active_cases,confirmed_sum,death_sum,recovered_sum)
+
+
+n_Uzbekistan_corona <- Uzbekistan_corona %>% pivot_wider(names_from=type,values_from=cases)
+n_Uzbekistan_corona$active_cases<- cumsum(n_Uzbekistan_corona$confirmed - (n_Uzbekistan_corona$recovered +n_Uzbekistan_corona$death ))
+
+n_Uzbekistan_corona$confirmed_sum <- cumsum(n_Uzbekistan_corona$confirmed)
+n_Uzbekistan_corona$death_sum <- cumsum(n_Uzbekistan_corona$death)
+n_Uzbekistan_corona$recovered_sum <- cumsum(n_Uzbekistan_corona$recovered)
+
+vnn <- select(n_Uzbekistan_corona,date,country,active_cases,confirmed_sum,death_sum,recovered_sum)
+
+n_Belize_corona <- Belize_corona %>% pivot_wider(names_from=type,values_from=cases)
+n_Belize_corona$active_cases<- cumsum(n_Belize_corona$confirmed - (n_Belize_corona$recovered +n_Belize_corona$death ))
+
+n_Belize_corona$confirmed_sum <- cumsum(n_Belize_corona$confirmed)
+n_Belize_corona$death_sum <- cumsum(n_Belize_corona$death)
+n_Belize_corona$recovered_sum <- cumsum(n_Belize_corona$recovered)
+
+bnn <- select(n_Belize_corona,date,country,active_cases,confirmed_sum,death_sum,recovered_sum)
+
+n_Cyprus_corona <- Cyprus_corona %>% pivot_wider(names_from=type,values_from=cases)
+n_Cyprus_corona$active_cases<- cumsum(n_Cyprus_corona$confirmed - (n_Cyprus_corona$recovered +n_Cyprus_corona$death ))
+
+n_Cyprus_corona$confirmed_sum <- cumsum(n_Cyprus_corona$confirmed)
+n_Cyprus_corona$death_sum <- cumsum(n_Cyprus_corona$death)
+n_Cyprus_corona$recovered_sum <- cumsum(n_Cyprus_corona$recovered)
+
+cnn <- select(n_Cyprus_corona,date,country,active_cases,confirmed_sum,death_sum,recovered_sum)
+
+active_nc <- tibble(rbind(nn,tnn,znn,vnn,bnn,cnn))
+
+ggplotly(ggplot(active_nc, aes(x=date,y=active_cases,col=country)) + geom_line(size=0.5)+ggtitle("Figure 16 : Active cases Covid-19 cases"))
+
+
+```
+This chart shows a very high number of active cases in Cyprus. It can be viewed separately from the countries below.
+
+
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+
+ggplot(active_nc, aes(x=date, y=active_cases ,col=country)) + geom_point(alpha=0.3)+geom_line()+ ggtitle("Figure 17 : Daily Covid-19 active cases")+facet_wrap(~country, ncol=2 )
+
+
+```
+
+
+
+<font size="7" color="seagreen">Discussion</font>
+
+The dataset of Rwanda contained herein is loaded by coronavirus dataset given in the package R. There is no minus value in  this data set. But there are 45 not allocated (NA) values in recovered cases.The lack of that data made it difficult to trace the number of active cases that occurred in the last 45 days. Therefore, when that data was removed and this data was calculated. In the last few days, the number of confirmed cases has increased significantly, making it difficult to estimate the incomplete data recovered data. Therefore, active cases have been obtained without including those last days.
+
+The number of Covid-19 patients in Rwanda is lower than in other countries where there are confirmed, recovered and death cases.The number of such cases in Zimbabwe is very high. However, the figure 16 shows that the number of active patients on a daily basis does not increase as the patients have recovered.However, Figure 16 shows an increase in the number of active patients in Cyprus. It can be shown that a small number of reported patients have recovered. But according to Figure 12, the number of patients recovered in Cyprus has reached more than 30,000 in a single day. Thus, it can be assumed that there was a delay in recording the data.
+
+Figure 8 clearly shows that all cases in Rwanda are generally lower in comparison to other countries and that patients have recovered in parallel with the reported cases. Accordingly, it can be seen that the number of active cases is still under control. Figure 8 also clearly shows that the number of deaths due to the report is low and that it is a very small percentage of the total confirmed cases.
+
+
+
+<font size="7" color="seagreen">Conclusion </font>
+
+It can be said that Rwanda currently stands at a much favorable stage regarding the COVID-19 Pandemic when compared to most countries.Rwanda's government and healthcare system has responded to the COVID-19 pandemic with innovative interventions to prevent and contain the virus. The Government of Rwanda has been able to apply many successful public health response strategies and stabilize the progress of the disease.Overall, the observed low COVID-19 deaths in Rwanda is likely influenced by the combination of effective infection control strategies, reliable identification of cases and reporting of deaths, and the population’s young age structure.
+
+
+<font size="7" color="seagreen">References</font>
+
+
+[1] <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf"> Rmarkdown cheetsheet</a>
+
+[2] <a href="https://www.r-graph-gallery.com/">R Graph Gallery</a>
+ 
+[3] <a href="https://lms.fas.sjp.ac.lk/mod/forum/view.php?id=28506"> Lms forum</a>
+ http://www.unesco.org/new/fileadmin/MULTIMEDIA/HQ/SC/pdf/FEI_Country_profile_Rwanda.pdf
+ 
+[4] https://www.rw.undp.org/content/rwanda/en/home/countryinfo.html
+ 
+[5] https://globaledge.msu.edu/countries/rwanda/
+
+[6] https://rw.usembassy.gov/health-alert-covid-19-information/
+
+[7] https://r-coder.com/custom-fonts-r/#
+
+[8] https://cran.r-project.org/web/packages/naniar/vignettes/replace-with-na.html
+
+</span>

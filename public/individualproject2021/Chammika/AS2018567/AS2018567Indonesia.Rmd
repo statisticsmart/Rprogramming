@@ -1,0 +1,298 @@
+---
+title: "COVID-19 pandemic in Indonesia"
+author: "Dinu Waduge AS2018567"
+date: "9/29/2021"
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,comment=NA, echo=FALSE ,eval=TRUE,message=FALSE, warning=FALSE)
+```
+
+$~$
+
+![](/Users/dinu/Desktop/3 YEAR/Stat/R/Assignment 3/image.jpg)
+$~$
+
+# 1. Introduction
+
+### 1.1. Background
+
+The COVID-19 pandemic is an ongoing worldwide pandemic of corona-virus disease 2019 (COVID-19) caused by severe acute respiratory syndrome corona-virus 2 (SARS-CoV-2).On 12 January 2020, the World Health Organization (WHO) confirmed that a novel corona-virus was the cause of a respiratory illness in a cluster of people in Wuhan, Hubei, China, which was reported to the WHO on 31 December 2019. Since 2021, variants of the virus have emerged and become dominant in many countries, with the Delta, Alpha and Beta variants being the most virulent. As of 19 September 2021, more than 228 million cases and 4.68 million deaths have been confirmed, making it one of the deadliest pandemics in history.This report attempts to analyze the COVID – 19 related data of Indonesia in order to communicate it to any parties of interest.
+
+### 1.2. Visualization of the location
+
+Indonesia,officially the Republic of Indonesia,is a country in Southeast Asia and Oceania between the Indian and Pacific oceans. It consists of over seventeen thousand islands, including Sumatra, Java, Sulawesi, and parts of Borneo and New Guinea. Indonesia is the world’s largest island country and the 14th-largest country by area, at 1,904,569 square kilometers (735,358 square miles). With about 270 million people, Indonesia is the world’s fourth-most populous country and the most populous Muslim-majority country. Java, the world’s most populous island, is home to more than half of the country’s population.
+
+```{r}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+indonesia_corona <- coronavirus %>% filter(country == "Indonesia")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = indonesia_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+
+
+```
+
+
+### 1.3. Climate condition
+
+The climate of Indonesia is almost entirely tropical. The uniformly warm waters that make up 81% of Indonesia’s area ensures that temperatures on land remain fairly constant, with the coastal plains averaging 28 °C, the inland and mountain areas averaging 26 °C, and the higher mountain regions, 23 °C. Temperature varies little from season to season, and Indonesia experiences relatively little change in the length of daylight hours from one season to the next.The main variable of Indonesia’s climate is not temperature or air pressure, but rainfall. The area’s relative humidity ranges between 70% and 90%. Although air temperature changes little from season to season or from one region to the next, cooler temperatures prevail at higher elevations. In general, temperatures drop approximately 1°C per 90-meter increase in elevation from sea level with some high-altitude interior mountain regions experiencing night frosts.Being a tropical country, Indonesia does not have spring, summer, autumn, or winter, instead of just the two seasons of Rainy and Dry, both of which are relative. While there is significant regional variation, in most of the country (including Java and Bali) the dry season is April to October, while the wet season is November to March. However, global warming has made the seasons less predictable.
+
+### 1.4. Lock-down status
+
+Instead of implementing a nationwide lock down, the government applied “large-scale social restrictions” (Indonesian: Pembatasan Sosial Berskala Besar, abbreviated as PSBB), which was later modified into the “community activities restrictions enforcement” (Indonesian: Pemberlakuan Pembatasan Kegiatan Masyarakat, abbreviated as PPKM).
+
+Indonesia is currently implementing a more restrictive form of lock-down wherein non-essential and non-critical commercial activities are not allowed. Domestic travel is restricted while inter-regional travel is permissible only with a vaccination certificate or a valid negative COVID-19 test result.
+
+### 1.5. Actions taken by the government
+
+* **Vaccination efforts**
+
+The government began its COVID-19 Vaccination Program on January 13, 2021. It is split into four phases with healthcare workers receiving the first batch of vaccines, followed by public servants and then other members of the public.The government aims to inoculate a total of 208,265,720 people by the end of the year 2021.
+
+As of September 16, 2021, as many as 76,153,487 Indonesians have received their first vaccinations or 1,012,763 more than the day before. Meanwhile, 43,484,971 people have received their second vaccinations or 522,331 more than the previous day.
+
+Meanwhile, for Indonesia’s capital city of Jakarta, as of September 16, 2021, as many as 10,169,963 people have received their first vaccination, while 7,219,461 people have received their second vaccination.
+
+* **Stimulus policy**
+
+To reduce the impact of COVID-19 pandemic to the national economy, the government released a IDR 10.3 trillion stimulus policy to the tourism sector, in the form of ticket price discounts and restaurant tax deductions. The IDR 10.3 trillion budget is given to provide discounted airplane ticket prices for 10 tourist destinations, such as Batam, Denpasar, Yogyakarta, Labuan Bajo, Lombok, Malang, Manado, Lake Toba (Silangit Airport), Tanjung Pandan, and Tanjungpinang, which applies from March to May 2020. Ticket prices for low-cost airlines are discounted by 50%, medium-service by 48%, and full-service by 45%.Specifically for this ticket price discount, the stimulus fund comes from the IDR 444.39 billion state budget (APBN) for a discounted value of 30% and 25% of passengers per flight.Additionally, there were additional IDR 100 billion ticket discounts paid by Angkasa Pura I and Angkasa Pura II and IDR 260 billion PT Pertamina (Persero) paid through jet fuel price discounts, so the total ticket price stimulus was IDR 960 billion, so that the ticket price could be discounted by 50%.
+
+The stimulus in the form of restaurant taxes was borne by the central government was also provided to the tune of IDR 3.3 trillion. Thus, there was no restaurant tax in the ten tourist destinations above, but as compensation, the local government were to be given a grant from the central government.
+
+
+
+
+![](/Users/dinu/Desktop/3 YEAR/Stat/R/Assignment 3/covid-stringency-index.png){width="75%"}
+
+The chart here shows how governmental response has changed over time. It shows the Government Stringency Index – a composite measure of the strictness of policy responses. A higher score indicates a stricter government response (i.e. 100 = strictest response).
+
+$~$
+
+### 2. Exploratory Data Analysis
+
+#### 2.1. Visualization of death, confirmed, recovered, active cases
+
+Following outputs are given the summary of the Indonesia corona-virus data. The 1818 observation are taken from 2020-01-22 to 2021-09-18.
+
+In our data set all the records in province variable are missing.Therefore we are not able to analyze our data set province wise.And also last 45 values in “cases” variable are missing. It might be due to an error in recording data.Since they are last values it is better to omit them.
+
+```{r}
+library(knitr)
+indonesia_corona %>% group_by(type)  %>% summarise(total=sum(cases,na.rm = TRUE)) %>% kable(caption= "Table 1:Total death, confirmed, recovered cases")
+
+```
+
+
+```{r}
+indonesia_corona %>% group_by(type)  %>% summarise(total=sum(cases,na.rm = TRUE)) %>%  ggplot(aes(x=type,y=total,fill=type))+ geom_bar(stat="identity") + labs(title = "Figure 1:Bar chart of corona-virus cases in Indonesia")
+                                                                                            
+
+```
+
+Above bar chart shows that overall Indonesia has been performing well in keeping the death total low and ensuring that higher than half the confirmed patients are recovered.
+
+```{r,out.width="100%"}
+library(plotly)
+q1 <- indonesia_corona %>% group_by(type)  %>%  ggplot(aes(x=date,y=cases,col=type))+ geom_line(size=1) +facet_grid(type ~.,scales = "free") + labs(title = "Figure 2:Daily COVID-19 cases in Indonesia")
+
+ggplotly(q1)
+                                                                                            
+
+```
+
+
+According to figure 2,In June 2021 there was sudden increase in all confirmed,death and recovered cases.But it is seems that after end of the July 2021 confirmed and death cases are gradually decreasing,which is a positive sign.
+
+```{r, out.width="100%"}
+q2 <- indonesia_corona %>% pivot_wider(names_from = type,values_from = cases) %>% mutate(cum_confirmed = cumsum(confirmed), cum_death = cumsum(death), cum_recovered = cumsum(recovered),cum_active = cum_confirmed -cum_death- cum_recovered ) %>% pivot_longer(9:12,"cum_type","value") %>%
+  
+ggplot(aes(x=date, y= value,col=cum_type)) + geom_line(size=1)  + ggtitle("Figure 3: The growth of different cases in Indonesia") +theme(axis.line = element_line(colour = "black",size = 0.5))
+  
+ ggplotly(q2) 
+
+```
+
+Figure 3 depicts the daily change in the number of cumulative confirmed, death, recovered and active case in Indonesia.
+
+
+```{r}
+indonesia_corona %>% pivot_wider(names_from = type,values_from = cases) %>% separate(date, into = c("year","month","day"),sep="-") %>% unite("year_month",c("year","month"),sep = "-") %>%  group_by(year_month) %>% summarise(count_confirmed = sum(confirmed),count_death = sum(death), count_recovered = sum(recovered)) %>%  pivot_longer(2:4,"type","value") %>% 
+  ggplot(aes(x=year_month, y=value, fill=year_month)) +facet_grid(type~. , scales = "free")+ labs(title = "Figure 4:The monthly data") + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 90))
+
+
+```
+
+Figure 4 shows that, the number of confirmed cases fluctuates from month to month. The highest increase in the number of new confirmed cases occurred in July 2021. The number of new confirmed cases has decreased from July 2021 to September 2021. Thus, it can be concluded that there is an impact of large-scale social restrictions on the growth of new confirmed cases. The death number each month has fluctuated during the time, where the peak occurred in August 2021. However, in the September 2021, the number of death cases has decreased, which is a good sign.
+
+$$\ Mortality−rate=\frac{cumulative−sum(death)}{cumulative−sum(confirmed)}*100$$
+$~$
+
+$$\ Recovery−rate=\frac{cumulative−sum(recovered)}{cumulative−sum(confirmed)}*100$$
+$~$
+
+```{r}
+q3 <- indonesia_corona %>% pivot_wider(names_from = type,values_from = cases) %>% mutate(mortality_rate=cumsum(death)/cumsum(confirmed)*100, recovery_rate= cumsum(recovered)/cumsum(confirmed)*100  ) %>% select(date,mortality_rate,recovery_rate) %>% pivot_longer(2:3,"rate_type","value") %>%
+group_by(rate_type) %>%  
+  ggplot(aes(x=date, y= value,col=rate_type)) + geom_line(size=1)  + ggtitle("Figure 5: Mortality rate & Recovery rate ") + facet_grid(rate_type~. , scales = "free") + theme(axis.line = element_line(colour = "black",size = 0.5))
+  
+ ggplotly(q3)
+
+```
+
+According to the Figure 5 we can see that mortality rate is decreasing and recovery rate is increasing over the time.That means Indonesia is succeeding to reduced death cases and increased the recovered case.
+
+```{r}
+max_confirmed <- indonesia_corona %>% arrange(desc(cases))  %>% select(date,type,cases) %>% filter(type== "confirmed") %>% head(1)
+
+max_death <- indonesia_corona %>% arrange(desc(cases))  %>% select(date,type,cases) %>% filter(type== "death") %>% head(1)
+
+max_recovered <- indonesia_corona %>% arrange(desc(cases))  %>% select(date,type,cases) %>% filter(type== "recovered") %>% head(1)
+
+bind_rows(max_confirmed, max_death, max_recovered ) %>% kable(caption = "Table 2:Maximum cases of daily COVID-19 cases of Indonesia")
+
+```
+
+The highest number of patients reported in a single day is 56757 in 2021-07-15 and the highest number of deaths reported per day is 2069 in 2021-07-27.Also,the highest number of recovered cases reported in a day is 47128 in 2021-07-27.
+
+$~$ 
+
+#### 2.2. Comparison with other countries
+
+$~$ 
+
+##### 2.2.1. Comparison with neighboring countries
+
+```{r}
+near_countries <- coronavirus %>% filter(( -10< lat & lat < 10) & (90 < long & long < 130) ) 
+  unique(near_countries$country)  %>% kable(caption = "Table 3:Countries near Indonesia")
+
+```
+
+Brunei, Malaysia, Singapore and Timor-Leste are the countries, which are surrounded by Indonesia. If those countries have risk, then Indonesia also in a risk. Let’s compare those countries with Indonesia.
+
+There are 228 total missing cases in our “near_countries” data set.All the last 45 records in each countries’ data set are missing. Therefore, I decided to omit them.In addition to that 1 record in “Singapore” data set and 2 records in “Timor-Leste” are also missing. Since it is very small records(3) compared to our big data set I supposed there’s no harm in omitting them.
+
+```{r, out.width="100%"}
+q4 <- near_countries %>%
+  
+ggplot(aes(x=date, y= cases,col=country)) + geom_line()  +facet_grid(rows=vars(type), scales = "free") + ggtitle("Figure 6: Daily confirmed,death and recovered cases comparison") +theme(axis.line = element_line(colour = "black",size = 0.5))
+  
+ ggplotly(q4) 
+
+```
+
+Figure 6 shows that, Indonesia has a considerable increase in confirmed,death and recovered corona-virus cases compared to Brunei, Malaysia, Singapore and Timor-Leste. But we can’t take a correct idea about spread of corona virus, because the populations of those countries are vastly different.However We can get a rough idea of the spread of corona virus.
+
+```{r}
+near_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovered_sum= sum(recovered,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovered_sum, mortality_rate=death_sum/confirmed_sum*100, recovery_rate= recovered_sum/confirmed_sum*100  ) %>% kable(caption = "Table 4:Total corona-virus cases in neighboring countries of Indonesia")
+
+
+near_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovered_sum= sum(recovered,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovered_sum ) %>% pivot_longer(2:5,"sum_type","value") %>%       ggplot(aes(x=sum_type, y= value,fill=sum_type)) + geom_bar(stat="identity") + facet_grid( ~ country)+ labs(title = "Figure 7:Bar chart of corona-virus cases in neighboring countries of Indonesia") +
+  theme(axis.text.x = element_blank())
+
+                                   
+                                   
+
+```
+
+According to the figure 7 we can see that Indonesia reported the largest number of covid-19 cases.According to Table 4 Indonesia has the highest mortality rate, which is a negative sign. However, Recovery rate of Indonesia is higher than Brunei, Malaysia and Timor-Leste.
+
+$~$
+ 
+##### 2.2.2. Comparison with equal populated countries
+
+$~$
+
+Brazil and Pakistan are the nearly equal populated countries to Indonesia. Let’s compare those countries with Indonesia.
+
+There are some negative values in data set which corona-virus cases in Brazil, Pakistan and Indonesia.It might be due to some people were tested positive and then negative by the particular country.I removed the negative values in order to do the analysis.
+
+There are 136 total missing cases in our “equal_populated_countries” data set.All the last 45 records in each countries’ data set are missing. Therefore, I decided to omit them.In addition to that 1 record in “Pakistan” data set is also missing. Since there is only 1 record I supposed there’s no harm in omitting it.
+
+```{r, out.width="100%"}
+equal_populated_countries <- coronavirus %>% filter(country %in% c("Brazil", "Pakistan", "Indonesia"))
+
+q5 <- equal_populated_countries %>%
+  
+ggplot(aes(x=date, y= cases,col=country)) + geom_line()  +facet_grid(rows=vars(type), scales = "free") + ggtitle("Figure 8: Daily confirmed,death and recovered cases comparison") +theme(axis.line = element_line(colour = "black",size = 0.5))
+  
+ ggplotly(q5) 
+  
+```
+
+
+Figure 8 shows that, Indonesia has lower number of cases than Brazil and higher number of cases than Pakistan with respect to confirmed and death corona-virus cases over the time. Daily corona-virus cases of Brazil continuously keeps fluctuating and occasionally reaching peaks.
+
+```{r}
+equal_populated_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovered_sum= sum(recovered,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovered_sum, mortality_rate=death_sum/confirmed_sum*100, recovery_rate= recovered_sum/confirmed_sum*100  ) %>% kable(caption = "Table 5: Total corona-virus cases in equal populated countries")
+
+
+equal_populated_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovered_sum= sum(recovered,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovered_sum ) %>% pivot_longer(2:5,"sum_type","value") %>%       ggplot(aes(x=sum_type, y= value,fill=sum_type)) + geom_bar(stat="identity") + facet_grid( ~ country)+ labs(title = "Figure 9:Bar chart of corona-virus cases in equal populated countries") +
+  theme(axis.text.x = element_blank())
+
+                                   
+                                   
+
+```
+
+According to the figure 9 we can see that Indonesia has lower number of cases than Brazil but higher number of cases than Pakistan with respect to confirmed, death and recovered cases. According to Table 5 mortality rate of Indonesia is higher than both Brazil and Pakistan. And also recovery rate of Indonesia is lower than both both Brazil and Pakistan.
+
+### 3. Conclusions
+
+The COVID-19 pandemic spread to various parts of the world, including Indonesia. Here we analyzed the corona-virus cases in Indonesia from 2020-01-22 to 2021-09-18. The first corona virus inflect person was recorded at 02-03-2020 and first death case reported at 11-03-2020.A patient who was recovered for the first time was reported at 12-03-2020. In June 2021, pandemic situation showed a rapid spread among the community. But it is seems that after end of the July 2021 confirmed and death cases are gradually decreasing, which is a positive sign.Thus, it can be concluded that there is an impact of large-scale social restrictions on the growth of new confirmed cases. The highest increase in the number of new confirmed cases occurred in July 2021. The peak of death cases occurred in August 2021. However, in the September 2021, the number of death cases has decreased, which is a good sign. In general, Indonesia has been performing well in keeping the death total low and ensuring that nearly higher than half the confirmed patients are recovered.
+
+Indonesia is caparisoned with different countries. Comparing the spread of coronavirus in different countries is difficult using the data being released by governments. Confirmed case counts depend heavily on the extent of countries’ very different testing regimes, so higher totals may simply reflect more testing. Furthermore, There is no one perfect statistic to compare the outbreaks different countries have experienced during this pandemic. Looking at a variety of metrics gives you a more complete view of the virus’ toll on each country. Brunei, Malaysia, Singapore and Timor-Leste are the countries, which are surrounded by Indonesia. Indonesia has the highest mortality rate among those countries. However, Recovery rate of Indonesia is higher than Brunei, Malaysia and Timor-Leste,which is a good sign. Brazil and Pakistan are the nearly equal populated countries to Indonesia. Indonesia has lower number of cases than Brazil but higher number of cases than Pakistan with respect to confirmed, death and recovered cases. Mortality rate of Indonesia is higher than both Brazil and Pakistan. And also recovery rate of Indonesia is lower than both both Brazil and Pakistan.
+
+### 4. Discussion
+
+The coronavirus disease is not any ordinary viral infection, and it has become a pandemic as it has an impact on health, mortality, economy and social well being of the entire world. Raw data released by various sources are not adequately capable to provide an informative understanding of COVID-19, caused of SARS-CoV-2. Therefore, A user-friendly data visualization model will be more effective to understand the epidemic outbreak of this severe disease. The number of cases in a country is dependent on two major factors, number of tests and preventive measures.It can be concluded that countries having high corona positive cases do not necessarily have a high death rate, as the death rate depends on the immunity of people and the healthcare facilities.Through the assessment of these graphs, one can learn lessons especially in terms of countrywide health with global perspective and can gear up its facilities to fight any new upcoming similar pandemic.
+
+### 5. References
+
+1. En.wikipedia.org. 2021. COVID-19 pandemic in Indonesia - Wikipedia. [online] Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Indonesia.
+
+2. En.wikipedia.org. 2021. COVID-19 pandemic - Wikipedia. [online] Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic.
+
+3. En.wikipedia.org. 2021. Indonesia - Wikipedia. [online] Available at: https://en.wikipedia.org/wiki/Indonesia.
+
+4. Indonesia.travel. 2021. Weather, Climate & Season - Indonesia Travel. [online] Available at: https://www.indonesia.travel/gb/en/general-information/climate.
+
+5. AHK Indonesien. 2021. COVID-19 developments in Indonesia. [online] Available at: https://indonesien.ahk.de/infothek/news/news-details/covid-19-developments-in-indonesia.
+
+6. Medium. 2021. Visualize the Pandemic with R #COVID-19. [online] Available at: https://towardsdatascience.com/visualize-the-pandemic-with-r-covid-19-c3443de3b4e4.
+
+7. Datanovia. 2021. How to Easily Customize GGPlot Date Axis - Datanovia. [online] Available at: https://www.datanovia.com/en/blog/ggplot-date-axis-customization/ .
+
+8. Global-monitoring.com. 2021. [online] Available at: https://global-monitoring.com/gm/page/events/epidemic-0001982.H0KwiHYHD9xL.html?lang=en .
+
+9. Staff, A., 2021. Indonesia quells COVID, but is a new wave on the way?. [online] Aljazeera.com. Available at: https://www.aljazeera.com/news/2021/9/16/indonesia-covid-wave .
+
+10. Ritchie, H., Mathieu, E., Rodés-Guirao, L., Appel, C., Giattino, C., Ortiz-Ospina, E., Hasell, J., Macdonald, B., Beltekian, D. and Roser, M., 2021. Coronavirus Pandemic (COVID-19). [online] Our World in Data. Available at: https://ourworldindata.org/coronavirus/country/indonesia.
