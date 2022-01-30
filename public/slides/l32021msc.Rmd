@@ -1,0 +1,1340 @@
+---
+title: "STA 517 3.0 Programming and Statistical Computing with R"
+subtitle: "🚦Built-in functions in R"  
+author: 
+  - ""
+  - "Dr Thiyanga Talagala"
+date: ''
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#081d58",
+  text_bold_color = "#ce1256",
+  title_slide_text_color = "#edf8b1",
+  header_font_google = google_font("Josefin Sans"),
+  base_font_size = "18px",
+  text_font_size = "1.5rem",
+ # code_inline_font_size = "1em",
+  code_font_size="1em"
+ #text_font_google   = google_font("Montserrat", "300", "300i")
+ # code_font_google   = google_font("Fira Mono")
+)
+```
+
+
+
+## Function Anatomy
+
+.pull-left[
+```{r, comment=NA}
+vec1 <- c(1, 2, 3, 4, 5)
+mean(vec1)
+```
+
+```{r, comment=NA}
+vec2 <- c(1, 2, NA, 3, 4, 5)
+mean(vec2)
+```
+
+]
+
+## Help 
+
+`?mean`
+
+---
+
+## help: `mean`
+
+![](mean.png)
+
+---
+
+## help: `sort`
+
+![](sort.png)
+
+---
+
+
+![](functionanatomy.PNG)
+
+
+
+---
+
+## `mean` with additional inputs 
+
+.pull-left[
+```{r, comment=NA}
+vec1 <- c(1, 2, 3, 4, 5)
+mean(vec1)
+```
+
+```{r, comment=NA}
+vec2 <- c(1, 2, NA, 3, 4, 5)
+mean(vec2)
+```
+
+]
+
+.pull-right[
+```{r, comment=NA}
+mean(vec2, na.rm=TRUE)
+```
+
+![](functionanatomy.png)
+
+]
+---
+
+
+
+![](default.PNG)
+
+
+
+---
+
+![](sort.png)
+
+---
+
+.pull-left[
+```{r, comment=NA}
+vec <- c(10, 1, 2, 4, 100, 15)
+sort(vec)
+sort(vec, decreasing = TRUE)
+sort(vec, decreasing = FALSE)
+```
+]
+
+.pull-right[
+
+![](default.PNG)
+
+]
+
+
+---
+## `rep`
+
+![](rep.png)
+
+---
+
+class: center, middle
+
+# [Vector creation with `rep` function in R!](https://hellor.netlify.app/2021/week1/l12021msc.html#66)
+
+---
+
+## Working with built-in functions in R
+
+- How to call a built-in function
+
+- Arguments matching
+
+- Basic functions
+
+- Test and type conversion functions
+
+- Probability distribution functions
+
+- Reproducibility of scientific results
+
+- Data visualization: `qplot`
+
+
+---
+## Functions in R
+
+👉🏻 Perform a specific task according to a set of instructions.
+
+--
+
+👉🏻  Some functions we have discussed so far,
+
+> `c`, `matrix`, `array`, `list`, `data.frame`, `str`, `dim`, `length`, `nrow`, `which.max`, `diag`, `summary`
+
+--
+
+👉🏻 In R, functions are **objects** of **class** *function*.
+
+```{r, comment=NA}
+class(length)
+```
+
+---
+
+## Functions in R (cont.)
+
+👉🏻 There are basically two types of functions:
+
+    
+ > 💻 Built-in functions 
+  
+Already created or defined in the programming framework to make our work easier.
+
+> 👨 User-defined functions
+
+Sometimes we need to create our own functions for a specific purpose.
+      
+---
+
+
+### How to call a built-in function in R
+
+```r
+function_name(arg1 = 1, arg2 = 3)
+
+```
+
+**Argument matching**
+
+```{r, echo=FALSE}
+mydata <- c(rnorm(20), 100000)
+```
+
+The following calls to `mean` are all equivalent
+
+```r
+mydata <- c(rnorm(20), 100000)
+mean(mydata) # matched by position
+mean(x = mydata) # matched by name
+mean(mydata, na.rm = FALSE)
+mean(x = mydata, na.rm = FALSE) 
+mean(na.rm = FALSE, x = mydata) 
+mean(na.rm = FALSE, mydata)
+```
+
+```{r, echo=FALSE, comment=NA}
+mean(mydata)
+```
+
+⚠️ Even though it works, do not change the order of the arguments too much.
+
+---
+
+## Argument matching (cont.)
+
+.pull-left[
+
+- some arguments have default values
+
+```{r, comment=NA}
+mean(mydata, trim=0)
+mean(mydata) # Default value for trim is 0
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+mean(mydata, trim=0.1)
+```
+
+```{r, comment=NA}
+mean(mydata, tr=0.1) # Partial Matching
+```
+
+]
+
+---
+
+background-image: url('helpmean.png')
+background-position: center
+background-size: contain
+
+## ?mean
+
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+1. Calculate the mean of 1, 2, 3, 8, 10, 20, 56, NA.
+
+2. Arrange the numbers according to the descending order and ascending order.
+
+3. Compute standard error of the above numbers.
+
+
+---
+
+# Basic maths functions
+
+|  Operator | Description  |
+|---|---|
+|<img width=400/>|<img width=500/>|
+|  abs(x) | absolute value of x   |
+| log(x, base = y)  |  logarithm of x with base y; if base is not specified, returns the natural logarithm |
+|exp(x)| exponential of x|
+|sqrt(x)|square root of x|
+|factorial(x)| factorial of x|
+
+---
+# Basic statistic functions
+
+|  Operator | Description  |
+|---|---|
+|<img width=400/>|<img width=400/>|
+|  mean(x) | mean of x   |
+| median(x)  |  median of x |
+|mode(x)| mode of x|
+|var(x)|variance of x|
+|sd(x)|standard deviation of x|
+|scale(x)| z-score of x|
+|quantile(x)| quantiles of x|
+|summary(x)|summary of x: mean, minimum, maximum, etc.|
+
+---
+
+.pull-left[
+
+## Test and Type conversion functions
+
+|  Test | Convert  |
+|---|---|
+|<img width=400/>|<img width=400/>|
+|  is.numeric() | as.numeric()   |
+| is.character()  |  as.character() |
+|is.vector()| as.vector()|
+|is.matrix()|as.matrix()|
+|is.data.frame()| as.data.frame()|
+|is.factor()| as.factor()|
+|is.logical()|as.logical()|
+|is.na()||
+]
+
+--
+
+.pull-right[
+
+
+```{r, comment=NA}
+a <- c(1, 2, 3); a
+is.numeric(a)
+is.vector(a)
+
+```
+]
+
+---
+
+
+.pull-left[
+
+## Test and Type conversion functions
+
+|  Test | Convert  |
+|---|---|
+|<img width=400/>|<img width=400/>|
+|  is.numeric() | as.numeric()   |
+| is.character()  |  as.character() |
+|is.vector()| as.vector()|
+|is.matrix()|as.matrix()|
+|is.data.frame()| as.data.frame()|
+|is.factor()| as.factor()|
+|is.logical()|as.logical()|
+|is.na()||
+]
+
+--
+
+.pull-right[
+
+
+```{r, comment=NA}
+
+b <- as.character(a); b
+is.vector(b)
+is.character(b)
+```
+]
+
+
+
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+Remove missing values in the following vector 
+
+```{r, echo=FALSE, comment=NA}
+set.seed(24022020)
+a <- c(rnorm(5), NA, rnorm(4), rep(NA, 2), rnorm(5), rep(NA, 10), rnorm(20))
+
+
+```
+
+```{r, comment=NA}
+a
+```
+---
+
+### Probability distribution functions
+
+- Each probability distribution in R is associated with four functions.
+
+- Naming convention for the four functions:
+
+    For each function there is a root name. For example, the **root name** for the normal distribution is `norm`. This root is prefixed by one of the letters `d`, `p`, `q`, `r`.
+    
+  - **d** prefix for the **distribution** function
+
+  - **p** prefix for the **cumulative probability**
+
+  - **q** prefix for the **quantile**
+
+  - **r** prefix for the **random** number generator
+
+- Example: `dnorm`, `pnorm`, `qnorm`, `rnorm`
+
+
+---
+
+background-image: url('dis.jpeg')
+background-position: center
+background-size: contain
+
+---
+
+### Illustration with Standard normal distribution
+
+The general formula for the probability density function of the normal distribution with mean $\mu$ and variance $\sigma$ is given by
+
+
+$$
+f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}
+$$
+
+If we let the mean $\mu=0$ and the standard deviation $\sigma=1$, we get the probability density function for the standard normal distribution.
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+---
+
+### Standard Normal Distribution
+
+.pull-left[
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+```{r, comment=NA}
+
+dnorm(0)
+```
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, fig.height=7, fig.cap="Standard normal probability density function: dnorm(0)"}
+
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "dnorm(0)")+
+    geom_segment(aes(x = 0, y = 0, xend = 0, yend = 0.398), size=1, color="red")+
+    geom_segment(aes(x = 0, y = 0.398, xend = -4, yend = 0.398), arrow = arrow(length = unit(0.5, "cm")), size=1, color="red") 
+    
+```
+
+]
+
+
+---
+
+### Standard Normal Distribution
+
+.pull-left[
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+```{r, comment=NA}
+pnorm(0)
+```
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: pnorm(0)", fig.height=7}
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "pnorm(0)")+
+    geom_area(stat = "function", fun = dnorm, fill = "red", xlim = c(-4, 0))
+    
+```
+
+]
+
+---
+
+## Standard Normal Distribution
+
+.pull-left[
+
+$$
+f_X(x) = \frac{1}{\sqrt{(2\pi)}} e^{-(x)^2/2}
+$$
+
+```{r, comment=NA}
+qnorm(0.5)
+```
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, fig.cap="Standard normal probability density function: qnorm(0.5)",  fig.height=7}
+library(ggplot2)
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+#plot(x, y, type="l", lwd=2, col="red")
+dat <- data.frame(x=x, y=y)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line()+labs(y = "density", title = "qnorm(0)")+
+    geom_area(stat = "function", fun = dnorm, fill = "blue", xlim = c(-4, 0))+
+   geom_segment(aes(x = 0, y = 0.398, xend = 0, yend = 0), size=1, color="red", arrow = arrow(length = unit(0.5, "cm")),)
+    
+```
+
+]
+
+---
+
+## Normal distribution: `norm`
+
+.pull-left[
+
+![](norm.png)
+
+]
+
+
+.pull-left[
+
+```{r, comment=NA}
+pnorm(3)
+
+pnorm(3, sd=1, mean=0)
+
+pnorm(3, sd=2, mean=1)
+```
+
+]
+
+---
+
+### Binomial distribution
+
+
+```{r, comment=NA}
+dbinom(2, size=10, prob=0.2)
+
+a <- dbinom(0:10, size=10, prob=0.2)
+a
+cumsum(a)
+
+
+
+
+
+```
+
+
+---
+
+
+
+
+```{r, comment=NA}
+cumsum(a)
+
+pbinom(0:10, size=10, prob=0.2)
+
+qbinom(0.4, size=10, prob=0.2)
+
+```
+
+
+---
+
+### Standard Normal Distribution: rnorm
+
+.pull-left[
+
+```{r, comment=NA}
+set.seed(262020)
+random_numbers <- rnorm(5)
+random_numbers
+sort(random_numbers) ## sort the numbers then it is easy to map with the graph
+```
+
+]
+
+.pull-right[
+
+```{r, echo=FALSE, fig.height=7}
+x <- seq(-4, 4, length=200)
+y <- 1/sqrt(2*pi)*exp(-x^2/2)
+dat <- data.frame(x=x, y=y)
+highlight <- data.frame(y=rep(0, 10), x=random_numbers)
+ggplot(data = dat, mapping = aes(x = x, y = y)) +
+    geom_line() + labs(y = "density", title = "rnorm(10)") + geom_point(data=highlight, aes(x=x, y=y), colour="red", size=4, alpha=0.2)
+```
+
+]
+
+---
+class: inverse, center, middle
+
+# Other distributions in R
+
+---
+
+.pull-left[
+
+- **`beta`**: beta distribution
+
+- **`binom`**: binomial distribution
+
+- **`cauchy`**: Cauchy distribution
+
+- **`chisq`**: chi-squared distribution
+
+- **`exp`**: exponential distribution
+
+- **`f`**: F distribution
+
+- **`gamma`**: gamma distribution
+
+- **`geom`**: geometric distribution
+
+- **`hyper`**: hyper-geometric distribution
+
+
+]
+
+
+.pull-right[
+
+
+
+- **`lnorm`**: log-normal distribution
+
+- **`multinom`**: multinomial distribution
+
+- **`nbinom`**: negative binomial distribution
+
+- **`norm`**: normal distribution
+
+- **`pois`**: Poisson distribution
+
+- **`t`**: Student's t distribution
+
+- **`unif`**: uniform distribution
+
+- **`weibull`**: Weibull distribution
+
+]
+
+---
+
+class: inverse, center, middle
+
+ 🙋 Getting help with R:  **`?Distributions`**
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+**Q1** Suppose $Z \sim  N(0,1)$. Calculate the following standard normal probabilities.
+
+  - $P(Z \le 1.25)$,
+
+  - $P(Z > 1.25)$,
+
+  - $P(Z \leq -1.25)$,
+
+  - $P(-.38 \leq Z \leq 1.25)$.
+
+  
+**Q2** Find the following percentiles for the standard normal distribution.
+
+  - 90th, 
+     
+  - 95th,
+     
+  - 97.5th,
+     
+---
+
+**Q3** Determine the $Z_\alpha$ for the following
+
+  - $\alpha = 0.1$
+      
+  - $\alpha = 0.95$
+
+
+**Q4** Suppose $X \sim N(15, 9)$. Calculate the following probabilities
+
+
+  - $P(X \leq 15)$,
+  
+  - $P(X < 15)$,
+  
+  - $P(X \geq 10)$.
+  
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
+  
+  
+---
+
+**Q5** A particular mobile phone number is used to receive both voice messages and text messages. Suppose 20% of the messages involve text messages, and consider a sample of 15 messages. What is the probability that 
+
+  - At most 8 of the messages involve a text message?
+    
+  - Exactly 8 of the messages involve a text message.
+  
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
+  
+---
+
+
+**Q6** Generate 20 random values from a Poisson distribution with mean 10 and calculate the mean. Compare your answer with others.
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 2L, seconds = 00)
+```
+
+---
+
+# Reproducibility of scientific results
+
+```{r, comment=NA}
+rnorm(10) # first attempt
+```
+
+
+```{r, comment=NA}
+rnorm(10) # second attempt
+```
+
+As you can see above you will get different results.
+
+---
+
+# Reproducibility of scientific results (cont.)
+
+
+```{r, comment=NA}
+set.seed(1)
+rnorm(10) # First attempt with set.seed
+```
+
+```{r, comment=NA}
+set.seed(1)
+rnorm(10) # Second attempt with set.seed
+```
+ 
+---
+## R Apply family and its variants
+
+- **`apply()`** function
+
+```{r, comment=NA}
+marks <- data.frame(maths=c(10, 20, 30), chemistry=c(100, NA, 60)); marks
+apply(marks, 1, mean)
+
+```
+
+---
+
+```{r, comment=NA}
+apply(marks, 2, mean)
+apply(marks, 1, mean, na.rm=TRUE)
+
+```
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+---
+
+Calculate the row and column wise standard deviation of the following matrix
+
+```{r, echo=FALSE, comment=NA}
+matrix(1:20, ncol=4)
+
+```
+
+```{r, echo=FALSE}
+library(countdown)
+countdown(minutes = 3L, seconds = 00)
+```
+
+---
+
+class: duke-green, center, middle
+
+# Your turn
+
+---
+
+**Your turn**
+
+Find about the following variants of apply family functions in R **`lapply()`**, **`sapply()`**, **`vapply()`**, **`mapply()`**, **`rapply()`**, and **`tapply()`** functions.
+
+Resourses: You can follow the DataCamp tutorial [here](https://www.datacamp.com/community/tutorials/r-tutorial-apply-family?utm_source=adwords_ppc&utm_campaignid=1658343524&utm_adgroupid=63833882055&utm_device=c&utm_keyword=%2Bapply%20%2Br&utm_matchtype=b&utm_network=g&utm_adpostion=&utm_creative=319558765408&utm_targetid=aud-299261629574:kwd-309818754193&utm_loc_interest_ms=&utm_loc_physical_ms=1009919&gclid=EAIaIQobChMImfeQkOTq5wIVVQwrCh1BngrmEAAYASAAEgLEa_D_BwE).
+
+- You should clearly explain,
+
+    - syntax for each function/ Provide your own example for each function
+
+    - function inputs
+    
+    - how each function works?/ The task of the function.
+    
+    - output of the function.
+    
+    - differences between the functions (apply vs lapply, apply vs sapply, etc.)
+
+
+
+
+---
+
+## Data Visualization: qplot()
+
+?qplot
+--
+
+<img src="emoji.png" height="400">
+
+
+---
+# Installing R Packages
+
+## Method 1
+
+![](inst.png)
+---
+
+# Installing R Packages
+
+## Method 2
+
+```r
+install.packages("ggplot2")
+```
+
+---
+
+## Load package 
+
+```r
+library(ggplot2)
+```
+
+Now search `?qplot`
+
+Note: You shouldn't have to re-install packages each time you open R. However, you do need to load the packages you want to use in that session via `library`.
+
+---
+
+# `install.packages` vs `library`
+
+![](loadpkg.jpeg)
+
+Image credit: [Professor Di Cook](http://dicook.org/)
+---
+
+## mozzie dataset
+
+```{r}
+library(mozzie)
+data(mozzie)
+```
+
+---
+
+## Data Visualization with R
+
+.pull-left[
+
+```{r, comment=NA}
+
+boxplot(mpg ~ cyl, data = mtcars,   
+        xlab = "Quantity of Cylinders",  
+        ylab = "Miles Per Gallon",   
+        main = "Boxplot Example",  
+        notch = TRUE,   
+        varwidth = TRUE,   
+        col = c("green","yellow","red"),  
+        names = c("High","Medium","Low")  
+)  
+
+
+
+```
+
+
+
+]
+
+
+.pull-right[
+
+
+```{r, comment=NA}
+counts <- table(mtcars$gear)
+barplot(counts, main="Car Distribution",
+   xlab="Number of Gears")
+```
+
+
+
+]
+
+---
+
+Default R installation: graphics package
+
+```{r, comment=NA, echo=FALSE}
+library(dplyr)
+ls("package:graphics")
+```
+
+
+---
+
+![](qplot.png)
+---
+
+.pull-left[
+
+```{r, comment=NA, echo=FALSE}
+library(tidyverse)
+x <- runif(10000, -1, 1)
+y <- runif(10000, -1, 1)
+fx <- x^2 + y^2
+coly <- ifelse(fx <= 1, 1, 0)
+coly <- as.factor(coly)
+pidf <- data.frame(x=x, y=y, coly=coly)
+# without coord_equal()
+ggplot(pidf, aes(x=x, y=y, col=coly)) + geom_point() +
+scale_colour_manual(values = c("#e7298a", "#1b9e77")) +  theme(legend.position = "none")
+
+```
+
+
+]
+
+.pull-right[
+
+```{r, comment=NA, echo=FALSE}
+
+ggplot(pidf, aes(x=x, y=y, col=coly)) + geom_point() +
+scale_colour_manual(values = c("#e7298a", "#1b9e77")) + coord_equal() +  theme(legend.position = "none")
+```
+
+
+
+]
+
+---
+
+background-image: url('qplottheory.png')
+background-position: center
+background-size: contain
+
+
+---
+
+
+## mozzie
+
+```{r, comment=NA}
+head(mozzie)
+```
+
+
+
+---
+## Data Visualization with `qplot`
+
+## plot vs qplot
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+plot(mozzie$Colombo, mozzie$Gampaha)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie,
+      colour=Year)
+```
+]
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie, 
+      size=Year)
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie, 
+      size=Year, alpha=0.5)
+```
+]
+
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie,
+      geom="point")
+```
+]
+
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(ID, Gampaha, data=mozzie, 
+      geom="line")
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(ID, Gampaha, data=mozzie)
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(ID, Gampaha, data=mozzie,
+      geom="path")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie,
+      geom="line")
+```
+]
+
+.pull-right[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie, 
+      geom="path")
+```
+]
+
+---
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie, 
+      geom=c("line", "point"))
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, Gampaha, data=mozzie,
+      geom=c("path", "point"))
+```
+]
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+```{r, comment=NA, fig.height=6}
+boxplot(Colombo~Year, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="boxplot")
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+
+.pull-left[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="boxplot")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie) # geom="point"-default
+```
+]
+
+---
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie, 
+      geom="point")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie, 
+      geom="jitter") # geom="point"-default
+```
+]
+
+---
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="jitter")
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+]
+
+---
+
+.pull-left[
+
+```{r, comment=NA, fig.height=3, echo=FALSE}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="jitter")
+```
+
+```{r, comment=NA, fig.height=3, echo=FALSE}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom="boxplot")
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+]
+
+---
+
+.pull-left[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot")) # geom="point"-default
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(factor(Year), Colombo, data=mozzie,
+      geom=c("jitter", "boxplot"),
+      outlier.shape = NA) # geom="point"-default
+```
+]
+
+---
+
+
+## Data Visualization with `qplot`
+.pull-left[
+
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, data=mozzie)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, fig.height=6}
+qplot(Colombo, data=mozzie, geom="density") 
+```
+]
+
+
+---
+
+class: inverse, center, middle
+
+# Your turn
+
+---
+
+Explore `iris` dataset with suitable graphics.
+
+```{r, comment=NA}
+head(iris)
+```
+
+<img src="iris_flower_dataset.png" width="800">
+
+
+
+class: center, middle
+
+## Thank you!
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+
+
+
