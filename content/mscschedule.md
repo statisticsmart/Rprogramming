@@ -49,7 +49,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 5-1: Control structures
 
-|[Slides-5.1](/slides/l5msc2022.html)  	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19])	|  Cheat sheet 	| R-script | 	| Answers |
+|[Slides-5.1](/slides/l5msc2022.html)  	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19])	|  Cheat sheet 	| R-script | Exercise	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 5-2: Introduction to the tidyverse, pipe operator and data import and export
