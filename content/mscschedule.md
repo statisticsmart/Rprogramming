@@ -42,14 +42,19 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 |[Slides - 3](/slides/l32021msc.html)  	| [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions)  [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html) 	|  Cheat sheet 	| R-script | [Exercise 4](https://thiyangt.github.io/rworkbook/built-in-functions-in-r.html)  [Exercise 5](https://thiyangt.github.io/rworkbook/data-visualization-with-r-qplot.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 4: Writing functions in R and control structures
+#### Week 4: Writing functions in R 
 
 |[Slides-4](/slides/l42021msc.html)  	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19])	|  Cheat sheet 	| R-script | [Exercise]((https://thiyangt.github.io/rworkbook/writing-functions-in-r.html)) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 5: Introduction to the tidyverse, pipe operator and data import and export
+#### Week 5-1: Control structures
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides-5.1](/slides/l5msc2022.html)  	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19])	|  Cheat sheet 	| R-script | 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+#### Week 5-2: Introduction to the tidyverse, pipe operator and data import and export
+
+|[Slides-5.2](/slides/l6msc2022.html)   	|  [Reading](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](https://hellor.netlify.app/cheatsheets/tibble.jpeg) 	| R-script | Exercise 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 6: Reproducible reporting with R Markdown
