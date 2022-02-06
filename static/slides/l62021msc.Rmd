@@ -1,0 +1,469 @@
+---
+title: "STA 517 3.0 Programming and Statistical Computing with R"
+subtitle: "✍️ Reproducible Reports with R-Markdown"  
+author: 
+  - ""
+  - "Dr Thiyanga Talagala"
+date: ''
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, custom2.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 35px;
+}
+</style>
+
+
+```{css, echo = FALSE}
+h1, #TOC>ul>li {
+  color: #006837;
+  font-weight: bold;
+}
+h2, #TOC>ul>ul>li {
+  color: #49006a;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+h3, #TOC>ul>ul>li {
+  color: #7570b3;
+  #font-family:  "Times";
+  font-weight: bold;
+}
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"))
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+# Today's menu
+
+.pull-left[
+
+- Document with R Markdown
+
+]
+
+.pull-right[
+<center><img src="recipe.JPG" height="600px"/></center>
+]
+
+---
+
+background-image: url(workflowds_communication.png)
+background-position: center
+background-size: contain
+
+# Data Science Workflow: Communicate
+
+---
+
+# Necessary packages
+
+## Installation
+
+```r
+install.packages(knitr)
+install.packages(rmarkdown)
+```
+
+
+<img src="knitrhex.png" alt="knitrhex" width="200"/> <img src="rmarkdown.png" alt="rmarkdown" width="200"/>
+
+
+---
+
+## Introduction to R Markdown
+
+- R Markdown is a file format for making dynamic documents with R.
+
+- R Markdown allows you to organize your code, outputs, content and commentary in one place.
+
+- These documents are self-contained and fully reproducible which makes it very easy to share.
+
+- R Markdown document is written in markdown.
+
+- Markdown is one of the world's most popular markup language.
+    - R Markdown (in R)
+    - Jupyter Notebooks (in Python)
+    
+
+---
+
+# Advantages
+
+1. For .bold[.green[communicating]] to .bold[.red[decision makers]], who want to focus on the results and conclusions, not the code behind the analysis.
+
+1. For .bold[.green[collaborating]] with other .bold[.red[data scientists]], who are interested in both your conclusions, and how you reached them (i.e. the codes that you used to take the outputs).
+
+1. As an environment in which to do data science, as a modern day lab notebook where you can capture not only .bold[.blue[what you did]], but also .bold[.blue[what you were thinking]].
+
+
+*From R for Data Science by Hadley Wickham and Grrett Grolemud.*
+---
+class: duke-orange, center, middle
+
+# Your first rmarkdown document.
+
+
+---
+background-image: url(rmarkdown_step1.png)
+background-position: center
+background-size: contain
+
+
+---
+background-image: url(rmarkdown_step2.png)
+background-position: center
+background-size: contain
+
+---
+
+background-image: url(rmarkdown_step2_1.png)
+background-position: center
+background-size: contain
+---
+
+background-image: url(rmarkdown_step3.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+background-image: url(componentsrmd.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+background-image: url(rmarkdown_step4.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+
+
+
+---
+
+# Select a folder to save the document 
+
+![](rmarkdown_save1.png)
+---
+
+# Give a name to the document
+
+![](rmarkdown_save2.png)
+
+---
+
+background-image: url(rmarkdown_step5.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+background-image: url(rmarkdown_step6.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+background-image: url(rmarkdown_step7.png)
+background-position: center
+background-size: contain
+
+class: center, middle
+
+---
+
+class: duke-orange, center, middle
+
+# Edit .rmd file to include your content
+
+
+---
+
+# Change header
+
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+```
+
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+## Header 2
+
+### Header 3
+
+
+
+]
+
+
+---
+
+class: inverse, center, middle
+
+# Add content
+
+---
+.pull-left[
+
+**Code**
+
+```r
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+```
+
+]
+
+.pull-right[
+
+**Output**
+
+
+# Header 1
+
+This is section 1.
+
+## Header 2
+
+This is section 1.2
+
+### Header 3
+
+This is section 1.2.1
+
+
+
+
+]
+
+---
+class: inverse, center, middle
+
+# Add R codes
+
+
+---
+
+.pull-left[
+
+**Code**
+
+
+<img src="codechunk_example.png" alt="codechunk_example" width="100"/>
+]
+
+.pull-right[
+
+**Output**
+
+
+```{r}
+rnorm(2)
+```
+
+]
+
+
+---
+class: inverse, center, middle
+
+# Chunk options
+
+---
+
+* `eval = FALSE` - prevents the code from being evaluated
+
+* `include = FALSE` - runs the code but doesn't show it in the final document
+
+* `echo = FALSE` - prevents the code but not the results from appearing
+
+* `message = FALSE` - prevents messages from appearing in the finished file
+
+* `results = "hide"` - hides the printed output
+
+* `error = TRUE` - causes the render to continue even if the code returns an error
+---
+
+## Text formatting
+
+.pull-left[
+
+## Code
+
+<img src="text.png" alt="text" width="300"/>
+
+
+]
+
+.pull-right[
+
+## Output
+
+*M1: This text is in italics.*
+
+_M2: This is also italics._
+
+**M3: This text is in bold.**
+
+__M4: This is also bold.__
+
+
+~~This text is strikethrough.~~
+
+]
+
+---
+class: inverse, center, middle
+
+# Mathematical Equations
+
+---
+
+**The code:**
+
+![](equationsrmd.png)
+
+
+**Output:**
+
+The general formula for the probability density function of the normal distribution with mean $\mu$ and variance $\sigma$ is given by
+
+$$
+f_X(x) = \frac{1}{\sigma\sqrt{(2\pi)}} e^{-(x-\mu)^2/2\sigma^2}.
+$$
+
+---
+
+## How to type Greek letters?
+
+Please read my blog post here: 
+
+https://thiyanga.netlify.app/post/greekletters/
+
+---
+
+### Generate PDF and WORD documents
+
+.pull-left[
+
+**Create a PDF document**
+
+![](pdfrmd.png)
+
+Requires (MiKTex on Windows, MacTex 2013+ on OS X, Tex Live 2013+ on Linux) OR
+
+Install tinytex in R. Type the following code on R Console.
+```r
+tinytex::install_tinytex()
+```
+]
+
+
+
+
+.pull-right[
+
+**Create a Word document**
+
+![](wordrmd.png)
+
+Requires an installation of MS Word.
+
+]
+
+---
+
+# R Markdown Demonstration
+
+> Download [Rmarkdown_practical_lesson1.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson1.Rmd)
+
+> Download [sampleimage.jpg](/rscripts/rmarkdown_labwork/sampleimage.jpg)
+
+> Before running the file `Rmarkdown_practical_lesson_2021.Rmd`, save `Rmarkdown_practical_lesson_2021.Rmd` and `sampleimage.jpg` into your current working directory. 
+
+> Follow the video lecture for instructions. 
+
+
+---
+class: center, middle
+
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)

@@ -59,8 +59,16 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 6: Reproducible reporting with R Markdown
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides](/slides/l72022msc.html)	|  [Reading]((https://r4ds.had.co.nz/r-markdown.html)) 	|  [Cheat sheet]((/cheatsheets/rmarkdown-cheatsheet-2.0.pdf)) 	| R-script | Exercise 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+🖥️ **R Labwork**
+
+[Rmarkdown_practical_lesson_21.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
+
+[sampleimage.png](/rscripts/rmarkdown_labwork/sampleimage.png)
+
+[Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
 
 #### Week 7: Mid-Exam
 
