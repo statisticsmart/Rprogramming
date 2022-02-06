@@ -70,6 +70,12 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 [Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
 
+
+## Data import and export
+
+|[Slides](/slides/l8msc.html)	|  [Reading - Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	| R-script | Exercise 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
 #### Week 7: Mid-Exam
 
 |Mid-Exam   	|  
