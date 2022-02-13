@@ -81,12 +81,21 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 |Mid-Exam   	|  
 |:-:	|	
 
-#### Week 8: Data wrangling with tidyr and dplyr
+#### Week 7: Data wrangling with tidyr and dplyr
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+
+#### Reshaping Data
+
+|[Slides](/slides/l9msc.html)    	|  [Reading-R4DS Ch 12](https://r4ds.had.co.nz/tidy-data.html)   	|  [Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	| R-script | [Problems-R4DS Ch 12 Exercises](https://r4ds.had.co.nz/tidy-data.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 9: The grammar of graphics
+#### Data Manipulation
+
+| [Slides](/slides/l10msc.html)    	|  [Reading-R4DS Ch5](https://r4ds.had.co.nz/transform.html)  	|[Video Lecture](/video.pdf)   |[Cheat sheet](/cheatsheets/data-wrangling-cheatsheet.pdf) 	|  [Problems-R4DS Ch5 Exercises](https://r4ds.had.co.nz/transform.html)	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
+
+
+#### Week 8-9: The grammar of graphics
 
 |Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
