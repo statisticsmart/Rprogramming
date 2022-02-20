@@ -97,7 +97,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 8: The grammar of graphics
 
-|[Slides]((/slides/l12msc.html) )   	|  [Reading](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](https://hellor.netlify.app/cheatsheets/ggplot2-cheatsheet.pdf) 	| R-script | [Exercise](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
+|[Slides](/slides/l12msc.html)   	|  [Reading](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](https://hellor.netlify.app/cheatsheets/ggplot2-cheatsheet.pdf) 	| R-script | [Exercise](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 9: Mid-Semester Examination 
