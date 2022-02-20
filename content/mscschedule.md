@@ -78,7 +78,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 7: Mid-Exam
 
-|Mid-Exam   	|  
+|Mid-Exam   - 1	|  
 |:-:	|	
 
 #### Week 7: Data wrangling with tidyr and dplyr
@@ -95,10 +95,16 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
 
-#### Week 8-9: The grammar of graphics
+#### Week 8: The grammar of graphics
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides]((/slides/l12msc.html) )   	|  [Reading](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](https://hellor.netlify.app/cheatsheets/ggplot2-cheatsheet.pdf) 	| R-script | [Exercise](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+#### Week 9: Mid-Semester Examination 
+
+|Mid-Exam   - 2 (Physical)	|  
+|:-:	|	
+
 
 #### Week 10: Introduction to statistical modelling
 
