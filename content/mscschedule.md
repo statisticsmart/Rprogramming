@@ -100,37 +100,39 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 |[Slides](/slides/l12msc.html)   	|  [Reading](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](https://hellor.netlify.app/cheatsheets/ggplot2-cheatsheet.pdf) 	| R-script | [Exercise](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 9: Mid-Semester Examination 
+
+
+#### Week 9: Introduction to statistical modelling
+
+|[Slides](/slides/l13msc.html)   	|  Reading 	|  Cheat sheet 	| [Data](/slides/facebookdata_marketing.rds) | [Exercise](/problems/Regressionmsc.html) 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+#### Week 10: Methods of generating random numbers
+
+|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+#### Week 11: Functional programming with R
+
+|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+#### Week 12: Hypothesis testing
+
+|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+#### Week 13: Bootstrap and Jackknife
+
+|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+#### Week 14: Mid-Semester Examination 
 
 |Mid-Exam   - 2 (Physical)	|  
 |:-:	|	
 
-
-#### Week 10: Introduction to statistical modelling
-
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-#### Week 11: Methods of generating random numbers
-
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-
-#### Week 12: Functional programming with R
-
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-#### Week 13: Hypothesis testing
-
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-#### Week 14: Bootstrap and Jackknife
-
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 #### Week 15: Recap
