@@ -109,7 +109,7 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 
 #### Week 10: Methods of generating random numbers
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides](/slides/inverse_transformation_msc.pdf)   	|  Reading 	|  Cheat sheet 	| R-script | [Exercise](/problems/inverse_transform_method.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
