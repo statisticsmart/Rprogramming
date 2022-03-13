@@ -113,15 +113,34 @@ Welcome you all to STA 517 3.0 Programming and Statistical Computing with R :cla
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 11: Functional programming with R
+#### Week 11: Hypothesis testing
+
+Data Analysis: 
+
+## Spatial data visualization
+
+> Kenya Census: [download data](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-01-19/readme.md)
+
+## Handling missing values
+
+African Names Database
+
+Data description: [here](https://www.slavevoyages.org/resources/about#african-names-database/0/en/)
+
+```{r}
+african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-06-16/african_names.csv")
+```
+
+|[Slides](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading -  Inference Notes 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+#### Week 12: Functional programming with R
 
 |Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 12: Hypothesis testing
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 13: Bootstrap and Jackknife
 
