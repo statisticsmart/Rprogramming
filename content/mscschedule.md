@@ -137,7 +137,7 @@ african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 #### Week 12: Functional programming with R
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides](/slides/l16_1_functionals_msc.html)   	|  [Reading](https://adv-r.hadley.nz/functionals.html)  	|  [Cheat sheet](/cheatsheets/purrr.pdf) 	| R-script | [Problems](/problems/Functionals_question.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
