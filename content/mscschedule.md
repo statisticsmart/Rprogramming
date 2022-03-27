@@ -131,21 +131,19 @@ Data description: [here](https://www.slavevoyages.org/resources/about#african-na
 african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-06-16/african_names.csv")
 ```
 
+#### Week 12: Hypothesis Testing
+
 |[Slides](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading -  Inference Notes 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 12: Functional programming with R
+#### Week 13: Functional programming with R
 
 |[Slides](/slides/l16_1_functionals_msc.html)   	|  [Reading](https://adv-r.hadley.nz/functionals.html)  	|  [Cheat sheet](/cheatsheets/purrr.pdf) 	| R-script | [Problems](/problems/Functionals_question.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 
-#### Week 13: Bootstrap and Jackknife
-
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 #### Week 14: Mid-Semester Examination 
 
@@ -154,7 +152,7 @@ african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 
 
-#### Week 15: Recap
+#### Week 15:  Bootstrap and Jackknife/ Recap
 
 |Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
