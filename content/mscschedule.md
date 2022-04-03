@@ -145,14 +145,13 @@ african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 
 
-#### Week 14: Mid-Semester Examination 
+#### Week 14:  Bootstrap and Jackknife
 
-|Mid-Exam   - 2 (Physical)	|  
-|:-:	|	
+|[Slides](/slides/l14bootstrap.html)   	|  [Reading](http://bcs.whfreeman.com/webpub/statistics/ips9e/9781319013387/companionchapters/companionchapter16.pdf) 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-
-#### Week 15:  Bootstrap and Jackknife/ Recap
+#### Week 15:  Recap
 
 |Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|

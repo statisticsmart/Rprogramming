@@ -1,0 +1,201 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, message = FALSE, warning = FALSE)
+```
+
+## R packages
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(knitr)
+library(naniar)
+library(ggrepel)
+library(recipes)
+library(scales)
+theme_set(theme_bw())
+#theme_set(theme_light())
+#library(extrafont) #Import extra font
+#extrafont::font_import()
+```
+
+## About data
+
+This is a dataset of individual people who were freed from slave ships during the last few decades. This gives information about enslaved people in America.
+
+## Read and Skim data
+
+```{r}
+african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-06-16/african_names.csv")
+glimpse(african_names)
+skimr::skim(african_names)
+
+```
+
+# Exploratory data analysis
+
+## Where these ships were disembarked?
+
+```{r}
+african_names %>%
+  count(port_disembark, sort = TRUE) %>%
+  kable()
+```
+
+## Where these ships were embarked?
+
+```{r}
+african_names %>%
+  count(port_embark, sort = TRUE) %>%
+  kable()
+```
+
+
+
+## Note: `add_count`
+
+```{r}
+#count the unique values of one or more variables
+iris %>% add_count(Species) %>% head(3)
+```
+
+## Port of embark by year
+
+```{r}
+
+african_names %>%
+  add_count(port_embark) %>%
+  mutate(port_embark = case_when(
+    n < 4000 ~ "Other",
+    TRUE ~ port_embark
+  )) %>%
+  ggplot(aes(port_embark, year_arrival, fill = port_embark)) +
+  geom_boxplot(alpha = 0.4, show.legend = FALSE) +
+  labs(x = NULL, y = "Year")
+```
+
+## Distribution of years of arrivals
+
+```{r}
+african_names %>%
+  ggplot(aes(year_arrival)) +
+  geom_histogram(bins = 20, fill = "midnightblue", alpha = 0.7, col="white") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  labs(
+    y = "Number of liberated individuals",
+    x = "Year"
+  )
+```
+
+## Handling missing values
+
+```{r}
+african_names %>% gg_miss_var()
+```
+
+
+
+```{r}
+african_names %>%
+  select(gender, age, height, year_arrival) %>%
+  gg_miss_upset()
+```
+
+## Relationship between years of arrival and gender
+
+```{r}
+african_names %>%
+  ggplot(aes(gender, year_arrival, fill = gender)) +
+  geom_boxplot(alpha = 0.4, show.legend = FALSE) +
+  labs(x = NULL, y = "Year")
+```
+
+## Relationship between age and gender
+
+```{r}
+african_names %>%
+  ggplot(aes(gender, age, fill = gender)) +
+  geom_boxplot(alpha = 0.4, show.legend = FALSE) +
+  labs(x = NULL, y = "Age")
+```
+
+## Relationship between age and years of arrivals
+
+```{r}
+african_names %>%
+  filter(year_arrival < 1850) %>%
+  group_by(year_arrival) %>%
+  summarise(age = mean(age, na.rm = TRUE)) %>%
+  ggplot(aes(year_arrival, age)) +
+  geom_line(alpha = 0.6, size = 1.5) +
+  geom_smooth(method = "lm") +
+  scale_y_continuous(limits = c(0, NA)) +
+  labs(x = NULL, y = "Mean age")
+
+```
+
+## Relationship between age, year of arrivals and names of transported captives
+
+```{r}
+african_names %>%
+  group_by(name) %>%
+  summarise(
+    n = n(), # how many people have that name
+    age = mean(age, na.rm = TRUE),
+    year_arrival = mean(year_arrival, na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  arrange(-n) %>%
+  filter(n > 30) %>%
+  ggplot(aes(year_arrival, age)) +
+  geom_text_repel(aes(label = name), size = 3) +
+  geom_point(aes(size = n), color = "midnightblue", alpha = 0.7) +
+  labs(
+    x = "Mean year of arrival", y = "Mean age",
+    size = "Number of people",
+    title = "Age and year of arrival for most common names of transported captives",
+    caption = "African Names Database from slavevoyages.org"
+  )
+
+```
+
+## Impute missing values
+
+```{r}
+liberated_df <- african_names %>%
+  filter(year_arrival < 1850) %>% 
+  mutate(gender = case_when(
+    gender == "Boy" ~ "Man",
+    gender == "Girl" ~ "Woman",
+    TRUE ~ gender
+  )) %>%
+  mutate_if(is.character, factor)
+
+liberated_df
+
+```
+
+## Missing value imputation with `recipes`
+
+```{r}
+impute_rec <- recipe(year_arrival ~ gender + age + height, data = liberated_df) %>%
+  step_meanimpute(height) %>%
+  step_modeimpute(gender) %>%
+  step_medianimpute(age)
+imputed <- prep(impute_rec) %>% juice()
+imputed
+```
+
+## Linear regression model
+
+```{r}
+fit_lm <- lm(year_arrival ~ gender + age, data = imputed)
+summary(fit_lm)
+tidy(fit_lm) %>%
+  kable(digits = 3)
+```
+
+Acknowledgement: https://juliasilge.com/blog/captive-africans-voyages/

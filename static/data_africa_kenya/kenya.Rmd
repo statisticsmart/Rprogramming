@@ -1,0 +1,48 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Kenya Census Data Set
+
+```{r}
+library(tidyverse)
+library(scales)
+```
+
+## Read data
+
+```{r}
+gender <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-19/gender.csv')
+crops <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-19/crops.csv')
+households <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-19/households.csv')
+
+```
+
+```{r}
+head(gender)
+head(crops)
+head(households)
+```
+
+## Exploratory Data Analysis
+
+```{r}
+gender %>% 
+  filter(County != "Total") %>%
+  mutate(County = fct_reorder(County, Total)) %>%
+  ggplot(aes(Total, County)) + geom_col() + scale_x_continuous(labels = scales::comma_format())  
+```
+
+```{r}
+gender %>% 
+  filter(County != "Total") %>%
+  gather(Gender, population, Male, Female, Intersex) %>%
+  mutate(County = fct_reorder(County, Total, sum)) %>%
+  ggplot(aes(population, County, fill=Gender)) + geom_col()  + scale_x_continuous(labels = scales::comma_format())
+```
+
+

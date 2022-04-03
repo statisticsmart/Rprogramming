@@ -1,3 +1,4 @@
+library(purrr)
 ## Question 1
 library(gapminder)
 map(gapminder, ~length(unique(.x)))
