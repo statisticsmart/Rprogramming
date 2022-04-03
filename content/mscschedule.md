@@ -147,7 +147,7 @@ african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 #### Week 14:  Bootstrap and Jackknife
 
-|[Slides](/slides/l14bootstrap.html)   	|  [Reading](http://bcs.whfreeman.com/webpub/statistics/ips9e/9781319013387/companionchapters/companionchapter16.pdf) 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
+|[Slides](/slides/l14bootstrap.html)   	|  [Reading](http://bcs.whfreeman.com/webpub/statistics/ips9e/9781319013387/companionchapters/companionchapter16.pdf) 	|  Cheat sheet 	| R-script | [Exercise](https://hellor.netlify.app/slides/l14bootstrap.html#22) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
