@@ -153,6 +153,9 @@ african_names <- readr::read_csv("https://raw.githubusercontent.com/rfordatascie
 
 #### Week 15:  Recap
 
-|Slides   	|  Reading 	|  Cheat sheet 	| R-script | Exercise 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+| [Exercise](/problems/MSc_2020_mid.pdf) 	|
+|:-:	|
 
+
+| [Recap](https://thiyanga.netlify.app/Slides/2020s1STA5173_0/recap.pdf) 	|
+|:-:	|
