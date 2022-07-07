@@ -14,11 +14,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # STA 326 2.0 Programming and Data Analysis with R
+]
+.subtitle[
 ## 🎉 Introduction to R, RStudio and R Programming Basics
+]
+.author[
 ### 
+]
+.author[
 ### Dr Thiyanga Talagala
-### 2021 June 17
+]
 
 ---
 
@@ -63,7 +70,7 @@ class: center, middle, inverse, title-slide
 
 
 
-<div class="countdown" id="timer_60e67410" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62c775df" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -331,8 +338,8 @@ rnorm(10)
 ```
 
 ```
- [1]  0.8346283 -1.1079496  0.4586405  0.6329668  0.6410652  0.6992549
- [7]  1.8462059 -0.5670776 -0.9381136  2.2804844
+ [1] -0.653639564 -0.137726049 -0.007202717 -0.204584989  0.008316891
+ [6]  2.281781737 -0.428624936 -0.309236862  0.413992993 -0.359558380
 ```
 
 
@@ -348,8 +355,8 @@ a
 ```
 
 ```
- [1] -0.5514941 -0.1515122 -0.7767797 -0.7473786  0.8474448 -0.1244805
- [7]  0.1947677 -0.8097608  0.2429251  0.3809392
+ [1] -0.363582067  3.008709499 -1.943744335 -0.788914814 -0.109718774
+ [6]  0.046294027 -0.039896692 -2.236285164 -0.008472824  0.156574856
 ```
 
 --
@@ -361,8 +368,8 @@ b
 ```
 
 ```
- [1] -55.14941 -15.15122 -77.67797 -74.73786  84.74448 -12.44805  19.47677
- [8] -80.97608  24.29251  38.09392
+ [1]  -36.3582067  300.8709499 -194.3744335  -78.8914814  -10.9718774
+ [6]    4.6294027   -3.9896692 -223.6285164   -0.8472824   15.6574856
 ```
 
 --
@@ -529,8 +536,8 @@ rnorm(10) # This is a comment
 ```
 
 ```
- [1] -1.58349159 -1.42972632 -0.05988781  0.16724221  0.50717341 -0.45596142
- [7]  2.36319727  1.28363096 -1.30861832  0.55870057
+ [1] -1.4029748  0.5922733 -2.1301256 -0.4156925  0.2598820 -0.2655705
+ [7] -1.0436223 -0.3195700  1.4862750 -0.5543811
 ```
 
 ```r
@@ -727,7 +734,7 @@ y &lt;- c(x, 500, 600)
 y
 ```
 
-<div class="countdown" id="timer_60e67387" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62c774ab" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -961,7 +968,7 @@ as.numeric(x)
 [1] NA NA NA
 ```
 
-<div class="countdown" id="timer_60e674ab" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62c774a7" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1155,7 +1162,7 @@ v
 ```
 
 
-<div class="countdown" id="timer_60e6752d" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62c772c1" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -1357,7 +1364,7 @@ rep(1:4, 1:4)
 rep(1:4, c(4, 1, 4, 2))
 ```
 
-<div class="countdown" id="timer_60e6745f" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62c7734c" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1539,7 +1546,7 @@ first &lt;- c(1, 2, 3, 4); second &lt;- c(10, 100)
 first * second
 ```
 
-<div class="countdown" id="timer_60e6762d" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62c77285" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -1641,6 +1648,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

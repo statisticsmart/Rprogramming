@@ -49,7 +49,7 @@ Assignment: Individual assignment 1
 
 ```diff
 
-Go to LMS. Deadline: Thursday, 22 July 2021, 10:00 AM
+Go to LMS. Deadline: TBA
 
 ```
 
@@ -83,7 +83,7 @@ Assignment: Individual assignment 2
 
 ```diff
 
-Go to LMS. Deadline: Monday, 17 August 2021, 3:00 PM
+Go to LMS. Deadline: TBA
 
 ```
 
@@ -148,9 +148,9 @@ Assignment2: Do the analysis of assignment 2 using the tidyverse.
 
 ```diff
 
-Assignment 1: 16 Sep 2021
+Assignment 1: TBA
 
-Assignment 2: 14 Sep 2021
+Assignment 2: TBA
 
 ```
 
@@ -171,8 +171,7 @@ Assignment: Individual Project
 
 ```diff
 
-Go to LMS. Deadline: 28 September 2021, 3.00PM (IST)
-
+Go to LMS. Deadline: TBA
 ```
 
 
