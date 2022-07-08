@@ -322,6 +322,21 @@ background-image: url('project6.png')
 background-position: center
 background-size: contain
 
+---
+## Get Working Directory
+
+Display the current working directory.
+
+```r
+getwd()
+```
+
+## Set Working Directory
+
+```r
+setwd(include_path_here)
+```
+
 
 ---
 
