@@ -4,7 +4,7 @@ subtitle: "🎉 Introduction to R, RStudio and R Programming Basics"
 author: 
   - ""
   - "Dr Thiyanga Talagala"
-date: '2021 June 17'
+date: ''
 output:
   xaringan::moon_reader:
     css: [xaringan-themer.css, custom.css]
@@ -321,6 +321,21 @@ background-size: contain
 background-image: url('project6.png')
 background-position: center
 background-size: contain
+
+---
+## Get Working Directory
+
+Display the current working directory.
+
+```r
+getwd()
+```
+
+## Set Working Directory
+
+```r
+setwd(include_path_here)
+```
 
 
 ---
