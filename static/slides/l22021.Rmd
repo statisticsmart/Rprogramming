@@ -708,7 +708,7 @@ background-image: url('dataStructures.png')
 background-position: center
 background-size: contain
 
-
+Image Credit: venus.ifca.unican.es
 ---
 
 ## Array
@@ -758,6 +758,7 @@ a
 .pull-right[
 
 ```{r, comment=NA}
+a[1, 2, 3] 
 a[, , 1] # Extract first entry
 ```
 ]
@@ -808,6 +809,12 @@ countdown(minutes = 2L, seconds = 00)
 ```{r, comment=NA}
 dim1 <- c("A1", "A2"); dim2 <- c("B1", "B2", "B3"); dim3 <- c("c1", "c2", "c3", "c4")
 z <- array(1:24, c(2, 3, 4), dimnames = list(dim1, dim2, dim3))
+z
+```
+
+---
+
+```{r}
 z
 ```
 
