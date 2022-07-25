@@ -703,12 +703,12 @@ class: inverse, center, middle
 
 # 3. Arrays
 
----
-background-image: url('dataStructures.png')
-background-position: center
-background-size: contain
+![](arraynew.png)
 
-Image Credit: venus.ifca.unican.es
+
+
+
+
 ---
 
 ## Array
@@ -736,13 +736,9 @@ a
 ```
 
 
----
 
-background-image: url('array.png')
-background-position: center
-background-size: contain
 
-## Array
+
 ---
 
 ## Subsetting arrays
@@ -806,6 +802,8 @@ countdown(minutes = 2L, seconds = 00)
 
 ## Array with dimnames
 
+
+
 ```{r, comment=NA}
 dim1 <- c("A1", "A2"); dim2 <- c("B1", "B2", "B3"); dim3 <- c("c1", "c2", "c3", "c4")
 z <- array(1:24, c(2, 3, 4), dimnames = list(dim1, dim2, dim3))
@@ -814,10 +812,21 @@ z
 
 ---
 
-```{r}
+.pull-left[
+
+```{r, comment=NA, eval=F}
+dim1 <- c("A1", "A2"); dim2 <- c("B1", "B2", "B3"); dim3 <- c("c1", "c2", "c3", "c4")
+z <- array(1:24, c(2, 3, 4), dimnames = list(dim1, dim2, dim3))
 z
 ```
 
+]
+
+.pull-right[
+```{r, echo=FALSE}
+z
+```
+]
 ---
 
 
@@ -830,11 +839,9 @@ class: inverse, center, middle
 
 # 4. Data Frames
 
----
+![](dfnew.png)
 
-background-image: url('dataStructures.png')
-background-position: center
-background-size: contain
+
 
 ---
 # Data frames
