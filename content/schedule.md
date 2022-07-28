@@ -27,12 +27,12 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 2: Data Structures in R (Vector, Matrix, Array, Data Frame, List) 
+#### Week 2-3: Data Structures in R (Vector, Matrix, Array, Data Frame, List) 
 
 |[Slides](/slides/l22021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/r-objects.html#matrices)	|  [Cheat sheet]((/cheatsheets/baser.pdf)) 	| R-script | [Exercise 3](https://thiyangt.github.io/rworkbook/matrices-arrays-data-frames.html) 	| Answers: Tutorial discussion |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 3-5: Functions in R 
+#### Week 4: Functions in R 
 
 |[Slides - 1](/slides/l32021.html)    	|  [Reading - 2.3](https://rstudio-education.github.io/hopr/basics.html#functions) 	|  Cheat sheet 	| R-script | [Exercise 4](https://thiyangt.github.io/rworkbook/built-in-functions-in-r.html#lecture-slides-2)	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -40,6 +40,22 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
 |[Slides - 2](/slides/l42021.html)  	|  [Reading-qplot](https://ggplot2.tidyverse.org/reference/qplot.html)  	|  [Video](https://www.youtube.com/watch?v=HeqHMM4ziXA) 	| R-script | [Exercise 5](https://thiyangt.github.io/rworkbook/data-visualization-with-r-qplot.html) 	| [Answers](/answers/Week3Answers.pdf) |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+#### Week 4:  Writing Functions in R  
+
+|[Slides](/slides/l52021.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19] )  	|  Cheat sheet 	| [R-script](/slides/functionsanswers.R) | [Exercise 6](https://thiyangt.github.io/rworkbook/writing-functions-in-r.html) 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+
+#### Week 5:  Control structures
+
+|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+
 
 ##### Individual Assignment - 1 (5%) 🎓
 
@@ -53,22 +69,7 @@ Go to LMS. Deadline: TBA
 
 ```
 
-#### Week 6:  Writing Functions in R  
-
-|[Slides](/slides/l52021.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19] )  	|  Cheat sheet 	| [R-script](/slides/functionsanswers.R) | [Exercise 6](https://thiyangt.github.io/rworkbook/writing-functions-in-r.html) 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-----------------------------------------------------------------------------------
-
-#### Week 7:  Control structures
-
-|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-
-
-
-#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
+#### Week 6-7: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
 
 |[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -88,7 +89,7 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 9: Data Import and Export
+#### Week 8: Data Import and Export
 
 **Flip-style**
 
