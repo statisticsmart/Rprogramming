@@ -171,3 +171,17 @@ cal_zscore <- function(math, phy, chem){
 
 cal_zscore(10, 5, 30)
 
+## median
+
+median_cal <- function(x){
+  n <- length(x)
+  if (n%%2 == 1) {
+    ans <- (x[n/2]) + (x[(n/2) + 1] )/2
+  } else{
+    ans <- x[n/2]
+  }
+  ans
+}
+
+median(c(1, 2, 3, 4))
+
