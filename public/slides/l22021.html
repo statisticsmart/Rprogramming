@@ -97,7 +97,7 @@ c(1, 2, 3, 4, 5, 5, 4, 3, 2, 1)
 c(1:5, 5:1)
 ```
 
-<div class="countdown" id="timer_62d902eb" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df68b0" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -327,7 +327,7 @@ class: inverse, center, middle
 3. Using the function `rep` , create the below sequence 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4
 
 
-<div class="countdown" id="timer_62d903a4" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df67ef" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1007,7 +1007,7 @@ background-image: url('paper.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_62d903c4" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df670e" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1025,7 +1025,7 @@ background-image: url('slr.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_62d904a2" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df670c" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1097,12 +1097,12 @@ class: inverse, center, middle
 
 # 3. Arrays
 
----
-background-image: url('dataStructures.png')
-background-position: center
-background-size: contain
+![](arraynew.png)
 
-Image Credit: venus.ifca.unican.es
+
+
+
+
 ---
 
 ## Array
@@ -1147,14 +1147,14 @@ a
 [1,]   50   60
 ```
 
-
 ---
-
 background-image: url('array.png')
 background-position: center
 background-size: contain
 
-## Array
+
+
+
 ---
 
 ## Subsetting arrays
@@ -1189,7 +1189,7 @@ a
 
 
 ```r
-a[1, 2, 3] # Extract first entry
+a[1, 2, 3] 
 ```
 
 ```
@@ -1271,13 +1271,15 @@ matrix(1:20, ncol=5)
 [4,]    4    8   12   16   20
 ```
 
-<div class="countdown" id="timer_62d90560" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df65da" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
 ---
 
 ## Array with dimnames
+
+
 
 
 ```r
@@ -1314,10 +1316,18 @@ A2 20 22 24
 
 ---
 
+.pull-left[
+
 
 ```r
+dim1 &lt;- c("A1", "A2"); dim2 &lt;- c("B1", "B2", "B3"); dim3 &lt;- c("c1", "c2", "c3", "c4")
+z &lt;- array(1:24, c(2, 3, 4), dimnames = list(dim1, dim2, dim3))
 z
 ```
+
+]
+
+.pull-right[
 
 ```
 ## , , c1
@@ -1344,7 +1354,7 @@ z
 ## A1 19 21 23
 ## A2 20 22 24
 ```
-
+]
 ---
 
 
@@ -1357,11 +1367,9 @@ class: inverse, center, middle
 
 # 4. Data Frames
 
----
+![](dfnew.png)
 
-background-image: url('dataStructures.png')
-background-position: center
-background-size: contain
+
 
 ---
 # Data frames
@@ -1538,7 +1546,7 @@ mat_df
 .pull-left[
 
 ```r
-head(mat_df) # default it shows 5 rows
+head(mat_df) # default it shows 6 rows
 ```
 
 ```
@@ -1712,7 +1720,7 @@ background-image: url('datafr.png')
 background-position: center
 background-size: contain
 
-<div class="countdown" id="timer_62d905ae" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df6588" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1815,7 +1823,7 @@ Use	the	R	dataset	“iris”	to	answer	the	following	questions:
 
 5. Select rows 10 to 20 with only the Species, Petal.Width and Petal.Length.
 
-<div class="countdown" id="timer_62d9042e" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df67b4" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -1831,7 +1839,7 @@ cont.
 8. How many rows in the iris dataset have `Petal.Length` larger than 5 and `Sepal.Width` smaller than 3?
 
 
-<div class="countdown" id="timer_62d90361" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_62df6905" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 ---
