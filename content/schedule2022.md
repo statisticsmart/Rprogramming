@@ -42,20 +42,23 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 4:  Writing Functions in R  
+#### Week 4-5:  Writing Functions in R  
 
 |[Slides](/slides/l52021.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19] )  	|  Cheat sheet 	| [R-script](/slides/functionsanswers.R) | [Exercise 6](https://thiyangt.github.io/rworkbook/writing-functions-in-r.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
+#### Week 6: The Grammar of Graphics 
 
 
-#### Week 5:  Control structures
-
-|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
+|[Slides](/slides/l122021.html)     	| [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf)  	| R-script | [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
+Perform EDA on palmerpenguins using ggplot2
 
-
+```r
+library(palmerpenguins)
+data(package = 'palmerpenguins')
+```
 
 ##### Individual Assignment - 1 (5%) 🎓
 
@@ -69,7 +72,15 @@ Go to LMS. Deadline: TBA
 
 ```
 
-#### Week 6-7: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
+
+#### Week 7:  Control structures
+
+|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+
+#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
 
 |[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -89,7 +100,7 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 8: Data Import and Export
+#### Week 9: Data Import and Export
 
 **Flip-style**
 
@@ -97,7 +108,7 @@ Go to LMS. Deadline: TBA
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
-#### Week 9: Reproducible Reporting with R Markdown
+#### Week 10: Reproducible Reporting with R Markdown
 
 
 |[Slides](/slides/l92021.html)  	|  [Reading-Ch27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) 	| [Reference Guide](/cheatsheets/rmarkdown-reference.pdf)  | Video Clips - LMS 	| Problems |
@@ -113,7 +124,7 @@ Go to LMS. Deadline: TBA
 
 
 
-#### Week 10-11: Data Wrangling: Reshaping Data and Data Manipulation
+#### Week 11: Data Wrangling: Reshaping Data and Data Manipulation
 
 #### Reshaping Data
 
@@ -126,18 +137,6 @@ Go to LMS. Deadline: TBA
 |:-:	|:-:	|:-:	|:-:	|:-:	|:-:|
 
 
-#### Week 12: The Grammar of Graphics 
-
-
-|[Slides](/slides/l122021.html)     	| [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf)  	| R-script | [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-Perform EDA on palmerpenguins using ggplot2
-
-```r
-library(palmerpenguins)
-data(package = 'palmerpenguins')
-```
 
 ##### Makeup assignments - 1 and 2 🎓
 
@@ -156,7 +155,7 @@ Assignment 2: TBA
 ```
 
 
-#### Week 13:  Regression Analysis with R
+#### Week 12:  Regression Analysis with R
 
 
 
@@ -176,7 +175,7 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 14: Hypothesis Testing
+#### Week 13: Hypothesis Testing
 
 |[Slides](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
