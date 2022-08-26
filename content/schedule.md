@@ -60,6 +60,24 @@ library(palmerpenguins)
 data(package = 'palmerpenguins')
 ```
 
+
+#### Week 7: Reproducible Reporting with R Markdown 
+
+
+|[Slides](/slides/hellor.rmarkdown.html)  	|  [Reading-Ch27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) 	| [Reference Guide](/cheatsheets/rmarkdown-reference.pdf)  | Video Clips - LMS 	| Problems |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+🖥️ **R Labwork**
+
+[Rmarkdown_practical_lesson_21.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
+
+[sampleimage.png](/rscripts/rmarkdown_labwork/sampleimage.png)
+
+[Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
+
+
+
+
 ##### Individual Assignment - 1 (5%) 🎓
 
 ```{r class.source="watch-out"}
@@ -107,20 +125,6 @@ Go to LMS. Deadline: TBA
 |[Slides](/slides/l82021.html)     	|  [Reading - Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	| [Demo 1](https://www.youtube.com/watch?v=i-tshXv6lTg&t=381s) [Demo 2](https://www.youtube.com/watch?v=3pW3wZ-Dprg) [Demo-3](https://www.youtube.com/watch?v=K58J7EvGXDA)| Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-
-#### Week 10: Reproducible Reporting with R Markdown
-
-
-|[Slides](/slides/l92021.html)  	|  [Reading-Ch27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) 	| [Reference Guide](/cheatsheets/rmarkdown-reference.pdf)  | Video Clips - LMS 	| Problems |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-🖥️ **R Labwork**
-
-[Rmarkdown_practical_lesson_21.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
-
-[sampleimage.png](/rscripts/rmarkdown_labwork/sampleimage.png)
-
-[Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
 
 
 
