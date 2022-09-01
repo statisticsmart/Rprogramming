@@ -69,11 +69,11 @@ data(package = 'palmerpenguins')
 
 🖥️ **R Labwork**
 
-[Rmarkdown_practical_lesson_21.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.Rmd)
+[Rmarkdown_practical_lesson_21.Rmd](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson.Rmd)
 
 [sampleimage.png](/rscripts/rmarkdown_labwork/sampleimage.png)
 
-[Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson_21.html)
+[Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson.html)
 
 
 
@@ -91,14 +91,14 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 7:  Control structures
+#### Week 8:  Control structures
 
 |[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 
-#### Week 8: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
+#### Week 9: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
 
 |[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -118,7 +118,7 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 9: Data Import and Export
+#### Week 10: Data Import and Export
 
 **Flip-style**
 
