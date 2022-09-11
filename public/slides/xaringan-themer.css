@@ -18,21 +18,21 @@
  *  Version: 0.4.1
  *
  * ------------------------------------------------------- */
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,300i&display=swap);
-@import url(https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap);
-@import url(https://fonts.googleapis.com/css?family=Fira+Mono&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Josefin+Sans:400,400i,800i,800&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Cabin:600,600i&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&display=swap);
 
 
 :root {
   /* Fonts */
-  --text-font-family: Montserrat;
+  --text-font-family: 'Josefin Sans';
   --text-font-is-google: 1;
   --text-font-family-fallback: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
   --text-font-base: sans-serif;
-  --header-font-family: 'Josefin Sans';
+  --header-font-family: Cabin;
   --header-font-is-google: 1;
   --header-font-family-fallback: Georgia, serif;
-  --code-font-family: 'Fira Mono';
+  --code-font-family: 'Source Code Pro';
   --code-font-is-google: 1;
   --base-font-size: 20px;
   --text-font-size: 1rem;
@@ -43,23 +43,20 @@
   --header-h3-font-size: 1.75rem;
 
   /* Colors */
-  --text-color: #272822;
-  --header-color: #1c5253;
-  --background-color: #FFFFFF;
-  --link-color: #1c5253;
-  --text-bold-color: #1c5253;
-  --code-highlight-color: rgba(255,255,0,0.5);
-  --inverse-text-color: #FFFFFF;
-  --inverse-background-color: #1c5253;
-  --inverse-header-color: #FFFFFF;
-  --inverse-link-color: #1c5253;
-  --title-slide-background-color: #1c5253;
-  --title-slide-text-color: #FFFFFF;
-  --header-background-color: #1c5253;
-  --header-background-text-color: #FFFFFF;
-  --base: #1c5253;
-  --white: #FFFFFF;
-  --black: #272822;
+  --text-color: #657b83;
+  --header-color: #dc322f;
+  --background-color: #fdf6e3;
+  --link-color: #b58900;
+  --text-bold-color: #d33682;
+  --code-highlight-color: #268bd240;
+  --inverse-text-color: #fdf6e3;
+  --inverse-background-color: #002b36;
+  --inverse-header-color: #fdf6e3;
+  --inverse-link-color: #b58900;
+  --title-slide-background-color: #002b36;
+  --title-slide-text-color: #fdf6e3;
+  --header-background-color: #dc322f;
+  --header-background-text-color: #fdf6e3;
 }
 
 html {
@@ -100,10 +97,10 @@ h1, h2, h3 {
 }
 .remark-inline-code {
   font-size: var(--code-inline-font-size);
-  color: #1c5253;
+  color: #6c71c4;
 }
 .remark-slide-number {
-  color: #1c5253;
+  color: #93a1a1;
   opacity: 1;
   font-size: 0.9rem;
 }
@@ -151,10 +148,10 @@ a, a > code {
   float: left;
 }
 .left-column h2, .left-column h3 {
-  color: #1c525399;
+  color: #93a1a1;
 }
 .left-column h2:last-of-type, .left-column h3:last-child {
-  color: #1c5253;
+  color: #586e75;
 }
 .right-column {
   width: 75%;
@@ -176,22 +173,22 @@ img, video, iframe {
   max-width: 100%;
 }
 blockquote {
-  border-left: solid 5px #1c525380;
+  border-left: solid 5px #cb4b16;
   padding-left: 1em;
 }
 .remark-slide table {
   margin: auto;
-  border-top: 1px solid #666;
-  border-bottom: 1px solid #666;
+  border-top: 1px solid #839496;
+  border-bottom: 1px solid #839496;
 }
 .remark-slide table thead th {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #839496;
 }
 th, td {
   padding: 5px;
 }
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
-  background: #D1DCDC;
+  background: #eee8d5;
 }
 table.dataTable tbody {
   background-color: var(--background-color);
@@ -201,7 +198,7 @@ table.dataTable.display tbody tr.odd {
   background-color: var(--background-color);
 }
 table.dataTable.display tbody tr.even {
-  background-color: #D1DCDC;
+  background-color: #eee8d5;
 }
 table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.5);
@@ -271,22 +268,4 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   }
 }
 
-.base {
-  color: var(--base);
-}
-.bg-base {
-  background-color: var(--base);
-}
-.white {
-  color: var(--white);
-}
-.bg-white {
-  background-color: var(--white);
-}
-.black {
-  color: var(--black);
-}
-.bg-black {
-  background-color: var(--black);
-}
 
