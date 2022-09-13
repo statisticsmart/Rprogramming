@@ -47,7 +47,7 @@ Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 |[Slides](/slides/l52021.html)    	|  [Reading](https://r4ds.had.co.nz/functions.html)[Ch 19] )  	|  Cheat sheet 	| [R-script](/slides/functionsanswers.R) | [Exercise 6](https://thiyangt.github.io/rworkbook/writing-functions-in-r.html) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
-#### Week 6: The Grammar of Graphics 
+#### Week 6-7: The Grammar of Graphics 
 
 
 |[Slides](/slides/l122021.html)     	| [Reading-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	|  [Cheat sheet](/cheatsheets/ggplot2-cheatsheet.pdf)  	| R-script | [Problems-Ch3](https://r4ds.had.co.nz/data-visualisation.html) 	| Answers |
@@ -61,7 +61,8 @@ data(package = 'palmerpenguins')
 ```
 
 
-#### Week 7: Reproducible Reporting with R Markdown 
+
+#### Week 8: Reproducible Reporting with R Markdown 
 
 
 |[Slides](/slides/hellor.rmarkdown.html)  	|  [Reading-Ch27](https://r4ds.had.co.nz/r-markdown.html)  	|  [Cheat sheet](/cheatsheets/rmarkdown-cheatsheet-2.0.pdf) 	| [Reference Guide](/cheatsheets/rmarkdown-reference.pdf)  | Video Clips - LMS 	| Problems |
@@ -76,7 +77,12 @@ data(package = 'palmerpenguins')
 [Output: Rmarkdown_practical_lesson_21.html](/rscripts/rmarkdown_labwork/Rmarkdown_practical_lesson.html)
 
 
+#### Week 9: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
 
+|[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+----------------------------------------------------------------------------------
 
 ##### Individual Assignment - 1 (5%) 🎓
 
@@ -86,41 +92,19 @@ Assignment: Individual assignment 1
 
 ```diff
 
-Go to LMS. Deadline: TBA
+Go to LMS. Deadline: 19 September 2022
 
 ```
 
 
-#### Week 8:  Control structures
+#### Week 10: Flipped classroom - Physical
 
-|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
+[Flipped classroom work](https://tstdataviz.netlify.app/slides/mpg_visualization.html)
 
 
-#### Week 9: Introduction to the Tidyverse Data Science Workflow: Tibble, Factor, Pipe operator
 
-|[Slides](/slides/l72021.html)     	|  [Reading - Ch1 and Ch 2](https://r4ds.had.co.nz/introduction.html) 	|  [Cheat sheet](/cheatsheets/tibble.jpeg) 	| R-script | Problems 	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+#### Week 11: Data Import and Export - Flipped classroom
 
-----------------------------------------------------------------------------------
-
-##### Individual Assignment - 2 (10%) 🎓
-
-```{r class.source="watch-out"}
-Assignment: Individual assignment 2
-```
-
-```diff
-
-Go to LMS. Deadline: TBA
-
-```
-
-
-#### Week 10: Data Import and Export
-
-**Flip-style**
 
 |[Slides](/slides/l82021.html)     	|  [Reading - Ch 11](https://r4ds.had.co.nz/data-import.html)  	|  [Cheat sheet](/cheatsheets/data-import.pdf) 	| [Demo 1](https://www.youtube.com/watch?v=i-tshXv6lTg&t=381s) [Demo 2](https://www.youtube.com/watch?v=3pW3wZ-Dprg) [Demo-3](https://www.youtube.com/watch?v=K58J7EvGXDA)| Problems 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
@@ -128,7 +112,7 @@ Go to LMS. Deadline: TBA
 
 
 
-#### Week 11: Data Wrangling: Reshaping Data and Data Manipulation
+#### Week 12: Data Wrangling: Reshaping Data and Data Manipulation - Physical
 
 #### Reshaping Data
 
@@ -142,10 +126,10 @@ Go to LMS. Deadline: TBA
 
 
 
-##### Makeup assignments - 1 and 2 🎓
+##### Makeup assignments -  2 🎓
 
 ```{r class.source="watch-out"}
-Assignment 1: Data Visualization with geom_*
+
 
 Assignment2: Do the analysis of assignment 2 using the tidyverse.
 ```
@@ -158,16 +142,7 @@ Assignment 2: TBA
 
 ```
 
-
-#### Week 12:  Regression Analysis with R
-
-
-
-|[Slides](/slides/l132021.html)    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)   	|  Cheat sheet 	| R-script | [Problems](/problems/Regression.html)  	| Answers |
-|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
-
-
-##### Individual Project (25%) 🎓
+##### Individual Project (30%) 🎓
 
 ```{r class.source="watch-out"}
 Assignment: Individual Project
@@ -179,14 +154,33 @@ Go to LMS. Deadline: TBA
 ```
 
 
-#### Week 13: Hypothesis Testing
+
+
+#### Week 13:  Control structures: Physical
+
+|[Slides](/slides/l62021.html)    	|  [Reading - Ch 13](https://bookdown.org/rdpeng/rprogdatascience/control-structures.html)  	|  Cheat sheet 	| [R-script](/rscript/cs.R) | Problems 	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+
+#### Week 14:  Regression Analysis with R: Physical and Pre-recorded lecture
+
+
+
+|[Slides](/slides/l132021.html)    	|  [Reading-broom](http://varianceexplained.org/r/broom-intro/)   	|  Cheat sheet 	| R-script | [Problems](/problems/Regression.html)  	| Answers |
+|:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
+
+
+
+
+#### Week 15: Hypothesis Testing: Physical
 
 |[Slides](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
 
-#### Week 14: Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
+#### Revision and Ways to Continue Learning R No Matter What You Choose to be Your Next Step
 
 
 |[Recap](/slides/recap2021.pdf)   	|  
