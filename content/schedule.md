@@ -126,22 +126,6 @@ Go to LMS. Deadline: 19 September 2022
 
 
 
-##### Makeup assignments -  2 🎓
-
-```{r class.source="watch-out"}
-
-
-Assignment2: Do the analysis of assignment 2 using the tidyverse.
-```
-
-```diff
-
-Assignment 1: TBA
-
-Assignment 2: TBA
-
-```
-
 ##### Individual Project (30%) 🎓
 
 ```{r class.source="watch-out"}
@@ -163,7 +147,7 @@ Go to LMS. Deadline: TBA
 
 
 
-#### Week 14:  Regression Analysis with R: Physical and Pre-recorded lecture
+#### Week 14:  Regression Analysis with R: Physical (50%) and Pre-recorded lecture and flipped classroom (50%)
 
 
 
