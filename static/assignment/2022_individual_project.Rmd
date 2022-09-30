@@ -63,6 +63,10 @@ get_individual_project_country("AS2018000") # type your index n. within ""
 
 ### 2. To obtain coronavirus data corresponds to your country
 
+```r
+install.packages("coronavirus")
+library(coronavirus)
+```
 
 You can download coronavirus data from the coronavirus package in R. This help file here https://hellor.netlify.app/slides/coronavirus_assignment_help_file
 gives some useful hints on how to extract and visualise relevant data from the package. 

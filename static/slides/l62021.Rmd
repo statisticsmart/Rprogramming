@@ -871,10 +871,10 @@ switch(c("a", "b"), "a" = "apple", # not working
 
 ## Multiple element - use `for` loop
 
-```{r, eval=FALSE}
+```{r}
 vect <- c("a", "b")
 for(i in seq(vect)){
-print(switch(i, "a" = "apple", # not working
+print(switch(i, "a" = "apple", 
        "b" = "banana",
        "c" = "cherry"))
 }
