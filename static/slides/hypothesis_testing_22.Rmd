@@ -1,0 +1,583 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+subtitle: "Statistical Hypothesis Testing"  
+author: 
+  - ""
+  - "Dr Thiyanga Talagala"
+date: ''
+output:
+  xaringan::moon_reader:
+    css: [xaringan-themer.css, custom2.css]
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+```
+
+<style type="text/css">
+.remark-slide-content {
+    font-size: 50px;
+}
+</style>
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+#style_duo_accent(
+#  primary_color = "#1381B0",
+#  secondary_color = "#FF961C",
+#  inverse_header_color = "#FFFFFF"
+#)
+style_solarized_light(text_font_google   = google_font("Josefin Sans", "500", "400i", "800i", "900"))
+#style_mono_light(
+#  base_color = "#1c5253",
+#  header_font_google = google_font("Josefin Sans"),
+#  text_font_google   = google_font("Josefin Sans", "400", "400i", "800i", "800"),
+#  code_font_google   = google_font("Fira Mono")
+#)
+```
+
+
+# Why statistical hypothesis testing is important?
+
+--
+
+Hypothesis testing provides a **reliable framework** for making any **data-driven** decisions for your **population of interest**.
+
+---
+background-image: url(ht/ht1.png)
+background-size: contain
+
+
+---
+class: center, middle
+
+# Do 12.5kg gas cylinders actually hold 12.5kg of weight?
+
+---
+# Step 1
+
+Establish null and alternative hypotheses
+
+--
+
+$$H_1: \mu < 12.5kg$$
+
+---
+
+# Step 1
+
+Establish null and alternative hypotheses
+
+--
+
+$$H_0: \mu \geq 12.5kg$$
+
+$$H_1: \mu < 12.5kg$$
+$\mu$ - population mean
+
+
+---
+class: center, middle
+
+# Suppose the manager wants to determine whether their process is out-of-control by using the weight of gas cylinders
+
+---
+class: center, middle
+
+
+
+$$H_1: \mu \neq 12.5kg$$
+$\mu$ - population mean
+
+
+---
+class: center, middle
+
+$$H_0: \mu = 12.5kg$$
+
+$$H_1: \mu \neq 12.5kg$$
+
+$\mu$ - population mean
+
+---
+background-image: url(ht/ht2.jpg)
+background-size: contain
+
+
+.footnote[
+ [https://www.sciencedirect.com/topics/mathematics/tailed-test](https://www.sciencedirect.com/topics/mathematics/tailed-test)
+
+]
+
+---
+background-image: url(ht/ht2.jpg)
+background-size: contain
+
+---
+# Step 2: Gather sample data
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+set.seed(123)
+library(tibble)
+gas <- tibble(weight = rnorm(35, mean=10, sd=1))
+```
+
+```{r}
+gas
+```
+
+---
+# Step 3: Visualize data
+
+```{r, fig.height=3}
+library(ggplot2)
+ggplot(gas, aes(x=weight)) +  geom_boxplot(alpha=0.5)
+```
+
+---
+
+```{r, fig.height=3}
+ggplot(gas, aes(x=weight)) +  geom_boxplot(alpha=0.5) +
+  theme( # remove axis text and ticks
+    axis.text.y = element_blank(), axis.ticks = element_blank()) + labs(x="weight")
+```
+
+
+---
+
+# Step 4: Determine the appropriate statistical test
+
+$$n > 30$$
+
+Central Limit Theorem
+
+---
+Distribution of data unknown/ If sample size is small, perform normality test.
+
+### Method 1
+
+ H0: The data  are normally distributed.
+
+ H1: The data  are not normally distributed.
+ 
+ 
+---
+
+### Method 2
+
+Let $X$ be the weight of a randomly selected cylinder
+
+H0: $X$ is normally distributed
+
+H1: $X$ is not normally distributed
+
+---
+
+# Normal-probability plot
+
+```{r, fig.height=3}
+ggplot(gas, aes(sample = weight)) +
+    stat_qq() + stat_qq_line(col="red") + coord_equal() + ylab("Theoretical Quantiles") + xlab("Sample Quantiles")
+```
+
+---
+
+How to perform normality test in R?
+
+```{r}
+#perform shapiro-wilk test
+shapiro.test(gas$weight)
+```
+
+
+---
+
+# Step 5: Test
+
+"The R package `statsr` provides functions and datasets to support the Coursera Statistics with R Specialization videos and open access book An Introduction to Bayesian Thinking for learning Bayesian and frequentist statistics using R"
+
+source: https://www.rdocumentation.org/packages/statsr/versions/0.3.0
+
+---
+
+# `statsr` package installation
+
+```r
+library(devtools)
+devtools::install_github("statswithr/statsr",
+                  dependencies=TRUE,
+                      upgrade_dependencies = TRUE)
+
+```
+
+---
+background-image: url(ht/ht3.png)
+background-size: contain
+
+---
+
+Method 1: Using `statsr` package
+
+```{r}
+library(statsr)
+inference(weight, data=gas, statistic="mean", type="ht", null=12.5,
+          alternative ="less", method="theoretical")
+```
+
+---
+
+```{r, echo=FALSE}
+inference(weight, data=gas, statistic="mean", type="ht", null=12.5,
+          alternative ="less", method="theoretical")
+```
+
+---
+
+# Confidence intervals with `statsr`
+
+```{r}
+inference(weight, data=gas, statistic="mean", type="ci",  method="theoretical")
+```
+
+---
+
+# Method 2: Using `stats` package
+
+```{r}
+t.test(gas$weight, mu=12.5, alternative = "less")
+```
+
+
+---
+
+# Confidence intervals with `stats`
+
+```{r}
+t.test(gas$weight, mu=12.5, alternative = "two.sided")
+```
+
+
+---
+
+# Example 2
+
+A chemist wants to measure the bias in a pH meter. She uses the meter to measure the pH in 14 neutral
+substances (pH=7) and obtains the data below.
+
+```{r}
+ph <- c( 7.01, 7.04, 6.97, 7.00, 6.99, 6.97, 7.04, 7.04, 7.01, 7.00, 6.99, 7.04, 7.07, 6.97)
+```
+
+Is there sufficient evidence to support the claim that the pH meter is not correctly calibrated at the α = 0.05
+level of significance?
+
+---
+
+```{r}
+ph.df <- data.frame(pH=ph)
+ggplot(ph.df, aes(y=pH, x="")) +
+geom_boxplot(outlier.shape = NA, fill="forestgreen") +
+geom_jitter(alpha=0.5) +
+labs(x = "")
+```
+
+---
+
+In this case, we have only sixteen observations, meaning that the Central Limit Theorem does not apply.
+With a small sample, we should only use the t-test if we can reasonably assume that the population data is
+normally distributed. Hence, we must first verify that pH is normally distributed.
+
+---
+
+```{r}
+ggplot(ph.df,
+aes(sample=pH))+
+stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles") +
+  theme(aspect.ratio=1)
+```
+
+---
+
+```{r}
+shapiro.test(ph.df$pH)
+```
+
+---
+
+
+# Hypothesis to be tested
+
+$$H_0: \mu = 7$$
+
+$$H_1: \mu \neq 7$$
+
+$\mu$ - Population mean pH value (in neutral substances).
+
+---
+### Hypothesis test
+
+```{r, fig.height=3}
+inference(y=pH, data=ph.df, statistic="mean", type="ht", null=12.5,
+          alternative ="twosided", method="theoretical")
+```
+
+---
+
+### Hypothesis test
+
+```{r, echo=FALSE, fig.height=3}
+inference(y=pH, data=ph.df, statistic="mean", type="ht", null=12.5,
+          alternative ="twosided", method="theoretical")
+```
+
+---
+
+# Confidence interval
+
+```{r}
+inference(y=pH, data=ph.df, statistic="mean", type="ci",  method="theoretical")
+```
+
+
+
+---
+
+# Confidence interval
+
+```{r, echo=FALSE}
+inference(y=pH, data=ph.df, statistic="mean", type="ci",  method="theoretical")
+```
+
+---
+
+## Two-sample: Paired t-test
+
+A dietician hopes to reduce a person’s cholesterol level by using a special diet supplemented with a combination
+of vitamin pills. Twenty (20) subjects were pre-tested and then placed on diet for two weeks. Their cholesterol
+levels were checked after the two week period. The results are shown below. Cholesterol levels are measured
+in milligrams per decilitre.
+
+---
+cont. 
+
+i) Test the claim that the Cholesterol level before the special diet is greater than the Cholesterol level
+after the special diet at α = 0.01 level of significance.
+
+ii) Construct 99% confidence interval for the difference in mean cholesterol levels. Assume that the
+cholesterol levels are normally distributed both before and after.
+
+---
+
+```{r}
+id <- 1:20
+before <- c(210, 235, 208, 190, 172, 244, 211, 235, 210,
+190, 175, 250, 200, 270, 222, 203, 209, 220, 250, 280)
+after <- c(190, 170, 210, 188, 173, 195, 228, 200, 210, 184,
+196, 208, 211, 212, 205, 221, 240, 250, 230, 220)
+cholesterol_1 <- tibble(id=id, before=before, after=after)
+head(cholesterol_1)
+```
+
+---
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+cholesterol_2 <- pivot_longer(cholesterol_1, before:after, "type", "value")
+head(cholesterol_2)
+```
+
+---
+
+```{r}
+ggplot(data= cholesterol_2, aes(x=type, y=value)) +
+geom_boxplot(outlier.shape = NA, aes(fill=type), alpha=0.5) +
+geom_jitter(aes(fill=type))
+```
+
+---
+
+```{r}
+cholesterol_2 %>%
+group_by(type) %>%
+summarize(mean = round(mean(value), 2),
+sd = round(sd(value), 2))
+```
+
+---
+
+```{r}
+ggplot(data = cholesterol_2, aes(sample = value)) +
+stat_qq() +
+stat_qq_line() +
+facet_grid(. ~ type)
+```
+
+---
+
+
+
+```{r}
+shapiro.test(cholesterol_1$before)
+shapiro.test(cholesterol_1$after)
+```
+
+---
+
+Method 1: stats package
+
+```{r}
+t.test(before, after, data=cholesterol_1, "greater", paired=TRUE)
+
+```
+
+---
+
+Method 2: statsr package
+
+```{r, fig.height=2.7}
+diff <- cholesterol_1$before -cholesterol_1$after
+diff_data <- data.frame(diff=diff)
+ggplot(diff_data, aes(sample=diff))+
+stat_qq() + stat_qq_line()+
+labs(x="Theoretical Quantiles", y="Sample Quantiles") +  theme(aspect.ratio=1)
+
+```
+
+
+---
+
+```{r, fig.height=2.7}
+
+inference(y=diff,  data=diff_data,statistic="mean",  type="ht", method="theoretical", alternative ="greater", null=0L)
+```
+
+---
+
+Method 2: stats
+
+```{r}
+t.test(x = diff_data$diff, alternative = c("greater"), mu=0)
+```
+
+
+---
+class: center, middle
+
+Your turn: Obtain confidence intervals
+
+---
+# Two-independent samples
+
+$H_0: \mu_M \leq \mu_F$  vs $H_1: \mu_M > \mu_F$
+
+$\mu_M$ - Population mean weight of male penguins
+
+$\mu_F$ - Population mean weight of female penguins
+
+---
+# Two-independent samples
+
+```{r}
+library(palmerpenguins)
+data(penguins)
+inference(x=sex, y=flipper_length_mm ,data=penguins, alternative  = "greater", order = c("male", "female"), 
+          statistic="mean", 
+          type="ht",
+          method="theoretical")
+
+```
+
+---
+
+```{r, echo=FALSE, fig.height=3}
+library(palmerpenguins)
+data(penguins)
+inference(x=sex, y=flipper_length_mm ,data=penguins, alternative  = "greater", order = c("male", "female"), 
+          statistic="mean", 
+          type="ht",
+          method="theoretical")
+
+```
+
+
+---
+class: center, middle
+
+# ANOVA: using `statsr` package
+
+---
+
+
+```{r}
+
+ggplot(penguins, aes(x=flipper_length_mm, y=species)) + geom_boxplot() +  stat_summary(fun.x=mean, colour="darkred", geom="point", size=5)
+```
+
+---
+
+```{r, fig.height=3}
+#Notches are used to compare groups; if the notches of two boxes do not overlap,
+#this suggests that the medians are significantly different
+ggplot(penguins, aes(x=flipper_length_mm, y=species)) + geom_boxplot(notch = TRUE)
+
+```
+
+
+---
+
+```{r, eval=FALSE}
+library(magrittr)
+penguins <- penguins %>%
+  na.omit() # remove missing values
+inference(x=species, y=flipper_length_mm ,data=penguins,
+          statistic="mean", 
+          type="ht",
+          method="theoretical")
+```
+
+---
+
+```{r, echo=FALSE}
+library(palmerpenguins)
+library(magrittr)
+data(penguins)
+penguins <- penguins %>%
+  na.omit()
+inference(x=species, y=flipper_length_mm ,data=penguins,
+          statistic="mean", 
+          type="ht",
+          method="theoretical")
+```
+
+
+---
+
+
+---
+
+class: center, middle
+
+## Thank you!
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+
+
+

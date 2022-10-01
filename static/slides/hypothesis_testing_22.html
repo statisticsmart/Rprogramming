@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>STA 326 2.0 Programming and Data Analysis with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga Talagala" />
+    <script src="hypothesis_testing_22_files/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="custom2.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# STA 326 2.0 Programming and Data Analysis with R
+]
+.subtitle[
+## Statistical Hypothesis Testing
+]
+.author[
+### 
+]
+.author[
+### Dr Thiyanga Talagala
+]
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 50px;
+}
+&lt;/style&gt;
+
+
+
+
+# Why statistical hypothesis testing is important?
+
+--
+
+Hypothesis testing provides a **reliable framework** for making any **data-driven** decisions for your **population of interest**.
+
+---
+background-image: url(ht/ht1.png)
+background-size: contain
+
+
+---
+class: center, middle
+
+# Do 12.5kg gas cylinders actually hold 12.5kg of weight?
+
+---
+# Step 1
+
+Establish null and alternative hypotheses
+
+--
+
+`$$H_1: \mu &lt; 12.5kg$$`
+
+---
+
+# Step 1
+
+Establish null and alternative hypotheses
+
+--
+
+`$$H_0: \mu \geq 12.5kg$$`
+
+`$$H_1: \mu &lt; 12.5kg$$`
+`\(\mu\)` - population mean
+
+
+---
+class: center, middle
+
+# Suppose the manager wants to determine whether their process is out-of-control by using the weight of gas cylinders
+
+---
+class: center, middle
+
+
+
+`$$H_1: \mu \neq 12.5kg$$`
+`\(\mu\)` - population mean
+
+
+---
+class: center, middle
+
+`$$H_0: \mu = 12.5kg$$`
+
+`$$H_1: \mu \neq 12.5kg$$`
+
+`\(\mu\)` - population mean
+
+---
+background-image: url(ht/ht2.jpg)
+background-size: contain
+
+
+.footnote[
+ [https://www.sciencedirect.com/topics/mathematics/tailed-test](https://www.sciencedirect.com/topics/mathematics/tailed-test)
+
+]
+
+---
+background-image: url(ht/ht2.jpg)
+background-size: contain
+
+---
+# Step 2: Gather sample data
+
+
+
+
+```r
+gas
+```
+
+```
+## # A tibble: 35 × 1
+##    weight
+##     &lt;dbl&gt;
+##  1   9.44
+##  2   9.77
+##  3  11.6 
+##  4  10.1 
+##  5  10.1 
+##  6  11.7 
+##  7  10.5 
+##  8   8.73
+##  9   9.31
+## 10   9.55
+## # … with 25 more rows
+```
+
+---
+# Step 3: Visualize data
+
+
+```r
+library(ggplot2)
+ggplot(gas, aes(x=weight)) +  geom_boxplot(alpha=0.5)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+
+---
+
+
+```r
+ggplot(gas, aes(x=weight)) +  geom_boxplot(alpha=0.5) +
+  theme( # remove axis text and ticks
+    axis.text.y = element_blank(), axis.ticks = element_blank()) + labs(x="weight")
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-4-1.png" width="100%" /&gt;
+
+
+---
+
+# Step 4: Determine the appropriate statistical test
+
+`$$n &gt; 30$$`
+
+Central Limit Theorem
+
+---
+Distribution of data unknown/ If sample size is small, perform normality test.
+
+### Method 1
+
+ H0: The data  are normally distributed.
+
+ H1: The data  are not normally distributed.
+ 
+ 
+---
+
+### Method 2
+
+Let `\(X\)` be the weight of a randomly selected cylinder
+
+H0: `\(X\)` is normally distributed
+
+H1: `\(X\)` is not normally distributed
+
+---
+
+# Normal-probability plot
+
+
+```r
+ggplot(gas, aes(sample = weight)) +
+    stat_qq() + stat_qq_line(col="red") + coord_equal() + ylab("Theoretical Quantiles") + xlab("Sample Quantiles")
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-5-1.png" width="100%" /&gt;
+
+---
+
+How to perform normality test in R?
+
+
+```r
+#perform shapiro-wilk test
+shapiro.test(gas$weight)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  gas$weight
+## W = 0.98495, p-value = 0.9027
+```
+
+
+---
+
+# Step 5: Test
+
+"The R package `statsr` provides functions and datasets to support the Coursera Statistics with R Specialization videos and open access book An Introduction to Bayesian Thinking for learning Bayesian and frequentist statistics using R"
+
+source: https://www.rdocumentation.org/packages/statsr/versions/0.3.0
+
+---
+
+# `statsr` package installation
+
+```r
+library(devtools)
+devtools::install_github("statswithr/statsr",
+                  dependencies=TRUE,
+                      upgrade_dependencies = TRUE)
+
+```
+
+---
+background-image: url(ht/ht3.png)
+background-size: contain
+
+---
+
+Method 1: Using `statsr` package
+
+
+```r
+library(statsr)
+inference(weight, data=gas, statistic="mean", type="ht", null=12.5,
+          alternative ="less", method="theoretical")
+```
+
+```
+## Single numerical variable
+## n = 35, y-bar = 10.0375, s = 0.9463
+## H0: mu = 12.5
+## HA: mu &lt; 12.5
+## t = -15.3956, df = 34
+## p_value = &lt; 0.0001
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-7-1.png" width="100%" /&gt;
+
+---
+
+
+```
+## Single numerical variable
+## n = 35, y-bar = 10.0375, s = 0.9463
+## H0: mu = 12.5
+## HA: mu &lt; 12.5
+## t = -15.3956, df = 34
+## p_value = &lt; 0.0001
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-8-1.png" width="100%" /&gt;
+
+---
+
+# Confidence intervals with `statsr`
+
+
+```r
+inference(weight, data=gas, statistic="mean", type="ci",  method="theoretical")
+```
+
+```
+## Single numerical variable
+## n = 35, y-bar = 10.0375, s = 0.9463
+## 95% CI: (9.7125 , 10.3626)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-9-1.png" width="100%" /&gt;
+
+---
+
+# Method 2: Using `stats` package
+
+
+```r
+t.test(gas$weight, mu=12.5, alternative = "less")
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  gas$weight
+## t = -15.396, df = 34, p-value &lt; 2.2e-16
+## alternative hypothesis: true mean is less than 12.5
+## 95 percent confidence interval:
+##      -Inf 10.30798
+## sample estimates:
+## mean of x 
+##  10.03752
+```
+
+
+---
+
+# Confidence intervals with `stats`
+
+
+```r
+t.test(gas$weight, mu=12.5, alternative = "two.sided")
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  gas$weight
+## t = -15.396, df = 34, p-value &lt; 2.2e-16
+## alternative hypothesis: true mean is not equal to 12.5
+## 95 percent confidence interval:
+##   9.712466 10.362569
+## sample estimates:
+## mean of x 
+##  10.03752
+```
+
+
+---
+
+# Example 2
+
+A chemist wants to measure the bias in a pH meter. She uses the meter to measure the pH in 14 neutral
+substances (pH=7) and obtains the data below.
+
+
+```r
+ph &lt;- c( 7.01, 7.04, 6.97, 7.00, 6.99, 6.97, 7.04, 7.04, 7.01, 7.00, 6.99, 7.04, 7.07, 6.97)
+```
+
+Is there sufficient evidence to support the claim that the pH meter is not correctly calibrated at the α = 0.05
+level of significance?
+
+---
+
+
+```r
+ph.df &lt;- data.frame(pH=ph)
+ggplot(ph.df, aes(y=pH, x="")) +
+geom_boxplot(outlier.shape = NA, fill="forestgreen") +
+geom_jitter(alpha=0.5) +
+labs(x = "")
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-13-1.png" width="100%" /&gt;
+
+---
+
+In this case, we have only sixteen observations, meaning that the Central Limit Theorem does not apply.
+With a small sample, we should only use the t-test if we can reasonably assume that the population data is
+normally distributed. Hence, we must first verify that pH is normally distributed.
+
+---
+
+
+```r
+ggplot(ph.df,
+aes(sample=pH))+
+stat_qq() + stat_qq_line()+labs(x="Theoretical Quantiles", y="Sample Quantiles") +
+  theme(aspect.ratio=1)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-14-1.png" width="100%" /&gt;
+
+---
+
+
+```r
+shapiro.test(ph.df$pH)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  ph.df$pH
+## W = 0.91603, p-value = 0.1927
+```
+
+---
+
+
+# Hypothesis to be tested
+
+`$$H_0: \mu = 7$$`
+
+`$$H_1: \mu \neq 7$$`
+
+`\(\mu\)` - Population mean pH value (in neutral substances).
+
+---
+### Hypothesis test
+
+
+```r
+inference(y=pH, data=ph.df, statistic="mean", type="ht", null=12.5,
+          alternative ="twosided", method="theoretical")
+```
+
+```
+## Single numerical variable
+## n = 14, y-bar = 7.01, s = 0.0316
+## H0: mu = 12.5
+## HA: mu != 12.5
+## t = -649.5856, df = 13
+## p_value = &lt; 0.0001
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-16-1.png" width="100%" /&gt;
+
+---
+
+### Hypothesis test
+
+
+```
+## Single numerical variable
+## n = 14, y-bar = 7.01, s = 0.0316
+## H0: mu = 12.5
+## HA: mu != 12.5
+## t = -649.5856, df = 13
+## p_value = &lt; 0.0001
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-17-1.png" width="100%" /&gt;
+
+---
+
+# Confidence interval
+
+
+```r
+inference(y=pH, data=ph.df, statistic="mean", type="ci",  method="theoretical")
+```
+
+```
+## Single numerical variable
+## n = 14, y-bar = 7.01, s = 0.0316
+## 95% CI: (6.9917 , 7.0283)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-18-1.png" width="100%" /&gt;
+
+
+
+---
+
+# Confidence interval
+
+
+```
+## Single numerical variable
+## n = 14, y-bar = 7.01, s = 0.0316
+## 95% CI: (6.9917 , 7.0283)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-19-1.png" width="100%" /&gt;
+
+---
+
+## Two-sample: Paired t-test
+
+A dietician hopes to reduce a person’s cholesterol level by using a special diet supplemented with a combination
+of vitamin pills. Twenty (20) subjects were pre-tested and then placed on diet for two weeks. Their cholesterol
+levels were checked after the two week period. The results are shown below. Cholesterol levels are measured
+in milligrams per decilitre.
+
+---
+cont. 
+
+i) Test the claim that the Cholesterol level before the special diet is greater than the Cholesterol level
+after the special diet at α = 0.01 level of significance.
+
+ii) Construct 99% confidence interval for the difference in mean cholesterol levels. Assume that the
+cholesterol levels are normally distributed both before and after.
+
+---
+
+
+```r
+id &lt;- 1:20
+before &lt;- c(210, 235, 208, 190, 172, 244, 211, 235, 210,
+190, 175, 250, 200, 270, 222, 203, 209, 220, 250, 280)
+after &lt;- c(190, 170, 210, 188, 173, 195, 228, 200, 210, 184,
+196, 208, 211, 212, 205, 221, 240, 250, 230, 220)
+cholesterol_1 &lt;- tibble(id=id, before=before, after=after)
+head(cholesterol_1)
+```
+
+```
+## # A tibble: 6 × 3
+##      id before after
+##   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1     1    210   190
+## 2     2    235   170
+## 3     3    208   210
+## 4     4    190   188
+## 5     5    172   173
+## 6     6    244   195
+```
+
+---
+
+
+```r
+library(tidyverse)
+cholesterol_2 &lt;- pivot_longer(cholesterol_1, before:after, "type", "value")
+head(cholesterol_2)
+```
+
+```
+## # A tibble: 6 × 3
+##      id type   value
+##   &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1     1 before   210
+## 2     1 after    190
+## 3     2 before   235
+## 4     2 after    170
+## 5     3 before   208
+## 6     3 after    210
+```
+
+---
+
+
+```r
+ggplot(data= cholesterol_2, aes(x=type, y=value)) +
+geom_boxplot(outlier.shape = NA, aes(fill=type), alpha=0.5) +
+geom_jitter(aes(fill=type))
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-22-1.png" width="100%" /&gt;
+
+---
+
+
+```r
+cholesterol_2 %&gt;%
+group_by(type) %&gt;%
+summarize(mean = round(mean(value), 2),
+sd = round(sd(value), 2))
+```
+
+```
+## # A tibble: 2 × 3
+##   type    mean    sd
+##   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 after   207.  21.0
+## 2 before  219.  29.3
+```
+
+---
+
+
+```r
+ggplot(data = cholesterol_2, aes(sample = value)) +
+stat_qq() +
+stat_qq_line() +
+facet_grid(. ~ type)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-24-1.png" width="100%" /&gt;
+
+---
+
+
+
+
+```r
+shapiro.test(cholesterol_1$before)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  cholesterol_1$before
+## W = 0.9647, p-value = 0.6414
+```
+
+```r
+shapiro.test(cholesterol_1$after)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  cholesterol_1$after
+## W = 0.98535, p-value = 0.9836
+```
+
+---
+
+Method 1: stats package
+
+
+```r
+t.test(before, after, data=cholesterol_1, "greater", paired=TRUE)
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  before and after
+## t = 1.7754, df = 19, p-value = 0.04593
+## alternative hypothesis: true mean difference is greater than 0
+## 95 percent confidence interval:
+##  0.3167385       Inf
+## sample estimates:
+## mean difference 
+##           12.15
+```
+
+---
+
+Method 2: statsr package
+
+
+```r
+diff &lt;- cholesterol_1$before -cholesterol_1$after
+diff_data &lt;- data.frame(diff=diff)
+ggplot(diff_data, aes(sample=diff))+
+stat_qq() + stat_qq_line()+
+labs(x="Theoretical Quantiles", y="Sample Quantiles") +  theme(aspect.ratio=1)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-27-1.png" width="100%" /&gt;
+
+
+---
+
+
+```r
+inference(y=diff,  data=diff_data,statistic="mean",  type="ht", method="theoretical", alternative ="greater", null=0L)
+```
+
+```
+## Single numerical variable
+## n = 20, y-bar = 12.15, s = 30.6049
+## H0: mu = 0
+## HA: mu &gt; 0
+## t = 1.7754, df = 19
+## p_value = 0.0459
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-28-1.png" width="100%" /&gt;
+
+---
+
+Method 2: stats
+
+
+```r
+t.test(x = diff_data$diff, alternative = c("greater"), mu=0)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  diff_data$diff
+## t = 1.7754, df = 19, p-value = 0.04593
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  0.3167385       Inf
+## sample estimates:
+## mean of x 
+##     12.15
+```
+
+
+---
+class: center, middle
+
+Your turn: Obtain confidence intervals
+
+---
+# Two-independent samples
+
+`\(H_0: \mu_M \leq \mu_F\)`  vs `\(H_1: \mu_M &gt; \mu_F\)`
+
+`\(\mu_M\)` - Population mean weight of male penguins
+
+`\(\mu_F\)` - Population mean weight of female penguins
+
+---
+# Two-independent samples
+
+
+```r
+library(palmerpenguins)
+data(penguins)
+inference(x=sex, y=flipper_length_mm ,data=penguins, alternative  = "greater", order = c("male", "female"), 
+          statistic="mean", 
+          type="ht",
+          method="theoretical")
+```
+
+```
+## Response variable: numerical
+## Explanatory variable: categorical (2 levels) 
+## n_male = 168, y_bar_male = 204.506, s_male = 14.5479
+## n_female = 165, y_bar_female = 197.3636, s_female = 12.5008
+## H0: mu_male =  mu_female
+## HA: mu_male &gt; mu_female
+## t = 4.8079, df = 164
+## p_value = &lt; 0.0001
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-30-1.png" width="100%" /&gt;
+
+---
+
+
+```
+## Response variable: numerical
+## Explanatory variable: categorical (2 levels) 
+## n_male = 168, y_bar_male = 204.506, s_male = 14.5479
+## n_female = 165, y_bar_female = 197.3636, s_female = 12.5008
+## H0: mu_male =  mu_female
+## HA: mu_male &gt; mu_female
+## t = 4.8079, df = 164
+## p_value = &lt; 0.0001
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-31-1.png" width="100%" /&gt;
+
+
+---
+class: center, middle
+
+# ANOVA: using `statsr` package
+
+---
+
+
+
+```r
+ggplot(penguins, aes(x=flipper_length_mm, y=species)) + geom_boxplot() +  stat_summary(fun.x=mean, colour="darkred", geom="point", size=5)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-32-1.png" width="100%" /&gt;
+
+---
+
+
+```r
+#Notches are used to compare groups; if the notches of two boxes do not overlap,
+#this suggests that the medians are significantly different
+ggplot(penguins, aes(x=flipper_length_mm, y=species)) + geom_boxplot(notch = TRUE)
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-33-1.png" width="100%" /&gt;
+
+
+---
+
+
+```r
+library(magrittr)
+penguins &lt;- penguins %&gt;%
+  na.omit() # remove missing values
+inference(x=species, y=flipper_length_mm ,data=penguins,
+          statistic="mean", 
+          type="ht",
+          method="theoretical")
+```
+
+---
+
+
+```
+## Response variable: numerical
+## Explanatory variable: categorical (3 levels) 
+## n_Adelie = 146, y_bar_Adelie = 190.1027, s_Adelie = 6.5218
+## n_Chinstrap = 68, y_bar_Chinstrap = 195.8235, s_Chinstrap = 7.1319
+## n_Gentoo = 119, y_bar_Gentoo = 217.2353, s_Gentoo = 6.5854
+## 
+## ANOVA:
+##            df     Sum_Sq    Mean_Sq       F  p_value
+## species     2 50525.8836 25262.9418 567.407 &lt; 0.0001
+## Residuals 330  14692.753    44.5235                 
+## Total     332 65218.6366                            
+## 
+## Pairwise tests - t tests with pooled SD:
+## # A tibble: 3 × 3
+##   group1    group2      p.value
+##   &lt;chr&gt;     &lt;chr&gt;         &lt;dbl&gt;
+## 1 Chinstrap Adelie    1.25e-  8
+## 2 Gentoo    Adelie    2.68e-106
+## 3 Gentoo    Chinstrap 3.37e- 63
+```
+
+&lt;img src="hypothesis_testing_22_files/figure-html/unnamed-chunk-35-1.png" width="100%" /&gt;
+
+
+---
+
+
+---
+
+class: center, middle
+
+## Thank you!
+
+Slides available at: hellor.netlify.app
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
