@@ -176,5 +176,4 @@ Go to LMS. Deadline: TBA
 |[TidyTuesday](https://www.youtube.com/user/safe4democracy/videos)|
 |:-:	|
 
-
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">I am completely stunned by this gorgeous canvas created by one of my students. This image was created using a script written based on the R programming language. Thank you so much <a href="https://twitter.com/janithcwanni?ref_src=twsrc%5Etfw">@janithcwanni</a> <a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/rstudio?src=hash&amp;ref_src=twsrc%5Etfw">#rstudio</a> <a href="https://twitter.com/hashtag/genart?src=hash&amp;ref_src=twsrc%5Etfw">#genart</a> <a href="https://t.co/VaKAmqnUkX">pic.twitter.com/VaKAmqnUkX</a></p>&mdash; Thiyanga Talagala (@thiyangt) <a href="https://twitter.com/thiyangt/status/1566784755181371392?ref_src=twsrc%5Etfw">September 5, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+[Happy Learning with R](/slides/twitter.html)
