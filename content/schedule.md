@@ -159,7 +159,7 @@ Go to LMS. Deadline: TBA
 
 #### Week 15: Hypothesis Testing: Physical
 
-|[Slides-2022](/slides/hypothesis_testing_22.html) [Slide - 2021 notes](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
+|[Slides-2022](/slides/hypothesis_testing_22.html) [Slide - 2021 notes](https://hellor.netlify.app/slides/Hypothesis_testing.pdf)    	|  Reading - 2nd year Inference Notes and [this](https://www.rebeccabarter.com/blog/2018-12-04_hypothesis_testing/) 	|  Cheat sheet 	| R-script | [Problems](https://hellor.netlify.app/problems/Hypothesis_questions.pdf) 	| Answers |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
 
 
