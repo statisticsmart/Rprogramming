@@ -1,0 +1,49 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Assignment 1 
+
+Date: 12 September 2022
+
+Select a `geom_*` function (for example geom_polygon). Make sure that your selected `geom_*` is not explained in any lecture slides. You are allowed to select geoms that I did not explain in https://hellor.netlify.app/slides/l122021.html#46 or new geoms from any other resource.
+
+Fill out the following google sheet with your chosen geom and index number: https://docs.google.com/spreadsheets/d/1OHcEEZdR3LqEfpfMOHRA-VpNCpAbDASSBzR6WICvfT0/edit?usp=sharing
+
+Furthermore, you are not allowed to select a geom that has been already selected by another student in https://docs.google.com/spreadsheets/d/1OHcEEZdR3LqEfpfMOHRA-VpNCpAbDASSBzR6WICvfT0/edit?usp=sharing
+
+
+
+Write 
+
+1. a brief explanation of the `geom_*`
+
+2. a ggplot to  demonstrate the application of the selected geom_*
+
+3. R codes and outputs
+
+Output type: You should arrange the content in an RMarkdown file. The output type should be HTML.
+
+Please submit both .Rmd and HTML file.
+
+Due Date: 19 September 2022
+
+## Example
+
+**geom_polygon**
+
+`geom_polygon` can be used to draw boundaries for different regions.
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(maps)
+library(tidyverse)
+world <- map_data("world")
+AUS <- world %>% filter(region == "Australia")
+ggplot(AUS) + 
+   geom_polygon(aes(x = long, y = lat, group = group))
+```

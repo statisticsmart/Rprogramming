@@ -218,8 +218,12 @@ test_even_odd <- function(x){
 
 ```{r, comment=FALSE}
 test_even_odd(5)
-test_even_odd(c(1,6))
 
+```
+
+```{r, eval=FALSE}
+test_even_odd(c(1,6))
+# returns an error
 ```
 
 ]
@@ -785,7 +789,7 @@ background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Green base - roses, small - dots, medium - stars, ...
+Green base - roses, Red - small dots, Pink - stars, ...
 
 .tr[
 
@@ -810,7 +814,7 @@ background-size: cover
 
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 
-Green base - roses, small - dots, etc..
+Green base - roses, Red - small dots, etc..
 
 .tr[
 
@@ -867,10 +871,10 @@ switch(c("a", "b"), "a" = "apple", # not working
 
 ## Multiple element - use `for` loop
 
-```{r, eval=FALSE}
+```{r}
 vect <- c("a", "b")
 for(i in seq(vect)){
-print(switch(i, "a" = "apple", # not working
+print(switch(i, "a" = "apple", 
        "b" = "banana",
        "c" = "cherry"))
 }
