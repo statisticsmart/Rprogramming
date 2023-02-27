@@ -1,0 +1,360 @@
+---
+title: "COVID 19 Armenia"
+author: "AS2019547"
+date: "10/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction of Armenia
+Armenia is a country in Southwestern Asia.The neighborhood countries of the Armenia are,Georgia,Azerbaijan,Iran,Nakhijevan and Turkey.Territory is about 29.74 thousand square kilometers. As of 2022 January 1,population of the country is 2961 thousand.
+
+### Climate 
+Armenia has significant annual variance in temperature.There are four seasons Winter that lasting from June to mid September,Summer, short Spring and long Autumn.in summer temperature is fluctuates between 22 and 36 Celsius.
+
+### Economy
+The economy of the Armenia relies heavily on investment and support from Armenians abroad.
+
+### Health
+In Armenia medical treatment in hospitals and clinics is free of charge for all citizens.
+
+
+
+
+
+
+
+```{r, comment=NA, warning=FALSE,echo=FALSE, eval=FALSE}
+install.packages("devtools")
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2019547")
+install.packages("coronavirus")
+library(coronavirus)
+```
+```{r,eval=FALSE,echo=FALSE}
+install.packages("tidyverse")
+install.packages("dplyr")
+library(dplyr)
+```
+
+# Exploratory Data Analysis
+
+```{r,warning=FALSE,eval=FALSE}
+# coronavirus data set & displaying first 6 rows of the data set.
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+```
+```{r,warning=FALSE,echo=FALSE,eval=FALSE}
+library(coronavirus)
+tail(coronavirus)
+```
+```{r,warning=FALSE,echo=FALSE,eval=FALSE}
+#To see the behavior and variables of the data set.
+?coronavirus
+```
+**There are 742560 observations of variables in the coronavirus data set.It contains the daily summary of Coronavirus cases,by state.**
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(dplyr)
+library(coronavirus)
+#filter the data of Armenia from the coronavirus data set.
+armenia_corona <- coronavirus %>% filter(country == "Armenia")
+head(armenia_corona)
+```
+**We can filter 2652 observations of Armenia COVID 19 cases from the coronavirus data set.The daily coronavirus cases collected from 2020-01-22 to 2022-06-23.**
+
+```{r,warning=FALSE,message=FALSE}
+#check the columns for missing data
+mean(armenia_corona)
+```
+There are missing values in the data set.
+
+
+```{r,comment=NA,warning=FALSE}
+# code missing values to NA
+armenia_corona <- armenia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(armenia_corona)
+```
+
+
+```{r,echo=FALSE}
+#install.packages("ggplot2")
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+ggplot(armenia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 cases")
+```
+
+**According to the above summary output and the figure  of the cases,maximum number of corona cases recorded within a day is 8319.And the minimum is 0.Average number of corona cases over the whole two years is 246.**
+
+
+
+```{r,warning=FALSE,echo=FALSE}
+#death_cases <- armenia_corona %>% filter(type=="death")
+confirmed_cases <- armenia_corona %>% filter(type=="confirmed")
+#death_cases
+#death_cases<-death_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(death_cases)
+confirmed_cases<-confirmed_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_cases$cases)
+```
+```{r}
+sum(confirmed_cases$cases)
+```
+
+
+```{r,echo=FALSE}
+#install.packages("ggplot2")
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+ggplot(confirmed_cases, aes(x=date, y=cases)) + geom_point() + ggtitle("Daily confirmed cases of COVID 19")
+```
+
+
+**This graph shows daily confirmed cases.According to the summary also maximum daily confirmed cases is 4388.All number of cases confimed over the time is 423104.We can see some cyclical & sesonal behaviour over the time.**
+
+
+
+```{r,warning=FALSE,echo=FALSE}
+recovery_cases <- armenia_corona %>% filter(type=="recovery")
+#recovery_cases
+recovery_cases<-recovery_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovery_cases$cases)
+sum(recovery_cases$cases,na.rm = TRUE)
+```
+
+
+
+
+```{r,echo=FALSE}
+#install.packages("ggplot2")
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+ggplot(recovery_cases , aes(x=date, y=cases)) + geom_point() + ggtitle("Daily recovery cases of COVID 19")
+```
+
+**There are no recovery cases at the beginning of 2020 and end of the 2022.In the end of 2020 & the beginning of 2021 there are some recovery cases than other time periods.**
+
+
+```{r,warning=FALSE,echo=FALSE}
+death_cases <- armenia_corona %>% filter(type=="death")
+#death_cases
+death_cases<-death_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_cases$cases)
+sum(death_cases$cases,na.rm = TRUE)
+```
+
+
+```{r,echo=FALSE}
+#install.packages("ggplot2")
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+ggplot(death_cases , aes(x=date, y=cases)) + geom_point() + ggtitle("Daily death cases of COVID 19")
+```
+
+
+**It can be see some seasonal pattern in the death cases in both two years.The highest death cases happened in the last of 2021**
+
+
+```{r,echo=FALSE,include=FALSE}
+ggplot(data = armenia_corona) +
+  geom_bar(mapping = aes(x = type))
+          
+```
+
+
+```{r,echo=FALSE}
+ggplot(armenia_corona, aes(x=type, y=cases)) + geom_col() + ggtitle("number of confirmed,death & recovery COVID 19 cases ") + ylim(0,30000)
+```
+**As a total number of confirmed cases and number of recovery cases are approximatly same.Total number of death cases are lesser than confirmed and recoveries.**
+
+
+```{r,echo=FALSE}
+ggplot(armenia_corona, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+
+```{r,echo=FALSE}
+ggplot(armenia_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Confirmed,Recovered and death cases") + ylim(0,10000)
+```
+**According to the above two figures.Since the year 2020 to first half of 2021,there is no significant difference between confirmed and recovery cases.At the end of 2020 there is higher recovery cases with compared to the confirmed cases.After the first half of the year 2021,there can not be seen any recovery cases.Death cases can be seen as insignificant with respect to other two cases.** 
+
+```{r,echo=FALSE}
+tab <- matrix(c(423104, 8631, 220438, 478.6, 9.775, 249.6, 4388, 70, 8319.0,64.876,1.323,33.800), ncol=3, byrow=TRUE)
+colnames(tab) <- c('confirmed','death','recovered')
+rownames(tab) <- c('total','mean','max','total percentage')
+tab <- as.table(tab)
+tab
+```
+**AS a summery ,death corona case percentage is very small.Confirmed percentage is as twice as recovered.**
+
+# Comparison with other countries.
+
+*Iran*
+```{r,echo=FALSE}
+iran_corona <- coronavirus %>% filter(country == "Iran")
+#iran_corona
+iran_corona <- iran_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(iran_corona$cases)
+iran_corona_confirmed <- iran_corona %>% filter(type == "confirmed")
+iran_corona_recovered <- iran_corona %>% filter(type == "recovery")
+#iran_corona_recovered
+iran_corona_death <- iran_corona %>% filter(type == "death")
+#iran_corona_death
+```
+
+
+*Turkey*
+```{r,echo=FALSE}
+turkey_corona<-coronavirus %>% filter(country == "Turkey")
+#turkey_corona
+turkey_corona <- turkey_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(turkey_corona$cases)
+turkey_corona_confirmed <- turkey_corona %>% filter(type == "confirmed")
+turkey_corona_recovered <- turkey_corona %>% filter(type == "recovery")
+turkey_corona_death <- turkey_corona %>% filter(type == "death")
+```
+*Georgia*
+```{r,echo=FALSE}
+georgia_corona<-coronavirus %>% filter(country == "Georgia")
+#georgia_corona
+georgia_corona <- georgia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(georgia_corona$cases)
+georgia_corona_confirmed <- georgia_corona %>% filter(type == "confirmed")
+georgia_corona_recovered <- georgia_corona %>% filter(type == "recovery")
+georgia_corona_death <- georgia_corona %>% filter(type == "death")
+```
+*Azerbaijan*
+```{r,echo=FALSE}
+azerbaijan_corona<-coronavirus %>% filter(country == "Azerbaijan")
+#azerbaijan_corona
+azerbaijan_corona <- azerbaijan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(azerbaijan_corona$cases)
+azerbaijan_corona_confirmed <- azerbaijan_corona %>% filter(type == "confirmed")
+azerbaijan_corona_recovered <- azerbaijan_corona %>% filter(type == "recovery")
+azerbaijan_corona_death <- azerbaijan_corona %>% filter(type == "death")
+```
+*nakhijevan*
+```{r,echo=FALSE}
+nakhijevan_corona<-coronavirus %>% filter(country == "Nakhijevan")
+#nakhijevan_corona
+nakhijevan_corona <- nakhijevan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(nakhijevan_corona$cases)
+nakhijevan_corona_confirmed <- nakhijevan_corona %>% filter(type == "confirmed")
+nakhijevan_corona_recovered <- nakhijevan_corona %>% filter(type == "recovery")
+nakhijevan_corona_death <- nakhijevan_corona %>% filter(type == "death")
+```
+
+*Syria*
+```{r,echo=FALSE}
+syria_corona<-coronavirus %>% filter(country == "Syria")
+#syria_corona
+syria_corona <- syria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(syria_corona$cases)
+syria_corona_confirmed <- syria_corona %>% filter(type == "confirmed")
+syria_corona_recovered <- syria_corona %>% filter(type == "recovery")
+syria_corona_death <- syria_corona %>% filter(type == "death")
+```
+*Sri Lanka*
+```{r,echo=FALSE}
+Sri_lanka_corona <- coronavirus %>% filter(country == "Sri Lanka")
+#Sri_lanka_corona
+Sri_lanka_corona <- Sri_lanka_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Sri_lanka_corona$cases)
+Sri_lanka_corona_confirmed <- Sri_lanka_corona %>% filter(type == "confirmed")
+Sri_lanka_corona_recovered <- Sri_lanka_corona %>% filter(type == "recovery")
+Sri_lanka_corona_death <- Sri_lanka_corona %>% filter(type == "death")
+```
+
+
+
+```{r,echo=FALSE}
+other_country_cases <- rbind(iran_corona,turkey_corona,georgia_corona,armenia_corona, azerbaijan_corona,nakhijevan_corona,syria_corona,Sri_lanka_corona)
+#other_country_cases
+```
+
+
+
+```{r,echo=FALSE}
+other_country_confirmed_cases <- rbind(iran_corona_confirmed,turkey_corona_confirmed,georgia_corona_confirmed,confirmed_cases, azerbaijan_corona_confirmed,nakhijevan_corona_confirmed,syria_corona_confirmed,Sri_lanka_corona_confirmed)
+```
+
+
+```{r,echo=FALSE}
+other_country_recovered_cases <- rbind(iran_corona_recovered,turkey_corona_recovered,georgia_corona_recovered,recovery_cases, azerbaijan_corona_recovered,nakhijevan_corona_recovered,syria_corona_recovered,Sri_lanka_corona_recovered)
+```
+
+
+```{r,echo=FALSE}
+other_country_death_cases <- rbind(iran_corona_death,turkey_corona_death,georgia_corona_death,death_cases, azerbaijan_corona_death,nakhijevan_corona_death,syria_corona_death,Sri_lanka_corona_death)
+```
+
+
+```{r,echo=FALSE}
+ggplot(other_country_cases, aes(x=country, y=cases)) + geom_col() + ggtitle("Total COVID cases") + ylim(0,5000)
+```
+
+**minimum corona cases are recorded in Turkey**
+
+```{r,echo=FALSE}
+ggplot(other_country_confirmed_cases, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed cases in some neighbour countries")
+```
+
+
+
+**IN the 2020 -2022 year time period ,most confirm cases are recorded among above contries from Turkey.secondly in Iran.**
+
+```{r,echo=FALSE}
+ggplot(other_country_recovered_cases, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of recovered cases in some neighbour countries")
+```
+
+
+
+**Recovery cases also high in Turkey.Other countries have approximatly similar number of recovery cases.**
+
+```{r,echo=FALSE}
+ggplot(other_country_death_cases, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of death cases in some neighbour countries")
+```
+**This box plot clearly shows Iran has the maximum death cases.It has very large significant difference among others.Second largest number of cases are in Turkey and thirdly Sri Lanka.Armenia and Azerbaijan has no significant difference.**
+
+
+
+
+# Discussion
+
+**According to the analysis of Armenia COVID 19 cases data set,we can't say that Armenia is extremely god or bad.They managed the deaths with respect to the confirmed cases.But after the first six months  2021 ,recovery cases are reduced.There fore Armenia should pay attention for recovering the COVID cases.Their number of confirmed cases are as twice as recoveries.Therefore make their attention to reduce corona cases by make COVID rules and health care followings,will be a  decision.**
+**Analyzing their neighborhood countries Iran & Turkey provide  surprising result of death cases.While others are surrounded countries,I choose Sri Lanka also compared as it is also a Asian country and as Sri Lankans our responsibility is save from COVID 19 by following health care rules.**
+
+
+
+
+# Conclusions
+
+  **In 2021-2022 Armenia has approximately 246 average daily corona cases.**
+  **Daily 249 cases are recognize as COVID.Approximately 9 people are died daily from COVID 19.**
+  **From the middle of the year 2020 to middle of the 2021 covid cases are managed somewhat good.**
+  **As overall Armenia controls the corona in their country somewhat good.**
+  **Among the neighboring countries Armenia also in same level from covid controlling.**
+
+
+## REFERENCES
+
+[1] https://www.britannica.com/place/Armenia/Settlement-patterns#ref44253
+
+[2] https://www.gov.am/en/
+
+[3] https://en.wikipedia.org/wiki/Armenia
+
+
+
+
+
+

@@ -1,0 +1,451 @@
+---
+title: "**The COVID-19 Pandemic in Zambia**"
+author: "A.M. Tirimanne (AS2019557)"
+output: html_document
+---
+```{r packages, echo=FALSE, message=FALSE}
+## Loading requisite packages
+
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(maps)
+library(maptools)
+library(RColorBrewer)
+library(knitr)
+
+```
+
+## **1.0 Introduction**
+
+### 1.1 - Location of Zambia
+```{r location, echo=FALSE, message=FALSE}
+
+## Location plot
+mapdata <- map_data("world")
+zam_map <- filter(mapdata,region=="Zambia")
+data("wrld_simpl")
+
+p0 <- ggplot() +
+  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="lightgreen", colour="black") +
+  ggtitle("Fig. 1 - Zambia on the World Map")
+
+p0 + geom_polygon(data = zam_map,aes(x=long,y=lat), fill="red", colour="black")
+```
+
+Zambia is a landlocked country located in South-Central Africa and is bordered by 8 countries, namely the Democratic Republic of the Congo to the north, Tanzania to the northeast, Malawi to the east, Mozambique to the southeast, Zimbabwe and Botswana to the south, Namibia to the southwest, and Angola to the west.
+
+### 1.2 - Geography and Climate
+
+* Zambia is the 38th largest country in the world at 290,587 sq.mi. 
+* Consists mostly of high plateaus with hills and mountains that are dissected by river valleys, with an average elevation of 1,200m above sea level giving the land a moderate tropical climate.
+* Average monthly temperatures of above 20 degrees Celsius persists for the majority of the year.
+* There are 2 major river basins in Zambia that keeps it drained, 1 is the Congo basin to the north and the other is the Zambezi basin towards the centre, west and south of the country. 
+* The Victoria Falls lies on the border between Zambia and Zimbabwe. 
+
+### 1.3 - A Brief Timeline of COVID-19 in Zambia
+
+**March, 2020**
+
+* 17th - Government shuts down all educational institutions and imposes restrictions on foreign travel.
+* 18th - First 2 cases are reported.
+
+**April, 2020**
+
+* 2nd - First death is reported.
+
+**December, 2020**
+
+* 30th - 501.V2 (Beta) variant is first detected in Zambia.
+
+**July, 2021**
+
+* 1st - Maximum number of deaths in a single day (up to present day) is recorded at 72.
+
+**December, 2021**
+
+* 4th - Omicron variant is first detected in 3 people.
+* 30th - Maximum number of confirmed cases in a single day (up to present day) is recorded at 5555.
+
+
+
+
+
+
+## **2.0 Exploratory Data Analysis**
+
+### 2.1 - Structure of the Dataset
+
+The initial dataset obtained from filtering only for Zambia from the "coronavirus" dataset consisted of 2652 observations recording the number of confirmed cases, recovered cases and deaths per day during the time period of 22/01/2022 - 23/06/2022.
+
+However, recovered cases beyond 05/08/2021 have not been recorded and were removed from the final dataset considered for analysis during the data cleaning process, resulting in the following dataset consisting of 2329 observations with a structure as can be seen below.
+
+As such, recovered cases were not considered in the analysis proper. 
+```{r obtaining/cleaning dataset, echo=FALSE, message=FALSE}
+
+## obtaining dataset
+
+data("coronavirus")
+zam_cov <- filter(coronavirus,country=="Zambia")
+
+## replace negative values with NA
+
+zam_cov <- zam_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+## filtering by case type
+
+zam_confirmed <- filter(zam_cov,type=="confirmed")
+zam_death <- filter(zam_cov,type=="death")
+zam_recov <- filter(zam_cov, type=="recovery") %>%
+              subset(date<"2021-08-05") # removal of missing values beyond this date
+
+## dataset
+zam_cov_full <- rbind(zam_confirmed,zam_death,zam_recov)
+zam_cov_final <- filter(zam_cov_full, type!="recovery")
+
+```
+```{r zambia data set}
+knitr::kable(head(zam_cov_full))
+summary(zam_cov_full)
+```
+
+
+### 2.2 - Zambia
+```{r overview plot, echo = FALSE,fig.width = 12}
+## Overview cases/deaths/recovered plot
+
+p1 <- ggplot(zam_cov_full,mapping=aes(x=date,y=cases, colour=type)) + 
+        geom_line(alpha=0.8) +
+        ggtitle("Fig. 2 - Zambia: Overview of Daily COVID-19 Cases/Deaths/Recovered") +
+        scale_y_sqrt()
+ggplotly(p1) %>%
+  layout(hovermode = "x")
+```
+**Some key takeaways from Fig. 2 - **
+
+* The time series plot for daily COVID-19 cases seems to indicate some seasonal pattern based on the data at hand, with increasing variance as time progresses. The plot for daily COVID-19 deaths does not show as clear of a pattern as that of daily cases, however both plots hit their peaks and valleys roughly in conjunction with one another, which suggests some correlation between the two at first glance.
+
+Peaks (roughly) - May 2020, July 2020, Jan 2021, Jun 2021, late Dec-early Jan 2022 
+
+Valleys (roughly) - Jun 2020, Oct/Nov 2020, May 2021, Nov 2021
+
+* The 1st death has been recorded on 2020-04-02, roughly 2 weeks after the 1st confirmed case on 2020-03-18.
+* The maximum number of confirmed cases on single day was on 2021-12-30, with 5555 cases and the maximum number of deaths on a single day was on 2021-07-01, with 72 deaths.
+
+
+```{r cumulative cases vs deaths plot, echo=FALSE, message=FALSE}
+## cumulative cases vs deaths plot
+
+p2 <- ggplot() + 
+          geom_area(zam_confirmed, mapping=aes(x=date,y=cumsum(cases), fill=type), colour="black") +
+          geom_area(zam_death, mapping=aes(x=date,y=cumsum(cases), fill=type), colour="black") +
+          ggtitle("Fig. 3 - Zambia: Total COVID-19 Cases vs Deaths") +
+          labs(y="cumulative cases") +
+          scale_y_sqrt()
+ggplotly(p2)
+```
+
+* Total confirmed COVID-19 infections accounts for roughly 1.8% of the population, with approximately a further 1.2%
+of those infected resulting in death.
+* Zambia has had approximately 80 times as many confirmed cases as they have deaths.
+
+*Note - The proportions of the stacked area graphs in the above figure are not immediately accurate as the cumulative totals on the y axis have been scaled by square root in order to better visualize the cumulative deaths plot* 
+
+
+### 2.3 - Zambia vs Neighbouring Countries
+
+A collection of neighbouring countries in the southern region of Africa were selected in order to compare COVID-19 data on a regional level, with 4 of the 5 chosen being countries that directly sit on the border of Zambia (i.e. Angola, Mozambique, Namibia and Zimbabwe) and the 5th being South Africa, a major player both politically and economically in the region that was severely affected during the COVID-19 pandemic.
+```{r regional data, echo=FALSE, message=FALSE}
+## obtaining and cleaning datasets
+
+# Namibia
+nam_cov <- filter(coronavirus, country=="Namibia") %>%
+  subset(type!="recovery")
+
+nam_cov <- nam_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+nam_cov$cases[1545] = mean(c(nam_cov$cases[1544], nam_cov$cases[1546]))
+
+# Zimbabwe
+zimb_cov <- filter(coronavirus, country=="Zimbabwe") %>%
+  subset(type!="recovery")
+
+zimb_cov <- zimb_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+zimb_cov$cases[102] = mean(c(zimb_cov$cases[101], zimb_cov$cases[103]))
+
+# South Africa
+rsa_cov <- filter(coronavirus, country=="South Africa") %>%
+  subset(type!="recovery")
+
+rsa_cov <- rsa_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+rsa_cov$cases[1619] = mean(c(zimb_cov$cases[1618], rsa_cov$cases[1620]))
+
+# Mozambique
+mozam_cov <- filter(coronavirus, country=="Mozambique") %>%
+  subset(type!="recovery")
+
+mozam_cov <- mozam_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+mozam_cov$cases[476] = mean(c(mozam_cov$cases[475], mozam_cov$cases[477]))
+mozam_cov$cases[1255] = mean(c(mozam_cov$cases[1254], mozam_cov$cases[1256]))
+
+# Angola
+ang_cov <- filter(coronavirus, country=="Angola") %>%
+  subset(type!="recovery")
+
+ang_cov <- ang_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ang_cov$cases[1145] = mean(c(ang_cov$cases[1144], ang_cov$cases[1146]))
+
+# complete Zambia vs neighbors data set
+nghbr_vs_zam <- rbind(ang_cov,nam_cov,rsa_cov,zimb_cov,mozam_cov,zam_cov_final)
+
+
+## data formatting
+
+grp_nam <- nam_cov %>% group_by(country, type, population) %>%
+            summarise(total_cases=sum(cases))
+nam1 <- pivot_wider(grp_nam, names_from = type, values_from = total_cases)
+
+
+grp_zimb <- zimb_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+zimb1 <- pivot_wider(grp_zimb, names_from = type, values_from = total_cases)
+
+
+grp_rsa <- rsa_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+rsa1 <- pivot_wider(grp_rsa, names_from = type, values_from = total_cases)
+
+
+grp_mozam <- mozam_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+mozam1 <- pivot_wider(grp_mozam, names_from = type, values_from = total_cases)
+
+
+grp_ang <- ang_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+ang1 <- pivot_wider(grp_ang, names_from = type, values_from = total_cases)
+
+
+grp_zam <- zam_cov_final %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+zam1 <- pivot_wider(grp_zam, names_from = type, values_from = total_cases)
+
+```
+
+```{r daily regional cases plot, echo=FALSE, message=FALSE, fig.width = 12}
+# TS of daily COVID-19 confirmed cases of neighboring countries
+nghbr_vs_zam_conf <- filter(nghbr_vs_zam, type=="confirmed")
+
+p3 <- ggplot(nghbr_vs_zam_conf, mapping=aes(x=date,y=cases, colour=country)) +
+        geom_line(alpha= 0.5) +
+        scale_colour_brewer(palette = "Dark2") +
+        ggtitle("Fig. 4 - Zambia vs Neighbouring Countries: Daily COVID-19 cases") +
+        scale_y_sqrt() 
+ggplotly(p3) %>%
+  layout(hovermode = "x")
+```
+
+* Upon pairwise comparison of the time series plots of daily confirmed COVID-19 cases in Fig. 4, Zambia exhibits an approximately similar distribution in its peaks and valleys of the plot to all the countries compared, except for Angola which appears to lag behind the other countries on the time scale and peaks when other countries are experiencing a valley and vice versa multiple times pre-2022.
+* South Africa shows a significantly greater number of confirmed cases throughout the plot, with the other 5 countries being more closely grouped together.
+* South Africa also recorded its first confirmed case in early March of 2020, followed by Namibia in mid March and finally Zambia, Zimbabwe, Angola and Mozambique respectively following soon after by mid-late March of the same year.
+
+
+
+```{r total cases/deaths, echo=FALSE, message=FALSE}
+# cumulative cases
+
+x1 <- nghbr_vs_zam_conf %>% group_by(country) %>% mutate(cum_sum= cumsum(cases))
+
+p4 <- ggplot(x1, mapping=aes(x=date, y=cum_sum, colour=country)) +
+        geom_line() +
+        ggtitle("Fig. 5 - Regional: Total COVID-19 Cases") +
+        scale_colour_brewer(palette = "Dark2") +
+        labs(y="cumulative cases") +
+        scale_y_sqrt() 
+ggplotly(p4) %>%
+  layout(hovermode = "x")
+
+# cumulative deaths
+
+nghbr_vs_zam_death <- filter(nghbr_vs_zam, type=="death")
+x2 <- nghbr_vs_zam_death %>% group_by(country) %>% mutate(cum_sum= cumsum(cases))
+
+p5 <- ggplot(x2, mapping=aes(x=date, y=cum_sum, colour=country)) +
+        geom_line() +
+        ggtitle("Fig. 6 - Regional: Total COVID-19 Deaths") +
+        scale_colour_brewer(palette = "Dark2") +
+        labs(y="cumulative cases") +
+        scale_y_sqrt() 
+ggplotly(p5) %>%
+  layout(hovermode = "x")
+
+```
+
+**By Fig. 5,**
+
+* We can see the discrepancy between South Africa and the rest with respect to confirmed cases even more clearly than in Fig. 4, with the total cases of the other 5 countries combined still amounting to less than a third of South Africa's. (approximately 4 million vs 1.1 million)
+
+* Zambia shows the 2nd highest count of total cases amongst those considered at appr. 325,000, around 70,000 cases more than the next highest, Zimbabwe.
+
+* Angola has the lowest count of total cases at appr. 100,000 by a relatively sized margin in comparison to the differences between non South African countries. (gap of appr. 70,000 between itself and the next lowest, Namibia)
+
+**By Fig. 6,**
+
+* The contrast in the total deaths values are even more stark than total cases when considering South Africa vs the rest, as South Africa's death count is more than 5 times as much as the others combined.
+
+* Total death counts of the non South African countries are similar relatively speaking, with Angola having the lowest as was the case with total cases. Zambia despite having the 2nd highest number of total cases by a decent margin is only the 4th highest in total death count.
+
+
+```{r total cases/deaths as a pop%, echo=FALSE, message=FALSE, fig.width = 12}
+# Combine into a df with counts 
+nghbr_counts<- rbind(zam1, ang1, zimb1, rsa1, nam1, mozam1) %>%
+  mutate(infection_perc= (confirmed/population)*100, death_perc= (death/confirmed)*100)
+
+nghbr_rates <- nghbr_counts %>% select(country, infection_perc, death_perc) %>%
+                        pivot_longer(cols = c("infection_perc", "death_perc"), names_to = "perc", values_to = "value")
+
+# col graph of infection rate and death rate
+p6 <- ggplot(nghbr_rates, mapping=aes(x=reorder(country, +value),y=value, fill=perc)) + 
+        geom_col(position = "dodge") +
+        ggtitle("Fig. 7 - Regional: Infection Rate (% of cases wrt population) and Death Rate (% of deaths wrt cases)") +
+        labs(x="country",y="percentage")
+ggplotly(p6)
+```
+
+
+* South Africa continues to have the highest infection rate even when adjusted for population.
+* Namibia, despite having the 2nd lowest total COVID-19 cases among countries compared, has an infection rate that is almost equal to that of South Africa's. A similar, but not as drastic change is seen in Namibia's death rate too, as it trails South Africa's leading death rate only by appr. 0.15.
+* Zambia is 1 of 3 countries to have a higher infection rate than a death rate, the others being Namibia and South Africa. Zambia also has the 2nd lowest death rate at appr. 1.2% with the next lowest being the 1% death rate of Mozambique.
+* Notably Angola shows a significantly lower infection rate of just 0.3% when compared to the rest, with the next lowest being Mozambique at 0.7% which is also quite low in and of itself as the others are all at least a full percentage point larger.
+
+### 2.4 - Zambia vs Some Countries from Around the World
+
+**Why the US, NZ, Sweden and Sri Lanka?**
+
+* The US is the country with the highest total COVID-19 cases and deaths recorded in the world.
+* NZ as their Government was known for their extremely swift imposition of lockdowns at the onset of the pandemic.
+* Sweden as they were known for their limited measures, notably that of no lockdowns.
+* SL for added context.
+
+
+```{r global infection/death rate comparison, echo=FALSE, message=FALSE, results='hide'}
+# data filtering
+# US
+US_cov <- filter(coronavirus, country=="US") %>% 
+            subset(type!="recovery")
+
+US_cov <- US_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(US_cov) 
+
+which(is.na(US_cov$cases)) 
+US_cov$cases[1757] = mean(c(US_cov$cases[1756], US_cov$cases[1758]))
+
+
+# NZ
+NZ_cov <- filter(coronavirus, country=="New Zealand") %>% 
+  subset(type!="recovery")
+
+NZ_cov <- NZ_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(NZ_cov) 
+
+which(is.na(NZ_cov$cases)) 
+NZ_cov$cases[980] = mean(c(NZ_cov$cases[979], NZ_cov$cases[981]))
+NZ_cov$cases[988] = mean(c(NZ_cov$cases[987], NZ_cov$cases[989]))
+NZ_cov$cases[1258] = mean(c(NZ_cov$cases[1257], NZ_cov$cases[1259]))
+NZ_cov$cases[1360] = mean(c(NZ_cov$cases[1359], NZ_cov$cases[1361]))
+
+# SL
+SL_cov <- filter(coronavirus, country=="Sri Lanka") %>% 
+  subset(type!="recovery")
+
+SL_cov <- SL_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(SL_cov) 
+
+which(is.na(SL_cov$cases)) 
+
+# sweden
+swe_cov <- filter(coronavirus, country=="Sweden") %>% 
+  subset(type!="recovery")
+
+swe_cov <- swe_cov %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(swe_cov) 
+
+which(is.na(swe_cov$cases)) 
+swe_cov$cases[958] = mean(c(swe_cov$cases[957], swe_cov$cases[959]))
+swe_cov$cases[1083] = mean(c(swe_cov$cases[1082], swe_cov$cases[1084]))
+swe_cov$cases[1108] = mean(c(swe_cov$cases[1107], swe_cov$cases[1109]))
+swe_cov$cases[1144] = mean(c(swe_cov$cases[1143], swe_cov$cases[1145]))
+swe_cov$cases[1165] = mean(c(swe_cov$cases[1164], swe_cov$cases[1166]))
+swe_cov$cases[1424] = mean(c(swe_cov$cases[1423], swe_cov$cases[1425]))
+swe_cov$cases[1440] = mean(c(swe_cov$cases[1439], swe_cov$cases[1441]))
+summary(swe_cov) 
+
+# data wrangling
+grp_US <- US_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+US1 <- pivot_wider(grp_US, names_from = type, values_from = total_cases)
+
+grp_NZ <- NZ_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+NZ1 <- pivot_wider(grp_NZ, names_from = type, values_from = total_cases)
+
+grp_SL <- SL_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+SL1 <- pivot_wider(grp_SL, names_from = type, values_from = total_cases)
+
+grp_swe <- swe_cov %>% group_by(country, type, population) %>%
+  summarise(total_cases=sum(cases))
+swe1 <- pivot_wider(grp_swe, names_from = type, values_from = total_cases)
+
+
+glbl_counts<- rbind(US1, NZ1, SL1, swe1, zam1) %>%
+  mutate(infection_perc= (confirmed/population)*100, death_perc= (death/confirmed)*100)
+
+glbl_rates <- glbl_counts %>% select(country, infection_perc, death_perc) %>%
+  pivot_longer(cols = c("infection_perc", "death_perc"), names_to = "perc", values_to = "value")
+
+```
+
+```{r global rates plot, echo=FALSE, message=FALSE, fig.width=12}
+p7 <- ggplot(glbl_rates, mapping=aes(x=reorder(country, +value),y=value, fill=perc)) + 
+  geom_col(position = "dodge") +
+  ggtitle("Fig. 8 - Global: Infection rate (% of cases wrt population) and Death rate (% of deaths wrt cases)") +
+  labs(x="country",y="percentage")
+ggplotly(p7)
+
+```
+
+* Zambia's death rate is the 2nd highest compared to the other countries on the plot save for Sri Lanka's, which is more than 2 times that of Zambia's.
+* The US, despite having claim to the highest number of COVID-19 cases and death totals in the world, still has a lower death rate than Zambia.
+* All countries plotted show higher infection rates than death rates.
+
+## **3.0 Conclusions and Discussion**
+
+### 3.1 - Conclusions
+
+* The spread of COVID-19 in Zambia (in terms of the timeline of daily cases and deaths) is consistent with that of its neighbours, except for Angola.
+* All of Zambia's immediate neighbours show similar totals in terms of confirmed case and death totals, except for South Africa.
+* Zambia's death rate is one of the lowest in the region.
+* Zambia hit its peak levels of daily COVID-19 cases in late Dec-early Jan of 2022 and peak daily COVID-19 deaths in early July of 2021.
+* Developed nations in the analysis such as Sweden, US, NZ showed significantly higher infection rates than the African countries and Sri Lanka.
+
+
+### 3.2 - Discussion
+
+* The missing values of recovered COVID-19 cases for Zambia narrows the scope of the analysis somewhat.
+* Countries having low infection rates may be due to under reporting of COVID-19 cases, especially since developed nations show significantly higher infection rates possibly due to increased expenditure and diligency towards testing.
+* A potential shortcoming of the death rate stat is that it is dependent on infection rate and such under reporting may lead to inflated death rates.
+* Death rate differences of countries may be within some margin of random error.
+* Due to the lack of demographic/socioeconomic data in the analysis, the impact of factors such as income, education, age etc are not distinguishable as reasons behind observed differences. 
+
+## **4.0 References**
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Zambia
+* https://en.wikipedia.org/wiki/Zambia
+* https://r-graphics.org/
+* https://www.musgraveanalytics.com/blog/2018/8/24/how-to-make-ggplot2-charts-interactive-with-plotly
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Sweden
+* https://covid19.who.int/data
+* https://hellor.netlify.app/slides/onlinehelpdesk

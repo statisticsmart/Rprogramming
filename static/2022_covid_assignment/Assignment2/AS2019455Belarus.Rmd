@@ -1,0 +1,296 @@
+---
+title: "AS2019455"
+author: "M.M.S.B.Munasinghe"
+date: "10/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## **01.Introduction**
+The COVID-19 pandemic, also known as the corona virus pandemic, is an ongoing global pandemic. It spread all over the world and affect the people health as well as their economic.In this report we try to talk about how COVID-19 affect the country Belarus.
+
+
+## 1.1.Brief Introduction about Belarus
+Belarus is officially the Republic of Belarus and a landlocked country in Eastern Europe.Covering an area of 207,600 square kilometres (80,200 sq mi) and with a population of 9.2 million, Belarus is the 13th-largest and the 20th-most populous country in Europe. The country has a hemiboreal climate and is administratively divided into seven regions. Minsk is the capital and largest city.
+
+Belarus has a population of 9.4 million people (in 2022). Spoken languages are Belarusian (official) 24%, but 70% speak Russian (official), there are small Polish- and Ukrainian-speaking minorities. Ethnic Belarusians, who speak a language closely related to Russian and Ukrainian, make up more than three-quarters of the population.Belarus is a developing country, ranking 60th in the Human Development Index.
+
+Belarus has trade relations with over 180 countries. The main trading partners are Russia, which accounts for about 45% of Belarusian exports and 55% of imports, and the EU countries, which account for 25% of exports and 20% of imports.
+
+
+```{r, echo=FALSE , message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = coronavirus %>% filter(country == "Belarus"), aes(x = long, y = lat), color = "red", size= 2)+
+    ggtitle("Figure 01 : Location of the Belarus")
+```
+
+# 1.2.Geography of Belarus
+
+ It is bordered by Russia to the east and northeast, Ukraine to the south, Poland to the west, and Lithuania and Latvia to the northwest.
+
+```{r,echo=FALSE,message=FALSE}
+
+pivot_corona <- coronavirus %>%
+  pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+compare_corona <- coronavirus %>% filter(country == c("Belarus", "Ukraine", "Poland", "Russia"))
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white") +
+  coord_cartesian(xlim = c(-60, 180), ylim = c(10, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = compare_corona, aes(x = long, y = lat, col = country), size= 5)+
+  ggtitle("Figure 02 : Neighbouring Countries of Belarus")
+```
+
+
+
+## **03.Exploratory Data Analysis**
+
+The COVID-19 pandemic in Belarus is part of the ongoing worldwide pandemic of corona virus disease 2019 (COVID-19). The virus was confirmed to have spread to Belarus, when the first case of COVID-19 in the country was registered in Minsk on 28 February 2020.According to the World Health Organization reports, a total of 15,582,410 vaccine doses gave to the people until 7th of October 2022.
+
+In this dataset contains the daily summary of COVID-19 cases according to the type of confirmed, death, and recovered data in Belarus.
+
+```{r ,echo=FALSE , message=FALSE,results='hide'}
+
+library(magrittr)
+belarus_corona <- coronavirus %>% filter(country == "Belarus")
+confirmed_belarus_corona <- belarus_corona %>% filter(type=="confirmed")
+death_belarus_corona <- belarus_corona %>% filter(type=="death")
+recovered_belarus_corona <- belarus_corona %>% filter(type=="recovery")
+
+confirmed_belarus_corona <- confirmed_belarus_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmed_belarus_corona$cases))
+
+death_belarus_corona <- death_belarus_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(death_belarus_corona$cases))
+
+recovered_belarus_corona <- recovered_belarus_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(recovered_belarus_corona$cases))
+recovered_belarus_corona$cases[75] = mean(c(recovered_belarus_corona$cases[74], recovered_belarus_corona$cases[76]))
+
+recovered_belarus_corona$cases[562] = mean(c(recovered_belarus_corona$cases[561], recovered_belarus_corona$cases[563]))
+length(recovered_belarus_corona$cases)
+
+recovered_belarus_corona$col <- as.factor(c(rep("black", 73),rep("red", 2), rep("black", 884-75)))
+recovered_belarus_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+
+```
+
+```{r , echo=FALSE, message=FALSE}
+ggplot(confirmed_belarus_corona, aes(x=date, y=cases)) +geom_line() + ggtitle("Figure 03 : Belarus Daily Covid-19 Confirmed")
+
+```
+
+In figure 03 shows the yearly variation of confirmed coronavirus cases in Belarus.According to this plot we can say from year 2020 to 2022 there is nearly same variation of the data and there is no significant increase or decrease was shown but the beginning of the year 2022 confirmed daily corona cases are increasing rapidly.Middle of the year 2022 corona cases are decreasing gradually and now number of cases come close to zero.
+
+```{r, echo=FALSE}
+ggplot(death_belarus_corona, aes(x=date, y=cases)) +geom_line() + ggtitle("Figure 04 : Belarus Daily Covid-19 Deaths")
+
+```
+
+Figure 04 shows that the beginning of the year 2020 there are least number of death cases and it is starting to increase nearly month of March in 2020.From that point death cases are gradually increasing to middle of the year 2022.Between the period of 2021 and 2022 we can see there is sudden increase as well as sudden decrease of the deaths in Belarus.Number of deaths are decreasing from the start of the year 2022.
+
+```{r, echo=FALSE,message=FALSE}
+ggplot(recovered_belarus_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity() + ggtitle("Figure 05 : Belarus Daily Covid-19 Recoveries")
+
+```
+
+According to the figure 05 start of the year 2020 is similar to figure 04 and gradually increasing to the middle of the year.After passing that period it is decreasing and close to zero.That means end of the year 2020 the recovery cases are decreasing.Again it starts to increasing from the end of the year 2020 to beginning of the year 2021.
+
+```{r, echo=FALSE,message=FALSE,results='hide'}
+belarus_corona <-belarus_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(belarus_corona)
+which(is.na(belarus_corona$cases))
+belarus_corona$cases[1843] = mean(c(belarus_corona$cases[1842], belarus_corona$cases[1844]))
+belarus_corona$cases[2330] = mean(c(belarus_corona$cases[2329], belarus_corona$cases[2331]))
+ggplot(belarus_corona, aes(x=date, y=cases, col=type)) + geom_line()+ggtitle("Figure 06 : COVID-19 Status in Belarus")
+```
+
+Considering the overall corona virus variation of the Belarus, confirmed and recovery cases shows nearly same variation and they have both upward and downward trend variation until middle of the year 2021.After that recovery cases shows sudden decrease and close to zero but confirmed cases kept on its variation continuously till now.Beginning of the year 2022 death and recovery cases might have come down but confirmed cases rapidly increasing because the second wave of the COVID-19 is started in that period.Attains to the end of the year 2022 confirmed cases were dropped below 2500 cases per day.Death cases are always in same range and does not show any remarkable increasing or decreasing.It means death rate is very low than confirmed cases in Belarus. 
+
+```{r, echo=FALSE,message=FALSE}
+belarus_active_cases <-  belarus_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+ggplot(belarus_active_cases,aes(x =date,y =total_active))+geom_line(color="blue")+ggtitle("Figure 07 : COVID-19 Total Acive Cases in Belarus")
+
+```
+
+Figure 07 shows the cumulative sums of the active cases in Belarus.
+
+```{r, echo=FALSE,message=FALSE,results='hide'}
+russia_corona <- coronavirus %>% filter(country == "Russia")
+summary(russia_corona)
+
+confirmed_russia_corona <- russia_corona %>% filter(type=="confirmed")
+death_russia_corona <- russia_corona %>% filter(type=="death")
+recovered_russia_corona <- russia_corona %>% filter(type=="recovery")
+
+confirmed_russia_corona <- confirmed_russia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmed_russia_corona$cases))
+
+death_russia_corona <- death_russia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(death_russia_corona$cases))
+
+recovered_russia_corona <- recovered_russia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(recovered_russia_corona$cases))
+recovered_russia_corona$cases[562] = mean(c(recovered_russia_corona$cases[561], recovered_russia_corona$cases[563]))
+
+russia_corona <-russia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(russia_corona$cases))
+russia_corona$cases[2330] = mean(c(russia_corona$cases[2329], russia_corona$cases[2331]))
+
+
+```
+
+
+```{r, echo=FALSE,message=FALSE,results='hide'}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+summary(ukraine_corona)
+
+confirmed_ukraine_corona <- ukraine_corona %>% filter(type=="confirmed")
+death_ukraine_corona <- ukraine_corona %>% filter(type=="death")
+recovered_ukraine_corona <- ukraine_corona %>% filter(type=="recovery")
+
+confirmed_ukraine_corona <- confirmed_ukraine_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmed_ukraine_corona$cases))
+
+death_ukraine_corona <- death_ukraine_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(death_ukraine_corona$cases))
+
+recovered_ukraine_corona <- recovered_ukraine_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(recovered_ukraine_corona$cases))
+recovered_ukraine_corona$cases[562] = mean(c(recovered_ukraine_corona$cases[561], recovered_ukraine_corona$cases[563]))
+
+ukraine_corona <-ukraine_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(ukraine_corona$cases))
+ukraine_corona$cases[2330] = mean(c(ukraine_corona$cases[2329], ukraine_corona$cases[2331]))
+
+
+```
+
+
+```{r, echo=FALSE,message=FALSE,results='hide'}
+poland_corona <- coronavirus %>% filter(country == "Poland")
+summary(poland_corona)
+
+confirmed_poland_corona <- poland_corona %>% filter(type=="confirmed")
+death_poland_corona <- poland_corona %>% filter(type=="death")
+recovered_poland_corona <- poland_corona %>% filter(type=="recovery")
+
+confirmed_poland_corona <- confirmed_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmed_poland_corona$cases))
+
+death_poland_corona <- death_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(death_poland_corona$cases))
+
+recovered_poland_corona <- recovered_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(recovered_poland_corona$cases))
+recovered_poland_corona$cases[58] = mean(c(recovered_poland_corona$cases[57], recovered_poland_corona$cases[56]))
+recovered_poland_corona$cases[540] = mean(c(recovered_poland_corona$cases[539], recovered_poland_corona$cases[541]))
+recovered_poland_corona$cases[546] = mean(c(recovered_poland_corona$cases[545], recovered_poland_corona$cases[547]))
+recovered_poland_corona$cases[562] = mean(c(recovered_poland_corona$cases[561], recovered_poland_corona$cases[563]))
+
+poland_corona <-poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(poland_corona$cases))
+poland_corona$cases[1826] = mean(c(poland_corona$cases[1825], poland_corona$cases[1827]))
+poland_corona$cases[2308] = mean(c(poland_corona$cases[2307], poland_corona$cases[2309]))
+poland_corona$cases[2314] = mean(c(poland_corona$cases[2313], poland_corona$cases[2315]))
+poland_corona$cases[2330] = mean(c(poland_corona$cases[2329], poland_corona$cases[2331]))
+
+
+```
+
+
+```{r,echo=FALSE,message=FALSE}
+neighbour_country <- as.data.frame(rbind(belarus_corona,russia_corona,poland_corona,ukraine_corona))
+countries_confirmed<- neighbour_country%>%filter(type=="confirmed")
+ggplot(countries_confirmed,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  ggtitle("Figure 08 : Comparison  of COVID-19 Confirmed Data between the Neighbouring Countries of Belarus")
+
+```
+
+When considering the confirmed cases of these four countries Belarus cases in range 0 to 50000 always because Belarus population is small than comparing other countries.According to the plot we can say Poland and Ukraine affect the pandemic in same way.Beginning of the year 2022 these countries shows same variation and same time points the cases are increasing suddenly.Highest cases were reported in Russia in that period.
+
+```{r,echo=FALSE,message=FALSE}
+neighbour_country <- as.data.frame(rbind(belarus_corona,russia_corona,poland_corona,ukraine_corona))
+countries_death<- neighbour_country%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  ggtitle("Figure 09 : Comparison  of COVID-19 Deaths between the Neighbouring Countries of Belarus")
+
+```
+
+Figure 09 shows the death cases of Belarus,Poland,Russia and Ukraine.These four countries represent four different variations in this situation.Belarus keep their death cases in low value continuously than other countries.Poland and Ukraine control pandemic situation in same way.Russia is the largest country in Asia and its population is very high.Therefore death cases are higher than other countries but Russia is control the death rate nearly similar as Poland and Ukraine. 
+
+```{r,echo=FALSE,message=FALSE}
+neighbour_country <- as.data.frame(rbind(belarus_corona,russia_corona,poland_corona,ukraine_corona))
+countries_recovery<- neighbour_country%>%filter(type=="recovery")
+ggplot(countries_recovery,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  ggtitle("Figure 10 : Comparison  of COVID-19 Recoveries between the Neighbouring Countries of Belarus")
+
+
+```
+
+Recovered patients are reported in same pattern in these four countries.Between the middle of the year 2020 and the end of the year 2021 there are large number of patients are recovered.Due to the decreasing the spread of corona virus recovery cases are dropped in the beginning of the year 2022 and now it is close to zero.
+
+
+## **04.Conclusions and Discussion**
+
+* According to this analysis we can conclude the government of Belarus control the pandemic situation in a favorable way.They always kept the daily death cases is very low value and Both confirmed and death cases are close to zero now in Belarus.
+* If the government continue to implement their health polices and regulations they can get rid of the COVID-19 at the end of the year 2022.
+
+## **05.References**
+
+https://en.wikipedia.org/wiki/Belarus
+
+https://hellor.netlify.app/
+
+https://covid19.who.int/region/euro/country/by
+
+

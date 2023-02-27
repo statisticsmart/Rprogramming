@@ -1,0 +1,507 @@
+---
+title: "Coronavirus country report of Lithuania"
+author: "M.V.P.Martis"
+date: "2022-10-05"
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1.0 Introduction
+
+  Republic of Lithuania, is a country in the Baltic region of Europe.[a] It is one of three Baltic states and lies on the eastern shore of the Baltic Sea. Lithuania shares land borders with Latvia to the north, Belarus to the east and south, Poland to the south, and Russia to the southwest.[b] It has a maritime border with Sweden to the west on the Baltic Sea. Lithuania covers an area of 65,300 km2 (25,200 sq mi), with a population of 2.8 million. Its capital and largest city is Vilnius; other major cities are Kaunas and Klaipėda. Lithuanians belong to the ethno-linguistic group of the Balts and speak Lithuanian, one of only a few living Baltic languages.
+
+## 1.1 some key indicators of Lithuania
+* **President**: Gitanas Nausėda 
+* **Capital city**: Vilnius
+* **Languages**: Lithuanian (official) 82%, Russian 8%, Polish 5.6%, other 0.9%, unspecified 3.5% (2011 est.)
+* **Population, persons**: 2,795,321 (2021)
+* **Area, sq km**: 62,630
+
+## 1.2 Location of Lithuania
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+Lithuani_corona <- coronavirus %>% 
+  filter(country == "Lithuania")
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Lithuani_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+
+
+## 1.3 Education
+
+According to the World Bank, the literacy rate among Lithuanians aged 15 years and older is 100%. School attendance rates are above the EU average and school leave is less common than in the EU. According to Eurostat Lithuania leads among other countries of the European Union in people with secondary education (93.3%).[406] Based on OECD data, Lithuania is among the top 5 countries in the world in postsecondary (tertiary) education attainment. As of 2016, 54.9% of the population aged 25 to 34, and 30.7% of the population aged 55 to 64 had completed tertiary education.[408] The share of tertiary-educated 25–64-year-olds in STEM (Science, technology, engineering, and mathematics) fields in Lithuania were above the OECD average (29% and 26% respectively), similarly to business, administration and law (25% and 23% respectively).
+
+## 1.4 Military
+
+The Lithuanian Armed Forces is the name for the unified armed forces of Lithuanian Land Force, Lithuanian Air Force, Lithuanian Naval Force, Lithuanian Special Operations Force and other units: Logistics Command, Training and Doctrine Command, Headquarters Battalion, Military Police. Directly subordinated to the Chief of Defence are the Special Operations Forces and Military Police. The Reserve Forces are under command of the Lithuanian National Defence Volunteer Forces.
+
+The Lithuanian Armed Forces consist of some 20,000 active personnel, which may be supported by reserve forces. Compulsory conscription ended in 2008 but was reintroduced in 2015.[224] The Lithuanian Armed Forces currently have deployed personnel on international missions in Afghanistan, Kosovo, Mali and Somalia.
+
+Lithuania became a full member of NATO in March 2004. Fighter jets of NATO members are deployed in Šiauliai Air Base and provide safety for the Baltic airspace.
+
+
+## 1.5 Culture 
+
+The Lithuanian language (lietuvių kalba) is the official state language of Lithuania and is recognized as one of the official languages of the European Union. There are about 2.96 million native Lithuanian speakers in Lithuania and about 0.2 million abroad.
+
+Lithuanian is a Baltic language, closely related to Latvian, although they are not mutually intelligible. It is written in an adapted version of the Roman script. Lithuanian is believed to be the linguistically most conservative living Indo-European tongue, retaining many features of Proto Indo-European. Lithuanian language studies are important for comparative linguistics and for reconstruction of Proto-Indo-European language. Lithuanian was studied by linguists such as Franz Bopp, August Schleicher, Adalbert Bezzenberger, Louis Hjelmslev,[426] Ferdinand de Saussure, Winfred P. Lehmann, Vladimir Toporov and others.
+
+
+## 1.6 Social-economic effects of the COVID-19 pandemic in Lithuania
+
+People are well informed about the COVID-19 pandemics in Lithuania. Thread of COVID-19 was seen as real and Lithuanians were in panic that affected their behaviour on purchasing consumer goods and services. Lithuanian economic sectors were affected differently. However, Lithuania has a mild social-economic effects of COVID-19, were more concerned about global issues related to the virus (spreading globally and in Europe, impact on economy and etc.) and less about personal, local and national issues (closure of Lithuanian borders, closure of schools and universities, crisis in tourism and other sectors).
+
+  
+# 2.0 Exploratory Data Analysis
+### **NOTE**
+
+ this analysis includes data only from 2020-01-22 to 2022-06-23 
+ 
+
+## 2.1 Summary of COVID-19 statistics in Lithuania
+### 2.1.1  Visualization of death, confirmed, recovered
+
+__total  of confirmed cases and deaths according to year__
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(coronavirus)
+library(kableExtra)
+full_table <- as_tibble(coronavirus)
+
+covid_confirmed <- full_table %>% 
+  filter(country == "Lithuania") %>% 
+  filter(type == "confirmed") %>% 
+  select(date ,country, type, cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  drop_na(date ,country, type, cases)
+  
+  
+covid_deaths <- full_table %>% 
+  filter(country == "Lithuania") %>% 
+  filter(type == "death") %>% 
+  select(date ,country, type, cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  drop_na(date ,country, type, cases)
+
+
+covid_recovered <- full_table %>%  
+  filter(country == "Lithuania") %>%
+  filter(type == "recovery") %>% 
+  select(date,country, type, cases) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  drop_na(date ,country, type, cases)
+
+#con
+#20
+             
+total_confirmed_2020 <- covid_confirmed %>% 
+  filter(date > "2020-01-22" & date <= "2020-12-31")
+
+total_cases_confirmed_2020 <- sum(total_confirmed_2020$cases)
+#21
+
+total_confirmed_2021 <- covid_confirmed %>% 
+  filter(date > "2020-12-31" & date <= "2021-12-31") 
+
+total_cases_confirmed_2021 <- sum(total_confirmed_2021$cases)
+#22
+
+total_confirmed_2022 <- covid_confirmed %>% 
+  filter(date > "2021-12-31" & date <= "2022-06-23") 
+
+total_cases_confirmed_2022 <- sum(total_confirmed_2022$cases)
+
+#deth
+#20
+total_death_2020 <- covid_deaths %>% 
+  filter(date > "2020-01-22" & date <= "2020-12-31")
+
+total_cases_death_2020 <- sum(total_death_2020$cases)
+#21
+
+total_death_2021 <- covid_deaths %>% 
+  filter(date > "2020-12-31" & date <= "2021-12-31") 
+
+total_cases_death_2021 <- sum(total_death_2021$cases)
+#22
+
+total_death_2022 <- covid_deaths %>% 
+  filter(date > "2021-12-31" & date <= "2022-06-23") 
+
+total_cases_death_2022 <- sum(total_death_2022$cases)
+
+#dataframe 
+y <- data.frame("year" = c(2020, 2020, 2021, 2021, 2022, 2022),
+                "type" = c("confirmed", "deaths",
+                           "confirmed","deaths",
+                           "confirmed","deaths"),
+                "total" = c(total_cases_confirmed_2020, total_cases_death_2020,
+                            total_cases_confirmed_2021, total_cases_death_2021,
+                            total_cases_confirmed_2022, total_cases_death_2022 ))
+table1 <- kable(y) %>% 
+  kable_styling() %>% 
+  kable_material_dark()
+table1
+
+
+```
+
+ __combined graphs according to year__
+ 
+
+**NOTE**
+
+* confirmed = grey colour
+* deaths = cyan colour
+* recovery = pink colour
+
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(coronavirus)
+library(kableExtra)
+full_table <- as_tibble(coronavirus)
+
+covid_confirmed <- full_table %>% 
+  filter(country == "Lithuania") %>% 
+  filter(type == "confirmed") %>% 
+  select(date ,country, type, cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  drop_na(date ,country, type, cases)
+  
+  
+covid_deaths <- full_table %>% 
+  filter(country == "Lithuania") %>% 
+  filter(type == "death") %>% 
+  select(date ,country, type, cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  drop_na(date ,country, type, cases)
+
+
+covid_recovered <- full_table %>%  
+  filter(country == "Lithuania") %>%
+  filter(type == "recovery") %>% 
+  select(date,country, type, cases) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) %>% 
+  drop_na(date ,country, type, cases)
+
+## all according to year
+covid_2020 <- coronavirus %>% 
+  filter(country == "Lithuania") %>% 
+  filter(date > "2020-01-22" & date <= "2020-12-31") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+covid_2021 <- coronavirus %>% 
+  filter(country == "Lithuania") %>% 
+  filter(date > "2020-12-31" & date <= "2021-12-31") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+covid_2022 <- coronavirus %>% 
+  filter(country == "Lithuania") %>% 
+  filter(date > "2021-12-31" & date <= "2022-06-23") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+#transformation
+minmax_trans <- function(x){
+  rng <- range(x, na.rm = TRUE)
+  trns  <- ((x - rng[1]) / (rng[2] - rng[1]))
+  return(trns)
+}
+### comb 2020
+c20 <-  covid_2020 %>% filter(type == "confirmed" ) 
+d20 <- covid_2020 %>% filter(type == "death" )
+r20 <- covid_2020 %>% filter(type == "recovery" )  
+#
+trns_2020_con <- c20 %>% mutate(cases = minmax_trans(c20$cases))
+trns_2020_det <- d20 %>% mutate(cases = minmax_trans(d20$cases))
+trns_2020_rec <- r20 %>% mutate(cases = minmax_trans(r20$cases))
+#
+combine_graph_2020 <- ggplot(, aes(date, cases)) +
+    geom_point(data = trns_2020_rec, col = "deeppink3") +
+    geom_point(data = trns_2020_det, col = "darkturquoise") +
+    geom_point(data = trns_2020_con, col = "darkslategrey") +
+    labs(y = "minmax transformed cases", title = "combined cases graph 2020")
+
+  combine_graph_2020
+  
+  ###comb 2021
+c21 <-  covid_2021 %>% filter(type == "confirmed" ) 
+d21 <- covid_2021 %>% filter(type == "death" )
+r21 <- covid_2021 %>% filter(type == "recovery" )  
+#
+trns_2021_con <- c21 %>% mutate(cases = minmax_trans(c21$cases))
+trns_2021_det <- d21 %>% mutate(cases = minmax_trans(d21$cases))
+trns_2021_rec <- r21 %>% mutate(cases = minmax_trans(r21$cases))
+#
+combine_graph_2021 <- ggplot(, aes(date, cases)) +
+    geom_point(data = trns_2021_rec, col = "deeppink3") +
+    geom_point(data = trns_2021_det, col = "darkturquoise") +
+    geom_point(data = trns_2021_con, col = "darkslategrey") +
+    labs(y = "minmax transformed cases", title = "combined cases graph 2021")
+
+  combine_graph_2021
+  
+  ### comb 2022
+c22 <-  covid_2022 %>% filter(type == "confirmed" ) 
+d22 <- covid_2022 %>% filter(type == "death" )
+r22 <- covid_2022 %>% filter(type == "recovery" )  
+#
+trns_2022_con <- c22 %>% mutate(cases = minmax_trans(c22$cases))
+trns_2022_det <- d22 %>% mutate(cases = minmax_trans(d22$cases))
+trns_2022_rec <- r22 %>% mutate(cases = minmax_trans(r22$cases))
+#
+combine_graph_2022 <- ggplot(, aes(date, cases)) +
+    geom_point(data = trns_2022_rec, col = "deeppink3") +
+    geom_point(data = trns_2022_det, col = "darkturquoise") +
+    geom_point(data = trns_2022_con, col = "darkslategrey") +
+    labs(y = "minmax transformed cases", title = "combined cases graph 2022")
+
+  combine_graph_2022
+  
+
+  
+```
+
+__In here we have boxplots of confirmed/recovery/deaths cases according to years __
+
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+library(ggpubr)
+ ## histros confirm
+  
+ covid_2020_con <-  covid_2020 %>% 
+   filter(type == "confirmed")
+ covid_2021_con <-  covid_2021 %>% 
+   filter(type == "confirmed")
+ covid_2022_con <-  covid_2022 %>% 
+   filter(type == "confirmed")
+ 
+ # hist death
+ 
+ covid_2020_det <-  covid_2020 %>% 
+   filter(type == "death")
+ covid_2021_det <-  covid_2021 %>% 
+   filter(type == "death")
+ covid_2022_det <-  covid_2022 %>% 
+   filter(type == "death") %>% 
+   drop_na(cases)
+ 
+ # hist recovery
+ 
+ covid_2020_rec <-  covid_2020 %>% 
+   filter(type == "recovery")
+ covid_2021_rec <-  covid_2021 %>% 
+   filter(type == "recovery") %>% 
+   drop_na(cases)
+ covid_2022_rec <-  covid_2022 %>% 
+   filter(type == "recovery")
+ 
+ 
+x <- rbind(covid_2020_con, covid_2021_con, covid_2022_con)
+ 
+ year_con <- ggplot(, aes(date, cases, alpha = 0.5)) + 
+  geom_boxplot(data = covid_2020_con,
+               col = "brown", 
+               fill = "brown", 
+               alpha = 0.5 ) +
+  geom_boxplot(data =  covid_2021_con, 
+               col = "deeppink3", 
+               fill = "deeppink3", 
+               alpha = 0.5) +
+  geom_boxplot(data = covid_2022_con, 
+               col =  "cyan3", 
+               fill = "cyan3", 
+               alpha = 0.5) +
+  ggtitle("confirmed cases of lithuania by years")
+ 
+ year_det <- ggplot(, aes(date, cases)) + 
+   geom_boxplot(data = covid_2020_det, 
+                col = "brown", 
+                fill = "brown", 
+                alpha = 0.5 ) +
+   geom_boxplot(data =  covid_2021_det, 
+                col = "deeppink3", 
+                fill = "deeppink3", 
+                alpha = 0.5) +
+   geom_boxplot(data = covid_2022_det, col =  "cyan3", fill = "cyan3", alpha = 0.5) +
+   ggtitle("death cases of lithuania by years")
+ 
+ year_rec <- ggplot(, aes(date, cases, alpha = 0.5)) + 
+   geom_boxplot(data = covid_2020_rec, 
+                col = "brown", 
+                fill = "brown", 
+                alpha = 0.5 ) +
+   geom_boxplot(data =  covid_2021_rec, 
+                col = "deeppink3", 
+                fill = "deeppink3", 
+                alpha = 0.5) +
+   geom_boxplot(data = covid_2022_rec, 
+                col =  "cyan3", 
+                fill = "cyan3", 
+                alpha = 0.5) +
+   ggtitle("recovery cases of lithuania by years")
+ 
+figure1 <- ggarrange(year_con, year_det, year_rec )
+figure1 
+ 
+```
+
+
+__here we have separate graphs for confirmed/deaths/recovery__
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+ country_lithuania <- full_table %>% 
+   filter(country == "Lithuania") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ ggplot(country_lithuania, aes(date, cases, group = type, col = type)) +
+   geom_point() +
+   facet_grid(type~.) + 
+   ylim(0,10000) +
+   scale_colour_manual(values = c("darkslategrey", "darkturquoise", "deeppink3"))
+ 
+```
+
+## 2.1.2 Comparison with other countries
+
+**1. latvia**
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+
+ lithu_latvia_confirmed <- full_table %>% 
+   filter(country == "Lithuania" | country == "Latvia") %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+
+lat<- ggplot(lithu_latvia_confirmed, 
+        aes(date, cases, group = country, col = country))+
+   geom_line() +
+   scale_colour_manual(values = c("darkslategrey", "darkturquoise"))+
+  ggtitle("confirmed cases of lithuania and latvia")
+
+lat
+```
+
+**belarus**
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+
+ lithu_belarus_confirmed <- full_table %>% 
+   filter(country == "Lithuania" | country == "Belarus") %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+
+bel<- ggplot(lithu_belarus_confirmed, 
+        aes(date, cases, group = country, col = country))+
+   geom_line() +
+   scale_colour_manual(values = c("darkslategrey", "darkturquoise"))+
+  ggtitle("confirmed cases of lithuania and belarus")
+
+bel
+```
+
+  **poland**
+
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+
+ lithu_poland_confirmed <- full_table %>% 
+   filter(country == "Lithuania" | country == "Poland") %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+
+pol<- ggplot(lithu_poland_confirmed, 
+   aes(date, cases, group = country, col = country))+
+   geom_line() +
+   scale_colour_manual(values = c("darkslategrey", "darkturquoise"))+
+   ggtitle("confirmed cases of lithuania and poland")
+
+pol
+```
+
+ **combined country graph**
+ 
+```{r,comment=NA, warning=FALSE, echo=FALSE, message=FALSE}
+
+all_country_confirmed <- full_table %>% 
+   filter(country == "Lithuania" | country == "Poland" | country == "Belarus" | country == "Latvia") %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+
+all_con <- ggplot(all_country_confirmed, 
+        aes(date, cases, group = country, col = country))+
+   geom_line() +
+   scale_colour_manual(values = c("darkslategrey", "darkturquoise", "deeppink3", "darkviolet")) + ggtitle("confirmed cases of lithuania/belarus/poland/latvia")
+
+all_con
+
+```
+ 
+## 3 Conclusions and Discussion
+
+#### 3.1 conclusion
+
++ in "combined graph 2020" we can see sudden rise of  all cases around month of november.
+
++ in "combined graph 2021"  there is a huge collapse in   confirmed cases around month of june.
+
++ in "combined graph 2022" we can see the number of confirmed cases had gradually decresed.
+
++ in those boxplot graphs we can have a knowledge about mean value of confirmed/death and recovery cases.
+
++ when comparing with countries like latvia and belarus which has approximatly same population shows similer kind of graph in confirmed cases
+
++ when comparing Lithuania  with poland which  has mush larger population that graph show s
+higher number of confirmed cases daily
+
+#### 3.2 discussion
+
+Despite the high rates of COVID-19 cases recorded in Lithuania in 2021 and the relatively strict 
+lockdown, the country’s economic indicators grew in 2021. Lithuania’s GDP growth in the first three 
+quarters of 2021 was 5.2% compared to the same period in 2020, which had a positive impact on the 
+overall working life situation in the country. Gross average wage in the country’s economy in the 
+third quarter of 2021 as compared to the third quarter in 2020 grew by approximately 9.9% and the 
+total unemployment rate fell from 9.3% to 6.7%. In June 2021, the number of job vacancies in 
+Lithuania reached the highest level over the past 30 years, with the number of job vacancies 
+reaching 60,600. In 2021, the country was particularly short of industrial workers, drivers of heavy 
+trucks and goods vehicles, loaders, salespeople, and construction workers
+
+# 4 references
+
+https://euagenda.eu/upload/publications/wpef22019.pdf
+
+https://en.wikipedia.org/wiki/Lithuania
+
+
+
+

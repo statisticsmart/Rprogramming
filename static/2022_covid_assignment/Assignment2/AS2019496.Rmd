@@ -1,0 +1,120 @@
+---
+title: "**Corona Virus Report In Azerbaijan**"
+author: "priyashantha"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(maps)
+library(maptools)
+```
+```{r pressure, echo=FALSE, fig.cap="", out.width = '100%'}
+knitr::include_graphics("Azerbaijan.png")
+  
+```
+'<br>'
+
+
+## Introduction
+The World Health Organization (WHO), which received a report of the respiratory ailment in a group of persons in Wuhan City, Hubei Province, China, on December 31, 2019, determined on January 12 that a new coronavirus was the culprit.
+
+Compared to SARS in 2003, the case fatality ratio for COVID-19 has been significantly lower.
+
+ however there have been a considerable number of deaths overall and a significantly increased rate of transmission.
+
+ The 95% confidence interval for the time-varying reproduction number Rt, according to model-based simulations, was less than 1.0 in July and August of 2020 but more than 1.0 in October and November.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+data(wrld_simpl)
+Azerbaijan_corona <- coronavirus %>% filter(country == "Azerbaijan")
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Azerbaijan_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+'<br>'
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+  
+```
+
+
+
+## Data Filtering
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+recovered_Azerbaijan_corona <- Azerbaijan_corona %>% filter(type=="confirmed")
+summary(recovered_Azerbaijan_corona)
+recovered_Azerbaijan_corona <- recovered_Azerbaijan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovered_Azerbaijan_corona)
+which(is.na(recovered_Azerbaijan_corona$cases))
+recovered_Azerbaijan_corona$cases[828] = mean(c(recovered_Azerbaijan_corona$cases[827], recovered_Azerbaijan_corona$cases[829]))
+length(recovered_Azerbaijan_corona$cases)
+
+
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+death_Azerbaijan_corona <- Azerbaijan_corona %>% filter(type=="death")
+summary(death_Azerbaijan_corona)
+which(is.na(death_Azerbaijan_corona$cases))
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(death_Azerbaijan_corona, aes(x=date, y=cases)) + geom_line()+labs(x='Date',y='No of Death')
+```
+
+
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(recovered_Azerbaijan_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Azerbaijan: Daily Covid-19 Recoveries")
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+ggplot(recovered_Azerbaijan_corona, aes(cases)) +
+  geom_freqpoly(bins = 9)+ ggtitle("Azerbaijan: number of recovered cases")
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(recovered_Azerbaijan_corona, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="red")
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Azerbaijan_corona <- coronavirus %>% filter(country == "Azerbaijan")
+head(Azerbaijan_corona)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(Azerbaijan_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+
+

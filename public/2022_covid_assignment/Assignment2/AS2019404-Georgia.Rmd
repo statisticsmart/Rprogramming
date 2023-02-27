@@ -1,0 +1,378 @@
+---
+title: "THE COVID-19 PANDEMIC IN GEORGIA"
+author: "D.B Joseph"
+date: "2022-10-06"
+output: html_document
+---
+
+# 1. Introduction
+
+Georgia (Georgian: საქართველო, romanized: Sakartvelo; IPA: [sɑkʰɑrtʰvɛlɔ] (listen)) is a transcontinental country at the intersection of Eastern Europe and Western Asia. It is part of the Caucasus region, bounded by the Black Sea to the west, by Russia to the north and east, by Turkey to the southwest, by Armenia to the south, and by Azerbaijan to the southeast. The country covers an area of 69,700 square kilometres (26,900 sq mi), and has a population of 3.7 million people.[b][9] Tbilisi is its capital as well as its largest city, home to roughly a third of the Georgian population.
+
+During the classical era, several independent kingdoms became established in what is now Georgia, such as Colchis and Iberia. In the early 4th century, ethnic Georgians officially adopted Christianity, which contributed to the spiritual and political unification of the early Georgian states. In the Middle Ages, the unified Kingdom of Georgia emerged and reached its Golden Age during the reign of King David IV and Queen Tamar in the 12th and early 13th centuries. Thereafter, the kingdom declined and eventually disintegrated under the hegemony of various regional powers, including the Mongols, the Timurids, the Ottoman Empire, and the successive dynasties of Persia. In 1783, one of the Georgian kingdoms entered into an alliance with the Russian Empire, which proceeded to annex the territory of modern Georgia in a piecemeal fashion throughout the 19th century.
+
+After the Russian Revolution in 1917, Georgia emerged as an independent republic under German protection.[10] Following World War I, Georgia was invaded and annexed by the Soviet Union in 1922, becoming one of its constituent republics. By the 1980s, an independence movement emerged and grew quickly, leading to Georgia's secession from the Soviet Union in April 1991. For most of the subsequent decade, post-Soviet Georgia suffered from economic crisis, political instability, ethnic conflict, and secessionist wars in Abkhazia and South Ossetia. Following the bloodless Rose Revolution in 2003, Georgia strongly pursued a pro-Western foreign policy; it introduced a series of democratic and economic reforms aimed at integration into the European Union and NATO. The country's Western orientation soon led to worsening relations with Russia, which culminated in the Russo-Georgian War of 2008; Russia has since been occupying a portion of Georgia.
+
+Georgia is a representative democracy governed as a unitary parliamentary republic.[11][12] It is a developing country with a very high human development. Economic reforms since independence have led to higher levels of economic freedom, as well as reductions in corruption indicators, poverty, and unemployment. It was one of the first countries in the world to legalize cannabis, becoming the only former-socialist state to do so. The country is a member of international organizations across Europe and Asia, such as the Council of Europe, the OSCE, Eurocontrol, the EDRB, the BSCE, the GUAM, the ADB, the WTO, and the Energy Community.
+
+
+## location
+
+Georgia, a country at the intersection of Europe and Asia, is a former Soviet republic that’s home to Caucasus Mountain villages and Black Sea beaches. It’s famous for Vardzia, a sprawling cave monastery dating to the 12th century, and the ancient wine-growing region Kakheti. The capital, Tbilisi, is known for the diverse architecture and mazelike, cobblestone streets of its old town.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(ggpubr)
+data("wrld_simpl")
+```
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+Georgia_corona <- coronavirus %>% filter(country == "Georgia")
+
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), 
+                             fill = "light blue", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90,90)) + 
+  scale_x_continuous(breaks = seq(-180,180,120)) +
+  scale_y_continuous(breaks = seq(-90,90,100))
+
+p +
+  geom_point(
+    data = Georgia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  ) + ggtitle("Visualization of Georgia")
+
+```
+
+Figure 1: Location of Georgia.
+
+## Climate
+
+In the western part of Georgia the climate is subtropical, while in the eastern part experiences a dry moderate continental climate. Annual precipitation in Georgia ranges from 400 to 4,500 mm. Due to its location at a relatively low latitude and moderate cloudiness, Georgia receives significant heat from the sun.
+
+
+
+
+# 2. Exploratory Data Analysis
+
+Considering the coronavirus analysis of Goergia, there are main facts to be consider. 
+They are,
+
+  * Confirmed cases
+  * Death cases
+  * Recovered cases
+
+In this coronavirus data set, we are considering incidents happened from 22.01.2020 to 23.06.2022 range.  
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE,comment=NA}
+
+
+Georgia_corona <- coronavirus %>% filter (country == "Georgia")%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(Georgia_corona)
+
+```
+
+
+### 2.1 Confirmed Data of Georgia.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+
+Corona_country <- as.tibble(coronavirus)
+Georgia_corona_confirmed <- coronavirus %>% filter(country == "Georgia") %>% 
+  filter(type == "confirmed") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+ggplot(Georgia_corona_confirmed,aes(x=date,y=cases)) + geom_line(colour = "red")+ 
+  ggtitle("Georgia:Daily Covid-19 confirmed cases.") 
+
+
+
+```
+
+Figure 2: Time series plot of coronavirus confirmed cases.
+
+
+The above figure 2 shows the number of daily COVID-19 confirmed cases in Georgia from 22.01.2020 tO 23.06.2022.According to that we can see that the number of Covid cases confirmed in the year 2020 is very low. After that it was increased and the maximum number of confirmed cases reported on 2022.
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+ggplot(Georgia_corona_confirmed, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5, fill="forestgreen") + 
+  geom_freqpoly(bins = 9, col="red")+
+  ggtitle("Histogram and Frequency polygon for confirmed cases.")
+
+
+```
+
+Figure 3:Distribution of number of coronavirus confirmed cases.
+
+According to above figure 3 we can see that from 22.01.2020 to 23.06.2022 majority days do not have coronavirus confirmed patients.
+
+
+### 2.2 Recovered Data of Georgia.
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+Georgia_corona_recovered <- coronavirus %>% filter(country == "Georgia") %>% 
+  filter(type == "recovery") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+ggplot(Georgia_corona_recovered,aes(x=date,y=cases)) + geom_line(colour = "red")+ 
+  ggtitle("Georgia:Daily Covid-19 recovered cases.") 
+
+```
+
+Figure 4: Time series plot of recovered cases.
+
+
+Above figure 4 shows that the graphical representation of recovered cases out of confirmed cases.There is some upward and downward trend. According to figure we can see that confirmed patients have recovered in Georgia after middle of 2020. After that it can be clearly seen that number of coronavirus recovered patients has increased in 2021.Middle of the year 2021 number of coronavirus recovered patients has decreases. 
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(Georgia_corona_recovered, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5, fill="forestgreen") + 
+  geom_freqpoly(bins = 9, col="red")+
+  ggtitle("Histogram and Frequency polygon for recovered cases.")
+
+```
+
+Figure 5:Distribution of number of coronavirus recovered cases.
+
+Considering between 22.01.2020 to 23.06.2022 period, it can be seen that 
+majority days recovered below about 1500 corona virus confirmed patients per day.
+
+### 2.3 Deaths Data of Georgia.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+Georgia_corona_Death <- coronavirus %>% filter(country == "Georgia") %>% 
+  filter(type == "death") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+ggplot(Georgia_corona_Death,aes(x=date,y=cases)) + geom_line(colour = "red")+ 
+  ggtitle("Georgia:Daily Covid-19 death cases.") 
+
+```
+
+Figure 6: Time series plot of death cases.
+
+
+The above figure 6 also shows some upward and downward trend. According to figure we can see that number of death cases in 2020 is very minimal.At the beginning of 2021 it shows higher number of death cases compare to the year 2020. Then again it has decreases in middle of 2021.In 2022 number of death cases has shows maximum value.
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(Georgia_corona_Death, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5, fill="forestgreen") + 
+  geom_freqpoly(bins = 9, col="red")+
+  ggtitle("Histogram and Frequency polygon for death cases.")
+
+```
+
+
+Figure 7: Distribution of number of coronavirus deaths.
+
+According to figure 7 we can say that below 75 deaths has been occurred per day in that given time period.
+
+
+### 2.4 Comparison of Coronavirus data.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+Georgia_corona <- coronavirus %>% filter(country == "Georgia") %>% 
+  select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+
+ggplot(Georgia_corona, aes(x=date, y=cases, col=type)) + geom_line() +
+  ggtitle("Georgia:Daily Covid-19 details.") + facet_grid(type~.)
+
+```
+
+Figure 8:Time series plot of Coronavirus cases.
+
+
+According to above figure 8 it can be clearly seen that minimum number of patients has died comparing with number of coronavirus confirmed patients. Majority of coronavirus confirmed patients has recovered from 2020 to middle of 2021.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+Georgia_corona <- coronavirus %>% filter (country == "Georgia")
+Russia_corona <- coronavirus %>% filter(country == "Russia")
+Armenia_corona <- coronavirus %>% filter(country == "Armenia")
+
+corona <- rbind(Georgia_corona,Russia_corona,Armenia_corona)
+corona_confirmed <- corona %>% filter(type=="confirmed")
+gg9 <- ggplot(corona_confirmed, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,25000)
+
+corona_deaths <- corona %>% filter(type=="death")
+gg10 <- ggplot(corona_deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Deaths")
+
+corona_recovered <- corona %>% filter(type=="recovery")%>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+gg11 <- ggplot(corona_recovered, aes(x=country, y=cases)) + geom_col() + ggtitle("Recoveries")
+
+theme_set(theme_pubr())
+figureB <- ggarrange(gg9, gg10, gg11)
+figureB
+
+```
+
+Here we can see as summary of all the confirmed, death, recovery cases.
+
+# 3. Comparison with neighboring countries.
+
+## 3.1 Georgia compare with Russia, Armenia and Azerbaijan.
+
+**Russia:**
+
+  + Russia, the largest country in the world, occupies one-tenth of all the land on Earth. It spans 11 time zones across two continents (Europe and Asia) and has coasts on three oceans (the Atlantic, Pacific, and Arctic). The Russian landscape varies from desert to frozen coastline, tall mountains to giant marshes.
+
+**Armenia:**
+
+  + Armenia is a landlocked country in Southwestern Asia or Eurasia. It is situated at the gateway between Western Asia and Eastern Europe and bordered by Azerbaijan, Georgia, Iran, and Turkey. Located in the Lesser Caucasus Mountains, Armenia is a mountainous region with fast-flowing rivers.
+  
+**Azerbaijan:**
+
+  + Azerbaijan is a landlocked country in Southwestern Asia located at the crossroads of Eastern Europe and Western Asia. It is bounded by the Caspian Sea, Russia, Georgia, Armenia, and Iran. The government system is a republic; the chief of state is the president, and the head of government is the prime minister.
+  
+  
+### 3.1.1 Comparison with confirmed.
+
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+Georgia_corona_confirmed <- coronavirus %>% filter(country == "Georgia") %>% 
+  filter(type == "confirmed") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Russia_corona_confirmed <- coronavirus %>% filter(country == "Russia") %>% 
+  filter(type == "confirmed") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+
+
+Armenia_corona_confirmed <- coronavirus %>% filter(country == "Armenia") %>% 
+  filter(type == "confirmed") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Azerbaijan_corona_confirmed <- coronavirus %>% filter(country == "Azerbaijan") %>% 
+  filter(type == "confirmed") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Neighboring_countries1 <- rbind(Georgia_corona_confirmed, Russia_corona_confirmed, 
+                               Armenia_corona_confirmed,
+                               Azerbaijan_corona_confirmed)
+
+ggplot(Neighboring_countries1, aes(x=date, y= cases, col= country))+geom_line()+
+  ggtitle("Confirmed cases in Georgia's neighboring countries.") 
+
+
+```
+
+Figure 09: Comparing Time series plots of confirmed Coronavirus cases with neighboring countries.
+
+By considering figure 9 we can see that daily Coronavirus confirmed cases in Georgia is less than daily Coronavirus confirmed casesin Russia and greater than daily Coronavirus confirmed cases in Armenia and Azerbaijan.But upto 2022 Georgia, Armenia and Azerbaijan shows approximately equal Coronavirus confirmed cases in per day.
+
+
+### 3.1.2 Comparison with recovered.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+Georgia_corona_recovered<- coronavirus %>% filter(country == "Georgia") %>% 
+  filter(type == "recovery") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Russia_corona_recovered <- coronavirus %>% filter(country == "Russia") %>% 
+  filter(type == "recovery") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+
+Armenia_corona_recovered <- coronavirus %>% filter(country == "Armenia") %>% 
+  filter(type == "recovery") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Azerbaijan_corona_recovered <- coronavirus %>% filter(country == "Azerbaijan") %>% 
+  filter(type == "recovery") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Neighboring_countries2<- rbind(Georgia_corona_recovered, Russia_corona_recovered, 
+                                Armenia_corona_recovered,
+                               Azerbaijan_corona_recovered)
+
+ggplot(Neighboring_countries2,aes(x=date, y= cases, col= country))+geom_line()+
+  ggtitle("Recovered cases in Georgia's neighboring countries.")
+
+
+
+
+```
+
+Figure 10: Compairing Time series plots of recovered Coronavirus cases with neighboring countries.
+
+Using figure 10 we can say that recovered coronavirus cases in Georgia is less than Russia.Also Armenia, Azerbaijan, Georgia shows approximately equal coronavirus recovered cases in per day.
+
+
+### 3.1.3 Comparison with deaths.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+Georgia_corona_Death<- coronavirus %>% filter(country == "Georgia") %>% 
+  filter(type == "death") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Russia_corona_Death <- coronavirus %>% filter(country == "Russia") %>% 
+  filter(type == "death") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+
+Armenia_corona_Death <- coronavirus %>% filter(country == "Armenia") %>% 
+  filter(type == "death") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Azerbaijan_corona_Death<- coronavirus %>% filter(country == "Azerbaijan") %>% 
+  filter(type == "death") %>% select(date, country, type, cases) %>%
+  mutate(cases=replace(cases,which(cases<0),NA))
+
+Neighboring_countries3 <- rbind(Georgia_corona_Death, Russia_corona_Death, 
+                               Armenia_corona_Death,
+                               Azerbaijan_corona_Death)
+
+ggplot(Neighboring_countries3, aes(x=date, y= cases, col= country))+geom_smooth()+
+  ggtitle("Death cases in Georgia's neighboring countries.") + theme(legend.position = "bottom")
+
+```
+
+Figure 11: Comparing Time series plots of Coronavirus deaths with neighboring countries.
+
+According to figure 11 daily Coronavirus deaths in Georgia is less than daily Coronavirus deaths in Russia. But daily Coronavirus deaths in Georgia,Armenia and Azerbaijan are approximately equal.
+
+# 4. Discussion and Conclusion
+
+## 4.1 Discussion
+
+Main objective of this analysis is to get an idea about coronavirus effect of the country Georgia. So that using the data from the coronavirus repository (R package) has been used to do the analysis. This data set has been considered on from 22.01.2020 to 23.06.2022 time period. In this analysis we are considering three types of cases which are coronavirus confirmed cases, recovered cases and death cases.In recovered cases there were negative values and had to filter them out to show them as zero cases. And also to do the analysis with comparisons I have used three neighboring countries,which are Russia, Armenia and Azerbaijan.The reason for not choosing the Turkey as neighboring country that that results will highly differ from the Georgia.
+
+## 4.2 Conclusion
+
+There was not coronavirus confirmed patients in Georgia from early 2020 to mid-year. After that number of coronavirus confirmed patients has gradually increased. Up to 2022 it shows below 10000 confirmed cases. Unfortunately in 2022 it shows more than 20000 confirmed cases.
+Coronavirus deaths has started since middle of 2022. But after mid-year number of coronavirus deaths has increased. In Georgia minimum number of patients has died comparing with number of coronavirus confirmed patients.The confirmed patients have recovered in Georgia after middle of 2020. Then number of coronavirus recovered patients has increased in 2021. Middle of the year 2021 number of coronavirus recovered patients has decreases.Georgia has approximately same impact from coronavirus comparing with neighbor country Armenia and Azerbaijan. Georgia has minimum impact from coronavirus Comparing with Russia.
+
+# 5. References
+
+  + https://en.wikipedia.org/wiki/Georgia_(country)
+  + https://climateknowledgeportal.worldbank.org/country/georgia/climate-data-historical#
+  + https://kids.nationalgeographic.com/geography/countries/article/russia#
+  + https://globaledge.msu.edu/countries/armenia#
+  + https://globaledge.msu.edu/countries/azerbaijan#

@@ -1,0 +1,336 @@
+---
+title: "Corona Virus in Slovakia"
+author: "P.M.A.D.Jayarathne"
+date: "2022-10-05"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Packages
+
+```{r,message=FALSE,warning=FALSE}
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(coronavirus)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(knitr)
+library(skimr)
+library(plotly)
+```
+
+# Introduction
+
+```{r,message=FALSE,warning=FALSE}
+data("coronavirus")
+slovakia_corona <- coronavirus %>% filter(country == "Slovakia")
+```
+
+This data analysis was carried out to identify the corona virus situation in the Slovakia.This slovakia_corona data set contain daily summary of corona virus data in Slovakia for 336 days.
+
+There are 3 variables
+
+
+### Variable	Description
+
+date    :	Date in YYYY-MM-DD format
+
+type    :	Type of cases : confirmed, death, recovered
+
+cases   :	Number of cases on given date
+
+
+### Type of variables
+
+Quantitative  : cases
+
+Qualitative   : date, type
+  
+
+# About Slovakia
+
+
+### Visualization of Slovakia
+
+  
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light green", colour = "dark green"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = slovakia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+  Slovakia is a small,mountainous landlock country in central Europe,that is bordered by Austria and the Czech Republic in west,by Hungary in south,by Poland in north,and the Ukraine in east .It is located between 47 - 49 degrees north latitude,the climate is moderately continential in the plains,while it becomes colder with increasing altitude in mountainous ares..Formerly part of Czechoslovakia,it was known as the slovak socialist republic became an independent sovereign state.
+
+  The country covers an area of  49,035  square of km,making it somewhat larger than half the size of portugal or about twice the size of the U>S> state New Hampshire.Slovakia has a population of 5.4 million people(in 2015),Slovakia's capital and largest city is Bratislava.spoken languages are Slovak(official) and Hungarian. 
+  The majority of Slovak people are Christians – 62% are Roman Catholics, 4% are Greek Catholics, 6% Protestants, but most of them are not practicing more than once a week on Sunday mass. Around 15%-25% of inhabitants are atheists. The official language in Slovakia is the Slovak language, which is a Slavic language. Speaking Slavic language is very useful especially in central and Eastern Europe – people speaks Slavic languages in Czech Republic, Poland, Ukraine, Russia, Belarus, and Balkan. On another hand, speaking Slovak is not easy and requires a lot of practice – you may contact SAIA or IOM for getting more information about Slovak courses.
+Slovakia is considered a safe country for foreigners. As per Global Peace Index comparing 172 independent countries in the world on the criteria as number of conflicts, criminality, political instability, violent demostration risk, number of jailed people per 100.000 inhabitants or number of armed people per capita, the Slovak ranked 23rd, with very similar result as Germany, Sweden, Belgium or Netherland.
+
+      
+### Covid 19 in Slovakia
+      
+Slovakia  is one of the most corona positive cases reported country. COVID 19 emergency measures taken by the slovak government in response to the coronavirus pandemic are,
+ 
+  01.   As from March 16, 2020, the slovak  government declared a state of emergency based on the Slovak constitutional act No.227/2002 Coll.on state security in times of war,hostilities,exceptiona circumstances or emergency, as amended.
+ 
+   02.    As of march,2020 the public health authority has decided to imposed a mandatory 14 day quarntine on all persons returning from any country abroad.
+ 
+ 03. All three international airports in Slovakia are closed.
+ 
+  04. Based on  decree of the public health authority ,as from march,2020, everyone is obliged to wear a mask covering their breathing area in public places.
+ 
+  05. Banned any export of registerd human medicine or medical devices outside the territory of the slovak republic and etc.
+
+### Vaccination:
+
+Slovakia has administered at least 7,077,048 doses of COVID vaccines so far. Assuming every person needs 2 doses, that’s enough to have vaccinated about 64.9% of the country’s population
+
+### Lockdown :
+
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces and international borders in order to contain the spread of the virus 
+
+# Explanatory Data Analysis
+ 
+summary of the corona virus data in Slovakia
+ 
+Table 01
+
+```{r,message=FALSE,warning=FALSE}
+summary(slovakia_corona)
+```
+
+ 
+```{r,message=FALSE,warning=FALSE}
+slovakia_corona$month<- months(as.Date(slovakia_corona$date))
+recovered_slovakia_corona<-slovakia_corona %>% filter(type=="recovery")
+confirmed_slovakia_corona<-slovakia_corona %>% filter(type=="confirmed")
+death_slovakia_corona<-slovakia_corona %>% filter(type=="death")
+```
+To avoid giving the incorrect information due to outliers in data we can replace it as missing value.
+
+ 
+```{r,message=FALSE,warning=FALSE}
+recovered_slovakia_corona <- recovered_slovakia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovered_slovakia_corona)
+```
+
+
+### Confirmed cases at first & last days
+ 
+Table 2 - Confirmed cases at first days
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+Confirmed_slovakia_corona <- slovakia_corona %>% filter(type == " Confirmed")
+head(slovakia_corona)
+```
+
+Table 3 - Confirmed cases at last days
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+tail(slovakia_corona)
+```
+
+
+###Figure 01 - Distribution of confirmed,recovery,death cases of covid 19 - Slovakia
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(slovakia_corona, aes(x=date, y=cases, col=type)) + geom_point()
+```
+
+This figure shows distribution of confirmed ,recovery and death cases of covid-19 in slovakia.This figure show that the number of confirmed cases are positively distributed.
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(slovakia_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Figure 02 : Confirmed, Death and Recovered cases in Slovakia")
+
+```
+ 
+Table 04 : summary - recovery cases 
+
+```{r,message=FALSE,warning=FALSE}
+slovakia_corona <- coronavirus %>% filter(country == "Slovakia")
+recovered_slovakia_corona <- slovakia_corona %>% filter(type=="recovery")
+summary(recovered_slovakia_corona)
+```
+ 
+  
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ ggplot(recovered_slovakia_corona, aes(x=date, y=cases)) +
+  geom_path(size=1,color="dark green")+labs(title="Figure 03 : Recovered cases in Slovakia") 
+```
+
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ ggplot(confirmed_slovakia_corona, aes(x=date, y=cases)) +
+  geom_path(size=1,color="blue")+labs(title = "Figure 04 : Confirmed cases in Slovakia") 
+
+```
+Above graph shows the confirmed number of corona cases in Slovakia in daily basis.From 2021to 2022,the number of confirmed cases will increase slightly and again in the middle of 2022,the number of confirmed cases will dicrease. 
+
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ ggplot(death_slovakia_corona, aes(x=date, y=cases)) +
+  geom_path(size=1,color="red")+labs(title="Figure 05 : Death cases in Slovakia") 
+```
+
+
+Above graph shows the number of death  corona cases in Slovakia in daily basis.From 2021to 2022,the number of confirmed cases will increase slightly and again in the middle of 2022,the number of confirmed cases will dicrease.
+
+```{r,message=FALSE,warning=FALSE}
+p1<- ggplot(slovakia_corona,aes(date,cases,color=type), is.na=FALSE)+
+  geom_point()+
+  geom_line()+
+  ggtitle("Figure 06 : Time series analysis - Slovakia")
+
+ggplotly(p1)
+
+```
+
+
+# Comparison with Covid 19 cases of other countries.
+
+```{r,message=FALSE,warning=FALSE}
+slovakia_corona<- coronavirus %>% filter(country=="Slovakia")
+us_corona<-coronavirus %>% filter(country == "US")
+italy_corona<- coronavirus %>% filter(country=="Italy")
+france_corona<-coronavirus %>% filter(country=="France")
+
+other_country_corona<-as.data.frame(rbind(slovakia_corona,us_corona,italy_corona,france_corona))
+```
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+death_other_country<-other_country_corona %>% filter(type=="death")
+ggplot(other_country_corona,aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+facet_wrap(~country,ncol=4)+coord_flip()+
+  ggtitle("Figure 07 : Compare of death cases with other countries")
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+recovered_other_country<-other_country_corona %>% filter(type=="recovered")
+ggplot(other_country_corona,aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+facet_wrap(~country,ncol=4)+coord_flip()+
+  ggtitle("Figure 08 : Compare of recovery cases with other countries")
+```
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed_other_country<-other_country_corona %>% filter(type=="confirmed")
+ggplot(death_other_country,aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+facet_wrap(~country,ncol=4)+coord_flip()+
+  ggtitle("Figure 09 : Compare of confirmed cases with other countries")
+```
+
+# Compare with nearest countries
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+coronavirus <- as.data.frame(coronavirus)
+
+data(wrld_simpl)
+
+p4 <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group,), fill = "light blue", colour = "blue"
+  ) +
+  coord_cartesian(xlim = c(-10,30), ylim = c(30,60)) +
+  scale_x_continuous(breaks = seq(-10,20,30)) +
+  scale_y_continuous(breaks = seq(30,45,60))
+
+
+p4 +
+  geom_point(
+    data = coronavirus , aes(x = long, y = lat), color = "red", size
+    = 1
+  )  + geom_text(aes(x=coronavirus$long, y=coronavirus$lat, label=coronavirus$country))
+```
+
+The above graph shows the nearby coutries to Slovakia.
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+near_countries <- filter(coronavirus, country == "Italy"|country =="Germany"|country =="Hungary"|
+                           country =="Austria"|country =="France"|country =="Belgium"|country =="Switzerland"|country=="Poland"|country=="Ukraine")
+count(near_countries,country)
+
+```
+The above table shows the number of countries near the Slovakia.
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+p4 +
+  geom_point(
+    data = near_countries , aes(x = long, y = lat), color = "red", size
+    = 10
+  )  + geom_text(aes(x=near_countries$long, y=near_countries$lat, label=near_countries$country))
+
+```
+
+The above plot was generated in order to confirm whether nearest conuntries in the slovakia continent is in the relevent dataframe. Therefore it can be concluded that all the contries in the same continent has been considered.
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+confirmed_near_countries <- filter(near_countries, type == "confirmed")
+death_near_countries <- filter(near_countries, type == "death")
+recovered_near_countries <- filter(near_countries, type == "recovered")
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=1) + 
+  labs(title="Figure 10 : Daily Confirmed cases in the countries near to Slovakia")
+
+```
+
+# Discussion and conclusion
+
+
+Covid 19 is now a world pandemic where Slovakia also has to gone through. Corona virus confirmed cases has appeared in Slovakia from end of 2022. Although the country was on lockdown the no.of confirmed corona cases in Slovakia has been inreased, when we take a overall look it can be seen that daily confirmed cases in increasing which means there is a upward and downward trend in the no.of daily confirmed corona virus cases in Slovakia. The daily confirmed cases is increasing at 2021 and it has been dicrease at the 2022.  And also rate of daily death cases is remained same for 2022 at a low value. The perecentage of recovered patients with respect to the total confirmed cases is low.That implies that still there are many corona patients who needed to be treated. Therefore from that it can be concluded that still the country did not take reliable measures to stop the spreading of the disease  since the recovery rate is low but they has managed to keep the death rate very low because we can see number of deaths are dicrese at the end of 2022.
+
+
+
+# References
+
+
+
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/slovakia/
+
+https://www.dentons.com/en/insights/articles/2020/april/14/covid19-emergency-measures-taken-by-the-slovak-government-in-response-to-the-coronavirus-pandemic
+
+https://hellor.netlify.app/slides/onlinehelpdesk
+
+
+
+
+
+
+
+

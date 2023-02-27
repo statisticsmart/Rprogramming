@@ -1,0 +1,732 @@
+---
+title: "COVID-19 Pandemic in Mongolia"
+author: "O.M.D. Nipuni Opatha - AS2019470"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(devtools)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(sta3262)
+library(ggplot2)
+library(gganimate)
+library(dplyr)
+library(ggthemes)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+library(scales)
+
+get_individual_project_country("AS2019470")
+unique(coronavirus$country)
+mongolia_corona <- coronavirus %>% filter(country == "Mongolia")
+mongolia_corona <- mongolia_corona%>% mutate(cases = replace(cases, which(cases < 0), 0))
+
+dates <- mongolia_corona$date
+dates <- as.POSIXct(dates,format= "%Y/%m/%d")
+date_year <- format(dates,format= "%Y")
+mongolia_corona <- cbind(mongolia_corona,date_year)
+mongolia_corona
+
+recover_mongolia_corona <- mongolia_corona %>% filter(type == "recovery")
+recover_mongolia_corona <- recover_mongolia_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+
+confirmed_mongolia_corona <- mongolia_corona %>% filter(type == "confirmed")
+
+death_mongolia_corona <- mongolia_corona %>% filter(type == "death")
+
+mon_cum <- cumsum(confirmed_mongolia_corona$cases)
+confirmed_mongolia_corona <- cbind(confirmed_mongolia_corona,mon_cum)
+mon_cum <- cumsum(recover_mongolia_corona$cases)
+recover_mongolia_corona <- cbind(recover_mongolia_corona,mon_cum)
+mon_cum <- cumsum(death_mongolia_corona$cases)
+death_mongolia_corona <- cbind(death_mongolia_corona,mon_cum)
+all3cases_mongolia <- rbind(confirmed_mongolia_corona,death_mongolia_corona,recover_mongolia_corona)
+
+
+## Dataset of USA
+usa_corona <- coronavirus %>% filter(country == "US")
+dates <- usa_corona$date
+dates <- as.POSIXct(dates,format= "%Y/%m/%d")
+date_year <- format(dates,format= "%Y")
+usa_corona <- cbind(usa_corona,date_year)
+usa_corona
+confirmed_usa_corona <- usa_corona %>% filter(type == "confirmed")
+
+
+## Dataset of India
+ind_corona <- coronavirus %>% filter(country == "India")
+dates <- ind_corona$date
+dates <- as.POSIXct(dates,format= "%Y/%m/%d")
+date_year <- format(dates,format= "%Y")
+ind_corona <- cbind(ind_corona,date_year)
+ind_corona
+confirmed_ind_corona <- ind_corona %>% filter(type == "confirmed")
+
+
+## Dataset of Australia
+australia_corona <- coronavirus %>% filter(country == "Australia")
+dates <- australia_corona$date
+dates <- as.POSIXct(dates,format= "%Y/%m/%d")
+date_year <- format(dates,format= "%Y")
+australia_corona <- cbind(australia_corona,date_year)
+australia_corona
+confirmed_australia_corona<- australia_corona %>% filter(type == "confirmed")
+
+
+## Dataset of Russia
+russia_corona <- coronavirus %>% filter(country == "Russia")
+dates <- russia_corona$date
+dates <- as.POSIXct(dates,format= "%Y/%m/%d")
+date_year <- format(dates,format= "%Y")
+russia_corona <- cbind(russia_corona,date_year)
+russia_corona
+
+russia_confirmed <- russia_corona %>% filter(type == "confirmed")
+russia_death <-russia_corona %>% filter(type == "death")
+russia_recovered <- russia_corona %>% filter(type == "recovery")
+russia_recovered <- russia_recovered %>% mutate(cases = replace(cases, which(cases < 0), 0))
+
+
+## Dataset of China
+china_corona <- coronavirus %>% filter(country == "China")
+dates <- china_corona$date
+dates <- as.POSIXct(dates,format= "%Y/%m/%d")
+date_year <- format(dates,format= "%Y")
+china_corona <- cbind(china_corona,date_year)
+china_corona
+
+china_confirmed <- china_corona %>% filter(type == "confirmed")
+china_recovered <- china_corona %>% filter(type == "recovery")
+china_recovered <- china_recovered %>% mutate(cases = replace(cases, which(cases < 0), 0))
+china_death <- china_corona %>% filter(type == "death")
+
+
+
+```
+
+
+
+# 1. Introduction
+
+
+## 1.1 What is Covid-19?
+
+
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+Most people infected with the virus experienced mild to moderate respiratory illness and recovered without requiring special treatment. However, some become seriously ill and require medical attention.
+
+The COVID-19 pandemic has led to a dramatic loss of human life worldwide and presents an unprecedented challenge to public health, food systems and the world of work. The economic and social disruption caused by the pandemic is devastating: tens of millions of people are at risk of falling into extreme poverty, while the number of undernourished people, currently estimated at nearly 690 million, could increase by up to 132 million by the end of the year.
+
+Millions of enterprises face an existential threat. Nearly half of the world’s 3.3 billion global workforce are at risk of losing their livelihoods. Informal economy workers are particularly vulnerable because the majority lack social protection and access to quality health care and have lost access to productive assets. Without the means to earn an income during lockdowns, many are unable to feed themselves and their families. For most, no income means no food, or, at best, less food and less nutritious food.
+
+####### Source: https://www.who.int/
+
+
+
+
+
+## 1.2 Mongolia
+
+
+Mongolia is the world's 18th-largest country though its population is just over 3.3 million people making it one of the least densely populated countries in the world. The capital and largest city of Mongolia is Ulaanbaatar which contains about one-third of the country’s population. The official language of Mongolia is Mongolian, a language written in Cyrillic and in the traditional Mongolian script.
+
+Over the past 30 years, Mongolia has transformed into a vibrant democracy, with vast agricultural, livestock and mineral resources, and an educated population, Mongolia’s development prospects look promising in the long-term assuming the continuation of structural reforms.
+
+
+
+### 1.2.1 Location
+
+
+
+Mongolia is located in eastern Asia south of Russia and north of China, east of Kazakhstan. Situated on mountains and plateaus, it is one of the world's highest countries with an elevation averaging 5,180 feet (1,580 meters). Mongolia is 435 miles (700 kilometers) from the Yellow Sea.
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#mapping the country
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light green", colour = "black", size = 0.2
+  )+ ggtitle("Location of Mongolia in world map") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = mongolia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+
+The country is known as the "Land of the Eternal Blue Sky" and as the "Land of the Horse", because of its beautiful landscape properties. Mongolia’s temperature can fluctuate as much as 35 degrees in one day. The country is very dry and receives only about four inches of rainfall per year. Southern Mongolia is dominated by the Gobi, which is one of the Earth’s coldest deserts and covers about 500,000 square miles (1,295,000 square kilometers).
+
+
+
+### 1.2.2 Climate Conditions
+
+
+
+Mongolia has a strongly continental climate, with four fluctuations of temperatures, low precipitation and marked regional variations depending on latitude and altitude. Average temperatures range between around -4°C and -8°C in and between mountain ranges climbing to around 2°C in the steppe desert region and around 6°C in the southern desert bordering China. Temperature varies dramatically throughout the year. Historically maximum temperatures have peaked at around 24°C in July, while January minimum temperatures drop to around -28°C. Annual precipitation rarely exceeds 400 mm and is typically much lower in the south and central desert and steppe regions. In the Gobi Desert, annual rainfall is only 40 mm. Nationally, an estimated 85% of precipitation falls between April and September. Small inter-annual variations in precipitation can lead to severe drought events, with some regions not experiencing rainfall at all.
+
+
+
+### 1.2.3 Government
+
+
+
+Mongolia established diplomatic relations with the People’s Republic of China on October 16, 1949. Two sides established their respective embassies in Ulaanbaatar and Beijing in 1950. The bilateral relations have witnessed a rapid and stable development in the last two decades thanks to concerted efforts exerted by both sides.  A new era of an intensive cooperation began with renewal of the Treaty on Friendly Relations and Cooperation in 1994.
+
+Mongolia is led by a president but the president doesn’t have much power. The country is divided administratively into 21 provinces that are headed by governors, appointed by the prime minister. Most of the control is in the parliament, which has 76 members and chooses the prime minister and the cabinet officers.
+
+
+
+
+### 1.2.4 Covid-19 Situation in Mongolia
+
+
+
+The COVID-19 pandemic in Mongolia is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The COVID-19 pandemic was confirmed to have reached Mongolia when its first case was confirmed in a French man who traveled from Moscow to Dornogovi on 10 March 2020.
+
+Mongolia is the fifth most affected country in East Asia, after South Korea, Japan, North Korea and Taiwan. As of 25 May 2022, there are 469,885 cases and 2,179 deaths in the country.
+On 20 June 2021, Mongolia overtook China in terms of the number of COVID-19 cases, becoming the third most affected country in East Asia. Three days later, on 23 June, the number of COVID-19 cases in the country crossed the 100,000-mark. On 26 August, the number of COVID-19 cases in Mongolia crossed the 200,000-mark. More than a month later, on 29 September, the number of COVID-19 cases in the country crossed the 300,000-mark. On 13 January 2022, the number of COVID-19 cases in Mongolia crossed the 400,000-mark.
+
+
+
+
+#### *First case identified:-*
+  
+  
+  On 10 March, Deputy Prime Minister Ölziisaikhany Enkhtüvshin announced that a French national arriving in Ulaanbaatar via a flight from Moscow was the first confirmed COVID-19 case in the country.
+
+The patient, a 57-year-old male, first showed signs of a fever on 7 March. Initial tests confirmed that the patient was positive for coronavirus, and the patient was told to self-isolate in Dornogovi. The patient had already self-isolated upon the first symptoms, before any instructions from Mongolian authorities. Contrarily to claims made by the then-minister for Health, neither he nor any other passenger on the flight he took to travel to Mongolia ever received any recommendation to quarantine upon arrival. Two Mongolian close contacts of the patient left Dornogovi despite recommendations by health officials to remain in the province. The State Emergency Commission said that the two would be held legally responsible for their actions. More than 120 people that have had close contact with the patient have been quarantined, and over 500 people with indirect contact were under medical observation.
+
+
+
+
+### 1.2.5 Government Response
+
+
+
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces and international borders in order to contain the spread of the virus.
+
+The Mongolian government also announced various measures to control the outbreak. These include the closure of air and land border crossing between China and Mongolia and suspension of all international flights and passenger train. 
+
+
+•	On 27 January 2020, the Mongolian government announced they would close the border with China. They began   closing schools on the same day.
+
+•	In February 2020, the Mongolian government cancelled Tsagaan Sar, the Mongolian New Year. Around the holiday, severe limitations were placed on travel within the country. Major events were canceled in March as well, causing economic difficulty for people whose incomes depend on tourism.
+
+•	Epidemic control measures included temperature checks for passengers entering Ulaanbaatar, health questionnaires, and requiring face masks on Ulaanbaatar public transportation and at the airport. The government limited international flights and trains and closed its land borders. Various businesses were closed, including churches, bars, and saunas. Sports, cultural activities, and restaurants were restricted.
+
+•	On March 22, the Cabinet Secretariat decided to close schools and cancel activities until the end of April.
+
+•	As of March 24, 2020, the country was in a state of "heightened awareness", not national emergency. At that time, 2,034 people were in quarantine, with the number expected to increase as Mongolians returned from other countries.
+
+Almost 50% of the public regarded the government's response measures to the COVID pandemic as successful according to a May 2020 opinion poll.
+
+
+
+
+# 2. Explanatory Data Analysis
+
+
+## 2.1 Structure of data
+
+
+
+The data set used is the 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset which provides a daily summary of the Coronavirus (COVID-19) cases by state/province of each country. Data source of the package is the Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province.
+
+The following variables are considered in the dataset :-
+    
+    •	Date - Date in YYYY-MM-DD format.
+    •	Province - Name of province/state, for countries where data is provided split across multiple provinces/states.
+    •	Country - Name of country/region.
+    •	lat - Latitude of center of geographic region, defined as either country or, if available, province.
+    •	long - Longitude of center of geographic region, defined as either country or, if available, province.
+    •	type - An indicator for the type of cases (confirmed, death, recovered).
+    •	cases - Number of cases on given date.
+    •	uid - Country code
+    •	iso2 - Officially assigned country code identifiers with two-letter
+    •	iso3 - Officially assigned country code identifiers with three-letter
+    •	code3 - UN country code
+    •	combined_key - Country and province (if applicable)
+    •	population - Country or province population
+    •	continent_name - Continent name
+    •	continent_code - Continent code
+
+
+
+The following shows the summery of the data under each variable. 
+
+
+
+```{r warning=FALSE, echo=FALSE}
+summary(coronavirus)
+
+```
+
+
+
+
+## 2.2 COVID-19 Statistics of Mongolia 
+
+
+Data Analysis is done under the the 3 cases of confirmed cases, Recovered cases and 
+Death cases from the start of COVID-19 in the former half of 2019 till 2022.
+
+
+
+### 2.2.1 Confirmed Daily Cases of Mongolia
+
+
+
+According to the figure 2.2.1 up until October 2020, no number of daily confirmed cases has been reported but starting from March 2021 the number of cases has been increased and has come to a peak at 21st of October 2021. Then the number of daily confirmed cases has decreased steadily until January 2022 but has started increasing again. It has decreased again by March 2022 and has been flowing steadily from there on wards.
+
+
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+confirmed_plot <- plot_ly(confirmed_mongolia_corona, type = 'scatter', mode = 'lines')%>%
+  add_trace(x = ~date, y = ~cases)%>%
+  layout(showlegend = F, title='Mongolia: Daily Covid-19 Confirmed cases with Rangeslider',
+         xaxis = list(rangeslider = list(visible = T)))
+confirmed_plot <- confirmed_plot %>%
+  layout(
+    xaxis = list(zerolinecolor = '#ffff',
+zerolinewidth = 2,
+gridcolor = 'ffff',
+title = "Date"),
+yaxis = list(zerolinecolor = '#ffff',
+             zerolinewidth = 2,
+             gridcolor = 'ffff',
+             title = "Cases"),
+plot_bgcolor='#e5ecf6', width = 900)
+
+
+confirmed_plot
+
+```
+                                               Figure 2.2.1 - Daily Covid-19 Confirmed cases of Mongolia
+Drag the slider to see the lines in detail 
+
+
+
+
+
+### 2.2.2 Recovered Cases of Mongolia
+
+
+
+
+According to the data up until the latter half of December 2020 there seem to be no recorded daily recovered cases but starting from January 2021 the daily recovered cases has increased gradually and has come to a peak of 7398 recovered cases at July 2021. It has started decreasing from there and has come to the zero level of recorded daily recovered cases by August 2021.
+Overall it seems that Mongolia has performed well and handled the Covid-19 situation in a goodway by looking at the steady increase of recovered cases.
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+recovery_plot <- plot_ly(recover_mongolia_corona, type = 'scatter', mode = 'lines', color = "#009E73")%>%
+  add_trace(x = ~date, y = ~cases, color = "#009E73")%>%
+  layout(showlegend = F, title='Mongolia: Daily Covid-19 Recovered cases with Rangeslider',
+         xaxis = list(rangeslider = list(visible = T)))
+recovery_plot <- recovery_plot %>% layout(xaxis = list(zerolinecolor ='#ffff',
+                                                       zerolinewidth = 2,
+                                                       gridcolor = 'ffff',
+                                                       title = "Date"),
+                                          yaxis = list(zerolinecolor ='#ffff',
+                                                       zerolinewidth = 2,
+                                                       gridcolor = 'ffff',
+                                                       title = "Cases"),
+                                          plot_bgcolor='#e5ecf6', width = 900)
+recovery_plot
+
+
+```
+                                   Figure 2.2.2 - Daily Covid-19 Recovered cases of Mongolia
+Drag the slider to see the lines in detail. 
+
+
+
+
+### 2.2.3 Death Cases of Mongolia
+
+
+
+
+
+The first death og Mongolia due to COVID-19 has been reported in 29th December 2019 and the second one in 7th January 2021 but after those 2 records no deaths has been reported until 8th March 2021. From there on wards the number of daily deaths has increased over about 7 months and has come to a peak on 2nd October 2021 with a number of 38 daily deaths reported. And from there on wards the death rate has decreased slowly and has come to a stop on 30th April 2022 and no deaths has been reported after that.
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+death_plot <- plot_ly(death_mongolia_corona , type = 'scatter', mode = 'lines',color='blue')%>%
+  add_trace(x = ~date, y = ~cases)%>%
+  layout(showlegend = F, title='Mongolia: Daily Covid-19 Death cases with Rangeslider',
+         xaxis = list(rangeslider = list(visible = T)))
+death_plot <- death_plot %>% layout(xaxis = list(zerolinecolor ='#ffff',
+                                                 zerolinewidth = 2,
+                                                 gridcolor = 'ffff',
+                                                 title = "Date"),
+                                    yaxis = list(zerolinecolor ='#ffff',
+                                                 zerolinewidth = 2,
+                                                 gridcolor = 'ffff',
+                                                 title = "Cases"),
+                                    plot_bgcolor='#e5ecf6', width = 900)
+death_plot
+
+
+
+```
+                                    Figure 2.2.3 - Daily Covid-19 Deaths of Mongolia
+Drag the slider to see the lines in detail.
+
+
+
+### 2.2.4 Comparison of Daily cases
+
+
+
+Compared to number of confirmed cases number of deaths seems to be almost insignificant. The graph here shows that the number of daily confirmed cases has increased in 3 stages and the number of daily recovered cases has increased in 2 stages.
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+mongolia_corona <- group_by(mongolia_corona,type)%>%mutate(cum_cases = cumsum(cases))
+all3cases_mongolia <- rbind(confirmed_mongolia_corona,recover_mongolia_corona,death_mongolia_corona)
+
+ggplot(all3cases_mongolia, aes(x=date, y=mon_cum, fill=type)) + 
+  geom_area(size = 0.5) +
+  labs(title = "Mongolia: Daily Covid-19 Cases",
+       subtitle = "Cumulative Daily Confirmed cases, Recovered cases and Deaths",
+       x = "Date",
+       y = "Cases",
+       color = "Type") 
+
+
+```
+
+
+
+### 2.2.5 Year wise comparison of all cases in Mongolia
+
+
+Comparing the cases in each year separately in 2020 in the early half of the year both the confirmed cases and the recovered cases seem to  increase in a steady pace until early 2021 where the number of recovered cases increase more than confirmed. This increment in recovered cases keeps on going until the middle of 2021 and starting from there the number of confirmed cases seems to be increasing with few fluctuations while the recovered cases seem to be at the minimum with no big differences. In 2022 also the same patterns seem to be going on. In all 3 years compared to both confirmed and recovered cases the number of deaths are almost insinificant. 
+
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+all3cases_mongolia <- rbind(confirmed_mongolia_corona,recover_mongolia_corona,death_mongolia_corona)
+
+ggplot(all3cases_mongolia, aes(x=date, y=cases, color=type)) + 
+  geom_line(size = 0.5) +
+  facet_wrap(~date_year, ncol=1, scales = "free") +
+  scale_color_manual(values=c( "red", "black", "#0072B2"))+
+  labs(title = "Mongolia: Daily Covid-19 Cases",
+       subtitle = "Daily Confirmed cases, Recovered cases and Deaths",
+       x = "Date",
+       y = "Cases",
+       color = "Type") 
+
+```
+
+
+
+
+## 2.3 Comparison with neighboring countries
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+#mapping the country
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light green", colour = "black", size = 0.2
+  )+ ggtitle("Location of Mongolia  with Russia and China") +
+  coord_cartesian(xlim = c(30, 170), ylim = c(-20, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 90))
+
+data_location <- data.frame(long<- c(103.8467,105.3188,117.2264),
+                            lat<- c(46.8625,61.52401,31.8257),
+                            country <- c("Mongolia","Russia","China"))
+
+
+p+
+  geom_point(data = data_location, aes(x = long, y = lat ), color = "red", size= 2)+geom_text(aes(label=country, x = long-2, y = lat+4))
+
+
+
+```
+
+
+
+As mentioned in the introduction Mongolia is surrounded by the worlds 2 largest countries in population China and Russia, therefore this section elaborates the COVID-19 situation of Mongolia when compared to its neighboring  countries. And since COVID-19 pandemic started from China its even more important to compare the statistics with China.
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+data <- data.frame(near_death = c(sum(death_mongolia_corona$cases),sum(russia_death$cases),sum(china_death$cases)),
+                   near_confirmed = c(sum(confirmed_mongolia_corona$cases),sum(russia_confirmed$cases),sum(china_confirmed$cases)),
+                   near_recovered = c(sum(recover_mongolia_corona$cases),sum(russia_recovered$cases),sum(china_recovered$cases)),
+                   type = c("Mongolia","Russia","China"))
+figure <- plot_ly(data, x = ~type, y = ~near_death, type = 'bar', name = 'Deaths')
+figure <- figure %>% add_trace(y = ~near_confirmed, name = 'Confirmed cases')
+figure <- figure %>% add_trace(y = ~near_recovered, name = 'Recovered cases')
+figure <- figure %>% layout(yaxis = list(title = 'Cases'), title='Comparison of Mongolia, China and Russia', barmode = 'stack')
+figure
+
+```
+
+
+
+The above stacked bar chart shows that compared to both China and Russia all three types of cases in Mongolia seems to be very small but that ust be probably because of the big differences in population in the 3 countries. So it is important to compare the values as percentages of each country.
+
+
+
+
+### 2.3.1 Comparision of percentages of deaths and recoveries
+
+
+
+The comparison of the three countries can be further understood by the graphical representation of confirmed cases and deaths as a percentage as shown below. It can be seen that Russia has a higher percentage of daily deaths when compared with China and Mongolia. In fact the percentage of deaths compared to confirmed cases is very low in Mongolia. It seems almost insignificant.
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+mon_totsum = sum(death_mongolia_corona$cases)+sum(confirmed_mongolia_corona$cases)
+mon_death_pec <- (sum(death_mongolia_corona$cases)/mon_totsum)*100
+mon_confirm_pec <- (sum(confirmed_mongolia_corona$cases)/mon_totsum)*100
+
+rus_totsum <-sum(russia_death$cases)+sum(russia_confirmed$cases)
+rus_death_pec <- (sum(russia_death$cases)/rus_totsum)*100
+rus_confirm_pec <- (sum(russia_confirmed$cases)/rus_totsum)*100
+
+chi_totsum <- sum(china_death$cases)+sum(china_confirmed$cases)
+chi_death_pec <- (sum(china_death$cases)/chi_totsum )*100
+chi_confirm_pec <- (sum(china_confirmed$cases)/chi_totsum )*100
+
+
+
+type1 = c(rep("Mongolia",2),rep("Russia",2),rep("China",2))
+status1 <- rep(c("Deaths","Confirmed") , 3)
+cases <- c(c(mon_death_pec,mon_confirm_pec),c(rus_death_pec,rus_confirm_pec),c(chi_death_pec,chi_confirm_pec))
+dataf <- data.frame(type1,status1,cases)
+ggplot(dataf, aes(fill=status1, y=cases, x=type1)) + 
+  geom_bar(position="fill", stat="identity")+
+  labs(title = "Comparision of percentages of deaths and confirmed cases with nearby countries",
+       x = "Country",
+       y = "Percentage of cases")
+
+```    
+
+
+
+
+## 2.4 Comparison with other countries
+
+
+To further investigate how Mongolia has performed with regards to Covid-19 pandemic, this section compares the convid-19 statistics of Mongolia with some other remarked countries in the world. When compared with the deaths per 100,000 population USA and India are among the top most countries and China is among the bottom most countries. Australia is considered as a country which performed fairly well and has 'effectively suppressed' Covid-19. The following analysis has been done with regards to those countries.
+
+
+
+### 2.4.1 Confirmed cases comparison in 2020
+
+
+
+As the following figure shows in the beginning of 2020 China shows a significant increase in confirmed cases but by March 2020 it has decreased and shows a steady flow where both India and US shows fluctuating increasement of daily confirmed cases throughout the year. But still the confirmed cases of Mongolia is highly insignificant compared to the other countries.
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE,out.width="70%",out.height="70%"}
+confirmed_usa_corona_2020 <- confirmed_usa_corona%>%filter(date_year == 2020)
+confirmed_ind_corona_2020 <- confirmed_ind_corona%>%filter(date_year == 2020)
+confirmed_australia_corona_2020 <- confirmed_australia_corona%>%filter(date_year == 2020)
+confirmed_china_corona_2020 <- china_confirmed%>% filter(date_year == 2020)
+confirmed_mongolia_corona_2020 <- confirmed_mongolia_corona%>%filter(date_year == 2020)
+confirmed_mongolia_corona_2020 <- subset(confirmed_mongolia_corona_2020, select = -c(mon_cum) )
+
+data_set <- rbind(confirmed_mongolia_corona_2020,confirmed_china_corona_2020, confirmed_usa_corona_2020,confirmed_ind_corona_2020,confirmed_australia_corona_2020)
+
+
+confirmed_2020_compare_plot <- plot_ly(data_set, type = 'scatter', mode = 'lines',split = ~country)%>%
+  add_trace(x = ~date, y = ~cases)%>%
+  layout(showlegend = T, title='Mongolia: Daily Covid-19 Confirmed cases with Rangeslider',
+         xaxis = list(rangeslider = list(visible = T)))
+confirmed_2020_compare_plot <- confirmed_2020_compare_plot %>%
+  layout(
+    xaxis = list(zerolinecolor = 'black',
+                 zerolinewidth = 2,
+                 gridcolor = 'ffff',
+                 title = "Date"),
+    yaxis = list(zerolinecolor = '#ffff',
+                 zerolinewidth = 2,
+                 gridcolor = 'ffff',
+                 title = "Cases"),
+    plot_bgcolor='#e5ecf6', width = 900)
+
+confirmed_2020_compare_plot
+
+```
+Drag the slider to see the lines in detail.
+
+
+
+#### 2.4.2 Confirmed cases comparison in 2021
+
+
+In the same way as in 2020, only US and India seems to be showing the highest number of cases. But in 2020 India seems to show one highest peak in number of cases in May 2021 and seems to have gradually settled down again by October 2021. But once again no significant confirmed cases are shown in Mongolia compared to other countries. 
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE,out.width="70%",out.height="70%"}
+confirmed_usa_corona_2021 <- confirmed_usa_corona%>%filter(date_year == 2021)
+confirmed_ind_corona_2021 <- confirmed_ind_corona%>%filter(date_year == 2021)
+confirmed_australia_corona_2021 <- confirmed_australia_corona%>%filter(date_year == 2021)
+confirmed_china_corona_2021 <- china_confirmed%>% filter(date_year == 2021)
+confirmed_mongolia_corona_2021 <- confirmed_mongolia_corona%>%filter(date_year == 2021)
+confirmed_mongolia_corona_2021 <- subset(confirmed_mongolia_corona_2021, select = -c(mon_cum) )
+
+data_set <- rbind(confirmed_mongolia_corona_2021,confirmed_china_corona_2021, confirmed_usa_corona_2021,confirmed_ind_corona_2021,confirmed_australia_corona_2021)
+
+
+confirmed_2021_compare_plot <- plot_ly(data_set, type = 'scatter', mode = 'lines',split = ~country)%>%
+  add_trace(x = ~date, y = ~cases)%>%
+  layout(showlegend = T, title='Mongolia: Daily Covid-19 Confirmed cases with Rangeslider',
+         xaxis = list(rangeslider = list(visible = T)))
+confirmed_2021_compare_plot <- confirmed_2021_compare_plot %>%
+  layout(
+    xaxis = list(zerolinecolor = 'black',
+                 zerolinewidth = 2,
+                 gridcolor = 'ffff',
+                 title = "Date"),
+    yaxis = list(zerolinecolor = '#ffff',
+                 zerolinewidth = 2,
+                 gridcolor = 'ffff',
+                 title = "Cases"),
+    plot_bgcolor='#e5ecf6', width = 900)
+
+confirmed_2021_compare_plot
+
+```
+Drag the slider to see the lines in detail.
+
+
+
+#### 2.4.3 Confirmed cases comparison in 2022
+
+By 2022 all 5 countries seems to be settling down in terms of daily confirmed cases though US still shows the most significant numbers through out the year. Australia also shows a small increasement in cases in the former half of the year. But again Mongolia shows no significance with comparision to the other countries. 
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE,out.width="70%",out.height="70%"}
+confirmed_usa_corona_2022 <- confirmed_usa_corona%>%filter(date_year == 2022)
+confirmed_ind_corona_2022 <- confirmed_ind_corona%>%filter(date_year == 2022)
+confirmed_australia_corona_2022 <- confirmed_australia_corona%>%filter(date_year == 2022)
+confirmed_china_corona_2022 <- china_confirmed%>% filter(date_year == 2022)
+confirmed_mongolia_corona_2022 <- confirmed_mongolia_corona%>%filter(date_year == 2022)
+confirmed_mongolia_corona_2022 <- subset(confirmed_mongolia_corona_2022, select = -c(mon_cum) )
+
+data_set <- rbind(confirmed_mongolia_corona_2022,confirmed_china_corona_2022, confirmed_usa_corona_2022,confirmed_ind_corona_2022,confirmed_australia_corona_2022)
+
+
+confirmed_2022_compare_plot <- plot_ly(data_set, type = 'scatter', mode = 'lines',split = ~country)%>%
+  add_trace(x = ~date, y = ~cases)%>%
+  layout(showlegend = T, title='Mongolia: Daily Covid-19 Confirmed cases with Rangeslider',
+         xaxis = list(rangeslider = list(visible = T)))
+confirmed_2022_compare_plot <- confirmed_2022_compare_plot %>%
+  layout(
+    xaxis = list(zerolinecolor = 'black',
+                 zerolinewidth = 2,
+                 gridcolor = 'ffff',
+                 title = "Date"),
+    yaxis = list(zerolinecolor = '#ffff',
+                 zerolinewidth = 2,
+                 gridcolor = 'ffff',
+                 title = "Cases"),
+    plot_bgcolor='#e5ecf6', width = 900)
+
+confirmed_2022_compare_plot
+
+```
+Drag the slider to see the lines in detail.
+
+
+
+Considering the big picture in comparison to US, India, China and Australia, Mongolia shows the least significant number of daily cases. 
+
+
+
+# 3. Discussion
+
+
+- The data analysis process has been carried out in 2 stages as Analyzing COVID-19 Statistics of Mongolia and Comparison with neighboring countries in order to reach the final conclusions.
+
+- In the data analysis process it was identified that there were few negative values for recovered cases of Mongolia and come other countries, so as to remove the negative values and also to avoid any discontinuities in the graphs all negative values has been replaced by 0. It was assumed that the main causes for having negative values must be because of some patients having been diagnosed as COVID-19 positive in testing and later on diagnosed as negative. 
+
+- In the Analysis of Confirmed cases, recovered cases and deaths of Mongolia since the daily data were coming from an almost 3 year long time interval too many data points were present making the graphs unclear so as to make it easier to read the graphs, they are drawn with a range slider which makes it easier to zoom in on data points separately. 
+
+- The analysis of recovered cases of Mongolia showed that after August 2021 the number of daily recovered cases has come to a abrupt halt and the number of cases for each day after that point were recorded as 0. This could possibly be identified as a fault in recording the data. 
+
+
+- As an additional measure an analysis comparing the 3 types of cases in each year separately has also been carried out.
+
+- When comparing with Russia and China, 2 of the largest countries in the world with respect to population, it was noticed that due to the immense value differences in the number of cases because of population differences, it was impossible to interpret the smaller values coming from a rather smaller country Mongolia. When plotted on a graph the larger values dominated. So as to get a better understanding and a clear idea of the data distribution, the plots were created using the respective percetage values of each country. 
+
+
+
+# 4. Conclusion
+
+
+In conclusion, it can be said that the Mongolian Government is having the situation under control and has been performing well in keeping the fatality rate low although the daily recovered cases seems to have come to a abrupt halt in mid 2021. The Government of Mongolia has applied many successful public health response strategies and thereby stabilized the progress of the disease. Comparing with other countries as mentioned earlier, Mongolia seems to have done remarkably well.
+
+
+# 5. References
+
+(1). Mongolia, Wikipedia: https://en.wikipedia.org/wiki/Mongolia
+
+(2). COVID-19 pandemic in Mongolia, Wikipedia:  https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Mongolia
+
+(3). Mongolia: Government places Ulaanbaatar and other cities on lockdown due to COVID-19 March 10 /update 7, Crisis24: https://crisis24.garda.com/alerts/2020/03/mongolia-government-places-ulaanbaatar-and-other-cities-on-lockdown-due-to-covid-19-march-10-update-7
+
+(4). Mongolia country profile, BBC News: https://www.bbc.com/news/world-asia-pacific-15460525
+
+(5). Working on All Fronts to Counter COVID-19 in Mongolia, The World Bank; https://www.worldbank.org/en/results/2022/06/27/working-on-all-fronts-to-counter-covid-19-in-mongolia
+
+(6). Mongolia, Britannica; https://www.britannica.com/place/Mongolia
+
+(7). Coronavirus disease (COVID-19), World Health Organization; https://www.who.int/health-topics/coronavirus#tab=tab_1
+
+(8). Impact of COVID-19 on people's livelihoods, their health and our food systems, World Health Organization; https://www.who.int/news/item/13-10-2020-impact-of-covid-19-on-people's-livelihoods-their-health-and-our-food-systems#:~:text=The%20economic%20and%20social%20disruption,the%20end%20of%20the%20year.
+
+(9). The World Bank in Mongolia, The World Bank; https://www.worldbank.org/en/country/mongolia/overview
+
+(10). Coronavirus Cases in Mongolia, Worldometer; https://www.worldometers.info/coronavirus/country/mongolia/#graph-deaths-daily
+
+(11). Does US really have world's highest Covid death toll?,BBC News; https://www.bbc.com/news/61333847
+
+(12). The COVID‐19 pandemic in Australia, National Library of Medicine;  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8652799/#:~:text=COVID%E2%80%9019%20within%20Australia%20has,and%20contact%20quarantine%20regime%20combined

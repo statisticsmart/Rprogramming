@@ -1,0 +1,406 @@
+---
+title: "Covid 19 Report of New Zealand"
+author: "K.D.P Kulugammana - AS2019421"
+date: "2022-10-04"
+output: 
+       html_document:
+             toc: True
+             toc_float: True
+---
+# __New Zealand__
+
+## __1. Introduction__
+
+New Zealand responded to COVID-19 "early" and "hard," and it was quite successful in containing the virus's growth and effects. The reaction has intensified over time and now includes several levels of testing and tracing, as well as border control, hygiene guidance, physical separation, and mask use. Important activities have been led by a four-level Alert Level system at various risk levels. The response has received strong support from the community as well as the strong leadership of the prime minister, minister of finance, and director-general of health. The nation's borders are where it is most susceptible, and arrangements there have raised concerns. Over time, recommendations about testing and the use of masks have varied, and Additionally, there have been worries about the availability and use of personal protective equipment. Although the nation as a whole was not adequately prepared for a pandemic, policy making has been quick. The rapid rollout of a vaccine, making up for delayed health care, and determining how and when the border will reopen are major problems for 2021. The economic and social difficulties will last for a very long time.
+
+### __1.1 Visualization of the location on world map__
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+library(plotly)
+NewZealand_corona<-coronavirus%>%filter(country=="New Zealand")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="brown",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = NewZealand_corona, aes(x=long, y=lat), color="blue", size
+   =3
+   )+
+   labs(title = "Figure 01:Location of New Zealand")
+```
+
+
+
+### __1.2 Climate condition__
+
+The weather in New Zealand fluctuates significantly. While the South Island's inland alpine regions can experience winter temperatures as low as -10°C (14°F), the far north experiences subtropical weather in the summer.However, the majority of the nation is located close to the shore, which results in comfortable weather all year long.As we move south in New Zealand, the average temperature drops.
+
+The majority of New Zealand receives between 600 and 1600 mm of precipitation annually, with a dry spell in the summer. Winter brings more rain than summer to New Zealand's northern and central regions, whilst winter brings the least amount of rain to much of the country's southern region.
+
+In New Zealand, the mean annual temperature ranges from 10°C in the south to 16°C in the north. Typically, January or February are the hottest months while July is the coldest. Although inland and to the east of the ranges, where the fluctuation is greater (up to 14°C), summer and winter temperature differences in New Zealand are often quite minimal. For every 100 meters of elevation, temperatures likewise decrease by roughly 0.7°C.
+
+In New Zealand, the mountainous regions receive the most snowfall. Although the east and south of the South Island may get some snow in the winter, snow is uncommon in the coastal regions of the North Island and west of the South Island. Frosts can form everywhere in New Zealand and typically do so on cold, windless nights.
+
+### __1.3 Lockdown status of New Zealand__
+
+The COVID-19 pandemic in New Zealand is a component of the ongoing coronavirus disease pandemic 2019 (COVID-19), which is brought on by coronavirus 2 that causes severe acute respiratory syndrome (SARS-CoV-2) On February 28 2020, the disease's first case in New Zealand was reported. A total of 1,563,510 cases have been reported across the nation as of July 24th, 2022. (1,551,939 confirmed and 11,571 probable). The virus has claimed 1,925 lives, and cases have been found in all 20 district health board (DHB) regions. With 89 new cases reported daily and 929 active patients, the pandemic first peaked in early April 2020. With 134 additional cases recorded on October 22, 2021, the number of cases rose once more. 7,274,347 in total COVID tests have been conducted as of June 28.
+
+
+The New Zealand government closed its borders and instituted lockdown restrictions in reaction to the initial outbreak in late February 2020. On March 21, 2020, a four-tier system of alert levels was implemented to control the epidemic within New Zealand. Since then, regionalized alert level changes have been employed, where the Auckland Region has gone into lockdown twice, in August-September 2020 and February-March 2021, following a two-month nationwide lockdown from 26 March to 27 May 2020. The nation then experienced a period of time during which there was no community transmission and all cases were contained under the managed isolation system.
+
+
+
+Due to a case of community transmission of the Delta variant in Auckland, followed by more community cases in Auckland and Wellington, New Zealand went into a state of emergency in August 2021.As cases increased across the country, the government abandoned its extermination strategy while quickening the immunization program.Auckland remained in a state of lockdown until the new COVID-19 Protection Framework (often known as the "traffic light system") went into force on December 3, 2021.The Government gradually loosened border controls, limitations on public gatherings, and vaccination mandate requirements between February and May 2022.The COVID-19 Protection Framework was terminated by the government in September 2022, removing all remaining vaccine mandates and mask requirements.
+
+### __1.4 First reported incident__
+
+On February 28, 2020, the disease's first case in New Zealand was reported. A total of 1,563,510 cases have been reported across the nation as of July 24th, 2022. (1,551,939 confirmed and 11,571 probable). The virus has claimed 1,925 lives, and cases have been found in all 20 district health board (DHB) regions.
+
+### __1.5 Actions taken by government after first case__
+
+Community transmission was beginning to take place across the nation two weeks after its first case was confirmed in late February, and the public health system was beginning to fray by the time the WHO eventually proclaimed COVID-19 a global pandemic. Since New Zealand was not impacted by SARS or MERS like Taiwan, Singapore, or South Korea, it did not learn the lessons that its Asian neighbors had from these diseases. To stop a fast expanding transmission, regional public health agencies would never be able to detect and trace close contacts quickly enough. By March 26, it was obvious that the outbreak was on course to devastate the healthcare system and result in tens of thousands of fatalities. There was no alternative but to implement a strict national lockdown in New Zealand.
+
+### __1.6 Impacts of covid 19 in New Zealand__
+
+There are two alarm levels where lockdowns are necessary. Regional lockdowns have been at level three since the national lockdown began at level four before decreasing to level three. Level 4 demands a person to remain in their home and refrain from interacting with anybody outside of their "bubble" of family and friends. Businesses that are not absolutely necessary can continue to operate from home without having to shut down their offices. Hospitals and other medical facilities, life-sustaining utilities, supermarkets, and gas stations are all on the extremely short list of critical services. The state of emergency was firmly maintained.
+People were still expected to remain at home under alert level 3, but they had more flexibility to move about their immediate surroundings.
+Numerous firms were allowed to reopen their locations as long as they abided by tight social distancing and contact-free trading regulations.
+Workers who were able to work from home were required to do so because public spaces were closed. During this time, New Zealand experienced a huge boom in internet sales. Courier businesses were forced to hire more personnel as a result of the increased amount of domestic parcels because they were allowed to operate under level three.
+Even after the level three restrictions were lifted, domestic online sales continued to rise, and many companies are now reorganizing their operations to focus more on online delivery. Additionally, it appears likely that many organizations will continue to allow employees to work from home in the future.
+
+## __2. Exploratory data analysis__
+
+### __2.1 Analysis of death,confirmed,recovered & active cases__
+
+
+```{r,echo=FALSE,warning=FALSE}
+NewZealand_corona <- NewZealand_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(NewZealand_corona,aes(y=cases,x=type,fill=type))+
+  geom_bar(stat = "identity")+
+ylim(0,10000)+
+labs(title="Figure 02: Comparison of total COVID 19 cases in New Zealand")+
+  theme_classic()
+```
+
+Figure 02 shows that all COVID-19 cases in New Zealand. This figure also represented the coparison of deaths,recovery and confirmed COVID 19 cases in New Zealand.It can be seen that highest number of confirmed cases and lowest number of death cases.
+
+
+```{r,echo=FALSE}
+
+confirmed_NewZealand_corona<-NewZealand_corona%>%filter(type=="confirmed")
+confirmed_NewZealand_corona<- confirmed_NewZealand_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p1<-ggplot(confirmed_NewZealand_corona, aes(date, cases),color=confirmed_Newzealand_corona) + geom_path(size=0.5,color="blue") + facet_grid(rows = vars(type)) +
+  labs(title = "Figure 03: Daily COVID-19 confirmed in New Zealand")
+
+ggplotly(p1)
+```
+
+Figure 03 displays the number of daily COVID-19 cases in New Zealand. After February 25th, 2022, there is a significant increase in confirmed cases. On 11th of May 2022, a value of 39773 daily confirmed cases was reported, which is the highest number recorded. Between March and June, they also quickly reported daily confirmed cases.After March 16th of 2022, there is a significant decrese in confirmed cases.
+
+
+```{r,echo=FALSE}
+
+recovery_Newzealand_corona<-NewZealand_corona%>%filter(type=="recovery")
+recovery_Newzealand_corona<- NewZealand_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p2<-ggplot(recovery_Newzealand_corona, aes(date, cases),color=recovery_Newzealand_corona) + geom_path(size=0.5,color="green")+
+  labs(title = "Figure 04: Daily COVID-19 recovered in New Zealand")
+
+ggplotly(p2)
+```
+
+Daily recovered COVID-19 cases are shown in the figure 04.14th March 2020, first COVID-19 recovered case is reported in New Zealand. Since 20th of  October 2021 recovered cases per day is higher than 100. The highest number of daily recovered cases are reported in 16th of march 2022 is 39135.
+
+
+```{r,echo=FALSE}
+
+death_Newzealand_corona<-NewZealand_corona%>%filter(type=="death")
+death_Newzealand_corona <- death_Newzealand_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p3<-ggplot(death_Newzealand_corona, aes(date, cases),color=recovery_Newzealand_corona) + geom_path(size=0.5,color="orange") + facet_grid(rows = vars(type)) +
+  labs(title = "Figure 05: Daily COVID-19 death in New Zealand")
+  
+ggplotly(p3)
+
+```
+
+
+The first COVID-19 death in New Zealand is recorded in 29th of March 2020. In 28 March of 2022 the highest number of daily death reported. The highest number of daily death is 35.recently 28 th of June 2022 number of deaths recorded is 5.
+
+
+```{r,echo=FALSE}
+
+ p4<-ggplot(death_Newzealand_corona, aes(cases)) +
+  geom_freqpoly(bins = 100, col="red")+
+  ggtitle("Figure 06: Distribution of death cases in New Zealand")
+  
+ggplotly(p4)
+
+```
+
+
+Figure 06 shows that the distribution of death cases in New Zealand.Considering between 22 January of 2020 and 23 June 2022 period it can be seen that majority days deaths below 20.
+
+
+```{r,echo=FALSE,warning=FALSE}
+
+  p5<-ggplot(recovery_Newzealand_corona, aes(cases)) +
+  geom_freqpoly(bins = 10, col="green")+
+  ggtitle("Figure 07: Distribution of recoverd cases in New Zealand")
+  
+ggplotly(p5)
+
+```
+
+Figure 07 shows that the distribution of recovered cases in New Zealand.Considering between 22 January of 2020 and 23 June 2022 period it can be seen that majority days recovered below 4420 corona virus recovered pations per day.
+
+```{r,echo=FALSE,warning=FALSE}
+
+p6<-ggplot(confirmed_NewZealand_corona, aes(cases)) +
+  geom_freqpoly(bins = 8, col="blue")+
+  ggtitle("Figure 08: Distribution of confirmed cases in New Zealand")
+  
+ggplotly(p6)
+
+```
+
+Figure 08 shows that the distribution of confirmed cases in New Zealand.Considering between 22 January of 2020 and 23 June 2022 period it can be seen that majority days confirmed below 5682 corona virus confirmed pations per day.
+
+
+### __2.2 Comparison with other countries__
+
+#### __2.2.1 Comparison with neighbouring countries__
+
+```{r,echo=FALSE,warning=FALSE}
+
+near_countries<- coronavirus%>% filter(country == "New Zealand" | country == "Fiji" | country == "Tonga" | country == "Australia" | country == "Vanuatu")
+near_countries<- near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(near_countries,aes(y=cases,x=country,fill=type))+
+  geom_bar(stat = "identity",position ="fill" )+
+  theme_classic()+
+  ylim(0.0,1.0)+
+  labs(title = "Figure 09:comparison of total COVID 19 cases with neighboring countries")
+
+```
+
+Figure 09 shows that comparison the neighboring countries to the New Zealand and total COVID 19 cases.Total COVID 19 cases are relatively equal in Australia and New Zealand. Also total death cases are low compared to other type’s total.Tonga didn’t have recovery cases.New Zealand shows the high recovery cases comparing with other neighboring countries.
+
+
+```{r,echo=FALSE}
+
+near_countries<- coronavirus%>% filter(country == "New Zealand" | country == "Fiji" | country == "Tonga" | country == "Australia" | country == "Vanuatu")
+Confirmed_near_countries<-near_countries%>%filter(type=="confirmed")
+
+Confirmed_near_countries <- Confirmed_near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p8<-ggplot(Confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.3) + scale_color_manual(values = c("red","blue","yellow","orange","green")) +
+  labs(title="Figure 10: Confirmed cases with neighboring countries") 
+
+  
+ggplotly(p8)
+
+```
+
+Figure 10 shows the daily confirmed COVID-19 cases in New Zealand,Fiji,Australia,Tonga and Vanuatu. It can be seen very clearly the number of daily confirmed cases in Australia is higer than other countries.The number of daily confirmed cases in Australia exceeds the 30,000 limit in 17th of january 2022. However, the number of daily confirmed cases in New Zealand is lower than Australia and higher than other countries.
+
+```{r,echo=FALSE,warning=FALSE}
+
+ggplot(Confirmed_near_countries,aes(y=cases,x=country,fill=country))+
+  geom_bar(stat = "identity")+
+ylim(0,100000)+
+labs(title="Figure 10: Comparison of confirmed cases in New Zealand with neighboring countries")+
+  theme_classic()
+
+```
+
+
+Figure 11 shows that comparison of confirmed cases in New Zealand with some of neighboring countries which are Fiji,Australia,Tonga and Vanuatu.Australia has highest confirmed cases and secondly highest is New Zealand And also Fiji shows relatively high value than other two countries and Vanuatu and Tonga shows relatively low confirmed cases comparing other countries.
+
+
+```{r,echo=FALSE}
+
+near_countries<- coronavirus%>% filter(country == "New Zealand" | country == "Fiji" | country == "Tonga" | country == "Australia" | country == "Vanuatu")
+recovery_near_countries<-near_countries%>%filter(type=="recovery")
+
+recovery_near_countries <- recovery_near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+p10<-ggplot(recovery_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.3) + scale_color_manual(values = c("red","blue","yellow","orange","green"))+ 
+labs(title="Figure 12: Recovered cases with neighboring countries") 
+
+ggplotly(p10)
+
+```
+
+ Figure 12 shows comparison of recovered cases with neighboring countries.Australia has the highest daily recovered COVID-19 cases. The number of highest recovered cases per day is 2605 and it is reported in Australia. Compare with Australia, the number of daily recovered cases in New Zealand has the least value.The number of cases daily recovered in New Zealand is approximately increase with time.
+
+```{r,echo=FALSE,warning=FALSE}
+
+ggplot(recovery_near_countries,aes(y=cases,x=country,fill=country))+
+  geom_bar(stat = "identity")+
+ylim(0,10000)+
+labs(title="Figure 13: Comparison of recovered cases in New Zealand with near countries")+
+  theme_classic()
+
+```
+
+Figure 13 shows that comparison of confirmed cases in New Zealand with some of neighboring countries.Australia and Fiji has relatively highest recovered cases and also New Zealand shows relatively lower value than Australia and Fiji.Vanuatu and Tonga didn't show recovered cases comparing other countries.
+
+
+```{r,echo=FALSE,warning=FALSE}
+
+near_countries<- coronavirus%>% filter(country == "New Zealand" | country == "Fiji" | country == "Tonga" | country == "Australia" | country == "Vanuatu")
+death_near_countries<-near_countries%>%filter(type=="death")
+
+death_near_countries <- death_near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+p12<-ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_path(size=0.3) + scale_color_manual(values = c("red","blue","yellow","orange","green"))+ 
+  labs(title="Figure 14: Death cases with neighboring countries") 
+
+ggplotly(p12)
+```
+
+Above figure 14 shows the number of daily deaths in New Zealand with some of neighboring countries.The highest number of daily death also reported in Australia. Since 03rd of March 2020, the count of daily death reported in Australia is higher than 50. There is highly spike in daily death of Australia in 01 of April 2022 and the value is recorded. The count of daily death of New Zealand can be considered as very small compare with Australia.
+
+
+```{r,echo=FALSE,warning=FALSE}
+
+
+ggplot(death_near_countries,aes(y=cases,x=country,fill=country))+
+  geom_bar(stat = "identity")+
+ylim(0,10000)+
+labs(title="Figure 15: Comparison of death cases in New Zealand with near countries")+
+  theme_classic()
+
+```
+
+Figure 15 shows that comparison of death cases in New Zealand with some of neighboring countries.Australia has relatively highest death cases and also New Zealand shows relatively lower value than Australia.Vanuatu and Tonga didn't show death cases comparing other countries.Fiji has relatively low death cases comparing Australia and New Zealand.
+
+
+#### __2.2.1 Comparison with asian countries__
+
+
+```{r,echo=FALSE}
+
+other_countries<- coronavirus%>% filter(country == "New Zealand" | country == "China" | country == "India" | country == "Japan")
+recovery_other_countries<-other_countries%>%filter(type=="recovery")
+recovery_other_countries <-recovery_other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+  
+p14<-ggplot(recovery_other_countries, aes(x = date, y = cases, colour = country)
+       ) +
+  geom_path(size=0.3) + scale_color_manual(
+    values = c("red","orange","green","blue"))+ 
+  labs(title="Figure 16: Recovered cases with Asian countries") 
+
+ggplotly(p14)
+```
+
+Figure 16 shows the daily recovery COVID-19 cases in New Zealand,Japan,India and China. It can be seen very clearly the number of daily recovered cases in India is higher than other countries.Daily recovered cases in India  has been dropped after 06th of May 2021 and 01st of January 2022 while Japan and China has started reporting the new confirmed cases on 09th of January 2022. The number of daily recovred cases in India exceeds the 10050 limit in 18th of January 2021. However, the number of daily recovered cases in New Zealand is lower than India & Japan.
+
+```{r,echo=FALSE}
+other_countries<- coronavirus%>% filter(country == "New Zealand" | country == "China" | country == "India" | country == "Japan" )
+confirmed_other_countries<-other_countries%>%filter(type=="confirmed")
+confirmed_other_countries <-confirmed_other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+p15<-ggplot(confirmed_other_countries, aes(x = date, y = cases, colour = country)
+) +
+  geom_path(size=0.3) + scale_color_manual(
+    values = c("red","orange","green","blue"))+ 
+  labs(title="Figure 17: Confirmed cases with Asian countries")
+ 
+ggplotly(p15)
+
+```
+
+Above figure 17 shows the number of daily confirmed cases in New Zealand with some of asian countries which are Japan,China,India. The highest number of daily confirmed case also reported in India. Since 22nd of May 2020, the count of daily confirmed reported in India is higher than 7000. There is highly spike in daily confirmed of Japan in 1st of December 2021 and the value is recorded as 13044. The count of daily confirmed cases of New Zealand can be considered as very small compare with India.But with Japan and china its comparatively same.
+
+
+```{r,echo=FALSE}
+
+other_countries<- coronavirus%>% filter(country == "New Zealand" | country == "China" | country == "India" | country == "Japan")
+death_other_countries<-other_countries%>%filter(type=="death")
+recovery_other_countries <-confirmed_other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+p16<-ggplot(death_other_countries, aes(x = date, y = cases, colour = country)
+) +
+  geom_path(size=0.3) + scale_color_manual(
+    values = c("red","orange","green","blue"))+ 
+  labs(title="Figure 18: Death cases with Asian countries")
+
+ggplotly(p16)
+
+```
+
+Above figure 18 shows the number of daily death cases in New Zealand with some of Asian countries which are Japan,China,India. The highest number of daily death case also reported in India. Since 17th of April 2020, the count of daily death reported in China is between 0 and 3.But again 17th of February 2022,11 number of death cases reported in China. There is highly spike in daily death cases of India in 10nd of June 2021 and the value is recorded as 7374. The count of daily death cases of New Zealand can be considered as very small compare with all other three countries.
+
+```{r,echo=FALSE,warning=FALSE}
+
+ggplot(other_countries,aes(y=cases,x=country,fill=type))+
+  geom_bar(stat = "identity",position ="fill" )+
+  theme_classic()+
+  ylim(0.0,1.0)+
+  labs(title = "Figure 19:comparison of total COVID 19 cases with Asian countries")
+```
+
+Figure 19 shows that comparison of some of Asian countries with the New Zealand and total COVID 19 cases.Total recovery cases are relatively equal in china and New Zealand.Also total death cases are low in china compared to other countries death total.Japan shows lowest confirmed and recovery cases.Japan shows the high death cases comparing with other asian countries.
+
+
+## __3. Conclusions__
+
+In fact, per 1,000 people, New Zealand has one of the highest hospital bed densities in the world. However, due to a lack of quarantine procedures, its corrupt government has already damaged its health system. Because of this, the number of confirmed patients has significantly climbed. From January 21, 2020, to June 23, 2022, 1.29 million persons tested positive for COVID-19. 1410 persons with coronavirus infections have passed away over the course of the infection's spread in the nation. On June 22nd 2022, 5529 patients who had previously been diagnosed with the novel coronavirus had recovered and been let go from the hospital.
+
+On May 16, 2022, New Zealand reported 39135 patients with the highest number of confirmed COVID cases. But compared to confirmed cases, the number of deaths appears to be small. The largest number of cases that were successfully recovered was reported on May 11th, 2022, with 39773 patients, and the highest number of fatal cases was reported on May 28th, 2022, with 35 patients.
+
+
+## __4. Discussion__
+
+The information from the coronavirus package forms the foundation of this report. In December 2019, authorities in Wuhan City, China, made the first official reports of COVID-19 instances in humans. COVID-19 is a sickness brought on by the unique coronavirus that caused it, which was later renamed SARS-CoV-2. Chinese authorities' investigations have found human instances with symptoms beginning in early December 2019. While some of the initial cases were connected to a Wuhan wholesale food market, others were not. Many of the earliest patients were either market vendors, staff members, or frequent customers.
+
+
+It was discovered during the analysis procedure that the recovered instances from New Zealand had a negative value. A change in the counting method or data source, adding new instances, or because of inaccuracies in the original data can all result in normally negative cases. Therefore, it was changed to zero while evaluating recovered cases in order to meet the positivity and discrete character of the number of counts (>0).
+Therefore, negative cases could happen whenever there is a decrease in the total number of cases from the day before. As negative values are replaced with zero, output of fractional values is prevented.
+
+
+On the strength of rigorous initial travel regulations, science-based government action, and methods responsive to testing limits, the country of around 5 million has only reported a dozen ongoing COVID-19 cases as of this year, a full month after reporting none at all.
+
+As a contemporary, small island nation, New Zealand has emerged as a symbol of effective coronavirus 2019 (COVID-19) pandemic prevention and response.
+Around the same time that international authorities started noting that the SARS-CoV-2 virus was behaving more like a severe acute respiratory syndrome (SARS) than an influenza, the first New Zealand COVID-19 case was identified on February 26. This gave investigators optimism for containment.
+Midway through March, because to a lack of testing and contact-tracing tools, the nation's leaders abruptly changed their approach from controlling the disease to eradicating it.
+On March 26, an alert level four lockdown was imposed across the nation.
+
+
+
+## __5. References__
+(1) Overview of New Zealand’s climate. NIWA.                     https://niwa.co.nz/education-and-training/schools/resources/climate/overview (accessed 2022-10-04).
+
+(2) Msu-Ibc, A.; Us, C. New Zealand: Introduction. Msu.edu. https://globaledge.msu.edu/countries/new-zealand (accessed 2022-10-04).
+
+(3) Wikipedia contributors. COVID-19 pandemic in New Zealand. Wikipedia, The Free Encyclopedia. https://en.wikipedia.org/w/index.php?title=COVID-19_pandemic_in_New_Zealand&oldid=1109878747.
+
+(4) How New Zealand eliminated COVID-19. LSE COVID-19. https://blogs.lse.ac.uk/covid19/2021/01/04/how-new-zealand-eliminated-covid-19/ (accessed 2022-10-04).
+
+
+(5) Kung, S.; Doppen, M.; Black, M.; Hills, T.; Kearns, N. Reduced Mortality in New Zealand during the COVID-19 Pandemic. Lancet 2021, 397 (10268), 25. https://doi.org/10.1016/S0140-6736(20)32647-7.
+
+

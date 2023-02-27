@@ -1,0 +1,400 @@
+---
+#AS2019453
+#Gethmi Vimarshana Mudalige 
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment=NA, message=FALSE, warning=FALSE, paged.print=FALSE)
+```
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+
+## **COVID_19 PANDEMIC IN TUNISIA**
+
+
+### **1.1 About TUNISIA**
+
+Tunisia, officially the Republic of Tunisia,is the northernmost country in Africa. It is a part of the Maghreb region of North Africa, and is bordered by Algeria to the west and southwest, Libya to the southeast, and the Mediterranean Sea to the north and east. It covers 163,610 km2 (63,170 sq mi), and has a population of 12.1 million. It contains the eastern end of the Atlas Mountains and the northern reaches of the Sahara desert; much of its remaining territory is arable land. Its 1,300 km (810 mi) of coastline include the African conjunction of the western and eastern parts of the Mediterranean Basin. Tunisia is home to Africa's northernmost point, Cape Angela; and its capital and largest city is Tunis, which is located on its northeastern coast, and lends the country its name.
+
+Beginning in early antiquity, Tunisia was inhabited by the indigenous Berbers. Phoenicians began to arrive in the 12th century BC, establishing several settlements, of which Carthage emerged as the most powerful by the 7th century BC. Carthage was a major mercantile empire and a military rival of the Roman Republic until 146 BC, when it was defeated by the Romans, who occupied Tunisia for most of the next 800 years, introducing Christianity and leaving architectural legacies like the amphitheatre of El Jem. In the 7th century AD Muslims conquered all of Tunisia (finally succeeding in 697 after several attempts starting in 647), and they brought Islam and Arab culture to the local inhabitants. Then in 1546, the Ottoman Empire established control there, holding sway for over 300 years, until 1881, when the French conquered Tunisia. In 1956, Tunisia gained independence as the Tunisian Republic under the leadership of Habib Bourguiba. Today, Tunisia is the smallest nation in North Africa, and its culture and identity are rooted in this centuries-long intersection of different cultures and ethnicities.
+
+
+### **1.2 Visualization of the location**
+
+```{r echo=FALSE,message=FALSE}
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(maps)
+library(maptools)
+library(ggrepel)
+#library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+visualize <- map_data("world")
+map <- filter(visualize,region=="Tunisia")
+#data("wrld_simpl")
+
+map_plot <- ggplot() +  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="light gray", colour="white") + ggtitle("Point on the Tunisia") 
+
+map_plot + geom_point(data = map,aes(x=long,y=lat),colour="red") 
+#+ label(data) <- "Variable label for variable myvar"
+```
+
+### **1.3 Climate Condition**
+
+Tunisia's climate is hot-summer Mediterranean climate (Köppen climate classification Csa) in the north, where winters are mild with moderate rainfall and summers are hot and dry. Temperatures in July and August can exceed 40 °C (104 °F) when the tropical continental air mass of the desert reaches the whole Tunisia. Winters are mild with temperatures rarely exceeding 20 °C (68 °F) (exception is the south-west of the country). The south of the country is desert. The terrain in the north is mountainous, which, moving south, gives way to a hot, dry central plain. As we go to the south, the climate naturally becomes hotter, drier and sunnier. The southern part has therefore a hot desert climate (Köppen climate classification BWh) with extremely hot summers, warm winters and very low annual rainfall amount. Daytime temperatures consistently turn around 45 °C (113 °F) during summers. However, the warmth of winters is only during daytime because nights can be cold in the desert. A series of salt lakes, known as chottzz or shatts, lie in an east–west line at the northern edge of the Sahara Desert, extending from the Gulf of Gabes into Algeria. The lowest point is Chott el Djerid, at −17 m (−55.8 ft), and the highest is Jebel ech Chambi, at 1,544 metres (5,066 ft). Annual average rainfall amount is lower than 500 mm (19.68 in) nearly everywhere in Tunisia. Tunisia is therefore a dry, semi-arid country. Areas with a pre-Saharan climate receive below 250 mm (9.84 in) and areas with a typical Saharan climate receive below 100 mm (3.94 in) of annual average precipitation. The southernmost part receives rainfall as low as 50 mm (1,97 in) in areas around El Borma, along the Algerian border.
+
+### **1.4 Strong Healthcare System**
+
+Tunisia has the advantage of possessing one of the most advanced, effective, and better-resourced healthcare systems in the MENA region, with relatively high health expenditure per capita and capacity, strong public health infrastructure, and highly organized pre-existing health structures. Tunisia  has spent more in health expenditure than several of its neighbors; the country boasts 2,085 primary care centers and 135 hospitals.
+
+Importantly, it has strong health structures and institutions that were prepared to face the pandemic, which helped the government with both its security and health-related responses to the crisis. They include the National Observatory of New and Emerging Diseases, the Response and Relief Organization, and the Regional National Committee for Disaster Prevention. These institutions were able to collaborate with a newly created authority- the National Coronavirus Response Authority (NCRA)- to centralize responses to the pandemic, follow its epidemiological development, and control its spread. At the local level, municipal councils, aided by civil society organizations and political parties, coordinated with national institutions to implement additional, more targeted measures.
+
+### **2.0  Data Analysis**
+
+
+
+### **2.1 Visualization of the Spread of COVID-19**
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+tunisia.separated <- coronavirus %>% filter(country == "Tunisia")
+africa.separated <- coronavirus %>% filter(continent_name == "Africa")
+
+egypt.separated <- coronavirus %>% filter(country == "Egypt")
+libya.separated <- coronavirus %>% filter(country == "Libya" )
+uganda.separated <- coronavirus %>% filter(country == "Uganda")
+
+```
+
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE}
+tunisia.separated <- tunisia.separated %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(tunisia.separated)
+
+ggplot(tunisia.separated, aes(x=date, y=cases)) + geom_line() 
+
+#there are three missing value
+```
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE}
+# Locate missing value
+which(is.na(tunisia.separated$cases)) # Using base R
+```
+
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE,warning=FALSE}
+tunisia.separated$cases[856] = mean(c(tunisia.separated$cases[855], tunisia.separated$cases[857]))
+length(tunisia.separated$cases)
+
+tunisia.separated$cases[1740] = mean(c(tunisia.separated$cases[1739], tunisia.separated$cases[1741]))
+length(tunisia.separated$cases)
+
+tunisia.separated$cases[2330] = mean(c(tunisia.separated$cases[2329], tunisia.separated$cases[2331]))
+length(tunisia.separated$cases)
+```
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE,warning=FALSE}
+tunisia.separated$col <- as.factor(c(rep("black", 854),rep("red", 2), rep("black", 2652-856)))
+summary(tunisia.separated)
+
+tunisia.separated$col <- as.factor(c(rep("black", 1738),rep("red", 2), rep("black", 2652-1740)))
+summary(tunisia.separated)
+
+tunisia.separated$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 2652-2330)))
+summary(tunisia.separated)
+```
+
+
+
+
+```{r include=FALSE, echo=FALSE,message=FALSE,warning=FALSE}
+#fig.width = 10,fig.height = 6
+ggplot(tunisia.separated, aes(x=date, y=cases)) +
+geom_line(aes(colour=col, group=1)) + ggtitle("Missing values date vs cases - Tunisia")
+scale_colour_identity()
+
+```
+
+
+
+
+
+```{r echo=FALSE,message=FALSE, warning=FALSE }
+#confirmed cases in tunisia
+confirmed.tunisia <-tunisia.separated %>% filter(type =="confirmed")
+graph02 <- ggplot(confirmed.tunisia, aes(date, cases,color=cases)) +ggtitle("Figure 01 : Covid_19 confirmed cases vs Time -  Tunisia") +geom_area() + labs(x="date",y="Number of cases")
+ggplotly(graph02)
+```
+This Figure 01 shows the daily Covid_19 confirmed cases 
+```{r echo=FALSE,message = FALSE}
+#death cases in tunisia
+death.tunisia <-tunisia.separated %>% filter(type=="death")
+graph03 <- ggplot(death.tunisia, aes(date, cases,color=cases)) +ggtitle("Figure 02 : Covid_19 death cases vs Time - Tunisia") +geom_area() + labs(x="date",y="Number of cases")
+ggplotly(graph03)
+```
+```{r echo=FALSE, message = FALSE}
+#recovery cases in tunisia
+recovery.tunisia <-tunisia.separated %>% filter(type=="recovery")
+graph03 <- ggplot(recovery.tunisia, aes(date, cases,color=cases)) +ggtitle("Figure 03 : Covid_19 recovery cases vs Time - Tunisia") +geom_area() + labs(x="date",y="Number of cases")
+ggplotly(graph03)
+```
+```{r echo=FALSE, message = FALSE, warning=FALSE}
+#active cases in tunisia
+active.tunisia <- tunisia.separated %>% group_by(type,date) %>% summarise(total.all.cases = sum(cases)) %>% pivot_wider(names_from = type, values_from = total.all.cases) %>% arrange(date) %>% mutate(active = confirmed - death - recovery) %>% mutate(total_active = cumsum(active), total_recovered = cumsum(recovery), total_death = cumsum(death))
+
+ggplotly(ggplot(active.tunisia,aes(x =date,y =total_active)) +geom_line(color="dark blue") +ggtitle("Figure 04 : Covid_19 acive cases vs Time - Tunisia"))
+```
+According to the Figure 04 shows that the active cases of daily COVID-19 patients ware highly increased by the time in Tunisia.
+
+
+```{r echo=FALSE, message = FALSE, warning=FALSE,fig.width = 10,fig.height = 6 }
+ggplot(tunisia.separated, aes(x=date, y=log(cases), color=type)) + geom_col()  + facet_wrap(type~.) + ylim(0,10) + ggtitle("Figure 05 : Daily Covid-19 cases by cases - Tunisia") 
+```
+The area graph (figure 05) shows, number of confirmed cases(red), number of deaths(green), number of recoveries(blue) on a area. Between 2020 and 2022 COVID-19 confirmed cases has been increased but recovery COVID-19 patient are also the decreasing in period.  
+
+
+
+
+```{r echo=FALSE, message = FALSE, warning=FALSE,fig.width = 10,fig.height = 5 }
+#africa.separated <- coronavirus %>% filter(continent_name == "Africa")
+
+ggplot(africa.separated)+aes(x = country , y=cases,color = country) +geom_point()+ggtitle("Figure 06 : Daily Covid-19 cases by type in Africa")
+```
+In Figure 06, Compared the all countries of Africa continent. Then figure shows the some outliers. Therefore I decided to left some countries. Hare I chose to Benin, Egypt, Eswatini, Gambo, Gambia, Kenya, Libya, Malawi, Nige, Senegal, Somalia, Sudan, Togo, Tunisia and Uganda to conclude. 
+
+
+```{r echo=FALSE, message = FALSE, warning=FALSE,fig.width = 10,fig.height = 5 }
+country.selection.africa<-africa.separated %>% filter(country==c("benin","Congo","Egypt","Eswatini","Gambo","Gambia","Kenya","Libya","Malawi","Nige","Senegal","Somalia","Sudan","Togo","Tunisia","Uganda"))
+ggplot(country.selection.africa)+aes(x = country ,y= cases, color = country) + geom_point() + ggtitle("Figure 07 : Daily Covid-19 cases by type in some conutries in Africa Continent") 
+```
+According to the Figure 07 shows variation of the daily COVID-19 cases of some countries in the Africa continent. There is the huge variate in the Tunisia.
+
+```{r echo=FALSE, message = FALSE, warning=FALSE}
+#active cases in Africa
+active.africa <- africa.separated %>% group_by(type,date) %>% summarise(total.all.cases = sum(cases)) %>% pivot_wider(names_from = type, values_from = total.all.cases) %>% arrange(date) %>% mutate(active = confirmed - death - recovery) %>% mutate(total_active = cumsum(active), total_recovered = cumsum(recovery), total_death = cumsum(death))
+
+ggplotly(ggplot(active.africa,aes(x =date,y =total_active)) +geom_line(color="red") +ggtitle("Figure 08 : Covid_19 acive cases vs Time - Africa  Continent"))
+```
+According to the Figure 08 shows that the active cases of daily COVID-19 patients ware highly increased by the time in Africa Continent. Therefore I start to compare which country has more COVID-19 patients there.
+
+
+```{r echo=FALSE,message=FALSE}
+#time series plot: comfirmed
+confirmed.africa<-country.selection.africa %>% filter(type == "confirmed")
+graph04 <- ggplot(confirmed.africa, aes(x=date,y=cases, color = country), is.na=FALSE)+ geom_line()+ ggtitle("Figure 09 :  confirmed cases - Time series analysis - Africa Continent")
+ggplotly(graph04)
+```
+Here Figure 09 shows the confirmed COVID-19 cases in time series analysis of the selected counties. Among all countries the Tunisia get hands on that huge variation.
+
+```{r echo=FALSE,message=FALSE}
+#time series plot: death
+death.africa<-country.selection.africa %>% filter(type == "death")
+graph05 <- ggplot(death.africa, aes(x=date,y=cases, color = country), is.na=FALSE)+ geom_line()+ ggtitle("Figure 10 : death cases - Time series analysis - Africa Continent")
+ggplotly(graph05)
+```
+In here Figure 10, relatively the highest number of deaths has occurred in Tunisia.
+```{r echo=FALSE,message=FALSE}
+#time series plot: recovery
+recovery.africa<-country.selection.africa %>% filter(type == "recovery")
+graph06 <- ggplot(recovery.africa, aes(x=date,y=cases, color = country), is.na=FALSE)+ geom_line()+ ggtitle("Figure 11 : recovery cases - Time series analysis - Africa Continent")
+ggplotly(graph06)
+```
+
+
+
+```{r echo=FALSE, message = FALSE, fig.width = 10,fig.height = 6 }
+ggplot(country.selection.africa, aes(x=date, y=log(cases), color=type)) + geom_col() + ggtitle("Figure 12 : Daily Covid-19 cases by type : Africa Continent")  + facet_grid(type~.) + ylim(0,20)
+```
+
+
+```{r echo=FALSE,message=FALSE}
+confirmed.africa<-country.selection.africa %>% filter(type == "confirmed")
+ggplot(confirmed.africa, aes(x=country, y=cases,fill=country), is.na=FALSE) + geom_col() + ggtitle("Figure 13 : Daily Covid_19 confirmed cases - Africa Continent")
+```
+
+```{r echo=FALSE,message=FALSE}
+death.africa<-country.selection.africa %>% filter(type == "death")
+ggplot(death.africa, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Figure 14 : Daily Covid_19 death cases - Africa Continent")
+```
+```{r echo=FALSE,message=FALSE}
+recovery.africa<-country.selection.africa %>% filter(type == "recovery")
+ggplot(recovery.africa, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Figure 15 : Daily Covid_19 recovery cases - Africa Continent")
+```
+
+
+### **2.2 Prevalence of corona virus in __Tunisia__ compared to neighboring countries**
+### **Comparison between Tunisia and Egypt**
+
+In this study, we considered following three countries for comparison. There are Egypt, Libya, Uganda. We selected these countries because these are the most effected from COVID-19 virus for the Tunisia.
+
+```{r echo=FALSE,message=FALSE}
+confirmed.tunisia <-tunisia.separated %>% filter(type =="confirmed")
+confirmed.egypt<-egypt.separated %>% filter(type=="confirmed")
+
+confirmed.tunisia.egypt <- data.frame(date = confirmed.tunisia$date, Tunisia=confirmed.tunisia$cases, Egypt=confirmed.egypt$cases)
+
+
+confirmed.tunisia.egypt <- pivot_longer(confirmed.tunisia.egypt, c(2, 3), "country", "value")
+
+ggplot(confirmed.tunisia.egypt, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 16 : Compare Tunisia and Egypt - confirmed cases")
+
+```
+```{r echo=FALSE,message=FALSE}
+death.tunisia <-tunisia.separated %>% filter(type =="death")
+death.egypt<-egypt.separated %>% filter(type=="death")
+
+death.tunisia.egypt <- data.frame(date = death.tunisia$date, Tunisia=death.tunisia$cases, Egypt=death.egypt$cases)
+
+
+death.tunisia.egypt <- pivot_longer(death.tunisia.egypt, c(2, 3), "country", "value")
+
+ggplot(death.tunisia.egypt, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 17 : Compare Tunisia and Egypt - death cases")
+```
+```{r echo=FALSE,message=FALSE}
+recovery.tunisia <-tunisia.separated %>% filter(type =="recovery")
+recovery.egypt<-egypt.separated %>% filter(type=="recovery")
+
+recovery.tunisia.egypt <- data.frame(date = recovery.tunisia$date, Tunisia=recovery.tunisia$cases, Egypt=recovery.egypt$cases)
+
+
+recovery.tunisia.egypt <- pivot_longer(recovery.tunisia.egypt, c(2, 3), "country", "value")
+
+ggplot(recovery.tunisia.egypt, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 18 : Compare Tunisia and Egypt - recovery cases")
+```
+
+
+
+### **Comparison between Tunisia and Libya**
+
+```{r echo=FALSE,message=FALSE}
+confirmed.tunisia <-tunisia.separated %>% filter(type =="confirmed")
+confirmed.libya<-libya.separated %>% filter(type=="confirmed")
+
+confirmed.tunisia.libya <- data.frame(date = confirmed.tunisia$date, Tunisia=confirmed.tunisia$cases, Libya=confirmed.libya$cases)
+
+
+confirmed.tunisia.libya <- pivot_longer(confirmed.tunisia.libya, c(2, 3), "country", "value")
+
+ggplot(confirmed.tunisia.libya, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 19 : Compare Tunisia and Libya - confirmed cases")
+
+```
+```{r echo=FALSE,message=FALSE}
+death.tunisia <-tunisia.separated %>% filter(type =="death")
+death.libya<-libya.separated %>% filter(type=="death")
+
+death.tunisia.libya <- data.frame(date = death.tunisia$date, Tunisia=death.tunisia$cases, Libya=death.libya$cases)
+
+
+death.tunisia.libya <- pivot_longer(death.tunisia.libya, c(2, 3), "country", "value")
+
+ggplot(death.tunisia.libya, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 20 : Compare Tunisia and Libya - death cases")
+```
+```{r echo=FALSE,message=FALSE}
+recovery.tunisia <-tunisia.separated %>% filter(type =="recovery")
+recovery.libya<-libya.separated %>% filter(type=="recovery")
+
+recovery.tunisia.libya <- data.frame(date = recovery.tunisia$date, Tunisia=recovery.tunisia$cases, Libya=recovery.libya$cases)
+
+
+recovery.tunisia.libya <- pivot_longer(recovery.tunisia.libya, c(2, 3), "country", "value")
+
+ggplot(recovery.tunisia.libya, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 21 : Compare Tunisia and Libya - recovery cases")
+```
+
+### **Comparison between Tunisia and Uganda**
+
+```{r echo=FALSE,message=FALSE}
+confirmed.tunisia <-tunisia.separated %>% filter(type =="confirmed")
+confirmed.uganda<-uganda.separated %>% filter(type=="confirmed")
+
+confirmed.tunisia.uganda <- data.frame(date = confirmed.tunisia$date, Tunisia=confirmed.tunisia$cases, Uganda=confirmed.uganda$cases)
+
+
+confirmed.tunisia.uganda <- pivot_longer(confirmed.tunisia.uganda, c(2, 3), "country", "value")
+
+ggplot(confirmed.tunisia.uganda, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 22 : Compare Tunisia and Uganda - confirmed cases")
+
+```
+```{r echo=FALSE,message=FALSE}
+death.tunisia <-tunisia.separated %>% filter(type =="death")
+death.uganda<-libya.separated %>% filter(type=="death")
+
+death.tunisia.uganda <- data.frame(date = death.tunisia$date, Tunisia=death.tunisia$cases, Uganda=death.uganda$cases)
+
+
+death.tunisia.uganda <- pivot_longer(death.tunisia.uganda, c(2, 3), "country", "value")
+
+ggplot(death.tunisia.uganda, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 23 : Compare Tunisia and Uganda - death cases")
+```
+```{r echo=FALSE,message=FALSE}
+recovery.tunisia <-tunisia.separated %>% filter(type =="recovery")
+recovery.uganda<-libya.separated %>% filter(type=="recovery")
+
+recovery.tunisia.uganda <- data.frame(date = recovery.tunisia$date, Tunisia=recovery.tunisia$cases, Uganda=recovery.uganda$cases)
+
+
+recovery.tunisia.uganda <- pivot_longer(recovery.tunisia.uganda, c(2, 3), "country", "value")
+
+ggplot(recovery.tunisia.uganda, aes(x=date, y=log(value), colour=country)) + geom_line() + ggtitle("Figure 24 :Compare Tunisia and Uganda - recovery cases")
+```
+
+
+```{r fig.width = 10,fig.height = 6}
+tunisia.separated <- coronavirus %>% filter(country == "Tunisia")
+#africa.separated <- coronavirus %>% filter(continent_name == "Africa")
+egypt.separated <- coronavirus %>% filter(country == "Egypt")
+libya.separated <- coronavirus %>% filter(country == "Libya" )
+uganda.separated <- coronavirus %>% filter(country == "Uganda")
+
+
+compare.cases<-rbind(tunisia.separated,egypt.separated,libya.separated,uganda.separated)
+ggplot(data=compare.cases,aes(x=type, y=cases,fill=country)) + geom_col(position ="dodge") + ylim(0,10000) + ggtitle("Figure 25 : Comparison of cases in Egypt, Libya, Tunisia, Uganda")
+```
+According to the Figure 25, we can say that compared to the patients who have confirmed COVID-19 in Libya, it is seen that they have recovered at a much higher speed. The death toll seens to have increased relative to the number of comfirmed cases of COVID-19 in Uganda. 
+
+
+
+### **Discussion**
+
+Tunisia is one of the African countries most effected by the COVID-19 pandemic. The virus was first confirmed to have spread to Tunisia on 2020. According to the Figure 05 we can say, there is higher rage of recovery than confirmed COVID-19 patients. Therefore
+this means that Tunisia does not have the necessary resources to provide care for a mass influx of patients. Furthermore, not all Tunisians have the same access to health resources. Other countries had more sufficient way to stop spread of COVID-19.
+Recovery rate of Libya is greater than other selected countries during the studied period. Tunisia also the same plans.
+
+### **Conclusion**
+
+In conclusion, this study shows how COVID-19 virus affected Tunisia, how the virus spread with time. Study also considered how the recovery from COVID-19 happened in Spain and how fatal was it with regard to deaths.The Tunisian government has successfully contained COVID-19, thanks to a strong institutional response combined with public trust and awareness. However, this fledgling democracy may be threatened by the socioeconomic fallout from the outbreak. 
+
+Finally Spain COVID-19 spread is compared with 3 other major countries affected by COVID-19. The actual number of cases and deaths can be different from these data. These are recorded data by the hospitals and medical centers. In this situation, social distances, clean hands often, wear a mask, maintain safe distance from others are some of steps that a person can reduce the chance of being infected or spreading COVID-19.And also it is helpful for future epidemic control.
+
+### **References**
+https://en.wikipedia.org/wiki/Tunisia
+
+https://www.gov.uk/foreign-travel-advice/tunisia/coronavirus
+
+https://www.dfa.ie/travel/travel-advice/a-z-list-of-countries/tunisia/
+
+https://www.brookings.edu/opinions/tunisia-may-have-beaten-covid-19-but-challenges-persist/
+
+
+

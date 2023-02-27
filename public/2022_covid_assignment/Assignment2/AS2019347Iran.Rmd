@@ -1,0 +1,264 @@
+---
+title: "Covid-19 Pandemic in Iran"
+author: "Teshani Dissanayake"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction
+
+Iran, officially the Islamic Republic of Iran and also called Persia, is a country in Western Asia. It is a mountainous, arid, and ethnically diverse country of southwestern Asia. Capital of Iran is Tehran and the currency is rial. More than half of its surface area consists of salt desserts and other wastelands. About one-tenth of its land is arable, and another one-fourth is suitable for grazing. Iran's rich petroleum reserves are the basis of its economy.  
+
+### 1.1 Location of Iran 
+
+Iran is bordered by Iraq and Turkey to the west, by Azerbaijan and Armenia to the northwest, by the Caspian Sea and Turkmenistan to the north, by Afghanistan and Pakistan to the east, and by the Gulf of Oman and the Persian Gulf to the south. Iran also controls about a dozen islands in the Persian Gulf. About one-third of its 4,770-mile (7,680-km) boundary is seacoast.
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
+library(maptools)
+library(ggrepel)
+library(png)
+library(sp)
+library(coronavirus)
+library(grid)
+data("coronavirus")
+data("wrld_simpl")
+```
+
+
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+
+iran_corona <- coronavirus %>% filter(country == "Iran")
+
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), 
+                             fill = "skyblue", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90,90)) + 
+  scale_x_continuous(breaks = seq(-180,180,120)) +
+  scale_y_continuous(breaks = seq(-90,90,100))
+
+p +
+  geom_point(
+    data = iran_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  ) + ggtitle("Visualization of Iran")
+
+```
+
+_Figure 1: Location of Iran in world map_
+
+### 1.2 Demographics of Iran
+
+Iran's population increased dramatically during the later half of the 20th century, reaching about 80 million by 2016. As of 2021, Iran's population is around 85 million. In recent years, however, Iran's birth rate has dropped significantly. Studies project that Iran's rate of population growth will continue to slow until it stabilises above 100 million by 2050. Half of Iran's population was under 35 years old in 2012. 
+
+In 2009, the number of households stood at 15.3 million (4.8 persons per household). Families earn some 11.8 million rials (about $960) per month on average (2012). 
+
+According to the OECD/World Bank statistics population growth in Iran from 1990 to 2008 was 17.6 million and 32%. The literacy rate was 80% in 2002, and 85% in 2016. The fertility rate has fallen to 1.6, far below the natural replacement rate of 2.1
+
+### 1.3 Health and Welfare
+
+Health conditions appreciably improved after World War II through the combined efforts of the government, international agencies, and philanthropic endeavour. By 1964 smallpox had been eradicated, plague had disappeared, and malaria had been practically wiped out. Cholera, believed to have been controlled, broke out in 1970 and again in 1981 but was speedily checked. Health facilities are nevertheless inadequate, and there is a shortage of doctors, nurses, and medical supplies.
+
+Public hospitals provide free treatment for the poor. These are supplemented by private institutions, but all are inadequate. All health services are supervised by the Ministry of Health, Treatment, and Medical Education, the branch offices of which are headed by certified physicians. Welfare is administered by the Ministry of State for Welfare, Foundation of the Oppressed (Bonyād-e Mostaẕʿafān), and the Martyr Foundation (Bonyād-e Shahīd), the latter being particularly concerned with families of war casualties.
+
+### 1.4 Economy of Iran
+
+The most formidable hurdle facing Iran’s economy remains its continuing isolation from the international community. This isolation has hampered the short- and long-term growth of its markets, restricted the country’s access to high technology, and impeded foreign investment. Iran’s isolation is a product both of the xenophobia of its more conservative politicians—who fear postimperial entanglements—and sanctions imposed by the international community, particularly the United States, which accuses Iran of supporting international terrorism. The Iran and Libya Sanctions Act of 1996 expanded an existing U.S. embargo on the import of Iranian petroleum products to encompass extensive bans on investment both by U.S. and non-U.S. companies in Iran. These prohibitions included bans on foreign speculation in Iranian petroleum development, the export of high technology to Iran, and the import of a wide variety of Iranian products into the United States. Overtures by reform-minded Iranian politicians to open their country to foreign investment have met with limited success, but in the early 21st century U.S. sanctions remained in place.
+
+
+# 2. Exploratory Data Analysis
+
+```{r, echo=FALSE}
+library(coronavirus)
+```
+
+
+```{r}
+data(coronavirus)
+```
+
+```{r, comment=NA}
+head(coronavirus)
+```
+
+```{r, comment=NA}
+tail(coronavirus)
+```
+
+```{r,comment=NA, eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
+unique(coronavirus$country)
+```
+
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+iran_corona <- coronavirus %>% filter(country == "Iran")
+```
+
+## 2.1 Visualization of Corona virus cases in Iran
+
+The data about covid-19 cases in Iran were collected for the years of 2020, 2021, 2022. Using recorded data confirmed, death, recovered and active corona virus cases in Iran can be analyzed. 
+
+### 2.1.1 confirmed covid-19 cases
+
+Following data represents confirmed covid-19 cases in Iran according to the collected dataset. 
+
+```{r, comment=NA, echo=FALSE}
+confirmed_iran_corona <- iran_corona %>% filter(type=="confirmed")
+head(confirmed_iran_corona)
+```
+
+Here is a line graph based on the above filtered covid-19 cases which were recorded as confirmed. 
+
+```{r, echo=FALSE}
+ggplot(confirmed_iran_corona, aes(x=date, y=cases)) + geom_line(col="forestgreen") + ggtitle("Iran: Daily Covid-19 confirmed cases")
+```
+
+_Figure 2: Daily confirmed covid-19 cases in Iran_
+
+According to the above figure, at the begining of 2020, there has no any covid-19 confirmed cases in Iran. Number of confirmed cases has gone increasing and decreasing time to time, but during the middle period of 2021, suddenly the number of confirmed cases has taken a higher value.
+
+### 2.1.2 Death Covid-19 cases 
+
+Death covid-19 counts can be seen by the following dataset.
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+death_iran_corona<-iran_corona %>% filter(type=="death")
+head(death_iran_corona)
+```
+
+Changing of death Covid-19 case over the 3 years can be clealry shown by following line graph. 
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(death_iran_corona, aes(x=date, y=cases)) + geom_line(col="red") + ggtitle("Iran: Daily Covid-19 death cases")
+```
+
+_Figure 3: Daily death cases of  covid-19 in Iran_
+
+According to the graph we have obtained, daily Covid-19 death cases shows a wavy pattern over the 3 years. But death cases are considerably high in 2021 compared to other 2 years. Highest amount of death counts shows during the latter half of 2021. Anyway by mid-2022, the death count has marked as zero in Iran. 
+
+
+### 2.1.3 Active Covid-19 cases 
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+corona_iran_wider <-iran_corona %>% pivot_wider(names_from=type, values_from=cases)
+
+corona_iran_wider$active_iran_corona <- corona_iran_wider$confirmed - corona_iran_wider$death - corona_iran_wider$recovery
+
+ggplot(corona_iran_wider, aes(x=date, y= active_iran_corona)) + geom_line(col="Red") + ggtitle("Iran: Daily Covid-19 Active cases")
+```
+
+_Figure 4: Daily active cases of  covid-19 in Iran_
+
+### 2.1.3 Summary of confirmed, recovered and death cases as densities
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(iran_corona, aes(x=date, fill=type))+geom_density()+facet_wrap(type~., ncol=1, scales = "free")
+```
+
+_Figure 5: Density plot of Covid-19 cases in Iran_
+
+The above charts show the confirmation, mortality and recovery of patients corresponding to Covid-19 distribution in Iran as a density plot. Overall, it shows lower density in years 2020,2022 and the density has taken a higher value in the year 2021.
+
+## 2.2 Comparison of Covid-19 cases in Iran with other countries
+
+COVID-19 is different. The causative agent, SARS-CoV-2, is clear; the task is to learn how to best block the virus’s transmission and to prevent infections from progressing to severe disease and death.It is important to compare data regarding Covid-19 cases with neighbouring countries, so that it will be important in the analysis of epidemic spread and remission. Iran borders 7 countries, them being Iraq, Turkey, Armenia, Azerbaijan, Turkmenistan, Afghanistan and Pakistan. 
+
+### 2.2.1 Comparison of Iran and Afghanistan
+
+Following plots show comparison of confirmed, recovered and death cases in Iran and Afghanisitan.
+
+### confirmed cases
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+afghanistan_corona<-coronavirus%>%filter(country=="Afghanistan")
+confirm_Afghanistan_corona<-afghanistan_corona%>%filter(type=="confirmed")
+Iran_corona <- coronavirus %>% filter(country == "Iran")
+confirm_Iran_corona<-Iran_corona%>%filter(type=="confirmed")
+Afghan_Iran_confirm <- data.frame(date=confirm_Afghanistan_corona$date, Afghanistan=confirm_Afghanistan_corona$cases, Iran=confirm_Iran_corona$cases)
+Afghan_Iran_confirm <- pivot_longer(Afghan_Iran_confirm, c(2, 3), "country", "value")
+ggplot(Afghan_Iran_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+_Figure 6: Comparison of confirmed cases in Iran and Afghanistan_
+
+As this diagram shows, the identification of new Covid-19 patients from Iran is greater than from Afghanistan. But in the mid-2022, both countries has recorded about same amount of confirmed cases. That has happened because of the confirmation cases of Iran has reduced at that period but the count of Afghanistan has remained same. 
+
+### Recovered cases
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+afghanistan_corona<-coronavirus%>%filter(country=="Afghanistan")
+recover_Afghanistan_corona<-afghanistan_corona %>% filter(type=="recovery")
+recover_Iran_corona<-Iran_corona%>%filter(type=="recovery")
+Afghan_Iran_recover <- data.frame(date=recover_Afghanistan_corona$date, Afghanistan=recover_Afghanistan_corona$cases,Iran=recover_Iran_corona$cases)
+Afghan_Iran_recover <- pivot_longer(Afghan_Iran_recover, c(2, 3), "country", "value")
+ggplot(Afghan_Iran_recover, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+_Figure 7: Comparison of recovered cases in Iran and Afghanistan_
+
+The amount of recovered patients from confirmed cases in Iran is higher than that of Afghanistan. In mid-2022 period that count has increased in Iran, but it doesn`t show a considerable change regarding Afghanistan. 
+
+### Death cases
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+death_Afghanistan_corona<-afghanistan_corona%>%filter(type=="death")
+death_Iran_corona<-Iran_corona%>%filter(type=="death")
+Afghan_Iran_death <- data.frame(date=death_Afghanistan_corona$date, Afghanistan=death_Afghanistan_corona$cases, Iran=death_Iran_corona$cases)
+Afghan_Iran_death <- pivot_longer(Afghan_Iran_death, c(2, 3), "country", "value")
+ggplot(Afghan_Iran_death, aes(x=date, y=log(value), colour=country)) + geom_line()
+```
+
+_Figure 8: Comparison of death cases in Iran and Afghanistan_
+
+Overall, the death cases in Iran is higher than that of Afghanistan for all 3 years. But a large decrease of death counts is shown in both countries during mid-2022 period. Decreasing rate of Iran of that period is higher than that of Afghanistan. 
+
+### 2.2.2 Comparison of confirmed cases with neighbouring countries
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+pivot_corona <- coronavirus %>%
+pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+```
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+compare_corona <- coronavirus %>% filter(country == c("Afghanistan", "Turkey", "Iraq", "Pakistan"))
+```
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+pivot_compare_corona <- compare_corona %>%
+pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+```
+
+```{r,comment=NA, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = confirmed, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T)
+```
+
+_Figure 9: Scatterplot of confirmed cases of comparing countries_
+
+Above figure shows the confirmed Covid-19 cases in Afghanistan, Iraq, Pakistan and Turkey which are the countries surrounded by Iran. 
+According to the figure, while Iraq, Afghanistan and Pakistan show approximately same amount of confirmed cases, Turkey shows an increasing of that. But in the mid-2022 period, the count of confirmed cases in Turkey also has been reduced rapidly. 
+
+# 3. Discussion and Conclusions
+
+The data set used for the study was loaded by coronavirus data set given in the package R. The data consisting information about Covid-19 cases in Iran was filtered from the coronavirus data set. Two seperate plots has been plotted regarding confirmed cases and death cases and those plots represent that the highest amount confirmed and death cases have been recorded during the period of mid-2021. Iran has compared with other countries also. They were selected because they are neighboring countries of Iran. Impact of neighboring countries to the Covid-19 pandemic is high as it is a virus spread mainly between people who are in close contact with each other. The data regarding other countries also obtained by coronavirus dataset. 
+
+By looking at the obtained plots, it can be said that the Covid-19 epidemic in Iran is almost under control. Except Turkey, neighboring countries of Iran also show same situation regarding the epidemic. The Iran government has been able to control the spread of the corona virus by implementing numerous effective public health response initiatives. 
+
+# 4. References
+
+* https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+* https://hellor.netlify.app/coronareports/
+* https://www.britannica.com/place/Iran
+* https://www.quora.com/How-many-countries-does-Iran-border
+* https://en.wikipedia.org/wiki/Iran
+
+

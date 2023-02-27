@@ -1,0 +1,379 @@
+---
+title: "Vietnam: Covid-19 Pandemic"
+author: "Erangi Dinushika (AS2019329)"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **1.Introduction**
+
+##### As of December 31, 2020, Vietnam had reported 1,465 laboratory confirmed cases of COVID-19 and 35 deaths. This success has been attributed to several key factors, including a well-developed public health system, a decisive central government, and a proactive containment strategy based on comprehensive testing, tracing, and quarantining.
+##### Detect: Vietnam has taken a targeted approach to testing, scaling it up in areas with community transmission. Contact tracing is comprehensive, with three degrees of contacts traced for each positive case.
+##### Contain: As a result of its detection process, hundreds of thousands of people, including international travelers and those who had close contact with people who tested positive, were placed in quarantine centers run by the government, greatly reducing both household and community transmission. Hot spots with demonstrated community transmission, including Da Nang during its outbreak in July and August 2020, were locked down immediately, and the government communicated frequently with citizens to keep them informed and involved in the public health response.
+
+### 1.1 Location of the Vietnam
+```{r, echo=FALSE , message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "green", colour = "white", alpha=0.5
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = coronavirus %>% filter(country == "Vietnam"), aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+```
+
+##### Vietnam is a long, narrow nation shaped like the letter s. It is in Southeast Asia on the eastern edge of the peninsula known as Indochina. Its neighbors include China to the north and Laos and Cambodia to the west. The South China Sea lies to the east and south.
+
+### 1.2 Actions taken by the government
++ #### Contact Tracing
+##### Contact tracing and quarantine are the key parts of containment. Vietnam???s contact tracing strategy stands out as uniquely comprehensive???it is based on tracing degrees of contact from F0 (the infected person) through F1 (those who have had close contact with F0 or are suspected of being infected) and F2 (close contact with F1), and all the way up to F5.
+  
++ #### Quarantine
+##### From January 23 to May 1, 2020, over 200,000 people spent time in a quarantine facility,26 but the numbers increased dramatically after the Da Nang outbreak. To enable contract tracing of the more than 1.5 million people linked to the Da Nang outbreak, the government mobilized resources to localities with poor health systems.27 Ho Chi Minh City conducted contact tracing of everyone from Da Nang and stratified them into groups. People with respiratory symptoms or those exposed to the three epicenter hospitals in Da Nang were placed in a centralized quarantine facility and tested; others were isolated at home and monitored by local commune health staff.
+  
++ #### Target Lockdowns
+##### Vietnam implemented mass quarantines in suspected hot spots based on evolving epidemiological evidence over time. Vietnam entered a nationwide lockdown on April 1. Initially, the lockdown was set for 15 days, but it was extended to 21 days in 28 out of 63 provinces. During the Da Nang outbreak in August, 10 provinces were locked down.
+  
+### 1.3 Economic Impact
+##### The pandemic is projected to cost Vietnam nearly 200,000 billion dong (US$ 9.4 billion) in revenue, according to Prime Minister Nguyen Xuan Phuc. The country???s tourism sector was among the hardest hit as borders remain closed to international tourists. In typical years, Vietnam welcomes 21 million international arrivals. The shops and hotels in the most upscale streets of Hanoi and Ho Chi Minh City remain empty. Fruit exports fell by half between April and June 2020, with freight operators demanding two to four times the normal prices.Overall, however, Vietnam is weathering the economic crisis better than many other countries. It is one of the few countries in the world currently experiencing positive GDP growth (noting that Vietnam had a high baseline GDP growth before the pandemic). The manufacturing sector was growing again by June, after five months of decline.
+  
+## **2.Exploratory Data Analysis**
+### 2.1 Visualization of confirmed, recovered and death cases
+  
+```{r ,echo=FALSE , message=FALSE, results="hide"}
+Vietnam_corona <- coronavirus %>% filter(country == "Vietnam")
+confirmedCases_Vietnam_corona <- Vietnam_corona %>% filter(type == "confirmed")
+recovered_Vietnam_corona <- Vietnam_corona %>% filter(type == "recovery")
+deaths_Vietnam_corona <- Vietnam_corona %>% filter(type == "death")
+
+confirmedCases_Vietnam_corona <- confirmedCases_Vietnam_corona %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmedCases_Vietnam_corona$cases))
+
+
+recovered_Vietnam_corona <- recovered_Vietnam_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(recovered_Vietnam_corona$cases))
+
+deaths_Vietnam_corona <- deaths_Vietnam_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(deaths_Vietnam_corona$cases))
+
+recovered_Vietnam_corona$cases[94] = mean(c(recovered_Vietnam_corona$cases[93],
+                                            recovered_Vietnam_corona$cases[95]))
+
+recovered_Vietnam_corona$cases[98] = mean(c(recovered_Vietnam_corona$cases[97],
+                                            recovered_Vietnam_corona$cases[99]))
+
+recovered_Vietnam_corona$cases[100] = mean(c(recovered_Vietnam_corona$cases[99],
+                                             recovered_Vietnam_corona$cases[101]))
+
+recovered_Vietnam_corona$cases[204] = mean(c(recovered_Vietnam_corona$cases[203],
+                                             recovered_Vietnam_corona$cases[205]))
+
+recovered_Vietnam_corona$cases[562] = mean(c(recovered_Vietnam_corona$cases[561],
+                                             recovered_Vietnam_corona$cases[563]))
+length(recovered_Vietnam_corona$cases)
+
+deaths_Vietnam_corona$cases[211] = mean(c(deaths_Vietnam_corona$cases[210],
+                                          recovered_Vietnam_corona$cases[212]))
+
+deaths_Vietnam_corona$cases[770] = mean(c(deaths_Vietnam_corona$cases[769],
+                                          recovered_Vietnam_corona$cases[771]))
+length(deaths_Vietnam_corona$cases)
+
+recovered_Vietnam_corona$col <- as.factor(c(rep("black", 92),rep("red", 2), 
+                                            rep("black", 884-94)))
+recovered_Vietnam_corona$col <- as.factor(c(rep("black", 96),rep("red", 2), 
+                                            rep("black", 884-98)))
+recovered_Vietnam_corona$col <- as.factor(c(rep("black", 98),rep("red", 2), 
+                                            rep("black", 884-100)))
+recovered_Vietnam_corona$col <- as.factor(c(rep("black", 202),rep("red", 2), 
+                                            rep("black", 884-204)))
+recovered_Vietnam_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), 
+                                            rep("black", 884-562)))
+
+
+deaths_Vietnam_corona$col <- as.factor(c(rep("black", 209),rep("red", 2), 
+                                         rep("black", 884-211)))
+deaths_Vietnam_corona$col <- as.factor(c(rep("black", 768),rep("red", 2), 
+                                         rep("black", 884-770)))
+
+```
+
+#### Confirmed cases of Vietnam
+```{r}
+ggplot(confirmedCases_Vietnam_corona, aes(x=date, y=cases))+
+  geom_line(col="blue")+
+  ggtitle("Vietnam: Daily Covid-19 confirmed cases")
+```
+
+##### Increment of the confirmed cases have been started from the middle of the year 2001. There isn't a trend. A huge increment has been begun in the beginning of the year 2022.
+
+#### Recoveries of Vietnam
+
+```{r  }
+ggplot(recovered_Vietnam_corona, aes(x=date, y=cases))+
+  geom_line(col="blue")+
+  ggtitle("Vietnam: Daily Covid-19 recoveries")
+
+```
+
+##### Recoveries have been increased in the middle of the year 2021.Per day highest recoveries have been reported nearly 8000 by the middle of the year 2021 and the lowest one is 0.
+
+#### Deaths of Vietnam
+
+```{r}
+ggplot(deaths_Vietnam_corona, aes(x=date, y=cases))+
+  geom_line(col="red")+
+  ggtitle("Vietnam: Daily Covid 19 deaths")
+
+```
+##### The highest deaths in a day have been reported at the end of the year 2021.The maximum number of deaths per day is nearly 750.
+
+```{r ,echo=FALSE, message=FALSE}
+ggplot(Vietnam_corona, aes(x=date))+
+  geom_histogram(colour="white")+
+  facet_wrap(type~., ncol=1)+
+  ggtitle("Vietnam: Daily confirmed, death and recovered cases (Histogram)")
+
+```
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(Vietnam_corona, aes(x=date, y=cases, col=type))+
+  geom_line()+
+  ggtitle("Vietnam: Daily confirmed, death and recovered cases(Line plot)")
+```
+
+##### The above charts show the confirmation, mortality and recovery of patients corresponding to Covid-19 distribution in Vietnam.
+
+### 2.2 Comparison with other countries
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+cambodia_corona <- coronavirus %>% filter(country == "Cambodia")
+confirmedCases_cambodia_corona <- cambodia_corona %>% filter(type== "confirmed")
+recovered_cambodia_corona <- cambodia_corona %>% filter(type == "recovery")
+deaths_cambodia_corona <- cambodia_corona %>% filter(type == "death")
+
+confirmedCases_cambodia_corona <- confirmedCases_cambodia_corona %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmedCases_cambodia_corona$cases))
+
+recovered_cambodia_corona <- recovered_cambodia_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(recovered_cambodia_corona$cases))
+
+
+deaths_cambodia_corona <- deaths_cambodia_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(deaths_cambodia_corona$cases))
+recovered_cambodia_corona$cases[79] = mean(c(recovered_cambodia_corona$cases[78],
+   recovered_cambodia_corona$cases[80]))
+recovered_cambodia_corona$cases[562] = mean(c(recovered_cambodia_corona$cases[561],
+   recovered_cambodia_corona$cases[563]))
+
+cambodia_corona <- cambodia_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(cambodia_corona$cases))
+cambodia_corona$cases[1847] = mean(c(cambodia_corona$cases[1846],
+ cambodia_corona$cases[1848]))
+cambodia_corona$cases[2330] = mean(c(cambodia_corona$cases[2329],
+  cambodia_corona$cases[2331]))
+
+```
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+
+laos_corona <- coronavirus %>% filter(country == "Laos")
+confirmedCases_laos_corona <- laos_corona %>% filter(type == "confirmed")
+recovered_laos_corona <- laos_corona %>% filter(type == "recovery")
+deaths_laos_corona <- laos_corona %>% filter(type == "death")
+
+confirmedCases_laos_corona <- confirmedCases_laos_corona %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(confirmedCases_laos_corona$cases))
+confirmedCases_laos_corona$cases[872] = mean(c(confirmedCases_laos_corona$cases[871],
+  confirmedCases_laos_corona$cases[873]))
+
+recovered_laos_corona <- recovered_laos_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(recovered_laos_corona$cases))
+recovered_laos_corona$cases[107] = mean(c(recovered_laos_corona$cases[106],
+  recovered_laos_corona$cases[108]))
+recovered_laos_corona$cases[562] = mean(c(recovered_laos_corona$cases[561],
+  recovered_laos_corona$cases[563]))
+
+
+deaths_laos_corona <- deaths_laos_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(deaths_laos_corona$cases))
+deaths_laos_corona$cases[793] = mean(c(deaths_laos_corona$cases[792],
+  deaths_laos_corona$cases[794]))
+
+laos_corona <- laos_corona %>% 
+  mutate(cases = replace(cases, which(cases< 0), NA))
+which(is.na(laos_corona$cases))
+laos_corona$cases[872] = mean(c(laos_corona$cases[871],
+                                 laos_corona$cases[873]))
+laos_corona$cases[1677] = mean(c(laos_corona$cases[1676],
+                                 laos_corona$cases[1678]))
+laos_corona$cases[1875] = mean(c(laos_corona$cases[1874],
+                                 laos_corona$cases[1876]))
+laos_corona$cases[2330] = mean(c(laos_corona$cases[2329],
+                                 laos_corona$cases[2331]))
+
+
+```
+
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+
+confirmedCases_Vietnam_corona <- Vietnam_corona %>% filter(type == "confirmed")
+cambodia_corona <- coronavirus %>% filter(country == "Cambodia")
+confirmedCases_cambodia_corona<-cambodia_corona%>%filter(type=="confirmed")
+vietnam_cambodia_confirm <- data.frame(date=confirmedCases_Vietnam_corona$date, Vietnam=confirmedCases_Vietnam_corona$cases, Cambodia=confirmedCases_cambodia_corona$cases)
+vietnam_cambodia_confirm <- pivot_longer(vietnam_cambodia_confirm, c(2, 3), "country", "value")
+
+ggplot(vietnam_cambodia_confirm, aes(x=date, y=log(value), colour=country)) + geom_point()+
+  ggtitle("Covid-19 Confirmed cases between Vietnam and Cambodia")
+
+```
+
+##### According to the above dot plot we can see that the confirmed cases of Covid-19 of Vietnam and Cambodia are approximately similar between year 2020 and 2001. After the year 2020 both cases have been increased, but increasing of the Confirmed cases of Vietnam is higher than the increasing of the Confirmed cases of Cambodia 2021 onwards.
+
+```{r, echo=FALSE, message=FALSE , results="hide"}
+
+confirmedCases_Vietnam_corona <- Vietnam_corona %>% filter(type == "confirmed")
+laos_corona <- coronavirus %>% filter(country == "Laos")
+confirmedCases_laos_corona<-laos_corona%>%filter(type=="confirmed")
+vietnam_laos_confirm <- data.frame(date=confirmedCases_Vietnam_corona$date, Vietnam=confirmedCases_Vietnam_corona$cases, Laos=confirmedCases_laos_corona$cases)
+vietnam_laos_confirm <- pivot_longer(vietnam_laos_confirm, c(2, 3), "country", "value")
+
+ggplot(vietnam_laos_confirm, aes(x=date, y=log(value), colour=country)) + geom_point()+
+  ggtitle("Covid-19 Confirmed cases between Vietnam and Laos")
+
+```
+
+##### According to the above dot plot we can see that the confirmed cases of Covid-19 of Vietnam is higher than the Laos in between yeas of 2020 and 2021. After the year 2020 both cases have been increased, but increasing of the Confirmed cases of Vietnam is higher than the increasing of the Confirmed cases of Laos from the origin.
+
+```{r, echo=FALSE, message=FALSE , results="hide"}
+
+recovered_Vietnam_corona <- Vietnam_corona %>% filter(type == "recovery")
+cambodia_corona <- coronavirus %>% filter(country == "Cambodia")
+recovered_cambodia_corona<-cambodia_corona%>%filter(type=="recovery")
+vietnam_cambodia_confirm <- data.frame(date=recovered_Vietnam_corona$date, Vietnam=recovered_Vietnam_corona$cases, Cambodia=recovered_cambodia_corona$cases)
+vietnam_cambodia_confirm <- pivot_longer(vietnam_cambodia_confirm, c(2, 3), "country", "value")
+
+ggplot(vietnam_cambodia_confirm, aes(x=date, y=log(value), colour=country)) + geom_point()+
+  ggtitle("Covid-19 Recovered cases between Vietnam and Cambodia")
+
+```
+
+##### According to the above dot plot we can see that the Recovered cases of Vietnam and Cambodia are approximately similar in between the years of 2020 and 2021. After the year 2020 both cases have been increased, but increasing of the Recovered cases of Vietnam is higher than the increasing of the Recovered cases of Cambodia after the year 2020. The peak of the Recovered of Vietnam have been recorded in the middle of the year 2021.
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+
+recovered_Vietnam_corona <- Vietnam_corona %>% filter(type == "recovery")
+laos_corona <- coronavirus %>% filter(country == "Laos")
+recovered_laos_corona<-laos_corona%>%filter(type=="recovery")
+vietnam_laos_confirm <- data.frame(date=recovered_Vietnam_corona$date, Vietnam=recovered_Vietnam_corona$cases, Laos=recovered_laos_corona$cases)
+vietnam_laos_confirm <- pivot_longer(vietnam_laos_confirm, c(2, 3), "country", "value")
+
+ggplot(vietnam_laos_confirm, aes(x=date, y=log(value), colour=country)) + geom_point()+
+  ggtitle("Covid-19 Recovered cases between Vietnam and Laos")
+
+```
+
+##### According to the above dot plot we can see that the Recovered cases of the Vietnam are extremely higher than the Recovered cases of Laos in between the years of 2020 and 2021. After the year 2020 both cases have been increased, but increasing of the Recovered Cases of Vietnam is higher than the increasing of the Recovered cases of Laos after the year 2020. The peak of the Recovered cases of Vietnam have been recorded in the middle of the year 2021.
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+
+deaths_Vietnam_corona <- Vietnam_corona %>% filter(type == "death")
+cambodia_corona <- coronavirus %>% filter(country == "Cambodia")
+deaths_cambodia_corona<-cambodia_corona%>%filter(type=="death")
+vietnam_cambodia_confirm <- data.frame(date=deaths_Vietnam_corona$date, Vietnam=deaths_Vietnam_corona$cases, Cambodia=deaths_cambodia_corona$cases)
+vietnam_cambodia_confirm <- pivot_longer(vietnam_cambodia_confirm, c(2, 3), "country", "value")
+
+ggplot(vietnam_cambodia_confirm, aes(x=date, y=log(value), colour=country)) + geom_point()+
+  ggtitle("Covid-19 Deaths between Vietnam and Cambodia")
+
+```
+
+##### According to the above dot plot we can see that the deaths of both Vietnam and Cambodia had started after the year 2021. Deaths of the Vietnam are more higher than the Deaths pf the Cambodia over the time period.
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+
+deaths_Vietnam_corona <- Vietnam_corona %>% filter(type == "death")
+laos_corona <- coronavirus %>% filter(country == "Laos")
+deaths_laos_corona<-laos_corona%>%filter(type=="death")
+vietnam_laos_confirm <- data.frame(date=deaths_Vietnam_corona$date, Vietnam=deaths_Vietnam_corona$cases, Laos=deaths_laos_corona$cases)
+vietnam_laos_confirm <- pivot_longer(vietnam_laos_confirm, c(2, 3), "country", "value")
+
+ggplot(vietnam_laos_confirm, aes(x=date, y=log(value), colour=country)) + geom_line()+
+  ggtitle("Covid-19 Deaths between Vietnam and Laos")
+
+```
+
+##### According to the above dot plot we can see that the deaths of both Vietnam and Laos had started after the year 2021. Deaths of the Vietnam are more higher than the Deaths pf the Laos over the time period.
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+neighbour_country_corona <- as.data.frame(rbind(Vietnam_corona,cambodia_corona,laos_corona))
+countries_confirmed<- neighbour_country_corona%>%filter(type=="confirmed")
+ggplot(countries_confirmed,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+
+  ggtitle("Comparison  of Covid-19 Confirmed cases between the neighbouring countries")
+
+```
+##### This plot shows the Cofirmed cases among all the 3 neighbouhring countries. Vietnam shows the highest cases according to this grids.
+
+```{r, echo=FALSE, message=FALSE, results="hide"}
+neighbour_country_corona <- as.data.frame(rbind(Vietnam_corona,cambodia_corona,laos_corona))
+countries_death<- neighbour_country_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date, y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+ 
+  ggtitle("Comparison  of Covid-19 Deaths between the neighbouring countries")
+
+```
+
+##### This plot shows the Cofirmed death among all the 3 neighbouhring countries. Vietnam shows the highest cases according to this grids.
+
+## 3. Conclusions
+##### According to the above information, the rate of Covid-19 patients in Vietnam is higher than the other two countries as well as the recovery rate of the Vietnam is also higher than the other two countries. As well as the death rate is too high in Vietnam than the other two border countries. So according to these details we can conclude that Vietnam had to take more actions at the beging of the Covid-19 to contol the spread of the Virus.
+
+##### At the early stages of Covid-19, we can see according to the plot of Confirmed cases between Vietnam and Laos, Loas has a little number of confirmed cases. So according to that we can conclude that the Health Service in Laos is at a better level than the Vietnam.
+
+##### When comparing Vietnam and Cambodia, the records of Confirmed cases of Vietnam is higher than the confirmed cases of Cambodia over the period of time. But the recovered cases of both countries are approximately similar. So we can conclude that Cambodia had taken neccessary actions to control Covid-19 than Vietnam.
+
+##### According to all these details we can conclude that Vietnam has been hit hard by Covid-19 and the spread of corona virus has been brought under control to some extent under poor health facilities relative to the number of patients and deaths.
+
+## 4.References
+
+###### https://ourworldindata.org/covid-exemplar-vietnam
+###### https://www.worldometers.info/coronavirus/country/viet-nam/

@@ -1,0 +1,363 @@
+### K.Y.Kaluarachchi
+### AS2019407
+
+
+# 1. Corona Virus Report of IRELAND
+
+
+## 1.1 Introduction
+
+Ireland, the 20th largest island, is located on the North Atlantic Ocean. Ireland is also the third largest island in Europe and second largest island of the British Isles. It lies in the north-west of Europe and is separated from Great Britain by the North Channel, the Irish Sea and St. George's Channel. Ireland is geopolitically divided into two parts, Republic of Ireland(officially named Ireland) and Northern Ireland which is a part of United Kingdom. Meanwhile, the majority of the island(five-sixths) belongs to the Republic of Ireland. Out of the total population, about 5.1 million live in the Republic of Ireland and the remaining 1.9 million live in the Northern Ireland. Republic of Ireland, is the second-most populous island in Europe after Great Britain. Capital of Republic of Ireland is Dublin while the Capital of Northern Ireland is Belfast.
+
+
+## 1.2 Visualization of Ireland
+
+
+```{r, include=FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+data(coronavirus)
+data(wrld_simpl)
+```
+
+
+```{r, include=FALSE}
+ ireland_corona <- coronavirus %>% filter(country == "Ireland")
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+```
+
+
+```{r, results='hide', echo=FALSE}
+
+p +
+  geom_point(
+    data = ireland_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+    
+
+  )
+```
+
+
+
+## 1.3 Climate
+
+Ireland has a mild temperate oceanic climate, due to the controlling influence of the Atlantic Ocean. Mean annual temperatures generally range between 9°C and 10°C with the higher values in coastal regions. Summer is the warmest season, followed by Autumn, Spring and Winter. The highest temperatures occur inland during the summer, with mean seasonal maximum between 18°C and 20°C while highest values occur in coastal regions during the Winter. July is the warmest month, followed by August and June; the coldest month is January followed closely by February and then December.
+
+
+
+## 1.4 First Case of Covid 19
+
+The first covid patient reported from Ireland was a middle aged lady. She returned to her home country Ireland on 17th February 2020 after travelling in Northern Italy. On the same day she started developing general malaise and cough. She was admitted to the the hospital for further clinical observation and at that time she showed many symptoms as cough, night sweat, nausea, general malaise etc. After undergoing various tests, this middle aged woman diagnosed with a mild clinical episode of Corona Virus.
+
+
+
+## 1.5 Lockdown status in Ireland
+
+
+Like other countries, Ireland also had to face the spread of Covid. The covid virus reached Ireland in the second half of February 2020.The Governement of Republic of Ireland issued the stay at home order for the first time on 27th March, 2020. This first lockdown is the longest in Europe. This lockdown also led to a severe recession and growth in unemloyment. With the drop of deaths and infections by June, the restrictions issued by the Government had lifted gradually.But schools were closed during the summer break and the pubs also remained shut. Again in October statewide lockdown which was one of the strictest in the world had  announced with the rise of infections. From May 2021 the the lockdown gradually lifted, after another curfew was ordered on indoor hospitality from 20th December 2021.
+
+
+## 1.6 Actions taken by Goverment
+
+The Government of Republic of Ireland had taken various actions to control the prevalence of covid. Imposing lockdowns, Vaccinations, quarantine rules on incoming travellers was executed by Governement. The Oireachtas(bicameral parliament of Ireland) passed an emergency act giving the state-far reaching ppowers to control the virus's spread. The vaccination programme began on 29 December and has been praise for one of the most successful rollout in the world. Due the decrease of cases, the most of the restrictions including wearing masks and social distancing were removed in January and February 2022. 
+
+
+# 2. Exploratory Data Analysis
+
+
+## 2.1 Confirmed Cases
+
+
+```{r, include=FALSE}
+
+
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+```
+
+
+
+```{r, results='hide', echo=FALSE}
+
+ireland_corona <- coronavirus %>% filter(country == "Ireland")
+
+confirmed_ireland_corona<-ireland_corona %>% filter(type=="confirmed")%>% select(date, country, type, cases)%>% mutate(cases=replace(cases,which(cases<0),NA))
+
+head(confirmed_ireland_corona)
+ggplot(confirmed_ireland_corona, aes(x=date, y=cases, scale_x_log10())) + geom_line(color="red") + ggtitle("Ireland: Daily Covid-19 Cases")
+
+```
+
+
+From this figure, we can see that the number of covid cases reported in the year of 2020 is very minimal.At the beginning of 2021, the number of cases rose slightly and then remained at a very low level for the remaining months of the year.But it seems that the number of covid cases reported in the year 2022 has increased very rapidly.
+
+
+## 2.2 Recovered Cases
+
+```{r, echo=FALSE, results='hide'}
+
+
+recover_ireland_corona <- coronavirus %>% filter(country == "Ireland")%>% filter(type=="recovery")%>% select(date, country, type, cases)%>% mutate(cases=replace(cases,which(cases<0),NA))
+
+head(recover_ireland_corona)
+ggplot(recover_ireland_corona, aes(x=date, y=cases), scale_x_log10()) + geom_line(color="blue") + ggtitle("Ireland: Daily Covid-19 Recoveries")
+
+```
+
+
+We can see a decreasing pattern from this graph.
+
+
+## 2.3 Death Cases
+
+```{r, echo=FALSE, results='hide'}
+
+
+death_ireland_corona <- coronavirus %>% filter(country == "Ireland")%>% filter(type=="death")%>% select(date, country, type, cases)%>% mutate(cases=replace(cases,which(cases<0),NA))
+
+head(death_ireland_corona)
+ggplot(death_ireland_corona, aes(x=date, y=cases), scale_x_log10()) + geom_line(color="green") + ggtitle("Ireland: Daily Covid-19 Deaths")
+
+```
+
+
+The covid death seem to have increased in the first half of 2020. Back in 2021, the covid death toll has rised again. But by the middle of the year, the number of deaths has gradually decreased. Later it gradually increased again and by 2021 has remained at an approximately constant value.
+
+
+## 2.4  Confirmed, Recovered and Death Boxplots
+
+
+```{r, echo=FALSE, results='hide'}
+ireland_corona <- coronavirus %>% filter(country == "Ireland") %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+ggplot(ireland_corona, aes(x=date, fill=type))+geom_boxplot()+facet_wrap(type~., ncol=1, scales = "free")
+```
+
+
+
+## 2.5 Visualization of the relationship between death cases and confimed cases
+
+
+```{r, echo=FALSE, results='hide'}
+
+A <- c(1666048, 7959)
+
+B <- c("confirmed", "Death")
+  
+barplot(A, names.arg = B, xlab ="", 
+        ylab ="", col ="orange", 
+        main ="Death vs Confirmed")
+
+```
+
+By the graph we can see that number of deaths compared to number of confirmed cases are very low.
+
+
+# 3. Comparison with other countries
+
+## 3.1. Covid summary of World
+
+
+```{r, echo=FALSE, results='hide',comment=FALSE, include=FALSE}
+confirmedraw <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+str(confirmedraw) 
+deathsraw <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
+recoveredraw <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv")
+
+library(tidyr)
+library(dplyr)
+confirmed <- confirmedraw %>% gather(key="date", value="confirmed", -c(Country.Region, Province.State, Lat, Long)) %>% group_by(Country.Region, date) %>% summarize(confirmed=sum(confirmed))
+deaths <- deathsraw %>% gather(key="date", value="deaths", -c(Country.Region, Province.State, Lat, Long)) %>% group_by(Country.Region, date) %>% summarize(deaths=sum(deaths))
+recovered <- recoveredraw %>% gather(key="date", value="recovered", -c(Country.Region, Province.State, Lat, Long)) %>% group_by(Country.Region, date) %>% summarize(recovered=sum(recovered))
+summary(confirmed)
+
+country <- full_join(confirmed, deaths) %>% full_join(recovered)
+
+str(country) 
+country$date <- country$date %>% sub("X", "", .) %>% as.Date("%m.%d.%y")
+str(country) 
+
+country <- country %>% group_by(Country.Region) %>% mutate(cumconfirmed=cumsum(confirmed), days = date - first(date) + 1)
+world <- country %>% group_by(date) %>% summarize(confirmed=sum(confirmed), cumconfirmed=sum(cumconfirmed), deaths=sum(deaths), recovered=sum(recovered)) %>% mutate(days = date - first(date) + 1)
+```
+
+
+
+```{r, echo=FALSE, results='hide'}
+ggplot(world, aes(x=date, y=confirmed)) + geom_bar(stat="identity") +
+  theme_classic() +
+  labs(title = "Covid-19 Global Confirmed Cases", x= "Date", y= "Daily confirmed cases") +
+  theme(plot.title = element_text(hjust = 0.5, color="orange"))
+```
+
+
+
+```{r, echo=FALSE, results='hide'}
+library(ggplot2)
+
+ggplot(world, aes(x=days, y=confirmed)) + geom_line() +
+  theme_classic() +
+  labs(title = "Covid-19 Global Confirmed Cases", x= "Days", y= "Daily confirmed cases") +
+  theme(plot.title = element_text(hjust = 0.5, color="red"))
+
+```
+
+
+
+## 3.2 Ireland, UK, Italy Comparison
+
+## 3.2.1 Covid 19 Growth Rate of Ireland, Italy and UK
+
+```{r, include=FALSE}
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+```{r, echo=FALSE, results='hide',comment=FALSE, warning=FALSE}
+world_map <- ne_countries(scale = 50, returnclass = 'sf')
+european_union <- c("Ireland","Italy","United Kingdom")
+european_union_map <- 
+  world_map %>% 
+  filter(name %in% european_union)
+
+bbox_europe <- st_bbox(c(xmin = -10, ymin = 20, xmax = 50, ymax = 80), crs = st_crs(european_union_map))
+european_union_map_cropped <- st_crop(european_union_map, bbox_europe)
+
+df <- 
+  tibble(country = european_union,
+       some_value = runif(length(european_union)))
+
+map <- 
+  european_union_map_cropped %>% 
+  left_join(df, by = c("name" = "country"))
+
+ggplot(data = map) +
+  geom_sf(mapping = aes(fill = some_value)) +
+  scale_fill_gradient(name = "Growth Rate", low = "#99CCFF", high = "#FF3366", na.value = "grey50") +
+  labs(title = "Ireland, UK, Italy.") +
+  theme(plot.title.position = "plot")
+
+
+```
+
+
+```{r, echo=FALSE, results='hide', include=FALSE}
+
+countryselection <- country %>% filter(Country.Region==c("Italy", "United Kingdom", "Ireland"))
+```
+
+
+
+## 3.2.2 Daily Confirmed Cases Comparison
+
+
+```{r, echo=FALSE, results='hide', warning=FALSE,include= FALSE}
+p10 <- ggplot(countryselection, aes(x=days, y=confirmed, colour=Country.Region)) + geom_line(size=1) +
+  theme_classic() +
+  labs(title = "Covid-19 Confirmed Cases by Country", x= "Days", y= "Daily confirmed cases (log scale)") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(trans="log10")
+```
+```{r, echo=FALSE, results='hide',warning=FALSE, comment=FALSE}
+
+p10
+```
+
+
+There has been an almost equal increasing pattern in confirmed cases of Covid 19 in both Italy and the United Kingdom. Compared to those two countries, the number of Covid patients reported from Ireland is low.
+
+# 3.2.3 Daily Recovered Cases By Country
+
+
+```{r, echo=FALSE, results='hide', warning=FALSE,include= FALSE}
+p11 <- ggplot(countryselection, aes(x=days, y=recovered, colour=Country.Region)) + geom_line(size=1) +
+  theme_classic() +
+  labs(title = "Covid-19 Recovered Cases by Country", x= "Days", y= "Daily recovered cases (log scale)") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(trans="log10")
+```
+```{r, echo=FALSE, results='hide',warning=FALSE, comment=FALSE}
+
+p11
+```
+
+Italy has the highest number of recovered cases prior to the highest number of confirmed cases. Eventhough the confirmed cases were higher in United Kingdom the recovered cases are lower than the Ireland
+
+
+## Covid 19 Death Cases by Country
+
+```{r, echo=FALSE, results='hide', warning=FALSE,include= FALSE}
+p12 <- ggplot(countryselection, aes(x=days, y=deaths, colour=Country.Region)) + geom_line(size=1) +
+  theme_classic() +
+  labs(title = "Covid-19 Death Cases by Country", x= "Days", y= "Daily Death cases (log scale)") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(trans="log10")
+```
+```{r, echo=FALSE, results='hide',warning=FALSE, comment=FALSE}
+
+p12
+```
+
+This figure is approximately similar to the figure of confirmed cases by country. Ireland is the country which have lowest deaths among the other two countries.
+
+## 3.2.4 Covid 19 Cases by Country
+
+
+```{r, echo=FALSE, results='hide',warning=FALSE, comment=FALSE}
+str(countryselection)
+countryselection %>% gather("Type", "Cases", -c(date, days, Country.Region)) %>%
+ggplot(aes(x=days, y=Cases, colour=Country.Region)) + geom_line(size=1) +
+  theme_classic() +
+  labs(title = "Covid-19 Cases by Country", x= "Days", y= "Daily cases (log scale)") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(trans="log10") +
+  facet_grid(rows=vars(Type))
+```
+
+# 4. Conclusion
+
+The total number of cases reported from Ireland is 1.67 million and the number of deaths is 7959. Accordingly, the death rate due to Covid is only 0.477%. Also according to the figures, the impact of Covid on Ireland appears to be minimal. Italy is the most affected country in the continent of Europe due to covid. With the longest lockdowns the prevalance of Covid in Ireland is at a low level. During 2020 and 2021 Ireland had one of the lowest excess death rates, which is 12.5 deaths per 100000 population.
+
+
+## 5. Refferences
+
+1. “Ireland” Wikipedia. Available: https://en.wikipedia.org/wiki/Ireland
+
+2. "Ireland" Britannica. Available: https://www.britannica.com/place/Ireland
+
+3. "Citizens Information". Available:https://www.citizensinformation.ie/en/covid19/living_with_covid19_plan.html#:~:text=All%20COVID-19%20restrictions%20in,recovery%20to%20travel%20to%20I
+
+4. "Worldometers". Available: https://www.worldometers.info/coronavirus/country/ireland
+
+5. "World Health Organization". Availabele:https://covid19.who.int/region/euro/country/ie
+
+
+

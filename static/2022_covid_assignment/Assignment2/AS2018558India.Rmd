@@ -1,0 +1,331 @@
+---
+title: "**COVID-19 Analysis in India**"
+author: "S.D.D.Thilakshana"
+date: "2022-09-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = NA, message = FALSE, warning = FALSE)
+```
+
+<style>
+body {
+text-align: justify; font-size: 15pt}
+</style>
+
+<font face="Times New Roman">
+
+## **1. Introduction**
+
+### **1.1 Visualisation of country, location and population **
+
+India is a South Asian country. It is the world's most populous democracy, the second-most populated nation by area, and the seventh-largest nation overall. Its land borders with Pakistan to the west, China, Nepal, and Bhutan to the north, Bangladesh and Myanmar to the east, and the Indian Ocean on the south, Arabian Sea on the southwest, and the Bay of Bengal on the southeast. The capital of the country is New Delhi.
+<br>
+India typically has a tropical wet and dry climate. In terms of climate, India is divided into several regions. The country has a tropical climate for the most part, with a mix of wet and dry tropical weather throughout the interior. The northern parts have a humid tropical climate, while the western coast has wet tropical areas. 
+
+
+
+```{r, include = FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+library(gganimate)
+library(gifski)
+
+India_corona <- coronavirus %>% filter(country == "India")
+
+India_corona[India_corona$cases < 0, ] # Identify negative values
+
+#Replace three negative cases which are Identify above
+India_corona[944, 7] <- mean(India_corona[943, 7], India_corona[945, 7]) 
+India_corona[2115, 7] <- mean(India_corona[2114, 7], India_corona[2116, 7])
+India_corona[2330, 7] <- mean(India_corona[2329, 7], India_corona[2331, 7])
+
+summary(India_corona)
+#Zero NA cases
+```
+
+```{r, fig.cap="Figure 1: Location in the worldmap"}
+library(ggplot2)
+library(maptools)
+library(tibble) 
+library(tidyverse) 
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl) 
+
+p <- ggplot() + 
+  geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), 
+               fill = "gray", colour = "white" ) + 
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + 
+  scale_x_continuous(breaks = seq(-180, 180, 120)) + 
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+
+p + geom_point(data = India_corona, aes(x = long, y = lat), color = "red", 
+               size = 2) 
+```
+
+
+### **1.2	Health condition in the India**
+India has made enormous strides in the health sector over the last few decades. Life expectancy has surpassed 67 years, infant and under-five mortality rates are decreasing, and disease incidence is decreasing. Many diseases have been eradicated, including polio, guinea worm disease, yaws, and tetanus.
+<br>
+In the coming decades, communicable diseases are expected to remain a major public health problem, posing a threat to both national and international health security. Furthermore, noncommunicable diseases (NCDs) are now the leading cause of death in the country, accounting for 60% of all deaths. (4,5) Four diseases, namely heart disease, cancer, diabetes, and chronic pulmonary diseases, account for nearly 80% of all NCD-related deaths, and they share four risk factors: tobacco use, harmful alcohol use, an unhealthy diet, and a lack of physical activity. In addition, the maternal mortality ratio and infant mortality rate (IMR) remain unacceptably high. According to the World Health Organization (WHO), the IMR fell from 81 in 1990 to 41.4 per 1,000 live births in 2013.
+
+### **1.3	What is COVID-19**
+COVID-19 infection, which originated in Wuhan, China. The COVID-19's clinical signs resemble those of other respiratory viruses quite a bit. In numerous regions of the world, the number of deaths linked to laboratory-confirmed cases is rising steadily. Seven coronaviruse can naturally infect people such as 229E, NL63, OC43, HKU1, SARS, MERS, and COVID-19. Out of these, SARS-CoV, MERS-CoV, and COVID-19 are widely recognized for their high fatality, whereas are in charge of moderate upper respiratory illnesses. There are a few mild coronavirus strains in circulation in India, but no outbreaks of SARS or MERS have been reported. A new viral illness that causes pandemics is COVID-19.
+<br>
+Fortunately, COVID-19 has a lower death rate than SARS and MERS, and the majority of its cases recover. Even with a low fatality rate, COVID-19 creates a pandemic while SARS-CoV and MERS-CoV only cause outbreaks, therefore its death toll is substantial. Large portions of the global population were affected by COVID-19, which created an international public health emergency and raised the alert level for all medical organizations.
+
+### **1.4	COVID-19 in India**
+
+#### **1.4.1	Pandemic status of the India**
+Initial outbreaks in India began in regions that are directly linked to the affected area via trade/travel. The most previous case regarding the COVID-19 in India was founded in Kerala by three students who returned from Wuhan, China. More than a hundred confirmed cases of COVID-19 have been identified from various parts of India as of 09 April 2020; the majority of them have a travel history to affected areas. Meanwhile, on March 12, 2020, the first death was reported. The first victim was a 76-year-old man who had recently returned from a trip to Saudi Arabia. COVID-19 increases the rate of infection, with 1000 infections on March 28 and 1834 deaths on April 1, 2020. The number of cases is very low in comparison to other countries because India is the world's second-most populous developing country with insufficient medical facilities.  More than two million people were screened, and 5734 were found to be positive for COVID-19 by laboratory-confirmed assays, with 166 (2.9%) dying and 473 (8.25%) recovering.
+
+#### **1.4.2	Action taken by the government and the lockdown status**
+A dependable vaccine or antiviral may be the best solution for any virus. In the absence of these, prevention is the only option. A susceptible person contracted the infection from these contaminated targets, allowing the virus to multiply and spread to other people. To reduce viral transmission, the infected or suspected person should follow cough etiquette, maintain distance, cover coughs/sneezes with tissues or clothing, frequently wash their hands, and safely dispose of infected material. To avoid nosocomial infections, hospitals, diagnostic laboratories, emergency departments, and other health care facilities should follow standard infection prevention and control practices.
+<br>
+COVID Care Centers (CCC) are established in public or private hostels, hotels, schools, stadiums, and lodges throughout India.
+<br>
+The world's largest COVID-19 national lock down has been extended until May 3. Since the first case on January 30, India has reported 18 985 confirmed cases and 603 deaths from COVID-19 in 31 states and union territories as of April 22. India moved quickly to close its international borders and impose an immediate curfew.
+<br>
+The lock down also gave the government time to prepare for a potential surge in cases when the pandemic is expected to peak in the coming weeks. Nonetheless, India's 13 billion population spread across various states, health inequalities, widening economic and social disparities, and distinct cultural values present unique challenges.
+
+## **2. Exploratory Data Analysis**
+
+### **2.1 Structure of the Data**
+
+The data set is the 2019 Novel Coronavirus COVID-19 (2019-nCoV) and it contains the daily summary of the coronavirus (COVID-19) cases (confirmed, death and recovered) by state/province.The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) coronavirus.
+
+Format : A data frame with 7 variables.
+
+**date**: Date in YYYY-MM-DD format.
+
+**province**: Name of province/state, for countries where data is provided split across multiple provinces/states.
+
+**country**: Name of country/region.
+
+**lat**: Latitude of center of geographic region, defined as either country or, if available, province.
+
+**long**: Longitude of center of geographic region, defined as either country or, if available, province.
+
+**type**: An indicator for the type of cases (confirmed, death, recovered).
+
+**cases**: Number of cases on given date.
+
+This analysis is based on the COVID-19 in India by using R language.
+This statistical analysis was conducted by using the data which are recorded from 22 January 2020 to 23 June 2022.
+
+### **2.2 COVID-19 Statistics of India**
+
+```{r, fig.cap="Figure 2"}
+ggplot(India_corona, aes(x = cases, y=type, fill= type, col = type))+
+  geom_boxplot(outlier.shape = NA, alpha=0.5) +
+  geom_jitter(alpha = 0.8) 
+
+```
+
+The Figure 2 shows that, brief idea about the amount of confirmed, death and recovered cases in India. When compared to confirmed and recovered cases, there were fewer cases of death, and the range was very narrow. most of the people who are affected from COVID-19 could be survived. But When see the count of death cases individually, it has some large value.
+
+**The following graphs indicate the daily confirmed, recovered and death cases in India.**
+
+#### **Daily confirmed cases in India**
+```{r, fig.cap="Figure 3: Daily Covid-19 Confirmed cases"}
+confirmed_India_corona <- India_corona %>% filter(type == "confirmed")
+p1 <- ggplot(confirmed_India_corona, aes(x=date, y=cases))+ geom_line() 
+plotly::ggplotly(p1)
+```
+
+According to the Figure 3, At the beginning(first 3 months in 2020) the less number of people were affected COVID-19 but in recently it is increasing speedy.In April 2021, India was faced to the second wave of COVID-19. There were few considerable cases has been occurred. The highest number of COVID-19 confirmations were reported on May 2021 and next peak was started from January 2022.
+
+#### **Daily death cases in India**
+```{r, fig.cap="Figure 4: Daily Covid-19 Death cases"}
+death_India_corona <- India_corona %>% filter(type == "death")
+p2 <- ggplot(death_India_corona, aes(x=date, y=cases)) + geom_line()
+plotly::ggplotly(p2)
+```
+
+By Figure 4, The count of the death cases is considerably increasing after 2020 and  it is comparatively very large in the middle of the year 2021 with previous year(2020). The worst case was reported in India as 7374 on May 2021. Apart from that, the daily death cases of COVID-19 in 2022 was recorded around 2000 deaths.
+
+#### **Daily recovered cases in India**
+```{r, fig.cap="Figure 5: Daily Covid-19 Recovered cases"}
+recovered_India_corona <- India_corona %>% filter(type == "recovery")
+p3 <- ggplot(recovered_India_corona, aes(x=date, y=cases))+ geom_line()
+plotly::ggplotly(p3)
+```
+
+Figure 5 shows that the daily count of recovered cases were reported from COVID-19 in India . The number of recoveries were higher in May in 2021. Recovered number of patients are comparatively low in 2020 than 2021.
+
+
+
+```{r, fig.cap="Figure 6"}
+
+p4 <- ggplot(data = India_corona, aes(x = date, y = cases, col = type))  +
+  geom_line() +
+  facet_grid(rows = vars(type), scale = "free_y") + theme(legend.position = "bottom")
+plotly::ggplotly(p4)
+```
+
+Figure 6 illustrates the above three cases in one figure and all 3 figures follow the same pattern to each other.
+
+### **Active cases in India**
+
+```{r, fig.cap="Figure 7: Daily Covid-19 Active cases"}
+India_corona_wide_format <- India_corona %>%  pivot_wider(names_from = type, values_from = cases)
+
+India_corona_wide_format$active <-  cumsum(India_corona_wide_format$confirmed) - cumsum(India_corona_wide_format$death) -                                 cumsum(India_corona_wide_format$recovery)
+
+p5 <- ggplot(India_corona_wide_format, aes(x = date, y = active)) + labs(y = 'daily active cases') +
+  geom_line(color = 'red') +
+  geom_point(color = 'red', size = 1) +
+  geom_area(fill = 'red', alpha = 0.5) +
+  transition_reveal(date)
+animate(p5)
+```
+
+In figure 7, there can be seen the amount of patients were increasing over the time because of people were affected to the disease speedy.
+
+### **2.2 Comparison with few countries**
+
+
+```{r, fig.cap = "Figure 8"}
+# Close countries to India
+select_countries_corona <- filter(coronavirus, country %in% c("Bangladesh","Nepal","Pakistan","Sri Lanka"))
+                                                    
+#"Afghanistan", "Bangladesh","Maldives","Myanmar","Nepal","Pakistan","Sri Lanka" ,"China"
+select_countries <- ggplot() + geom_polygon(
+  data = wrld_simpl,
+  aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+select_countries + geom_point( data = select_countries_corona, 
+  aes(x = long, y = lat), color = "red", size = 1)
+```
+
+Figure 8 illustrate the world map of few countries which have located near India. (Bangladesh, Nepal, Pakistan, Sri Lanka) Further analysis will be conducted with all countries mentioned above.
+
+
+
+**Comparison of Daily Confirmed Cases**
+
+```{r, fig.cap = "Figure 9"}
+# Close countries to India
+select_countries_corona <- filter(coronavirus, country %in% c("India", "Bangladesh","Nepal","Pakistan","Sri Lanka"))
+
+# Get positive cases
+select_countries_corona_positive <-select_countries_corona %>% filter(cases >= 0)
+
+
+#For confirmed cases
+confirmed <- select_countries_corona_positive %>% filter(type == "confirmed")
+
+p6 <- ggplot(data = confirmed, aes(x=as.Date(date), y = cases, col = country)) +
+  geom_line(size = 1) + geom_point(size = 3) + theme(legend.position = "bottom") + 
+  labs(x = 'date', y = 'no.of confirmed cases') + transition_reveal(date) 
+animate(p6, width=1500, height=800)
+
+```
+
+
+It can be identified clearly in Figure 9, India was on the top with confirming COVID-19 cases the considering whole time period when compare the selected other four countries. That may be due to large population.
+
+**Comparison of Daily Death Cases**
+
+```{r, fig.cap = "Figure 10"}
+#For death cases
+death <- select_countries_corona_positive %>% filter(type == "death")
+
+p7 <- ggplot(data = death, aes(x=as.Date(date), y = cases, col = country)) +
+  geom_line(size = 2) + geom_point(size = 3) + theme(legend.position = "bottom") + 
+  labs(x = 'date', y = 'no.of death cases') + transition_reveal(date) 
+
+animate(p7, width=1500, height=800)
+```
+
+In the Figure 10, it can be seen that India has amount of death cases compared to the other four countries. The amount of people who were infected with COVID-19 was very larger than others so that might be the effect having more death cases in India.  
+
+**Comparison of Daily Recovered Cases**
+
+```{r, fig.cap="Figure 11"}
+#For recovered cases
+recovered <- select_countries_corona_positive %>% filter(type == "recovery")
+
+p8 <- ggplot(data = recovered, aes(x=as.Date(date), y = cases, col = country)) +
+  geom_line(size = 2) + geom_point(size = 3) + theme(legend.position = "bottom") + 
+  labs(x = 'date', y = 'no.of recovered cases') + transition_reveal(date) 
+
+animate(p8, width=1500, height=800)
+```
+
+
+In Figure 11 also shows the same pattern with plots of confirmation and death cases.
+
+## **3. Discussion**
+
+The data set is loaded by the coranavirus R package from R database. It contains useful data on the global corona outbreak about more countries. This analysis have been conducted by considering the data set of India. During the data analysis process, it was observed that there were three negative values in the data set and there were no null values. It is impossible to have negative values. It can be happened due to mistake occurred when entering data. The data set was rearranged to get only positive values to prior the analysis. These unusual cases were replaced by the means of their previous and the next case.
+
+Furthermore when considering only about the data set of India , it does not provide a comprehensive picture of the COVID-19 situation in India. In order to reach final conclusions, it was decided to make comparisons of India with countries that are closely located and significant during the COVID-19 pandemic.
+
+```{r, fig.cap="Table 1", }
+c1 <- c("India","Bangladesh","Nepal","Pakistan","Sri Lanka")
+c2 <- c(1388052928,168385731, 30319100, 230569105, 21615705)
+c3 <- c(431, 1265, 203, 287, 341)
+
+select_countries_corona <- filter(coronavirus, country %in% c("India","Bangladesh","Nepal","Pakistan","Sri Lanka"))
+
+select_countries_wider_corona <- select_countries_corona %>%pivot_wider(names_from = type, values_from = cases)
+
+confirmed_sum <- aggregate(x = select_countries_wider_corona$confirmed, by=list(select_countries_wider_corona$country),FUN=sum)
+
+death_sum <- aggregate(x = select_countries_wider_corona$death, by= list(select_countries_wider_corona$country),FUN=sum)
+
+
+c4 <- round(confirmed_sum$x / c2 * 100, digits = 3)
+c5 <- round(death_sum$x / c2 * 100, digits = 3)
+
+
+table <- cbind(country = c1, population = c2, population_density = c3, conf_perc = c4, death_perc = c5)
+knitr::kable(table) 
+```
+
+**country** : Selected countries which are located near by India
+
+**population** : Total population of the countries roughly
+
+**population_density** : Population density given by per square kilo meter
+
+**conf_perc** : Case confirmation percentage corresponding to the total population
+
+**death_perc** : Percentage of reporting death cases corresponding to the total population
+
+The confirmation rate always depends on the test rate when assume that all the countries have the same test rate. Sri Lanka is very neighbour with India with respect to the population density in per square kilo meter. It can be seen death percentage of Sri lanka is higher than that of India.
+ 
+ 
+## **4. Conclusion**
+This study has presented a analysis of the COVID-19 outbreak in India. By the first week of March 2020, India was faced the COVID-19 pandemic. At the beginning on 2020 less number of people were affected to COVID-19 but in the middle of the year 2021 it was increased very speedy. In April 2021, India was faced to second wave of COVID-19 and again they had to face likely same situation in 2022. The people of India followed the government's prescribed rules and were aware of the drastic impact of COVID-19, so they attempted to follow the regulations.
+
+## **5. References**
+
+* https://www.newworldencyclopedia.org/entry/Climate_of_India
+
+* https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7180023/
+
+* https://link.springer.com/article/10.1007/s13337-020-00587-x
+
+* https://opennursingjournal.com/VOLUME/15/PAGE/62/
+
+* https://www.sciencedirect.com/science/article/pii/S2666351120300218
+
+* https://www.mygov.in/covid-19/
+
+* https://india.unfpa.org/en/publications/unfpa-india-covid-19-response-situation-report-january-august-2021
+
+* https://www.worldometers.info/world-population/population-by-country/
+
+

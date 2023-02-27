@@ -1,0 +1,212 @@
+---
+title: "Covid-19 Cases in South Africa"
+author: "AS2019370 / I.M.G.U.K.Herath"
+date: "10/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,comment =NA,message = FALSE,fig.align = "center")
+```
+## 1. Introduction
+
+### 1.1 About South Africa
+South Africa is a country on the southernmost tip of the African continent, marked by several distinct ecosystems. Inland safari destination Kruger National Park is populated by big game. The Western Cape offers beaches, lush winelands around Stellenbosch and Paarl, craggy cliffs at the Cape of Good Hope, forest and lagoons along the Garden Route, and the city of Cape Town, beneath flat-topped Table Mountain
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+```
+
+```{r}
+library(coronavirus)
+library(magrittr)
+coronavirus<-coronavirus
+
+```
+  
+```{r}
+SA_cases<-filter(coronavirus,(country=="South Africa"))
+SA_cases[SA_cases==-2258603]<-2555
+SA_cases[SA_cases==-228]<-228
+```
+```{r,fig.cap="*Figure 1* : South Africa in World Map"}
+
+data(wrld_simpl)
+
+SA_map <- ggplot() + 
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))+
+  geom_point(
+    data = SA_cases, aes(x = long, y = lat), color = "red", size
+    = 1)
+SA_map
+```
+
+### 1.2 Covid Cases in South Africa
+  On 5 March 2020, Minister of Health Zweli Mkhize had confirmed the spread of the virus to South Africa, with the first known patient being a citizen who tested positive upon his return from Italy.
+  
+  
+  Since then they have deal with total 4,017,700 confirmed positove cases, 102,185 number of death cases. Further they have 3,909,764 number of recoveries and conducted 21,172,787 number of tests and administrates 37,634,853 vaccines. 
+  
+  
+  This report discusses how the corona virus cases(total Confirmed cases, Death cases and Recovery cases) fluctuated during the time period from January 2020 to June 2022.
+  
+  
+  
+## 2. Exploratory Data Analysis
+
+
+```{r}
+SA_cases_confirmed<-filter(SA_cases,type=="confirmed")
+SA_cases_death<-filter(SA_cases,type=="death")
+SA_cases_recovery<-filter(SA_cases,type=="recovery")
+```
+
+### 2.1 Summary measures
+Summary measures of total Confirmed cases, Death cases and Recovery cases are as given below.
+
+  * **Confirmed cases**
+```{r,fig.cap ="Summary meassures of confirmed cases"}
+summary(SA_cases_confirmed$cases)
+c("Total confirmed cases =",sum(SA_cases_confirmed$cases))
+
+```
+  * **Death cases**
+```{r}
+summary(SA_cases_death$cases)
+c("Total death cases =",sum(SA_cases_death$cases))
+
+```
+  * **Recovery cases**
+```{r}
+summary(SA_cases_recovery$cases)
+c("Total recovery cases =",sum(SA_cases_recovery$cases))
+```
+
+
+### 2.2 Graphical Visualization of COVID-19 cases in South Africa
+
+```{r,fig.cap="*Figure 2* : Daily COVID-19 cases fluctuation over Time by case type"}
+ggplot(SA_cases, aes(x=date, y=cases, col=type)) + geom_col()+  facet_grid(type~.)
+```
+By looking at Figure 1 we can identify that COVID-19 death cases in South Africa is very low comparing to confirmed and recovery cases.
+
+### 2.3 Active COVID-19 cases in South Africa
+
+
+```{r}
+active<-function(x){
+  x1<-filter(x,type=="confirmed")
+  x2<-filter(x,type=="recovery")
+  x3<-filter(x,type=="death")
+  ac=0
+  ac_v<-c()
+  for(i in 1:length(x1$date)){
+    ac = ac + x1$cases[i] - x2$cases[i] - x3$cases[i]
+    ac_v[i]<-ac
+  }
+  ac_v
+}
+active_cases<-active(SA_cases)
+c("Current COVID-19 cases=",active_cases[884])
+```
+```{r,fig.cap="*Figure 3* : Active COVID-19 cases of South Africa over Time"}
+y<-data.frame(active_cases,SA_cases_confirmed$date)
+ggplot(y,aes(x=SA_cases_confirmed.date,y=active_cases))+geom_line()+labs(x="Year",y="Active Cases")
+```
+According to above plot Active COVID-19 cases are increasing over time. 
+
+### 2.4 Comparison of COVID-19 cases of South Africa with other Countries
+
+Its hard to come to an accurate image on the COVID-19 cases by only looking at the COVID-19 cases in South Africa alone.Therefore,here the COVID-19 cases in South Africa is compared with the countries Ghana, Zambia and Zimbabwe which are in the same geographical region with South Africa.
+
+```{r,out.width="100%"}
+Ghana_cases<-filter(coronavirus,(country=="Ghana"))
+Ghana_cases[Ghana_cases==-31]<-0
+Ghana_cases[Ghana_cases==-98633]<-0
+Ghana_cases_death<-filter(Ghana_cases,type=="death")
+Ghana_cases_recovery<-filter(Ghana_cases,type=="recovery")
+Ghana_cases_confirmed<-filter(Ghana_cases,type=="confirmed")
+
+Zambia_cases<-filter(coronavirus,(country=="Zambia"))
+Zambia_cases[Zambia_cases==-189658]<-0
+Zambia_cases_death<-filter(Zambia_cases,type=="death")
+Zambia_cases_recovery<-filter(Zambia_cases,type=="recovery")
+Zambia_cases_confirmed<-filter(Zambia_cases,type=="confirmed")
+
+Zimbabwe_cases<-filter(coronavirus,(country=="Zimbabwe"))
+Zimbabwe_cases[Zimbabwe_cases==-82994]<-0
+Zimbabwe_cases_death<-filter(Zimbabwe_cases,type=="death")
+Zimbabwe_cases_recovery<-filter(Zimbabwe_cases,type=="recovery")
+Zimbabwe_cases_confirmed<-filter(Zimbabwe_cases,type=="confirmed")
+
+```
+
+* **COVID-19 cases in Ghana**
+```{r,fig.cap="*Figure 4* : Daily COVID-19 cases fluctuation of Ghana over Time by case type"}
+ggplot(Ghana_cases,aes(x=date,y=cases,col=type))+geom_line()
+
+```
+
+* **COVID-19 cases in Zambia**
+```{r,fig.cap="*Figure 5* : Daily COVID-19 cases fluctuation of Zambia over Time by case type"}
+ggplot(Zambia_cases,aes(x=date,y=cases,col=type))+geom_line()
+
+```
+
+* **COVID-19 cases in Zimbabwe**
+```{r,fig.cap="*Figure 6* : Daily COVID-19 cases fluctuation of Zimbabwe over Time by case type"}
+ggplot(Zimbabwe_cases,aes(x=date,y=cases,col=type))+geom_line()
+
+```
+  By looking at the *Figure 4, Figure 5, Figure 6* for all these three countries we can see from 2020 to mid 2021 the confirmed cases and recovered cases are seems to be equal.But after mid 2021 the confirmed cases are highly increasing and the recovery cases becomes negligible. Further all the time death cases are seems to be negligible.
+
+
+#### Comparison COVID-19 cases in South Africa with other countries
+```{r,fig.cap="*Figure 7* : Daily COVID-19 cases fluctuation of all 4 counties over Time by Case Type"}
+compare_cases<-rbind(SA_cases,Ghana_cases,Zambia_cases,Zimbabwe_cases)
+ggplot(compare_cases,aes(x=date, y=cases, col=country)) + geom_line()+facet_wrap(~type)
+```
+
+```{r,fig.cap="*Figure 8*: Total COVID-19 cases of countries by Case Type"}
+
+compare_cases_death<-rbind(SA_cases_death,Ghana_cases_death,Zambia_cases_death,Zimbabwe_cases_death)
+ggplot(data=compare_cases,aes(x=type,y=cases,fill=country))+geom_col(position ="dodge")
+
+```
+```{r,fig.cap="*Figure 9* : Total COVID-19 death cases of all 4 countries"}
+ggplot(data=compare_cases_death,aes(x=type,y=cases,fill=country))+geom_col(position ="dodge")
+
+```
+
+*Figure 7, Figure 8 and Figure 9* shows that the all 3 cases(*confirmed,recovery and death*) are higher in South Africa comparing to other countries.However the death cases are always negligible comparing to other two cases.
+
+
+### 3.  Conclusion
+
+By looking at *Figure 3, Figure 4, Figure 5* we can see commonly in all the four cuntries (South Africa, Ghana, Zambia, Zimbabwe) the Death cases are negligible all the time. And the recovery cases have become negligible after mid 2021. But the confirmed cases are slightly increasing through all over the time.
+
+*Figure 6, Figure 7, Figure 8* says that South Africa is hightly engaged with COVID-19 cases than the other countries in the same region. In another way, South Africa has highest number of confirmed COVID-19 cases, highest number of COVID-19 recovery cases and also the highest number of COVID-19 death cases comparing to Ghana, Zambia and Zimbabwe. 
+
+Furthermore as COVID-19 death cases of South Africa are negligible comparing to Confirmed COVID-19 cases it is clear that government in South Africa had somehow successfully managed the COVID-19 pendamic.
+
+
+But unfortunately as shown in *Figure 3* the Active Cases of COVID-19 has increased over time. So the threat is still there(currently there is 1626739 Active cases). The government should also concern how to decrease these active cases.
+
+### 4. References
+
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Africa
+
+* https://sacoronavirus.co.za/

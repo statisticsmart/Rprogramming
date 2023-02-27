@@ -1,0 +1,365 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+author: "AS2019322"
+date: "2022-10-02"
+output: html_document
+---
+### COVID-19 IN TURKEY
+
+##  Country Background
+Turkey, officially the Republic of Turkey is a transcontinental country located mainly on the Anatolian Peninsula in Western Asia, with a small portion on the Balkan Peninsula in Southeast Europe. It shares borders with the Black Sea to the north; Georgia to the northeast; Armenia, Azerbaijan, and Iran to the east; Iraq to the southeast; Syria and the Mediterranean Sea to the south; the Aegean Sea to the west; and Greece and Bulgaria to the northwest. Cyprus is located off the south coast. Turks form the vast majority of the nation's population and Kurds are the largest minority.Ankara is Turkey's capital, while Istanbul is its largest city and financial centre.
+
+# Introduction to COVID-19
+
+COVID-19 is a novel coronavirus that had not previously been identified in humans.The first case was detected in the Hubei province of China at the end of December 2019.Thousand of new cases are being reported each day,and because the illness has only recently been detected,it is known that the virus spread via cough and sneeze droplets.
+
+As the COVID-19 disease spreads outside of China, countries like Italy,Spain and the United States are leading the world in new coronavirus cases.The virus was first confirmed to have spread to Spain on 31 January 2020,when a German tourist tested positive for cOVID-19 in La Gomera,Canary Islands. The community transmission began by mid-February in Spain,as other European countriess also began to see substantial rises.By 13 March, cases had been confirmed in all 50 provinces of the country.
+
+Turkey's first case was reported just after midnight on March 11, 2020, hours before WHO first described the outbreak of COVID-19 as a pandemic. One of the early concerns for Turkish authorities was Umrah, the pilgrimage Muslims make to Mecca, which sees thousands of Turkish people travel abroad. By March 23, 2020, about 11 000 Umrah pilgrims were quarantined on their arrival back to Turkey. The Government placed them in state-run dormitories in Ankara, Konya, and 11 other cities.
+
+```{r , include=FALSE}
+library(devtools)
+
+```
+# Loading Data Set
+```{r, include=TRUE}
+library(coronavirus)
+data(coronavirus)
+```
+# Detection of Outliers
+
+Here we see that there are negative values in the data set. So first we can remove them and adjust the data as below.
+```{r, include=TRUE}
+library(tidyverse)
+library(magrittr)
+library(devtools)
+library(tidyverse)
+library(dplyr)
+Turkey_corona <- coronavirus %>% filter(country=="Turkey")
+# Applying NA's to negative Data values/outliers
+Turkey_corona<-Turkey_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(Turkey_corona$cases))
+Turkey_corona$cases[2330] = mean(c(Turkey_corona$cases[2329],
+                              Turkey_corona$cases[2331]))
+
+```
+# visualizing the location
+```{r, include=TRUE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Turkey_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+# Geographical Features Of Turkey
+The Anatolian side of Turkey is a large, roughly rectangular peninsula[1] that bridges southeastern Europe and Asia. Thrace, the European portion of Turkey comprises 3%[2] of the country and 10%[2] of its population. Thrace is separated from Asia Minor, the Asian portion of Turkey, by the Bosporus, the Sea of Marmara and the Dardanelles. İskilip, Çorum province, is considered to be the geographical center of Earth. Turkey has the 17th longest coastline in the world with 7,200 km.
+
+# Climate
+
+Türkiye is situated between the subtropical zone and temperate zone. The climate zones observed in Türkiye are the Mediterranean Climate where summers are hot and dry and the winters are mild and rainy; the Black Sea Climate where summers are cool and winters are warm in the coastal area and snowy and cold at the higher parts; the Terrestrial Climate where temperature differences between summer and winter and day and night are large, and the Marmara Climate showing the characteristics of a climate transition between the Terrestrial, Black Sea and Mediterranean climates. Türkiye receives most of its rainfall in winter and spring. In summer, the amount of precipitation decreases while the temperature and evaporation increases. Annual long-term mean precipitation is 574 mm.
+
+# Exploratory Data Analysis
+
+```{r, include=TRUE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+
+#Turkey_corona <- coronavirus %>% filter(country=="Turkey")
+
+confirmed_cases_Turkey <- Turkey_corona %>%  filter(type =="confirmed")
+
+recovered_cases_Turkey <- Turkey_corona %>% filter(type =="recovery")
+
+death_cases_Turkey <- Turkey_corona %>% filter(type =="death")
+
+
+merged_list <- cbind(confirmed_cases_Turkey, "recover"= recovered_cases_Turkey$cases, "death" = death_cases_Turkey$cases)
+
+total_cases <- sum(merged_list$cases)
+cat("Total cases in Turkey = ", total_cases)
+
+total_recovery <- sum(merged_list$recover)
+cat("Total recovery in Turkey = ", total_recovery)
+
+total_death <- sum(merged_list$death)
+cat("Total death cases in Turkey = ", total_death)
+
+total_active <- total_cases - (total_recovery + total_death)
+cat("Total active cases in Turkey = ", total_active)
+
+
+```
+# Turkey COVID-19 Confirmed graph
+```{r, include=TRUE}
+library(ggplot2)
+confirmed_corona<- filter(Turkey_corona,type=="confirmed")
+ggplot(confirmed_corona,aes(date,cases)) + geom_path(size=1) + labs(title= "confirmed cases in Turkey")
+
+```
+As shown in the plot , we can see that there's a high increase of confirmed cases at the end of the year 2020. And also at the beginning of the year 2022 its gets rised up again and but not much like at the end of the year 2020.
+```{r , include=FALSE}
+
+
+```
+# Turkey COVID-19 Deaths Graph
+```{r, include=TRUE}
+library(ggplot2)
+death_corona<- filter(Turkey_corona,type=="death")
+ggplot(death_corona,aes(date,cases)) + geom_path(size=1) + labs(title= "Death cases in Turkey")
+
+```
+Deaths graph varies frequently over the time and the corona virus deaths in Turkey lies between 0-400 per day as shown in the graph. At the beginning of the virus in the country, there's only a less amount of deaths compared with the confirmed covid cases. But in the year 2021 it gets increased and finaly at the end of the year 2022, the deaths again gets reduced.
+```{r , include=FALSE}
+
+
+```
+# Turkey COVID-19 Recovered Graph
+```{r, include=TRUE}
+library(ggplot2)
+Recover_corona<- filter(Turkey_corona,type =="recovery")
+ggplot(Recover_corona,aes(date,cases)) + geom_path(size=1) + labs(title= "Recover cases in Turkey")
+
+```
+The recovery covid cases in Turkey gets gradualy increased at the year 2021.
+```{r , include=FALSE}
+
+
+```
+# plot for Total cases,Total Recoveries, Total Deaths
+```{r, include=TRUE}
+library(ggplot2)
+ggplot(merged_list, aes(x=date)) + 
+  geom_line(aes(y = cumsum(recover)), color = "darkred") +
+  geom_line(aes(y = cumsum(death)), color="darkblue") +
+  geom_line(aes(y = cumsum(cases)), color="red") +
+  ylab("cases")
+# darkred: Recover Darkblue: Death  Red:Cases
+```
+The Cummulative scale graph is based on Total Confirmed cases of COVID-19.(Sum of total cases detected by PCR tests) in Turkey from Year 2020 t0 Year 2022. The Total confirmed cases in Turkey are 15085742, the Total Recovery cases are 5481233 and the total death cases are 98996. At that period of time the total active cases are 9505513.
+```{r , include=FALSE}
+
+
+```
+# line plot for Total cases,Total Recoveries, Total Deaths
+```{r, include=TRUE}
+library(ggplot2)
+ggplot(merged_list, aes(x=date)) + 
+  geom_line(aes(y = recover), color = "blue") +
+  geom_line(aes(y = death), color="black") +
+  geom_line(aes(y = cases), color="red") +
+  ylab("cases")
+```
+```{r , include=FALSE}
+
+
+```
+#  COVID-19 recovery Rate Comparison of Turkey and It's nearest countries 
+```{r, include=TRUE}
+library(tidyverse)
+library(magrittr)
+recover_rate_Turkey <-(total_recovery/total_cases)*100
+cat("Recovery Rate in Turkey", recover_rate_Turkey)
+## REcovery Rate in Turkey =
+
+# Colombia
+Colombia_corona <- coronavirus %>% filter(country=="Colombia")
+# Applying NA's to negative Data values/outliers
+Colombia_corona<-Colombia_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(Colombia_corona$cases))
+## 2062, 2330 has outliers/negative values
+# Impute missing values
+Colombia_corona$cases[2062] = mean(c(Colombia_corona$cases[2061],
+                              Colombia_corona$cases[2063]))
+Colombia_corona$cases[2330] = mean(c(Colombia_corona$cases[2329],
+                              Colombia_corona$cases[2331]))
+confirmed_cases_Colombia<- Colombia_corona %>% filter(type=="confirmed")
+recovered_cases_Colombia<- Colombia_corona %>% filter(type=="recovery")
+total_cases_Colombia<- sum(confirmed_cases_Colombia$cases)
+total_recovery_Colombia<- sum(recovered_cases_Colombia$cases)
+recover_rate_Colombia<- (total_recovery_Colombia/total_cases_Colombia)*100
+cat(" Recovery Rate in Colombia =", recover_rate_Colombia)
+
+# Greece
+Greece_corona <- coronavirus %>% filter(country=="Greece")
+# Applying NA's to negative Data values/outliers
+Greece_corona<-Greece_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(Greece_corona$cases))
+## 2330 has outliers/negative values
+# Impute missing values
+
+Greece_corona$cases[2330] = mean(c(Greece_corona$cases[2329],
+                              Greece_corona$cases[2331]))
+confirmed_cases_Greece<- Greece_corona %>% filter(type=="confirmed")
+recovered_cases_Greece<- Greece_corona %>% filter(type=="recovery")
+total_cases_Greece<- sum(confirmed_cases_Greece$cases)
+total_recovery_Greece<- sum(recovered_cases_Greece$cases)
+recover_rate_Greece<- (total_recovery_Greece/total_cases_Greece)*100
+cat(" Recovery Rate in Greece =", recover_rate_Greece )
+
+# Iran
+Iran_corona <- coronavirus %>% filter(country=="Iran")
+# Applying NA's to negative Data values/outliers
+Iran_corona<-Iran_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(Iran_corona$cases))
+## 2330 has outliers/negative values
+# Impute missing values
+Iran_corona$cases[2330] = mean(c(Iran_corona$cases[2329],
+                              Iran_corona$cases[2331]))
+confirmed_cases_Iran<- Iran_corona %>% filter(type=="confirmed")
+recovered_cases_Iran<- Iran_corona %>% filter(type=="recovery")
+total_cases_Iran<- sum(confirmed_cases_Iran$cases)
+total_recovery_Iran<- sum(recovered_cases_Iran$cases)
+recover_rate_Iran<- (total_recovery_Iran/total_cases_Iran)*100
+cat(" Recovery Rate in Iran =", recover_rate_Iran )
+
+recovery_rates<- c(recover_rate_Turkey,recover_rate_Colombia,recover_rate_Greece,recover_rate_Iran)
+barplot(recovery_rates, main="Recovery Rate Comparison", horiz= TRUE, names.arg = c("Turkey", "Colombia", "Greece", "Iran"), col= c("pink", "light blue", "light green", "yellow"))
+
+```
+As shown in the above figure, we can see that the highest recovery rate for COVID-19 is belongs to Colombia and the lowest recovery rate for COVID-19 belongs to Greece. The country very close to Turkey named Iran has a cOVID-19 recovery rate more than that of Turkey. 
+```{r , include=FALSE}
+
+
+```
+# COVID-19 Death Rate Comparison of Turkey and its nearest Countries
+```{r, include=TRUE}
+library(tidyverse)
+library(magrittr)
+death_rate_Turkey<- (total_death/total_cases)*100
+cat(" Death Rate Turkey =", death_rate_Turkey)
+
+death_cases_Colombia <- Colombia_corona %>% filter(type== "death")
+total_death_Colombia <- sum(death_cases_Colombia$cases)
+death_rate_Colombia<- (total_death_Colombia/total_cases_Colombia)*100
+cat("Death Rate Colombia", death_rate_Colombia)
+
+death_cases_Greece <- Greece_corona %>% filter(type== "death")
+total_death_Greece <- sum(death_cases_Greece$cases)
+death_rate_Greece<- (total_death_Greece/total_cases_Greece)*100
+cat("Death Rate Greece", death_rate_Greece)
+
+death_cases_Iran <- Iran_corona %>% filter(type== "death")
+total_death_Iran <- sum(death_cases_Iran$cases)
+death_rate_Iran<- (total_death_Iran/total_cases_Iran)*100
+cat("Death Rate Colombia", death_rate_Iran)
+
+death_rates<- c(death_rate_Turkey, death_rate_Colombia,death_rate_Greece, death_rate_Iran)
+barplot(death_rates, main="Death Rate Comparison", horiz=TRUE, names.arg =c("Turkey", "Colombia", "Greece", "Iran"), col= c("light blue", "red", "light green", "grey"))
+```
+ When comparing the death rates, the country that having the highest death rate is Colombia and the lowest death rate is belongs to Turkey. Iran has the second highest death rate.
+```{r , include=FALSE}
+
+
+```
+# Comparison of COVID-19 confirmed, Recovered, Deaths cases between nearest countries using plots
+```{r setup, include=TRUE}
+Countries_corona<- as.data.frame(rbind(Turkey_corona, Colombia_corona, Greece_corona, Iran_corona))
+Countries_Death_Compare<- Countries_corona %>% filter(type == "confirmed")
+ggplot(Countries_Death_Compare, 
+       aes(x=date, y=cases, fill=type,col=country)) + geom_line() + geom_point()+
+  facet_wrap(~country,ncol=3) + coord_flip() + ggtitle("Comparison of COVID-19 confirmed cases between nearest countries")
+
+
+Countries_recover_Compare<- Countries_corona %>% filter(type == "recovery")
+ggplot(Countries_recover_Compare, 
+       aes(x=date, y=cases, fill=type,col=country)) + geom_line() + geom_point()+
+  facet_wrap(~country,ncol=3) + coord_flip() + ggtitle("Comparison of COVID-19 Recovered cases between nearest countries")
+
+Countries_death_Compare<- Countries_corona %>% filter(type == "death")
+ggplot(Countries_death_Compare, 
+       aes(x=date, y=cases, fill=type,col=country)) + geom_line() + geom_point()+
+  facet_wrap(~country,ncol=3) + coord_flip() + ggtitle("Comparison of COVID-19 Death cases between nearest countries")
+```
+```{r , include=FALSE}
+
+
+```
+# Cummulative line plot for confirmed Cases in nearest selected countries of Turkey.
+```{r , include=TRUE}
+
+df_confirmed_5_countries<- data.frame("date" = confirmed_cases_Turkey$date, "confirmed_cases_Turkey" = confirmed_cases_Turkey$cases,  "confirmed_cases_Colombia" = confirmed_cases_Colombia$cases, "confirmed_cases_Greece" = confirmed_cases_Greece$cases,  "confirmed_cases_Iran" = confirmed_cases_Iran$cases)
+
+ggplot(df_confirmed_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(confirmed_cases_Turkey)), color = "black") +
+  geom_line(aes(y = cumsum(confirmed_cases_Colombia)), color="steelblue") +
+  geom_line(aes(y = cumsum(confirmed_cases_Greece)), color="red") +
+  geom_line(aes(y = cumsum(confirmed_cases_Iran)), color="green")  + ylab("confirmed cases")
+```
+Confirmed cases in Turkey(black), confirmed cases in Colombia(steelblue), confirmed cases in Greece(red), confirmed cases in Iran(green).
+
+The ongoing cOVID-19 pandemic was confirmed to have reached the Turkey in the beginning of 2020.According the above graph, by the end of the 2021,Confirmed cases in Turkey has increased with higher increasing rate.In Colombia also the confirmed cases increased at the beginning of the year 2021 and it gets reduced in year 2022 than the confirmed cases of in Iran.
+
+# Cummilative line plot for recovered cases in selected countries
+```{r , include=TRUE}
+df_recovery_5_countries<- data.frame("date" = recovered_cases_Turkey$date, "recovered_cases_Turkey" = recovered_cases_Turkey$cases,  "recovered_cases_Colombia" = recovered_cases_Colombia$cases, "recovered_cases_Greece" = recovered_cases_Greece$cases,  "recovered_cases_Iran" = recovered_cases_Iran$cases)
+
+ggplot(df_recovery_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(recovered_cases_Turkey)), color = "darkred") +
+  geom_line(aes(y = cumsum(recovered_cases_Colombia)), color="steelblue") +
+  geom_line(aes(y = cumsum(recovered_cases_Greece)), color="red") +
+  geom_line(aes(y = cumsum(recovered_cases_Iran)), color="green") + ylab("recovered cases")
+```
+recovered cases in Turkey(dark red), recovered cases in Colombia(steelblue), recovered cases in Greece(red), recovered cases in Iran(green).
+
+From the begin of the year 2021, Turkey, Colombia, Iran has increasing recovery rate.But Greece doesnt show a big rate of recovery compared to the other countries. It is shown that, Greece has the lowest recovered rate compared to other selected countries According to the above graph.
+
+# Cummilative line plot for death cases in selected countries
+```{r , include=TRUE}
+
+df_death_5_countries<- data.frame("date" = death_cases_Turkey$date, "death_cases_Turkey" = death_cases_Turkey$cases,  "death_cases_Colombia" = death_cases_Colombia$cases, "death_cases_Greece" = death_cases_Greece$cases,  "death_cases_Iran" = death_cases_Iran$cases)
+
+ggplot(df_death_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(death_cases_Turkey)), color = "darkred") +
+  geom_line(aes(y = cumsum(death_cases_Colombia)), color="steelblue") +
+  geom_line(aes(y = cumsum(death_cases_Greece)), color="red") +
+  geom_line(aes(y = cumsum(death_cases_Iran)), color="green") + ylab("death cases")
+
+```
+
+
+```{r , include=FALSE}
+
+
+```
+# DISCUSSION
+
+Turkey is one of the European/Middle east country most affected by the COVID-19 pandemic. The virus was first confirmed to have spread to Turkey on 10 march 2020. Within a month cases had been confirmed in all 81 provinces of the country. The lockdown was imposed on 26 March 2020. But the government of Turkey tries their best to reduce the effect from the begining of the virus spread. On 2 April, 950 people died of the virus in a single day. As a summery,The number of confirmed cases was 15085742 and 98996 people lost their lives due to COVID-19 pandemic in Turkey.5481233 patients were able to recover from the disease.Recovery rate of Colombia is greater than other selected countries during the sdudied period.It is 76.98075%. Iran has second place in recovery rate comparision compared to other selected countries.It is 47.74761%. There is lowest recovery rate in Greece Compared to other three countries, the death rate of Turkey is recorded as 0.6562223%. According to the data above, we can identify Colombia suffered most copmapred with deaths and cases.
+
+The data are collected from the World Health Organization website and WHO publishes.There is an outlier in Turkey corona data set. Before analyzing data, it is corrected.This study is based on the data from year2020 year 2022.
+
+# CONCLUSSION
+
+ This study shows how COVID-19 virus affected Turkey, how the virus spread with time and how the virus affected to the nearest countries of Turkey. Study also considered how the recovery from COVID-19 happened in Turkey and how fatal was it with regard to deaths.
+
+Finally Turkey COVID-19 spread is compared with 3 other major nearest countries affected by COVID-19. The actual number of cases and deaths can be different from these data. These are recorded data by the hospitals and medical centers. In this situation, social distances, clean hands often, wear a mask, maintain safe distance from others are some of steps that a person can reduce the chance of being infected or spreading COVID-19.And also it is helpful for future epidemic control.
+
+# ReFFERENCEs
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8118615/
+climateknowledgeportal.worldbank.org
+

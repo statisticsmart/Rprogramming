@@ -1,0 +1,371 @@
+---
+title: "COVID-19_Nigeria"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library("coronavirus")
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+```
+
+# **Introduction**
+## Nigeria
+#### Nigeria, country located on the western coast of Africa. Nigeria has a diverse geography, with climates ranging from arid to humid equatorial.The national capital is Abuja.Nigeria is bordered to the north by Niger, to the east by Chad and Cameroon, to the south by the Gulf of Guinea of the Atlantic Ocean, and to the west by Benin.
+
+## Climate of Nigeria
+#### Nigeria has a tropical climate with variable rainy and dry seasons, depending on location. It is hot and wet most of the year in the southeast but dry in the southwest and farther inland. A savanna climate, with marked wet and dry seasons, prevails in the north and west, while a steppe climate with little precipitation is found in the far north.
+
+## COVID-19 Pandemic in Nigeria
+#### The COVID-19 pandemic in Nigeria is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first confirmed case in Nigeria was announced on 27 February 2020, when an Italian national in Lagos tested positive for the virus.On 9 March 2020, a second case of the virus was reported in Ewekoro, Ogun State, a Nigerian citizen who came into contact with the Italian national.
+
+#### The effect of the virus in Nigeria has become notable worldwide for being extremely understated, as there have been just under 255,000 confirmed cases in a country of 200 million+; however, there has been far less testing for the virus in Nigeria than other countries.Deaths however have been minimal (3,143). This has been credited to a warmer climate, far younger populations (fewer people in care homes), faster government responses, and, crucially, experience in dealing with recent epidemics, such as the Ebola virus, that most Western countries lacked.
+
+## Location of Nigeria
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+Nigeria_corona<-coronavirus%>%filter(country=="Nigeria")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="gray",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = Nigeria_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+
+```
+
+## **Exploratory Data Analysis**
+
+#### Daily summary of the Coronavirus (COVID-19) cases by state/province.A data frame with 7 variables. date - Date in YYYY-MM-DD format. province - Name of province/state, for countries where data is provided split across multiple provinces/states. country - Name of country/region. lat - Latitude of center of geographic region, defined as either country or, if available, province. long - Longitude of center of geographic region, defined as either country or, if available, province. type - An indicator for the type of cases (confirmed, death, recovered). cases - Number of cases on given date.
+
+#### Here is summary of the coronavirus dataframe in Nigeria.
+
+### Summary of the covid-19 cases in Nigeria
+
+```{r,comment=NA,message=FALSE,warning=FALSE}
+Nigeria_corona_new<-Nigeria_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+ summary(Nigeria_corona_new)
+```
+
+
+### summary of the confirmed cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+confirmed_Nigeria_corona <- Nigeria_corona_new %>% filter(type=="confirmed")
+summary(confirmed_Nigeria_corona)
+```
+
+### Imputing missing values
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+which(is.na(confirmed_Nigeria_corona$cases))
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+confirmed_Nigeria_corona$cases[813] = mean(c(confirmed_Nigeria_corona$cases[812],confirmed_Nigeria_corona$cases[814]))
+length(confirmed_Nigeria_corona$cases)
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+confirmed_Nigeria_corona$col <- as.factor(c(rep("black", 811),rep("red", 2), rep("black", 884-813)))
+summary(confirmed_Nigeria_corona)
+```
+
+### Total number of confirmed cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+sum(confirmed_Nigeria_corona$type=="confirmed")
+```
+
+#### There are 884 confirmed cases in the considering time period.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(confirmed_Nigeria_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Nigeria: Daily Covid-19 confirmed cases")
+```
+
+#### The highest number of Covid cases are confirmed at end of the year 2021.The middle part  of the year 2020,the begining of the year 2021 and end of the year 2021 as well as very first begining of year 2022, there were some increasing in the confirmed corona cases.
+
+
+### Summary of the Recovery Cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+recovered_Nigeria_corona <- Nigeria_corona_new %>% filter(type=="recovery")
+summary(recovered_Nigeria_corona)
+```
+
+### Imputing missing values
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+which(is.na(recovered_Nigeria_corona$cases))
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+recovered_Nigeria_corona$cases[562] = mean(c(recovered_Nigeria_corona$cases[561], recovered_Nigeria_corona$cases[563]))
+length(recovered_Nigeria_corona$cases)
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+recovered_Nigeria_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+summary(recovered_Nigeria_corona)
+```
+
+### Toatal number of recovery cases in Nigeria
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+sum(recovered_Nigeria_corona$type=="recovery")
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(recovered_Nigeria_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Nigeria: Daily Covid-19 recovered cases")
+```
+
+#### The highest number of recovery cases are recorded in 2020.Recoveries are significantly higher from second half of the year 2020 and it's significantly lower after end of the first half of year 2021.
+
+## Summary of the Death Cases
+
+### Summary of the Death Cases in Nigeria
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+death_Nigeria_corona <- Nigeria_corona_new %>% filter(type=="death")
+summary(death_Nigeria_corona)
+```
+
+### Imputing missing values
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+which(is.na(death_Nigeria_corona$cases))
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+death_Nigeria_corona$cases[292] = mean(c(death_Nigeria_corona$cases[291],death_Nigeria_corona$cases[293]))
+length(death_Nigeria_corona$cases)
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,eval=FALSE}
+death_Nigeria_corona$col <- as.factor(c(rep("black", 290),rep("red", 2), rep("black", 884-292)))
+summary(death_Nigeria_corona)
+```
+
+### Total number of Death Cases in Nigeria
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+sum(death_Nigeria_corona$type=="death")
+```
+ 
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(death_Nigeria_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Nigeria: Daily Covid-19 Death Cases")
+```
+
+#### According to the above graph the shape of the distribution of death cases pretty much similarly to the distribution of confirmed cases data considering time period.The highest number of death cases reported in 2021 and it was 93.
+
+## Daily Covid-19 Cases in Nigeria
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Nigeria_corona_new, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Nigeria: Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+
+#### Above graph shows, the death cases are very lower than compared to confirmed cases.
+
+## Cummilative line plot for total cases, total recoveries and total deaths
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+merged_list <- cbind(confirmed_Nigeria_corona, "recovered"= recovered_Nigeria_corona$cases, "death" = death_Nigeria_corona$cases)
+
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(merged_list, aes(x=date)) + 
+  geom_line(aes(y = cumsum(recovered)), color = "blue") +
+  geom_line(aes(y = cumsum(death)), color="black") +
+  geom_line(aes(y = cumsum(cases)), color="red") +
+  ylab("cases")
+```
+
+
+##### Recoveries = blue, Deaths = black, All Cases = red
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(merged_list, aes(x=date)) + 
+  geom_line(aes(y = recovered), color = "blue") +
+  geom_line(aes(y = death), color="black") +
+  geom_line(aes(y = cases), color="red") +
+  ylab("cases")
+```
+
+#### Above two graphs shows,the recovery cases higher than death cases in Nigeria.
+
+## Comparison between neighbouring countries
+
+#### Niger,Benin, Chad, Cameroon are some of the neighbouring countries to the Nigeria. Following graphs show, How variy confirmed,recovered,death cases between Nigeria and neighbouring countries.  
+
+### Confirmed cases among Nigeria & Neighbouring Countries
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+Nigeria_corona <- coronavirus %>% filter(country == "Nigeria")
+confirmed_Nigeria_corona <- Nigeria_corona %>% filter(type=="confirmed") 
+
+Niger_corona <- coronavirus  %>% filter(country == "Niger")
+confirmed_Niger_corona <- Niger_corona %>% filter(type=="confirmed")
+
+Benin_corona <- coronavirus  %>% filter(country == "Benin")
+confirmed_Benin_corona <- Benin_corona %>% filter(type=="confirmed")
+
+Chad_corona <- coronavirus  %>% filter(country == "Chad")
+confirmed_Chad_corona <- Chad_corona %>% filter(type=="confirmed")
+
+Cameroon_corona <- coronavirus  %>% filter(country == "Cameroon")
+confirmed_Cameroon_corona <- Cameroon_corona %>% filter(type=="confirmed")
+
+Neighbor_confirm <- rbind(confirmed_Nigeria_corona, confirmed_Niger_corona, confirmed_Benin_corona, confirmed_Chad_corona, confirmed_Cameroon_corona)
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in Nigeria's neighbour countries") + ylim(0,10000)
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,30000)
+```
+
+#### From these graphs,we can see that Chad and Niger has low coronavirus cases compared to other neighbouring countries. Camaroon have approximately same confirmed cases as Nigeria.  
+
+### Recovered cases among Nigeria & Neighbouring Countries
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+Nigeria_corona <- coronavirus %>% filter(country == "Nigeria")
+recovered_Nigeria_corona <- Nigeria_corona %>% filter(type=="recovery") 
+
+Niger_corona <- coronavirus  %>% filter(country == "Niger")
+recovered_Niger_corona <- Niger_corona %>% filter(type=="recovery")
+
+Benin_corona <- coronavirus  %>% filter(country == "Benin")
+recovered_Benin_corona <- Benin_corona %>% filter(type=="recovery")
+
+Chad_corona <- coronavirus  %>% filter(country == "Chad")
+recovered_Chad_corona <- Chad_corona %>% filter(type=="recovery")
+
+Cameroon_corona <- coronavirus  %>% filter(country == "Cameroon")
+recovered_Cameroon_corona <- Cameroon_corona %>% filter(type=="recovery")
+
+Neighbor_recover <- rbind(recovered_Nigeria_corona, recovered_Niger_corona, recovered_Benin_corona, recovered_Chad_corona, recovered_Cameroon_corona)
+
+ggplot(Neighbor_recover, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("recovered cases in Nigeria's neighbour countries") + ylim(0,10000)
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases)) + geom_col() + ggtitle("recovered cases") + ylim(0,30000)
+```
+
+#### Both Camaroon and Nigeria have highest number of recoveries.It is mainly because of the high population in these contries compared to neighbor countries.
+
+### Death cases among Nigeria & Neighbouring Countries
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+Nigeria_corona <- coronavirus %>% filter(country == "Nigeria")
+death_Nigeria_corona <- Nigeria_corona %>% filter(type=="death") 
+
+Niger_corona <- coronavirus  %>% filter(country == "Niger")
+death_Niger_corona <- Niger_corona %>% filter(type=="death")
+
+Benin_corona <- coronavirus  %>% filter(country == "Benin")
+death_Benin_corona <- Benin_corona %>% filter(type=="death")
+
+Chad_corona <- coronavirus  %>% filter(country == "Chad")
+death_Chad_corona <- Chad_corona %>% filter(type=="death")
+
+Cameroon_corona <- coronavirus  %>% filter(country == "Cameroon")
+death_Cameroon_corona <- Cameroon_corona %>% filter(type=="death")
+
+Neighbor_death<- rbind(death_Nigeria_corona, death_Niger_corona, death_Benin_corona, death_Chad_corona, death_Cameroon_corona)
+
+ggplot(Neighbor_death, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Death cases in Nigeria's neighbour countries") + ylim(0,10000)
+```
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+ggplot(Neighbor_death, aes(x=country, y=cases)) + geom_col() + ggtitle("Death cases") + ylim(0,30000)
+```
+
+#### From these graphs we can clearly say that Nigeria coronavirus deaths are higher than the other neighbouring countries.
+
+## **Conclusion**
+
+#### Here, we considered the corona virus cases in Nigeria since 2020-01-22 up to 2020-06-23 time period. The mean number of confirmed per day is 290.The mean number of recovery cases per day is 187.The mean number of death cases per day is 4. After analysig above data set, can cleary say the death rate of coronavirus cases in Nigeria is very low. Comparing with neighbouring countries,Confirmed cases are high but same as recovered also high in Nigeria. Among all the neighbouring countries, Benin has the lowest death cases and Camaroon has high number of confirmed coronavirus cases.
+
+## **Discussion**
+
+#### The original Nigeria coronavirus dataset has negative and missing values.So before analysing the data, all missing values are identified and imputed new values for them and remove the negative values.The confirmed coronavirus cases changing over the taken time period.it's may caused the climate in the Nigeria too.The Nigeria government has taken immediate steps to control the COVID- 19 situation.That's because recovery cases increased and deaths are decreased.In neighbouring countries,Benin has the lowest death cases with relatively both confirmed and recovered cases.Nigeria and the Camaroon have high values of confirmed coronavirus cases. That's because of the high population in these contries compared to neighbor countries.
+ 
+## **References**
+
+* Falola, T. O. , Kirk-Greene, . Anthony Hamilton Millard , Udo, . Reuben Kenrick and Ajayi, . J.F. Ade (2022). Nigeria. Encyclopedia Britannica. https://www.britannica.com/place/Nigeria
+
+* Timeline of the COVID-19 pandemic in Nigeria (2020). Wikipedia. https://en.m.wikipedia.org/wiki/COVID-19_pandemic_in_Nigeria
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

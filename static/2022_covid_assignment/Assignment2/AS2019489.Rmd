@@ -1,0 +1,322 @@
+---
+title: "Corona Virus Analysis of Latvia"
+author: "Vihanga Perera - AS2019489"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## COVID-19 pandemic in Latvia
+## 1.1 Introduction Of The Country
+
+Latvia (/ˈlɑːtviə/ or /ˈlætviə/ (listen); Latvian: Latvija [ˈlatvija]; Latgalian: Latveja; Livonian: Leţmō), officially the Republic of Latvia[14] (Latvian: Latvijas Republika, Latgalian: Latvejas Republika, Livonian: Leţmō Vabāmō), is a country in the Baltic region of Northern Europe. It is one of the Baltic states; and is bordered by Estonia to the north, Lithuania to the south, Russia to the east, Belarus to the southeast, and shares a maritime border with Sweden to the west. Latvia covers an area of 64,589 km2 (24,938 sq mi), with a population of 1.9 million. The country has a temperate seasonal climate.[15] Its capital and largest city is Riga. Latvians belong to the ethno-linguistic group of the Balts; and speak Latvian, one of the only two[a] surviving Baltic languages. Russians are the most prominent minority in the country, at almost a quarter of the population.
+
+
+## 1.2 Visualization of the country
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+latvia_corona<-coronavirus%>%filter(country=="Latvia")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill=" pink",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = latvia_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+```
+
+
+## 1.3 Climate condition 
+In Latvia, a flat country overlooking the Baltic Sea, the climate is very cold in winter and mild and quite rainy in summer. The coastal areas are a bit more temperate, but also more humid and windy, while the eastern area has a slightly more continental climate.
+On the west coast (see Ventspils, Liepaja), the average temperatures are just below freezing in January and February and around 17.5/18 °C (63.5/64.5 °F) in July and August. In inland areas, the temperatures are a bit lower in winter and a bit higher in summer
+
+reference :- https://www.climatestotravel.com/climate/latvia
+
+## 1.4 COVID-19 pandemic in Latvia
+The COVID-19 pandemic in Latvia is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Latvia on 2 March 2020, having been brought along with people returning from abroad.
+
+The government declared a state of emergency on 13 March 2020 with a number of epidemiological safety measures and restrictions, primarily limiting gatherings, travel, most public venues, and educational institutions. As the new confirmed cases stayed in the low two-digit range per day, the emergency was periodically extended until mid-2020, when the confirmed infection case dropped to almost 0 and the state of emergency ended on 9 June 2020. Most restrictions were lifted.
+
+The rates spiked again by the end of September, from a few dozen per day to low hundreds by November, and many of the restrictions were restored and tightened, including a range of new ones. Eventually, a new state of emergency was reinstated on 9 November 2020 with increased rules and restrictions, while the daily cases reached close to one thousand by the end of November. The number of cases kept rising at the turn of the year and the state of emergency was extended to 6 April 2021. The vaccination programme began at the start of the year.
+
+references :-https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Latvia
+
+
+## 1.5. Actions taken by the government
+
+
+Latvia was fast, strict, and successful in its response at the beginning of the Covid-19 pandemic in 2020. The day after the World Health Organization (WHO) declaration of a global Covid-19 pandemic, the Cabinet of Ministers declared an emergency situation on 12 March 2020. Within two weeks, substantial restrictions limiting public events, travel, the functioning of state institutions, schools, shopping, health care, churches, etc were put in place. This led to a low Covid-19 incidence rate per 100,000 inhabitants (14-day care notification rate per 100,000 inhabitants): on 1 April 2020 this rate was 19.6, on 1 May 2020 it was 9.8, and on 1 June 2020 it was 3.1 The total number of deaths during that period was 25. The first emergency situation ended on 9 June 2020. During Summer restrictions were relaxed, with a low Covid-19 incidence. Latvia’s approach to the pandemic was seen as a success. The cases started to rise in October 2020 from 20 cases per 100,000 inhabitants on 1 October 2020 to 140 on 1 November 2020. The Cabinet declared a second emergency situation on 6 November 2020 and put in place substantial restrictions. Several times, stricter measures were added. Curfew orders were issued in the New Year and the following weekends, public gatherings were banned, and daily routines limited. Despite this, the number of cases skyrocketed during December 2020, reaching its peak on 10 January 2021 when the incidence rate reached 694 per 100,000 inhabitants, or 49,568 cases in total. This led to an extremely high number of hospitalized Covid-19 patients and a high death toll (810 by 10 January 2021). The health care system and medical professionals were overwhelmed. The decrease in case numbers during February and March 2021, despite strict public health measures in place, was slow, reaching 497 per 100,000 inhabitants on 1 March 2021 and 372 on 1 April 2021. The second emergency situation ended on 6 April 2021, when there was still a quite high incidence rate (338). Up to 1 May 2021, the total number of cases in Latvia was 119,360 infections, and 2,139 deaths.
+
+## 2. Exploratory Data Analysis
+
+
+*Table 01: Structure of the data set*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+str(latvia_corona)
+
+```
+
+
+
+*Table 02: Summary of the data set*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+(summary(latvia_corona))
+
+```
+
+
+
+### Corona cases in Latvia
+
+
+*Table 03: Summary on confirmed cases*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+confirmed_latvia_corona <- latvia_corona %>% filter(type=="confirmed")
+summary(confirmed_latvia_corona[1:7])
+```
+
+*Table 04: Summary table adjusting negative values to NA's if there any*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+confirmed_latvia_corona <- confirmed_latvia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_latvia_corona[1:7])
+```
+As NA values = 0, there are no negative values in the death data set
+
+
+*Table 05: Summary on death cases* 
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+death_latvia_corona <- latvia_corona %>% filter(type=="death")
+summary(death_latvia_corona[1:7])
+```
+ 
+*Table 06: Summary table adjusting negative values to NA's if there any*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+death_latvia_corona <- death_latvia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_latvia_corona[1:7])
+```
+
+As NA values = 0, there are no negative values in the death data set
+
+
+*Table 07: Summary on recovered cases*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+recovery_latvia_corona <- latvia_corona %>% filter(type=="recovery")
+summary(recovery_latvia_corona[1:7])
+```
+
+
+*Table 08: Summary table adjusting negative values to NA's if there any*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+recovery_latvia_corona <- recovery_latvia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovery_latvia_corona[1:7])
+```
+
+
+This table shows summary of daily recoveries without negative values or missing values.
+
+From all above summary tables we can see that only data on recovered has missing or negative values, we have used NA's instead of those values.There are 3 such places as NA = 3 in recoveries.
+
+
+
+
+*Figure 03: Confirmed corona cases*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(confirmed_latvia_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+
+From above figure it is clear that the number of confirmed cases reported increase gradually. And it has reached its current maximum at the end of 2022 with the highest peak.
+Maximum number of cases reported reached the count of 12500 per day.
+
+*Figure 04: Death cases in Latvia*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(death_latvia_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+
+Death cases reported daily in latvia from the beginning of the pandemic is shown in the above plot.The count has reached its maximum near the begining-of 2022 and it has again risen up by the end of 2022.
+Maximum deaths that has occuered with in a day is slightly more than 80.
+
+
+
+*Figure 05: Recovery cases in Latvia*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(recovery_latvia_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+
+
+As there we have 2 NA values , we can find the location of those 2 cases
+
+So, the locations of missing values are ; 
+ 
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+which(is.na(recovery_latvia_corona$cases))
+```
+
+Due to those we can see a little discontinuity in Figure 05
+
+Here I have used the average of places in front and back of the relevant missing value location  to get an estimated value for missing values.Those calculated values for the 3 missing values are as follows;
+
+
+
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+recovery_latvia_corona$cases[73] = mean(c(recovery_latvia_corona$cases[72], recovery_latvia_corona$cases[74]))
+length(recovery_latvia_corona$cases)
+
+
+recovery_latvia_corona$cases[562] = mean(c(recovery_latvia_corona$cases[561], recovery_latvia_corona$cases[563]))
+length(recovery_latvia_corona$cases)
+
+
+recovery_latvia_corona$col <- as.factor(c(rep("black", 71),rep("red", 2), rep("black", 884-73)))
+
+
+recovery_latvia_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+
+```
+
+*Figure 06: Adjusted Recovery cases*
+
+```{r , comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(recovery_latvia_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity()
+```
+
+
+
+
+And then those missing values are plotted with a different color in the plot shown in red colour.
+
+If we consider all confirmed,deaths and recoveries together and imput the negative values,we'll get a graph as follows
+Locations of NA values and calculated estimated values for those values are mentioned above the graph.
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+latvia_corona_new<-latvia_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(latvia_corona_new$cases))
+
+latvia_corona_new$cases[1712]= mean(c(latvia_corona$cases[1711],latvia_corona$cases[1713]))
+ length(latvia_corona_new$cases)
+
+latvia_corona_new$cases[1841]= mean(c(latvia_corona$cases[1840],latvia_corona$cases[1842]))
+ length(latvia_corona_new$cases) 
+
+latvia_corona_new$cases[2330]= mean(c(latvia_corona$cases[2329],latvia_corona$cases[2331]))
+ length(latvia_corona_new$cases) 
+ 
+latvia_corona_new$col <-as.factor(c(rep("black",1710),rep("red",2),rep("black",2652-1712))) 
+ 
+latvia_corona_new$col <-as.factor(c(rep("black",1839),rep("red",2),rep("black",2652-1841)))
+
+latvia_corona_new$col <-as.factor(c(rep("black",2328),rep("red",2),rep("black",2652-2330)))
+```
+
+
+
+*Figure 07: All adjusted confirmed, deaths, recovery cases*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(latvia_corona_new,
+       aes(x=date,y=cases,fill=type,col=type))+
+  geom_line()+geom_jitter(aes(col=type))+
+  facet_wrap(~type,ncol = 3)+coord_flip()
+ 
+```
+
+
+
+
+Number of total cases, recoveries and deaths reported
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+
+merged_list <- cbind(confirmed_latvia_corona, "recovered"= recovery_latvia_corona$cases, "death" = death_latvia_corona$cases)
+
+total_cases <- sum(merged_list$cases)
+cat("Total cases = ", total_cases)
+
+total_recovery <- sum(merged_list$recovered)
+cat("Total recovery cases = ", total_recovery)
+
+total_death <- sum(merged_list$death)
+cat("Total death cases = ", total_death)
+
+total_active <- total_cases - (total_recovery + total_death)
+cat("Total active cases = ", total_active)
+```
+
+
+
+## Comparisons with  countries with majority of covid cases
+
+Tg=his is about a comparison with  other countries selected are the countries which are mostly affected from COVID-19 virus.Those countries are US, Brazil, China and India. 
+
+
+*Figure 14 : Cumulative line plot for death cases of Latvia with other mostly effected countries*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+us_corona <- coronavirus %>% filter(country == "US")
+death_cases_us <- us_corona %>% filter(type == "death")
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+death_cases_brazil <- brazil_corona %>% filter(type == "death")
+india_corona <- coronavirus %>% filter(country == "India")
+death_cases_india <- india_corona %>% filter(type == "death")
+china_corona <- coronavirus %>% filter(country == "China" & province == "Hubei")
+death_cases_china <- china_corona %>% filter(type == "death")
+kenya_corona <- coronavirus %>% filter(country == "Latvia")
+death_cases_latvia <- latvia_corona %>% filter(type == "death")
+
+df_death_5_countries<- data.frame("date" = death_cases_latvia$date, "death_cases_latvia" = death_cases_latvia$cases,  "death_cases_us" = death_cases_us$cases, "death_cases_brazil" = death_cases_brazil$cases,  "death_cases_india" = death_cases_india$cases,  "death_cases_china" = death_cases_china$cases)
+
+ggplot(df_death_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(death_cases_latvia)), color = "black") +
+  geom_line(aes(y = cumsum(death_cases_us)), color="steelblue") +
+  geom_line(aes(y = cumsum(death_cases_brazil)), color="red") +
+  geom_line(aes(y = cumsum(death_cases_india)), color="green") +
+  geom_line(aes(y = cumsum(death_cases_china)), color="orange") +
+  
+  ylab("death cases")
+```
+
+ * Latvia = black
+ * us = steelblue
+ * brazil = red
+ * india = dark green
+ * china = pink
+
+It is clear that Compared to countries US, Brazil, India and China which are largely affected by covid 19 latvia seems to control and face the pandemic successfully. 

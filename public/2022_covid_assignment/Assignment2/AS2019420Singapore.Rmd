@@ -1,0 +1,342 @@
+---
+title: "COVID19-Singapore"
+author: "O.V.Kulasekara"
+date: "AS2019420"
+output: html_document
+---
+
+```{r  setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment=NA, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center')
+```
+
+## Intoduction
+
+<font size="4"> •	Background </font> 
+
+Singapore is a sunny, tropical island in South-east Asia. The city-state is 710 square kilometers and inhabited by five million people from four major communities: Chinese (majority), Malay, Indian and Eurasian. Singapore is today (beside Monaco) the most densely populated independent country in the world. Its strategic location at the Strait of Malacca and the South China Sea, combined with a mostly corruption-free government, a skilled workforce, pro-foreign investment and export-oriented, led to a thriving free-market economy that attracts international investment funds on a large scale despite its relatively high-cost operating environment. Singapore is a parliamentary representative democratic republic with a (in theory) multi-party system. Singapore is one of the most market-oriented and open economies in the world and is also considered the easiest country in which to do business. Singapore is a major international maritime center and a global air hub. The Port of Singapore is the world's second-busiest port in terms of total shipping tonnage.
+
+
+
+<font size="4"> •	COVID19 in Singapore </font>  
+
+The COVID-19 pandemic in Singapore is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first case in Singapore was confirmed on 23 January 2020. Early cases were primarily imported until local transmission began to develop in February and March. In late March and April, COVID-19 clusters were detected at multiple migrant worker dormitories, which soon contributed to an overwhelming proportion of new cases in the country.
+To stem the tide of infections, strict circuit breaker lockdown measures were implemented from 7 April to 1 June 2020, after which restrictions have been gradually lifted as conditions permitted.
+
+A mass vaccination program is currently under way following the approval and acquisition of the Pfizer–BioNTech and Moderna COVID-19 vaccines. In late 2021, Singapore became the world's most-vaccinated country, with more than 85% of its total population fully vaccinated. As of June 2022, over 92% of the total population have completed their vaccination regimen, representing over 96% of the eligible populace.
+
+Various measures have been taken to mass test the population for the virus and isolate infected people. Contact tracing measures SafeEntry and TraceTogether were implemented to identify and quarantine close contacts of positive cases.
+
+The country currently has a case fatality rate of 0.08%, one of the lowest in the world. It introduced what was considered one of the world's largest and best-organized epidemic control programs.
+
+
+</center>
+```{r,out.width="80%"}
+library(coronavirus)
+library(zoo)
+library(tidyverse)
+library(magrittr)
+singapore_corona <- coronavirus %>% filter(country == "Singapore")
+singapore_corona <- transform(singapore_corona, cases = na.locf(cases))
+
+singapore_corona <- coronavirus %>% filter((country == "Singapore"),cases >= 0)
+
+view(singapore_corona <- coronavirus %>% filter((country == "Singapore"),cases >= 0))
+
+library(leaflet)
+library(dplyr)
+library(httpuv)
+
+m <- leaflet() %>%
+  # Now add tiles to it
+  addTiles() %>%
+  # Setting the middle of where the map should be and the zoom level 103.851959, 1.290270
+  setView(lng = 103.851959, lat = 1.290270, zoom = 4) %>%
+  # Now, add a marker with a popup,
+  addMarkers(lng = 103.851959, lat = 1.290270, popup = "<b>Singapore</b>")
+
+
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+**Figure 01 - Visualization of the location on world map**
+
+<font size="4"> **Explanatory Data Analysis** </font>
+
+
+<font size="4"> **Structure of the data** </font>
+
+Qualitative Data - 
+
+•	date: Date in YYYY-MM-DD format.
+
+•	province: Name of province/state, for countries where data is provided split across multiple provinces/states.
+
+•	country: Name of country/region.
+
+•	type: An indicator for the type of cases (confirmed, death, recovered).
+
+Quantitative Data –
+
+•	cases: Number of cases on given date.
+
+•	long: Longitude of center of geographic region, defined as either country or, if available, province.
+
+•	lat: Latitude of center of geographic region, defined as either country or, if available, province.
+
+
+
+<font size="4"> **Summary Measures** </font>
+</center>
+```{r,out.width="80%"}
+library(kableExtra)
+sumary<-singapore_corona %>%
+  group_by(type) %>%
+  summarise(
+   
+    Minimum = min(cases),
+    First_Quantile = quantile(cases,0.25),
+    Median=median(cases),
+    Mean = mean(cases),
+    Third_Quantile=quantile(cases,0.75),
+    Maximum= max(cases),
+    Total=sum(cases)
+  )
+
+
+sumary %>%
+  kbl() %>%
+  kable_styling()
+
+summary(singapore_corona)
+recovery_singapore_corona <- singapore_corona %>% filter(type=="recoverd")
+recovery_singapore_corona <- recovery_singapore_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+confirmed_singapore_corona <-singapore_corona %>% filter(type=="confirmed")
+confirmed_singapore_corona <- confirmed_singapore_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+death_singapore_corona <- singapore_corona %>% filter(type=="death")
+death_singapore_corona <- death_singapore_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+**Table 01 - Summary measures of total number of confirmed, death and recovery cases.**
+
+
+<font size="4"> **Visualization of data** </font>
+</center>
+```{r,out.width="80%"}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(gganimate)
+library(gifski)
+library(av)
+library(gapminder)
+library(scales)
+
+singapore_corona %>%
+  filter(type == "confirmed" |
+    type == "death" |
+    type == "recovery") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = type,
+    color = type
+  )) +
+  geom_line() +
+  labs(x="Date",y="No.of cases",title = "Daily cases in Singapore")+
+  transition_reveal(date)+
+  geom_point() +
+  theme_bw() 
+```
+**Figure 02 - Daily confirmed,death,recovery cases**
+
+The above multiple time series plot shows that how cases have changed over time. According the
+animated representation, confirmed cases increasing compare to the death and recovered cases over time.
+
+
+
+<font size="4"> Total Number of Confirmed, Death and Recovered Cases in Singapore </font>
+</center>
+```{r,out.width="80%"} 
+ggplot(data=singapore_corona,aes(x=type,y=cases,fill=type))+geom_col(position ="dodge")
+  
+```
+**Figure 03 - Total number of confirmed, death and recovered cases**
+
+Overall Singapore has been performing well in keeping the fatality rate very low compare to the
+confirmed cases.This figure shows that the  total number of death cases are negligibly small compare to the confirmed and recovery cases.
+
+
+</center>
+```{r,out.width="80%"}
+singapore_active_cases <-  singapore_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+(ggplot(singapore_active_cases,aes(x =date,y =total_active)))+
+      geom_line(color = "black") +
+  geom_point(size =2) +
+  geom_area(fill = "black") +
+  theme_bw() +
+  ggtitle("Daily Active Cases in Singapore") +
+  transition_reveal(date)
+
+```
+**Figure 04 - Daily Active Cases**
+
+Above animated figure represents the daily active cases in Singapore. Daily active cases growth rate in
+Singapore appears a higher growth rate in 2020 and shows a considerable drop after 2020.
+
+
+
+
+<font size="4"> **Comparison with other countries** </font>
+
+Here I compare the cases of Singapore with several other countries. Compare the situation with the
+bordering countries like Malaysia and Indonesia is an important factor when considering its relationships,
+national security, access to resources and more. And compare data with the most focused countries in
+Asia during the corona period like China and India are also important. Further I compare Singapore
+COVID19 cases with our country.
+
+
+<center>
+```{r,out.width="80%"}
+library(htmltools)
+
+df <- read.csv(textConnection(
+  "Name,Lat,Long
+Singapore,1.290270,103.851959 
+Malaysia, 3.140853, 101.693207
+Indonesia, -6.200000,106.816666
+Sri Lanka,7.644901932409819, 80.7131748972552
+India,23.275096637375043, 78.72800712547912
+China,36.14975380447737, 103.65387695890672"
+))
+
+leaflet(df) %>%
+  addTiles() %>%
+  addMarkers(~Long, ~Lat, label = ~ htmlEscape(Name)) %>%
+  addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+**Figure 05 - locations in other countries on world map**
+
+ 
+
+
+
+</center>
+```{r,out.width="80%"}
+Singapore_coronaC <- coronavirus %>% filter(country == "Singapore" & type == "confirmed")
+Malaysia_coronaC <- coronavirus %>% filter(country == "Malaysia" & type == "confirmed")
+Indonesia_coronaC <- coronavirus %>% filter(country == "Indonesia" & type == "confirmed")
+
+
+Country_comparison_Confirmed <- rbind(Singapore_coronaC,Malaysia_coronaC,Indonesia_coronaC)
+
+Country_comparison_Confirmed %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  labs(x="Date",y="No.of cases",title = "Comparison of daily confirmed cases")+
+  transition_reveal(date)+
+  geom_point() +
+  theme_bw()
+
+```
+**Figure 06 - Multiple Time Series plot**
+
+The above Multiple Time series plot clearly shows that Indonesia has the highest number of confirmed corona cases compare to the other two countries over the time.
+According to the above plot Singapore considerably  increases the number of confirmed cases after end period of 2021.
+
+</center>
+```{r,out.width="80%"}
+Singapore_coronaC <- coronavirus %>% filter(country == "Singapore" & type == "confirmed",cases >=0)
+Malaysia_coronaC <- coronavirus %>% filter(country == "Malaysia" & type == "confirmed",cases >=0)
+Indonesia_coronaC <- coronavirus %>% filter(country == "Indonesia" & type == "confirmed",cases >=0)
+Sri_Lanka_coronaC <- coronavirus %>% filter(country == "Sri Lanka" & type == "confirmed",cases >=0)
+India_coronaC <- coronavirus %>% filter(country == "India" & type == "confirmed",cases >=0)
+China_coronaC <- coronavirus %>% filter(country == "China" & type == "confirmed",cases >=0)
+
+Country_comparison_Confirmed <- rbind(Singapore_coronaC,Malaysia_coronaC,Indonesia_coronaC,Sri_Lanka_coronaC,India_coronaC,China_coronaC)
+ggplot(data = Country_comparison_Confirmed, aes(x= type,y = cases, fill = country))+geom_col(position = "dodge")
+
+```
+**Figure 07 - Total number of confirmed cases by country**
+
+According to the above figure total number of COVID19 cases are lower in Singapore compare to the other most leading countries but it is higher than compare to Malaysia and Sri Lanka.This figure shows that confirmed cases in India is more than the other countries combined cases.
+
+</center>
+```{r,out.width="80%"}
+Singapore_coronaD <- coronavirus %>% filter(country == "Singapore" & type == "death",cases >=0)
+Malaysia_coronaD <- coronavirus %>% filter(country == "Malaysia" & type == "death",cases >=0)
+Indonesia_coronaD <- coronavirus %>% filter(country == "Indonesia" & type == "death",cases >=0)
+Sri_Lanka_coronaD <- coronavirus %>% filter(country == "Sri Lanka" & type == "death",cases >=0)
+India_coronaD <- coronavirus %>% filter(country == "India" & type == "death",cases >=0)
+China_coronaD <- coronavirus %>% filter(country == "China" & type == "death",cases >=0)
+
+Country_comparison_Death <- rbind(Singapore_coronaD,Malaysia_coronaD,Indonesia_coronaD,Sri_Lanka_coronaD,India_coronaD,China_coronaD)
+
+ggplot(data = Country_comparison_Death, aes(x= type,y = cases, fill = country))+geom_col(position = "dodge")
+
+```
+
+**Figure 08 - Total number of death cases by country**
+
+Above figure shows that the total number of death cases in Singapore is negligibly small compare to the other countries.The highest number of death cases are also reported in India.    
+
+</center>
+```{r,out.width="80%"}
+Singapore_coronaR <- coronavirus %>% filter(country == "Singapore" & type == "recovery",cases >=0)
+Malaysia_coronaR <- coronavirus %>% filter(country == "Malaysia" & type == "recovery",cases >=0)
+Indonesia_coronaR <- coronavirus %>% filter(country == "Indonesia" & type == "recovery",cases >=0)
+Sri_Lanka_coronaR <- coronavirus %>% filter(country == "Sri Lanka" & type == "recovery",cases >=0)
+India_coronaR <- coronavirus %>% filter(country == "India" & type == "recovery",cases >=0)
+China_coronaR <- coronavirus %>% filter(country == "China" & type == "recovery",cases >=0)
+
+Country_comparison_Recovery <- rbind(Singapore_coronaR,Malaysia_coronaR,Indonesia_coronaR,Sri_Lanka_coronaR,India_coronaR,China_coronaR)
+
+ggplot(data = Country_comparison_Recovery, aes(x= type,y = cases, fill = country))+geom_col(position = "dodge")
+
+```
+
+**Figure 09 - Total number of recovery cases by country**
+
+This figure shows that the highest number of recovery cases are reported in India and the lowest number of recovery cases are reported in Singapore and China.
+
+Limitation - In analysis with other countries, I have ignored NA cases and negative value cases. 
+
+
+<font size="4"> **Conclusions and Discussion** </font>
+
+
+We are still facing the global crisis of the COVID19 pandemic and it is an ongoing global pandemic caused by severe acute respiratory syndrome corona virus. Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to March in 2020. 
+The outbreak of the COVID-19 pandemic has led to profound health shocks worldwide, resulting in more than 2.4 million deaths. To contain the virus in the absence of effective drugs and vaccines, many governments have implemented a wide variety of non-pharmaceutical interventions (NPIs) at an unprecedented scale. Citizens have also been following risk avoidance behaviors such as wearing facial masks and staying at home, even before governments imposed strict social distancing rules. Because of that even if  the most of countries had high risk but same controlled the situation.
+
+Overall, according to the above analysis, I can conclude that the Singapore is having the situation under control over the time.
+From the Singapore coronavirus data analysis, it is clearly observable that Singapore's number of death cases are in low level and number of confirmed cases are increasing significantly over the time. So, Singapore should pay more attention to prevent spreading the corona virus.
+And also, with regards to other countries as mentioned in the analysis, Singapore is doing well even with the large number of populations compare to some other countries. 
+When comparing with the neighboring countries like Indonesia and Malaysia I can conclude that Singapore has very low amount of cases and comparing to the other countries which highly affected by corona virus, there is no big impact happened to Singapore.
+Finally, I can say that Singapore faced challenging period but they have controlled the situation by reducing confirmed cases and death cases. For that Singapore government have taken more actions like restriction on movements and gatherings, closure of all non-essential workplaces, masks are compulsory etc. 
+
+
+<font size="4"> **Reference** </font>
+
+https://hellor.netlify.app/
+https://www.mfa.gov.sg/Overseas-Mission/Xiamen/About-
+Singapore#:~:text=Singapore%20is%20a%20sunny%2C%20tropical,%2C%20Malay%2C%20Indian%20and%20Eurasian.
+https://www.britannica.com/place/Singapore/The-people
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Singapore
+https://www.moh.gov.sg/covid-19/statistics
+
+
+
+ 

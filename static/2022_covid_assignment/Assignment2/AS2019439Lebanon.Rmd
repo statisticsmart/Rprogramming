@@ -1,0 +1,326 @@
+---
+title: "Programming and Data Analysis with R"
+author: "AS2019439"
+date: "10/8/2022"
+output: html_document
+---
+<font size="8"><b>
+COVID-19 in Lebanon
+</b></font>
+
+
+<font size="6"><b>
+1) INTRODUCTION
+</b></font>
+
+
+<font size="4">
+Lebanon is a small, war-torn country on the east coast of the Mediterranean Sea. Located on fertile territory at the crossroads of three continents—Africa, Asia, and Europe.It is a valuable and highly desired territory. Throughout its history, it has been the stage for conflicts between local tribes-people and world powers.Lebanon gained full independence in 1943.
+
+The presence of Palestinian refugees and guerrilla bases, and tensions between Christians and Muslims, have led to continuing political instability and warfare in recent decades. However, the Lebanese people have continued to survive in the face of repeated disruptions of their economy and day-to-day life. From 1975 until 1991, civil war ruined Lebanon. Since the early 1990s, the government has gradually regained power but there are still incidents of political violence, especially in the south near Israel.
+
+Until recently, Lebanon was a war-torn nation. Much of the capital city of Beirut was in ruins. So was a great deal of the rest of the country. Rebuilding is now under way in order to address a lack of housing, as well as unreliable gas and water supplies.
+
+In rural areas, farmhouses are made of stone or concrete with tile floors. They have only a few necessary pieces of furniture. A small wood-burning or kerosene stove is used for heat in the winter. Most rural houses have running water.
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(gganimate)
+library(lubridate)
+library(ggExtra)
+data(wrld_simpl)
+```
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+Lebanon_corona <- coronavirus %>% filter(country == "Lebanon")
+
+
+#Check the outliers and reset that values and NA values
+
+reset_Lebanon_corona <- Lebanon_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(reset_Lebanon_corona)
+
+which(is.na(reset_Lebanon_corona$cases))
+
+reset_Lebanon_corona$cases[2330] = mean(c(reset_Lebanon_corona$cases[2329], reset_Lebanon_corona$cases[2331]))
+length(reset_Lebanon_corona$cases)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = reset_Lebanon_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )+ labs(title = "Location of the Country")
+```
+
+
+PRONUNCIATION: <b>leb-un-EEZ</b>
+
+LOCATION: <b>Lebanon</b>
+
+POPULATION: <b>3.1 million</b>
+
+LANGUAGE: Arabic (official); <b>English; French</b>
+
+RELIGION: Islam; Christianity; <b>Druze; Alawi; Baha'i</b>
+
+
+
+<font size="6"><b>
+2) Exploratory Data Analysis
+</b></font>
+
+
+<u>
+Whole COVID-19 details in Lebanon
+</u>
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(knitr)
+kable(reset_Lebanon_corona [1:5, ])
+
+```
+<u>
+Confirmed COVID cases in Lebanon
+</u>
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+confirmed_corona <- reset_Lebanon_corona %>% filter(type=="confirmed")
+
+library(knitr)
+kable(confirmed_corona[1:5, ])
+
+ggplot(confirmed_corona, aes(x=date,y=cases)) +
+  geom_point() + labs(title = "Confirmed COVID cases over the time - graph 01")
+
+
+```
+
+According to graph 1, we can see begging of the year 2021 and 2022 shows the higher number of confirmed cases compaired to the other time of the both years.
+
+<u>
+COVID-19 Death cases
+</u>
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+death_corona <-filter(reset_Lebanon_corona,type=="death")
+
+library(knitr)
+kable(death_corona[1:5, ])
+
+ggplot(death_corona,aes(date,cases)) + geom_path(size=1) + labs(title = "Death cases in Lebanon - graph 02")
+
+
+```
+
+According to above chart, we can see there were higher number of deaths in begging of the 2021.Then gradually decreasing the number of deaths over the time.
+
+<u>
+COVID-19 Recover cases
+</U>
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+
+Lebanon_corona <- coronavirus %>% filter(country == "Lebanon")
+
+recovered_corona<-reset_Lebanon_corona %>% filter(type=="recovery")
+
+#replace the negative value with mean value of nearest 2 values
+
+
+ggplot(recovered_corona,aes(date,cases))+geom_line(size=1)+labs(title = "Recovered corona cases - graph 03")
+
+```
+Higher number of recovered cases can be seen in the first half of the year 2021.And in some days there is no any recovered cases. 
+
+
+<font size="5">
+Line plot for total cases, total recoveries and total deaths
+</font>
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+ggplot(reset_Lebanon_corona, aes(date, cases,col=type)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Lebanon - graph 04")
+
+
+```
+
+According to the graph 04 we can clearly see that in begging of the year 2021 there is a more deaths and recovered cases but more confirmed cases reported in after the year 2022.And also number of deaths are very low in Lebanon.
+
+
+<font size ="5">
+Compare Lebanon data set with Turkey and Armenia
+</font>
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+Turkey_corona <- coronavirus %>% filter(country == "Turkey")
+reset_Turkey_corona <- Turkey_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(reset_Turkey_corona)
+
+reset_Turkey_corona$cases[2652] = mean(c(reset_Turkey_corona$cases[2651], reset_Turkey_corona$cases[2653]))
+length(reset_Turkey_corona$cases)
+
+Armenia_corona <- coronavirus %>% filter(country == "Armenia")
+reset_Armenia_corona <- Armenia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(reset_Armenia_corona)
+
+which(is.na(reset_Armenia_corona$cases))
+
+reset_Armenia_corona$cases[1593] =mean(c(reset_Armenia_corona$cases[1592], reset_Armenia_corona$cases[1594]))
+
+reset_Armenia_corona$cases[2330] = mean(c(reset_Armenia_corona$cases[2329], reset_Armenia_corona$cases[2331]))
+
+
+```
+
+<font size ="5">
+Visualize the Confirm,death and recovery cases in Turkey and Armenia
+</font>
+
+[i] For Lebanon (graph 05)
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(reset_Lebanon_corona, aes(x=date, y=cases, col=type)) + geom_path(size = 1.1)
+
+```
+
+
+[ii] For Turkey (graph 06)
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(reset_Turkey_corona, aes(x=date, y=cases, col=type)) + geom_path(size = 1.1)
+
+```
+
+[iii] For Armenia (graph 07)
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+ggplot(reset_Armenia_corona, aes(x=date, y=cases, col=type)) + geom_path(size=1.1) 
+
+```
+
+According to graph 5,6,7 we can clearly see that Lebanon had the lot of recoverd cases and confirmed cases compaired to the other two countries. 
+
+<font size ="5">
+Comparison of confirmed,deaths and recover cases with Lebanon,Turkey and Armenia
+</font>
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+countries_corona<-as.data.frame(rbind(reset_Lebanon_corona,reset_Turkey_corona,reset_Armenia_corona))
+
+countries_death<-countries_corona%>%filter(type=="confirmed")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 3)+coord_flip()+
+  ggtitle("Comparison  of covid-19 confirmed cases between the countries - graph 08")
+
+```
+
+
+According to graph 8 we can see the highest covid-19 cases shown in the Turkey compared to other two countries.
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 3)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the countries - graph 09")
+
+
+```
+
+According to graph 09 Armenia has the lowest death cases ,but Turkey has the very high death cases over the past two years.
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+countries_death<-countries_corona%>%filter(type=="recovery")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 3)+coord_flip()+
+  ggtitle("Comparison  of covid-19 recovery between the countries - graph 10")
+
+```
+
+Recovery cases also high in the Turkey.
+
+<font size="6"><b>
+3) Conclusions and Discussion
+</b></font>
+
+<font size="5"><b>
+Conclusion
+</b></font>
+
+In Lebanon, highest confirmed cases shown in the Beginning of the year 2022 and also first half of 2021 also shown the some some high confirmed cases.Beginning of the year 2021 shows the more than 300 death cases.Recovered cases also very high within first half of the year 2021.
+
+When comparing Lebanon with Armenia and Turkey,Turkey shows the highest confirmed,death and recovery cases.
+
+<font size="5"><b>
+Discussion
+</b></font>
+
+In this analysis we take corona data set to analysis the behavior of deaths,confirmed and recovery cases in several countries.
+Before analysis,filter the data in main data set.After filtering the related data set convert the negative values into NA value.
+After that take the approximate values for that NA values,take the before and after row values of NA values and take their mean value as the approximate values of NA values(Mean imputation interpolation method).There were always error in this method but it is the more suitable method to get approximate value for NA value.Due to not availability of province wise data in Lebanon corona data set,the analysis couldn't conduct province wise.And also due to low number of data we cant see any proper variation from the graph.
+
+According to above analysis we can clearly see that number of death cases getting low but pandemic is not over yet, therefore prevention steps such as social distance, wear mask, cleaning hands often are some of steps that should be implemented in country.
+
+
+
+
+<font size="6"><b>
+4) References
+</b></font>
+
+
+https://www.everyculture.com/wc/Japan-to-Mali/Lebanese.html#:~:text=Lebanon%20is%20a%20small%2C%20war,valuable%20and%20highly%20desired%20territory.
+
+WEBSITES
+ArabNet. [Online] Available http://www.arab.net/lebanon/lebanon_contents.html , 1998.
+
+Embassy of Lebanon, Washington, D.C. [Online] Available http://www.erols.com/lebanon/ , 1998.
+
+World Travel Guide, Lebanon. [Online] Available http://www.wtgonline.com/country/lb/gen.html , 1998.
+
+
+
+Read more: https://www.everyculture.com/wc/Japan-to-Mali/Lebanese.html#ixzz7gU3QV2hO
+
+</font>

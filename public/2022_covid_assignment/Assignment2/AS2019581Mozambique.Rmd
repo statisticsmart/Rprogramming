@@ -1,0 +1,333 @@
+---
+title: "**MOZAMBIQUE COVID-19 DISEASE RESPONSE**"
+
+author: "**B.P.U.Wijethunga**"
+date: "**10/6/2022**"
+output: html_document
+---
+
+```{r setup, include=FALSE, comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,comment=NA, echo=FALSE}
+getwd
+```
+```{r ,comment=NA,echo=FALSE,out.width="100%"}
+knitr::include_graphics("coronavirus-preguntas-y-respuestas.jpg",err=FALSE)
+
+```
+
+## **1.Introduction** ##
+WHO declared COVID-19 as a pandemic on 13 March 2020. 
+On 22 March 2020, the Government of Mozambique 
+officially declared the first COVID-19 case; despite extensive 
+preventative measures additional cases have steadily been 
+identified.
+Concern about the potential spread of COVID-19 in 
+Mozambique was elevated in late March, when according 
+to Mozambique’s National Migration Service (SENAMI) over 
+14,000 Mozambican migrants returned from South Africa 
+over the Ressano Garcia border, within a span of a few 
+days, as South Africa declared lock-down due to COVID-19.
+While screening and contact tracing has been widely carried 
+out, the number of cases in Mozambique passed 100 on 11 
+May; and as of 26 May, 213 cases of COVID-19 have been 
+identified. While cases were initially clustered in Maputo 
+and Palma areas, new cases have been registered across 
+almost all of Mozambique’s 11 provinces. 
+Mozambique is on Level 3 Alert since 1 April, including 
+restrictions on gatherings, commercial activity and closure 
+of many border points. Some neighbouring countries have 
+higher COVID-19 cumulative case numbers: over 23,000 in 
+South Africa, over 500 in Tanzania, and over 900 in 
+Zambia, which raises concern near border areas.
+
+
+
+ IOM aims to contribute to the Government of Mozambique 
+and partners’ preparedness and response efforts for COVID
+-19 to reduce transmission, associated morbidity and 
+mortality and mitigate the impact of the outbreak.
+IOM recognizes that preparedness and response plans 
+need to be responsive to population mobility and crossborder dynamics, and that inclusive approaches which take 
+into account migrants, travellers, displaced populations, 
+and local communities are essential in the event of an 
+outbreak.
+Efforts are initially focused on preparedness and response, 
+but IOM is responding to the need for mitigating the 
+socioeconomic impact of the pandemic by incorporating 
+elements of social cohesion programming throughout.
+IOM supports the Government of Mozambique’s COVID-19 
+response in the areas of coordination, infection prevention 
+and control, risk communication and community 
+engagement, disease surveillance, points of entry, case 
+management and continuity of essential services. 
+Activities are in line with national and WHO 
+recommendations, the Global HRP, the IASC Interim 
+Guidance on COVID-19, and IOM COVID-19 Global 
+Preparedness and Response Plan.
+
+### **Visualisation of the location** ###
+
+```{r,comment=NA, echo=FALSE}
+getwd
+```
+```{r,comment=NA, echo=FALSE,out.width="100%"}
+knitr::include_graphics("mozambique-metallic-flag-textured-flag-grunge-flag_559531-11258.jpg",err=FALSE)
+
+```
+
+```{r,comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+mozambique_corona <- coronavirus %>% filter(country == "Mozambique")
+library(ggplot2) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(png) 
+library(gridBase) 
+library(sp) 
+data(wrld_simpl)
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = mozambique_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+### **Weather and Climate** ###
+
+The climate in most of Mozambique is tropical and warm with a dry, cooler season from May until October and a wet, hot season from November until April. The Dry season corresponds with winter and the Wet season with summer (at the opposite time of winter and summer in Europe and North America). Aside from January and February, which tend to be very wet, the beaches are lovely throughout the year.
+
+Inhambane is a coastal town located in the south of Mozambique. Its warm sub-tropical climate is representative of most of the country. Like Inhambane, the whole coast has some rain throughout the year, although much more in the Wet season, from November to April. Parks in the interior, such as Niassa and Limpopo, tend to be totally dry during the Dry season, from May to October. It is hotter and more humid on the north coast of the country than in the south. Rainfall in Gorongosa NP is higher than in Inhambane.
+
+### **Geography of Mozambique** ###
+
+Geographically, Mozambique covers an area of over 800,000 sq. km, three times the size of Great Britain. Situated to the south east of the African continent, it shares borders with six other countries, Tanzania, Malawi and Zambia to the north, Zimbabwe to the west, South Africa and Swaziland to the south. The 2,500 km long coastline boasts numerous superb beaches fringed by lagoons, coral reefs and strings of small islands.
+
+The Geography of Mozambique apprises a vast, low, grassland plateau which rises from the coast towards the mountains in the north and west covers nearly half the country's land area. The population is concentrated along the coast and the fertile river valleys. The Zambezi is the largest of the country's 25 rivers. Mozambique is rich in mineral resources such as gold, emeralds, copper, iron ore and bauxite and is currently engaged in oil exploration.
+
+
+### **Lockdown status of Mozambique** ###
+
+No travel is risk-free during COVID-19. Countries may further restrict travel or bring in new rules at short notice, for example due to a new COVID-19 variant. Check with your travel company or airline for any transport changes which may delay your journey home.
+
+Plan ahead and make sure you:
+
+can access money
+understand what your insurance will cover
+can make arrangements to extend your stay and be away for longer than planned
+If you test positive for COVID-19 whilst in Mozambique, you must self-isolate in a hotel or private accommodation. If you do not have symptoms, you must self-isolate until advised otherwise by their doctor, after testing negative, or for 7 days. If you test positive and are showing symptoms, you must self-isolate for 7 days after developing symptoms.
+
+If you are forced to self-isolate, please make sure you have a plan for ensuring continued access to supplies such as food, as there is no government provision.
+
+These measures are the same for all ages.
+
+If you think you have COVID-19 symptoms, you should contact the Mozambique National Institute of Health on 82 34 34/ 84 34 34 /86 34 34 000 and follow their instructions. You can also reach out to health assistance through the following routes:
+
+Dial free line Alo Vida (Hello Life): 1490 through TmCel and Movitel networks
+Dial free line Alo Vida 84146 if calling from a Vodacom network
+Reach out to PENSA (Think) through *660#
+Reach out via WhatsApp Fica Atento (stay alert) through +258 843318727
+Visit the Mozambican government’s COVID-19 website for more information (This website is only available in Portuguese)
+
+## **2.Data Exploratory** ##
+
+```{r,comment=NA, echo=FALSE}
+getwd
+```
+```{r,comment=NA, echo=FALSE,out.width="100%"}
+knitr::include_graphics("home-vaccine-shot-1.jpg",err=FALSE)
+
+
+
+```
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+mozambique_corona <-coronavirus  %>% filter(country == "Mozambique")
+recovered_mozambique_corona <-mozambique_corona %>% filter(type=="confirmed")
+summary(recovered_mozambique_corona)
+```
+
+### **Visualization of corona virus cases in Mozambique** ###
+
+### Visualization of COVID-19 confirmed cases in Mozambique ###
+
+Represents the confirmed coronavirus cases in Mozambique.
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed_mozambique_corona<-mozambique_corona %>% filter(type=="confirmed")
+head(confirmed_mozambique_corona)
+
+confirmed_cases <- filter(mozambique_corona, type == "confirmed")
+
+ggplot(confirmed_cases,aes(x=date,y=cases)) + geom_path(size=1) + labs(title = "Confirmed cases in Mozambique")
+
+```
+
+
+Above graph showas the confirmed no.of corona patients in Mozambique in daily basis.
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+death_cases <- filter(mozambique_corona, type == "death")
+
+ggplot(death_cases,aes(date, cases)) + geom_path(size=1) + labs(title = "Death cases in Mozambique")
+```
+
+Above graph shows the no.of deadth from Corona in Mozambique in daily basis.
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(mozambique_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Mozambique")
+
+ggplot(mozambique_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Confirmed, Death and Recovered cases in Mozambique")
+
+ggplot(mozambique_corona, aes(x=date, y=cases,fill=factor(type))) + geom_bar(position="stack", stat="identity") + coord_flip()
+
+
+ggplot(recovered_mozambique_corona,aes(cases))+geom_histogram(bins=7,col="black",alpha=0.5)
+
+ggplot(recovered_mozambique_corona, aes(cases))+geom_histogram(bins=7,col="black",alpha=0.5)+geom_freqpoly(bins=7, col="red")
+
+
+```
+
+## **3.Comapring with the countries in the same continent** ##
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+Mozambique_corona <- coronavirus %>% filter(country == "Mozambique")
+confirmedcases_mozambique_corona <- mozambique_corona %>% filter(type=="confirmed") 
+
+Botswana_corona <- coronavirus  %>% filter(country == "Botswana")
+confirmed_botswana_corona <- Botswana_corona %>% filter(type=="confirmed")
+
+Nigeria_corona <- coronavirus  %>% filter(country == "Nigeria")
+confirmed_nigeria_corona <- Nigeria_corona %>% filter(type=="confirmed")
+
+Kenya_corona <- coronavirus  %>% filter(country == "Kenya")
+confirmed_kenya_corona <- Kenya_corona %>% filter(type=="confirmed")
+
+Morocco_corona <- coronavirus  %>% filter(country == "Morocco")
+confirmed_morocco_corona <- Morocco_corona %>% filter(type=="confirmed")
+
+Bulgaria_corona <- coronavirus  %>% filter(country == "Bulgaria")
+confirmed_bulgaria_corona <- Bulgaria_corona %>% filter(type=="confirmed")
+
+Algeria_corona <- coronavirus  %>% filter(country == "Algeria")
+confirmed_algeria_corona <- Algeria_corona %>% filter(type=="confirmed")
+
+Zimbabwe_corona <- coronavirus  %>% filter(country == "Zimbabwe")
+confirmed_zimbabwe_corona <- Zimbabwe_corona %>% filter(type=="confirmed")
+
+Neighbor_confirm <- rbind(confirmedcases_mozambique_corona, confirmed_botswana_corona, confirmed_nigeria_corona, confirmed_kenya_corona, confirmed_morocco_corona, confirmed_bulgaria_corona, confirmed_algeria_corona, confirmed_zimbabwe_corona)
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in Mozambique's neighbour countries") + ylim(0,10000)
+
+ggplot(Neighbor_confirm, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,30000)
+
+ggplot(Neighbor_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed cases in Mozambique's neighbour countries")
+
+
+```
+
+
+From these graphs we can clearly see that Mozambique coronavirus confirmed cases are higher than the Botswana.Botswana recorded the lowest confirmed cases compared to neighbor countries.In here Morocco and Bulgaria have higher outlier cases.
+
+
+## **4.Conclusion and Discussion** ##
+
+The COVID-19 pandemic has spread to every populated
+continent and has strained health systems across the
+world. While the virus spreads easily across borders, it
+has exposed the structural inequalities ingrained in societies internationally, demonstrating that social determinants of health such as socioceconomic status and race
+are closely and unjustly correlated with one’s ability to
+access testing and treatment [30–32]. While donorfunded initiatives have prioritized the development of
+systems of response to HIV, malaria, and tuberculosis —
+certainly concerns of the Mozambican government as
+well national efforts in building an infrastructure for
+universal health coverage have lagged and the health system is thus inadequately prepared to respond to a pandemic such as that caused by COVID-19. The results of
+this analysis can serve several purposes for both
+Mozambique and emergency response more broadly
+
+Primarily and most immediately, it can be used to identify and prioritize vulnerable areas within Mozambique
+requiring additional support in the COVID-19 response,
+particularly the rural northern regions. Future research
+should examine the location-allocation of additional oxygen delivery resources in Mozambique to maximize the
+population able to receive care at an oxygen-ready facility. Importantly, this research models an approach for
+assessing vulnerability that can be used in other country
+contexts where the SARA census was conducted. Further research can incorporate additional indicators for
+preparedness and improve simulation of public transportation travel times. Finally, we hope it serves as a call to
+action for global health practitioners. As government
+agencies and external funders scramble to scale-up an
+adequate COVID-19 response, including resources for
+testing and treatment, we must acknowledge the failings
+and injustices that led to this moment of extreme
+vulnerability.
+
+
+## **5.References** ##
+
+1. U.S. Embassy in Mozambique: COVID-19 Information. 2020. https://mz.
+usembassy.gov/covid-19-information-2/. Accessed 13 May 2020.
+2. Walker PG, Whittaker C, Watson O, Baguelin M, Ainslie K, Bhatia S. The
+impact of COVID-19 and strategies for mitigation and suppression in lowand middle-income countries, WHO Collaborating Centre for Infectious
+Disease Modelling; MRC Centre for Global Infectious Disease Analysis; Abdul
+Latif Jameel Institute for Disease and Emergency Analytics. UK: Imperial
+College London; 2020.
+3. Lopes AJ. The language situation in Mozambique. J Multiling Multicult Dev.
+1998;19(5):440–86. https://doi.org/10.1080/01434639808666364.
+4. Sabonete A, Momade A, Júnior A, Botão C, Baloi C, Muianga C, Ribeiro E,
+Amade E, Franco F, Muchanga G, Muianga J, Valido J, Matandalase M,
+Rambique O, da Costa P, Chicumbe S, Bignamini S, Gulamo Y. SARA 2018
+Inventário Internacional; 2020.
+5. Direcção de Planificação e Cooperação. Plano Estratégico do Sector
+de Saúde. República de Moçambique, Ministério de Saúde. September
+30, 2013.
+6. National Institutes of Health: COVID-19 Treatment Guidelines. 2020. https://
+www.covid19treatmentguidelines.nih.gov/overview/. Accessed 13 May 2020.
+7. Wu Z, McGoogan JM. Characteristics of and important lessons from the
+coronavirus disease 2019 (COVID-19) outbreak in China: summary of a
+report of 72,314 cases from the Chinese Center for Disease Control and
+Prevention. JAMA. 2020;323(13):1239–42.
+8. WHO-UNICEF Oxygen sources and distribution for COVID-19 treatment
+centres; COVID-19 Clinical Care, Geneva: World Health Organization and
+United Nations Children's Fund (UNICEF); 2020.
+9. Yao J, Agadjanian V. Bypassing health facilities in rural Mozambique:
+Spatial, institutional, and individual determinants. BMC Health Serv Res.
+2018;18:1
+
+
+
+
+
+
+

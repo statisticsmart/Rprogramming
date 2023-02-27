@@ -1,0 +1,655 @@
+---
+title: "Covid-19 Pandemic in Guatemala
+"
+author: "Name: Rusiru Lakmal-AS2019488"
+date: "Today: `r Sys.Date()`"
+output: html_document
+
+
+---
+
+---
+
+```{r echo=FALSE,message=FALSE,warning=FALSE,results="asis"}
+cat("
+<style>
+   h1.title.toc-ignore{
+   color: red;
+   }
+    .btn-primary {
+    padding: 10px 20px;
+    border-radius: 27px;
+    background: linear-gradient(135deg,rgba(0,38,62,1)0%,rgba(141,200,232,1) 100%);
+    box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 50%);
+    color: #fff;
+}
+   #introduction-about-guatemala h2{
+        display: flex;
+    text-align: center;
+    justify-content: center;
+    
+   }
+  
+  #header{
+  margin:20px;
+ background-image:url('img1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+   background: rgba( 255, 255, 255, 0.25 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 4px );
+-webkit-backdrop-filter: blur( 4px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+  
+  
+  }
+ h4.author,.date{
+ font-size: 14px;
+ margin-left:10px;
+    color: #f0f0f0;
+     text-shadow: 0px 0px 0 rgb(190,190,190),
+                 0px 1px  0 rgb(140,140,140),
+                 0px 2px 1px rgba(0,0,0,0.6),
+                 0px 2px 1px rgba(0,0,0,0.5),
+                 0px 0px 1px rgba(0,0,0,.2);
+ }
+ .main-container{
+ background-image: url('img1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 268.8px;
+  width:100%;
+  background-size:cover; 
+ }
+ @media only screen and (max-width: 700px) {
+  .main-container{
+ background-image: url('img1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 420.8px;
+  width:100%;
+  background-size:cover; 
+ }
+  
+}
+ 
+ img{
+ object-fit: cover
+ }
+ h1.title {
+    padding-top:15px;
+    font-size: 38px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-size: 60px;
+    color: #b33434;
+    text-shadow: 0px 0px 0 rgb(154,27,27),
+                 0px 1px 0 rgb(129,2,2),
+                 0px 2px  0 rgb(104,-23,0),
+                 0px 3px 2px rgba(0,0,0,0.6),
+                 0px 3px 1px rgba(0,0,0,0.5),
+                 0px 0px 2px rgba(0,0,0,.2);
+.author,.date{
+    margin:20px 20px;
+    margin-bottom:20px;
+    padding-bottom:10px;
+    
+}
+
+
+</style>
+")
+```
+## INTRODUCTION ABOUT GUATEMALA
+Guatemala is a country in Central America, that borders Honduras to the east, El Salvador to the southeast and the Pacific Ocean to the south, Belize and the Caribbean to the northeast, and Mexico to the north and west. Guatemala's population in 2022 is estimated to be 15.89 million, covers a country area of 108,889 sq km (42,042 sq mi), ranks one-hundred-fifth country by area, second most populous Central America, and the sixty-ninth most populous country in the world. Its capital and largest city are Nueva Guatemala de la Asunción, popularly known as Guatemala City and other popular cities are Mixco, Villa Nueva, Cobán, Quetzaltenango, Jalapa, Escuintla, San Juan Sacatepéquez, Jutiapa, and Petapa. The country code is GTM, Population of Guatemala in 2021 is estimated at 15.64 million. The official language is Spanish, origin of the name Guatemala is Indian (Native Indian), meaning mountain of vomiting water.<br><br>
+<a href="https://www.who.int/countries/gtm" target="_blank" class="btn btn-primary">WHO Latest update</a> 
+<button class="btn btn-primary" data-toggle="collapse" data-target="#BlockName">Click MAP Guatemala</button>  
+<div id="BlockName" class="collapse"> 
+
+```{r echo=F, message=F, warning=FALSE, fig.width=4}
+
+
+library(coronavirus)
+library(mapview)
+library(sp)
+library(ggspatial)
+library(sf)
+library(tigris)
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(rnaturalearth)
+library(countrycode)
+library(ggrepel)
+library(ggplot2)
+library(maps)
+library(ggthemes)
+
+library(ggmap)
+theme_set(theme_minimal())
+mallco_map <- get_stamenmap(
+  
+  bbox = c(left = -96.812  , bottom=12.018 , right=-86.528 , top=19.322 ),
+  maptype = "terrain",
+  zoom=7
+  
+)
+```
+```{r echo=F, message=F, warning=FALSE, fig.width=6}
+ggmap(mallco_map)
+
+```
+
+</div>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Growth Of Corona cases Worldwide
+
+Following plot shows how total "covid - 19 " cases has been recorded across the time
+You can also embed plots, for example:
+
+```{r echo=F, message=F, warning=FALSE}
+   #Discontinuity point
+    library(coronavirus)
+library(ggplot2)
+  
+   
+   #missing values to NA
+   d <- format(as.Date(coronavirus$date, format="%y-%m-%d"),"%Y")
+   ddf <- coronavirus
+   nedta <- cbind(ddf,"year"=d)
+
+   reclean <- nedta %>% mutate(cases = replace(cases,which(cases<0),0))
+   
+   
+   data_sum2 <- reclean %>% group_by(country,year) %>%dplyr::summarise(x2 = sum(cases)) %>% as.data.frame()
+   
+   
+   library(remotes)
+library(gganimate)
+library(gifski)
+
+ new_set <- data_sum2
+ 
+ datos2 <- new_set %>% group_by(year)%>%arrange(year,desc(x2))%>%mutate(ranking =row_number())%>%filter(ranking<=25)
+ 
+animacion <- datos2 %>%
+     ggplot() +
+    geom_col(aes(ranking,x2 , fill = country)) +
+  geom_text(aes(ranking, x2, label = x2), hjust=-0.1) +
+      geom_text(aes(ranking, y=0 , label = country), hjust=1.1) + 
+       geom_text(aes(x=15, y=max(x2) , label = as.factor(year)), vjust = 0.2, alpha = 0.5,  col = "gray", size = 20) +
+     coord_flip(clip = "off", expand = FALSE) + scale_x_reverse() +
+       theme_minimal() + theme(
+             panel.grid = element_blank(), 
+             legend.position = "none",
+             axis.ticks.y = element_blank(),
+             axis.title.y = element_blank(),
+             axis.text.y = element_blank(),
+             plot.margin = margin(1, 4, 1, 3, "cm")) +
+      transition_states(year, state_length = 0, transition_length = 2) +enter_fade() +exit_fade() +  ease_aes('quadratic-in-out')  
+animate(animacion, width = 700, height = 432, fps = 25, duration = 15, rewind = FALSE)
+   
+
+
+```
+
+
+## Exploratory Data Analysis
+Following outputs are given the summary of the GUATEMALA coronavirus data. The 2652 observations. The several variables are obtained such as date of the observation taken from, province of the case identified, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given date.
+```{r  echo=F, message=F, warning=FALSE}
+  library(coronavirus)
+  library(tidyverse)
+  guatemala_corona <- coronavirus %>% filter(country == "Guatemala")
+  reset_guatemala <- guatemala_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+  str(reset_guatemala)
+  
+```
+
+<br> 
+<button class="btn btn-primary" data-toggle="collapse" data-target="#discon">identify Discontinuity Points</button>  
+<div id="discon" class="collapse"> 
+```{r}
+  #identify the Discontinuity Point
+  library(coronavirus)
+  guatemala_cona <- coronavirus %>% filter(country == "Guatemala") #filter by country 
+  reset_guatea <- guatemala_cona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # nulld or negative values set to NA
+  which(is.na(reset_guatea$cases)) # identify NA cases
+  
+  #Impute missing value 1st value
+  reset_guatea$cases[1302] = mean(c(reset_guatea$cases[1301], reset_guatea$cases[1303]))
+  
+  #Impute missing value 2nd value
+  reset_guatea$cases[2330] = mean(c(reset_guatea$cases[2329], reset_guatea$cases[2331]))
+  
+  
+  #  I add a column col that indicates desired colour. 1st missing value is red color #2nd missing value is green color
+  reset_guatea$col <- as.factor(c(rep("black", 1300),rep("red", 2), rep("black",2328-1302),rep("green",2),rep("black",2652-2330)))
+  
+ 
+```
+</div>
+<br>
+<h1>Identify the Discontinuity Point</h1> 
+
+Number of recovered cases has begun to increase at a increasing rate around middle of the year 2020
+zoomed section shows the time period where most recovered covid cases are reported. below are cases of discontinuity points. 
+
+```{r echo=F, message=F, warning=FALSE }
+  #identify the Discontinuity Point 
+  guatemala_cona <- coronavirus %>% filter(country == "Guatemala") #filter by country 
+  reset_guatea <- guatemala_cona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # nulld or negative values set to NA
+  which(is.na(reset_guatea$cases)) # identify NA cases
+  
+  #Impute missing value 1st value
+  reset_guatea$cases[1302] = mean(c(reset_guatea$cases[1301], reset_guatea$cases[1303]))
+  
+  #Impute missing value 2nd value
+  reset_guatea$cases[2330] = mean(c(reset_guatea$cases[2329], reset_guatea$cases[2331]))
+  
+  #  I add a column col that indicates desired colour. 1st missing value is red color 2nd missing value is green color
+  reset_guatea$col <- as.factor(c(rep("black", 1300),rep("red", 2), rep("black",2328-1302),rep("green",2),rep("black",2652-2330)))
+ 
+```
+
+
+
+```{r echo=F, message=F, warning=FALSE}
+   library(ggforce)
+  theme_set(theme_bw())
+  ggplot(reset_guatea, aes(x=date, y=cases)) +geom_line(aes(colour=col, group=1)) + scale_colour_identity()+facet_zoom(ylim = c(0,5000),xlim = c(as.Date("2021-03-01"),as.Date("2021-10-01")) )+ggtitle("Time series plot of recovered cases imputed values are shown in red and Green  ")
+
+```
+
+
+Number of recovered cases has begun to increase at a increasing rate around middle of the year 2020
+zoomed section shows the time period where most recovered covid cases are reported
+
+
+```{r echo=F, message=F, warning=FALSE}
+
+      #clean data cases floting values rounded to integer
+
+       reset_guatea$cases <- round(reset_guatea$cases, digits = 0)#rounded flot values
+       dat_clean <- reset_guatea %>% group_by(type) %>%dplyr::summarise(case = sum(cases)) 
+       type_of_case <- reset_guatea$type
+       num_of_cases <- reset_guatea$cases
+  
+       library(ggplot2)
+       library(ggforce)
+       ggplot(reset_guatea, aes(x = type_of_case, y = num_of_cases, colour = type_of_case))+ geom_boxplot(outlier.shape = NA) +
+  geom_jitter()+facet_zoom(ylim = c(0,5000))+ggtitle("Confirmed, Death and Eecovered cases in Guatemala ")
+
+       
+```
+
+
+
+This <b>Above</b> figure shows that, confirmed, death and recovered cases in Guatemala. At first, there were no cases but in shortly, number of confirmed case are increased speedily and it is too much larger than death and confirmed cases. Especially, Guatemala has small amount of death cases than confirmed cases. guatemala had considerable recoveries.
+
+
+
+```{r echo=F, message=F, warning=FALSE}
+     library(ggplot2)
+library(gganimate)
+library(babynames)
+library(hrbrthemes)
+library(viridis)
+
+ #don<- format(as.Date(reset_guatea$date, format="%y-%m-%d"),"%Y")
+ 
+ reset_guatea$year <- format(as.Date(reset_guatea$date, format="%y-%m-%d"),"%Y")
+ reset_guatea$month <- format(as.Date(reset_guatea$date, format="%y-%m-%d"),"%m")
+ reset_guatea$day <- format(as.Date(reset_guatea$date, format="%y-%m-%d"),"%d")
+ reset_guatea$year<- as.integer(reset_guatea$year) 
+ reset_guatea$day<- as.integer(reset_guatea$day) 
+
+
+# Plot
+p <- ggplot(
+  reset_guatea,
+  aes(day, cases, group = month , color = factor(month))
+  ) +
+  geom_line() +
+  scale_color_viridis_d() +
+  labs(x = "Day of Month", y = "cases") +
+  theme(legend.position = "top")
+  p+geom_point(aes(group = seq_along(day)))+transition_reveal(day)
+
+```
+according to the following <b>Above </B>figure monthly corona cases vari from day of month and months are represent by months colors
+
+
+according to the following <b>Below </B>figure total cases recorded in year 2021 is higher
+compared to the 2020 and 2022. this plot also represents how monthly total covid cases are
+recorded
+
+
+
+```{r echo=F, message=F, warning=FALSE}
+ library(ggplot2)
+   library(ggplot2)
+   p<-ggplot(reset_guatea, aes(x=year, y=cases, fill=factor(month))) +
+  geom_bar(stat="identity")+theme_minimal() 
+   
+p
+
+ 
+```
+
+daily number of cases recorded has begun to increase around april 2020 and again around april 201
+
+<br>
+<br>
+```{r echo=F, message=F, warning=FALSE }
+
+library(plotly)
+library(MASS)
+library(coronavirus)
+
+        time_seis <- reset_guatea %>% filter(type == "confirmed")
+     
+        df <- data.frame(time_seis$date,time_seis$cases)
+
+
+colnames(df) <- c("x", "y")
+fig <- plot_ly(df, x = ~x, y = ~y, alpha = 0.3)
+fig <- fig %>% add_markers(marker = list(line = list(color = "black", width = 1)))
+
+fig <- fig %>% layout(
+  title = "Confirmed corona cases vari form date and you acn select  - Plot type",
+  xaxis = list(domain = c(0.1, 1),title="Date"),
+  yaxis = list(title = "Number of Cases"),
+  updatemenus = list(
+    list(
+      y = 0.8,
+      buttons = list(
+        
+        list(method = "restyle",
+             args = list("type", "scatter"),
+             label = "Scatter"),
+        
+        list(method = "restyle",
+             args = list("type", "histogram2d"),
+             label = "2D Histogram")))
+  ))
+
+fig
+        
+```
+
+```{r echo=F, message=F, warning=FALSE }
+
+library(plotly)
+library(MASS)
+library(coronavirus)
+
+        time_seis <- reset_guatea %>% filter(type == "death")
+     
+        df <- data.frame(time_seis$date,time_seis$cases)
+
+
+colnames(df) <- c("x", "y")
+fig <- plot_ly(df, x = ~x, y = ~y, alpha = 0.3)
+fig <- fig %>% add_markers(marker = list(line = list(color = "black", width = 1)))
+
+fig <- fig %>% layout(
+  title = " Deaths people vari from date   - Plot type",
+  xaxis = list(domain = c(0.1, 1),title="Date"),
+  yaxis = list(title = "Number of Cases"),
+  updatemenus = list(
+    list(
+      y = 0.8,
+      buttons = list(
+        
+        list(method = "restyle",
+             args = list("type", "scatter"),
+             label = "Scatter"),
+        
+        list(method = "restyle",
+             args = list("type", "histogram2d"),
+             label = "2D Histogram")))
+  ))
+
+fig
+        
+```
+
+
+```{r echo=F, message=F, warning=FALSE }
+
+library(plotly)
+library(MASS)
+library(coronavirus)
+
+        time_seis <- reset_guatea %>% filter(type == "recovery")
+     
+        df <- data.frame(time_seis$date,time_seis$cases)
+
+
+colnames(df) <- c("x", "y")
+fig <- plot_ly(df, x = ~x, y = ~y, alpha = 0.3)
+fig <- fig %>% add_markers(marker = list(line = list(color = "black", width = 1)))
+
+fig <- fig %>% layout(
+  title = "recovery cases vari from date  - Plot type",
+  xaxis = list(domain = c(0.1, 1),title="Date"),
+  yaxis = list(title = "Number of Cases"),
+  updatemenus = list(
+    list(
+      y = 0.8,
+      buttons = list(
+        
+        list(method = "restyle",
+             args = list("type", "scatter"),
+             label = "Scatter"),
+        
+        list(method = "restyle",
+             args = list("type", "histogram2d"),
+             label = "2D Histogram")))
+  ))
+
+fig
+        
+```
+
+
+
+<h1> FInding active cases and it  acitive cases vari from date</h1>
+```{r  echo=F, message=F, warning=FALSE }
+
+    
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+library(dygraphs)
+library(xts) 
+
+     
+       q1 <- coronavirus %>% filter(country =="Guatemala")
+        q2 <- q1 %>% filter(type == "confirmed")
+        q3 <- q1 %>% filter(type == "death")
+      q4 <- q1 %>% filter(type == "recovery")
+      dfff <- data.frame(v1 =cumsum(q2$cases),date = format(q2$date, "%Y-%m-%d"))
+      
+      # Switch to XTS format
+      head(q2$date)
+     
+     
+      
+data <- xts(x = dfff$v1, order.by = q2$date)
+     
+     
+
+p <- dygraph(data) %>%
+  dyOptions( stepPlot=TRUE, fillGraph=TRUE)
+p
+
+
+
+
+
+
+```
+
+
+```{r  echo=F, message=F, warning=FALSE}
+
+        library(coronavirus)
+library(ggplot2)
+library(tidyverse)
+library(gganimate)
+theme_set(theme_bw())
+library(magrittr)
+library(dplyr)
+        
+        wold_dta<-coronavirus %>% filter(country == c("Canada","India","Guatemala"))
+        wold_dta<-wold_dta %>% mutate(cases = replace(cases, which(cases < 0), NA))
+        
+        p <- which(is.na(wold_dta$cases))
+        
+        
+        
+         # program for estimate missing value
+        for (val in p) {
+
+           wold_dta$cases[val] = mean(c(wold_dta$cases[val-1], wold_dta$cases[val+1]))
+  
+        }
+       p <- which(is.na(wold_dta$cases));p
+        
+  
+       
+       wold_dta$year <- format(as.Date(wold_dta$date, format="%y-%m-%d"),"%Y")
+       
+
+      world_data <- wold_dta %>% group_by(year,country,population,continent_name)%>%dplyr::summarise(case = sum(cases)) %>% as.data.frame()
+       world_data$year<- as.integer(world_data$year) 
+      
+      pc<- ggplot(
+  world_data, 
+  aes(x = case, y=population, size = population , colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "Cases", y = "Population In Country")
+      
+      
+ 
+
+       pc + transition_time(year) +
+  labs(title = "Year: {frame_time}")+facet_wrap(~country) +
+  transition_time(year) +
+  labs(title = "Year: {frame_time}")
+        
+
+
+```
+
+
+
+```{r  echo=F, message=F, warning=FALSE }
+
+
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+
+     
+       q1 <- coronavirus %>% filter(country =="Guatemala")
+        q2 <- q1 %>% filter(type == "confirmed")
+        q3 <- q1 %>% filter(type == "death")
+      q4 <- q1 %>% filter(type == "recovery")
+      dfff <- data.frame(v1 =cumsum(q2$cases - (q3$cases + q4$cases)),date =q1$date)
+      
+     
+      p <- ggplot(dfff, aes(x=date, y=v1)) +
+  geom_line() +
+  xlab("")
+p
+
+
+
+```
+
+
+
+```{r echo=F, message=F, warning=FALSE }
+     
+        library(dplyr)
+library(coronavirus)
+
+     library(sqldf)
+target <- c("India","Guatemala","Poland","Sri Lanka")
+
+       
+     allcontry <- coronavirus %>% filter(country %in% target)
+    
+   
+     allcontry_comfrimed <- allcontry %>% filter( type == "confirmed")
+     #  allcontry_recovery <- allcontry %>% filter( type == "recovery")
+    # allcontry_death <- allcontry %>% filter( type == "death")
+    # pro <- c(sum(allcontry_comfrimed$cases)/(allcontry_comfrimed$population)*100)
+    # con <- c(allcontry_comfrimed$country)
+     
+        data_s2 <- allcontry_comfrimed %>% group_by(country,population) %>%dplyr::summarise(cases = sum(cases)) %>% as.data.frame()
+
+     data_s2$confirmed_propotition <- c(data_s2$cases/data_s2$population)
+     
+
+      ggplot( data_s2,aes(x=country, y=confirmed_propotition, color= country )) +
+    geom_bar(stat="identity", alpha=.6, width=.4) +
+    coord_flip() +
+    xlab("") +
+    theme_bw()
+   
+```
+
+
+```{r echo=F, message=F, warning=FALSE }
+     
+        library(dplyr)
+library(coronavirus)
+
+     library(sqldf)
+target <- c("India","Guatemala","Poland","Sri Lanka")
+
+       
+     allcontry <- coronavirus %>% filter(country %in% target)
+    
+   
+     #allcontry_comfrimed <- allcontry %>% filter( type == "confirmed")
+      # allcontry_recovery <- allcontry %>% filter( type == "recovery")
+     allcontry_death <- allcontry %>% filter( type == "death")
+    # pro <- c(sum(allcontry_comfrimed$cases)/(allcontry_comfrimed$population)*100)
+    # con <- c(allcontry_comfrimed$country)
+     
+        data_s2 <- allcontry_death %>% group_by(country,population) %>%dplyr::summarise(cases = sum(cases)) %>% as.data.frame()
+
+     data_s2$deth_propotition <- c(data_s2$cases/data_s2$population)
+     
+
+      ggplot( data_s2,aes(x=country, y=deth_propotition, color= country )) +
+    geom_bar(stat="identity", alpha=.6, width=.4) +
+    coord_flip() +
+    xlab("") +
+    theme_bw()
+   
+```
+
+<h1> Conclusion</h1>
+
+After January 2022, the vast majority of coronavirus patients were identified. Guatemala has a low daily death rate and has implemented the essential measures to reduce the effects of the coronavirus. When compared to its neighbors,  Guatemala is least affected by the coronavirus. Overall, we can say that  Guatemala handled the worldwide pandemic effectively.
+
+<h1> Reference</h1>
+https://thiyanga.netlify.app/
+https://r-graph-gallery.com/index.html
+https://www.populationu.com/guatemala-population

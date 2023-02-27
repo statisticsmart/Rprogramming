@@ -1,0 +1,369 @@
+---
+title: "   <u>The Coronavirous COVID-19 in Greece</u>"
+author: "AS2019383"
+date: "2022-10-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **1. Introduction**
+
+## 1.1 Greece and Its location
+Greece, officially the Hellenic Republic, is a country in Southeast Europe. It is situated on the southern tip of the Balkans, and is located at the crossroads of Europe, Asia, and Africa. Greece shares land borders with Albania to the northwest, North Macedonia and Bulgaria to the north, and Turkey to the northeast. The Aegean Sea lies to the east of the mainland, the Ionian Sea to the west, and the Sea of Crete and the Mediterranean Sea to the south. Due to its highly indented coastline and numerous islands, Greece has the 11th longest coastline in the world with 13,676 km (8,498 mi). Its land boundary is 1,160 km (721 mi). The country lies approximately between latitudes 34° and 42° N, and longitudes 19° and 30° E, with the extreme points being. Crete is the largest and most populous island. The country consists of nine traditional geographic regions, and has a population of approximately 10.4 million. Athens is the nation's capital and largest city, followed by Thessaloniki and Patras.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(rmarkdown)
+library(devtools)
+library(coronavirus)
+library(tidyverse)
+library(maps)
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+library(plotly)
+library(knitr)
+
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="Figure1: Location of Greece in world map"}
+greece <- coronavirus %>% filter(country == "Greece")
+
+world <- map_data("world")
+g <- ggplot() +geom_polygon(data = world,aes(x = long, y= lat, group=group), fill ="gray", colour="white") +
+  coord_cartesian(xlim = c(-180,180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180,180,120))+
+  scale_y_continuous(breaks = seq(-90,90,100))
+
+g + geom_point(data = greece, aes(x=long, y=lat), color = "red", size=2)
+
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap="Figure2: Map of Greece"}
+
+GRE <- world %>% filter(region == "Greece")
+ggplot(GRE) + geom_polygon(aes(x = long, y = lat, group = group), color = "dark blue", fill = "light blue") 
+
+```
+
+## 1.2 Climate in Greece
+The climate of Greece is primarily Mediterranean, featuring mild, wet winters and hot, dry summers. This climate occurs at all coastal locations, including Athens, the Cyclades, the Dodecanese, Crete, the Peloponnese, the Ionian Islands and parts of the Central Continental Greece region. The Pindus mountain range strongly affects the climate of the country, as areas to the west of the range are considerably wetter on average than the areas lying to the east of the range.The mountainous areas of Northwestern Greece as well as in the mountainous central parts of Peloponnese feature an Alpine climate with heavy snowfalls. The inland parts of northern Greece, in Central Macedonia and East Macedonia and Thrace feature a temperate climate with cold, damp winters and hot, dry summers with frequent thunderstorms. Snowfalls occur every year in the mountains and northern areas, and brief snowfalls are not unknown even in low-lying southern areas, such as Athens.
+
+## 1.3 COVID-19 Pandemic 
+The COVID-19 pandemic is a global outbreak of coronavirus; an infectious disease caused by the severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) virus.
+
+The first cases of novel coronavirus (nCoV) were first detected in China in December 2019, with the virus spreading rapidly to other countries across the world. This led WHO to declare a Public Health Emergency of International Concern on 30 January 2020, and to characterize the outbreak as a pandemic on 11 March 2020.
+
+Since the COVID-19 pandemic started, over 2 million people in the European Region have died from the disease. France has been the worst affected country in Europe.
+
+## 1.4 COVID-19 pandemic and Actions taken by government in Greece
+The COVID-19 pandemic in Greece is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first case in Greece was confirmed on 26 February 2020 when a 38-year-old woman from Thessaloniki who had recently visited Northern Italy, was confirmed to be infected. Subsequent cases in late February and early March related to people who had travelled to Italy and a group of pilgrims who had travelled to Israel and Egypt, as well as their contacts. The first death from COVID-19 in Greece was a 66-year-old man, who died on 12 March. Since the opening of the Greek borders to tourists at the end of June 2020, the daily number of confirmed cases announced has included those detected following tests at the country's entry points.
+
+Following the confirmation of the first three cases in Greece, all carnival events in the country were cancelled on 27 February 2020. Health and state authorities issued precautionary guidelines and recommendations, while measures up to early March were taken locally and included the closure of schools and the suspension of cultural events in the affected areas (particularly Ilia, Achaea and Zakynthos). On 10 March, with 89 confirmed cases and no deaths in the country, the government decided to suspend the operation of educational institutions of all levels nationwide and then, on 13 March, to close down all cafes, sports leagues bars, museums, shopping centres, sports facilities and restaurants in the country. On 16 March, all retail shops were also closed and all services in all areas of religious worship of any religion or dogma were suspended. The government has announced a series of measures worth a total of around 24 billion euros, 14% of the country's GDP, to support the economy.
+
+Starting from 4 May 2020, after a 42-day lockdown, Greece began to gradually lift restrictions on movement and to restart business activity. Greece put in place new measures and restrictions on movement and business activity from 7 November 2020. On 14 November 2020, primary schools and kindergartens closed, initially for two weeks, and from 18 November 2020, they switched to distance learning. On 20 November 2020, Greece overtook China in terms of the number of confirmed cases of COVID-19. The country reached 100,000 cases on 27 November. On 14 December 2020, shops (utilizing the click away method) as well as hairdressers and other facilities were allowed to open, while schools and restaurants remained closed.
+
+The COVID-19 vaccination campaign in Greece began on 27 December 2020. As of the 30th of June 2022, 7.919.254 people have received their first dose (75.4% of total population), and 7.629.060 people have been fully vaccinated (72.6% of total population). A total of 6.119.231 people have received an additional booster shot (58.2% of total population).
+
+# **2. Exploratory Data Analysis**
+
+## Structure of the dataset in Greece
+
+```{r, caption = "Table1 : Structure of data set", echo=FALSE, comment=NA}
+str(greece)
+
+```
+
+## Small part of the dataset
+
+```{r, comment=NA, caption = "Table2: Small part of data set", echo=FALSE}
+kable(greece %>% head())
+```
+
+## Summary of all cases without missing values or negative values in Greece
+```{r, echo=FALSE}
+greece_new <- greece %>% mutate(cases=replace(cases,which(cases<0),NA))
+greece_new_1 <-  select(greece_new, -8:-15)
+summary(greece_new_1)
+```
+
+```{r, echo=FALSE}
+loca_na <- which(is.na(greece_new$cases ))
+print(paste("Location of missing value in all caces is",loca_na))
+
+```
+
+```{r, echo=FALSE}
+greece_new$cases[2330] = mean(c(greece_new$cases[2329], greece_new$cases[2331]))
+
+print(paste("Calculated missing value is",length(greece_new$cases)))
+
+```
+
+## Summary of all cases with imputed values in Greece
+```{r, echo=FALSE}
+greece_new$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 2652-2330)))
+summary(select(greece_new, -8:-15))
+```
+
+```{r, echo=FALSE, fig.cap= "Figure3: Time series plot of all cases with inputed values"}
+ggplot(greece_new, aes(x=date, y=cases, col=type)) + geom_line(aes(colour=col, group=1)) + scale_colour_identity()
+
+```
+
+
+```{r, echo=FALSE, fig.cap="Figure4: Daily COVID-19 cases by type in Greece"}
+ggplot(greece_new, aes(x=date, y=cases, col=type)) + geom_line(size = 0.5) + geom_jitter(aes(col=type)) + facet_grid(type~.) + theme(legend.position="right") + labs(title="Daily COVID-19 cases in Greece")
+
+```
+
+## Summary of recoveries without missing values or negative values in Greece
+```{r, echo=FALSE, caption = "Table3: Summary of daily recoveries"}
+recovered_greece_corona <- greece %>% filter(type=="recovery")
+
+recovered_greece_corona <- recovered_greece_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+recovered_greece_corona_remove <- select(recovered_greece_corona, -8:-15)
+summary(recovered_greece_corona_remove)
+```
+
+We can see there is a missing value(NA). 
+
+```{r, echo=FALSE, fig.cap="Figure5: Time series plot of recovered cases with discontinuity Point"}
+p1 <- ggplot(recovered_greece_corona, aes(x=date, y=cases)) + geom_line() + labs(y="Recovery Cases")
+ggplotly(p1)
+
+```
+
+```{r, echo=FALSE}
+location <- which(is.na(recovered_greece_corona$cases))
+print(paste("Location of missing value is",location))
+
+```
+
+```{r, echo=FALSE}
+recovered_greece_corona$cases[562] = mean(c(recovered_greece_corona$cases[561], recovered_greece_corona$cases[563]))
+
+print(paste("Calculated missing value is",length(recovered_greece_corona$cases)))
+
+```
+
+## Summary of recoveries with imputed values in Greece
+```{r, echo=FALSE}
+recovered_greece_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+summary(select(recovered_greece_corona, -8:-15))
+```
+
+
+```{r,echo=FALSE, fig.cap="Figure6: Time series plot of recovered cases with inputed values"}
+p2 <- ggplot(recovered_greece_corona, aes(x=date, y=cases)) + geom_line(aes(colour=col, group=1)) + scale_colour_identity() + labs(y="Recovery Cases")
+
+ggplotly(p2)
+
+```
+
+Figure6 shown that most recovery cases are recorded on 4th of December,2020.
+
+## Summary of comformed cases in Greece
+```{r, echo=FALSE}
+confirmed_greece_corona <- greece %>% filter(type=="confirmed")
+
+confirmed_greece_corona <- confirmed_greece_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed_greece_corona_remove <- select(confirmed_greece_corona, -8:-15)
+summary(confirmed_greece_corona_remove)
+```
+
+According to this summary, there is no missing values(NA) values and maximum confirmed cases count is 50182.
+
+```{r,echo=FALSE, fig.cap="Figure7: Time series plot of confirmed cases "}
+p3 <- ggplot(confirmed_greece_corona, aes(x=date, y=cases)) + geom_line(col="black") + geom_jitter(col = "red") + labs(title="Daily COVID-19 confirmed cases in Greece", x="Date", y="Comformed Cases")
+
+ggplotly(p3)
+
+```
+
+According to figure7 we can see upward trend up to year of 2022 and after 2022, there is a downward trend confirmed cases in Greece. This plot is shown that most confirmed cases are recorded on 4th of January,2022.
+
+## Summary of death cases in Greece
+```{r, echo=FALSE}
+death_greece_corona <- greece %>% filter(type=="death")
+
+death_greece_corona <- death_greece_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+death_greece_corona_remove <- select(death_greece_corona, -8:-15)
+summary(death_greece_corona_remove)
+```
+
+This summary is shown that there is no missing values(NA) values. Average of daily death counts is 34.
+
+```{r, echo=FALSE, fig.cap="Figure8: Time series plot of death cases "}
+p4 <- ggplot(death_greece_corona, aes(x=date, y=cases)) + geom_line(col="dark green") + labs(title="Daily COVID-19 death cases in Greece", x="Date", y="Death Cases")
+
+ggplotly(p4)
+
+```
+
+There is no linear trend. This plot(figure8) is shown that most death cases are recorded on 3rd of may,2021. Its death count is 134.  
+
+```{r, echo=FALSE, comment=NA}
+
+total_confirmed_cases <- sum(confirmed_greece_corona$cases)
+print(paste("Total confirmed cases in greece is ",total_confirmed_cases))
+
+total_recovered_cases <- sum(recovered_greece_corona$cases)
+print(paste("Total recovered cases in greece is ",total_recovered_cases))
+
+total_death_cases <- sum(death_greece_corona$cases)
+print(paste("Total death cases in greece is ",total_death_cases))
+
+total_active <- total_confirmed_cases - (total_recovered_cases + total_death_cases)
+print(paste("Total active cases in greece is ",total_active))
+
+```
+
+```{r, echo=FALSE, fig.cap="Figure9: Active, recovery and death cases in Greece"}
+total <- c(total_active, total_recovered_cases, total_death_cases)
+type <- c("active","recovery","death")
+df_tot <- data.frame(total, type )
+
+ggplot(df_tot,aes(x="", y=total, fill=type)) + geom_bar(stat="identity", width=1) + coord_polar("y",start = 0)
+```
+
+
+```{r, echo=FALSE, fig.cap="Figure10: Annual death counts in Greece"}
+year <- as.POSIXct(death_greece_corona$date, format="%Y-%M-%D")
+year <- c(format(year, format="%Y"))
+
+ggplot(death_greece_corona, aes(x=year, y=cases)) + geom_bar(stat = "identity") + labs(title="Comparing Death counts by year",y="Death Cases")
+
+```
+
+Figure10 shows that highest numbers of deaths are reported in 2021 while lowest number of deaths are reported in 2020.
+
+## Comparison between Greece and its neighbouring countries
+
+Greece shares land borders with Albania to the northwest, North Macedonia and Bulgaria to the north, and Turkey to the northeast.
+
+```{r, echo=FALSE}
+turkey_confirmed <- coronavirus %>% filter(country == "Turkey" & type == "confirmed")
+turkey_death <- coronavirus %>% filter(country == "Turkey" & type == "death")
+turkey_recovered <- coronavirus %>% filter(country == "Turkey" & type == "recovery")
+
+bulgaria_confirmed <-coronavirus %>% filter(country == "Bulgaria" & type == "confirmed")
+bulgaria_death <-coronavirus %>% filter(country == "Bulgaria" & type == "death")
+bulgaria_recovered <-coronavirus %>% filter(country == "Bulgaria" & type == "recovery")
+
+macedonia_confirmed <-coronavirus %>% filter(country == "North Macedonia" & type == "confirmed")
+macedonia_death <-coronavirus %>% filter(country == "North Macedonia" & type == "death")
+macedonia_recovered <-coronavirus %>% filter(country == "North Macedonia" & type == "recovery")
+
+albania_confirmed <- coronavirus %>% filter(country == "Albania" & type == "confirmed")
+albania_death <- coronavirus %>% filter(country == "Albania" & type == "death")
+albania_recovered <- coronavirus %>% filter(country == "Albania" & type == "recovery")
+
+neighbour_country_confirmed <- rbind(turkey_confirmed, bulgaria_confirmed, macedonia_confirmed, albania_confirmed, greece %>% filter(type == "confirmed") )
+
+neighbour_country_death <- rbind(turkey_death, bulgaria_death, macedonia_death, albania_death, greece %>% filter(type == "death") )
+
+```
+
+```{r, echo=FALSE, fig.cap="Figure11: Daily confirmed cases in neighbouring countries "}
+
+p5 <- ggplot(neighbour_country_confirmed, aes(x=date, y=cases, col = country)) + geom_line(size = 1.5) + facet_grid(country~.) +labs(title="Daily COVID-19 confirmed cases in neighbouring countries", y="Comformed Cases")
+
+ggplotly(p5)
+
+```
+
+```{r, echo=FALSE, fig.cap="Figure12: Total confirmed cases counts of neighbouring countries"}
+
+ggplot(neighbour_country_confirmed, aes(x=country, y=cases, color=country)) + geom_bar(stat = "identity") + coord_flip()
+
+
+```
+
+
+Figure 12 is shown that the most COVID-19 confirmed cases are recorded from Turkey among neighboring countries. 2nd highest confirmed cases are recorded from Greece.
+
+
+```{r, echo=FALSE, fig.cap="Figure13: Daily Death cases in neighbouring countries"}
+
+p6 <- ggplot(neighbour_country_death, aes(x=date, y=cases, col = country)) + geom_line(size = 0.8) + labs(title="Daily COVID-19 death cases in neighbouring countries ", y="Death Cases")
+
+ggplotly(p6)
+
+```
+
+
+```{r, echo=FALSE, fig.cap="Figure14: Total Death counts of neighbouring countries"}
+
+ggplot(neighbour_country_death, aes(x=country, y=cases, color=country)) + geom_bar(stat = "identity") + coord_flip()
+
+
+```
+
+Figure 14 is shown that the most COVID-19 death cases are recorded from Turkey among neighboring countries. 2nd and 3rd highest death cases are recorded from Bulgaria and Greece respectively.
+
+## Greece compared with worst affected country in Europe
+
+Since the COVID-19 pandemic started, over 2 million people in the European Region have died from the disease. France has been the worst affected country in Europe.
+
+```{r, echo=FALSE}
+
+france_confirmed <- coronavirus %>% filter(country == "France" & type == "confirmed" & cases >= 0)
+france_death <- coronavirus %>% filter(country == "France" & type == "death" & cases >= 0)
+france_recovered <- coronavirus %>% filter(country == "France" & type == "recovery" & cases >= 0)
+
+fg_confirmed <- rbind(france_confirmed, greece %>% filter(type == "confirmed") )
+
+fg_death <- rbind(france_death, greece %>% filter(type == "death") ) 
+
+```
+
+```{r, echo=FALSE, fig.cap="Figure15: Daily comfirmed cases of France and Greece" }
+fg_cp <- ggplot(fg_confirmed) + aes(x = date, y= cases, color= country) + geom_line() + scale_y_continuous() + labs(title="Comparison of Daily COVID-19 comfirmed cases between France and Greece ", y="Comfirmed Cases")
+ggplotly(fg_cp)
+
+```
+
+Figure15 is shown that daily confirmed cases of France are rapidly increased by first month of 2022 while there is also rapidly increased in Greece during that period.
+
+```{r, echo=FALSE, fig.cap="Figure16: Daily death cases of France and Greece"}
+fg_dp <- ggplot(fg_death) + aes(x = date, y= cases, color= country) + geom_line() + scale_y_continuous() + labs(title="Comparison of Daily COVID-19 death cases between France and Greece ", y="Death Cases")
+
+ggplotly(fg_dp)
+
+```
+
+```{r, echo=FALSE, fig.cap="Figure17: Death counts of France and Greece"}
+ggplot(fg_death, aes(x=country, y=cases)) + geom_bar(stat = "identity")
+
+```
+
+
+Figure17 shows that total death count of France is about 150000 while total death count of Greece is about 1/6 comparely France.
+
+## **3. Conclusions and Discussion**
+
+This report is about COVID-19 outbreak of Greece using data from 2020-01-22 to 2022-06-23. Within this time period in Greece, there are total confirmed cases reported as 3583526 and total deaths as 30141. While total active cases are 3459621 up to date. COVID-19 virus was rapidly spread in 2021 in Greece. Death and confirmed cases of the pandemic in Greece are now decreasing significantly. Therefore the situation of pandemic is decreasing in Greece.
+
+Turkey is the most affected country in COVID-19 among Greece and its neighboring countries. On the other hand Albania is the least affected country among neighboring countries.
+
+France is the most effected country to COVID-19 in Europe. Its death toll is greater than Greece and approximately it is about 5 times than Greece.
+
+During lockdown period, reported confirmed cases are reduced in Greece. As of the 30th of June 2022, 75.4% of total population have received their first dose. As of May 2022 situation of COVID-19 pandemic has been diminished. Therefore, we can come to the conclusion that vaccination is successful and efficient. 
+
+There is Limitation we faced when doing this analysis. Such that difficulty of plotting the graphs because of the presence of negative values and the availability of unnecessary data to be compared.
+
+
+## **References**
+  1. https://en.m.wikipedia.org/wiki/Greece
+  2. https://www.who.int/europe/emergencies/situations/covid-19
+  3. https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Greece
+  4. https://www.statista.com/statistics/1104837/coronavirus-cases-europe-by-country/
+  5. https://en.m.wikipedia.org/wiki/COVID-19_vaccination_in_Greece
+  6. https://hellor.netlify.app/slides/onlinehelpdesk
+  7. https://hellor.netlify.app/coronareports/
+  
+  
+  

@@ -1,0 +1,281 @@
+---
+title: "COVID-19 Pandemic in the Republic of Ethiopia"
+author: "AS2019532"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, force=TRUE,eval=FALSE}
+#install.packages("devtools")
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2019532")
+#install.packages("coronavirus")
+library(coronavirus)
+```
+
+# **ABSTRACT**
+<font size="4">Covid-19 is  spreading rapidly in different parts of the world. If coordinated preventive measures are not taken, the epidemic will have a severe impact. The dataset contains a daily summary of the number of coronavirus cases (confirmed, death and recovered) by Ethiopia.
+This provides an analysis of the data on Corona confirmed, death and recovered cases</font>
+
+# **1.BACKGROUND**
+
+## __1.1 INTRODUCTION__
+<font size="4">The COVID-19 pandemic continues as a significant worldwide health threat. The World Health Organization has declared it a public health emergency of global concern calling for concerted efforts from across all nations to stop the spread of the virus (World Health Organization, 2020). Most African countries face an enormous mission to contain the rapidly spreading pandemic due to poor healthcare and limited resources. However, the Mo Ibrahim Foundation (2020) debates that the continent appears to have comparative advantages to contain the pandemic. The foundation’s claims are based on two viewpoints. First, it is related to the demography as most of its population is in the age of lower than 20 years. The assumption is that younger populations appear to suffer milder symptoms compared to older people. Second, it is associated with a warm climate in that influenza and respiratory viruses mainly transmit during cold rainy seasons. This is related to earlier studies that “high temperature and high relative humidity significantly reduce the transmission of COVID-19” (Wang et al., 2020, p.1). Nevertheless, this was immediately overruled, affirming that the virus could be transmitted to all areas, hot and humid climates (World Heath Organization, 2020b). Based on this, there is no concrete evidence to recognize the foundation’s claims as the COVID-19 is a new pandemic with no explicitly recommended antiviral treatment or vaccine to date. However, these claims represent the rapidly circulating myths and misconceptions in most African countries, including Ethiopia.</font>
+
+### **1.2. Location of Ethiopia**
+
+<font size="4"> Ethiopia is the oldest independent country in Africa and one of the world's oldest - it exists for at least 2,000 years. The country comprises more than 80 ethnic groups and as many languages. Primarily their shared independent existence unites Ethiopia's many nations.
+
+
+
+**The geographical location of Ireland can be further understood through the following figure**
+
+</font>
+
+
+
+
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, message=FALSE} 
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")#filtered data of Ethiopia corona cases#
+library(ggplot2) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(gridBase) 
+library(sp) 
+data(wrld_simpl)
+
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="gray",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = Ethiopia_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+ # Visualisation of the location
+ 
+```
+
+### **1.3 Actions taken by the government**
+
+
+<font size="4">Immediately after the first confirmed case of COVID-19 in Ethiopia in March 2020, the Government of Ethiopia took several public health measures to prevent increased levels of infection These included closing all schools and restricting large gatherings and movements of people. Hand-washing and social distancing were the main prevention measures that government has communicated to the general public through various media platforms. Using the latest round of the Ethiopian Demographic and Health Survey, COVID-19 relevant indicators related to household access to communication platforms; access to water, sanitation, and hygiene (WASH); and characteristics of the home environment were assessed. The analysis shows that a sizeable proportion of the rural population does not have access to the media platforms used to publicize COVID-19 prevention measures. Moreover, without aggressive interventions, current levels of access to water and soap are suboptimal to adopt the hand-washing recommendations, particularly in rural areas. The low proportion of households with electricity, refrigeration, or internet connection and the relatively high prevalence of partner violence suggest that implementing the stay and work from home measures will be challenging. Public health measures that slow down the transmission of the virus should be continued and efforts to prevent transmission to rural areas should be prioritized. Communication platforms and messaging will need to be adapted to different local realities to make any COVID-19 containment recommendations operational. WASH-related support should be ramped-up, and addressing barriers to staying at home, such as the risk of partner violence, should be considered. The efforts needed to end the current pandemic in Ethiopia, as well as similar pandemics in the future, illuminates the serious challenges related to WASH and to the inequalities between rural and urban areas that need urgent attention.
+
+ ### ** 1.4. Lockdown status of the country**
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces and international borders in order to contain the spread of the virus.
+
+This chart shows how different lockdown measures were implemented during the course of the pandemic.
+
+
+### **1.5. How Ethiopia compares**
+
+There is no one perfect statistic to compare the outbreaks different countries have experienced during this pandemic. Looking at a variety of metrics gives you a more complete view of the virus’ toll on each country.
+
+These charts show several different statistics, each with their own strengths and weaknesses, that mark the various ways each country’s outbreak compares in its region and the world.</font>
+
+
+# **2 . Exploratory Data Analysis**
+
+<font size="5">There are collect the data from 187 of counties.</font>
+```{r, comment=NA, echo=FALSE, warning=FALSE, message=FALSE} 
+
+library(coronavirus)
+
+unique(coronavirus$country)#There are 187 countries in this data set
+```
+
+## **2.1. COVID-19 Statistics of Ethiopia**
+
+<font size="4">Following outputs are given the summary of the Ethiopia coronavirus data. The observations are taken from 2020 January to 2022 May. The several variables are obtained such as date of the observation taken from, province of the case identified, latitude of center of geographic region, longitude of center of geographic region, type of the cases which means whether the case is confirmed, death or recovered and number of the cases on the given date.</font>
+
+
+
+### **2.2. All confirmed Covid-19 Cases in Ethiopia**
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, force=TRUE,message=FALSE} 
+
+library(coronavirus)
+
+
+
+# summary of the Ethiopia coronaviris data
+library(tidyverse) 
+library(magrittr)
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+summary(Ethiopia_corona)
+
+#Following dataframe shows the Confirmed corona virus caes in Ethiopia.
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+confirmedcases_Ethiopia_corona <- Ethiopia_corona %>% filter(type=="confirmed") 
+head(confirmedcases_Ethiopia_corona)
+sum(confirmedcases_Ethiopia_corona$cases) # The total confirmed covid-19 cases in Ethiopia  is 486373
+ggplot(confirmedcases_Ethiopia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 Confirmed cases")
+
+```
+<center>**Figure 1**</center>
+<font size="4">As we can see in this graph the number of confirmed cases in Ethiopia is rapidly increased in  2022 year and it came to a peak value in middle of 2022 year .  more than 5000 daily cases were recorded in 2022 year. The speciality of this data set is, one day the covid confirmed cases are very high and the next days there are decreasing the covid cinfirmed cases, this pattern is continued.</font>
+
+### **2.3. All Deaths of Covid-19 Cases in Ethiopia**
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, force=TRUE} 
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+deaths_Ethiopia_corona <- Ethiopia_corona %>% filter(type=="death") 
+head(deaths_Ethiopia_corona)
+
+sum(deaths_Ethiopia_corona$cases) #the total deaths of Ethiopia in the data set is 7526. This is approximately 1.54% from the confirmed cases in Ethiopia.
+
+ggplot(deaths_Ethiopia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 deaths")
+```
+<center>**Figure 2**</center>
+<font size="4">According to the chart we can see the highest number of deaths in 2021 and the number of deaths decreases in the middle of the year and again shows an increase in the number of deaths at the end of the year.</font>
+
+### **2.4. All  Covid-19 Recovery Cases in Ethiopia**
+
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE,eval=FALSE}
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+recover_Ethiopia_corona <- Ethiopia_corona %>% filter(type=="recovery") 
+head(recover_Ethiopia_corona)
+
+ggplot(recover_Ethiopia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 recoveries") 
+#Recovered cases cannot be a negative value. Therefore I removed this value from the data set.
+
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+recover_Ethiopia_corona <- Ethiopia_corona %>% filter(type=="recovery") 
+recover_Ethiopia_corona2 <- recover_Ethiopia_corona %>% filter(cases >= 0)
+ggplot(recover_Ethiopia_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 recoveries without Outliers")
+
+sum(recover_Ethiopia_corona2$cases) #The total recovered cases: Ethiopia in this data set is only 264014.his is approximately 54.28% from the confirmed cases in Ethiopia.
+```
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+
+
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+recover_Ethiopia_corona <- Ethiopia_corona %>% filter(type=="recovery") 
+recover_Ethiopia_corona2 <- recover_Ethiopia_corona %>% filter(cases >= 0)
+ggplot(recover_Ethiopia_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 recoveries without Outliers")
+
+sum(recover_Ethiopia_corona2$cases) 
+```
+<center>**Figure 3**</center>
+<font size="4">The total recovered cases: Ethiopia in this data set is only 264014.his is approximately 54.28% from the confirmed cases in Ethiopia.</font>
+
+### **2.5. All Covid-19 Recovery Cases in Ethiopia**
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+library(coronavirus)
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+Ethiopia_corona2 <- Ethiopia_corona %>% filter(cases >= 0)
+coronaEthiopia_wider <- Ethiopia_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+coronaEthiopia_wider$active_Ethiopia_corona <- coronaEthiopia_wider$confirmed - coronaEthiopia_wider$death - coronaEthiopia_wider$recovery
+ggplot(coronaEthiopia_wider, aes(x=date, y=active_Ethiopia_corona)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 Active cases")
+
+#there is an outlier.Therefore I removed this value from the data set
+
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+
+# ggplot(active-cases_Ethiopia_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Ethiopia: Daily Covid-19 Active cases without Outliers")
+
+ 
+```
+<center>**Figure 5**</center>
+### **2.6. Summery of total number of Covid-19 cases in Ethiopia in the year 20-22**
+```{r, comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+library(knitr)
+
+df <- data.frame(Confirmed =(486373)    ,
+                
+                  Deaths = (7526),
+                 Recovered=(264014),
+                 Active = (214833))
+
+kable(df)
+```
+
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+ggplot(Ethiopia_corona2, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Ethiopia: Daily Covid-19 cases by type") + facet_grid(type~.)
+```
+<center>**Figure 6**</center>
+<font size="4">As we can see in this graph The death cases are very low compared to confirmed cases.Recovery distribution is above the recovered distribution.</font>
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+library(ggplot2)
+Ethiopia_corona <- coronavirus %>% filter(country == "Ethiopia")
+confirmedcases_Ethiopia_corona <- Ethiopia_corona %>% filter(type=="confirmed") 
+
+Sudan_corona <- coronavirus  %>% filter(country == "Sudan")
+confirmed_Sudan_corona <- Sudan_corona %>% filter(type=="confirmed")
+
+Djibouti_corona <- coronavirus  %>% filter(country == "Djibouti")
+confirmed_Djibouti_corona <- Djibouti_corona %>% filter(type=="confirmed")
+
+
+ Neighbor_confirm<-as.data.frame(rbind(Ethiopia_corona,Sudan_corona,Djibouti_corona))
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in Ethiopia's neighbour countries") + ylim(0,10000)
+```
+<center>**Figure 7**</center>
+<font size="4">In the Year 2022, the highest number of corona infected people were confirmed in Ethiopia, and in 2022, the number of infected people in both Ethiopia and Sudan increased.Djibouti Covid-19 conformed cases are very low in 20-22 time period.</font>
+
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,800000)
+```
+<center>**Figure 8**</center>
+<font size="4">According to this plot we can clearly  say highest nimber of Covid-19 cases are recorded from Ethiopia  in 20-22 time period.</font
+
+## **2.7. Death Cases in Ethiopia's neighber countries**
+
+```{r,comment=NA, echo=FALSE, warning=FALSE}
+Neighbor_death<-as.data.frame(rbind(Ethiopia_corona,Sudan_corona,Djibouti_corona))
+ggplot(Neighbor_death, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("death cases") + ylim(0,300000)
+```
+<center>**Figure 9**</center>
+<font size="4">According to this plot highest number of death cases also recorded from Ethiopia.Sudan shows the second highest number of death cases in 20-22 time period.</font>
+
+```{r,comment=NA, echo=FALSE, warning=FALSE, force=TRUE}
+Neighbor_recovery<-as.data.frame(rbind(Ethiopia_corona,Sudan_corona,Djibouti_corona))
+ggplot(Neighbor_recovery, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("recovery cases") + ylim(0,300000)
+```
+<center>**Figure 10**</center>
+
+#  **3. Conclusions**
+
+<font size="4">* According to Figure 1 this graph the number of confirmed cases in Ethiopia is rapidly increased in  2022 year and it came to a peak value in middle of 2022 year .  more than 5000 daily cases were recorded in 2022 year. The speciality of this data set is, one day the covid confirmed cases are very high and the next days there are decreasing the covid cinfirmed cases, this pattern is continued
+
+
+* According to the Figure2  we can see the highest number of deaths in 2021 and the number of deaths decreases in the middle of the year and again shows an increase in the number of deaths at the end of the year
+
+* The total confirmed covid-19 cases in Ethiopia  is 486373and  total deaths  data set is 7526  This is approximately 1.54% from the confirmed cases in Ethiopia.
+.The total recovered cases: Ethiopia in this data set is only 264014.his is approximately 54.28% from the confirmed cases in Ethiopia.
+
+* according to the Figure 3 The total recovered cases: Ethiopia in this data set is only 264014.his is approximately 54.28% from the confirmed cases in Ethiopia
+
+* According to the Figure 6 we can see in this graph The death cases are very low compared to confirmed cases.Recovery distribution is above the recovered distribution
+
+*  the Year 2022, the highest number of corona infected people were confirmed in Ethiopia, and in 2022, the number of infected people in both Ethiopia and Sudan increased.Djibouti Covid-19 conformed cases are very low in 20-22 time period
+
+* Highest number of death cases also recorded from Ethiopia.Sudan shows the second highest number of death cases in 20-22 time period
+
+# **4. References**
+
+
+https://www.frontiersin.org/articles/10.3389/fcomm.2021.562512/full
+https://www.ifpri.org/publication/covid-19-prevention-measures-ethiopia-current-realities-and-prospects
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/ethiopia/
+</font>
+

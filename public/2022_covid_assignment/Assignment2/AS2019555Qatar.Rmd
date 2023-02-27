@@ -1,0 +1,417 @@
+---
+title: "Individual Project"
+author: "I.C.Thisera"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# STA 326 2.0 Programming and Data Analysis with R
+## Assignment 2
+#####  AS2019555
+#####  I.C.Thisera
+### Qatar
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus,stringAsFactors=TRUE)
+Qatar_corona <- coronavirus %>% filter(country=="Qatar")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(knitr)
+library(skimr)
+
+```
+
+## Introduction
+
+Qatar is a peninsular Arab country whose terrain comprises arid desert and a long Persian (Arab) Gulf shoreline of beaches and dunes. Also on the coast is the capital, Doha, known for its futuristic skyscrapers and other ultramodern architecture inspired by ancient Islamic design, such as the limestone Museum of Islamic Art. The museum sits on the city’s Corniche waterfront promenade
+
+
+
+#### Climate
+
+The climate is hot and humid from June to September,with daytime temperatures as high as 122F.The spring and fall months-April,May,October, and November-are temperature,averaging about 63F,and the winters are slightly cooler.Precipitation is scarce,with less than 3 inches(75mm)falling annually(generally in winter)
+
+
+
+#### Economy of Qatar
+
+Qatar’s economic prosperity is derived from the extraction and export of petroleum—discovered in 1939 and first produced in 1949—and natural gas. Before World War II Qatar’s population engaged in pearling, fishing, and some trade (with little exception the only occupations available) and was one of the poorest in the world. By the 1970s, however, native Qataris enjoyed one of the highest per capita incomes in the world, despite subsequent declines in income due to fluctuations in world oil prices. Qatar’s original oil concession was granted to the Iraq Petroleum Company (IPC), a consortium of European and American firms. This and later concessions were nationalized in the 1970s. While state-owned Qatar Petroleum (formerly Qatar General Petroleum Corporation) oversees oil and gas operations, private corporations continue to play an important role as service companies.
+
+
+
+
+
+#### Health and welfare
+
+Health care and medical services are provided free to all residents through government programs. The government also funds recreational and cultural clubs and facilities for young people as part of its extensive “youth welfare” campaign.
+
+
+
+#### Location
+
+Qatar is located in the Middle East.Qatar is bordered by the Gulf of Bahrain to the west,the Persian Gulf to the west,the Persian Gulf to the east ,and Saudi Arabia to the south.
+
+
+###### Figure 01: Location in the world map
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+data(wrld_simpl)
+
+p <- ggplot() + 
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+p + 
+  geom_point(
+    data = Qatar_corona , aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+
+
+
+
+Slightly smaller in area than the U.S. state of Connecticut, the Qatar peninsula is about 100 miles (160 km) from north to south, 50 miles (80 km) from east to west, and is generally rectangular in shape. It shares a border with eastern Saudi Arabia where the peninsula connects to the mainland and is north and west of the United Arab Emirates. The island country of Bahrain lies some 25 miles (40 km) northwest of Qatar.
+
+
+
+
+
+
+
+
+#### Covid 19 pandemic in Qatar
+
+COVID-19 pandemic in Qatar is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Qatar on 27 February 2020
+
+As of the12th of September 2022, a total of 3,904,273 people have been tested in the country.
+
+The reported number of deaths in Qatar has been low relative to the number of reported cases, which may be in part due to the country's adequate healthcare system and the fact that a high proportion of residents are young and healthy.
+
+#### Lockdown status and action taken by the government
+
+Over the past 10 years, Qatar has increased its public healthcare capacity by establishing ten new hospitals and 12 new primary care health and well-being centers, and thus, putting it among the most modern healthcare facilities in the world. This significant investment in the healthcare infrastructure has helped Qatar to rapidly and efficiently respond to the COVID-19 pandemic in a carefully planned way, ensuring that everybody who needed healthcare care was able to receive it free of charge. With the extra capacity, Qatar turned five of its hospitals into COVID-19 facilities and, at the same time, safeguarded the other hospitals as non-COVID-19 facilities in order to provide routine care to the rest of the community.
+
+This meant that we were able to ensure the availability of up to 3012 acute beds and 749 intensive care unit (ICU) beds available to provide care for sick patients affected by COVID-19 should they be needed. At the height of the pandemic acute occupancy rate only reached 72% and ICU occupancy rate, only 76% of the open beds. Access to Personal Protective Equipment, alongside strict infection control guidelines and measures for health-care facilities, staff, patients, and visitors, has meant that infection rates for staff were contained (only 6.5% of health-care workers became infected with COVID-19), ensuring we have been able to maintain consistently high clinical staffing levels throughout the pandemic.
+
+
+
+
+
+
+## Explotary Data Analysis
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+Qatar_corona <- as.data.frame(Qatar_corona)
+head(Qatar_corona)
+
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+tail(Qatar_corona)
+
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+summary(Qatar_corona)
+
+
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+confirmed_cases <- filter(Qatar_corona,type=="confirmed")
+ggplot(confirmed_cases,aes(x=date,y=cases))+geom_path(size=1)+labs(title="Figure2:confirmed cases in Qatar")
+
+
+
+```
+
+
+According to this graph,In middle of 2020 ,confirmed corona cases has increased in Qatar.At the end of that year ,it has decreased .Again it has increased somewhat in the middle of 2021.Again at the beginning of 2022,it has increased rapidly,and it as decreased within few months.
+
+
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+death_cases<-filter(Qatar_corona,type=="death")
+ggplot(death_cases,aes(date,cases))+geom_path(size=1)+labs(title="Figure3:Death cases in Qatar")
+
+
+```
+
+
+According to this graph,Death cases as increased in the middle of 2020 and 2021 and at beinning of 2022. In the middle of 2021,death cases as increased rapidly. 
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+recovery_cases <- filter(Qatar_corona,type == "recovery")
+ggplot(recovery_cases,aes(date,cases)) + geom_path(size=1) + labs(title="Figure4:Recovery cases in Qatar")
+
+```
+
+
+According to this graph,In the middle of 2021 ,Recovery cases as increased rapidly wile other times it is in a constant level.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(Qatar_corona,aes (date,cases)) + geom_path(size=0.000001) + facet_grid(rows=vars(type)) +
+  labs(title="Figure5:Confirmed,Death and Recovered cases in Qatar")
+
+
+```
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(Qatar_corona,aes(x=date,y=cases,colour=type)) + geom_path(size=1) + 
+  labs(title="Figure6:Confirmed,Death and Recoverd cases in Qatar")
+
+
+```
+
+
+
+
+Above graph shows the number of confirmed cases,death cases and recovered corona patients in Qatar in daily bais in the same graph.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+Qatar_corona <- Qatar_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(Qatar_corona,aes(date,cum_cases,colour = type)) + geom_path(size = 1) +
+  labs(title="Figure7:Total no of confirmed ,death,recovered cases in Qatar")
+
+
+```
+
+Above graph implies that the total no of confirmed cases as increased exponential since 2020.There is large gap no of patients with death patients with recovered patients.So medical facility of Qatar is at a very high level 
+
+## Comparison with Other Countries
+
+Now consider about the Qatar corona virus condition with other two countries.First we take China.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+China_corona<-coronavirus%>%filter(country=="China")
+head(China_corona)
+
+```
+#### Figure 8 :comparison of daily covid 19 confirmed cases 
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+confirmed_Qatar_corona<-coronavirus%>%
+  filter(country=="Qatar"&type=="confirmed")
+confirmed_China_corona<-coronavirus%>%
+  filter(country=="China"&type=="confirmed")
+Qatar_China<-data.frame(date=confirmed_Qatar_corona$date,
+      Qatar=confirmed_Qatar_corona$cases,
+     China=confirmed_China_corona$cases)
+Qatar_China<-pivot_longer(Qatar_China,c(2,3),"country","value")
+ggplot(Qatar_China,aes(x=date,y=value,colour=country))+
+  geom_line()
+                      
+```
+
+
+
+Above graph shows that daily confirmed cases in Qatar and China .When compared these two country China has the high number of confirmed corona patients.
+
+#### Figure 9 :comparison of daily covid 19 recovered cases
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+recover_Qatar_corona<-coronavirus%>%
+  filter(country=="Qatar"&type=="recovery")
+recover_China_corona<-coronavirus%>%
+  filter(country=="China"&type=="recovery")
+Qatar_China<-data.frame(date=recover_Qatar_corona$date,
+      Qatar=recover_Qatar_corona$cases,
+     China=recover_China_corona$cases)
+Qatar_China<-pivot_longer(Qatar_China,c(2,3),"country","value")
+ggplot(Qatar_China,aes(x=date,y=value,colour=country))+
+  geom_line()
+                      
+```
+
+
+
+Above graph also shows that even the daily recovered rate is high in Qatar.
+
+ 
+#### Figure 10 :comparison of daily covid 19 Death cases
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+death_Qatar_corona<-coronavirus%>%
+  filter(country=="Qatar"&type=="death")
+death_China_corona<-coronavirus%>%
+  filter(country=="China"&type=="death")
+Qatar_China<-data.frame(date=death_Qatar_corona$date,
+      Qatar=death_Qatar_corona$cases,
+     China=death_China_corona$cases)
+Qatar_China<-pivot_longer(Qatar_China,c(2,3),"country","value")
+ggplot(Qatar_China,aes(x=date,y=value,colour=country))+
+  geom_line()
+                      
+```
+
+
+Above graph also shows that when the daily death rate is so many high in China .When we compare Qatar and China death cases of Qatar is very low.
+
+  
+  
+Then we take US
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+US_corona<-coronavirus%>%filter(country=="US")
+head(US_corona)
+
+```
+
+#### Figure 11 :comparison of daily covid 19 confirmed cases 
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+confirmed_Qatar_corona<-coronavirus%>%
+  filter(country=="Qatar"&type=="confirmed")
+confirmed_US_corona<-coronavirus%>%
+  filter(country=="US"&type=="confirmed")
+Qatar_US<-data.frame(date=recover_Qatar_corona$date,
+      Qatar=confirmed_Qatar_corona$cases,
+     US=confirmed_US_corona$cases)
+Qatar_US<-pivot_longer(Qatar_US,c(2,3),"country","value")
+ggplot(Qatar_US,aes(x=date,y=value,colour=country))+
+  geom_line()
+                      
+```
+
+
+
+
+Above graph shows that daily confirmed cases in Qatar and US .When compared these two country US has the high number of confirmed corona patients.
+
+
+
+
+#### Figure 12 :comparison of daily covid 19 recovered cases
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+recover_Qatar_corona<-coronavirus%>%
+  filter(country=="Qatar"&type=="recovery")
+recover_US_corona<-coronavirus%>%
+  filter(country=="US"&type=="recovery")
+Qatar_US<-data.frame(date=recover_Qatar_corona$date,
+      Qatar=recover_Qatar_corona$cases,
+     US=recover_US_corona$cases)
+Qatar_US<-pivot_longer(Qatar_US,c(2,3),"country","value")
+ggplot(Qatar_US,aes(x=date,y=value,colour=country))+
+  geom_line()
+                      
+```
+
+
+
+
+
+Above graph also shows that even the daily recovered rate is high in US.In end of 2020 recovered cases in US has increased so much.
+
+
+
+#### Figure 13 :comparison of daily covid 19 Death cases
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+death_Qatar_corona<-coronavirus%>%
+  filter(country=="Qatar"&type=="death")
+death_US_corona<-coronavirus%>%
+  filter(country=="US"&type=="death")
+Qatar_US<-data.frame(date=death_Qatar_corona$date,
+      Qatar=death_Qatar_corona$cases,
+     US=death_US_corona$cases)
+Qatar_US<-pivot_longer(Qatar_US,c(2,3),"country","value")
+ggplot(Qatar_US,aes(x=date,y=value,colour=country))+
+  geom_line()
+                      
+```
+
+
+
+ Above graph also shows that when the daily death rate is so many high in US .When we compare Qatar and US death cases of Qatar is very low.
+
+
+
+
+
+
+
+
+## Conclusion and Discussion.
+
+This project was carried out to analyse the impact of the corona virus on Qatar.Te analyzed data set spans from 2020 to 2022.Each and every outcome obtained is relevant to this particular time frame.The covid 19 pandemic still poses a treat to the entire world,though.
+
+At the beginning of 2022 confirmed corona cases has increased in Qatar.The number of daily patients as crossed 4000.But in the 2022 death cases in Qatar as decreased.Death cases as increased at the middle of 2021.From these data we can conclude as soon as although the disease spread widely,the disease was prevented from worsening,the death rate was reduced and the patients were cured.By the year 2022 ,death rate has been greatly reduced.Treatment such as vaccinations may be the cause of this.
+
+
+
+
+
+
+The results of Qatar were compared with those of United states and China.While the result for Qatar ,United State and China.Then we compare United State ,China and Qatar we can see US and China results were very different from Qatar.
+
+According to the China at the beginning of 2020 and 2022 in China ,the prevalence of the disease has mostly been reduced.Then we compare Qatar and United State the prevalence of the disease has reduced
+in beginning  of 2022.
+
+The death rate in the US is very high compared to the Qatar,and is expected to rise rapidly in both 2021 and 2022.Thus ,they have failed to contain the outbreak.The fact that the US is severely impacted by the pandemic is obviously widely recognized.This really affects how things turn out for the US.However ,it should be remembered that in comparison to the United State ,Qatar is a smaller country.
+The size of Qatar is almost 849 times that of the US.As a result,it is not entirely accurate to compare the outcomes for Qatar and United State directly.The result from Qatar should ideally be adjusted to  account for the size disparity between the two countries.
+
+
+
+
+
+
+
+## References
+
+
+https://www.britannica.com/place/Qatar
+
+
+https://covid19.who.int/region/emro/country/qa
+
+
+https://www.worldometers.info/coronavirus/country/qatar/
+
+
+https://ourworldindata.org/coronavirus/country/qatar

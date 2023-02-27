@@ -1,0 +1,308 @@
+---
+title: "Covid- 19 Pandemic in Switzerland"
+author: "Dilki Ranasinghe"
+date: "10/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+<font size="06">**Introduction**</font>
+
+
+
+
+<font size="04">Switzerland is a small mountains country located in Central Europe. This landlocked country is just smaller than the Netherlands or almost twice the size of the US state of New Jersey. It is also bordered by France, Italy, Austria, Germany and Liechtenstein. Berne is the capital of Switzerland. According to the World Happiness Report 2021,the Swiss confederation is officially the third- happiest nation on Earth. Geographically the country is divided into three major regions. Alps cover roughly 58% of the country, the Central Plateau around 31% and the Jura 11%.
+Switzerland is famous for skiing resorts, lakes, chocolates, cheese and watches. Switzerland is truly a melting pot of various cultures with four official languages. That are German, French, Italian and Romansh. Switzerland's climate is heavily influenced by the Atlantic Ocean. The current population of Switzerland in 2022 is 8,740,472.Switzerland's climate is heavily influenced by the Alps as well as by the Atlantic Ocean. Banking and finance are key industries in Switzerland.
+Switzerland's universal health care system is highly decentralized, with the cantons or states ,playing a key role in its operation. The system is funded through taxes, social insurance contributions and out-of-pocket payments.</font>
+
+
+
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+data("coronavirus")
+head("coronavirus")
+tail("coronavirus")
+switzerland_corona <- coronavirus %>% filter(country == "Switzerland")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = switzerland_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+<font size="06">**Exploratory Data Analysis**</font>
+
+
+
+
+<font size="05">Visualization of death,confirmed,recovered cases</font>
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona <- coronavirus %>% filter(country == "Switzerland")
+confirmed_switzerland_corona <- switzerland_corona %>% filter(type=="confirmed")
+summary(confirmed_switzerland_corona)
+
+```
+ 
+  
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed_switzerland_corona <- switzerland_corona %>% filter(type=="confirmed")
+ggplot(confirmed_switzerland_corona,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 01 - Switzerland:Daily Covid 19 Confirmed Cases")
+  
+
+```
+
+
+<font size="04">According to the Figure 01,the number of confirmed cases in Switzerland rapidly increased in 2022 than the 2020 and 2021.</font>
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona <- coronavirus %>% filter(country == "Switzerland")
+death_switzerland_corona <- switzerland_corona %>% filter(type=="death")
+summary(death_switzerland_corona)
+```
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+death_switzerland_corona <- switzerland_corona %>% filter(type=="death")
+ggplot(death_switzerland_corona,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 02-Switzerland:Daily Covid 19 Deaths")
+  
+```
+
+<font size="04">There is an outlier in this dataset.Deaths cannot be a negative value.Therefore removed that value from dataset.</font>
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona <- coronavirus %>% filter(country == "Switzerland")
+death_switzerland_corona <- switzerland_corona %>% filter(type=="death") 
+death_switzerland_corona2 <- death_switzerland_corona %>% filter(cases >= 0)
+ggplot(death_switzerland_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 03- Swithzerland: Daily Covid-19 deaths without Outliers")
+
+```
+
+
+<font size="04">Figure 03 shows the daily covid 19 deaths in Switzerland.It has increasing and decreasing pattern over the time.Most of the daily deaths in Switzerland is less than 100. But small period in 2021 deaths are more than 100.According to Figure 01 and Figure 03 deaths are very low compared to the confirmed cases.</font>
+
+
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona <- coronavirus %>% filter(country == "Switzerland")
+recovered_switzerland_corona <- switzerland_corona %>% filter(type=="recovered")
+summary(recovered_switzerland_corona)
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+recovered_switzerland_corona <- switzerland_corona %>% filter(type=="recovered")
+ggplot(recovered_switzerland_corona,aes(x=date,y=cases))+geom_line()+ggtitle("Figre 04 - Switzerland:Daily Covid 19 Recovered Cases")
+```
+
+
+
+<font size="04">There is an outtlier in this dataset.Recovered cases cannot be zero.Therefore used discontinuity point method.</font> 
+
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona<- coronavirus %>% filter(country=="Switzerland")
+recovered_switzerland_corona <- switzerland_corona %>% filter(type=="confirmed")
+summary(recovered_switzerland_corona)
+
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+recovered_switzerland_corona <- recovered_switzerland_corona %>% mutate(cases = replace(cases,which(cases<0),NA))
+summary(recovered_switzerland_corona)
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(recovered_switzerland_corona,aes(x=date, y=cases))+geom_line()+ ggtitle("Figure 05 - Switzerland:Daily Covid 19 Recoverd cases with discontinuity repesents missing values")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona <- coronavirus %>% filter(country == "Switzerland")
+activecases_switzerland_corona <- switzerland_corona %>% filter(type=="active")
+summary(activecases_switzerland_corona)
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+activecases_switzerland_corona <- switzerland_corona %>% filter(type=="active")
+ggplot(activecases_switzerland_corona,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 06 - Switzerland:Daily Covid 19 Active Cases")
+  
+
+```
+
+<font size="04">There is an outtlier in this dataset.Active cases cannot be zero.Therefore used discontinuity point method.</font> 
+
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+switzerland_corona<- coronavirus %>% filter(country=="Switzerland")
+activecases_switzerland_corona <- switzerland_corona %>% filter(type=="confirmed")
+summary(activecases_switzerland_corona)
+
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+activecases_switzerland_corona <- activecases_switzerland_corona %>% mutate(cases =replace(cases,which(cases<0),NA))
+summary(activecases_switzerland_corona)
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(activecases_switzerland_corona,aes(x=date, y=cases))+geom_line()+ ggtitle("Figure 07 - Switzerland:Daily Covid 19 Active cases with discontinuity repesents missing values")
+```
+
+<font size="04">The number of active cases in Switzerland rapidly increased in 2022 than the 2020 and 2021.</font>
+
+
+
+
+
+<font size="05">comparison with other country</font>
+
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+italy_corona <- coronavirus %>% filter(country=="Italy")
+confirmedcases_italy_corona <- italy_corona %>% filter(type=="confirmed")
+
+germany_corona <- coronavirus %>% filter(country=="Germany")
+confirmedcases_germany_corona <- germany_corona %>% filter(type=="confirmed")
+
+france_corona <- coronavirus %>% filter(country=="France")
+confirmedcases_france_corona <- france_corona %>% filter(type=="confirmed")
+
+austria_corona <- coronavirus %>% filter(country=="Austria")
+confirmedcases_austria_corona <- austria_corona %>% filter(type=="confirmed")
+
+Neighbor_confirmed <- rbind(confirmed_switzerland_corona,confirmedcases_italy_corona,confirmedcases_germany_corona,confirmedcases_france_corona,confirmedcases_austria_corona)
+
+ggplot(Neighbor_confirmed,aes(x=date,y=cases,col=country))+ geom_point()+ ggtitle("Figure 08 -Confirmed Cases in Switzerland Neighbour Countries")
+
+```
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirmed,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 09- Confirmed Cases")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirmed,aes(x=country,y=cases,col=country))+geom_boxplot(outlier.shape=NA,alpha=0.2)+geom_jitter(aes(col=country))+ggtitle("Figure 10- Boxplot Of Confirmed Cases in Neighbour Countries of Switzerland")
+```
+
+
+<font size="04">From Figure 08,09,10 Austria have low confirmed  coronavirus cases comparied to the other neighbour countries.France, Germany and Italy have more confirmed cases than the Switzerland.</font>
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+italy_corona <- coronavirus %>% filter(country=="Italy")
+death_italy_corona <- italy_corona %>% filter(type=="death")
+
+germany_corona <- coronavirus %>% filter(country=="Germany")
+death_germany_corona <- germany_corona %>% filter(type=="death")
+
+france_corona <- coronavirus %>% filter(country=="France")
+death_france_corona <- france_corona %>% filter(type=="death")
+
+austria_corona <- coronavirus %>% filter(country=="Austria")
+death_austria_corona <- austria_corona %>% filter(type=="death")
+
+Neighbor_death <- rbind(death_switzerland_corona,death_italy_corona,death_germany_corona,death_france_corona,death_austria_corona)
+
+ggplot(Neighbor_death,aes(x=date,y=cases,col=country))+ geom_point()+ ggtitle("Figure 11- Death in Switzerland Neighbour Countries")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(Neighbor_death,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 12- Death")
+ggplot(Neighbor_death,aes(x=country,y=cases,col=country))+geom_boxplot(outlier.shape=NA,alpha=0.2)+geom_jitter(aes(col=country))+ggtitle("Figure 13- Boxplot of Death in Neighbour Countries of switzerland")
+```
+
+
+<font size="04">Figure 11,12,13 show the deaths in neighbour countries of Switzerland. Switzerland coronavirus deaths are lower than the other neighbour countries of Switzerland.</font>
+
+
+
+
+
+<font size="06">**Conclusion and Discussion**</font>
+
+
+
+
+
+<font size="04">The COVID-19 pandemic in Switzerland is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to Switzerland on 25 February 2020 when the first case of COVID-19 was confirmed following a COVID-19 pandemic in Italy. A 70-year-old man in the Italian-speaking canton of Ticino which borders Italy, tested positive for SARS-CoV-2. The man had previously visited Milan.Afterwards, multiple cases related to the Italy clusters were discovered in multiple cantons, including Basel-City, Zürich, and Graubünden. Multiple isolated cases not related to the Italy clusters were also subsequently confirmed.</font>
+
+<font size="04">On 28 February 2020, the national government, the Federal Council, banned all events with more than 1,000 participants. On 16 March 2020, a State of Extraordinary Situation under the Federal Law of Epidemics was declared. Most shops were closed nationwide. Shortly thereafter, on 20 March, all gatherings of more than five people in public spaces were banned. Additionally, the government gradually imposed restrictions on border crossings and announced economic support measures worth 40 billion Swiss francs. The measures were gradually removed in several phases beginning in late April until June 2020.but new measures were imposed in October as cases surged again.</font>
+
+<font size="04">On 23 December 2020, the vaccination campaign started in Switzerland, ahead of that of most European countries. Four days earlier, Swissmedic approved the first COVID-19 vaccine for regular use. On August 1, 2021, Switzerland achieved a vaccination rate of 52%.[13] From 13 September 2021, access to indoor public spaces like restaurants, bars, museums or fitness centres is only permitted with a valid Covid certificate. Almost all measures were lifted on 17 February 2022.</font>
+
+<font size="04">The data visualise from 2020-01-22 to 2022-06-23 and between these period,there are 15.64 mean number of cases.According to the Figure 01,the number of confirmed cases in Switzerland rapidly increased in 2022 than the 2020 and 2021.There is an outlier in this dataset in covid 19 deaths in Switzerland, because of negative value.Therefore removed that values from dataset and after removing negative values Figure 03 shows the daily covid 19 deaths in Switzerland.It has increasing and decreasing pattern over the time.Most of the daily deaths in Switzerland is less than 100. But small period in 2021 deaths are more than 100.Also,another outtlier in this dataset.That is recovered cases and active cases are zero.But,recovered cases and active cases can not be zero .Therefore used discontinuity point method to plot the values.The number of active cases in Switzerland rapidly increased in 2022 than the 2020 and 2021.According to Figure 01 and Figure 03 deaths are very low compared to the confirmed cases.From Figure 08,09,10 Austria have low confirmed  coronavirus cases comparied to the other neighbour countries.France, Germany and Italy have more confirmed cases than the Switzerland.France have more confirmed cases than the other neigbour contries os Switzerland.Figure 11,12,13 show the deaths in neighbour countries of Switzerland. Switzerland coronavirus deaths are lower than the other neighbour countries of Switzerland. France and Germany have more corona deaths comparied to the neighbour countries of Switzerland.When comparing other neighbour countries ,there is no bog impact happened to Switzerland.</font>
+
+
+
+
+
+
+
+ <font size="06">**References**</font>
+ 
+ 
+ 
+
+
+<font size="04">*https://en.m.wikipedia.org/wiki/COVID-19_pandemic_in_Switzerland</font>
+
+
+<font size="04">*https://www.swissinfo.ch/eng/society/covid-19_coronavirus--the-situation-in-switzerland/45592192</font>
+
+
+<font size="04">*https://covid19.healthdata.org/switzerland?view=cumulative-deaths&tab=trend</font>
+
+
+<font size="04">*https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/switzerland/</font>
+
+
+
+
+
+
+

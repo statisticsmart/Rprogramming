@@ -1,0 +1,244 @@
+---
+title: "**Coronavirus Report - Ukrain**"
+author: "Binoli Gaweshika - AS2019358"
+output: html_document
+theme : journal
+font-family: Helvetica;
+font-size: 20pt;
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r message=FALSE, warning=FALSE,results=FALSE}
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(plotly)
+
+
+
+```
+
+## **1. Introduction**
+
+Novel corona virus disease became a major worldwide threat. It was first discovered as Whuhan in China in December 2019 and has since spread to more than 188 other nations.As most of the countries Ukraine also affected by corona virus.The virus was confirmed to have spread to Ukraine when the country's first case was confirmed on 3 March 2020.
+The COVID-19 pandemic in Ukraine has resulted in 5,478,025 confirmed cases of COVID-19 and 117,037 deaths & as of 26 February 2022, a total of 31,668,577 vaccine doses have been administered.
+
+Ukraine is a country in Eastern Europe.Ukraine referred to as the “Breadbasket of Europe” It is one of the world’s largest exporters of grains. Prices of the commodity have already spiked, and supply disruptions could lead to increased food insecurity in countries that rely on Ukraine’s exports.It is the second-largest European country after Russia, which it borders to the east and northeast.Prior to the ongoing Russo-Ukrainian War, Ukraine covered approximately 600,000 square kilometres (230,000 sq mi),and was the eighth-most populous country in Europe, with a population of around 41 million people.It is also bordered by Belarus to the north; by Poland, Slovakia, and Hungary to the west; and by Romania and Moldova to the southwest; with a coastline along the Black Sea and the Sea of Azov to the south and southeast. Kyiv is the nation's capital and largest city. The country's national language is Ukrainian, and most people are also fluent in Russian.
+
+```{r message=FALSE, warning=FALSE}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+library(ggplot2)
+library(maptools)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group),
+    fill = "gray",
+    colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+ggplotly(p +
+  geom_point(data = ukraine_corona,
+             aes(x = long, y = lat),
+             color = "red",
+             size = 1.2))
+
+```
+
+
+Ukraine has a mostly temperate climate, with the exception of the Southern Coast of Crimea which has a subtropical Mediterranean climate. The country enjoys sufficient amount of sunshine and year-round rainfall, highly concentrated during the summer months (May to August). Rainfall is highly varied depending upon area of the country and seasonal variation patterns. 
+
+Ukraine has an annual mean temperature of 7-9°C. Mean summer temperatures (May to August) range from less than 18°C to 22°C. Mean winter (December to March) temperatures range from -4.8°С to 2°C. Precipitation falls predominately in summer to fall months, with June and July typically having the highest rainfall (67 mm).  
+
+The virus was confirmed to have spread to Ukraine when the country's first case was confirmed to be hospitalized in Chernivtsi Oblast on 3 March 2020,a man who had travelled from Italy to Romania by plane and then arrived in Ukraine by car.
+An emergency was declared on 20 March 2020 in Kyiv Oblast, Chernivtsi Oblast, Zhytomyr Oblast, Dnipropetrovsk Oblast, Ivano-Frankivsk Oblast, and the city of Kyiv.
+New infections and deaths started to break records by late October 2021.By then, a total of 2.8 million coronavirus cases and 64,936 COVID-19 related deaths had occurred in Ukraine.
+
+Diagnostic testing will only be carried out in cases that meet the epidemiological and clinical definition of the disease outlined in the WHO guidelines. The testing will be conducted by the Virology Reference Laboratory of the Public Health Center of Ukraine. It is impossible to buy a diagnostic test kit for independent use.
+
+Ukraine has purchased German and Chinese test systems for detecting COVID-19. The reagents in the test systems make it possible to carry out laboratory diagnostics of the new coronavirus at the current level.
+
+Ukraine's ongoing vaccination program started on 24 February 2021 and from that day to 12 September 2021, 10,710,944 vaccinations were given in Ukraine (meaning 18% of the adult population of Ukraine had been vaccinated against COVID-19).About 44% of those vaccinated had been fully vaccinated.In an August 2021 poll 56% of Ukrainians did not plan to be vaccinated.Demand for vaccinations multiplied sharply by late October 2021.On 7 January 2022 the Ministry of Health announced that 44.9% of the adult population had undergone a full course of vaccination.
+Statistics for the Russian-held Autonomous Republic of Crimea and city of Sevastopol, and for the unrecognized Donetsk People's Republic and Luhansk People's Republic in eastern Ukraine, are not reported by Ukraine's state agencies, and are not included in the country's totals.
+
+Since the start of the 2022 Russian invasion of Ukraine, the Ukrainian Ministry of Healthcare has made no further press releases related to COVID-19, and the latest counts were for 23 February.As a result, daily counts are displayed in various diagrams as zero. In late May 2022, Chief State Sanitary Doctor Ihor Kuzin stated that since the beginning of the conflict, more than 750 studies had been conducted and that COVID-19 outbreaks were not expected in Ukraine in the near future.
+
+
+
+## **2. Exploratory Data Analysis**
+
+### Description of data
+
+**ukraine_corona** is a data frame filtered from **coronavirus dataset** published by Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website. There are 15 variables in the ukraine_corona dataset. The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province, but in the ukraine_corona dataset province variables haven't been recorded In this report I have mainly analyzed type(an indicator for the type of cases (confirmed, death, recovered).) & case(number of cases on a given date).
+
+The following figure shows all cases reported in Ukraine. It seems the number of cases got increased in February 2022. The data was recorded from 2020-01-22 to 2022-06-23 during 2652 days.
+```{r results=FALSE}
+ukraine_corona <- coronavirus %>% filter(country == "Ukraine")
+
+ukraine_corona1 <- ukraine_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(ukraine_corona1)
+
+ggplotly(ggplot(ukraine_corona1, aes(x=date, y=cases)) +
+   geom_path(size=0.5,colour="black"))
+
+which(is.na(ukraine_corona1$cases))
+
+ukraine_corona1$cases[2330] = mean(c(ukraine_corona1$cases[2329], ukraine_corona1$cases[2331]))
+length(ukraine_corona1$cases)
+
+
+```
+
+```{r results=FALSE}
+ukraine_corona1$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 2652-2330)))
+summary(ukraine_corona1)
+```
+
+```{r}
+ggplotly(ggplot(ukraine_corona1, aes(x=date, y=cases)) 
+  +geom_line(aes(colour=col, group=1))
+  +scale_colour_identity()
+  +ggtitle("Plot of all cases in Ukraine (imputed values are shown in red)")
+  )
+```
+
+----------------------------------------------------------------------------------------------------------
+
+### Visualization of Confirmed cases
+
+```{r results=FALSE }
+confirmed_ukraine_corona <- ukraine_corona %>% filter(type=="confirmed")
+summary(confirmed_ukraine_corona)
+
+confirmed_ukraine_corona <- confirmed_ukraine_corona %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(confirmed_ukraine_corona)
+
+which(is.na (confirmed_ukraine_corona$cases))
+```
+
+```{r}
+ggplotly(ggplot(confirmed_ukraine_corona, aes(x=date, y=cases)) + geom_path(size=0.5,colour="blue")+ ggtitle("Time series plot of Confirmed cases in Ukraine"))
+
+```
+When analysing the above plot its obvious that in 2020 & 2021 confirmed cases getting increased in November month,it may be due to beginning of winter season. But it getting lower gradually may be government taking necessary actions.
+
+### Visualization of Recovered cases
+
+```{r results=FALSE }
+recovery_ukraine_corona <- ukraine_corona %>% filter(type=="recovery")
+summary(recovery_ukraine_corona)
+
+recovery_ukraine_corona <- recovery_ukraine_corona %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(recovery_ukraine_corona)
+
+which(is.na (recovery_ukraine_corona$cases))
+
+recovery_ukraine_corona$cases[562]=mean(c(recovery_ukraine_corona$cases[561], recovery_ukraine_corona$cases[563]))
+length(recovery_ukraine_corona$cases)
+
+
+recovery_ukraine_corona$col <- as.factor(c(rep("black",560),rep("red",2),rep("black",884-562)))
+
+summary(recovery_ukraine_corona)
+```
+
+```{r}
+
+ggplotly(ggplot(recovery_ukraine_corona,aes(x=date,y=cases))+ geom_line(aes(colour=col, group=1))
+         + scale_colour_identity()
+         +ggtitle("Figure : Time series plot of recovered cases in Ukraine (imputed values are shown in red."))
+```
+Its obvious that number of recovered cases increased in 2021.There was one NA case that imputed value is shown in red.
+
+### Visualization of Death cases
+
+```{r results=FALSE}
+death_ukraine_corona <- ukraine_corona %>% filter(type=="death")
+summary(death_ukraine_corona)
+
+death_ukraine_corona <- death_ukraine_corona %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(death_ukraine_corona)
+
+which(is.na (death_ukraine_corona$cases))
+```
+
+```{r}
+
+ggplotly(ggplot(death_ukraine_corona, aes(x=date, y=cases))  + geom_path(size=0.5,colour="red")+ ggtitle("Figure : Time series plot of Death cases in Ukraine"))
+```
+Death cases increased in later part of 2021 year as number of recovered cases got lower in that time period.But onwards 2022-02-25 upto 2022-06-23 number of death cases reported is 0.
+### Visualization of Active Cases
+```{r message=FALSE, warning=FALSE}
+ukraine_active_cases <-  ukraine_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death)
+   )
+
+ggplotly(ggplot(ukraine_active_cases,aes(x =date,y =total_active))
+      +geom_line(color="brown")
+      +ggtitle("Figure : COVID-19 total acive cases in Ukrain"))
+
+```
+In the year of 2022 there is a comparable increment in active cases.
+
+### Visualization all cases according to case type 
+```{r}
+
+ggplotly(ggplot(ukraine_corona1,aes(date, cases, color = type)) +
+  geom_point() +
+ 
+  ggtitle("Confirmed, Death and Recovered cases in Ukraine")+
+  facet_grid(~type))
+
+
+```
+Compared to recovered cases death cases kept in a very low level.Most of the confirmed cases are seemed to be recovered.
+
+### Comparison with Neighbour countries
+
+```{r}
+nei_country <- coronavirus %>% filter (continent_code=="EU")
+neighbour_country<-nei_country %>% filter (country== c ("Russia", "Belarus", "Poland","Ukraine"))
+neighbour_country <- neighbour_country%>% mutate(cases = replace (cases, which (cases<0),NA))
+```
+
+```{r}
+ggplot(neighbour_country, aes(date,cases, colour = country)) + geom_path(size=1) +
+  facet_grid(rows= vars(type)) + labs(title = "Total no.of confirmed, death, recovered cases compared with neighbour countries")
+
+```
+
+Number of confirmed & recoverd cases in Ukraine in a  little bit higher level compared to Belarus.But compared to Poland & Russia Ukraine in a very low rate.
+
+## **3. Conclusions and Discussion**
+
+This worldwide spread pandemic case affected  Ukrain in its very first stage but not very seriously. The very first case was confirmed on the 3rd of March 2020 & an exponential growth seems upto November month of 2020. That period was critical for Ukraine and all other countries since this is a novel disease. November 2020, April 2021, November 2021, and February 2021 seem critical periods for Ukrain as the number of confirmed cases is higher. And death rate is higher compared to confirmed cases in November month which may be due to the beginning of the winter season. But it's clear that they have managed & done necessary actions because that doesn't remain on the whole season.
+When analyzing it seems most of the confirmed cases are recovered, so we can say it's due to good management of health in Ukraine.
+On 24th of February 2022, the Ukraine-Russia war began so the major issue is now not the coronavirus for Ukraine. So the Ukrainian Ministry of Healthcare has made no further press releases related to COVID-19, so from 2022-02-25 onwards, no records were there to analyze. That's why in our dataset also all confirmed, death, and recovery cases are displayed as 0. There may be cases but not recorded.
+
+## **4. References**
+* https://en.Wikipedia.org/wiki/Ukraine
+
+* https://www.nytimes.com/interactive/2022/02/25/opinion/russia-ukraine-invasion-maps.html
+
+* https://climateknowledgeportal.worldbank.org/country/ukraine/climate-data-historical#:~:text=Ukraine%20has%20a%20mostly%20temperate,months%20(May%20to%20August).
+
+* https://covid19.gov.ua/en
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Ukraine

@@ -1,0 +1,269 @@
+---
+title: "Report of Corona in West Bank and Gaza"
+author: "Manuka Perera"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment=NA, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center')
+```
+
+## West Bank and Gaza
+
+### **West Bank** ###
+West Bank ,area of the former British-mandated but occupied from 1967 by Israel. Now it’s a state of Palestine, Israel. Total area of West Bank is 5,655km^2. Palestinian Arabic, Israeli Hebrew are the main languages used in the region. Islam, Judaism, Christianity, Samaritanism are the main reliogions.New shekel(ILS),Jordanian dinar(JOD) are use as currency.
+
+### **Gaza** ###
+Gaza,is a Palestinian city in the Gaza Strip, with a population of 590,481, making it the largest city in the State of Palestine. Total area of West Bank is 45 km^2.The major agricultural products are strawberries, citrus, dates, olives, flowers, and various vegetables.Small-scale industries include the production of plastics, construction materials, textiles, furniture, pottery, tiles, copperware, and carpets.Gaza's cuisine is characterized by its generous use of spices and chillies.
+
+### **Geographical Location of West Bank and Gaza**
+```{r,out.width="80%"}
+library(leaflet)
+library(dplyr)
+library(httpuv)
+library(htmltools)
+library(zoo)
+
+m <- leaflet() %>%
+  # Now add tiles to it
+  addTiles() %>%
+  # Setting the middle of where the map should be and the zoom level 103.851959, 1.290270
+  setView(lng = 31.9466, lat = 35.3027, zoom = 4) %>%
+  # Now, add a marker with a popup,
+  addMarkers(lng = 31.379114, lat = 31.035421, popup = "<b>West Bank</b>") %>% addMarkers(lng = 31.5017, lat = 34.4668, popup = "<b>Gaza</b>")
+
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+
+```
+### **Climate variation in West Bank and Gaza** ###
+The climate in the West Bank is mostly Mediterranean, slightly cooler at elevated areas compared with the shoreline, west to the area. In the east, the West Bank includes the Judean Desert and the shoreline of the Dead Sea – both with dry and hot climate.
+
+Gaza has a hot semi-arid climate with Mediterranean characteristics, featuring mild rainy winters and dry hot summers.Spring arrives around March or April and the hottest month is August. The coolest month is January.
+
+### **Corona status in West Bank and Gaza** ###
+West bank and Gaza has 702,804 confirmed cases and 5,707 deaths according to a research by John Hopkins, University of Medicine. As for the Vaccine tracker 3,741,181 doses administered and 2,010,433 people received at least 1 dose. It is 39.41% percentage.
+
+### **Actions took by the government to reduce Corona** ###
+By 22 March, the following guidelines were in place, 
+* Closure of all schools, universities and public parks for 30 days (from 5 March - 5 April) 
+*  Closure of all borders (movement of goods is allowed) 
+* Government quarantine (14 days) and testing for all incoming travellers (from Ben Gurion airport) 
+* No movement between West Bank governorates
+* Palestinian laborers who travel to Israel for work are asked not to move between State of Palestine and Israel
+* No movement within all urban areas (except for exceptional circumstances), with all citizens requested to remain with their homes for 14 days (from March 22) 
+* Closure of all stores, public institutions and government offices, except for essential providers (pharmacies and food) and the Ministries of Health, Finance and Interior (for 14 days from 22 March) 
+* All citizens are asked to stay at home, except for essential activities and emergencies (for 14 days from 22 March).
+
+```{r, echo=FALSE}
+library(devtools)
+library(sta3262)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+```
+## Exploratory Data Analysis
+
+#### **Summary of West Bank and Gaza**
+```{r, echo=FALSE}
+view(West_Bank_and_Gaza_Corona <- coronavirus %>% filter((country == "West Bank and Gaza")))
+#West_Bank_and_Gaza_Corona <- West_Bank_and_Gaza_Corona %>% filter(cases>0)
+West_Bank_and_Gaza_Corona <- West_Bank_and_Gaza_Corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(West_Bank_and_Gaza_Corona)
+
+```
+#### **Total number of Death cases reported in West Bank and Gaza**
+
+```{r}
+West_Bank_and_Gaza_Corona_Death <- filter(West_Bank_and_Gaza_Corona, type == "death")
+West_Bank_and_Gaza_Corona_Death <- West_Bank_and_Gaza_Corona_Death %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(West_Bank_and_Gaza_Corona_Death)
+sum(abs(West_Bank_and_Gaza_Corona_Death$cases))
+```
+
+#### **Graphical Representation of deaths over time in West Bank and Gaza** 
+
+```{r fig.cap="Figure 1"}
+ggplot(West_Bank_and_Gaza_Corona_Death, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 Death Cases in West Bank and Gaza")
+```
+#### **Histogram of deaths in West Bank and Gaza** 
+
+```{r fig.cap="Figure 2"}
+ggplot(West_Bank_and_Gaza_Corona_Death, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5)
+```
+
+#### **Total number of Confirmed cases reported in West Bank and Gaza**
+
+```{r}
+West_Bank_and_Gaza_Corona_confirmed <- filter(West_Bank_and_Gaza_Corona, type == "confirmed")
+West_Bank_and_Gaza_Corona_confirmed <- West_Bank_and_Gaza_Corona_confirmed %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(West_Bank_and_Gaza_Corona_confirmed)
+sum(abs(West_Bank_and_Gaza_Corona_confirmed$cases))
+```
+
+#### **Graphical Representation of confirmed cases over time in West Bank and Gaza** 
+
+```{r fig.cap="Figure 3"}
+ggplot(West_Bank_and_Gaza_Corona_confirmed, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 confirmed Cases in West Bank and Gaza")
+```
+#### **Histogram of confirmed cases in West Bank and Gaza** 
+
+```{r fig.cap="Figure 4"}
+ggplot(West_Bank_and_Gaza_Corona_confirmed, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5)
+```
+#### **Total number of Recovered cases reported in West Bank and Gaza**
+
+```{r}
+West_Bank_and_Gaza_Corona_recovery <- filter(West_Bank_and_Gaza_Corona, type == "recovery")
+West_Bank_and_Gaza_Corona_recovery <- West_Bank_and_Gaza_Corona_recovery %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(West_Bank_and_Gaza_Corona_recovery)
+#which(is.na(West_Bank_and_Gaza_Corona_recovery$cases))
+#length(West_Bank_and_Gaza_Corona_recovery$cases)
+West_Bank_and_Gaza_Corona_recovery$cases[76] = mean(c(West_Bank_and_Gaza_Corona_recovery$cases[75], West_Bank_and_Gaza_Corona_recovery$cases[77]))
+West_Bank_and_Gaza_Corona_recovery$cases[98] = mean(c(West_Bank_and_Gaza_Corona_recovery$cases[97], West_Bank_and_Gaza_Corona_recovery$cases[99]))
+West_Bank_and_Gaza_Corona_recovery$cases[562] = mean(c(West_Bank_and_Gaza_Corona_recovery$cases[561], West_Bank_and_Gaza_Corona_recovery$cases[563]))
+sum(abs(West_Bank_and_Gaza_Corona_recovery$cases))
+```
+
+#### **Graphical Representation of recovered cases over time in West Bank and Gaza** 
+
+```{r fig.cap="Figure 5"}
+ggplot(West_Bank_and_Gaza_Corona_recovery, aes(x=date, y=cases)) + geom_line() + ggtitle("Daily Covid-19 recoverd Cases in West Bank and Gaza")
+```
+
+#### **Histogram of recovered cases in West Bank and Gaza** 
+
+```{r fig.cap="Figure 6"}
+ggplot(West_Bank_and_Gaza_Corona_recovery, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5)
+```
+#### **Total number of Active cases reported in West Bank and Gaza**
+```{r}
+df <- data.frame(West_Bank_and_Gaza_Corona_confirmed$date, cumsum(West_Bank_and_Gaza_Corona_confirmed$cases),cumsum(West_Bank_and_Gaza_Corona_recovery$cases),cumsum(West_Bank_and_Gaza_Corona_Death$cases))
+df$active<- (West_Bank_and_Gaza_Corona_confirmed$cases)-(West_Bank_and_Gaza_Corona_recovery$cases)-(West_Bank_and_Gaza_Corona_Death$cases)
+df$activecumulative <- cumsum(West_Bank_and_Gaza_Corona_confirmed$cases)-cumsum(West_Bank_and_Gaza_Corona_recovery$cases)-cumsum(West_Bank_and_Gaza_Corona_Death$cases)
+West_Bank_and_Gaza_Corona_active <- df
+#summary(West_Bank_and_Gaza_Corona_active)
+sum((West_Bank_and_Gaza_Corona_active$active))
+```
+
+#### **Graphical Representation of cumulative active cases over time in West Bank and Gaza** 
+
+```{r fig.cap="Figure 7"}
+ggplot(West_Bank_and_Gaza_Corona_active, aes(x=West_Bank_and_Gaza_Corona_confirmed.date, y=activecumulative)) + geom_line() + ggtitle("Daily Covid-19 active Cases in West Bank and Gaza")
+```
+```{r fig.cap="Figure 8"}
+Type<-c("Confirmed","Death","Recovered","Active")
+Total<-c(sum(abs(West_Bank_and_Gaza_Corona_confirmed$cases)),sum(abs(West_Bank_and_Gaza_Corona_Death$cases)),sum(abs(West_Bank_and_Gaza_Corona_recovery$cases)),sum((West_Bank_and_Gaza_Corona_active$active)))
+Table<-data.frame(Type,Total)
+knitr::kable(Table,"pipe",col.name =c("Type","Total"))
+```
+
+#### **Graphical Representation of Confirmed, Death and Recovered cases over time in Switzerland**
+
+```{r fig.cap="Figure 9"}
+ggplot(West_Bank_and_Gaza_Corona, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Daily Covid-19 cases by type in West Bank and Gaza") + facet_grid(type~.) + ylim(0,25000)
+```
+
+## Comparison with other countries
+
+### **Israel, Jordan, Lebanon**
+
+Comparison countries were choosen according to the geographical position. all the three countries situated in the same region.
+
+* Israel : A Middle Eastern country on the Mediterranean Sea, is regarded by Jews, Christians and Muslims as the biblical Holy Land.
+
+* Jordan : An Arab nation on the east bank of the Jordan River, is defined by ancient monuments, nature reserves and seaside resorts
+
+* Lebanon :  Is a country in Western Asia, located between Syria to the north and east and Israel to the south
+
+### **Comparison of death cases by country over the time**
+```{r}
+library(gganimate)
+jordan_Corona <- coronavirus %>% filter(country == "Jordan")
+israel_Corona <- coronavirus %>% filter(country == "Israel")
+lebanon_Corona <- coronavirus %>% filter(country == "Lebanon")
+
+```
+```{r fig.cap="Figure 10"}
+jordan_Corona_Death <- filter(jordan_Corona, type == "death")
+israel_Corona_Death <- filter(israel_Corona, type == "death")
+lebanon_Corona_Death <- filter(lebanon_Corona, type == "death")
+
+Country_comparison_Death <- rbind(jordan_Corona_Death, israel_Corona_Death, lebanon_Corona_Death, West_Bank_and_Gaza_Corona_Death)
+p<-Country_comparison_Death %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  labs(x="Date", y="Number Of Cases", title="Comparison of Death cases")+
+  geom_point()+
+  theme_bw()+
+  transition_reveal(date)
+animate(p,nframes = 144, fps =10)
+
+```
+### **Comparison of recovered cases by country over the time**
+```{r fig.cap="Figure 11"}
+jordan_Corona_recovery <- filter(jordan_Corona, type == "recovery")
+israel_Corona_recovery <- filter(israel_Corona, type == "recovery")
+lebanon_Corona_recovery <- filter(lebanon_Corona, type == "recovery")
+
+Country_comparison_recovery <- rbind(jordan_Corona_recovery, israel_Corona_recovery, lebanon_Corona_recovery, West_Bank_and_Gaza_Corona_recovery)
+p<-Country_comparison_recovery %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  labs(x="Date", y="Number Of Cases", title="Comparison of recovery cases")+
+  geom_point()+
+  theme_bw()+
+  transition_reveal(date)
+animate(p,nframes = 144, fps =10)
+
+```
+
+### **Total number of confirmed cases by country**
+
+```{r,out.width="80%"}
+jordan_Corona_confirmed <- filter(jordan_Corona, type == "confirmed")
+israel_Corona_confirmed <- filter(israel_Corona, type == "confirmed")
+lebanon_Corona_confirmed <- filter(lebanon_Corona, type == "confirmed")
+
+Country_comparison_confirmed <-rbind(jordan_Corona_confirmed,israel_Corona_confirmed,lebanon_Corona_confirmed,West_Bank_and_Gaza_Corona_confirmed)
+
+ggplot(data = Country_comparison_confirmed, aes(x= type,y = cases, fill = country))+geom_col(position = "dodge")
+```
+
+
+### **Discussion** ###
+According to the data set, there were no negative values in death and confirmed cases. But there were 3 negative values in recovery set. Those 3 data points were replaced by taking the average values previous and after data points.
+Figure 1 – Graphical representation of deaths over time in West Bank and Gaza, shows the daily death cases over time. According to the figure there is a sudden peak between 2021 and 2022. Daily death cases are gradually increasing over the time with some lower peaks too.
+Total number of confirmed death cases are 5660 according to the data set. 
+Figure 3 - Graphical representation of confirmed cases over time in West Bank and Gaza, shows the daily confirmed cases over time. According to the figure there is a sudden peak between 2021 and 2022, some peaks after 2022. We can see that daily confirmed cases are gradually increasing after 2021.
+Total number of recovered cases are 658503 according to the data set. 
+Figure 5 - Graphical representation of recovered cases over time in West Bank and Gaza, shows the daily recovered cases over time. According to the figure, there is a rapid increasing in the cases between middle of 2020 to middle of 2021.
+Total number of confirmed cases are 312359.5 according to the data set. 
+Calculated total number of active cases are 340483.5.
+According to the cumulative distribution of active cases, there is a sudden increase in the cases after the third quarter of 2021.
+No of death cases in Jordan, Isarael and Lebanon are comparatively high considering the cases in West Bank and Gaza.
+Total number of confirmed cases of Israel is more higher than other three countries.
+
+
+### **Conclusion** ###
+Compared to the other three countries confirmed cases, West Bank and Gaza corona confirmed cases are averagly positive according to the other countries. Therefor, the actions taken by the government to reduce number of corona cases are quite effective.
+
+### **Reference** ###
+* https://latitude.to/articles-by-country/ps/palestine/467/west-bank
+* https://en.wikipedia.org/wiki/West_Bank
+* https://en.wikipedia.org/wiki/Gaza_Strip
+* http://www.emro.who.int/images/stories/palestine/documents/Palestine_Authority_COVID-19_Response_Plan_Final_26_3_2020.pdf?ua=1
+* https://www.statology.org/multiple-histograms-r/
+* https://coronavirus.jhu.edu/region/west-bank-and-gaza

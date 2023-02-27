@@ -1,0 +1,170 @@
+---
+title: "Individual project"
+author: "Mayuri Madushika Bandara"
+date: "05/10/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, comment=NA}
+library(devtools) 
+devtools::install_github("thiyangt/sta3262")
+library(sta3262) 
+get_individual_project_country("AS2019313")
+```
+
+# Introduction
+Germany is a country located in the Western Europe. It is the second most populous country in Europe after Russia, and the most populous member state of the European Union. It is bordered by Denmark, Poland, Czechia, Austria, Switzerland, France, Luxembourg, Belgium, Netherlands, the North Sea, and the Baltic Sea. Germany has a strategic location on the North European Plain and along the entrance to the Baltic Sea. The government system is a federal republic. The chief of state is the president, and the head of government is the chancellor. Germany has a mixed economic system.
+This country is an interesting and rich history narrated by the old-fashion and colorful architecture, castles, palaces, cathedrals and monuments themselves, its landscapes, mountains and forests, delicious food and beer, Germany remains one of the top destinations in the world for travelers.
+
+#### *Visualization of Germany*
+```{r, message=FALSE,  warning=FALSE, echo=FALSE}
+
+library(coronavirus)
+data(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "gray"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = germany_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+# Exploratory Data Analysis
+```{r, message=FALSE, warning=FALSE, comment=NA}
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(magrittr)
+
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+
+germany_corona <- as.data.frame(germany_corona)
+
+head(germany_corona)
+tail(germany_corona)
+
+summary(germany_corona)
+```
+
+#### Summary of confirmed cases in Germany
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+confirmed_germany_corona <- germany_corona %>% filter(type=="confirmed")
+summary(confirmed_germany_corona)
+
+ggplot(confirmed_germany_corona, aes(x=date, y=cases)) +
+  geom_line()+ ggtitle("Germany:  Covid-19 Confirmed")
+
+```
+
+Initially the daily active cases count in Germany was relatively high.  from January 2022 to April 2022.
+
+#### Summary of death cases in Germany
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+germany_corona <- coronavirus %>% filter(country == "Germany")
+death_germany_corona <- germany_corona %>% filter(type=="death")
+summary(death_germany_corona)
+
+ggplot(death_germany_corona, aes(x=date, y=cases)) +
+  geom_line()+ ggtitle("Germany:  Covid-19 deaths")
+```
+
+In the above figure shows the highest number of daily deaths have been recorded in the first few months of 2021.
+
+#### Summary of recovered cases in Germany
+```{r, message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+germany_corona <- coronavirus %>% filter(country == "Germany")
+
+recovered_germany_corona <- germany_corona %>% filter(type=="recovered")
+summary(recovered_germany_corona)
+
+ggplot(recovered_germany_corona, aes(x=date, y=cases)) +
+  geom_line() + ggtitle("Germany: Covid-19 Recoveries")
+
+```
+
+## Comparison with other Countries
+```{r,message=FALSE, warning=FALSE,echo=FALSE}
+germany_corona<-coronavirus%>%filter(country=="Germany")
+
+netherlands_corona<-coronavirus%>%filter(country=="Netherlands")
+
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+
+switzerland_corona<-coronavirus%>%filter(country=="Switzerland")
+
+countries_corona<-as.data.frame(rbind(germany_corona,netherlands_corona,belgium_corona,switzerland_corona))
+
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+ggplot(countries_cases,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison of confirmed covid-19 patients between the neighbooring countries")
+```
+```{r, message=FALSE, warning=FALSE,echo=FALSE}
+germany_corona<-coronavirus%>%filter(country=="Germany")
+
+netherlands_corona<-coronavirus%>%filter(country=="Netherlands")
+
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+
+switzerland_corona<-coronavirus%>%filter(country=="Switzerland")
+
+countries_corona<-as.data.frame(rbind(germany_corona,netherlands_corona,belgium_corona,switzerland_corona))
+
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the neighbooring countries")
+
+```
+
+# Conclusion and Discussion
+* German is highly affected from coronavirus, according the above data exploration Switzerland is the least affected country form coronavirus.
+* When Germany compared with Switzerland, Germany has relatively high death cases after September 2020. However from January 2021 onwards the death rate in Germany has fallen steadily.But deaths and confirmed cases in Germany has risen dramatically. Finally it’s clear that daily cases are coming down.
+* The data in this report will only provide a broader picture of how the COVID-19 pandemic has affected Germany until the 23rd of June 2022. To give a better overview and an understanding about the future of the pandemic in Germany more data regarding government support and other support given are required.
+* This study is based on the data from 22 January 2020 to 23 June 2022.
+
+# References
+* https://en.wikipedia.org/wiki/Germany
+* https://globaledge.msu.edu/countries/germany:~:text=Germany%20is%20a%20country%20located,entrance%20to%20the%20Baltic%20Sea.
+
+* https://hellor.netlify.app/schedule/R_Markdown
+* https://github.com/RamiKrispin/coronavirus
+
+
+

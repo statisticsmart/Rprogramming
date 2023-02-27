@@ -1,0 +1,333 @@
+---
+title: "COVID 19 Pandemic Overview of the North Macedonia"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+
+The COVID-19 pandemic has become a global health crisis that has affected countries across all continents in the world except Antarctica. Therefore, understanding the strategic responses related towards controlling the pandemic can be of much importance. This report is an exploratory analysis of the pandemic in North Macedonia by studying data from 22nd January 2020 to 23rd June 2022 and comparing it with neighboring countries as well as countries identified as of key importance with respect to COVID-19. The main reason for this is the effective strategies implemented by the government along with complete lockdown. The effectiveness of this strategy and the impact to prevailing COVID-19 figures is yet to be determined.
+
+
+The COVID-19 pandemic in North Macedonia is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).
+
+Keywords: North Macedonia, COVID-19
+
+
+# 1.Background
+
+## 1.1 Introduction
+
+Corona Virus Disease, more commonly known as COVID – 19 is a virus originating from the Severe Acute Respiratory Syndrome (SARS) family of viruses. The symptoms of the disease being more or less similar to those of influenza (flu) or common cold makes it even more difficult to accurately diagnose it without further testing. The disease easily transmitted through direct contact with an infected person or through contaminated surfaces can be fatal in rare cases, yet no vaccine has been developed up to date.
+
+
+## 1.2 Location of North Macedonia
+
+North Macedonia is a small, landlocked country located in the central Balkan Peninsula in Southeastern Europe. It is bordered by Albania, Bulgaria, Greece, Kosovo, and Serbia. North Macedonia is a major transportation corridor from Western and Central Europe to the Aegean Sea and Southern Europe to Western Europe.
+
+The geographical location of North Macedonia can be further understood through the following figure.
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+NMacedonia_corona <- coronavirus %>% filter(country == "North Macedonia")
+data(wrld_simpl)
+p<- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y= lat, group=group), fill ="gray", colour="white"
+  ) +
+  coord_cartesian(xlim = c(-180,180), ylim = c(-90,90)) +
+  scale_x_continuous(breaks = seq(-180,180,120))+
+  scale_y_continuous(breaks = seq(-90,90,100))
+p +
+  geom_point(
+    data = NMacedonia_corona , aes(x=long, y=lat), color = "red",size
+    =2
+  )
+
+
+```
+
+## 1.3 Climate change of North Macedonia
+
+The climate in North Macedonia is quite varied, but generally does not offer extreme climatic conditions. It is cold, wet and some nice summer months are also present. 
+
+North Macedonia has a diverse climate, with eight distinct climate zones: sub-Mediterranean, moderate continental sub-Mediterranean, warm continental, cold continental, sub-forest continental mountainous,forest continental mountainous, sub-alpine mountainous, and alpine mountainous. Notable ecosystems
+include: temperate forests, grasslands, and wetlands. The average annual temperatures range from 10.1°C to 14.3°C with significant variation between regions and throughout the year; in January, the monthly average dips below zero, to -0.9°C, while in July and August the monthly average reaches 20.3°C.
+
+## 1.4 Demographics of North Macedonia
+
+The Republic Of North Macedonia 2020 population is estimated at 2,083,374 people at mid year according to UN data.The Republic Of North Macedonia population is equivalent to 0.03% of the total world population.North Macedonia ranks number 148 in the list of countries (and dependencies) by population.
+
+According to the Demographics of the Republic of North Macedonia,58.6 % of the population is urban (1,221,133 people in 2020).An average person’s life expectancy at birth is estimated to be 76.3 years; 74.3 years and 78.3 years for male and female respectively when considered gender-wise.
+
+The following map shows a more clear illustration of the geographical population distribution of North Macedonia based on the population per square kilometer.
+
+## 1.5. Lockdown status of the country
+
+The Government of the Republic of North Macedonia as of the first day pays serious attention to and monitors the condition with the corona virus infections in pursuance with the recommendations issued by the WHO and issues measures for protection of all citizens of the country.
+
+A full lockdown is enforced in the most critical areas: the capital, Skopje, and the towns of Shtip, Tetovo and Kumanovo. Curfews there will start at 9pm on Thursday and last until 5am on Monday. The same tough measures will apply to another 7 rural municipalities: Lipkovo, Bogovinje, Brvenica, Tearce, Zhelino, Jegunovce and Karbinci. In the rest of the country, the government has reintroduced previously-scrapped evening curfews, which start at 9pm and end in the early morning.
+
+
+## 1.6. Actions taken by the government
+
+The Republic of North Macedonia has been in a state of emergency since 19th March 2020.
+
+All citizens are obliged to wear personal protective equipment on the face when leaving their home, i.e. when moving in public places and areas of open and closed type, in markets, in the public transport and when entering closed spaces where many people gather (state institutions, markets, stores, banks, post office, waiting rooms, healthcare institutions etc.)
+
+All citizens are obliged in their headquarters, affiliates, and facilities where they perform their activity to ensure wearing personal protective equipment on the nose and mouth by all natural persons working and to prohibit entry and movement through these premises of any natural person who enters these premises as a visitor and does not wear personal protective equipment.
+
+All domestic and foreign natural persons, symptomatic and asymptomatic, who have been tested for the presence of COVID-19 in their body, shall be placed in a mandatory self-isolation from the moment of taking the sample for testing (mouth swab, throat swab, nasal swab, blood etc.), until negative result is obtained.
+
+Not only that the Republic of North Macedonia Government also take the following restrictions to prevent the spread of COVID 19.
+
+  **Restrictions on citizens’ free movement**
+  
+Association in groups of more than five persons in parks and other public places and areas is banned.
+
+ **Restrictions for Legal Entities**
+ 
+ The retail trade facilities are allowed to only one person per 20 square meters, whereas for retail trade facilities smaller than 20 square meters the ban refers to one person at a time. Each trader is obliged to provide protective equipment (masks and gloves) for the employees in the facility and the employees are obliged to wear protective equipment during the working hours.
+ 
+ 	
+All extracurricular activities and additional programs like foreign language courses or similar are terminated.
+
+Massive gatherings and events in open and closed facilities and all cultural events and festivals are terminated.
+
+All hospitality premises that prepare and sell food can work without accepting clients (guests) and may sell their products using alternative methods (online orders, telephone orders, etc.) and to perform delivery or to enable individual collection of the order outside the object (via stand, etc.).
+
+All sports facilities where gatherings of any type may be organized are closed for activities.
+
+Classes and training, as well as exams in driving schools is forbidden.
+
+To terminate the work of libraries and student homes on the territory of the Republic of North Macedonia; the employees in these institutions should be free from work for this time period.
+
+It is banned to hold and organize all kinds of public and private gatherings regardless of the scope or number of participants.
+
+### Main Cities by Population in North Macedonia
+
+The Republic Of North Macedonia 2020 population is estimated at 2,083,374 people at mid year according to UN data.In addition population density in the Republic of North Macedonia is 83 per Kilometer  and 58.6 % of the population is urban area.
+
+The following map shows a more clear illustration of the geographical population distribution of North Macedonia based on the population.
+
+
+![North Macedonia Population Density](E:/3rd Yr/Stat/R programming/Individual Project/download.jpg)
+
+
+# 2. Exploratory Data Analysis
+
+## 2.1 Structure of Data
+
+
+The data set used for this analysis is *The 2019 Novel corona virus COVID-19 (2019-nCoV)* data set which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) corona virus.
+The data set contains the daily summary of corona virus cases worldwide. All cases are recorded according to the following variables;
+
+  + Date
+  + Country
+  + Province/state; if available
+  + Latitude of center of geographic region defined by country/province
+  + Longitude of center of geographic region defined by country/province
+  + Type of reported case – confirmed, death, recovered
+  + Number of cases on given date
+  + Country code
+  + Country or province population
+All records are available for the time period from 01st January 2020 to 23rd June 2022.
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+## 2.2 COVID-19 Statistics of North Macedonia
+
+Following table shows that COVID 19 summary measurements of year wise data of North Macedonia.
+
+According to the table it table shows that year wise mean comparison of confirmed,death and recovery cases of North Macedonia.It shows that the average confirmed cases of 2022 year is greater than the average confirmed cases of 2020 year.Not only that mean recovery cases of 2022 year is 0.So we can say that COVID 19 confirmed cases was increased by year wise in North Macedonia.According to the summary table of cases by types and year, it can be seen that highest mean percentages of confirmed cases during the 2022 year.
+
+
+Year   |Confirmed               |Death             |Recovery     
+----   |   ------                |  --------         | --------
+2020   |    Min.  :0.0          | Min.   : 0.000   | Min.   :0.0
+----   |    1stQu. :22.0        | 1st Qu.: 1.000   | 1st Qu.:5.0 
+----   |    Median : 114.0      | Median : 4.000   | Median :69.0   
+----   |    Mean   :241.5       | Mean   : 7.255   | Mean   :178.1                 
+----   |    3rd Qu : 200.0      | 3rd Qu.: 9.000   | 3rd Qu.:194.0               
+----   |    Max   :1402.0       | Max.   :46.000   | Max.   :1242.0
+2021   |    Min.  :0.0          | Min.   : 0.00    | Min.   :0.0
+----   |    1stQu. :82.0        | 1st Qu.: 7.00    | 1st Qu.:0.0 
+----   |    Median : 347.0      | Median : 13.00   | Median :12.0   
+----   |    Mean   :388.5       | Mean   : 14.95   | Mean   :243.8                
+----   |    3rd Qu : 539.0      | 3rd Qu.: 21.00   | 3rd Qu.:374.0      
+----   |    Max   :1511.0       | Max.   :51.000   | Max.   :3803.0
+2022   |    Min.  :0.0          | Min.   : 0.000   | Min.   :0
+----   |    1stQu. :86.0        | 1st Qu.: 1.000   | 1st Qu.:0 
+----   |    Median : 198.5      | Median : 4.000   | Median :0   
+----   |    Mean   :506.5       | Mean   : 7.828   | Mean   :0                 
+----   |    3rd Qu : 713.8      | 3rd Qu.: 13.000  | 3rd Qu.:0 
+----   |    Max    :2332.0      | Max.   :39.000   | Max.   :0
+
+According to the following bar plot we can say that COVID 19 cases are higher in 2021 in the Republic of North Macedonia.
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+NewNMC<-data.frame(NMacedonia_corona)
+NewestNM<-select(NMacedonia_corona,date,cases,country,type)
+NewestNMa <-NewestNM %>% mutate(cases = replace(cases, which(cases < 0), NA))
+NewNM<-data.frame(NewestNMa)
+df<-NewNM%>% separate(date,c("Year","Month","day"),sep="-")
+df1<-select(df,Year,cases,type)
+df2=filter(df1,c(Year==2020))
+df3=filter(df1,c(Year==2021))
+df4=filter(df1,c(Year==2022))
+
+ggplot(df1,aes(x=Year))+geom_bar(data=df2,aes(color="2020"))+geom_bar(data=df3,aes(color="2021"))+ geom_bar(data=df4,aes(color="2022"))
+```
+
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE,comment=NA,include=FALSE}
+library(tidyr)
+library(dplyr)
+ which(is.na(NewestNMa$cases))
+ NewestNMa$cases[2330] = mean(c(NewestNMa$cases[2329], NewestNMa$cases[2331]))
+length(NewestNMa$cases)
+NewestNMa$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 2652-2330)))
+```
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE,comment=NA}
+
+confirm_NMacedonia_corona <- NewestNMa%>% filter(type=="confirmed")
+ggplot(confirm_NMacedonia_corona,aes(x=date, y=cases)) + geom_jitter(size=0.8,color="red")+geom_line(color="dark blue")+ggtitle("North Macedonia:Daily covid 19 confirmed")
+summary(confirm_NMacedonia_corona)
+
+death_NMacedonia_corona <- NewestNMa%>% filter(type=="death")
+ggplot(death_NMacedonia_corona,aes(x=date, y=cases)) + geom_jitter(size=0.8,color="red")+geom_line(color="dark blue")+ggtitle("North Macedonia:Daily covid 19 death")
+summary(death_NMacedonia_corona)
+
+recovery_NMacedonia_corona <- NewestNMa%>% filter(type=="recovery")
+ggplot(recovery_NMacedonia_corona,aes(x=date, y=cases)) + geom_jitter(size=0.8,color="red")+ geom_line(color="dark blue")+ggtitle("North Macedonia:Daily covid 19 recovered")
+summary(recovery_NMacedonia_corona)
+
+
+
+
+```
+According to the Daily covid 19 recovered graph,we can say that there are no recovery cases after some day point in 2021.
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE,include=FALSE}
+
+NewNM<-data.frame(NewestNMa )
+df<-NewNM%>% separate(date,c("Year","Month","day"),sep="-")
+df1<-select(df,Year,cases,type)
+
+## 2020
+df2=filter(df1,c(Year==2020))
+summary(df2)
+dd=filter(df2,c(type=="death"))
+summary(dd)
+rr=filter(df2,(type=="recovery"))
+summary(rr)
+cc=filter(df2,(type=="confirmed"))
+summary(cc)
+## 2021
+df3=filter(df1,c(Year==2021))
+dd1=filter(df3,c(type=="death"))
+summary(dd1)
+rr1=filter(df3,(type=="recovery"))
+summary(rr1)
+cc1=filter(df3,(type=="confirmed"))
+summary(cc1)
+
+## 2022
+df4=filter(df1,c(Year==2022))
+dd2=filter(df4,c(type=="death"))
+summary(dd2)
+rr2=filter(df4,(type=="recovery"))
+summary(rr2)
+cc2=filter(df4,(type=="confirmed"))
+summary(cc2)
+
+
+
+
+```
+
+
+## 2.3 North Macedonia vs Kosovo and Albania
+
+North Macedonia is situated very close to the Kosovo and Albania, Greece can also be considered as one of its neighboring countries, therefore this section elaborates the COVID-19 situation of North Macedonia when compared to its neighboring countries; Albania and Kosovo.
+
+![Neighbouring country for North Macedonia,Source: stiri.tvr.ro](E:/3rd Yr/Stat/R programming/Individual Project/pp.jpg)
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+
+near_countries <- filter(coronavirus,country =="Albania"|country=="Kosovo"|country=="North Macedonia")
+NC<-select(near_countries,date,cases,country,type)
+NCT<-near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+
+confirmed_near_countries <- filter(NCT, type == "confirmed")
+death_near_countries <- filter(NCT, type == "death")
+recovered_near_countries <- filter(NCT, type == "recovered")
+
+ggplot(confirmed_near_countries, aes(x = date, y = cases, colour = country)) + geom_line() + 
+  labs(title="Daily Confirmed cases North Macedonia VS Albania and Kosovo")
+
+
+ 
+```
+
+It can be seen that COVID-19 cases were confirmed in Kosovo and Albania after it was confirmed in North Macedonia.It confirmed after going some months in 2020 year. The daily confirmed cases of all 3 countries reached its peak in after 2021 and again the countries reached its peak nearly 2022; North Macedonia displaying a much drastic increase than the other countries. Daily confirmed cases of both Kosovo and Albania continuously keeps fluctuating.
+
+``` {r, message=FALSE, warning=FALSE, echo=FALSE}
+
+ggplot(death_near_countries, aes(x = date, y = cases, colour = country)) + geom_jitter(size=0.8) + 
+  labs(title="Daily death cases North Macedonia VS Albania and Kosovo")
+
+
+
+
+```
+
+When comparing the number of deaths; it can be seen that in the case of both Kosovo and Albania, deaths were reported after deaths were reported in North Macedonia. North Macedonia reached highest death cases in 2021 year. 
+
+
+# 3.Discussion 
+
+The progress of COVID-19 of North Macedonia cannot be clearly understood by solely analyzing North Macedonia's data, therefore a comparison of Ireland with countries of significance during the COVID-19 pandemic has been carried out in order to reach the final conclusions.
+
+Through the data analysis process it was recognized that there were negative values for confirmed cases of some countries, the main causes may be the fact that at preliminary stages of testing some patients may have been diagnosed as COVID-19 positive and later on diagnosed as negative. Therefore, the data was pre-processed before the actual analysis by coding the negative values as missing values. This is the reason as to why there are discontinuities in some line plots.
+
+
+# 4.Conclusion
+
+According to the summary measurement it table shows that year wise mean comparison of confirmed,death and recovery cases of North Macedonia.It shows that the average confirmed cases of 2022 year is greater than the average confirmed cases of 2020 year.Not only that mean recovery cases of 2022 year is 0.So we can say that COVID 19 confirmed cases was increased by year wise in North Macedonia.According to the summary table of cases by types and year, it can be seen that highest mean percentages of confirmed cases during the 2022 year.
+
+When comparing the number of deaths; it can be seen that in the case of both Kosovo and Albania, deaths were reported after deaths were reported in North Macedonia. North Macedonia reached highest death cases in 2021 year.
+
+
+
+## 5.References
+
+  + North Macedonia Introduction,viewed 30th September 2022 : [North Macedonia Introduction](https://globaledge.msu.edu/countries/north-macedonia)
+  
+  + Population of the Republic of North Macedonia,viewed 1st October 2022 : [Population of the Republic of North Macedonia](https://www.worldometers.info/world-population/north-macedonia-population/)
+  
+  + North Macedonia COVID 19 details,viewed 7th October 2022 : [North Macedonia COVID 19 details](https://covid19.who.int/region/euro/country/mk)
+  
+  + Coronavirus in North Macedonia,7th October 2022 :[Coronavirus in North Macedonia](https://www.gov.uk/foreign-travel-advice/north-macedonia/coronavirus)
+  
+  
+  
+  
+  
+  

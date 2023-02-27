@@ -1,0 +1,201 @@
+---
+title: "Analysis of Coronavirus in Poland"
+author: "AS2019353"
+date: "2022-10-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+
+
+
+## Corona Status of Poland
+
+The COVID-19 pandemic in Poland is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2(SARS-CoV-2). In February and March 2020, health authorities in Poland carried out laboratory testing of suspected cases of infection by coronavirus, one of the seven known human coronaviruses, as well as home quarantining and monitoring.The first case of a laboratory confirmed coronavirus infection in Poland was that of a man hospitalised in Zielona Góra, with confirmation announced officially on 4 March 2020.
+
+## Location of Poland
+
+Poland, officially the Republic of Poland, is a country in Central Europe. It is divided into 16 administrative provinces called voivodeships, covering an area of 312,696 km2 (120,733 sq mi). Poland has a population of over 38 million and is the fifth-most populous member state of the European Union. Warsaw is the nation's capital and largest metropolis. 
+Poland is bordered by the Baltic Sea, Lithuania, and Russia’s Kaliningrad Oblast to the north, Belarus and Ukraine to the east, Slovakia and the Czech Republic to the south, and Germany to the west.
+```{r echo=FALSE,message=F}
+library(coronavirus)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(ggmap)
+
+
+
+
+map <- get_stamenmap(
+ 
+  bbox = c(left = 6.086  , bottom=47.160 , right=32.146 , top=56.596 ),
+  maptype = "terrain",
+  zoom=6
+ 
+)
+
+ggmap(map)
+
+
+
+```
+
+Figure 1: Graphical Location of Poland
+
+Summary of confirmed cases
+```{r,echo=FALSE}
+poland_corona <- coronavirus %>% filter(country == "Poland")
+
+confirmed_poland_corona <- poland_corona %>% filter(type=="confirmed")
+
+
+
+
+confirmed_poland_corona <- confirmed_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_poland_corona)
+
+which(is.na(confirmed_poland_corona$cases))
+
+
+x1<-ggplot(confirmed_poland_corona, aes(x=date, y=cases,color=type)) +
+  geom_line()+labs(x="Year",y="Confirmed Cases",title = "Plot of Confirmed Corona Cases")
+ggplotly(x1)
+
+```
+Figure 2 : Confirmed corona cases of Poland
+
+According to the figure 2, there was least confirmed corona cases in Poland till the end of the year 2020.There is a increment shown from October to November in 2020.Again there is a decrements in Begin of the year 2021 but sightly increase confirm cases in February to March.Confirmed cases until the end of 2021 have shown a very low figure.But end of the year again increase the confirm cases and highest cases informed in 28th of January 2022.
+
+
+```{r,echo=FALSE}
+
+recovered_poland_corona <- poland_corona %>% filter(type=="recovery")
+
+
+
+recovered_poland_corona <- recovered_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+which(is.na(recovered_poland_corona$cases))
+
+x3<-ggplot(recovered_poland_corona, aes(x=date, y=cases,color=type)) +
+  geom_line()+labs(x="Year",y="Recovered Cases",title = "Plot of Recovered Corona Cases")
+ggplotly(x3)
+
+
+recovered_poland_corona$cases[58] = mean(c(recovered_poland_corona$cases[57], recovered_poland_corona$cases[59]))
+
+recovered_poland_corona$cases[540] = mean(c(recovered_poland_corona$cases[539], recovered_poland_corona$cases[541]))
+
+recovered_poland_corona$cases[546] = mean(c(recovered_poland_corona$cases[545], recovered_poland_corona$cases[547]))
+
+recovered_poland_corona$cases[562] = mean(c(recovered_poland_corona$cases[561], recovered_poland_corona$cases[563]))
+
+which(is.na(recovered_poland_corona$cases))
+
+
+```
+Figure 3: Recovered corona cases of Poland
+
+
+According to figure 3, there is very low recovered cases till end of the year 2020 and then increase rapidly in December 2020.Highest recovery cases have shown in 10th April 2021.
+
+```{r,echo=F}
+
+
+death_poland_corona <- poland_corona %>% filter(type=="death")
+
+
+death_poland_corona <- death_poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_poland_corona)
+which(is.na(death_poland_corona$cases))
+
+x2<-ggplot(death_poland_corona, aes(x=date, y=cases,color=type)) +
+  geom_line()+labs(x="Year",y="Death Cases",title = "Figure 4: Plot of Death Corona Cases")
+ggplotly(x2)
+```
+According to figure 4 there is least death cases till October 2020. Majority of death cases shown between November 2020 and May 2021. Highest death case inform in 8th April 2021 it is 956.Again death cases increased between November 2021 and February 2022.
+```{r,echo=FALSE}
+
+poland_corona <- poland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(poland_corona)
+
+
+x4<-ggplot(poland_corona, aes(x=date, y=cases, col=type)) + geom_line()+labs(x="Year",y="Cases",title = "Figure 5: Comparison of Coronavirus data")
+ggplotly(x4)
+```
+
+According to the figure 5,According to figure 5 it can be clearly seen that death cases lower than confirmed cases.Therefore can be assume government is managed it properly. Majority of corona virus confirmed cases has recovered.
+```{r,echo=FALSE}
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+
+     
+       coro_active <- coronavirus %>% filter(country =="Poland")
+        ac_cm <- coro_active %>% filter(type == "confirmed")
+        ac_de <- coro_active%>% filter(type == "death")
+      ac_re <- coro_active %>% filter(type == "recovery")
+      dfff <- data.frame(v1 =cumsum(ac_cm$cases - (ac_de$cases + ac_re$cases)),date =coro_active$date)
+     
+      p <- ggplot(dfff, aes(x=date, y=v1)) +
+  geom_line() +
+  xlab("")
+p
+```
+
+```{r,echo=FALSE}
+library(coronavirus)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+countryselection<-coronavirus%>%filter(country==c("Belarus","Germany","Lithuania","Poland","Ukraine"))
+#countryselection[,3]
+
+countryselection_death<- countryselection%>%filter(type =="death")
+countryselection_death <- countryselection_death %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(countryselection_death)
+x5<-ggplot(countryselection_death,aes(date, cases ,color=country),is.na=FALSE)+geom_line()+labs(x="Year",y="Death Cases",title = "Figure 6: Comparison with Death")
+ggplotly(x5)
+```
+According to figure 6 Higher death cases shown from Germany and least death cases from Belarus.Poland and Lithuania has approximately equal Corona virus confirmed cases in per day.
+
+```{r,echo=FALSE}
+countryselection_confirmed<- countryselection%>%filter(type =="confirmed")
+countryselection_confirmed <- countryselection_confirmed %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(countryselection_confirmed)
+x6<-ggplot(countryselection_confirmed,aes(date, cases ,color=country),is.na=FALSE)+geom_line()+labs(x="Year",y="Confirmed Cases",title = "Figure 7 :Comparison with Confirmed")
+ggplotly(x6)
+```
+According to figure 7,Daily Corona virus confirmed cases in Poland is less than daily Corona virus confirmed cases in Lithuania and greater than daily Corona virus confirmed cases in Germany.
+
+```{r,echo=FALSE}
+countryselection_recovered<- countryselection%>%filter(type =="recovery")
+countryselection_recovered <- countryselection_recovered %>% mutate(cases = replace(cases, which(cases < 0), NA))
+#summary(countryselection_recovered)
+
+x7<-ggplot(countryselection_recovered,aes(date, cases ,color=country),is.na=FALSE)+geom_line()+labs(x="Year",y="Revovery Cases",title = "Figure 8 :Comparison with Recovery")
+ggplotly(x7)
+```
+According to the figure 8, recovery cases are approximately equal between November 2020 and April 2021 in Poland, Lithuania and Germany.  
+
+
+## Conclusions
+
+Looking over to the actions taken by the Poland government it is evident that they were taking all the necessary action to mitigate the situation.
+Poland recovery cases and confirmed cases are approximately equal between October 2020 and April 2021.The vaccination program has been able to reduce the risk to an enormous extent.
+
+
+## Reference
+
+https://hellor.netlify.app/schedule/
+
+https://cran.r-project.org/web/packages/ggmap/readme/README.html
+
+https://youtu.be/2k8O-Y_uiRU

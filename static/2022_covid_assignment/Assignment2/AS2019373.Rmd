@@ -1,0 +1,232 @@
+---
+title: "Impact of COVID 19 in Chile"
+author: "D.M.Hewawasam"
+date: "2022-10-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# __*Chile*__
+####  Chile, country situated along the western seaboard of South America. **Chile is a long narrow country which extends like a ribbon down the west coast of South America.** It is bounded on the north by Peru and Bolivia, on its long eastern border by Argentina, and on the west by the Pacific Ocean. The capital is Santiago.Today only about 5 percent of the population is native Mapuche and other indigenous groups. Nearly 95 percent of Chileans have a mixture of native and European roots.The country is governed by an elected president, who is both the chief of state and head of government. Presidential elections are held every four years. The president picks cabinet members. There are two houses of congress, the National Congress and the Senate.The country is one of the largest exporters of grapes.
+
+
+## **Geography of Chile**
+#### The geography of Chile is extremely diverse as the country extends from a latitude of 17° South to Cape Horn at 56° and from the ocean on the west to Andes on the east. Chile is situated in southern South America, bordering the South Pacific Ocean and a small part of the South Atlantic Ocean. Chile's territorial shape is among the world's most unusual. From north to south, Chile extends 4,270 km (2,653 mi), and yet it only averages 177 km (110 mi) east to west. Chile reaches from the middle of South America's west coast straight down to the southern tip of the continent, where it curves slightly eastward. Diego Ramírez Islands and Cape Horn, the southernmost points in the Americas, where the Pacific and Atlantic oceans meet, are Chilean territory. Chile's northern neighbors are Peru and Bolivia, and its border with Argentina to the east, at 5,150 km (3,200 mi), is the world's third-longest. The total land size is 756,102 km2 (291,933 sq mi). The very long coastline of 6,435 km (3,999 mi) gives it the 11th largest exclusive economic zone of 3,648,532 km2 (1,408,706 sq mi).
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(coronavirus)
+
+data(coronavirus)
+
+library(tidyverse)
+library(magrittr)
+chile_corona <- coronavirus %>% filter(country =="Chile" )
+
+recover_chile_corona <- chile_corona %>% filter(type=="confirmed")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "sky blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p +
+  geom_point(
+    data = chile_corona, aes(x = long, y = lat), color = "red", size
+    = 1)+ labs(title="Figure 01-The Geographical view of Chile")
+```
+
+## **Cimate Condition of Chile**
+#### Chile is highly exposed and vulnerable to multiple hazards with such as earthquakes, volcanic activity, and tsunamis as well as hazards which can change due to climate change such as wildfires, floods and landslides, and droughts. Chile has suffered many instances of drought, including a drought between 2008-2015 that affected much of the southern and central areas. Climate change is expected to change the frequency, intensity, exposure, and magnitude of multiple hazards that have historically affected Chile, namely, wildfires, floods and landslides, droughts, and impacts of sea level rise. The accumulation of risks, exposure, and multiple hazards can have important implications for economic growth and development in regions particularly for electricity generation, agriculture, and public health.
+## ***introduction of COVID 19 0f Chile***
+
+##### In December 2019, the People’s Republic of China reported a cluster of pneumonia cases of unknown etiology, subsequently identified as a new coronavirus by the Chinese Center for Disease Control and Prevention. Later, in February 2020, the World Health Organization (WHO) named the disease COVID-19, short for ‘coronavirus disease 2019’, and in March of the same year, declared an international public health emergency due to its rapid community, regional and global spread. From the confirmation of the first COVID-19 cases to March 2021, 116,736,437 confirmed cases were reported, including 2,593,285 deaths worldwide, of which 45% of confirmed cases and 48% of deaths were within the Region of the Americas. Specifically, South America contributed a higher proportion of deaths (85%) of the total, greatly surpassing North America (14.5%) In March 2021, the Ministry of Health of Chile (MINSAL, the Spanish acronym for Ministry of Health) published an epidemiological report  that registered a total of 1,018,677 cases (confirmed and probable) and a total of 28,756 deaths from COVID 19. Another report , also prepared by the MINSAL, describes the analysis of the causes of deaths from COVID-19, where Chile applied rules for coding mortality and simulating the profile of deaths from COVID-19, not considering the existence of the virus as a cause of death in medical certification. This showed that respiratory issues represent the foremost cause of deaths in the country: influenza and pneumonia account for 47%, chronic diseases of the lower respiratory tract account for 3%, respiratory diseases that mainly affect the interstitium account for 3% and other diseases of the respiratory system account for 5%, displacing even hypertensive diseases (4%), cerebrovascular diseases (3%), malignant tumors of the digestive organs (2%), diabetes mellitus (2%), liver diseases (2%), ischemic heart diseases (2%) and others (27%).
+
+
+```{r,echo=FALSE,eval=FALSE,message=FALSE,warning=FALSE}
+library(sta3262)
+get_individual_project_country("AS2019373")
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+
+?coronavirus
+unique(coronavirus$country)
+```
+
+
+## **Health care system of Chile**
+ 
+#### Chile has one of the highest standards of public healthcare in the world. They are considered a leader in Latin America, setting the standard for what other countries can achieve. Based on the World Health Organization’s listing of global healthcare systems, Chile is ranked 33rd in the world. This puts it just below countries like Finland and Canada and just above the United States and Denmark. The results of their exemplary care are evident in life expectancy rates. Chileans have one of the longest average lifespans in the world: 80 years for men and 85 years for women. However, while standards in cities such as Santiago are especially high, many of Chile’s rural and remote regions struggle to get the same standard of care as the capital.
+ 
+##  **Prevention and control of COVID 19 by Health care system of Chile**
+
+#### On January 5, 2020, the Ministry of Health (“MINSAL” for its Spanish acronym) issued a nationwide health alert (“Health Alert“). This Health Alert allows the Chilean health authorities to exercise a series of extraordinary powers for one year in order to confront and prevent the spread of the new coronavirus 2019-NCOV, currently called SARS-CoV- 2, which produces the COVID-19 disease.
+
+####  In mid-March 2020, the Chilean government gathered an expert advisory group—including epidemiologists from the MoH and several universities—to plan the response to COVID-19. Since then, restrictions have increased, with the country moving rapidly toward more stringent measures (University of Oxford, 2020). Although there are no statistics available, the government has insisted that the main cause of increasing infections is the low level of compliance with measures. In addition to the general measures taken, specific regulations.
+
+### for OP were also implemented :
+
+#####  + Mandatory home-quarantine for people older than 80 years (changed to 75 years on May 15).
+
+#####  + Visits to people in LTC facilities were banned.
+
+#####  + Day centers for OP were closed.
+
+#####  + Some OP-specific health prevention activities were canceled.
+
+#####  + Meeting ban for all OP clubs.
+
+##### Many of these recommendations follow guidelines issued by international institutions. These guidelines, nevertheless, also highlight the need to protect OP in other dimensions, considering that restrictions may affect their mental health .
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(magrittr)
+
+chile_corona <- chile_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(chile_corona, aes(x=date, y=cases, col=type)) + geom_line()+labs(title="Figure 02-Multiple time series plot based on COVID 19 confirmed,death,recovery of Chile")
+
+```
+
+#### This multiple time series plots are ovrelaping with type.There are confimed,recovery and deaths.So we can see roughly that both confimed and recovery cases of time series are same around 2020 to 2021. 
+
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ ggplot(chile_corona, aes(date, cases,col=type)) + geom_path(size=1) + facet_grid(rows = vars(type))+labs(title="Figure 03-Time series plot based on COVID 19 by cases in Chile")
+  
+
+```
+
+#### According to figure 03, In 2022 year confirmed cases are very higher that other previous years.And death cases of Chile are remaining constant compare to other cases.But after 2021 suddenly death cases are increased. Time series of confimed and recovery cases show both upward and downward trend.The three time series data are not showing seasonal pattern.they are showing some cyclical pattern. 
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+ggplot(recover_chile_corona, aes(cases)) +
+  geom_histogram(bins = 8, col="white", alpha=2.0)+geom_freqpoly(bins = 8, col="red")+ labs(title="Figure 04-Recovered cases of COVID 19 in Chile")
+
+```
+
+#### Figure 04 shows that recovery cases of are lower. 
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+chile_year<-chile_corona %>% separate(date,into=c("year","month","day"),sep="-")    
+chile_year1<-chile_year%>%filter( year=="2020")
+chile_2020<-select(chile_year1,year,type,cases)
+
+chile_2020%>%filter(is.na(type)==FALSE)%>%ggplot(aes(x=cases,y=type))+ geom_boxplot(aes(fill=type))+ xlim(0,15000)+ labs(title = "Figure 05-Distribution of COVID 19 by type in Chile in 2020")
+
+chile_year2<-chile_year%>%filter( year=="2021")
+chile_2021<-select(chile_year2,year,type,cases)
+chile_2021%>%filter(is.na(type)==FALSE)%>%ggplot(aes(x=cases,y=type))+ geom_boxplot(aes(fill=type))+ xlim(0,15000)+ labs(title = "Figure 06-Distribution of COVID 19 by type in Chile in 2021")
+
+chile_year3<-chile_year%>%filter( year=="2022")
+chile_2022<-select(chile_year3,year,type,cases)
+chile_2022%>%filter(is.na(type)==FALSE)%>%ggplot(aes(x=cases,y=type))+ geom_boxplot(aes(fill=type))+ xlim(0,15000)+ labs(title = "Figure 07-Distribution of COVID 19 by type in Chile in 2022")
+
+chile_year%>%filter(is.na(type)==FALSE)%>%ggplot( aes(cases,type,fill=year)) + geom_boxplot() + facet_grid(rows = vars(year))+  labs(title="Figure 08-COVID 19 cases in Chile among year")
+
+```
+
+#### The Figure 05 shows that in 2020 confirmed cases are same to recovery cases of Chilie.We can see according to Figure 06 , as well as confirmed COVID 19 cases are same to recovery COVID 19 cases in 2021.However, according to figure 07 in 2022 confirmed cases are much higher than other previous years. And recovery cases of COVID 19 are much smaller than other previours years which are 2020,2021.  
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE} 
+near1<-filter(coronavirus,country %in% c("Chile","Bolivia","Argentina","Peru"))
+  library(ggplot2)
+  library(maptools)
+  library(tibble)
+  library(tidyverse)
+  library(ggrepel)
+  library(png)
+  library(grid)
+  library(sp)
+  data(wrld_simpl)
+  
+  p <- ggplot() +
+    geom_polygon(
+      data = wrld_simpl,
+      aes(x = long, y = lat, group = group), fill ="gray", colour = "white"
+    ) +
+    coord_cartesian(xlim = c(-120, 0), ylim = c(-70, 20)) +
+    scale_x_continuous(breaks = seq(-120,0, 20)) +
+    scale_y_continuous(breaks = seq(-80,10,10))
+  p +
+   geom_point(data=chile_corona,aes(x=long,y=lat),color="red",size=8)+
+   geom_point(data = near1, aes(x = long, y = lat), color = "blue",size=4)+ 
+    geom_text(aes(x=near1$long,y=near1$lat,label=near1$country))+
+ labs(title="Figure 09-The geographical view of chile sourrounded countries") 
+
+```
+
+####  Figure 09 shows that geographical view of near countries to Chile country.They are Argentina,Bolivia,Peru. According to this data analysis we can compare health care system of Chile with other near countries.Whether We can identified changing COVID 19 cases very clearly.
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+near_year<-near1 %>% separate(date,into=c("year","month","day"),sep="-")
+  near1_year2022<-near_year%>%filter( year=="2022")
+  near2_year2022<-near1_year2022%>%filter(type %in% c("confirmed","death"))
+  
+
+ 
+  near2_year2022%>%filter(is.na(type)==FALSE)%>%ggplot(aes(y=cases,x=country,fill=country))+ geom_boxplot(outlier.shape = NA,alpha=0.2)+ facet_grid(~type) + geom_jitter(aes(col=country))+ 
+    labs(title = "Figure 10 -Distribution of COVID 19 by sourrended countries of Chile in 2022")+ ylim(0,200)
+  
+  
+  
+```
+
+#### According to Figure 10,We analyse impact of COVID 19 0f Chile compare with .impact of COVID 19 of Argentina,Bolivia and Peru.In this case,Health cre system of Bolivia is much better than other countries.As well as,We can see that death cases of COVID 19 in Bolivia is smaller than other countries.Other countries are same .
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+near1<-filter(coronavirus,country %in% c("Chile","Bolivia","Argentina","Peru"))
+
+near1 <- near1 %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(near1, aes(x=date, y=cases, col=country)) + geom_line()+ facet_grid(vars(country))+ geom_path(size=1)+ labs(title="Figure 11-The  time series plot of ,Chile,Argentia,Bolivia,Peru")
+
+```
+
+#### AS the figure 11 overally indicates that COVID 19 cases of selected countries are increased roughly 2021 till 2022. The most COVID 19 cases are identified in Argentina. The lowest CoVID 19 cases are identified in Bolivia. COVID 19 cases of Chile and Peru are slightly same time series behiviour in 2022.
+
+## **Conclusion and Discussion**
+
+#### To come across these findings The COVID 19 infecections in Chile is increased with time. Chile is satisfactory controlled and maintained COVID 19 pandamic from 2020 till 2021.deaths related to COVID-19 in  Chile. Another possible cause of the decrease in the number of deaths could be related to the health measures implemented in Chile, in which a state of emergency was declared on 18 March 2020, and the implementation of an overnight curfew, nationwide lockdown and regional quarantines until September 2021, measures that were effective in reducing the rate of infections by COVID-19. Currently, the recommendations for social distancing, mandatory use of face masks, and indication of voluntary vaccination continue.But beginning of 2022, heath care system of Chile is poor. We can say that The goverment of Chilie is not considered COVID 19 pandamic in 2022.
+
+#### In 2022; Health care system of Bolivia is the best than other specified countries(Argentina,Chilie,Peru) Our findings suggest the implemented Public health interventions of Bolivia have been initially effective in decreasing the spread of pandamic. In 2022 comparatively the COVID 19 situtation of COVID 19 in Argentina is more severe.Roughly look at COVID 19 relationship Peru and Chile are same.
+
+#### The goverment of Chile must rethink the future of our environment and tackle climate change and environmental degradation with ambition and urgency. Only then can They protect the health, livelihoods, food security, and nutrition of all people in Chile. The use of commercial air purifiers can help fight Covid. 
+
+
+
+
+
+## **References**
+
+#### [1]Wikipedia,Geographical of Chile,[https://en.wikipedia.org/wiki/Geography_of_Chile](accessed on 07 October 2022)
+
+#### [2]Climate change knowledge portal,Vulnerability[https://climateknowledgeportal.worldbank.org/country/chile/vulnerability](assed on 08 october 2022)
+
+#### [3]Wikipedia,Chile[https://en.wikipedia.org/wiki/Chile](accessed on 08 october 2022)
+
+#### [4]L & E Global,Chile:COVID 19 sanitary govermental, measures[https://knowledge.leglobal.org/corona/country/chile/chile-covid-19-sanitary-governmental-measures/](accessed on 08 October 2022)
+
+#### [5]International insurance.com,Chile Health Care system[https://www.internationalinsurance.com/health/systems/chile.php](accessed on 08 October 2022)
+
+#### [6]de Salud de Chile M. Departamento de Epidemiología,Informe epidemiológico. COVID-19. Available from[https://www.minsal.cl/wp-content/uploads/2021/03/ Informe-epidemiolo%CC%81gico-102.pdf](accessed on 05 October 2022)
+
+#### [7]National Geographic KiDS ,Chile[https://kids.nationalgeographic.com/geography/countries/article/chile](accessed on 08 October 2022)
+
+
+

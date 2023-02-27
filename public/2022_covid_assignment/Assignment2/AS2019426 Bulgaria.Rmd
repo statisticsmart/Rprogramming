@@ -1,0 +1,208 @@
+---
+title:            "THE COVID-19 PANDEMIC IN **BULGARIA**"
+output:
+  html_document: default
+  pdf_document: default
+date: "2022-10-07"
+---
+
+```{r , echo=FALSE, results='hide'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE , results='hide' , message=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+data("coronavirus")
+```
+### What is Covid 19 ?
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+
+Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. 
+
+The best way to prevent and slow down transmission is to be well informed about the disease and how the virus spreads. Protect yourself and others from infection by staying at least 1 metre apart from others, wearing a properly fitted mask, and washing your hands or using an alcohol-based rub frequently. Get vaccinated when it’s your turn and follow local guidance.
+
+The virus can spread from an infected person’s mouth or nose in small liquid particles when they cough, sneeze, speak, sing or breathe. These particles range from larger respiratory droplets to smaller aerosols. It is important to practice respiratory etiquette, for example by coughing into a flexed elbow, and to stay home and self-isolate until you recover if you feel unwell.
+
+
+**In this Project, there is a analysis about Covid 19 pandemic in Bulgaria.**
+
+### Bulgaria
+
+   Bulgaria is located in Southern Europe, situated on the eastern Balkan Peninsula. It is a mostly mountainous country surrounded by Greece, Macedonia, Romania, Serbia, and the Black Sea. Bulgaria has strategic access to the Turkish Straits and controls key land routes to Europe and to the Middle East. The government system is a parliamentary republic; the chief of state is the president, and the head of government is the prime minister. Bulgaria has transitioned to a market economic system in which the prices of goods and services are determined in a free price system. Bulgaria is a member of the European Union (EU).
+
+
+
+```{r, echo=FALSE , echo=FALSE, results='hide' , message=FALSE}
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(maps)
+library(maptools)
+library(png)
+library(ggrepel)
+library(grid)
+library(sp)
+mapdata <- map_data("world")
+zam_map <- filter(mapdata,region=="Bulgaria")
+data("wrld_simpl")
+```
+
+###  Location
+```{r , echo=FALSE , message=FALSE}
+p0 <- ggplot() +
+  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="light green", colour="dark blue") +
+  ggtitle("Bulgaria on the World Map") 
+p0 + geom_point(data = zam_map,aes(x=long,y=lat), fill="black", colour="red")
+```
+
+(**Figure 01:** location of Bulgaria in world map)
+
+### Health Care System
+
+  High death rates result from a combination of an ageing population, high numbers of people at risk of poverty, and a weak healthcare system.Over 80% of deaths are due to cancer and cardiovascular conditions; nearly a fifth of those are avoidable. Although healthcare in Bulgaria is nominally universal, out-of-pocket expenses account for nearly half of all healthcare spending, significantly limiting access to medical care. Other problems disrupting care provision are the emigration of doctors due to low wages, understaffed and under-equipped regional hospitals, supply shortages and frequent changes to the basic service package for those insured. The 2018 Bloomberg Health Care Efficiency Index ranked Bulgaria last out of 56 countries. Average life expectancy is 74.8 years, compared with an EU average of 80.99 and a world average of 72.38
+     
+### Demography
+
+  The current population of Bulgaria is 6,830,456 as of Friday, October 7, 2022, based on Worldometer elaboration of the latest United Nations data.Bulgaria 2020 population is estimated at 6,948,445 people at mid year according to UN data. Bulgaria population is equivalent to 0.09% of the total world population.Bulgaria ranks number 107 in the list of countries (and dependencies) by population.The population density in Bulgaria is 64 per Km2 (166 people per mi2).The total land area is 108,560 Km2 (41,915 sq. miles)75.6 % of the population is urban (5,253,037 people in 2020) The median age in Bulgaria is 44.6 years.
+
+
+```{r,  echo=FALSE , results='hide', message=FALSE}
+Bulgaria_not_cleared <- coronavirus %>% filter(country == "Bulgaria")
+summary(Bulgaria_not_cleared)
+Bulgaria_cleared <- Bulgaria_not_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Bulgaria_cleared)
+which(is.na(Bulgaria_cleared$cases))
+```
+```{r, echo=FALSE , results='hide'}
+Bulgaria_cleared$cases[2330] = mean(c(Bulgaria_cleared$cases[2329], Bulgaria_cleared$cases[2331]))
+length(Bulgaria_cleared$cases)
+```
+
+```{r, echo=FALSE, results='hide'}
+Europe_not_cleared <- coronavirus %>% filter(continent_code == "EU")
+summary(Europe_not_cleared)
+Europe_not_cleared <-Europe_not_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Europe_not_cleared)
+which(is.na(Europe_not_cleared$cases))
+```
+
+```{r ,echo=FALSE, results='hide'}
+new_Europe_cleared <- coronavirus %>% filter(continent_code == "EU",cases>=0)
+unique(new_Europe_cleared$country)
+```
+
+```{r , echo=FALSE , results='hide' , warning=FALSE}
+new_Europe_cleared <- coronavirus %>% filter(continent_code == "EU",cases>=0)
+countryselection <-new_Europe_cleared %>%filter(country==c("Greece","Romania","Serbia","Bulgaria","Albania","Kosovo", "Moldova"))
+```
+
+
+```{r , echo=FALSE }
+confirmed__Bulgaria <-countryselection %>% filter(country == "Bulgaria")
+confirmed_Bulgaria <-Bulgaria_cleared %>% filter(type == "confirmed")
+p1 <- ggplot(confirmed_Bulgaria,aes(date, cases,color=cases), is.na=FALSE) +geom_point() +ggtitle("Covid19 confirmed cases vs Time :  Bulgaria")
+ggplotly(p1)
+```
+(**Figure 02:** no. of covid 19 confirmed  cases in Bulgaria)
+
+By considering figure 02, there are three stages of increasing number of people infected with covid 19 in Bulgaria. In month of January, 2022 there are massive increasement of infected people.
+
+
+```{r , echo=FALSE }
+death_Bulgaria <-Bulgaria_cleared %>% filter(type=="death")
+p2 <- ggplot(death_Bulgaria,aes(date, cases,color=cases), is.na=FALSE) +geom_point() +ggtitle("Covid19 death cases vs Time :  Bulgaria")+labs(x='date',y='Number of cases')
+ggplotly(p2)
+```
+(**Figure 03:** no. of covid 19 death cases in Bulgaria)
+
+According to the figure 03, the number of deaths also shows an increase compared to the stages of increasing covid 19 infected people.
+
+
+```{r, echo=FALSE }
+recovery_Bulgaria <-Bulgaria_cleared %>% filter(type =="recovery")
+p3 <- ggplot(recovery_Bulgaria,aes(date, cases,color=cases), is.na=FALSE) +geom_point() +ggtitle("Covid19 recovery cases vs Time :  Bulgaria")+labs(x='date',y='Number of cases')
+ggplotly(p3)
+```
+(**Figure 04:** no. of covid 19 recovery cases in Bulgaria)
+
+By considering figure 04, the accuracy of the recovery data is questionable by considering the extent of the recovery in 2022.
+
+
+```{r , echo=FALSE }
+confirmed_SA<-countryselection %>%filter(type=="confirmed")
+p8 <- ggplot(confirmed_SA,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+geom_line()+ggtitle("Time series analysis-country with confirmed cases")
+ggplotly(p8)
+```
+(**Figure 05:** no. of covid 19 confirmed cases in nearest countries of Bulgaria)
+
+According to the figure 05, the increasement of confirmed cases in Bulgaria is better than Greece, Serbia and Romania.
+
+
+```{r, echo=FALSE  }
+death_SA<-countryselection %>%filter(type=="death")
+p9 <- ggplot(death_SA,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+geom_line()+ggtitle("Time series analysis-country with death cases")
+ggplotly(p9)
+```
+(**Figure 06:** no. of covid 19 death cases in nearest countries of Bulgaria)
+
+According to the figure 06, the increasement of death cases in Bulgaria is better than Greece, Serbia and Romania. the increasement of death cases in Romania is considerable.
+
+
+```{r, echo=FALSE }
+recovery_SA<-countryselection %>%filter(type=="recovery")
+p10 <- ggplot(recovery_SA,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+geom_line()+ggtitle("Time series analysis-country with recovery cases")
+ggplotly(p10)
+```
+(**Figure 07:** no. of covid 19 recovery cases in nearest countries of Bulgaria)
+
+By considering figure 07, the increasement of recovery cases in Bulgaria is better than Greece, Molodova, Serbia,  Albania and Kosovo.
+
+
+```{r, echo=FALSE }
+countryselection_confirmed<-countryselection %>%filter(type=="confirmed")
+ggplot(countryselection_confirmed, aes(country,cases)) + geom_col() + ggtitle("Total No.of confirmed") + ylim(0,600000)
+```
+
+(**Figure 08:** total no. of covid 19 confirmed cases in nearest countries of Bulgaria)
+
+According to the Figure 08, the no. of confirmed cases in Bulgaria is average value withing nearest countries. No. of confirmed cases in Kosovo is the lowest(best) value withing this countries.
+
+
+```{r, echo=FALSE}
+countryselection_death<-countryselection %>%filter(type=="death")
+ggplot(countryselection_death, aes(x=country, y=cases)) + geom_col() + ggtitle("Total No.of Deaths") + ylim(0,10000)
+```
+
+(**Figure 09:** total no. of covid 19 death cases in nearest countries of Bulgaria)
+
+The no. of death cases in Bulgaria is normally high value withing nearest countries. No. of death cases in Kosovo is the lowest(best) value withing this countries. Romania has massive no. of death cases withing this countries according to the figure 09.
+
+
+```{r echo=FALSE}
+countryselection_recovery<-countryselection %>%filter(type=="recovery")
+ggplot(countryselection_recovery, aes(x=country, y=cases)) + geom_col() + ggtitle("Total No.of Recovery") + ylim(0,160000)
+```
+
+(**Figure 10:** total no. of covid 19 recovery cases in nearest countries of Bulgaria)
+
+By considering the figure 10, the number of recovery cases in Bulgaria is good valued withing nearest countries.
+
+
+## Conclusion & Discussion :
+
+The first Covid 19 infected person in Bulgaria was founded in 16^th^ march, 2020. Then, the number of confirmed cases in Bulgaria was increased in several stages. In january, 2022 there are considerable increasement in number of covid 19 infected people but there isn't considerable increasement in number of death cases in those days in Bulgaria.  The number of confirmed cases and  the number of death cases in Bulgaria is averagely better than other countries. The health authorities of Bulgaria have been able to increase the number of recovery cases. 
+
+
+## References :
+1. https://globaledge.msu.edu/countries/bulgaria#:~:
+
+2. https://en.wikipedia.org/wiki/Bulgaria
+
+3. https://www.worldometers.info/world-population/bulgaria-population/
+
+4. https://www.who.int/health-topics/coronavirus#tab=tab_1
+

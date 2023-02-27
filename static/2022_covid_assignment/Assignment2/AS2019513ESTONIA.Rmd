@@ -1,0 +1,332 @@
+---
+title: "Covid 19 pandemic of Estonia"
+author: "R.A.R.K.Ranaweera"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE , echo=FALSE, message=FALSE , comment=NA , warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA , message=FALSE}
+library(knitr)
+library(kableExtra)
+library(plotly)
+```
+
+# 1. Introduction
+Estonia, country in northeastern Europe, the northernmost of the three Baltic states. Estonia’s area includes some 1,500 islands and islets; the two largest of these islands, Saaremaa and Hiiumaa, are off mainland Estonia’s west coast.
+
+Estonia has been dominated by foreign powers through much of its history. In 1940 it was incorporated into the U.S.S.R. as one of its constituent republics. Estonia remained a Soviet republic until 1991, when, along with the other Baltic states, it declared its independence. The Soviet Union recognized independence for Estonia and the other Baltic states on September 6, 1991, and United Nations membership followed shortly thereafter. Estonia set about transforming its government into a parliamentary democracy and reorienting its economy toward market capitalism. It sought integration with greater Europe and in 2004 joined the North Atlantic Treaty Organization (NATO) and the European Union (EU).
+
+### 1.1 Location
+
+Estonia is located in the Baltic Region of Northern Europe. Estonia map also shows that the country shares its international boundaries with Russian Federation in the east and Latvia in the south. However, it has coastline with Gulf of Finland in the north and with Baltic Sea in the east. Country has temperate climate. Estonia has Finnic ethnic group. The official language of the country is Estonian.
+
+The government type of Estonia is democratic parliamentary republic. The small country is divided into 15 counties. Tallinn is the capital and largest city. Though, the country is small in terms of area and population but the country is listed as a High-Income Economy by the World Bank. Hence, the United Nations lists Estonia as a developed country where Human Development Index is "Very High". Moreover, the country's governance system has given high freedom to press, economic, politics and education.
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+Estonia_corona <- coronavirus %>% filter(country == "Estonia")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Estonia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  ) + ggtitle("Figure 01:Location of Estonia ")
+
+
+```
+
+
+
+
+### 1.2 Climate
+
+The temperate and humid climate of Estonia differs sharply from the climates of regions to the east (in Russia) at the same latitude. The country lies in the path of air masses borne by cyclonic winds that originate in the North Atlantic Ocean and carry warm air in winter and cool air in summer. The northern and western coastal areas tend to be milder than the country’s inland regions, while the eastern and southeastern regions tend to have a continental climate. The mean temperature is 17 to 23 °F (−8 to −5 °C) in January and 61 to 63 °F (16 to 17 °C) in July. Annual precipitation is about 24 to 28 inches (600 to 700 mm), which, coupled with negligible evaporation and low relief, leads to waterlogging. The Estonian climate is generally favourable for agriculture.
+
+### 1.3 What is covid 19?
+
+COVID-19 is the infectious disease caused by the novel coronavirus, first identified in December 2019 in Wuhan, China.
+
+### 1.4 Covid -19 pandemic in Estonia
+
+The COVID-19 pandemic in Estonia is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).
+
+The virus was confirmed to have spread to Estonia when the first case was confirmed in Tallinn on 27 February 2020. By 11 March, 15 people in Estonia had been diagnosed with the virus. All of them had been infected outside the country, mostly in Northern Italy.On 12 March, the first cases of locally transmitted infections emerged,and on 13 March, the Estonian government declared a state of emergency until 1 May 2020. As a result, all schools and universities were closed, and all public gatherings banned, including sports and cultural events.Later the state of emergency was extended until 17 May.
+
+Saare County was the hardest hit county in Estonia by the COVID-19 during spring. It has only 2.5% of the population of Estonia, but in March, it had over half of all hospitalized patients.Coronavirus was allegedly brought there by the Italian volleyball club Power Volley Milano, which participated in the 2019–20 CEV Challenge Cup matches held on Saaremaa island on 4 and 5 March. The virus may have spread rapidly in the community through a champagne festival held later on. Health officials estimate that half of the island's population have contracted the virus so far.In autumn during the second wave, Ida-Viru County and Harju County were hit hardest.
+At the beginning of the pandemic, most of the cases came in from Austria and Italy, but in the second part of the year 2020, Russia, Ukraine, and Finland took the lead.
+In the first months of 2021 situation grow worse and by mid-March Estonia had the most new cases per capita in the world.[15] Starting from March 11th stronger measurses were taken to suppress the spread of the virus.
+
+### 1.5 The COVID-19 pandemic lockdown in Estonia
+
+Estonia is considering new coronavirus restrictions on top of the ones that took effect a day ago but is seeking to avoid a general lockdown like the one neighboring Latvia has imposed to counter the rapid spread of the virus.
+Health Minister Tanel Kiik told Estonian media that the government will discuss additional restrictions particularly ones aimed at boosting the tempo of vaccinations in the small European Union nation of 1.3 million, with a decision expected on 26th of October.
+“We have mapped out all the different kinds of ways the spread can move and infect. Certainly, the most important measure to improve the situation is getting vaccinated,” Kiik told Estonian public broadcaster ERR.
+
+The Cabinet’s scientific council said it wouldn’t recommend imposing a lockdown and that schools should continue in-person classes.
+Some 57% of Estonians were fully vaccinated by Tuesday, health officials said. Some 513 coronavirus patients are being treated in hospitals across Estonia and 1,190 new cases were recorded in the last 24 hours with eight deaths.
+As of 25th of October, Estonians no longer can use negative test results to obtain the virus certificates needed to attend sporting events, theaters, indoor public meetings and other events. Only proof of vaccination or having recovered from COVID-19 are now accepted for a virus certificate. Masks in indoor public places are also required until Jan. 10.
+In Latvia, nearly 90% of those who died of COVID-19 last month were not vaccinated, and over 88% of virus patients now in the hospital are not vaccinated, official figures showed Tuesday as the Baltic country endures a monthlong lockdown.Latvia's vaccination rate is among the lowest in the 27-nation European Union, with only slightly over half of Latvians fully vaccinated.
+The lockdown that started Oct. 21 and runs until Nov. 15 includes a nationwide curfew and closes most stores. Indoor and outdoor gatherings, including entertainment, sports and cultural events, are also banned in the country of 1.9 million people.
+
+### 1.6 Actions taken by government for covid 19 pandemic 
+
+In the Estonian media, there has been some criticism of the Estonian government for acting too slowly and especially of the Health Board of not taking the coronavirus seriously enough initially (e.g. Aavik et al., 2020; Parksepp, 2020). However, the number of cases, hospitalizations and deaths do indicate that overall, the government did respond sufficiently swiftly. Once community spread was identified, the government reacted promptly by declaring the state of emergency on 12 March. Also, the government swiftly adopted additional restrictive measures on 24 March when the projections indicated that the number of COVID-19 cases may exceed the capacity of the Estonian hospitals and ICU units (Anvelt, 2020).
+
+In explaining the government’s willingness to declare the state of emergency two weeks before the first COVID-19-death even occurred and to quickly adopt restrictive measures, ideological factors should be taken into account (Cusack, 2001; Givens & Luedtke, 2005; Pamp, 2008). The current coalition government of Estonia consists of two right-leaning conservative parties (one traditional conservative, the other populist) and a centre-left party. Although ideologically speaking, such a party configuration is rather unusual, it provided a fertile ground for a more interventionist approach, both socially and economically. The right-leaning parties were willing to impose social constraints (especially when it came to closing the borders and containing immigration) whereas the left-leaning party was highly concerned with the viability of the health care sector and was also willing to go ahead with extensive fiscal measures in order to mitigate the economic effects of the lockdown.
+
+At the same time, there have been some elements of decentralization as well. For example, the hospitals have been allowed to decide for themselves how best to go back to offering regular health care services and what kinds of cautionary measures should be taken (Sildam, 2020). Local governments with a higher number of cases have adopted stricter measures than the central government in order to avoid the gathering of people (e.g. larger cities closed playgrounds after these became gathering places).
+
+## 2.Data Analysis
+
+### 2.1 Visualization of the Spread of COVID-19 in Estonia
+
+Data can be analyzed considering the confirmed cases,death cases and recovered cases. Using the coronavirus dataset, the analysis was performed. 
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+Estonia_corona_confirmed <- coronavirus %>% 
+  filter(country == "Estonia") %>% 
+  filter(type == "confirmed") %>%
+  select(date , country, type , cases) %>% 
+  mutate(cases = replace(cases , which(cases < 0), NA))
+
+total_confirmed <- sum(Estonia_corona_confirmed$cases , na.rm = TRUE)
+
+
+Estonia_corona_death <- coronavirus %>% 
+  filter(country == "Estonia") %>% 
+  filter(type == "death") %>%
+  select(date , country, type , cases) %>% 
+  mutate(cases = replace(cases , which(cases < 0), NA))
+
+total_death <- sum(Estonia_corona_death$cases, na.rm = TRUE)
+
+
+
+Estonia_corona_recovery <- coronavirus %>% 
+  filter(country == "Estonia") %>% 
+  filter(type == "recovery") %>%
+  select(date , country, type , cases) %>% 
+  mutate(cases = replace(cases , which(cases < 0), NA))
+
+total_recovery <- sum(Estonia_corona_recovery$cases, na.rm = TRUE)
+
+
+
+x <- data.frame(type = "Total count",
+                confirmed = total_confirmed,
+                death = total_death, 
+                recovery = total_recovery)
+knitr::kable(x, "simple")
+
+```
+
+
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+Estonia_corona_confirmed <- coronavirus %>% filter(country == "Estonia") %>% filter(type == "confirmed")
+
+
+
+Estonia_corona_confirmed <- coronavirus %>% 
+  filter(country == "Estonia") %>% 
+  filter(type == "confirmed") %>%
+  select(date , country, type , cases) %>% 
+  mutate(cases = replace(cases , which(cases < 0), NA))
+ 
+a <- ggplot(Estonia_corona_confirmed,aes(date, cases)) + geom_line(col="blue") + labs(x = "Date" , y = "Confirmed cases" , title = "Figure 02:Daily covid-19 confirmed cases in Estonia") + scale_colour_identity()
+ggplotly(a)    
+
+```
+
+Figure 02 shows daily confirmed COVID-19 cases in Estonia. The 1st confirmed cases of the corona virus disease in Estonia is reported in 05th March 2020. There is a significant increase in confirmed cases after 28th of October 2020. The highest number of daily confirmed cases have been reported on 16th of February 2022 It is 8438 confirmed cases. Among this period, cases are significantly decrease in 25th of May 2021.
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+Estonia_corona_death <- coronavirus %>% 
+  filter(country == "Estonia") %>% 
+  filter(type == "death") %>%
+  select(date , country, type , cases) %>% 
+  mutate(cases = replace(cases , which(cases < 0), NA))
+
+ b <- ggplot(Estonia_corona_death,aes(date, cases)) + geom_line(col="blue") + labs(x = "Date" , y = " Death cases" , title = "Figure 03:Daily covid-19 death cases in Estonia") + scale_colour_identity()
+ggplotly(b)   
+
+
+```
+
+This plot shows the number of confirmed COVID-19 deaths per day.Using the above plot it can be seen that until the 24th of March no death cases were reported. But on 25th of March 2020 1  death were reported due to Covid-19.From 20th of October2020, the death cases significantly stated to increase.On 23rd of March 2022, the death cases reached to the highest value in Estonia to 19 cases.In period from 09th of June 2020 to 23rd of August 2020 , there is no any death cases on Covid 19.
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+Estonia_corona_recovery <- coronavirus %>% 
+  filter(country == "Estonia") %>% 
+  filter(type == "recovery") %>%
+  select(date , country, type , cases) %>% 
+  mutate(cases = replace(cases , which(cases < 0), NA))
+
+
+
+ c <- ggplot(Estonia_corona_recovery,aes(date, cases)) + geom_line(col="blue") + labs(x = "Date" , y = " Recovery cases" , title = "Figure 04:Daily covid-19 recovery cases in Estonia") + scale_colour_identity()
+ggplotly(c)           
+
+```
+
+Using the above plot it can be seen that until the end of the March only few recovered cases were reported. But in the beginning of the 1st week of May recovery cases are increased. The highest number of recoveries per day in Estonia of 4606 recoveries were reported in 27th of March 2021. From 11th of November 2020 to 27th of March 2022 the recovered cases were significantly increased. On 3rd of August 2022 135 patients were recovered.
+
+
+
+`
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+Estonia_corona <- coronavirus %>% filter(country == "Estonia") %>% mutate(cases = replace(cases , which(cases < 0), NA))
+ggplot(Estonia_corona, aes(x=date, y=cases, col=type)) + geom_point() + ggtitle("Figure 05:Comparison between confirmed,death and recovery in Estonia")
+
+
+```
+
+
+
+
+### 2.2 Comparison of COVID-19 in Estonia with Lithuania and Latvia
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+compare_country <- coronavirus %>% 
+  filter(country == "Estonia" | country == "Lithuania" | country == "Latvia") %>% 
+  filter(type == "confirmed") %>% mutate(cases = replace(cases , which(cases < 0), NA))
+d <- ggplot(compare_country, aes(date, cases, group = country , col = country)) + geom_line() + facet_grid(~country) + ggtitle("Figure 06: Confirmed COVID-19 cases in Estonia with Lithuania and Latvia ")
+ggplotly(d)
+
+
+
+
+```
+
+Figure 09 shows the daily confirmed COVID-19 cases in Estonia with neighbour countries, Lithuania and Latvia. It can be seen clearly the number of daily confirmed cases in Estonia is lower than Lithuania and Latvia. According to above graph can be seen, highest number of confirmed cases reported in Lithuania among these countries. It is number of 12968 confirmed cases in 05th of February 2022.Confirmed patients were reported same time period  in these three countries. In Estonia, the confirmed cases were kept on increasing until October in 2020 and also Lithuania and Latvia started to increase while in Estonia. Therefor it can be conclude that confirmed cases of covid 19 in Estonia , Lithuania and Latvia have  approximately same distribution.
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+compare_country <- coronavirus %>% 
+  filter(country == "Estonia" | country == "Lithuania" | country == "Latvia") %>% 
+  filter(type == "recovery") %>%  mutate(cases = replace(cases , which(cases < 0), NA))
+
+e <- ggplot(compare_country, aes(date, cases, group = country , col = country)) + geom_line() + facet_grid(~country)+ggtitle("Figure 07: Recovered COVID-19 cases in Estonia with Lithuania and Latvia ")
+ggplotly(e)
+
+
+
+```
+
+According to above Figure10 ,Lithuania has the highest daily recovered COVID-19 cases. It is significantly large value than Estonia and Latvia. The number of highest recovered cases per day is 327271. Compare with Latvia and Lithuania, the number of daily recovered cases in Estonia has the least value. The highest Value of recovered covid 19 cases in Estonia is 4606 in 27th of March 2021
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+compare_country <- coronavirus %>% 
+  filter(country == "Estonia" | country == "Lithuania" | country == "Latvia") %>% 
+  filter(type == "death") %>% mutate(cases = replace(cases , which(cases < 0), NA))
+g <- ggplot(compare_country, aes(date, cases, group = country , col = country)) + geom_point() +facet_grid(~country)+ ggtitle("Figure 08: Death COVID-19 cases in Estonia with Lithuania and Latvia ")
+ggplotly(g)
+
+
+```
+
+Above figure shows the number of daily deaths in Estonia, Lithuania and Latvia. The highest number of daily death also reported in Latvia in 17th of November 2021. According to above figure , death covid 19 cases in Estonia is significantly lower than Latvia and Lithuania.Estonia has a population of 1.331 million while in Lithuania 2.795 million population. So that considering the population of Estonia and Lithuania, the population is slightly less in Estonia  than in Lithuania. The population of Estonia and Latvia is approximately same,When considering population and using above plot, reported death cases in Estonia is significantly lower than Latvia.Deaths of Latvia were reported in a nearly same pattern as in Lithuania.  it can clearly conclude that Estonia was able to control the pandemic more accurately than in Latvia and Lithuania.
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+compare_country <- coronavirus %>% 
+  filter(country == "Estonia" | country == "Italy") %>% 
+  filter(type == "confirmed") %>% mutate(cases = replace(cases , which(cases < 0), NA))
+ggplot(compare_country, aes(date, cases, group = country , col = country)) + geom_line() + facet_grid(~country) + ggtitle("Figure 09: Confirmed COVID-19 cases in Estonia and Italy")
+
+```
+
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+compare_country <- coronavirus %>% 
+  filter(country == "Estonia" | country == "Italy") %>% 
+  filter(type == "recovery") %>% mutate(cases = replace(cases , which(cases < 0), NA))
+ggplot(compare_country, aes(date, cases, group = country , col = country)) + geom_line()  + ggtitle("Figure 10: Recovered COVID-19 cases in Estonia and Italy")
+
+```
+
+```{r,echo=FALSE,warning=FALSE,comment=NA,message=FALSE}
+
+compare_country <- coronavirus %>% 
+  filter(country == "Estonia" | country == "Italy") %>% 
+  filter(type == "recovery") %>% mutate(cases = replace(cases , which(cases < 0), NA))
+ggplot(compare_country, aes(date, cases, group = country , col = country)) + geom_point() +facet_grid(country~.)  + ggtitle("Figure 11: Recovered COVID-19 cases in Estonia and Italy")
+
+```
+
+
+According to above figure 09 ,figure 10 and figure 11 can be seen that Estonia compare with another european country Italy, there is signifiacntly large number of confirmed cases , recovered cases and Death cases than Estonia.
+
+
+## 3.Conclusions and Discussion
+
+### 3.1 Conclusions
+
+COVID-19 is still an unclear infectious global pandemic. In Estonia, the first confirmed case for COVID-19 was identified on January 05th of March 2020.By the end of the March, pandemic situation showed a rapid spread among the community in Estonia. Although the majority of the daily confirmed cases were reported in October  of 2020 to June of 2021  (Figure 02 clearly show it). As of 23rd of June 2022, Estonia has reported a total of 	579316 confirmed cases with 129187 recovered cases and  2597	deaths. Death covid 19 cases are approximately 0.4% as a percentage of total confirmed cases.  The highest daily confirmed cases (8438 cases per day) and daily deaths. So, it can be conclued that From August of 2021 to June of 2022 was the critical period of spread of COVID-19 in Estonia.
+The death rate of Estonia is lower than Latvia and Lithuania when comparing with the neighbouring country. But, the recovered rate (percentage) of Estonia is approximately 22% . The recovered rate and percentage of death cases of Estonia has got better values than Latvia. The situation of  Estonia by October of 2020 is better compared to neighbouring countryLatvia at the same moment.when considering comparison of Estonia with Latvia and Lithuania, it can clearly conclude that Estonia was able to control the pandemic more accurately than in Latvia and Lithuania.
+
+### 3.2 Discussion
+
+Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to dec 2020. However, it is directly affected to the other countries. At that time, most of countries in Asia had high risk but all countries did not expect serious situations like this. China is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population they taken action to preventing virus. South Korea and Sri Lanka are taken immediate action while virus entering the virus in to the country. Somehow they could be able controlled confirmed cases in April in 2020.
+
+The Covid-19 Pandemic taught the world the importance of accurate decision making within less time. Countries took the accurate decision like imposing lockdown and imposing new rules to obtain social distancing were able to survive from the pandemic with relatively small loss.
+
+The countries where the lockdown decision and other social distancing decision imposed after a significant time from the first reported case, suffered from large number of deaths per day and large number of confirmed cases per day.
+Looking beyond those factors, we have to admit that Estonia got lucky as well. Being sufficiently far from the European epicentre ‒ Italy ‒ gave it more time to learn and prepare. For example, the hospitals had more time to procure protective gear and prepare separate COVID departments, in order to avoid intra-hospital contamination. The Estonian government and media were able to refer to the overflowing hospitals in Italy to justify restrictive measures and to convince the population to follow social distancing measures (Anvelt, 2020). Also, it helped being small in terms of population (1.3 million), while having a low population density (31 per km2 which is among the lowest in Europe). Compared to the large countries, the sheer volume of personal protection gear (for the health sector but also for other sectors that interact with the public) and tests Estonian organizations had to procure were a “drop in the bucket”. Thus, it was possible to supply all the organizations that needed protective gear and the tests in a timely manner.
+
+So the confirmed,recovered and death cases within that period were taken to make conclusions of different countries. In Latvia significant amount of recovered cases were reported after the 4th week of July in 2022. So the above analysis can be only to identify whether the particular country took rapid decisions to control the pandemic and fight against it as the recovered cases can be used as a method to identify the effectiveness of the measurements taken by a particular country to fight against the pandemic.When considering the countries like Lithuania, where the confirmed cases took significant time to recover, the measurements they took to fight against the pandemic as a country was not so effective compared to other countries.
+The dataset is loaded by coronavirus dataset given in the package R. Estonia dataset is obtained by it. Throughout this project it was able to identify the how Estonia face the Covid-19 pandemic and what are the accurate decisions made by the officials of the Estonia to fight against the Covid-19 pandemic and effectiveness of those decisions by analyzing the Coronavisrus dataset. Further bordering countries of Estonia were compared with Estonia to identify the impact from the Covid-19 pandemic to the region.By doing the analysis, it is identified that  Estonia has fight against the Covid-19 pandemic more accurately than the other countries in the region.
+
+Overall, Estonia has managed the corona-crisis relatively well, judging from the number of cases, hospitalizations and deaths. The management of the crisis was facilitated by political factors, quick policy learning, cooperation with the scientific community, and the existing ICT and e-government infrastructure.
+
+## References
+
+ https://www.redalyc.org/journal/2410/241066211008/html/
+ https://www.undp.org/guinea-bissau/news/what-covid-19?utm_source=EN&utm_medium=GSR&utm_content=US_UNDP_PaidSearch_Brand_English&utm_campaign=CENTRAL&c_src=CENTRAL&c_src2=GSR&gclid=Cj0KCQjwnP-ZBhDiARIsAH3FSRf556pf6CcSkY_QJnSHGH_6cPSRkdVotU2WCkcQaChvGzFi_rq-JmQaAsGlEALw_wcB
+ https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Estonia
+ https://www.britannica.com/place/Estonia
+ https://www.whereig.com/estonia/
+ https://abcnews.go.com/Health/wireStory/estonia-plans-restrictions-avoid-lockdown-latvia-80793629
+ https://ourworldindata.org/covid-deaths?country=~EST

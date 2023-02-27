@@ -1,0 +1,228 @@
+---
+title: "COVID-19 Pandemic in the Portugal"
+author: "Avishka Ganegoda"
+date: "10/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# **Abstract**
+<div align="justify">The COVID 19 pandemic is biggest ongoing global crisis of the 21st century, which has affected countries all over the world except Antarctica. It was first identified in Wuhan, China, at the end of 2019. After that the virus spread to other areas of the China and later worldwide. The pandemic had caused more than 618 million cases and 6.54 million confirmed deaths. So it is important to detect, prevent and respond to the threat posed by COVID 19. This report is an exploratory analysis of the COVID 19 pandemic in Portugal and it present comparison with other neighboring countries using the visualization methods.
+
+Keywords: Portugal, COVID 19
+
+# **1. Introduction**
+ <div align="justify">Portugal is a southern European country on the Iberian Peninsula, bordered by Span and the Atlantic Ocean. It is one of the oldest country in Europe. The country covers an area of 92,090 km^2^, it is slightly smaller than the US state of Indiana.Portugal has a population of 10.3 million people. The capital and economic and cultural center of the Portugal is Lisbon. Portuguese is the official language of the Portugal but English is widely spoken, especially in the larger cities and in the Algarve. The government system is a republic with a semi-presidential representative democracy. Portugal was the world's richest country but because this wealth was not used to develop domestic industrial infrastructure, Portugal gradually become one of western Europe's poorest countries in the 19th and 20th centuries.After 1986 it shows spurring strong and steady economic growth. Similar to other countries, Portugal's economy is now dominated by services.
+ 
+
+### **Visualization of the location**
+<div align="justify">Portugal is located on the Iberian Peninsula in the southwest corner of Europe. It shares that peninsula with its larger neighbor, Spain, which occupies about five-sixths of the land mass. Portugal has 35,000 square miles in average and it is about the size of the state of Indiana. It's bordered by Spain on the north and east, and the Atlantic Ocean on the west and south.
+
+```{r, echo=FALSE, comment=NA, message=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(data.table)
+data(coronavirus)
+
+portugal_corona <- coronavirus %>% filter(country == "Portugal")
+```
+
+
+```{r, echo=FALSE, comment=NA, message=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() + geom_polygon(data=wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) + scale_x_continuous(breaks = seq(-180, 180, 120)) + scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p + geom_point(data = portugal_corona, aes(x = long, y = lat), color = "red", size = 1)
+```
+
+
+### **Climate condition**
+<div align="justify">Climate is divided into three sets according to its effect on vegetation. Those are Atlantic, continental, and Mediterranean. As a whole Portugal is defined as having a Mediterranean climate but there is some variation between regions. The Atlantic climate predominates overall, putting most of the country into the humid zone of the Iberian Peninsula. In the northwest the climate is mild and rainy. 
+
+Summer temperatures near sea level may average up to 76$^\circ$F but are rather lower at exposed higher elevations. Winter temperatures average 37 to 40$^\circ$F but tend to be milder south of the Douro. Annual rainfall averages more than 40 inches.
+
+The highest temperatures in Portugal tend to occur inland. The town of Amareleja is one of the hottest places in Europe during the summer with a high temperature of 47.4$^\circ$C recorded. The highest average temperature are found in the Algarve though.
+
+### **Lockdown status of the country**
+On April 16, the Portuguese government announced that the nationwide lockdown measures in place amid the current national state of emergency will be extended for another 15 days until May 2, due to the ongoing coronavirus pandemic. President Marcelo Rebelo de Sousa declared the initial 15 day state of emergency on March 18. During the following 6 weeks, general population was forbidden to use public space, and compulsory confinement was legally imposed, except for shopping necessities and going to work when remote work was not possible.
+
+As lockdown was implemented, the Portuguese people complied with these confinement measures and quickly reduced their overall mobility. People reduced significantly their daily mobility, including for retail and leisure, parks and alike and transport. The population in Spain also adhered effectively to government containment and mltigation measures. 
+
+### **Action taken by government**
+Portugal took early action to control the COVID 19 pandemic.Portuguese Prime minister Antonio Costa announced stricter containment measures after a state of emergency was declared in the country on Wednesday, March 18, when it recorded only 62 cases of COVID 19 per million inhabitants and no reported deaths. It last for 15 days starting from midnight on March 19,.The government has reiterated that individuals who infected with the corona virus will be required to undergo mandatory self-isolation and the government emphasize that violation of this requirement will constitute a "crime of disobedience".
+
+The government gave the permission to the security forces to send home people who breach self-isolation requirements.In addition, elderly over the age of 70 years or those with existing health conditions are advised to stay at home unless necessary. To prevent further spread of the virus, the government advised to the members to stay at home as much as possible.All commercial establishments except bakeries, supermarkets, gas station, and pharmacies were announced to be closed. Even schools were closed from Monday, March 16 to April 9 as a precautionary measure.
+
+From midnight on Wednesday, March 18, flights to countries outside th EU/EEA, except for the UK, Us, Canada, Venezuela, South Africa, and Portuguese speaking countries were suspended. Further, flights to Brazil were restricted to Rio de Janeiro and Sao Paulo while flights to and from Italy were suspended in order to prevent further entry of the virus into the country. Strict borders were enforced between Spain and Portugal from Monday, March 16, until Wednesday, April 15. Only cross border workers, goods traffic, and individuals returning to their place of residence were allowed to travel accross the border.
+
+# **2. Exploratory Data Analysis**
+
+### **Structure of data**
+The data set used in this report is The Novel Coronavirus COVID 19 (2019-nCoV) Dataset. It contains the daily summary of the Coronavirus (COVID 19) cases (confirmed, death, and recovered) by state/province. The data frame contains 15 variables;
+
+* date - Date in YYYY-MM-DD format
+* province - Name of the state/province, for countries where data is provided split across multiple provinces/states
+* country - Name of the country/region
+* lat - Latitude of center of geographic region, defined as either country or, if available, province
+* long - Longtide of center of geographic region, defined as either country or, if available in province
+* type - An indicator for the type of cases (confirmed, death, recovered)
+* cases - Number of cases on given date
+* uid - Country code
+* iso2 - Officially assigned country code identifiers with two-letter
+* iso3 - Officially assigned country code identifiers with three-letter
+* code3 - UN country code
+* combined_key - Country and province (if applicable)
+* population - Country or province population
+* continent_name - Continent name
+* continent_code - Continent code
+
+The source of the dataset is Johns Hopkins University Center for Systems Science and Engineering(JHUCCSE) Coronavirus website. All records are available January 22, 2020 to 23 of June 2022. it contains 742,560 rows and 15 columns.
+
+```{r, echo=FALSE, comment=NA, message=FALSE}
+dplyr::glimpse(coronavirus)
+```
+
+* __*structure of the coronavirus dataset*__
+
+```{r, echo=FALSE}
+head(coronavirus)
+tail(coronavirus)
+```
+
+
+### **Data set of Portugal**
+
+#### __*Summary of total death, recovered and confirmed cases in Portugal*__
+```{r, echo=FALSE, comment=NA, message=FALSE}
+portugal_corona %>% group_by(type) %>% summarise(total_cases = sum(cases))
+
+library(plotly)
+p <- ggplot(portugal_corona, aes(x = date, y = cases, color = type)) + geom_point(alpha = 0.7) +  ylim(0,50000)
+ggplotly(p)
+
+```
+
+#### __*Death cases in Portugal*__
+```{r, echo=FALSE, comment=NA, message=FALSE}
+death_portugal_corona <- portugal_corona %>% filter(type == "death")
+head(death_portugal_corona)
+```
+
+* __*Scatter plot of death cases Vs date*__
+
+```{r, echo=FALSE}
+p1 <- ggplot(death_portugal_corona, aes(x = date, y = cases)) + geom_line() + ggtitle("Portugal: Daily Covid-19 Deaths")
+ggplotly(p1)
+```
+
+#### __*Confirmed cases in Portugal*__
+```{r, echo=FALSE, comment=NA, message=FALSE}
+confirmed_portugal_corona <- portugal_corona %>% filter(type == "confirmed")
+head(confirmed_portugal_corona)
+```
+
+* __*Scatter plot of confirmed cases Vs date*__
+
+```{r, echo=FALSE}
+p2 <- ggplot(confirmed_portugal_corona, aes(x = date, y = cases)) + geom_line() + ggtitle("Portugal: Daily Covid-19 Confirmed")
+ggplotly(p2)
+
+```
+
+#### __*Recovered cases in Portugal*__
+```{r, echo=FALSE, comment=NA, message=FALSE}
+recovered_portugal_corona <- portugal_corona %>% filter(type == "recovery")
+head(recovered_portugal_corona)
+```
+
+* __*Scatter plot of recovered cases Vs date*__
+
+```{r, echo=FALSE}
+p3 <- ggplot(recovered_portugal_corona, aes(x = date, y = cases)) + geom_line() + ggtitle("Portugal: Daily Covid-19 recovered") + ylim(0,8000)
+ggplotly(p3)
+```
+
+### **Comparison with other countries**
+
+#### __*Comparison with nearest country of Spain*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+portugal_spain <- coronavirus %>% filter(country %in% c("Portugal", "Spain"))
+portugal_china <- coronavirus %>% filter(country %in% c("Portugal", "China"))
+
+ggplot(portugal_spain, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,8000) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nSpain and Portugal")
+```
+
+The number of recovered cases reported in 2020 shows a higher amount in Spain compared to Portugal. But the number of recoveries reported in 2021 and 2022 shows a lower figure in Span compared to Portugal.  
+
+The number of death cases reported in Spain is higher than the no of death cases reported in Portugal
+
+
+#### __*Comparison between Portugal and China*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+portugal_china <- coronavirus %>% filter(country %in% c("Portugal", "China"))
+
+ggplot(portugal_china, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,4500) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nChina and Portugal")
+```
+
+According to the figure we can see that the number of confirmed cases and the number of recovered cases in Portugal is consistently higher compare to the China . Reported death cases also comparatively higher in Portugal.
+ 
+
+#### __*Comparison between Portugal and Italy*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+portugal_italy <- coronavirus %>% filter(country %in% c("Portugal", "Italy"))
+
+ggplot(portugal_italy, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,8500) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nItaly and Portugal")
+```
+
+It shows that the number of death cases reported in Italy is higher than the number of death cases reported in Portugal. And the number of confirmed cases reported in 2022 is higher in italy than in Portugal.
+
+#### __*Date vs cases plot of Portugal, Span, Italy and China*__
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+covid_cases_in_countries <- coronavirus %>% filter(country %in% c("Portugal", "Italy", "China", "Spain"))
+p4 <- ggplot(covid_cases_in_countries, aes(x = date, y = cases, color = country)) + geom_point() + ylim(0,9500) + facet_grid(.~type)
+ggplotly(p4)
+```
+
+# **3. Conclusion and Discussion**
+Portugal is one of the few success stories in Europe in controlling the spread of the virus as they took quick action. When compared with its neighboring countries the Portugal had a very low caseload. As in the other countries the COVID 19 epidemic peak in Portugal has been shown in the year 2021. Lockdowns, social distancing procedures, mandatory in wearing mask in Portugal have been largely managed the COVID 19 in Portugal. Therefore we can conclude that mitigation actions can positively influence the spread of the virus in countries as well as in Portugal. 
+
+Comparing the spread of coronavirus in different countries is difficult using the data being released by governments deaths are somewhat more reliable, but some countries have different rules for what deaths to include in their official numbers. 
+
+In European countries like Italy, Spain, France, UK and Netherlands are major COVID 19 infected countries. Death rate in Italy is the highest death rate in world. Spain is the second highest among COVID 19 affected among European country, which is neighboring country to the Portugal.
+
+Therefore Portugal might be seen as an example of good practices in pandemic crisis management, since with the early response to the virus appearance, rooted in the valuable stakeholders' coordination, it was possible to control the spread of the virus, and the implementation of several mitigation measures presented positive results in regarding control of spreading corona virus.
+
+# **4. References**
+https://www.researchgate.net/publication/340413293_COVID_19_A_Comparative_Study_of_Asian_European_American_continent
+
+https://dereksonderegger.github.io/570L/10-more-ggplot2.html
+
+https://cran.r-project.org/web/packages/coronavirus/index.html
+
+https://www.markdownguide.org/extended-syntax/
+
+https://www.google.com/amp/s/newseu.cgtn.com/news/2020-05-20/How-did-Portugal-manage-the-COVID-19-crisis-so-well--QCRLaAvqr6/share_amp.html
+
+https://www.britannica.com/place/Portugal/Climate
+
+https://en.m.wikipedia.org/wiki/COVID-19_pandemic
+
+https://datavizpyr.com/how-to-center-plot-title-and-subtitle-in-ggplot2/?amp=1
+
+https://medium.com/analytics-vidhya/7-advanced-markdown-tips-5a031620bf52

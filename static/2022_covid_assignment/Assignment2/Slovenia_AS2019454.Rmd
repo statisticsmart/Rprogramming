@@ -1,0 +1,347 @@
+---
+title: "Navindu_AS2019454"
+author: "Navindu Dilshan"
+date: "2022-10-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE,results="asis"}
+cat("
+<style>
+   h1.title.toc-ignore{
+   color: Blue;
+   }
+    .btn-primary {
+    padding: 10px 20px;
+    border-radius: 27px;
+    background: linear-gradient(135deg,rgba(0,38,62,1)0%,rgba(141,200,232,1) 100%);
+    box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 50%);
+    color: #fff;
+}
+   #introduction-about-guatemala h2{
+        display: flex;
+    text-align: center;
+    justify-content: center;
+    
+   }
+  
+  #header{
+  margin:20px;
+ background-image:url('img1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+   background: rgba( 255, 255, 255, 0.25 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 4px );
+-webkit-backdrop-filter: blur( 4px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+  
+  
+  }
+ h4.author,.date{
+ font-size: 14px;
+ margin-left:10px;
+    color: #AAFF00;
+     text-shadow: 0px 0px 0 rgb(190,190,190),
+                 0px 1px  0 rgb(140,140,140),
+                 0px 2px 1px rgba(0,0,0,0.6),
+                 0px 2px 1px rgba(0,0,0,0.5),
+                 0px 0px 1px rgba(0,0,0,.2);
+ }
+ .main-container{
+ background-image: url('img1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 268.8px;
+  width:100%;
+  background-size:cover; 
+ }
+ @media only screen and (max-width: 700px) {
+  .main-container{
+ background-image: url('img1.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 420.8px;
+  width:100%;
+  background-size:cover; 
+ }
+  
+}
+
+ h1.title {
+    padding-top:15px;
+    font-size: 38px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-size: 60px
+    color: #b33434;
+    text-shadow: 0px 0px 0 rgb(154,27,27),
+                 0px 1px 0 rgb(129,2,2),
+                 0px 2px  0 rgb(104,-23,0),
+                 0px 3px 2px rgba(0,0,0,0.6),
+                 0px 3px 1px rgba(0,0,0,0.5),
+                 0px 0px 2px rgba(0,0,0,.2);
+.author,.date{
+    margin:20px 20px;
+    margin-bottom:20px;
+    padding-bottom:10px;
+    
+}
+
+
+</style>
+")
+```
+
+## **1. Introduction of Slovenia**
+
+Slovenia is a nation in Central Europe with an Adriatic Sea border. Austria, Croatia, Hungary, and Italy are nearby nations. Slovenia manages some of Europe's main transit networks despite its tiny size. Northern Slovenia is dominated by the Alps, and the eastern region is home to many rivers. The government is a parliamentary republic, with the president serving as the head of state and the prime minister as the head of government. Slovenia features a mixed economic system in which there is flexibility for the private sector but the state is heavily involved in centralized planning. Member of the European Union is Slovenia (EU).
+
+## 1.2 Climate Condition of Slovenia
+
+The sub-Mediterranean, Alpine, and continental climatic types can all be found in Slovenia. The sub-Mediterranean climate type has an average annual temperature of 12°C, ranging from 8°C to 1°C in Slovenia's lower central areas to 0°C in its highest peaks. The country's annual precipitation varies greatly, ranging from 800 mm in the far north-eastern and 1000 mm in the far south-western regions to over 3000 mm in the far north-western region.
+
+## 1.3 Coronavirus status of Slovenia
+
+On March 4th, 2020, the first case of the new coronavirus infection in Slovenia was determined. An increase in testing enables us to keep track of the epidemiological situation in the nation, and on the basis of the percentage of positive tests, we implement and modify steps to slow the spread of the novel coronavirus in the population.
+
+
+```{r echo=FALSE,message=F}
+library(coronavirus)
+library(ggmap)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+```
+# **2. Exploratory Data Analysis**
+
+## 2.1 Visualisation of Slovania
+
+
+```{r,echo=FALSE,include=FALSE}
+library(coronavirus)
+library(ggplot2)
+Slovenia_corona <- coronavirus %>% filter(country == "Slovenia")
+
+confirmed_corona_Slovenia <- Slovenia_corona %>% filter(type=="confirmed")
+summary(confirmed_corona_Slovenia)
+
+recovered_corona_Slovenia <- Slovenia_corona %>% filter(type=="recovery")
+summary(recovered_corona_Slovenia)
+
+death_corona_Slovenia <- Slovenia_corona %>% filter(type=="death")
+summary(death_corona_Slovenia)
+
+```
+
+
+```{r,echo=F,include=FALSE}
+confirmed_corona_Slovenia <- confirmed_corona_Slovenia %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_corona_Slovenia)
+
+which(is.na(confirmed_corona_Slovenia$cases))
+
+
+recovered_corona_Slovenia <- recovered_corona_Slovenia %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovered_corona_Slovenia)
+
+places_of_missing_values_in_recovered_corona_Slovenia<-which(is.na(recovered_corona_Slovenia$cases))
+
+
+death_corona_Slovenia <- death_corona_Slovenia %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_corona_Slovenia)
+
+which(is.na(death_corona_Slovenia$cases))
+```
+##### Summary of Slovania corona
+```{r,echo=F}
+summary(Slovenia_corona)
+```
+
+#### Figure 1: represents Time series plot of coronavirus confirmed cases in Slovania.
+
+```{r,echo=FALSE}
+library(ggplot2)
+
+ggplot(confirmed_corona_Slovenia, aes(x=date, y=cases, color=date)) +
+  geom_line()+labs(x="Year - Figure 1",y="Confirmed Cases",title = "Plot of Confirmed Corona Cases")
+
+```
+
+According to figure 1, confirmed cases were 0 until the mid of 2020. It shows some spikes until it rapidly increased up to a highpoint (23,000) in the begining of 2022 and it came down back
+
+#### Figure 2: Plot of Death Corona Cases
+
+```{r,echo=FALSE}
+library(ggplot2)
+
+a<-ggplot(death_corona_Slovenia, aes(x=date, y=cases)) +
+  geom_line()+labs(x="Year - Figure 2 ",y="Death Cases",title = "Plot of Death Corona Cases")
+ggplotly(a)
+```
+
+According to figure 2,Death cases increased in the latter part of 2021 where the all time high recorded is (68) and Slovania managed to take control of it and by the begining of 2022.
+
+#### Resolution of missing values by the recovered Corona Cases
+```{r,echo=F ,include=FALSE}
+
+recovered_corona_Slovenia$cases[540] = mean(c(recovered_corona_Slovenia$cases[539], recovered_corona_Slovenia$cases[541]))
+length(recovered_corona_Slovenia$cases)
+
+recovered_corona_Slovenia$cases[562] = mean(c(recovered_corona_Slovenia$cases[561], recovered_corona_Slovenia$cases[563]))
+length(recovered_corona_Slovenia$cases)
+
+recovered_corona_Slovenia$col <- as.factor(c(rep("black", 539),rep("red", 2), rep("black", 561-541),rep("green",2),rep("black",884-563)))
+summary(recovered_corona_Slovenia)
+
+```
+
+#### Figure 3: The plot of Recovered Corona Cases
+```{r,echo=F}
+library(ggforce)
+library(ggplot2)
+library(plotly)
+
+places_of_missing_values_in_recovered_corona_Slovenia
+
+ggplot(recovered_corona_Slovenia, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity()+
+  facet_zoom(xlim = c(as.Date("2021-07-01"), as.Date("2021-09-01")),ylim = c(0,220))
+
+b<-ggplot(recovered_corona_Slovenia, aes(x=date, y=cases)) +
+  geom_jitter()+labs(x="Year",y="Recovered Cases",title = "Plot of Recovered Corona Cases")
+ggplotly(b)
+
+c<-ggplot(recovered_corona_Slovenia, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="red")
+ggplotly(c)
+```
+
+Figure 3 represents Time series plot of Recovered cases which has hit an all time high of (4000) cases per day by the end of 2021. 
+
+### The plot of types Corona Cases
+#### Figure 4: The plot of Recovered Corona Cases
+```{r pressure, echo=FALSE}
+library(ggplot2)
+Slovenia_corona <- coronavirus %>% filter(country == "Slovenia")
+head(Slovenia_corona)
+Slovenia_corona <- Slovenia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(Slovenia_corona$cases))
+Slovenia_corona$cases[2308] = mean(c(Slovenia_corona$cases[2307], Slovenia_corona$cases[2309]))
+Slovenia_corona$cases[2330] = mean(c(Slovenia_corona$cases[2329], Slovenia_corona$cases[2331]))
+
+which(is.na(Slovenia_corona$cases))
+
+
+ggplot(Slovenia_corona, aes(x=date, y=cases, col=type)) + geom_line()+labs(x="Year",y="Cases",title = "The plot of types Corona Cases")
+
+```
+
+According to figure 4 represents confirmed(red), death(green) and recovered(blue) cases ofcorona virus in Slovania. Eventhough active cases rapidly increased in the first half of 2021, death cases were not proportianal with the active cases. Medical System of Slovania managed to keep deaths under control at a time where Confirmed cases rised rapidly.
+
+#### Find the active corona case in Slovenia
+
+```{r}
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+library(plotly)
+
+filter_by_slovania <- coronavirus %>% filter(country == "Slovenia")
+q2 <- filter_by_slovania %>% filter(type == "confirmed")
+q3 <- filter_by_slovania %>% filter(type == "death")
+q4 <- filter_by_slovania %>% filter(type == "recovery")
+dfff <- data.frame(v1 =cumsum(q2$cases - (q3$cases + q4$cases)),date =filter_by_slovania$date)
+     
+p <- ggplot(dfff, aes(x=date, y=v1)) +geom_line() +labs(x="Year",y="Cases",title = "The plot of active corona case in Slovenia")
+ggplotly(p)
+```
+
+
+```{r}
+
+countryselection<-coronavirus%>%filter(country==c("Hungary","Croatia","Italy","Slovakia","Slovenia"))
+countryselection_death<- countryselection%>%filter(type =="death")
+
+countryselection_confirmed<- countryselection%>%filter(type =="confirmed")
+
+
+
+countryselection_recovered<- countryselection%>%filter(type =="recovery")
+countryselection_recovered <- countryselection_recovered %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(countryselection_recovered$cases))
+
+countryselection_recovered$cases[113] = mean(c(countryselection_recovered$cases[112], countryselection_recovered$cases[114]))
+countryselection_recovered$cases[542] = mean(c(countryselection_recovered$cases[541], countryselection_recovered$cases[544]))
+countryselection_recovered$cases[543] = mean(c(countryselection_recovered$cases[541], countryselection_recovered$cases[544]))
+countryselection_recovered$cases[818] = mean(c(countryselection_recovered$cases[817], countryselection_recovered$cases[819]))
+
+
+
+Slovenia_Hungary<-countryselection%>%filter(country==c("Slovenia","Hungary"))
+Slovenia_Hungary_death<- Slovenia_Hungary%>%filter(type =="death")
+
+```
+
+#### Figure 5:
+
+```{r}
+ggplot(countryselection_death,aes(date, cases ,color=country),is.na=FALSE)+geom_line()
+
+```
+
+#### According to figure 5 compares the death corona cases in  Solovania with Croatia,Hungary,Italy, and Slovakia. According to figure 6 daily Coronavirus deaths in Slovenia is less than the daily Coronavirus deaths of the other selected countries and on the other hand Italy shows the highest numbers.
+
+#### Figure 6:
+
+```{r}
+ggplot(countryselection_confirmed,aes(date, cases ,color=country),is.na=FALSE)+geom_line()
+
+```
+
+#### According to figure 6 shows the comparison of recovered corona cases in Solovania with Croatia,Hungary,Italy, and Slovakia. According to figure 7 daily Coronavirus confirmed cases in Slovenia is less than the daily Coronavirus confirmed cases of the other selected countries and Italy shows the highest number of confirmed cases.
+
+#### Figure 7:
+
+```{r}
+ggplot(countryselection_recovered,aes(date, cases ,color=country),is.na=FALSE)+geom_line()
+
+```
+
+#### According to figure 7 compares the recovered corona cases in  Solovania with Croatia,Hungary,Italy, and Slovakia. According to figure 8 daily Coronavirus recoveries in Slovenia is less than the daily Coronavirus recoveries of the other selected countries and on the other hand Italy shows the highest numbers.
+
+#### Figure 8: Comparison of Corona Virus Death Cases in Hungary and Slovania.
+
+```{r}
+ggplot(Slovenia_Hungary_death,aes(date, cases ,color=country),is.na=FALSE)+geom_line()
+
+```
+
+#### According to figure 8 Both Slovania and Hungary have started recording death cases in the same period. Eventhough Slovania have showed small spikes, Hungary has showed large spikes. Both the countries have managed to kleep the daily deaths at the bottom for few months in the mid of 2021. Highest deaths in Hungary were recorded in the end of 2021 whereSlovania had its peak in the begining of 2021.
+
+# **3. Discussion and Conclusion**
+
+#### The majority of coronavirus patients were discovered after the month of January 2022. daily deaths in Slovenia are minimum and the government has taken necessary steps to minimize the effect of the coronavirus. slovenia has a minimum impact from coronavirus when considering neighboring countries. overall we can conclude that Slovenia was able to face the global pandemic efficiently. 
+
+
+# **4. References**
+
+1. https://hellor.netlify.app/archive/
+2. https://www.futureproofinghealthcare.com/en/slovenia-personalised-health-index
+3. https://www.slovenia.info/en/plan-your-trip/all-you-need-to-know-for-a-healthy-and-safe-vacation-in-slovenia
+4. https://globaledge.msu.edu/countries/slovenia#
+5. https://www.worldometers.info/coronavirus/
+6. https://covid19.who.int/region/euro/country/si/
+7. https://www.bmj.com/content/373/bmj.n1137
+8. https://stackoverflow.com/questions/36325154/how-to-choose-variable-to-display-in-tooltip-when-using-ggplotly
+9. https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2
+
+

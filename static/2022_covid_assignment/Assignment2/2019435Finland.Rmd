@@ -1,0 +1,293 @@
+---
+title: "AS2019435_Finland"
+author: "Ishara Madushan"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE, eval=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<br>
+<br>
+_Packages_
+```{r library_loard, comment=NA, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(hrbrthemes)
+library(kableExtra)
+library(streamgraph)
+library(viridis)
+library(DT)
+library(plotly)
+library(dplyr)
+```
+
+
+```{r predefined_datasets, include=FALSE}
+#__________________________________________
+#data frame from filtered Finland
+#filtering Finland
+finland_corona <- coronavirus %>% filter(country == "Finland")
+
+#extracting 3 types counts as separate Data frames
+recovered_finland_corona <- finland_corona %>% filter(type=="recovery")
+deaths_finland_corona <- finland_corona %>% filter(type=="death")
+confirmed_finland_corona <-finland_corona %>% filter(type=="confirmed")
+
+#building a proper Data Frame with 3 types as variables
+finland.DF <- data.frame(date=confirmed_finland_corona[,"date"],
+                           country=confirmed_finland_corona[,"country"],
+                           confirmed=confirmed_finland_corona[,"cases"],
+                         deaths=deaths_finland_corona[,"cases"],
+                         recovered=recovered_finland_corona[,"cases"])
+
+
+#replacing negative recovered values with NA
+finland.DF<-finland.DF%>% mutate(recovered = replace(recovered, 
+                                                     which(recovered < 0), NA))
+
+#creating new variable "active" and excluding it's negative values  
+finland.DF$active <- ((finland.DF$confirmed)-(finland.DF$deaths)-
+                        (finland.DF$recovered))
+finland.DF<-finland.DF%>% mutate(active = replace(active, 
+                                             which(active < 0), NA))
+
+
+
+#finding cumulative sum simultaneously replacing NA with 0
+
+#finland.DF$act_cum_sum<-cumsum(replace_na(finland.DF$active,0))
+#finland.DF$recov_cum_sum<-cumsum(replace_na(finland.DF$recovered,0))
+
+
+#_____________________________________________________________________
+#contingency table for bar chart
+
+#calculating sums of types("active","deaths","recovered")
+ac<-sum(finland.DF$active,na.rm = TRUE)
+de<-sum(finland.DF$deaths)
+re<-sum(finland.DF$recovered,na.rm = TRUE)
+
+#percentage of each type for a vector
+tb_percs<-c(ac%*%100/(ac+de+re),de%*%100/(ac+de+re),re%*%100/(ac+de+re))
+tb_types<-c("active","deaths","recovered")
+
+#data frame for those data
+table1<-data.frame(type=tb_types,percentage=tb_percs)
+#__________________________________________________________________________
+
+#3 variable data frame called Finland_premium
+recovered_vec<- c(finland.DF$recovered)
+confirmed_vec<- c(finland.DF$confirmed)
+active_vec<- c(finland.DF$active)
+deaths_vec<- c(finland.DF$deaths)
+
+date_vector<- rep(finland.DF$date,times=4)
+cases_vector<-c(confirmed_vec, deaths_vec, recovered_vec, active_vec)
+type_vector<- c(rep("confirmed",times=884), rep("death",times=884), 
+                rep("recovered",times=884), rep("active",times=884))
+
+finland_premium<- data.frame(date=date_vector,type= type_vector,
+                             cases=cases_vector)
+
+```
+
+### __Overview of Finland__
+
+   
+
+Bordered by Norway, Sweden, Russia, the Baltic Sea and the Gulf of Bothnia, Finland and its vast stretches of heavily forested open land acts as a northern gate between West and East. Capital is Helsinki. Finland is a bilingual country – Finnish and Swedish are both official languages.
+Finland, which functions today as a parliamentary democracy, is an international leader in providing education, and it ranks high for its performances in civil rights, press freedom and quality of life. The country was one of the first in the world to grant women the right to vote and was the first country to legalize universal suffrage, the right to both vote and run for office.
+The country’s economy is primarily geared toward free-market capitalism that, like its Nordic neighbors, diverts substantial spending to social safety nets and public services. Historically, the country’s workforce has been tied to the land, however, following World War II the country moved to rapidly industrialize. Today, Finland’s economy reflects its engagement with the world community; one-third of the country’s GDP comes from international trade.
+Finland is a member of major international organizations, such as the United Nations, World Bank and European Union, as well as regional organizations such as the Nordic Council.
+
+### __Medical care in Finland__
+
+#### Quality
+Finland’s overall quality ranked 17th, with low rankings in the WIHI (World Index of Healthcare Innovation) Elements for Patient-centered Care (28th) and measures of preventable disease (22nd). However, Finland boasts a modern hospital infrastructure, ranking 4th in the corresponding WIHI Element.
+
+#### Choice
+Despite Finland’s successes in other realms, it ranked last in WIHI’s Dimension for Choice. Under its socialized health care system, the freedom to choose health care services was nearly nonexistent, and in effect, rendered a 31st ranking in the WIHI Element for the “Freedom to Choose Health Care Services.” Furthermore, Finland ranked 11th and 17th, respectively, in the Elements “Affordability of Health Insurance” and “Access to New Treatments.”
+<br>
+<br>
+
+## __Our Time Global Epidemic__
+In 2020, COVID-19 spread with varying speed in different parts of the world, with reproduction numbers varying between 1.4–6.47 (Cheng and Shan 2020). Even though the pandemic has a biological foundation, it has quickly taken a fundamental political-economic, societal and geographical form. Lockdowns, mobility restrictions, stay-at-home orders, financial rescue packages, inter-state tensions, state border closings, digital surveillance, the concentration of infections in cities, and the politics of expert knowledge all underscore the fact that COVID-19 is much more than a biological phenomenon.
+
+#### __Covid-19 situation in Finland__
+In Finland, the COVID-19 epidemic broke out in early March 2020. Since then, the number of daily infections has increased steadily, peaking on the 6th of April with 210 reported cases. Let’s get into the breakdown of this.
+<br>
+<br>
+<br>
+
+##### -Overall percentages of __Active counts,__ __Death counts,__ __Recovered__
+
+```{r overall barchart, comment=NA, echo=FALSE, warning=FALSE}
+#overall bar chart
+overall <-ggplot(data=table1, aes(x=type, y=percentage, fill=percentage))+
+  geom_bar(stat="identity",fill="lightblue")+
+  theme_ipsum(base_size = 12,base_family =26, axis_title_size = 13 )
+  
+overall
+
+```
+
+It is obvious that among the covid cases in Finland, majority has claimed to Active cases. Deaths inside Finland is also like negligible.
+<b>
+
+### Summary
+
+```{r summary, comment=NA, echo=FALSE, warning=FALSE}
+summary(finland.DF)
+```
+
+
+
+
+```{r Seperated Graphs,comment=NA, echo=FALSE, warning=FALSE}
+#separated graphs in one figure
+
+sep<-finland_premium %>% 
+ ggplot( aes(x=date, y=cases, group=type, fill=type)) +
+    geom_area() +
+    scale_fill_viridis(discrete = TRUE) +
+    theme(legend.position="none") +
+    ggtitle("Daily covid cases in Finland(Jan 2020- Jul 2022)") +
+    theme_ipsum(axis_title_size = 13 ) +
+    theme(legend.position="none",
+          panel.spacing = unit(0.1, "lines"),
+          strip.text.x = element_text(size = 8),
+          plot.title = element_text(size=14)) +
+    facet_wrap(~type)
+sep
+```
+
+
+
+```{r TS plot for active,comment=NA, echo=FALSE, warning=FALSE}
+#time series plot for each active
+
+finland.DF %>% 
+  ggplot( aes(x=date, y=active)) +
+  geom_line(color="#69b3a2") +
+  ylim(0,60000) +
+geom_hline(yintercept=1267.9, color="orange", size=0.3) +
+  ggtitle("Time series plot for Active Cases") +
+  theme_ipsum(axis_title_size = 13 )+
+  theme(legend.position="none",
+        plot.title = element_text(size=14))
+```
+
+With the start of 2022 virus must have started spreading quickly. As for the the reason of that, above plot shows that rate keeps simple and neutral (even below the meanleavel (yellow line)) until like November of 2021. But with December of 2021 the active cases started increase until the April of 2022. Which also shows the highest rate so far on covid active cases.
+
+
+```{r TS plot for recovered,comment=NA, echo=FALSE, warning=FALSE}
+#time series plot for each recovered
+
+finland.DF %>% 
+  ggplot( aes(x=date, y=recovered)) +
+  geom_line(color="#2554C7") +
+  ylim(0,60000) +
+  geom_hline(yintercept=52.26, color="red", size=0.2) +
+    ggtitle("Time series plot for Recovered Cases") +
+  theme_ipsum(axis_title_size = 13 )+
+  theme(legend.position="none",
+        plot.title = element_text(size=14))
+```
+
+Majority of the recovered rates reported in beginning of 2021 year. However except that season, the recovered cases remain even below the mean level. Which is aloso like 0.
+
+```{r TS plot for deaths,comment=NA, echo=FALSE, warning=FALSE}
+#time series plot for each deaths
+
+finland.DF %>% 
+  ggplot( aes(x=date, y=deaths)) +
+  geom_line(color="#800000") +
+  ylim(0,60000) +
+  geom_hline(yintercept=5.46, color="black", size=0.3) +
+  ggtitle("Time series plot for Death Cases") +
+  theme_ipsum(axis_title_size = 13 )+
+  theme(legend.position="none",
+        plot.title = element_text(size=14))
+```
+
+However during the entire Time span, Finland's covid situation doesn't impact on human lives.
+Because , the death rate remains constant flat low value.
+
+```{r TS plot for confirmed,comment=NA, echo=FALSE, warning=FALSE}
+#time series plot for each confirmed
+
+finland.DF %>% 
+  ggplot( aes(x=date, y=confirmed)) +
+  geom_line(color="#6AFB92") +
+  ylim(0,60000) +
+  geom_hline(yintercept=1325.6, color="dark blue", size=0.3) +
+    ggtitle("Time series plot for Confirmed Cases") +
+  theme_ipsum(axis_title_size = 13 )+
+  theme(legend.position="none",
+        plot.title = element_text(size=14))
+
+
+```
+
+According to the above plot, largest number of confirmed cases, active cases, recovered cases were reported only on the beginning of 2022.
+
+```{r Interactive plot, comment=NA, echo=FALSE, warning=FALSE}
+plott <- finland_premium %>% 
+  ggplot( aes(x=date, y=cases, fill=type, text=type)) +
+  geom_area( ) +
+  scale_fill_viridis(discrete = TRUE) +
+  ggtitle("Covid case in Finland") +
+  theme_ipsum(axis_title_size = 13) +
+  theme(legend.position="none",
+        plot.title = element_text(size=15))
+
+# Turn it interactive
+plott<- ggplotly(plott, tooltip="text")
+plott 
+
+```
+Preferably we can check above figure for more flexibly, how each time frame was affected the situation inside Finland.
+
+### Comparison with "confirmed" cases of __Russia__ and __Sweden__
+
+```{r Neighbour confirmed plot, comment=NA, echo=FALSE, warning=FALSE}
+#filter Sweden,Russia,Finland 
+
+neighbour_country <- coronavirus %>% filter (continent_code=="EU")
+choosed_nei_country <- neighbour_country %>% filter (country== c ("Sweden", "Russia","Finland"))
+
+#variable asigning and mutating
+confirmed_nei_country <- choosed_nei_country %>% filter (type=="confirmed")
+confirmed_nei_country <- confirmed_nei_country %>% mutate(cases = replace (cases, which (cases<0),NA))
+
+comparePlot<-ggplot(confirmed_nei_country, aes(x=date, y= cases, colour=country)) +
+  geom_line() +
+  scale_fill_viridis(discrete = TRUE) +
+  theme_ipsum(axis_title_size = 13)
+ comparePlot
+```
+
+During the time zone of 2020-2022, Russia has always got into highest counts of confirmed covid cases. Beginning of the 2022 Russia confirms more than 200000 covid cases
+Until like 2022 Finland seems to have very slight amount of covid cases compared to Russia and Sweden.
+<b>
+<b>
+
+### Comparison with "death" cases of __Russia__ and __Sweden__.
+
+```{r deaths compare plot, comment=NA, echo=FALSE, warning=FALSE}
+#variable asigning and mutating
+deaths_nei_country <- choosed_nei_country %>% filter (type=="death")
+deaths_nei_country <- deaths_nei_country %>% mutate(cases = replace (cases, which (cases<0),NA))
+
+deathsPlot<-ggplot(deaths_nei_country, aes(x=date, y= cases, colour=country)) +
+  geom_line() +
+  scale_fill_viridis(discrete = TRUE) +
+  theme_ipsum(axis_title_size = 13)
+deathsPlot
+```
+
+
+Deaths due to covid-19 inside Russia seemly has huge amounts of spikes. Since the January of 2020 as the time spent on, Russia's daily death rate has increased. However after end of 2021 the rate start to retrograde. Compared to Russia, Sweden never had exact uplifting or downlifting distribution. Yet Sweden's death rate keeps a pretty big amount than Finland's rate.
+Except util 2022, Finland never had shown a considerable amount of death rate. Nevertheless Finland had been always carried on a Balanced low key profile thru this covid case.

@@ -1,0 +1,204 @@
+---
+title: "Covid-19 in Russia"
+author: 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+### 1.1.Background
+
+Russia or the Russian Federation, is a transcontinental country spanning Eastern Europe and Northern Asia. It is the largest country in the world, covering over 17,098,246 square kilometres, and encompassing one-eighth of Earth's inhabitable landmass. Russia extends across eleven time zones and borders sixteen sovereign nations, more than any other country in the world. It is the ninth-most populous country in the world and the most populous country in Europe, with a population of 146 million. The country's capital and largest city is Moscow, the largest city entirely within Europe. Saint Petersburg is Russia's cultural center and second-largest city. Other major urban areas include Novosibirsk, Yekaterinburg, Nizhny Novgorod and Kazan.
+
+### 1.2.Geometry
+
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+data(coronavirus)
+russia_corona <- coronavirus %>% filter(country == "Russia")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() + ggtitle("Russia: Location") +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = russia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+### 1.3.Economy
+
+The Russian economy is the world's eleventh-largest by nominal GDP and the sixth-largest by PPP. It has the world's largest stockpile of nuclear weapons, with the fifth-highest military expenditure. Russia's extensive mineral and energy resources are the world's largest, and it is among the leading producers of oil and natural gas globally. It is a permanent member of the United Nations Security Council, a member of the G20, the SCO, BRICS, the APEC, the OSCE and the WTO, as well as the leading member of the CIS, the CSTO, and the EAEU. Russia is home to 30 UNESCO World Heritage Sites.
+
+
+### 1.4.COVID-19 pandemic in Russia 
+
+The COVID-19 pandemic in Russia is part of the ongoing pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2).
+
+The virus was confirmed to have spread to Russia on 31 January 2020, when two Chinese citizens in Tyumen (Siberia) and Chita (Russian Far East) tested positive for the virus, with both cases being contained. Early prevention measures included restricting the China–Russia border and extensive testing. The infection spread from Italy on 2 March, leading to additional measures such as cancelling events, closing schools, theatres, and museums, as well as shutting the border and declaring a non-working period which, after two extensions, lasted until 11 May 2020. By the end of March 2020, COVID-19 lockdowns were imposed by the majority of Federal subjects of Russia, including Moscow. By 17 April 2020, cases had been confirmed in all federal subjects. At the beginning of September 2020, the number of COVID-19 cases in Russia exceeded a million. The number of COVID-19 cases in the country also exceeded two million on 19 November 2020, three million on 26 December 2020, four million on 10 February 2021, five million on 23 May 2021, six million on 20 July 2021, seven million on 5 September 2021, eight million on 18 October 2021, nine million on 13 November 2021, ten million on 12 December 2021 and 20 million on 10 September 2022. At the end of 2020, there were nearly 3.2 million COVID-19 cases in Russia. On 3 April 2021, the number of COVID-19 deaths in the country exceeded 100,000. Several months later, on 22 September 2021, the number of COVID-19 deaths in Russia exceeded 200,000. On 20 December 2021, the number of COVID-19 deaths in the country exceeded the number of COVID-19 deaths in Mexico. Two days later, on 22 December 2021, the number of COVID-19 deaths in Russia exceeded 300,000. At the end of 2021, there were nearly 10.5 million cases and nearly 310,000 deaths in the country.
+
+Russia has the tenth-highest number of confirmed cases in the world, after the United States, India, France, Brazil, Germany, South Korea, the United Kingdom, Italy and Japan. According to detailed data published by the Federal State Statistics Service (Rosstat), 114,268 people with COVID-19 died between April and November 2020. However, over 300,000 excess deaths were reported in the same time period, suggesting that the official pandemic death tally greatly underestimated the true number of COVID-19 related deaths. Analysis of excess deaths from official government demographic statistics, based on births and deaths and excluding migration, showed that Russia had its biggest ever annual population drop in peacetime, with the population declining by 997,000 between October 2020 and September 2021, which demographer Alexei Raksha interpreted as being primarily due to the COVID-19 pandemic.
+ 
+
+
+## 2.Exploratory Data Analysis
+
+### 2.1.Visualization of confirmed cases in Russia
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+confirmed_russia_corona <- russia_corona %>% filter(type=="confirmed")
+ggplot(confirmed_russia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Russia: Daily Covid-19 Confirmed Cases ")
+
+```
+
+This graph shows that the conformed covid-19 cases in Russia since 2020.According to this graph at the first half of 2022 there is a remarkable growth.
+
+### 2.2. Visualization of death cases in Russia
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+death_russia_corona <- russia_corona %>% filter(type=="death")
+ggplot(death_russia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Russia: Daily Covid-19 Death Cases ")
+```
+
+This graph implies that number of death Cases due to Corona Virus in Russia from 2020 to 2022.According to this graph the death cases has been increased upto the end of 2021.But in 2022 there is a decreesing. 
+
+
+### 2.3. Visualization of recovery cases in Russia
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+recovered_russia_corona <- russia_corona %>% filter(type=="recovery")
+ggplot(recovered_russia_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Russia: Daily Covid-19 Recovered Cases ")
+```
+
+According to this plot recovered cases from covid_19 in Russia has not been reported in 2022. There is a   2020 & 2021 
+
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+ggplot(russia_corona, aes(date, cases,color = type )) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Russia:Confirmed, Death and Recovered cases")
+
+```
+
+According to this graph the conformed cases are high than the recovery cases.But it not a large difference.
+
+### 2.4.Comparison with the neighbouring countries and Sri Lanka
+
+It is very important to know about the spread of covid-19 in neighbouring countries.For that, China, Belarus, Ukraine & North Korea were choose. As Sri Lankan it is important to compare the spread of covid-19 with other countries.
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+
+sri_lanka_corona<-coronavirus%>%filter(country=="Sri Lanka")
+china_corona<-coronavirus%>%filter(country=="China")
+belarus_corona<-coronavirus%>%filter(country=="Belarus")
+ukraine_corona<-coronavirus%>%filter(country=="Ukraine")
+north_korea_corona<-coronavirus%>%filter(country=="North Korea")
+
+countries_corona<-as.data.frame(rbind(sri_lanka_corona,china_corona,belarus_corona,ukraine_corona,north_korea_corona,russia_corona))
+
+confirmed_countries_corona<-countries_corona%>%filter(type=="confirmed")
+ggplot(confirmed_countries_corona, aes(date, cases,col=country))+
+  geom_line()+ facet_wrap(~country,nrow = 6)+
+  ggtitle("Comparison  of covid-19 confirmed cases between the neighbooring countries")
+
+```
+This plot shows a comparison of the conformed covid-19 cases since 2020 in Sri Lanka, China, Belarus,Ukraine, North Korea & Russia.
+
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+
+sri_lanka_corona<-coronavirus%>%filter(country=="Sri Lanka")
+china_corona<-coronavirus%>%filter(country=="China")
+belarus_corona<-coronavirus%>%filter(country=="Belarus")
+ukraine_corona<-coronavirus%>%filter(country=="Ukraine")
+north_korea_corona<-coronavirus%>%filter(country=="North Korea")
+
+countries_corona<-as.data.frame(rbind(sri_lanka_corona,china_corona,belarus_corona,ukraine_corona,north_korea_corona,russia_corona))
+
+recovered_countries_corona<-countries_corona%>%filter(type=="recovery")
+ggplot(recovered_countries_corona, aes(date, cases,col=country))+
+  geom_line()+ facet_wrap(~country,nrow = 6)+
+  ggtitle("Comparison  of covid-19 recovered cases between the neighbooring countries")
+
+```
+
+This plot shows a comparison of the recovery cases since 2020 in Sri Lanka, China, Belarus,Ukraine, North Korea & Russsia.
+
+
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+
+sri_lanka_corona<-coronavirus%>%filter(country=="Sri Lanka")
+china_corona<-coronavirus%>%filter(country=="China")
+belarus_corona<-coronavirus%>%filter(country=="Belarus")
+ukraine_corona<-coronavirus%>%filter(country=="Ukraine")
+north_korea_corona<-coronavirus%>%filter(country=="North Korea")
+
+countries_corona<-as.data.frame(rbind(sri_lanka_corona,china_corona,belarus_corona,ukraine_corona,north_korea_corona,russia_corona))
+
+death_countries_corona<-countries_corona%>%filter(type=="death")
+ggplot(death_countries_corona, aes(date, cases,col=country))+
+  geom_line()+ facet_wrap(~country,nrow = 6)+
+  ggtitle("Comparison  of covid-19 death cases between the neighbooring countries")
+
+```
+
+This plot shows a comparison of the death cases due to the covid-19 since 2020 in Sri Lanka, China, Belarus,Ukraine, North Korea & Russia.
+
+
+
+
+
+
+
+
+## 3.Conclusion & Discussion
+The data which has been used for the above analysis was taken  from the corona virus data set in R. By using plots, the conformed cases, recovery cases and the death cases due to corona virus in Russia was interpreted since 2020.
+
+At the beginning of this year, the conformed cases reached its peak. The Russia-Ukraine war can be reason for this.It can be conformed when we look at the comparison plot of conformed cases.Except Russia & Ukraine, in the all other countries have been reached there minimum in this year.At this time lots of countries recovered from the corona.
+
+Before 2022,the highest conformed cases are recorded by Russia.
+Also the death cases are increased in that period.At the first half of 2022 it becomes to decrease.The death cases also behave as the conformed cases.
+
+In Russia the highest recovery cases reached at the middle of 2021. 
+
+
+According to the comparison, we can say that both Russia & Ukraine are ahead of Sri Lanka in all three aspects. Within the comparison countries,(Sri Lanka, China, Belgium, Ukrain, North Korea ) Sri Lanka takes the third place. 
+
+
+
+
+
+## 4.Refference
+* https://en.wikipedia.org/wiki/Russia
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Russia
+* https://www.nationsonline.org>russia
+
+
+
+
+

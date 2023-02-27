@@ -1,0 +1,322 @@
+---
+title: "Report About Corona Virus Cases in Croatia"
+author: "M.M.G.S.Madhuranga"
+date: "10/3/2022"
+output: html_document
+---
+
+### Introduction
+
+Croatia is a Central European and Mediterranean nation that shares lengthy maritime borders with Italy in the Adriatic Sea and borders Slovenia to the west, Hungary to the north, Serbia to the east, and Bosnia and Herzegovina to the south. Together, these borders measure 2,028 km.
+
+Croatia is unlike any other country in the world and has a peculiar shape (like a croissant!). The Ottoman (Turkish) empire's five centuries of expansion into Central Europe are what gave it this peculiar shape. (However, despite this, the Turks never fully took control of Croatia; they did, however, rule over parts of its neighbors, including Serbia and Bosnia and Hercegovina.) On our history of Croatia page, we have more information about Croatia's past if that interests you.
+
+With a land area of 56,691 square kilometers and a population of 3.88 million, Croatia is a large country (2021 census â quite a fall from 4.29 million people recorded in the 2011 census). There are minorities of Serbian, Bosnian, Hungarian, and Italian in addition to the almost 90% Croat (most of whom are Roman Catholic) majority.
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+#data("coronavirus")
+croatia_corona <- coronavirus %>% filter(country == "Croatia")
+library(ggplot2) 
+library(maptools) 
+library(tibble)
+library(ggrepel)
+library(png) 
+library(gridBase) 
+library(sp) 
+data(wrld_simpl)
+croatia_location <- tibble(lat=100   , long=10) 
+ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "light blue", color = "white") +coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) +   
+geom_point(data = croatia_corona, aes(x = long, y = lat), color = "red", size = 1)
+
+
+
+mapdata<-map_data("world")
+zam_map<-filter(mapdata,region=="Croatia")
+data("wrld_simpl")
+
+p<-ggplot()+
+geom_polygon(data=wrld_simpl,aes(x=long, y=lat, 
+group=group), fill="white", colour="black") +
+  ggtitle("Croatia on the World Map")
+
+p + geom_point(data = zam_map,aes(x=long,y=lat), fill="black", colour="red")
+
+```
+
+
+#### This is a summary of the Croatia coronaviris data.
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+library(tidyverse) 
+library(magrittr)
+croatia_corona <- coronavirus %>% filter(country == "Croatia")
+summary(croatia_corona)
+```
+
+
+
+
+#### Following dataframe shows the Confirmed corona virus cases in Croatia.
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+croatia_corona <- coronavirus %>% filter(country == "Croatia")
+confirmedcases_croatia_corona <- croatia_corona %>% filter(type=="confirmed") 
+head(confirmedcases_croatia_corona)
+```
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+sum(confirmedcases_croatia_corona$cases)
+```
+
+#### The total confirmed cases in Croatia in this data set is 1143354.
+
+#### This graphs shows us how cofirmed cases reported in given years###
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+confirmedcases_croatia_corona<-croatia_corona %>%filter(type=="confirmed")
+ggplot(confirmedcases_croatia_corona, aes(x=date, y=cases)) + geom_area(fill="Yellow") + ggtitle("Croatia: Daily Covid-19 Confirmed cases")
+
+ggplot(confirmedcases_croatia_corona, aes(x=date, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.9,color="Red") + geom_jitter(aes(col=country,color="Red")) + ggtitle("Croatia: Daily Covid-19 Confirmed cases")+ylim(0,1200)
+```
+
+As we can see in this graph the number of confirmed cases in Croatia were increacing over the year. rapidly increased in end of the year 2021 and begining of 2022 and it came to a peak value in 1st quarter of 2022. The speciality of this data set is,we can see a pattern throughout the graph.
+
+
+
+
+
+#### Following dataframe shows the Death cases in Croatia cause of the Corona virus.
+
+```{r  echo=FALSE,warning=FALSE,message=FALSE}
+croatia_corona <- coronavirus %>% filter(country == "Croatia")
+death_croatia_corona <- croatia_corona %>% filter(type=="death") 
+head(death_croatia_corona)
+```
+
+#### The total Death cases in Croatia in this data set is 16043
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+sum(death_croatia_corona$cases)
+```
+
+#### This graphs shows us how Death cases reported in given years###
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+death_croatia_corona<-croatia_corona %>%filter(type=="death")
+ggplot(death_croatia_corona, aes(x=date, y=cases)) + geom_area(fill="Red") + ggtitle("Croatia: Daily Covid-19 Deaths")
+```
+
+In this graph we can see that the deaths in Croatia was in its peak point in the end of the year 2020. The deaths were decreased till the middle of the year 2021 and it were increased again. We can see a pattern like this until the end of the year 2022.The total deaths in Croatia in this data set is only 16043. Itâs approximately 1.4% from the confirmed cases in Croatia. 
+
+
+
+
+
+#### The following dataframe shows the recovered coronavirus cases in Croatia.
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+croatia_corona <- coronavirus %>% filter(country == "Croatia")
+recovered_croatia_corona <- croatia_corona %>% filter(type=="recovery") 
+head(recovered_croatia_corona)
+```
+
+
+#### Recovered cases cannot be a negative value. Therefore I took the mean value of nearest data and replace the mean  value to the minus value.
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+recovered_croatia_corona<-croatia_corona %>%filter(type=="recovery")
+recovered_croatia_corona<-recovered_croatia_corona %>% mutate(cases = replace(cases ,which(cases<0),NA))
+#which(is.na(recovered_croatia_corona$cases))
+
+```
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+#recovered_croatia_corona$cases[562] = mean(c(recovered_croatia_corona$cases[561], recovered_croatia_corona$cases[563]))
+#length(recovered_croatia_corona$cases)
+```
+
+#### The total Recovered in Croatia as in the data set is at least 354898.
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+sum(recovered_croatia_corona$cases)
+```
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(recovered_croatia_corona, aes(x=date, y=cases)) + geom_area(fill="Green") + ggtitle("Croatia: Daily Covid-19 Recoverie")
+```
+
+
+In this graph we can see that recovered cases high in end of the year 2020, that's because in end of  the year2020 confirmed cases were in a high level.Recovered cases are low in the middle of 2021. The total recovered cases in Croatia in this data set is only 354898. Itâs approximately 31.04% from the confirmed cases in Croatia. 
+
+
+
+
+
+#### Now we consider about the Active cases in Croatia.
+
+
+#### This graph shows that how active cases were recorded in those years.
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+df <- data.frame(confirmedcases_croatia_corona$date, cumsum(confirmedcases_croatia_corona$cases),cumsum(recovered_croatia_corona$cases),cumsum(death_croatia_corona$cases))
+df$active <- cumsum(confirmedcases_croatia_corona$cases)-cumsum(recovered_croatia_corona$cases)-cumsum(death_croatia_corona$cases)
+active_cases_croatia_corona <- df
+ggplot(active_cases_croatia_corona,aes(x=confirmedcases_croatia_corona$date,y=active)) + geom_area(fill="Blue") + ggtitle("Croatia: Daily Covid-19 Active")
+
+
+```
+
+
+#### Active corona recorded its maximum in the end of the year 2022
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(croatia_corona, aes(x=date, y=cases, col=type)) + geom_point() + ggtitle("All cases in Croatia") + ylim(0,10000)
+```
+Above Graph shows us that the confirmed cases were the most recorded cases in Croatia in that given time period. With comparing Confirmed and recovered cases,Death cases are vey low in Croatia 
+
+
+
+#### Now we concider how Corona virus effected on Coratia's Neighbour Countries. 
+
+
+
+```{r,include=FALSE,echo=FALSE,message=FALSE}
+
+europe_cleared <- coronavirus %>% filter(continent_code == "EU")
+countryselection<-europe_cleared %>%filter(country==c("Croatia","Italy","Slovenia","Hungary","Serbia","Bosnia and Herzegovina"))
+```
+
+
+#### This graph shows us about the confirmed cases in neighbour countries.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+confirmedcases_countryselection<-countryselection %>%filter(type=="confirmed")
+ggplot(confirmedcases_countryselection, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases in Croatia's neighbour countries") + ylim(0,4000000)
+
+ggplot(confirmedcases_countryselection, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in Croatia's neighbour countries") + ylim(0,10000)
+
+```
+
+#### Using 1st graph we can consider that there were higher confirmed cases inItaly compared to other countries.The reason is Italy has the highest population. When considering Hungary and Serbia there were approximately same confirmed cases.Bosnia and Herzegovina had the least cases comparing to the other countries. When considering the 2nd graph we can see that Italy  recorded higher outlier cases than other countries.
+
+
+
+#### This graphs shows about the Recoveries in neighbour Countries.
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+recovered_countryselection<-countryselection %>%filter(type=="recovery")
+recovered_countryselection<-recovered_countryselection %>% mutate(cases = replace(cases ,which(cases<0),NA))
+#which(is.na(recovered_countryselection$cases))
+
+#recovered_countryselection$cases[94] = mean(c(recovered_countryselection$cases[93], recovered_countryselection$cases[95]))
+#length(recovered_countryselection$cases)
+
+ggplot(recovered_countryselection, aes(x=country, y=cases)) + geom_col() + ggtitle("Recovered cases in Croatia's neighbour countries") + ylim(0,4000)
+
+ggplot(recovered_countryselection, aes(x=date, y=cases, col=country)) + geom_boxplot() + ggtitle("Recovered cases in Croatia's neighbour countries") + ylim(0,10000)
+```
+
+#### The number of recovered cases is approximately high in Croatia  compared to neighbor countries.Hungary and Solvenia have high number of recovered cases. In this case Hangary and Italy shows high outlier cases.
+
+
+
+### This is about the death cases in neighbour countries.
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+deaths_countryselection<-countryselection %>%filter(type=="death")
+
+ggplot(deaths_countryselection, aes(x=country, y=cases)) + geom_col() + ggtitle("Death cases in Croatia's neighbour countries") + ylim(0,4000)
+
+ggplot(deaths_countryselection, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Death cases in Croatia's neighbour countries") + ylim(0,800)
+```
+
+
+
+
+
+#### From these graphs we can clearly see that Croatia coronavirus deaths are approximately lower than the neighboring countries.Solvania  recorded the lowest deaths compared to neighbor countries.In here Italy have higher outlier cases.
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(countryselection, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("All cases in Croatia's neighbour countries") + ylim(0,10000)
+```
+
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+countryselection<-countryselection %>% mutate(cases = replace(cases ,which(cases<0),NA))
+#which(is.na(countryselection$cases))
+
+
+```
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+#countryselection$cases[973] = mean(c(countryselection$cases[972], countryselection$cases[974]))
+#length(countryselection$cases)
+
+#countryselection$cases[1862] = mean(c(countryselection$cases[1861], countryselection$cases[1863]))
+#length(countryselection$cases)
+
+
+```
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+
+ggplot(countryselection, aes(x=country, y=cases, col=type)) + geom_col() + ggtitle("Neighbour Countries: Daily Covid-19 cases by type") + facet_grid(type~.)
+
+```
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+ggplot(countryselection, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.9) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of All cases in Croatia's neighbour countries")+ylim(0,150000)
+```
+
+
+
+
+## Discussion
+
+1143354 confirmed cases of COVID-19 and 16043 fatalities have been reported as a result of the COVID-19 pandemic in Croatia.
+
+On February 25, a patient from Italy who had traveled to Zagreb was found to have the disease after testing positive. This was the country of Croatia's first case. The second instance connected to the first one was confirmed on the same day. A number of incidents were recorded in different Croatian cities in March 2020. The first recovery was recorded on March 12 and the first confirmed virus-related death was discovered on March 18.
+.During Croatia's time in office as EU Council president, a pandemic struck the country. The Croatian capital of Zagreb was struck by the largest earthquake in 140 years on March 22, 2020, which made it difficult to carry out the government's plans for social segregation during the country's lockdown in the latter portion of the first half of 2020. A national election for parliament was conducted on July 5, 2020. Local elections were held nationwide on May 16, 2021. During the summer of 2020, when tourists were most in demand, the nation was largely reopened.
+
+
+## Conclusion
+
+According to the given data set we cant more things about corona in Croatia. Using the given data we can determine how corona affected in Croatia in Years 2020,2021 and 2022.From the Croatia coronavirus data set it is clearly observable that Croatia's  death cases are in a low level and number of confirm cases  are increasing significantly end in the year 2022.
+
+
+
+## Refferences
+
+[https://www.visit-croatia.co.uk/about-croatia/](https://www.visit-croatia.co.uk/about-croatia/,https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Croatia)
+
+
+[https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Croatia](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Croatia)
+
+

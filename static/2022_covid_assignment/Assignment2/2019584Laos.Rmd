@@ -1,0 +1,487 @@
+---
+title: "Covid 19 in Laos"
+author: "T.R.Withanage"
+date: "2022-09-30"
+output: html_document
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+
+ library(devtools)
+ library(coronavirus) #loading the data set
+ data(coronavirus)
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+# loading supporting packages
+
+  library(tidyverse)
+  library(magrittr)
+  library(sqldf)
+  library(ggplot2)
+  library(gganimate)
+  library(magick)
+  library(maptools)
+  library(rgdal)
+  library(raster)
+  library(maps)
+  library(mapdata)
+  library(ggmap)
+  library(marmap)
+  library(lattice)
+  library(plotly)
+  library(ggpubr)
+  library(gridExtra)
+  library(crosstalk)
+  library(dplyr)
+  data("wrld_simpl")
+
+
+```
+
+
+### 1- What is Covid-19
+
+&emsp;&emsp;&emsp;&emsp;&emsp;According to WHO "Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus." Although first Covid-19 patient was reported from China in December 19 still the place of origin of the corona virus is uncertain
+
+&emsp;&emsp;&emsp;&emsp;&emsp;Corona virus can be spread from one infected person to another healthy person through mouth or nose of an infected person in small liquid when they cough,sneeze,speak or breath.The best way to prevent the spread of virus is to follow proper respiratory etiquette such as covering your by elbow when coughing,wearing a mask etc.Anyone can protect themselves by staying at least one meter away from an infected person
+
+
+
+
+
+### 2- Introduction
+
+&emsp;&emsp;&emsp;&emsp;&emsp; **"Laos"** or **" Lao People's Democratic Republic" ** is one of the few remaining communist state and one of the poorest country in South East Aisa.Laos was a french colony until 1953. From 1953 to 1975 there was a power struggle between the communist group" Pathet Lao" and "Royalists" and in 1975 communist groups were able to overthrow the monarchy and become a official communist state.Until 1990 Laos was an isolated country with a closed economy but with the falling of Soviet Union Laos was once again open to the world.But still Laos is one of the poorest country heavily depend on foreign aids. Main economic activity of Laos is agriculture. 80% of the total population depends on agricultural activities mainly paddy cultivating. Laos is also known for their Hydro power electricity production and their anticipation that Hydropower will become their main source of income by 2025.
+
+Some facts about Laos
+
+* Population - 7275556 
+* Area - 236 800 sqkm
+* Major languages - Lao, French
+* Major religion - Buddhism
+* Currency - kip
+
+
+### 2.1- Geographical location
+&emsp;&emsp;&emsp;&emsp;&emsp; Laos is a landlocked country bordered by China, Vietnam, Thailand, Cambodia and Myanmar.Laos has a very diverse landscape covered with mountains, upland plateaus and lowland plains
+
+### 2.2- location of Laos in the world map
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,include= FALSE }
+laos_corona<- coronavirus %>% filter(country == "Laos")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.show="hold", out.width="50%",}
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = laos_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+Laos <- getData('GADM', country="LA", level=1)
+plot(Laos, col = "red")
+
+
+```
+
+
+
+### 2.3- Health care system of Laos
+
+&emsp;&emsp;&emsp;&emsp;&emsp; Health care facilities in provided by both private and government sector in Laos. Because of the poor economic conditions Laos has developing health care system.According to WHO at present only 20% of the total population is covered by the universal health care plan provided by the Ministry of Health of Laos.The main reason for lack of coverage is the population of Laos being scattered around the country. Laotian government have taken many efforts to overcome these problems over the past few years in order to achieve universal health care coverage by 2025.One of the main step taken by the Laotian government to improve the accessibility of health services is to introduce separate health care programmes for different income groups. For civil servants State Authority for Social security, for employees of private and government enterprises Social Security Office,
+for informal-sector workers community based health insurance,
+for poor and maternal and child health Health Equity fund
+
+&emsp;&emsp;&emsp;&emsp;&emsp;Although government has taken many steps to improve the health care system of Laos due to following reasons they have not able to achieve the intended goals.
+
+* Lack of qualified staff
+* Poor infrastructure facilities
+* Lack of medical devices and medicinal drugs 
+
+
+### 2.4- Prevention of COVID 19
+
+
+&emsp;&emsp;&emsp;&emsp;&emsp; 28 year old man who visited the Thailand and returned to Laos on 9th March 2020 and 36 year old female tour guide were confirmed as the first two COVID -19 cases of  Lao People’s Democratic Republic were confirmed on 23rd of March 2020.With the growth of confirmed COVID - 19 cases government of Laos imposed the first lockdown of the country in April 2020 and after 2 years of the first lockdown Laos fully opened their boarders on May 9,2022. Alongside with fully and partially locking down the country Government of Laos took following actions to control the pandemic.
+
+* Suspension of incoming flights from countries where there is high rate COVID 19 cases and suspension of outgoing flights from local areas with high COVID 19 cases to foreign countries.
+* Prohibition of large gatherings,events.
+* Imposing conditions on small private gatherings
+* Closing down the border checkpoints to people and non essential goods except when when permission granted by the government after disinfecting the loads of goods.
+* Educating the public about the COVID 19 and urging public to observe the these measures.
+* Monitoring the individuals who are crossing the boarders.
+* Making wearing a medical device compulsory to every foreigner to track their movements within the country.
+* Establishing new treatment centers specially designed to treat COVID 19 patients. 
+
+
+## 3- Data Analysis 
+
+
+### 3.1- Varibles
+
+There are 14 variables in the data set whcih consist of both quantitative and qualitative variables
+
+##### Qualitative Variables
+
+* Date - Date the cases has been recorder. The data set analyzed on this report has data recorded from 2020-01-22 to 2022-06-23
+* Province - All the values related to this variable are NA in this dataframe.
+* Country - The Country data belongs to. In this data set Data belongs to Laos has been analysis
+* Type - Type of the recorded  cases.Whether it is a confirmed case.recovered case or a death
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+unique(laos_corona$type)
+```
+* iso2 and iso3 -  They are universally recognized country codes assign to identify a country.
+* uid and code3 are also used to identify the country of province.
+* Continent_name - Name of the continent country belongs to
+* continent_code - Code assigned to continent to identify uniquely.
+
+##### Quantitive variables
+
+* lat - Latitude used identify the location 
+* long - Longitude used to identify a location
+* cases - number of cases recorded in a particular day.
+* Population - Population of the country.
+
+
+
+Summary of the data set.
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+summary(laos_corona)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, include= FALSE }
+
+laos_corona_est<- coronavirus %>% filter(country == "Laos")%>% mutate(cases = replace(cases, which(cases < 0), NA)) 
+```
+Missing or negative values to be estimated
+```{r echo=FALSE, message=FALSE, warning=FALSE,}
+#Minus and missing values
+which(is.na(laos_corona_est$cases)) 
+```
+Estimation of missing values
+```{r message=FALSE, warning=FALSE,  }
+
+ 
+laos_corona_est$cases[872] = round(mean(c(laos_corona$cases[871],laos_corona$cases[873])),digits = 0)
+laos_corona_est$cases[1677] =round( mean(c(laos_corona$cases[1676],laos_corona$cases[1678])),digits = 0)
+laos_corona_est$cases[1875] =round( mean(c(laos_corona$cases[1874],laos_corona$cases[1876])),digits = 0)
+laos_corona_est$cases[2330] =round( mean(c(laos_corona$cases[2329],laos_corona$cases[2331])),digits = 0)
+
+
+```
+
+### 3.2- Distribution of all cases
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+laos_corona_sum <- laos_corona_est %>% group_by(type) %>% summarise(total = sum(cases))
+laos_corona_sum$total <- round(laos_corona_sum$total)
+d <- ggplot(laos_corona_sum, aes(x=type, y=total, fill = type)) + geom_col() + ggtitle("Figure 1 : All the cases reported according to type") 
+ggplotly(d)
+
+
+```
+
+When overall Covid-19 situation of Laos is considered number of recovered cases and number of deaths are at a very low level compared to the number of cases confirmed.
+
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,include = FALSE  }
+
+
+combine_ts <- SharedData$new(laos_corona_est,~type)
+combine_ts1 <- ggplot(combine_ts,aes(date,cases,color = type),is.na=FALSE) + geom_line()
+                     labs(x = "Date",
+                     y = "Cases",
+                     title = "Figure 2 : Distribution of all Recovered,Death,Confirmed Cases ")
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,  }
+ggplotly(combine_ts1) 
+
+```
+
+When Distribution of all the 3 cases considered daily confirmed cases reported has increased from April 2021. But daily recovered cases has not increased compared to the confirmed cases which is a negative fact. But number of deaths reported is also have not increased across time.
+
+
+#### 3.3- Distribution of confirmed cases across the time
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+confirmed_laos_corona <- laos_corona %>% filter(type=="confirmed")
+confirmed_laos_corona <- confirmed_laos_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, include= FALSE }
+which(is.na(confirmed_laos_corona$cases)) # Using base R
+confirmed_laos_corona$cases[872] = mean(c(confirmed_laos_corona$cases[871], confirmed_laos_corona$cases[873]))
+
+length(confirmed_laos_corona$cases)
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,}
+confirmed_laos_corona$status <- as.factor(c(rep("brown", 870),rep("red", 2),rep("brown", 884-872)))
+
+
+p11 <- ggplot(confirmed_laos_corona, aes(x=date, y=(cases))) +
+      geom_line(aes(color =status, group=1)) + 
+      labs(x = "Date",
+           y = "Confirmed cases",
+           title = "Figure 3 : Distribution of confirmed cases across time" )+
+  scale_colour_identity()
+
+ggplotly(p11) 
+
+
+
+```
+* In the graph <span style="color: red;">red</span> data points represents estimated missing values  to remove the discontinuity of the graph and <span style="color: brown;"> brown </span> points represents origina data points
+
+According to the above graph from 2020 January to 2021 April number of Covid confirmed cases are at a very low level. From 2021 April onwards rate of number of confirmed reported has been increased drastically. After 2022 April once again the confirmed cases reported are at a very low level. .
+
+##### 3.4- Distribution of Recovered Cases across time
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+recovered_laos_corona <- laos_corona %>% filter(type=="recovery")
+recovered_laos_corona <- recovered_laos_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, include= FALSE }
+
+which(is.na(recovered_laos_corona$cases)) # Using base R
+recovered_laos_corona$cases[107] = mean(c(recovered_laos_corona$cases[106], recovered_laos_corona$cases[108]))
+recovered_laos_corona$cases[562] = mean(c(recovered_laos_corona$cases[561], recovered_laos_corona$cases[563]))
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+recovered_laos_corona$col <- as.factor( c(rep("dark blue", 105), rep("black", 2), rep("dark blue",560-107),rep("red",2),rep("dark blue",884-562)))  
+
+
+
+p21 <- ggplot(recovered_laos_corona, aes(x=date, y=round((cases)))) +
+      geom_line(aes(colour=col, group=1)) + 
+      labs(x = "Date",
+           y = "Recovered cases",
+          title = "Figure 4 : Distribution of recovered cases across time ")+
+    scale_colour_identity() 
+ggplotly(p21)
+
+```
+* <span style="color: black;"> black </span>and <span style="color: red;">red</span> colour represents the estimted data points to remove the discontinuity of the graph. <span style="color: dark blue;"> dark blue</span> represents the original data points.
+
+From January 2020 to April 2021 number of recovered cases are at a then there is a sudden increase in the number of recovered cases after April 2021.From April 2021 to August 2021 recovered cases are varies largely with the date. After 2021-8-5 no new recovered cases have been reported.Excluding the estimated values highest number of recovered cases has been reported on 2021-07-28.
+
+
+
+#### 3.5 - Distribution of deaths occured across time
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, include= FALSE }
+
+death_laos_corona <- laos_corona %>% filter(type=="death")
+death_laos_corona <- death_laos_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, include= FALSE }
+
+which(is.na(death_laos_corona$cases)) # Using base R
+death_laos_corona$cases[793] = mean(c(death_laos_corona$cases[792], death_laos_corona$cases[794]))
+
+length(death_laos_corona$cases)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,}
+
+death_laos_corona$col <- as.factor(c(rep("dark green", 791),rep("red", 2), rep("dark green", 884-793)))
+
+p31 <- ggplot(death_laos_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  labs(x = "Date",
+       y = "Deaths",
+       title = " Figure 5 : Distribution of deaths number of deaths across time")+
+       scale_colour_identity()
+ggplotly(p31)
+
+
+```
+* <span style="color: red;">red </span> data points are estimated data points estimated to remove the discontinuity of the graph and <span style="color: dark green;"> dark green </span> data points are original values.
+
+First Covid -19 death has been reported on 2021-05-09. After September 2021 number of Covid-19 deaths have been reported more frequently. Highest daily death count has been reported on 2021-12-24 which is 17 deaths.
+
+#### 3.6 -Distribution of active covid cases across time
+
+Estimating active corona cases.
+Active covid-19 cases is not a variable in the original data set. Active cases are derived using following method.
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE, }
+
+confirm <- laos_corona_est %>% filter(type == "confirmed")
+death <- laos_corona_est %>% filter(type == "death")
+recover <- laos_corona_est %>% filter(type == "recovery")
+
+active_corona <- data.frame(active =cumsum(confirm$cases - (death$cases + recover$cases)),date =laos_corona_est$date)
+
+```
+
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+
+p_active<- ggplot(active_corona, aes(x=date, y=active)) +
+  geom_line() +
+  labs(x="date" ,"active cases" ,title="figure 6 - Distribution of active cases")
+ggplotly(p_active)
+
+```
+
+Like in the case of confirmed cases,recovered cases and deaths at the initial stage active cases have been reported at a very low level.From the start of July 2021 number of covid 19 cases has reported has increased at a increasing rate untill may 2022.
+
+### 3.7- Comparison with other countries
+
+In this section Covid -19 situation of Laos is compared with the Countries with highest number of reported cases Covid-19  according to World Health Organization which are United States of America,Italy,India,France,Brazil,Germany and with countries in the same region as Laos which are Vietnam,Thailand,Cambodia,Myanmar,Indonesia,Philippines,Singapore.
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, include = FALSE }
+
+world_corona <- coronavirus%>% filter(country==c("Laos","US", "Italy", "India", "France", "Brazil", "Germany")) %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+region_corona <- coronavirus%>% filter(country==c( "Laos","Vietnam", "Thailand", "Cambodia", "Myanmar","Indonesia","Philippines","Singapore")) %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+```
+
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,  }
+
+
+world_corona_confirmed <- world_corona%>% filter(type == "confirmed")
+sdworld_confirmed <- SharedData$new(world_corona_confirmed,~country)
+pworld_comfirmed <- ggplot(sdworld_confirmed,aes(date,cases,color = country),is.na=FALSE) + geom_line() + 
+           labs(x = "Date",
+           y = "Deaths",
+           title = "Figure 7 : Distribution of confirmed cases around the world")
+ggplotly(pworld_comfirmed) %>%
+  highlight(on = "plotly_hover")
+
+```
+.
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,  }
+region_corona_confirmed <- region_corona%>% filter(type == "confirmed")
+sdregion_confirmed <- SharedData$new(region_corona_confirmed,~country)
+pregion_confirmed <- ggplot(sdregion_confirmed,aes(date,cases,color = country),is.na=FALSE) + geom_line()+
+                     labs(x = "Date",
+                     y = "Confirmed cases",
+                     title = "Figure 8 : Distribution of confirmed cases in the region")
+ggplotly(pregion_confirmed) %>%
+  highlight(on = "plotly_hover")
+
+
+```
+Compared to most affected countries around the world  and countries in the South East Asian region of confirmed cases recorded from Laos is negligible.Above diagrams shows that number of confirmed cases has peaked at different time points which implies that covid waves are occured at different time points in different countries.In most countries confirmed covid cases has been started to report from the January 2020 but in Laos and other countries in the region confirmed cases have started to report from April 2021.
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+
+
+world_corona_death <- world_corona%>% filter(type == "death")
+sdworld_death <- SharedData$new(world_corona_death,~country)
+pworld_death <- ggplot(sdworld_death,aes(date,cases,color = country),is.na=FALSE) + geom_line() + 
+           labs(x = "Date",
+           y = "Deaths",
+           title = "Figure 9 : Distribution of deaths around the world")
+ggplotly(pworld_death) %>%
+  highlight(on = "plotly_hover")
+
+```
+According to above figure number of deaths reported from the Germany,India and Brazil. Compared to other countries in the world number of deaths reported from the Laos is also at a very low level.
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,  }
+
+
+region_corona_death <- region_corona%>% filter(type == "death")
+sdregion_death <- SharedData$new(region_corona_death,~country)
+pregion_death <- ggplot(sdregion_death,aes(date,cases,color = country),is.na=FALSE) + geom_line()+
+                     labs(x = "Date",
+                     y = "Deaths",
+                     title = "Figure 10 : Distribution of deaths in the region")
+ggplotly(pregion_death) %>%
+  highlight(on = "plotly_hover")
+
+
+
+
+```
+In the South East Asian Region most most deaths has been reported from Indonesia.Distribution of number of deaths reported across the time is very much low in Cambodia,Laos and Vietnam.
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+world_corona_recover <- world_corona%>% filter(type == "recovery")
+sdworld_recover <- SharedData$new(world_corona_recover,~country)
+pregion_recover <- ggplot(sdworld_recover,aes(date,cases,color = country),is.na=FALSE) + geom_line() + 
+           labs(x = "Date",
+           y = "recovered cases",
+           title = "Figure 11 : Distribution of recovered cases around the world")
+ggplotly(pregion_recover) %>%
+  highlight(on = "plotly_hover")
+
+```
+According to above figure India,Brazil,US have higher recovered cases  but those countries also have higher confirmed case.Number of reocovered cases reported from Laos is at very low level compared to other countries. 
+``` {r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,  }
+
+
+region_corona_recover <- region_corona%>% filter(type == "recovery")
+sdregion_recover <- SharedData$new((region_corona_recover),~country)
+pregion_recover <- ggplot(sdregion_recover,aes(date,cases,color = country),is.na=FALSE) + geom_line()+
+                     labs(x = "Date",
+                     y = "recovered cases",
+                     title = "Figure 12 : Distribution of recovered cases in the region")
+ggplotly(pregion_recover) %>%
+  highlight(on = "plotly_hover")
+
+
+
+```
+
+In the region also number of recovered cases across the time is very low compared to the other countries. Most recovered cases have been reported from Indonesia and Philippines.
+
+
+
+### 4 -Discussion
+
+
+With the declaration of Covid-19 outbreak as global pandemic on 11th of March 2020 by World Health Organization as a country bordered with China Laos has been able to keep the corona outbreak under control at the initial stage.Steps taken by the government such as establishing a functioning surveillance system, as closing the borders with China at the early stage of the pandemic may have help them to achieve the initial success. Laos has shown less number of cases compared to the other countries bordered with China in the region. 
+
+Despite the initial success after a year from the declaration of covid 19 outbreak as a global pandemic.
+The covid 19 situation of Laos has drastically changed. Emerging of new covid 19 variants which spreads, inefficiency of public health taken by the government due to economic situation of Laos, Shortage of healthcare workers may have caused the drastic change in the covid-19 situation of Laos
+
+Currently Government of Laos is in the process of vaccinating people. They started a door to door vaccination programme in late 2021.Atpresent With the help of foreign aid and guidance of WHO Laos has been able to kee the covid 19 outbreak under control.
+
+### 5- Conlusions
+
+Because of the public health sector Laos has been able to face covid -19 pandemic successfully compared to other countries in the world and in the region. Improving the private health sector alongside with the public health sector will help the Laos to reduce the burden of health expenditures on whole economy.Which may lead to more effective health system in future.
+
+
+
+### 6- References
+
+* www.who.int. (n.d.). Ministry of Health and WHO respond to first case of COVID-19 in Laos. [online] Available at: https://www.who.int/laos/news/detail/24-03-2020-ministry-of-health-and-who-respond-to-first-case-of-covid-19-in-laos.
+
+* Silverstein, J. and Zasloff, J.J. (2018). Laos | History, Geography, & Culture. In: Encyclopædia Britannica. [online] Available at: https://www.britannica.com/place/Laos.
+
+* Laos country profile. (2018). BBC News. [online] 24 Jul. Available at: https://www.bbc.com/news/world-asia-pacific-15351898.
+
+* Bethesda, C.H.P.B.M. 7315 W.A.S. 400W, Japan, Singapore, Kong, H., India, Indonesia, Korea, Malaysia, Philippines, Taiwan, Thail and Vietnam. (n.d.). Healthcare in Laos. [online] Pacific Bridge Medical. Available at: https://www.pacificbridgemedical.com/publication/healthcare-in-laos/.
+
+* Monitoring knowledge, risk perceptions, preventive behaviours, and public trust in the current coronavirus outbreak in Georgia Analytical Report of the First, Second and Third Wave Studies. (2020). [online] Available at: https://www.unicef.org/georgia/media/4736/file/COVID-19-Study-Analytical-Report-1-st-2nd-and-3rd-waves-Eng.pdf.
+
+* Bhargava, H. (2021). Coronavirus History: Origin and Evolution. [online] WebMD. Available at: https://www.webmd.com/lung/coronavirus-history.
+
+* Silver, A. (2022). Covid-19: What went wrong after initial success in Laos? BMJ, [online] 377, p.o994. doi:10.1136/bmj.o994.
+
+

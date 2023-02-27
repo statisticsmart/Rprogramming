@@ -1,0 +1,322 @@
+---
+title: "THE COVID-19 PANDEMIC IN ITALY"
+
+
+author: "G.C.CHATHURANGA  AS2019320"
+date: "2022-10-02"
+output: html_document
+---
+***
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE )
+```
+
+```{r, echo=FALSE, include=FALSE}
+#install.packages("devtools")
+library(devtools)
+
+#devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+
+#get_individual_project_country("AS2019320")
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(plotly)
+library(zoo)
+library(kableExtra)
+library(dplyr)
+data(coronavirus)
+data(wrld_simpl)
+
+```
+
+```{r, echo=FALSE, include=FALSE}
+italy_corona <- coronavirus %>% filter(country == "Italy")
+```
+
+# 1. Introduction
+
+Until March 28, 2020, there were ~90,000 confirmed cases of coronavirus disease (COVID-19) in Italy, with 26,000 in-patients, 3,800 patients in intensive care units (ICUs), 40,000 positive in home isolation, and 10,000 deaths, according to the Italian Civil Protection bulletin1. Italy currently has the highest COVID-19 mortality rate worldwide, even compared to the People's Republic of China where the number of COVID-19 deaths totaled over 3,000 cases, including potential re-infections. Globally, there are ~570,000 cases and 26,000 deaths due to COVID-19. According to the World Health Organization (WHO) as of March 28, 2020, the number of COVID-19 positive cases in Spain is increasing, with 64,000 infected cases and 5,000 deaths.
+
+In the United States, in the span of a few days, there were 85,000 cases and 1,200 deaths due to COVID-19; Germany has 48,000 confirmed cases, and France has 32,000 cases with 600 deaths2.
+
+After a short respite with 9,000 COVID-19 cases and only 140 deaths, the infection has resurged and the number of confirmed cases are continuously increasing in South Korea3. An analysis of the data in the daily updates communicated by the Civil Protection, showed that most of the COVID-19 cases and deaths are limited to Northern Italy—especially Lombardy, Emilia Romagna, Veneto, and Piedmont—with the numbers fortunately decreasing toward central and southern Italy, and very few cases documented in Basilicata1. The most severely affected regions are also the regions where healthcare services have always been considered excellent; the hospitals of Lombardy and Veneto are the Italian centers of excellence with regard to standard protocols and management for many diseases, especially neoplastic conditions, and there was a high rate of passive migration of patients from the South to northern hospitals.
+
+The Lombardy region has a higher number of intensive care and resuscitation beds compared to southern Italy; unfortunately, these places are fast running out of hospital beds and facing challenges in the provision of primary care for conditions other than COVID-19, necessitating the transfer of numerous patients to other regions4. The situation would probably have been considerably worse if the regions of Southern Italy had the highest number of COVID-19 cases.
+
+These numbers confirm the fact that we are facing a pandemic, which was declared by the WHO a few days ago.
+
+
+## * Location of Italy
+
+```{r, echo=FALSE}
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = italy_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+Italy is located in south-central Europe, and it is also considered a part of western Europe.
+
+***
+
+# 2. Exploratory Data Analysis
+
+First we look at the summary of the corona virus cases in Italy
+
+
+
+```{r, echo=FALSE}
+summary(italy_corona)
+
+```
+
+```{r, echo=FALSE}
+
+italy_corona$Month <- months(as.Date(italy_corona$date))
+
+recovered_italy_corona <- italy_corona %>% filter(type=="recovery")
+confirmed_italy_corona <- italy_corona %>% filter(type=="confirmed")
+death_italy_corona     <- italy_corona %>% filter(type=="death")
+```
+
+
+```{r}
+recovered_italy_corona <- recovered_italy_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+
+
+### * Summer Table
+```{r, echo=FALSE}
+sumary<-italy_corona %>%
+  group_by(type) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  summarise(
+    minimum = min(na.locf(cases)),
+    maximum= max(na.locf(cases)),
+    median=median(na.locf(cases)),
+    mean = mean(na.locf(cases)),
+    total=sum(na.locf(cases))
+  )
+
+
+sumary %>% kbl() %>% kable_styling()
+```
+
+
+
+### * Distribution Of Corona Cases
+
+
+```{r}
+italy_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~type,
+    y = ~cases,
+    color = ~type,
+    type = "bar",
+    mode = "diamond",
+    name = ~type
+  )
+```
+
+* According to the chart above, the death toll is very low compared to Italy's confirmations, and the numbers of recoveries is close to four millions.
+
+
+```{r}
+
+italy_confirmed_corona <- italy_corona %>% filter(type == "confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+italy_death_corona <- italy_corona %>% filter(type == "death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+italy_recovered_corona <- italy_corona %>% filter(type == "recovery")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+italy_confirmed_cases <- select(italy_confirmed_corona, cases)
+total_confirmed_cases <- sum(italy_confirmed_cases)
+
+italy_death_cases <- select(italy_death_corona, cases)
+total_death_cases <- sum(italy_death_cases)
+
+italy_recovered_cases <- select(italy_recovered_corona, cases)
+total_recovered_cases <- sum(italy_recovered_cases, na.rm = TRUE) 
+
+italy_active_cases <-  italy_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+```
+
+
+
+
+
+```{r}
+ggplotly(ggplot(italy_death_corona, aes(x = date, y= cases))
+      +geom_line(color = "orange") 
+      +geom_point(color = "orange",size = 0.7) 
+      +geom_area(fill = "orange") 
+      +ggtitle("Figure 1 - Deaths due to COVID-19 in Italy"))
+```
+
+* In march 2020, a rapid increase in deaths in also shown, and althought it shows a decrease by august of the same year, it appears that it has increased even more by december. Lower increases can be clearly seen in this graph.
+
+```{r}
+ggplotly(ggplot(italy_recovered_corona, aes(x = date, y= cases))
+      +geom_line(color = "green") 
+      +geom_point(color = "green",size = 0.7) 
+      +geom_area(fill = "green") 
+      +ggtitle("Figure 2 - Recovered due to COVID-19 in Italy"))
+```
+
+* Recoveries were very low in the early and middle months of 2020 but showed an increase from November 2020 and decreased by August 2021 and remained zero thereafter. 
+
+```{r}
+ggplotly(ggplot(italy_active_cases,aes(x =date,y =total_active))
+      +geom_line(color="yellow")
+      +ggtitle("Figure 3 - Active cases due to COVID-19 in Italy"))
+```
+* Here it is at a minimum value from 2020 to August 2021 and it shows a temporary increase in August and again shows a constant value until December and then increase again.
+
+
+```{r}
+Compare_with_other_countries <- coronavirus %>% filter(country %in% c("Spain","Italy", "India","Saudi Arabia")) %>% mutate(cases = replace(cases, which(cases < 0),NA))
+
+confirmed_cases <- Compare_with_other_countries %>% filter(type=="confirmed")
+ggplotly(ggplot(confirmed_cases, aes(x=date,y=cases,color=country))
+         +geom_line())
+
+```
+<div align="center">**Figure 04** : COVID-19 Daily Confirmed in Saudi Arabia, Spain, Oman and India</div>
+</center>
+
+* India showed the highest number of confirmations in 2020 and 2021, while Spain showed the highest number of confirmations in early 2022.Confirmation in Saudi Arabia and Italy are the lowest in all three years.
+
+
+```{r}
+death_cases <- Compare_with_other_countries %>% filter(type=="death")
+ggplotly(ggplot(death_cases, aes(x=date,y=cases,color=country))
+         +geom_line())
+```
+<div align="center">**Figure 05** : COVID-19 Daily death in Saudi Arabia, Spain, Oman and India</div>
+</center>
+
+* India shows the highest number of deaths, which will peak by June 2021.Italy and Spain have the highest number of deaths in all three years.
+
+
+```{r}
+death_cases <- Compare_with_other_countries %>% filter(type=="recovery")
+ggplotly(ggplot(death_cases, aes(x=date,y=cases,color=country))
+         +geom_line())
+```
+<div align="center">**Figure 06** : COVID-19 Daily recovery in Saudi Arabia, Spain, Oman and India</div>
+</center>
+
+* India shows the highest number of recoveries followed by Italy with the second highest number of recoveries.
+
+
+```{r}
+saudi_arabia_corona <- coronavirus %>% filter(country == "Saudi Arabia")
+
+Oman_corona <- coronavirus %>% filter(country == "Italy")
+
+India_corona <- coronavirus %>% filter(country == "India")
+
+Spain_corona <- coronavirus %>% filter(country == "Spain")
+
+
+x_country_total_confirmed_cases <- function(x_country_corona){
+  x_country_confirmed_corona <- x_country_corona %>% filter(type == "confirmed")%>% mutate(cases =   replace(cases, which(cases < 0), NA))
+  
+  x_country_confirmed_cases <- select(x_country_confirmed_corona, cases)
+  total_confirmed_cases <- sum(x_country_confirmed_cases, na.rm = TRUE)
+  
+  return(total_confirmed_cases)
+}
+
+
+x_country_total_death_cases <- function(x_country_corona){
+  x_country_death_corona <- x_country_corona %>% filter(type == "death")%>% mutate(cases =   replace(cases, which(cases < 0), NA))
+  
+  x_country_death_cases <- select(x_country_death_corona, cases)
+  total_death_cases <- sum(x_country_death_cases, na.rm = TRUE)
+  
+  return(total_death_cases)
+}
+
+
+x_country_total_recoveryd_cases <- function(x_country_corona){
+  x_country_recovery_corona <- x_country_corona %>% filter(type == "recovery")%>% mutate(cases =   replace(cases, which(cases < 0), NA))
+  
+  x_country_recovery_cases <- select(x_country_recovery_corona, cases)
+  total_recovery_cases <- sum(x_country_recovery_cases, na.rm = TRUE)
+  
+  return(total_recovery_cases)
+}
+
+
+
+```
+
+
+```{r}
+summary_table_other_countries <- tibble(Country=c("Spain","Saudi Arabia", "Italy","India"),
+                        Confirmed=c(x_country_total_confirmed_cases(Oman_corona),x_country_total_confirmed_cases(saudi_arabia_corona)	,x_country_total_confirmed_cases(Spain_corona),x_country_total_confirmed_cases(India_corona)),
+                        Death=c(x_country_total_death_cases(Oman_corona),x_country_total_death_cases(saudi_arabia_corona),x_country_total_death_cases(Spain_corona),x_country_total_death_cases(India_corona)),
+                        Recovery=c(x_country_total_recoveryd_cases(Oman_corona),x_country_total_recoveryd_cases(saudi_arabia_corona),x_country_total_recoveryd_cases(Spain_corona),x_country_total_recoveryd_cases(India_corona)),
+                        Active=c(12438391,271726,12438391,11860333))%>%
+  mutate(Death_Percentage = round((Death/Confirmed)*100, 2), Recovered_Percentage = round((Recovery/Confirmed)*100, 2),
+Active_Percentage=round((Active/Confirmed)*100, 2)) 
+
+summary_table_other_countries %>% kbl() %>% kable_styling()
+  
+```
+
+
+
+# 3. Discussion
+* some gaps and key issues can be identified in the Italian case. First of all, there are some gaps and potential biases in epidemiological data. Increasing or decreasing trends in the number of new diagnoses are likely due to changes in testing policies, and may be biased. For instance, individuals with severe symptoms are more likely to be tested than those with no symptoms. Next, common tests used for COVID-19 diagnosis may be not accurate, and their validity may be poor [26]. In addition, the date of symptom onset was not available for all diagnosed cases. According to the National Institute of Health, this can be due to the fact that some of the diagnosed cases have not yet developed symptoms and/or due to the failure to consolidate the data itself. Moreover, the clinical status of positive cases was not available for all patients and was not assessed in a standardized way in all regions [14]. Such information and measurement biases can compromise the quality and completeness of data, which would greatly affect the accuracy and reliability of mathematical models and estimations of socio-economic impact of COVID-19. Caution is warranted in the interpretation of data.
+
+Second, mathematical predictions about the future evolution of the epidemic are subject to a significant level of uncertainty due to several influencing factors, such as people’s individual behaviours and compliance with containment measures that are being implemented , meaning that it will take some time before it is possible to actually evaluate the efficacy of such interventions. Epidemiological investigations suggested that the infection transmission took place within the country for all identified cases, with the exception of the first two ones that were reported by the Lazio region and were probably infected in China . Regarding the regional distribution of cases, by the 19 March, COVID-19 cases had been reported in all Italian regions [14]. Cases were mainly concentrated in the Northern part of the country, especially in the regions of Lombardia (which represents the epicentre of the epidemic), Emilia Romagna, Veneto and Marche [14]; however, according to the infographics published on the 27 March, Piemonte, Toscana and Lazio add to the list of most affected regionn. In some regions, cases are more sporadic, with more limited transmission chains .
+
+Third, the number of deaths in Italy has now surpassed China’s officially reported deaths, but when analysing this type of epidemiological data, the national context should always be taken into account: the Italian population is relatively old and the CFR for COVID-19 is higher for the elderly; also, social distancing is not part of the Italian culture, unlike other cultures where it is implemented in people’s daily routines. Social distance has so far generated serious consequences, affecting social relationships and interactions (especially the empathic process), the economy and employment rates, and widening the digital and cultural infrastructure divide.
+
+Last but not least, the most important question remains on how to manage the epidemic in the long-term in view of the need at some point to restore economic activities. It has been argued that a strong and better economic recovery from the COVID-19 pandemic requires governments to make the services sector a key element in their policy mix, as services play a key role in increasing productivity, efficiency and effectiveness in the whole economy. On 27th October, the Italian Government approved the “Ristori” Decree Law [29], which introduces further urgent measures for the protection of health and for the support of workers and production sectors, as well as in the field of justice and safety related to the COVID epidemic -19. The Decree Law allocated 5.4 billion euros in terms of net debt and 6.2 billion in terms of balance for the restoration of the economic activities concerned, directly or indirectly, by the restrictions placed on health protection by the 24th of October Decree Law. This Decree, valid until today, mandated that public places (bars and restaurants) may remain open every day including weekends and holidays until 6.00 pm; closure of gyms and swimming pools; and suspension of cinema and theatre activities
+
+
+
+
+# 4. Conclusions
+
+* In conclusion, since Italy is the first and the most affected country in Europe, some lessons can be learned from the Italian case which could be useful to other European and non-European countries. First of all, the government initially underestimated the potential impact of the new epidemic, by allowing people to get on with their normal lives, and overestimated the country’s preparedness to deal with it. For instance, at the end of January 2020, the Prime Minister declared that Italy was fully prepared to respond to COVID-19, and, when Milan (Lombardia), which is the country’s financial capital, was first hit by the epidemic, the political class spread a video with the slogan “Milan does not stop”. On the other hand (second lesson learned), it must be acknowledged that Italy was the first Western country to adopt very severe containment measures, which are apparently leading to early signs of improvement and are being used as a model by other countries Indeed, as described above, the government moved quickly from quarantining eleven municipalities in Northern Italy (“Red Zone”) to placing the whole national territory under lockdown and interrupting all non-essential economic activities. Third, a large number of health care professionals has been infected, which means they might be overexposed to the risk of infection due to lack of adequate PPE and safe working conditions, which would allow them to perform their duties while at the same time preserving their health and not becoming potential transmission channels themselves. Fourth, communication strategies have not always been efficient and have generated waves of public panic. This appears particularly evident when considering the following example: the government’s decision to put some areas of Northern Italy under full lockdown was communicated to the press before being officially approved, which resulted in an exodus towards the South of the country and the subsequent spread of the virus. As it has been argued that Italy wasted these lessons during the second wave of the pandemic, it is important that what is learned is then followed up with appropriate actions from governments and other stakeholders involved in the management of the pandemic.
+
+# References
+
+* https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7767319/
+* https://www.frontiersin.org/articles/10.3389/fmed.2020.00140/full
+
+
+

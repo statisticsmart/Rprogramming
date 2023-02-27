@@ -1,0 +1,342 @@
+---
+title: "Covid-19 state in Romania "
+author: "W.A.Dishilki Jayarathne"
+date: "10/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Romania
+
+Romania is a country located at the crossroads of Central, Eastern, and Southeastern Europe. It borders Bulgaria to the south, Ukraine to the north, Hungary to the west, Serbia to the southwest, Moldova to the east, and the Black Sea to the southeast. It has a predominantly temperate-continental climate, and an area of 238,397 km2 (92,046 sq mi), with a population of around 19 million. Romania is the twelfth-largest country in Europe and the sixth-most populous member state of the European Union. Its capital and largest city is Bucharest.
+
+<https://en.wikipedia.org/wiki/Romania#:~:text=Romania%20is%20the%20twelfth%2Dlargest,Romania>.
+
+## About Helthcare in Romania
+
+Romania regularly falls around last place in the European Health Consumer Index. It has an underfunded and inefficient system.Romania has a program of universal health insurance. There is a mandatory payroll tax which the country uses to provide coverage to the entire population. Romania consistently spends around 4% of its GDP on healthcare, which is one of the lowest rates in the E.U. In addition to health insurance, the government also operates a majority of the hospitals in the country, many of which are aging and chronically underfunded. The country has built very few new hospitals since the end of communism. While Romania has opened the door to private insurance and hospitals over the past few decades, they have yet to take off. There is an acute shortage of healthcare professionals in the country,with around 30% of positions unfilled.
+
+ Acoding to <https://www.frontiersin.org/articles/10.3389/fpubh.2021.813941/full> article, During the first few months, the vaccination campaign progressed as planned, but then it stalled. By the surge of the fourth wave, only ≈30% of Romanians were fully immunized, one of the lowest COVID-19 vaccination coverages in Europe, and the main reason for this epidemiological crisis
+
+<https://borgenproject.org/healthcare-in-romania/>
+
+
+
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+library(maps)
+library(ggmap)
+library(ggthemes)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+library(ggplot2) 
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+summary(Romania_covid_data)
+dim(Romania_covid_data)
+```
+```{r message=FALSE, warning=TRUE, echo=FALSE}
+europemap <- get_stamenmap(bbox=c(left=-13.4,bottom=37.3,right=50.6,top =56.4),maptype="terrain",zoom=4 )
+ggmap(europemap)+
+geom_point(data=Romania_covid_data,aes(x=long,y=lat,color= "red"),size=.40)+
+theme_map()
+
+```
+
+## Exploratory Data Analysis
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+glimpse(Romania_covid_data)
+unique(Romania_covid_data$province )
+unique(Romania_covid_data$country )
+unique(Romania_covid_data$type)
+unique(Romania_covid_data$cases)
+```
+In this data set data were gathered daily over 3 years including this year.The data set wasn't categorized as province. And there was one negative value in recovered cases. Data were collected in types as confirmed cases, death cases and recovered cases.
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+Romania_covid_data <- Romania_covid_data[!duplicated(Romania_covid_data) , ]
+Romania_covid_data<-Romania_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+unique(Romania_covid_data$cases)
+which(is.na(Romania_covid_data$cases))
+Romania_covid_data$cases[2330] = mean(c(Romania_covid_data$cases[2329], Romania_covid_data$cases[2331]))
+length(Romania_covid_data$cases)
+
+```
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+mean(Romania_covid_data$cases)
+max(Romania_covid_data$cases)
+min(Romania_covid_data$cases)
+```
+Acoding this data set Romania shows 44991 covid-19 cases as the maximum number of cases over 3 years. And approximately 1519 cases per day. 
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+unique(Romania_covid_data$cases)
+```
+
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+confirmedcases_Romania_covid_data <- Romania_covid_data %>% filter(type=="confirmed")
+ggplot(confirmedcases_Romania_covid_data,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 1: Daily covid-19 confirmed cases in Romania")
+sum(confirmedcases_Romania_covid_data$cases)
+mean(confirmedcases_Romania_covid_data$cases)
+max(confirmedcases_Romania_covid_data$cases)
+
+```
+
+ According to figure 1, number of covid-19 confirmed cases are maximized in 2022 with 2915487 maximum number of confirmed cases .In this figure we can clearly identify 4 corona waves have been affected to the country Romania.
+And it shows approximately 3298 number of Confirmed cases per day. There were 2915487 total number of confirmed cases in total over 2020 to 2022 years.
+
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+deathcases_Romania_covid_data <- Romania_covid_data %>% filter(type=="death")
+ggplot(deathcases_Romania_covid_data,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 2: Daily covid-19 death cases in Romania")
+sum(deathcases_Romania_covid_data$cases)
+mean(deathcases_Romania_covid_data$cases)
+max(deathcases_Romania_covid_data$cases)
+```
+
+ In total  65726 death covid-19 cases were reported in Romania. Maximum number of death were recorded in year 2022.ti was 591 death cases. Acoding to this data set Romania shows approximately 74 of mean death rate.
+ 
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+recoveredcases_Romania_covid_data <- Romania_covid_data %>% filter(type=="recovery")
+ggplot(recoveredcases_Romania_covid_data,aes(x=date,y=cases))+geom_line()+ggtitle("Figure 3: Daily covid-19 recovered cases in Romania")
+sum(recoveredcases_Romania_covid_data$cases)
+mean(recoveredcases_Romania_covid_data$cases)
+max(recoveredcases_Romania_covid_data$cases)
+```
+
+ In total 1048072 recovered covid-19 cases were reported in Romania. This figure shows one outnumbered value of 1048151 recovered cases in one day. Inspite of that maximum recovery number is approximately 14000. And all those recovered cases were reported within 2020 to 2021. In 2022 there were almost no recovery cases reported in this data set.
+
+```{r echo=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country == "Romania")
+Romania_covid_data<- Romania_covid_data %>% filter(cases >= 0)
+coronaRomania_wider <- Romania_covid_data %>% pivot_wider(names_from = type, values_from = cases)
+coronaRomania_wider$active_Romania_covid <- coronaRomania_wider$confirmed - coronaRomania_wider$death - coronaRomania_wider$recovery
+ggplot(coronaRomania_wider, aes(x=date, y=active_Romania_covid)) + geom_line() + ggtitle(" Figure 4: Daily Covid-19 Active cases in Romania")
+
+```
+
+```{r echo=FALSE, message=TRUE, warning=TRUE}
+ggplot(Romania_covid_data,aes(x=date,y=cases,col=type))+geom_col()+ggtitle("Figure 5: Daily covid-19 cases of Romania by type")+facet_grid(type~.)
+
+```
+This figure shows that reported death count is extreamly lower than the reported cofirmed cases and recovery cases.
+And also in 2021 almost all confirmed covid-19 cases patiants had been recovered.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+confirmedcases_Romania_covid_data <- Romania_covid_data %>% filter(type=="confirmed")
+
+Ukraine_covid_data <- coronavirus %>% filter(country =="Ukraine")
+Ukraine_covid_data <- Ukraine_covid_data[!duplicated(Ukraine_covid_data) , ]
+confirmedcases_Ukraine_covid_data <- Ukraine_covid_data %>% filter(type=="confirmed")
+
+
+Moldova_covid_data <- coronavirus %>% filter(country =="Moldova")
+Moldova_covid_data <- Moldova_covid_data[!duplicated(Moldova_covid_data) , ]
+confirmedcases_Moldova_covid_data <- Moldova_covid_data %>% filter(type=="confirmed")
+
+Bulgaria_covid_data <- coronavirus %>% filter(country =="Bulgaria")
+Bulgaria_covid_data <- Bulgaria_covid_data[!duplicated(Bulgaria_covid_data) , ]
+confirmedcases_Bulgaria_covid_data <- Bulgaria_covid_data %>% filter(type=="confirmed")
+
+Serbia_covid_data <- coronavirus %>% filter(country =="Serbia")
+Serbia_covid_data <- Serbia_covid_data[!duplicated(Serbia_covid_data) , ]
+confirmedcases_Serbia_covid_data <- Serbia_covid_data %>% filter(type=="confirmed")
+
+Hungary_covid_data <- coronavirus %>% filter(country =="Hungary")
+Hungary_covid_data <- Hungary_covid_data[!duplicated(Hungary_covid_data) , ]
+confirmedcases_Hungary_covid_data <- Hungary_covid_data %>% filter(type=="confirmed")
+
+Neighboringcountries_confirmcases <- rbind(confirmedcases_Romania_covid_data,confirmedcases_Ukraine_covid_data,confirmedcases_Moldova_covid_data,confirmedcases_Bulgaria_covid_data,confirmedcases_Serbia_covid_data,confirmedcases_Hungary_covid_data)
+
+ggplot(Neighboringcountries_confirmcases, aes(x=country, y=cases, col= country))  + geom_jitter(aes(col=country))+geom_boxplot(outlier.shape = NA, alpha = 0.5,fill=" white")+ ggtitle("Figure 6: Confirmed cases in Romania's neighbouring countries")+ ylim(0,50000)
+``` 
+Among neighbouring countries Ukraine shows the highest average reported confirm covid-19 cases per day. And Romania shows the second highest value of that. Highest reported confirm covid-19 cases per day was reported from Hungary and Ukraine.
+Meanwhile Moldova shows the lowest average reported confirm covid-19 cases per day.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+Romania_covid_data <- Romania_covid_data[!duplicated(Romania_covid_data) , ]
+Deathcases_Romania_covid_data <- Romania_covid_data %>% filter(type=="death")
+
+Ukraine_covid_data <- coronavirus %>% filter(country =="Ukraine")
+Ukraine_covid_data <- Ukraine_covid_data[!duplicated(Ukraine_covid_data) , ]
+Deathcases_Ukraine_covid_data <- Ukraine_covid_data %>% filter(type=="death")
+
+
+Moldova_covid_data <- coronavirus %>% filter(country =="Moldova")
+Moldova_covid_data <- Moldova_covid_data[!duplicated(Moldova_covid_data) , ]
+Deathcases_Moldova_covid_data <- Moldova_covid_data %>% filter(type=="death")
+
+Bulgaria_covid_data <- coronavirus %>% filter(country =="Bulgaria")
+Bulgaria_covid_data <- Bulgaria_covid_data[!duplicated(Bulgaria_covid_data) , ]
+Deathcases_Bulgaria_covid_data <- Bulgaria_covid_data %>% filter(type=="death")
+
+Serbia_covid_data <- coronavirus %>% filter(country =="Serbia")
+Serbia_covid_data <- Serbia_covid_data[!duplicated(Serbia_covid_data) , ]
+Deathcases_Serbia_covid_data <- Serbia_covid_data %>% filter(type=="death")
+
+Hungary_covid_data <- coronavirus %>% filter(country =="Hungary")
+Hungary_covid_data <- Hungary_covid_data[!duplicated(Hungary_covid_data) , ]
+Deathcases_Hungary_covid_data <- Hungary_covid_data %>% filter(type=="death")
+
+Neighboringcountries_deathcases <- rbind(Deathcases_Romania_covid_data,Deathcases_Ukraine_covid_data,Deathcases_Moldova_covid_data,Deathcases_Bulgaria_covid_data,Deathcases_Serbia_covid_data,Deathcases_Hungary_covid_data)
+
+ggplot(Neighboringcountries_deathcases, aes(x=country, y=cases, col= country))  + geom_jitter(aes(col=country,alpha = 0.2))+geom_boxplot(outlier.shape = NA, alpha = 0.5,fill=" white") + ggtitle("Figure 7: Deathcases in Romania's neighbouring countries")+ ylim(0,1000)
+```
+Highest deathcount per day was recorded in Ukraine Romania's deathcount was comparatively lower than that. But the mean recorded deathcount per day fo both Ukraine and Romania is approximately equal.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+Romania_covid_data <- Romania_covid_data[!duplicated(Romania_covid_data) , ]
+Recoverycases_Romania_covid_data <- Romania_covid_data %>% filter(type=="recovery")
+
+Ukraine_covid_data <- coronavirus %>% filter(country =="Ukraine")
+Ukraine_covid_data <- Ukraine_covid_data[!duplicated(Ukraine_covid_data) , ]
+Recoverycases_Ukraine_covid_data <- Ukraine_covid_data %>% filter(type=="recovery")
+
+Moldova_covid_data <- coronavirus %>% filter(country =="Moldova")
+Moldova_covid_data <- Moldova_covid_data[!duplicated(Moldova_covid_data) , ]
+Recoverycases_Moldova_covid_data <- Moldova_covid_data %>% filter(type=="recovery")
+
+Bulgaria_covid_data <- coronavirus %>% filter(country =="Bulgaria")
+Bulgaria_covid_data <- Bulgaria_covid_data[!duplicated(Bulgaria_covid_data) , ]
+Recoverycases_Bulgaria_covid_data <- Bulgaria_covid_data %>% filter(type=="recovery")
+
+Serbia_covid_data <- coronavirus %>% filter(country =="Serbia")
+Serbia_covid_data <- Serbia_covid_data[!duplicated(Serbia_covid_data) , ]
+Recoverycases_Serbia_covid_data <- Serbia_covid_data %>% filter(type=="recovery")
+
+Hungary_covid_data <- coronavirus %>% filter(country =="Hungary")
+Hungary_covid_data <- Hungary_covid_data[!duplicated(Hungary_covid_data) , ]
+Recoverycases_Hungary_covid_data <- Hungary_covid_data %>% filter(type=="recovery")
+
+Neighboringcountries_recoverycases <- rbind(Recoverycases_Romania_covid_data,Recoverycases_Ukraine_covid_data,Recoverycases_Moldova_covid_data,Recoverycases_Bulgaria_covid_data,Recoverycases_Serbia_covid_data,Recoverycases_Hungary_covid_data)
+
+ggplot(Neighboringcountries_recoverycases, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("Figure 8: Recoverycases in Romania's neighbouring countries")
+
+```
+This figure shows there were few number of minus values recorded in each country.
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+Recoverycases_Romania_covid_data <- Ukraine_covid_data %>% filter(type=="recovery")
+Recoverycases_Romania_covid_data<-Romania_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+unique(Recoverycases_Romania_covid_data$cases)
+which(is.na(Recoverycases_Romania_covid_data$cases))
+Recoverycases_Romania_covid_data$cases[2330] = mean(c(Recoverycases_Romania_covid_data$cases[2329], Recoverycases_Romania_covid_data$cases[2331]))
+
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Ukraine_covid_data <- coronavirus %>% filter(country =="Ukraine")
+Recoverycases_Ukraine_covid_data <- Ukraine_covid_data %>% filter(type=="recovery")
+Recoverycases_Ukraine_covid_data<- Recoverycases_Ukraine_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+unique(Recoverycases_Ukraine_covid_data$cases)
+which(is.na(Recoverycases_Ukraine_covid_data$cases))
+Recoverycases_Ukraine_covid_data$cases[562] = mean(c(Recoverycases_Ukraine_covid_data$cases[561], Recoverycases_Ukraine_covid_data$cases[563]))
+
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Recoverycases_Moldova_covid_data <- Moldova_covid_data %>% filter(type=="recovery")
+Recoverycases_Moldova_covid_data<-Recoverycases_Moldova_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+unique(Recoverycases_Moldova_covid_data$cases)
+which(is.na(Recoverycases_Moldova_covid_data$cases))
+Recoverycases_Moldova_covid_data$cases[562] = mean(c(Recoverycases_Moldova_covid_data$cases[561], Recoverycases_Moldova_covid_data$cases[563]))
+unique(Recoverycases_Moldova_covid_data$cases)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Recoverycases_Bulgaria_covid_data <- Bulgaria_covid_data %>% filter(type=="recovery")
+Recoverycases_Bulgaria_covid_data<-Recoverycases_Bulgaria_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+unique(Recoverycases_Bulgaria_covid_data$cases)
+which(is.na(Recoverycases_Bulgaria_covid_data$cases))
+Recoverycases_Bulgaria_covid_data$cases[562] = mean(c(Bulgaria_covid_data$cases[561], Bulgaria_covid_data$cases[563]))
+unique(Recoverycases_Bulgaria_covid_data$cases)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Recoverycases_Serbia_covid_data <- Serbia_covid_data %>% filter(type=="recovery")
+Recoverycases_Serbia_covid_data<-Recoverycases_Serbia_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+unique(Recoverycases_Serbia_covid_data$cases)
+which(is.na(Recoverycases_Serbia_covid_data$cases))
+Recoverycases_Serbia_covid_data$cases[65] = mean(c(Recoverycases_Serbia_covid_data$cases[64], Recoverycases_Serbia_covid_data$cases[66]))
+Recoverycases_Serbia_covid_data$cases[139] = mean(c(Recoverycases_Serbia_covid_data$cases[138], Recoverycases_Serbia_covid_data$cases[140]))
+Recoverycases_Serbia_covid_data$cases[181] = mean(c(Recoverycases_Serbia_covid_data$cases[180], Recoverycases_Serbia_covid_data$cases[182]))
+unique(Recoverycases_Serbia_covid_data$cases)
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Recoverycases_Hungary_covid_data <- Hungary_covid_data %>% filter(type=="recovery")
+Recoverycases_Hungary_covid_data<-Recoverycases_Hungary_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+unique(Recoverycases_Hungary_covid_data$cases)
+which(is.na(Recoverycases_Hungary_covid_data$cases))
+Recoverycases_Hungary_covid_data$cases[562] = mean(c(Recoverycases_Hungary_covid_data$cases[561], Recoverycases_Hungary_covid_data$cases[563]))
+unique(Recoverycases_Hungary_covid_data$cases)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Neighboringcountries_recoverycases <- rbind(Recoverycases_Romania_covid_data,Recoverycases_Ukraine_covid_data,Recoverycases_Moldova_covid_data,Recoverycases_Bulgaria_covid_data,Recoverycases_Serbia_covid_data,Recoverycases_Hungary_covid_data)
+
+ggplot(Neighboringcountries_recoverycases, aes(x=country, y=cases, col= country)) +  geom_jitter(aes(col=country,alpha = 0.2))+ geom_boxplot(outlier.shape = NA, alpha = 0.5,fill=" white") + ggtitle("Figure 9: Recoverycases in Romania's neighbouring countries")
+```
+Acoding to this figure Romania shows the highest recorded recovery counts than the other neighbouring countries.
+But Ukraine shows higest recorded mean recovery count per day.
+
+### Let us consider the COVID-19 recovery cases in Ukrain and Romania
+```{r message=FALSE, warning=FALSE, ,echo=FALSE}
+library(coronavirus)
+
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+Recoverycases_Romania_covid_data <- Ukraine_covid_data %>% filter(type=="recovery")
+Recoverycases_Romania_covid_data<-Romania_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+Recoverycases_Romania_covid_data$cases[2330] = mean(c(Recoverycases_Romania_covid_data$cases[2329], Recoverycases_Romania_covid_data$cases[2331]))
+
+Ukraine_covid_data <- coronavirus %>% filter(country =="Ukraine")
+Recoverycases_Ukraine_covid_data <- Ukraine_covid_data %>% filter(type=="recovery")
+Recoverycases_Ukraine_covid_data<- Recoverycases_Ukraine_covid_data %>% mutate(cases = replace(cases,which(cases<0),NA))
+Recoverycases_Ukraine_covid_data$cases[562] = mean(c(Recoverycases_Ukraine_covid_data$cases[561], Recoverycases_Ukraine_covid_data$cases[563]))
+
+RomaniaVSUkraine_recoverycases <- rbind(Recoverycases_Romania_covid_data,Recoverycases_Ukraine_covid_data)
+
+ggplot(RomaniaVSUkraine_recoverycases,aes(x=date,y=cases))+geom_col(aes(col=country))+ggtitle("Figure 10: Daily covid-19 recovered cases in Romania Vs Ukraine")
+```
+If we consider the recorded recovery data broadly we can see that Romaina had done good job recovering from the COVID-19 than the Ukrain after all.
+
+```{r message=FALSE, warning=FALSE, ,echo=FALSE}
+Romania_covid_data <- coronavirus %>% filter(country =="Romania")
+Romania_covid_data <- Romania_covid_data[!duplicated(Romania_covid_data) , ]
+Deathcases_Romania_covid_data <- Romania_covid_data %>% filter(type=="death")
+
+Italy_covid_data <- coronavirus %>% filter(country =="Italy")
+Italy_covid_data <- Italy_covid_data[!duplicated(Italy_covid_data) , ]
+Deathcases_Italy_covid_data <- Italy_covid_data %>% filter(type=="death")
+
+RomaniaVSItaly_recoverycases <- rbind(Deathcases_Romania_covid_data ,Deathcases_Italy_covid_data)
+
+ggplot(RomaniaVSItaly_recoverycases,aes(x=date,y=cases))+geom_col(aes(col=country))+ggtitle("Figure 10: Daily covid-19 death cases in Romania Vs Italy")
+
+```
+ Italy is a neibouring country of Romania and also Italy severely affected by the COVID-19.
+ Therefore if we compared Romania with Italy we can clearly see the difference because Romania shows less death rate throught the time than the Italy.
+ 
+## Discussion and Conclusion
+
+From the above analysis, we can conclude that Romania shows the higher no of confirmed cases and deaths in 2022 than 2020 and 2021. we can see that Romania had been succusesfully recovered from 2021 COVID-19 wave.
+Compaired to the neighbouring countries such as Ukrain, Moldova,Bulgaria,Serbia and Hungary , Romania shows second worse situation. COVID-19 was more severely affected to the Ukraine than Romania. But Romania was in more safer situation than Italy. Because Italy shows that it was severely affected by COVID-19.
+But from the recorded data we can see the large number of confirmed cases had been recorded in 2022 but the number of death count and recovery counts are so much lower that means there were people who had been infected by corona yet had not been recovered or dead. we can conclude that there is a lack of information in this data set to discribe thatkind siuation.
+
+
+## References
+
+Wikipedia - [<https://en.wikipedia.org/wiki/Romania#:~:text=Romania%20is%20the%20twelfth%2Dlargest,Romania>.]
+
+<https://www.frontiersin.org/articles/10.3389/fpubh.2021.813941/full>
+
+<https://borgenproject.org/healthcare-in-romania/>

@@ -1,0 +1,363 @@
+---
+title: "AS2019510DominicanRepublic"
+author: "Lanka Ranasinghe"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## COVID-19 pandemic in the Dominican Republic
+## Abstract
+
+On 31 December 2019, the Health Commission of Wuhan, Hubei, China, informed the WHO about a cluster of acute pneumonia cases with unknown origin in its province. On 9 January 2020, the Chinese Center for Disease Control and Prevention (CCDC) reported the identification of a novel coronavirus (later identified as the SARS-CoV-2) as the cause. The disease in China affected over 80,000 people, causing over 3,200 deaths (as of March 25, 2020) and has now spread to over 210 countries and territories across the world.The COVID-19 pandemic has become a global health crisis that has affected countries across all continents in the world except Antarctica. Therefore, understanding the strategic responses related towards controlling the pandemic can be of much importance.  
+ references :- https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Dominican_Republic
+ 
+## Background
+
+## 1.1 Introduction
+
+The  COVID-19 Coronavirus is the hottest topic. This is caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). Every day, the media and newspapers share the number of new cases and deaths in several countries, try to measure the impacts of the virus on citizens and remind people to stay home in order to stay safe. In addition to governments, media and companies discussing about it, data scientists and data professionals in general are putting their knowledge and time at the service of the virus. This leads to a have analyzation of this pandemic situation, the expansion of the COVID-19 and how it spreads in the population.
+Dominican Republic is also a part of the ongoing worldwide pandemic of coronavirus disease.Health authorities in the Dominican Republic said on Sunday that they had confirmed the first case of coronavirus in the country, a tourist visiting from Italy.
+
+The patient, a 62-year-old man, was transferred on Sunday to an isolation room in a military hospital near the capital and is in stable condition, Health Minister Rafael Sanchez said at a press conference. Another tourist, a 56-year-old man from France, is under observation in the hospital and awaiting test results for the virus.
+
+As coronavirus spreads rapidly around the globe, Dominican authorities on Friday ordered the cancellation of all flights from Milan for 30 days. The measure will affect some 4,000 passengers who had reservations to fly with a low-cost airline from Milan to La Romana, a coastal tourist area, according to statistics from the Ministry of Tourism.
+
+The Dominican government also said on Friday that it will subject all travelers coming from Italy, regardless of nationality, to epidemiological reviews at airports in the Caribbean nation.
+
+references :-https://www.reuters.com/
+
+## 1.2 Visualization of the country
+
+The Dominican Republic (/dəˈmɪnɪkən/ də-MIN-ik-ən; Spanish: República Dominicana, pronounced [reˈpuβlika ðominiˈkana] (listen)) is a country located on the island of Hispaniola in the Greater Antilles archipelago of the Caribbean region. It occupies the eastern five-eighths of the island, which it shares with Haiti,[13][14] making Hispaniola one of only two Caribbean islands, along with Saint Martin, that is shared by two sovereign states. The Dominican Republic is the second-largest nation in the Antilles by area (after Cuba) at 48,671 square kilometers (18,792 sq mi), and third-largest by population, with approximately 10.7 million people (2022 est.), down from 10.8 million in 2020, of whom approximately 3.3 million live in the metropolitan area of Santo Domingo, the capital city.[4][15][16] The official language of the country is Spanish.
+The Dominican Republic is the most visited destination in the Caribbean.[34] The year-round golf courses are major attractions.[35] A geographically diverse nation, the Dominican Republic is home to both the Caribbean's tallest mountain peak, Pico Duarte, and the Caribbean's largest lake and lowest point, Lake Enriquillo.[36] The island has an average temperature of 26 °C (78.8 °F) and great climatic and biological diversity.[35] The country is also the site of the first cathedral, castle, monastery, and fortress built in the Americas, located in Santo Domingo's Colonial Zone, a World Heritage Site.[37][38] Baseball is the de facto national sport.
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+dominican_republic_corona<-coronavirus%>%filter(country=="Dominican Republic")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill=" pink",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = dominican_republic_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+```
+
+
+references :-https://en.wikipedia.org/wiki/Dominican_Republic
+
+
+## 1.3 Climate condition of Dominican Republic
+The DR enjoys a tropical climate with the typical year-round warm and humid conditions associated with the Tropics. Seasonal mean temperatures range from 20‐25˚C in the winter months (December to February), to 25‐27˚C in the warmer months of June to August and September to November.
+
+reference :-https://climateknowledgeportal.worldbank.org/country/dominican-republic/climate-data-historical#:~:text=The%20DR%20enjoys%20a%20tropical,August%20and%20September%20to%20November.
+
+## 1.4. Demographics of Dominican Republic
+
+The Dominican Republic is a Caribbean nation that shares the island of Hispaniola with Haiti to the west. It's known for its beaches, resorts and golfing. Its terrain comprises rainforest, savannah and highlands, including Pico Duarte, the Caribbean’s tallest mountain. Capital city Santo Domingo has Spanish landmarks like the Gothic Catedral Primada de America dating back 5 centuries in its Zona Colonial district. 
+
+
+reference ― Google
+
+Population: 10.85 million (2020) World Bank
+
+GNI per capita: 17,060 PPP dollars (2020) World Bank
+
+Fertility rate: 2.32 births per woman (2019) World Bank
+
+Population growth rate: 1.0% annual change (2020) World Bank
+
+Life expectancy: 74.08 years (2019) World Bank
+
+Official language: Spanish
+
+## 1.5. Lockdown status of the country
+
+The Dominican Republic's Ministry of Health confirmed the first case of coronavirus (COVID-19) in the country on Sunday, March 1. According to officials, a tourist visiting the country from Italy tested positive for the virus. The individual is being treated in isolation at a hospital near Santo Domingo. A second individual from France is reportedly being monitored for the virus as well.
+
+Further international spread of the virus is anticipated over the near term.The country’s response has adjusted to the needs created by the pandemic. Initially, with the economy in lockdown, the response prioritized health spending and broad transfers to low-income families and the unemployed, and targeted tax relief. The Central Bank reacted decisively through interest rate cuts and ample liquidity provision that supported credit and activity. As the economy began to recover, policies became more targeted. Broad support programs ended in April 2021, but temporary social programs were gradually merged into a new social assistance program. Support to the unemployed focused on the most affected sectors, notably tourism. To support a safe reopening, new health spending focused on the rollout of vaccines. The government has set a target of immunizing 7.8 million people—over 70 percent of the population. Around 51 percent  of the target population has received two vaccine doses, as of July 25, 2021.
+
+references :-https://www.imf.org/en/News/Articles/2021/07/08/na071221-four-charts-on-the-dominican-republics-crisis-response-and-recovery
+https://crisis24.garda.com/alerts/2020/03/dominican-republic-government-confirms-first-covid-19-case-march-1
+
+## 1.6. Actions taken by the government
+
+First measures -
+
+A number of schools and universities suspended classes due to COVID-19 concerns on March 16 and 17, with many switching to virtual learning platforms.[25]
+
+National measures
+On 17 March, President Danilo Medina gave an address to the nation and declared a state of emergency, announcing a series of measures to try and stop the spread of the virus.[26] He ordered all land, sea, and air borders be closed for the next 15 days, taking effect as of 19 March. Additionally, all commercial business activity will be suspended, with the exception of supermarkets, convenience stores, gas stations, and pharmacies. Schools will remain closed through 13 April, and public employees who are 60 years of age or over, or those with a pre-existing health condition, must stay confined to their residences.[citation needed]
+
+On 20 March 2020, the government decreed a mandatory night curfew from 8pm to 6am until 3 April. Only doctors and health workers, journalists, and guardsmen were exempt.[27] However, many residents in the Greater Santo Domingo area resisted the measure; on the first night, 1,714 were arrested during the curfew.[28] On the second night, 2,102 were arrested during the curfew.[29]
+
+On 26 March 2020, the government extended the night curfew schedule to 13 hours: from 5pm to 6am.[30]
+
+March 31, 2020, President Danilo Medina appointed (Decree 140–20) Doctor Amado Alejandro Baez as his senior advisor for Public Health and chief executive officer for the Presidential COVID-19 Committee.[31] The Presidential COVID-19 Committee was tasked with creating public-private partnerships as well as developing public policy, strategies and operations to combat COVID-19 at a national level. The committee presented on April 5 a comprehensive technology utilization, hospital capacity augmentation and Test-Trace- Treat strategy with a focus on strengthening local government capacities via public-private partnerships. The centerpiece of the strategy was "Public Value in Crisis Model" piloted on April 12, 2020, at San Francisco de Macoris (SFM) Duarte province. #PlanDuarte [32] targeted SFM as the highest case and mortality city at that time. Within two weeks of implementing #PlanDuarte the province started showing evidence of a positive impact in reported positivity, critical care use and mortality[33][34] in early May the focused and targeted approach to Duarte Province resulted in a statistically significant impact on Case Fatality Ratio for the whole country.[35] The Public Value in Crisis model was reproduced successfully in multiple other provinces and more recently became the hallmark on the National District strategy under the leadership of Mayor Carolina Mejia. On April 22, 2020, The first Dominican Epidemiology Intelligence Center was developed by the Presidential COVID-19 Committee under the leadership of Minister of Defense Lt General Paulino Sem, Counter Admiral Lee Balester and Doctor Amado Alejandro Baez. The Epi Intel Center was housed out of the Ministry of Defense C5i Center [36] and tasked with creating inter-agency "Intelligence Fusion" efforts that guided country-wide strategies and COVID-19 operations.[37] After the successful implementation of the C5i Epidemiology Intelligence Fusion Center, the Dominican Ministry of Public Health viewed this model as very important and effective and proceeded reproduced this effort four months later in August 2020, creating the MOH "Center for Public Health Intelligence" [38] After the epidemiological impact of COVID-19 post the July 5th 2020 presidential elections, the DR experienced a peak in positivity on July 23, after which a continuous deceleration was noticed up to late September, this prompted a formal public congratulations by the World health Organization to the Dominican Government on Sept 24th 2020 [39] the drastic improvements were noted on positivity rates, case fatality ratios and hospital capacity utilization, clearly this being evidence of all collective efforts of prior and current (August 16) authorities. Similarly on Sept 25th 2020, Dominican media reported the country as having one of the lowest mortality rates in the region (CFR ~1.9%)[40]
+
+Local measures-
+
+A number of provinces have decided to limit access to their territories to avoid contagion from COVID-19, such as San José de Ocoa,[41] and El Seibo, which remained case-free (as of 26 March).[42] Other provinces in case-free areas are asking their authorities for similar measures.[43] The National District of Santo Domingo under the leadership of Mayor Carolina Mejia, developed in conjunction with the Santo Domingo Health Cluster (www.clustersaludsd.org) the "Municipal COVID-19 Manual".[44] This manual was operationalized starting on August 18, 2020, and later launched to be reproduced comprehensively throughout all "mancomunity" municipalities [45]
+
+Alternative Measures -
+
+As options and new treatments emerged to combat the COVID-19 virus, there was talk of the possibility that convalescent plasma or hyperimune[46] was a viable option to treat. Since May 2020, multiple health institutions within an investigative protocol framework, regulated by CONABIOS, began its use.
+
+The practical results[47] of its use, and those recovered in situ, increased the demand for this blood product.
+
+From this growing demand, platforms and resolutions for the centralization of this blood product are born, such as donantes.com.do[48] and initiative No. 04749-2020-2024-CD carried out by the Permanent Commission on Health.[49]
+
+International aid -
+
+On 3 April 2020, the World Bank released US$150 million to support the Dominican Republic's efforts to contain COVID-19.
+
+## 2. Exploratory Data Analysis
+
+## 2.1. Structure of Data
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+
+ *Date
+ 
+*Country
+
+*Province/state; if available
+
+*Latitude of center of geographic region defined by country/province
+
+*Longtitude of center of geographic region defined by country/province
+
+*Type of reported case – confirmed, death, recovered
+
+*Number of cases on given date
+
+All records are available for the time period from 22 January 2020 to 23 june 2020.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+## 2.2. COVID-19 Statistics of Dominican Republic
+
+According to the plot of cases and days of month, it can be seen that highest amount of recoveries cases are during after the 2022 year. The progress of the disease after confirmation of first case  is comparatively slow with respect to the high acceleration in 2022.
+
+
+
+
+
+
+`
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+dominican_republic_corona <- coronavirus %>% filter(country == "Dominican Republic")
+death_dominican_republic_corona <- dominican_republic_corona %>% filter(type=="death")
+summary(death_dominican_republic_corona)
+```
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+ggplot(death_dominican_republic_corona, aes(x=date, y=cases)) +
+  geom_line(color = "green")
+```
+
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+dominican_republic_corona <- coronavirus %>% filter(country == "Dominican Republic")
+confirmed_dominican_republic_corona <- dominican_republic_corona %>% filter(type=="confirmed")
+summary(death_dominican_republic_corona)
+```
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+ggplot(confirmed_dominican_republic_corona, aes(x=date, y=cases)) +
+  geom_line(color = "red")
+```
+
+
+ 
+ 
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+dominican_republic_corona<-coronavirus%>%filter(country=="Dominican Republic")
+
+dominican_republic_corona_new<-dominican_republic_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+ summary(dominican_republic_corona_new)
+ 
+ ggplot(dominican_republic_corona_new,
+       aes(x=date,y=cases,fill=type,col=type))+
+  geom_line()+geom_jitter(aes(col=type))+
+  facet_wrap(~type,ncol = 3)+coord_flip()
+
+```
+
+
+
+
+
+
+
+According to this plots we  can see deaths are constant over the time (0).but the confirmed cases are increasing and decreasing over  time.we can see approximately recovery cases are increasing and decreasing  between half of the year 2020 and half of the 2021 year.
+
+```{r}
+ggplot(death_dominican_republic_corona, aes(cases)) +
+  geom_freqpoly(bins = 9)
+```
+
+```{r}
+ggplot(confirmed_dominican_republic_corona, aes(cases)) +
+  geom_freqpoly(bins = 9)
+```
+
+## 2.3 comparison between the neighbouring countries
+
+In this study, we considered following three countries for comparision.Netherland, venezuela, colombia. We seslected these countries because these are the most  nearest countries to te dominican republic.
+
+```{r}
+unique(coronavirus$country)
+netherlands_corona<-coronavirus%>%filter(country=="Netherlands")
+venezuela_corona<-coronavirus%>%filter(country=="Venezuela")
+colombia_corona<-coronavirus%>%filter(country=="Colombia")
+
+```
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+countries_corona<-as.data.frame(rbind(netherlands_corona,venezuela_corona,dominican_republic_corona,colombia_corona))
+```
+Comparison of covid-19 deaths between the neighbouring countries of Dominican Republic
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the neighbooring countries")
+```
+Comparison between the confirmed covid-19 patients between the neighbooring countries of Dominican Republic
+
+```{r}
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+ggplot(countries_cases,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison between the confirmed covid-19 
+          patients between the neighbooring countries")
+```
+
+
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+netherland_corona <- coronavirus %>% filter(country == "Netherland")
+confirmed_cases_netherland <- netherland_corona %>% filter(type == "confirmed")
+recovered_cases_netherland <- netherland_corona %>% filter(type == "recovered")
+total_cases_netherland <- sum(confirmed_cases_netherland$cases)
+total_recoveries_netherland <- sum(recovered_cases_netherland$cases)
+recovery_rate_netherland <- (total_recoveries_netherland/ total_cases_netherland)*100
+cat("Recovery rate in Netherland = ", recovery_rate_netherland) 
+
+```
+```{r message = FALSE ,warning = FALSE , echo = FALSE}
+venezuela_corona <- coronavirus %>% filter(country == "Venezuela")
+confirmed_cases_venezuela <- venezuela_corona %>% filter(type == "confirmed")
+recovered_cases_venezuela <- venezuela_corona %>% filter(type == "recovered")
+total_cases_venezuela <- sum(confirmed_cases_venezuela$cases)
+total_recoveries_venezuela <- sum(recovered_cases_venezuela$cases)
+
+
+
+
+recovery_rate_venezuela <- (total_recoveries_venezuela/ total_cases_venezuela)*100
+cat("Recovery rate in Venezuela = ", recovery_rate_venezuela) 
+
+```
+
+```{r}
+colombia_corona <- coronavirus %>% filter(country == "Colombia")
+confirmed_cases_colombia <- colombia_corona %>% filter(type == "confirmed")
+recovered_cases_colombia <-colombia_corona %>% filter(type == "recovered")
+total_cases_colombia <- sum(confirmed_cases_colombia$cases)
+total_recoveries_colombia <- sum(recovered_cases_colombia$cases)
+recovery_rate_colombia <- (total_recoveries_colombia/ total_cases_colombia)*100
+cat("Recovery rate in Colombia = ", recovery_rate_colombia)
+```
+```{r}
+dominican_republic_corona <- coronavirus %>% filter(country == "Dominican republic") 
+confirmed_cases_dominican_republic <- dominican_republic_corona %>% filter(type == "confirmed")
+recovered_cases_dominican_republic <- dominican_republic_corona %>% filter(type == "recovered")
+total_cases_dominican_republic <- sum(confirmed_cases_dominican_republic$cases)
+total_recoveries_dominican_republic <- sum(recovered_cases_dominican_republic$cases)
+recovery_rate_dominican_republic <- (total_recoveries_dominican_republic/ total_cases_dominican_republic)*100
+cat("Recovery rate in Dominican republic = ", recovery_rate_dominican_republic) 
+```
+
+
+
+```{r}
+recovery_rates <- c(recovery_rate_venezuela, recovery_rate_colombia, recovery_rate_netherland )
+
+barplot(recovery_rates, main="Recovery Rate Comparision", horiz=TRUE, names.arg = c("Netherland", "Venezuela", "Colombia" ), col = c(" green", "yellow", "red"))
+
+
+```
+
+
+
+
+
+
+## 2.4 Conclusions and Discussion
+
+Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to March. However, it is directly affected to the other countries. At that time, most of countries in Asia had high risk but all countries did not expect serious situations like this. China is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population they taken action to preventing virus. South Korea and Sri Lanka are taken immediate action while virus entering the virus in to the country. Somehow they could be able controlled confirmed cases in April.
+At very first, US had several confirmed cases in early February. Italy is reported large number of confirmed cases day by day nearly in March. Their death rate was very high than other countries at that time. In early April, US happened increase the confirmed case. In May, US reported their highest number of confirmed cases and death cases. Us is the country which has large number of population in Europe. After US is victimized, most of other countries in Europe also in risk.
+
+This report presented conclusions on COVID-19 outbreak of dominican republic using data from 2020.01.22 to 2022.06.23.The dataset is loaded by coronavirus dataset given in the package R.
+according to the plots we can see the recoveries of covid 19 rapidly increase after 2022.Also we  can see deaths are constant over the time (0).but the confirmed cases are increasing and decreasing over  time.we considered following three countries for comparision.Netherland, venezuela, colombia. We selected these countries because these are the most  nearest countries to the dominican republic.consider  comparison of the distribution of the deaths, venezuela is most  likely to the dominican republic.Also consider the comparison of the distribution of the confirmed cases we can see there is a similar between venezuela and dominican republic.After 2022 netherland shows rapid incease and decrease in the comparison of the distribution plot.Those are few things we can interpret and discuss from this graphs.
+
+
+## 2.5 References
+1.https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Dominican_Republic
+ 2.https://www.reuters.com/
+ 3.https://en.wikipedia.org/wiki/Dominican_Republic
+ 4.-https://climateknowledgeportal.worldbank.org/country/dominican-republic/climate-data-historical#:~:text=The%20DR%20enjoys%20a%20tropical,August%20and%20September%20to%20November.
+ 5.https://www.imf.org/en/News/Articles/2021/07/08/na071221-four-charts-on-the-dominican-republics-crisis-response-and-recovery
+https://crisis24.garda.com/alerts/2020/03/dominican-republic-government-confirms-first-covid-19-case-march-1
+ 6.https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Dominican_Republic
+ 

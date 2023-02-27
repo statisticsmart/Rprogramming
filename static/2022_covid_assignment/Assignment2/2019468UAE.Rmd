@@ -1,0 +1,150 @@
+---
+title: "AS2019468UAE"
+author: "Malindu Nimalsiri"
+date: "10/2/2022"
+output: html_document
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(maps)
+library(dplyr)
+library(ggplot2)
+library(coronavirus)
+library(hrbrthemes)
+```
+
+# Covid 19 in United Arab Emirates
+
+The United Arab Emirates (UAE), or simply the Emirates, is a country in Western Asia. It is located at the eastern end of the Arabian Peninsula and shares borders with Oman and Saudi Arabia, while having maritime borders in the Persian Gulf with Qatar and Iran.
+
+The first corona virus case in UAE was confirmed on 29 January in a family of four who arrived from Wuhan. The remaining three also tested positive for the virus later.
+
+<br>
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+UAE <- map_data("world") %>% filter(region=="United Arab Emirates")
+ggplot(UAE)+geom_polygon(aes(x=long,y=lat,group=group),fill="grey") + ggtitle("Geographical view of United Arab Emirates")+theme(plot.title=element_text(hjust=0.5))
+
+```
+
+# Exploratory Data Analysis
+
+## Content of Data
+
+The data set contains the daily summery of Corona virus cases (confirmed, death and recovered), by state/province. This data set provided by Johns Hopkins University Center for Systems Science and Engineering
+
+This data frame has included 15 variables
+
+* Date : Date in YYYY-MM-DD format
+* Province : Name of province/state, for countries where data is provided split across multiple provinces/states.
+* Country : Name of country/region.
+* lat : Latitude of center of geographic region, defined as either country or, if available, province.
+* long : Longitude of center of geographic region, defined as either country or, if available, province.
+* type : An indicator for the type of cases (confirmed, death, recovered).
+* cases : Number of cases on given date.
+* uid : Country code
+* iso2 : Officially assigned country code identifiers with two-letter
+* iso3 : Officially assigned country code identifiers with three-letter
+* code3 : UN country code
+* combined_key : Country and province (if applicable)
+* population : Country or province population
+* continent_name : Continent name
+* continent_code : Continent code
+
+## Descriptive data analysis for all cases
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+uae_covid <-coronavirus %>% filter(country=="United Arab Emirates")
+uae_cleaned_data_descriptive <- uae_covid %>% filter( cases>=0)
+summerise_by_cases<-uae_cleaned_data_descriptive %>% group_by(type) %>% summarise(mean=mean(cases),median=median(cases),max=max(cases),sd=sd(cases),n=sum(cases))
+summerise_by_cases
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+summerise_by_cases %>% ggplot(aes(x=type,y=n ))+geom_bar(stat="identity")+ggtitle("(fig-1) All cases Reported from UAE")+theme(plot.title=element_text(hjust=0.5))
+```
+\
+
+## Covid-19 confirmed cases
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+uae_confirmed_corona <-uae_covid %>% filter(type=="confirmed") %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+# there is no NA values in confirmed cases
+ggplot(uae_confirmed_corona,aes(x=date,y=cases))+geom_line(color="#E7330c",alpha=0.9)+theme_light() +ggtitle("(fig-2) Covid-19 confirmed cases reported from UAE")+theme(plot.title=element_text(hjust=0.5))
+
+```
+ \\
+ 
+## Covid-19 death cases
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+uae_death_corona <-uae_covid %>% filter(type=="death") %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+# there is no NA values in death cases
+ggplot(uae_death_corona,aes(x=date,y=cases))+geom_line(color="#EAD60B",alpha=0.9)+theme_light() +ggtitle("(fig-3) Covid-19 death cases reported from UAE")+theme(plot.title=element_text(hjust=0.5))
+```
+
+## Covid-19 recovery cases
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+uae_recovery_corona <-uae_covid %>% filter(type=="recovery") %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+# there is a NA values in recovery cases
+missing_index<-which(is.na(uae_recovery_corona$cases))
+# calculate missing value by using before value and after value
+uae_recovery_corona$cases[missing_index]=mean(c(uae_recovery_corona$cases[missing_index-1],uae_recovery_corona$cases[missing_index+1]))
+
+ggplot(uae_recovery_corona,aes(x=date,y=cases))+geom_line(color="#60C610",alpha=0.9)+theme_light() +ggtitle("(fig-4) Covid-19 recovery cases reported from UAE")+theme(plot.title=element_text(hjust=0.5))
+
+```
+
+\
+
+## Comparison with other countries
+
+### Comparison with neighbourhood countries
+United Arab Emirates shares borders with Oman and Saudi Arabia, while having maritime borders in the Persian Gulf with Qatar and Iran.Therefore we can identify how COVID-19 virus spread with nearest countries and how the government controlled the virus than other countries 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#confirmed cases
+neighbour_conutries<-c("Saudi Arabia","Iran","Oman","Qatar","United Arab Emirates")
+confirmed_cases <-coronavirus %>% filter(type=="confirmed" )
+data<-subset(confirmed_cases,subset = country %in% neighbour_conutries)
+ggplot(data,aes(x=date,y=cases))+geom_line(color="#E7330c",alpha=0.9)+facet_grid(cols = vars(country))+theme_light() +ggtitle("(fig-5) Covid-19 confirmed cases with neighbourhood countries of UAE")+theme(plot.title=element_text(hjust=0.5))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#death cases
+death_cases <-coronavirus %>% filter(type=="death" )
+data<-subset(death_cases,subset = country %in% neighbour_conutries)
+ggplot(data,aes(x=date,y=cases))+geom_line(color="#EAD60B",alpha=0.9)+facet_grid(cols = vars(country))+theme_light() +ggtitle("(fig-6) Covid-19 death cases with neighbourhood countries of UAE")+theme(plot.title=element_text(hjust=0.5))
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#recovery cases
+recovery_cases <-coronavirus %>% filter(type=="recovery" ) %>% mutate(cases=replace(cases,which(cases<0),NA))
+data<-subset(recovery_cases,subset = country %in% neighbour_conutries)
+ggplot(data,aes(x=date,y=cases))+geom_line(color="#60C610",alpha=0.9)+facet_grid(cols = vars(country))+theme_light() +ggtitle("(fig-7) Covid-19 recovery cases with neighbourhood countries of UAE")+theme(plot.title=element_text(hjust=0.5))
+```
+\
+
+\
+
+# Conclusion and discussion
+
+
+According to the figures 6,5,7 we can conclude United Arab emirates has not reported enough cases than neighbourhood countries.Iran has reported many death and confirmed cases than UAE. In 2022 confirmed covid cases reduce in UAE than other countries,(according to the figure 6).
+\
+
+The coronavirus disease continues to spread across the world following a trajectory that is difficult to predict.
+\
+
+UAE has obtained good rules and regulation to face covid-19 pandemic than other neighbour countries
+
+# Reference
+
+[r graph gallery](https://r-graph-gallery.com/)
+\
+[United Arab emirates - Minister of health](https://mohap.gov.ae/en/covid-19)

@@ -1,0 +1,266 @@
+---
+title: "Serbia Covid - Coronavirus Statistics"
+author: "J.M.N.S.B Jayasundara"
+index number: "AS2019394"
+date: "2022-10-01"
+output: html_document
+---
+
+### Introdution of Serbia
+
+Serbia, officially the Republic of Serbia , is a landlocked country in Southeastern and Central Europe, situated at the crossroads of the Patagonian Plain and the Balkans. Its capital Belgrade is also the largest city. The country’s population , estimated at 6.908 million (2020). Serbia has been traditionally a Christian country since the Christianize of Serbs by Clement of Oh rid and Saint Nam in the 9th century. The country covers an area of 77,474 km² (excluding Kosovo), this is about the size of the Czech Republic, or slightly smaller than US state of South Carolina.
+
+
+### Covid-19 induced economic crisis 
+
+Serbia has experienced four waves of the pandemic. The first case of COVID-19 was reported on 6 March 2020 and the first death on 20 March. The virus progressed rapidly in Serbia: 60 days after the first registered case, there were more than 10 000 – the highest number in the region – and 38 registered deaths from COVID-19 per million inhabitants, compared to 13 in Albania, 53 in Bosnia and Herzegovina, 20 in Kosovo and 137 in North Macedonia. The economy suffered a second wave from early June to mid-September, a third wave from October to December 2020 with significantly higher incidence rates and a fourth wave from mid-February to end of April 2021 (Figure 16.1). As of 21 May 2021, the economy counts an accumulated 900 233 cases (or 103 254 per million inhabitants) and 8 649 registered deaths (or 992 per million inhabitants), which is the second-lowest mortality rate in the region (Figure 16.2). The fatality rate (0.99%) is the lowest compared to other Western Balkan economies. The official figures might underestimate the real human cost of the pandemic insofar as positive tests are required to classify a death as due to COVID-19.
+
+
+### The location of Serbia
+
+```{r include=FALSE,echo=FALSE,warning=FALSE,message=FALSE }
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+
+
+data("coronavirus")
+serbia_cleared <- coronavirus %>% filter(country == "Serbia")
+europe_cleared <- coronavirus %>% filter(continent_name == "Europe",cases>=0)
+
+
+```
+
+```{r include=FALSE,echo=FALSE,warning=FALSE,message=FALSE}
+serbia_cleared <- serbia_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(serbia_cleared)
+
+
+which(is.na(serbia_cleared$cases))
+
+
+serbia_cleared$cases[949] = mean(c(serbia_cleared$cases[948], serbia_cleared$cases[950]))
+length(serbia_cleared$cases)
+serbia_cleared$cases[1833] = mean(c(serbia_cleared$cases[1832], serbia_cleared$cases[1834]))
+length(serbia_cleared$cases)
+serbia_cleared$cases[1907] = mean(c(serbia_cleared$cases[1906], serbia_cleared$cases[1908]))
+length(serbia_cleared$cases)
+serbia_cleared$cases[1949] = mean(c(serbia_cleared$cases[1948], serbia_cleared$cases[1950]))
+length(serbia_cleared$cases)
+
+
+near_countries<- europe_cleared %>% filter(country ==c("Montenegro","Hungary","Romania","Croatia","Bosnia and Herztenegro","Kosova", "North Macedonia","Bulgaria","Albania","Slovakia"))
+
+near_countries  <- near_countries  %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(near_countries )
+which(is.na(near_countries$cases))
+
+
+```
+
+
+```{r  echo=FALSE,warning=FALSE,message=FALSE}
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(rworldmap)
+data(wrld_simpl)
+
+worldmap <- getMap(resolution = "coarse")
+
+ plot(worldmap, col = "light gray", 
+     fill = T, border = "gray",
+     xlim = c(-200, 200), ylim = c(-100, 100),
+     bg = "white"
+     )
+data_frame <- data.frame(name = c("Serbia"),
+                         latitude = c(44.0165),
+                         longitude = c(21.0059))
+points(x = data_frame$longitude, y = data_frame$latitude)
+text(x = data_frame$longitude, y = data_frame$latitude, 
+     data_frame$name, pos = 3, col = "blue")
+
+```
+
+
+
+
+### Time series analysis-Serbia
+
+```{r echo=FALSE,message=FALSE}
+
+confirmed_serbia <-serbia_cleared %>% filter(type=="confirmed")
+death_serbia <-serbia_cleared %>% filter(type=="death")
+recovery_serbia <-serbia_cleared %>% filter(type=="recovery")
+
+
+
+p1 <- ggplot(serbia_cleared,aes(date, cases, color = type), is.na=FALSE) +
+   geom_line() +ggtitle("Time series analysis-serbia")+  theme(plot.title = element_text(face="bold"))
+
+
+ggplotly(p1)
+
+
+```
+##### The graph indicates that there will be a little increase of corona patients between 2020 and 2021. However, there will be more corona patients in 2022 than there were in 2020 and 2021.In the same way, the graph shows the number of patients who get infected with Corona and recover and die
+
+
+#### Daily Covid-19 cases by type in Serbia
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+
+p2 <- ggplot(near_countries, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Daily Covid-19 cases by type in Serbia") + facet_grid( type~.) + ylim(0,25000)+  theme(plot.title = element_text(face="bold"))
+ggplotly(p2)
+
+```
+
+
+
+### Time series analysis-Countries
+
+```{r include=FALSE,echo=FALSE,message=FALSE}
+
+unique(europe_cleared$country)
+
+```
+```{r echo=FALSE,message=FALSE}
+
+
+p3 <- ggplot(europe_cleared,aes(date, cases, color = country), is.na=FALSE) +
+   geom_line() +ggtitle("Time series analysis-country") +   theme(plot.title = element_text(face="bold"))
+ggplotly(p3)
+
+
+
+```
+##### The graph indicates that there will be a little increase of corona patients in the European countries between 2020 and 2021. However, compared to 2020 and 2021, there will be more corona patients in 2022.The most cases among these nations recorded in a single day (2022-01-31) are reported from United Kingdom. The quantity is 84731
+
+
+
+
+
+
+### Daily Covid-19  cases by type in countries
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+library(babynames)
+library(viridis)
+library(hrbrthemes)
+library(plotly)
+
+
+
+p4 <- near_countries %>% 
+  ggplot(aes(x=date, y=cases, fill=country, text=country)) +
+    geom_area( ) +
+    scale_fill_viridis(discrete = TRUE) +
+   
+    ggtitle("Daily Covid-19 cases in countries")+
+     theme(plot.title = element_text(face="bold"))
+
+ggplotly(p4)
+
+
+```
+
+```{r echo=FALSE,message=FALSE}
+
+
+p5 <- ggplot(near_countries, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Daily Confirmed, Death and Recovered cases in near countries ")+ 
+  theme(plot.title = element_text(face="bold"))
+
+ ggplotly(p5)
+
+```
+
+```{r  echo=FALSE,message=FALSE}
+
+confirmed_continent_name<-near_countries %>%filter(type=="confirmed")
+p6 <- ggplot(confirmed_continent_name,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Time series analysis-near countries with confirmed cases")+   theme(plot.title = element_text(face="bold"))
+  
+ggplotly(p6)
+
+
+
+```
+##### Therefore Slovakia having 1039831 (2020-01-22 to 2022-06-23) total confirmed cases with a population of 5.459 million people, is worse than Albania having only 28090 (2020-01-22 to 2022-06-23) confirmed cases for a population of around 2.838 million. However, Bulgaria seems to be performing better than its immediate neighbors Hungary , Croatia and North Macedonia since their rate of increase of confirmed cases are increasing at a very higher rate in comparison to Bulgaria
+
+
+
+
+### Daily Covid-19 recovey cases by type in country
+
+
+```{r echo=FALSE,message=FALSE}
+
+recovery_continent_name<-near_countries%>%filter(type=="recovery")
+p7 <- ggplot(recovery_continent_name,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Time series analysis-near countries with recovery cases") +   theme(plot.title = element_text(face="bold"))
+ggplotly(p7)
+
+
+
+
+```
+
+##### The plot shows that Slonakia has seen the most patients recover, with a total of about 326181 (2020-01-22 to 2022-06-23). The percentage of patients who are healed is low in all of the country in the plot, with the exception of Slovakia.
+
+### Daily Covid-19 death cases by type in country
+
+
+
+```{r echo=FALSE,message=FALSE}
+
+
+death_continent_name<-near_countries %>%filter(type=="death")
+p8 <- ggplot(death_continent_name,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Time series analysis-near countries with death cases") +   theme(plot.title = element_text(face="bold"))
+  
+ggplotly(p8)
+
+
+
+
+``` 
+##### There were recorded 20107 (2020-01-22 to 2022-06-23) fatalities in Slovakia among 1039831 patients. In Albania, 28090 patients and 335 (2020-01-22 to 2022-06-23) fatalities were reported. Croatia, Hungary, and North Macedonia all have more fatalities than Bulgaria does.
+
+
+
+
+
+
+###  Discussion and Conclusions
+
+##### The dataset is loaded by coronavirus dataset given in the package R. Serbia dataset is obtained by it.It was discovered throughout the data processing process that there were negative figures for confirmed instances in various nations. The main reason for this could be the possibility that some patients may have initially received a COVID-19 positive diagnosis but later received a negative one.These variables are ignored when plotting the graphs because there are a lot of missing values and negative values on the European continent.As a result, the data was pre-processed by labeling the negative values as missing values before the actual analysis. There are discontinuities in some line charts because of this.Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but It is increased speedily in January to March. However, it is directly affected to the other countries
+
+
+### References
+
+#### https://en.wikipedia.org/wiki/Religion_in_Serbia
+
+#### https://en.wikipedia.org/wiki/Serbia
+
+#### https://www.worldbank.org/en/news/press-release/2020/04/29/serbian-economy-shrinks-as-country-responds-to-covid-19
+
+#### https://www.ses.org.rs/uploads/savic_et_al_210521_80557_435.pdf
+
+
+#### https://www.oecd-ilibrary.org/sites/5eda65dd-en/index.html?itemId=/content/component/5eda65dd-en
+
+
+
+
+
+

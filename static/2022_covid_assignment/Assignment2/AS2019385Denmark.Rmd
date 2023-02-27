@@ -1,0 +1,311 @@
+---
+title: "COVID-19 PANDAMIC IN DENMARK"
+author: "D.M.K.I JAYAMAHA /AS2019385"
+date: "2022-10-06"
+output: html_document
+---
+
+# 1.0 INTRODUCTION
+## Geography of Denmark
+
+Denmark is a Nordic country located in Northern Europe. It consists of the Jutland Peninsula and several islands in the Baltic Sea, referred to as the Danish Archipelago. Denmark is located southwest of Sweden and due south of Norway and is bordered by the German state  Schleswig -Holstein to the south, on Denmark's only land border, 68 kilometre (42 miles) long.
+
+Denmark borders both the Baltic and North seas along its 8,750 km (5,440 mi) tidal shoreline. Denmark's general coastline is much shorter, at 1,701 km (1,057 mi), as it would not include most of the 1,419 offshore islands.
+
+Denmark is terrain is mostly flat, with gently rolling hills. During the Ice Age, glaciers moved slowly across the landmass and shaped the country that exists today. Denmark has a long coastline with many lagoons, gulfs, and inlets.It consists of metropolitan Denmark, the kingdom's territory in continental Europe and sometimes called "Denmark proper" (Danish: egentlig Denmark), and the realm's two autonomous countries: the Faroe Islands and Greenland.
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+library(scales)
+
+corona_country <- as_tibble(coronavirus)
+
+corona_Denmark <- coronavirus %>% 
+                  filter(country =="Denmark")
+                  
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long , y=lat, group = group) , fill = "gray" , colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 360)) +
+  scale_y_continuous(breaks = seq(-90, 90, 270))
+p +
+  geom_point(
+    data = corona_Denmark, aes( x=9.5018,  y= 56.2639), color="red", size=1)
+```
+
+
+
+## Climate of Denmark
+
+Denmark has a temperate climate, characterised by mild winters, with mean temperatures in January of 1.5 °C (34.7 °F), and cool summers, with a mean temperature in August of 17.2 °C (63.0 °F).Denmark has an average of 179 days per year with precipitation, on average receiving a total of 765 millimetres (30 in) per year; autumn is the wettest season and spring the driest.[59] The position between a continent and an ocean means that the weather is often unstable.
+
+Because of Denmark's northern location, there are large seasonal variations in daylight. There are short days during the winter with sunrise coming around 8:45 am and sunset 3:45 pm (standard time), as well as long summer days with sunrise at 4:30 am and sunset at 10 pm.
+
+## Restriction of denmark in covid-19 now
+
+Denmark has lifted all of its domestic Covid-19 restrictions, including the wearing of face masks, making it the first European Union country to do so.
+
+Nightclubs have reopened, late-night alcohol sales have resumed, and the Danish coronavirus app is no longer needed to enter venues.
+
+While cases are still relatively high, the authorities say the virus no longer qualifies as a "critical threat".
+
+That is due to the country's high vaccination rate, experts say.
+
+More than 80% of the population over the age of five have had two vaccinations and over 60% have been given a third booster dose.
+
+## Government intervention in the control of covid-19
+
+Whereas most other European countries are still under intensive lockdown as of May 1 2020 due to the Covid-19 crisis, Denmark slowly started re-opening its society and industry two weeks ago in mid-April. This observation raises some interesting questions about the handling of the crisis by the politicians and citizens: what are the geographical, demographical and societal factors that explain why and how Denmark seem to have handled this coronavirus crisis better than other countries.
+Denmark’s approach to dealing with the coronavirus pandemic could be best summarized by saying “Act fast and act with force”. However, the fast response of the government and the rapid handling of the crisis is not the only element explaining the success of this small kingdom in dealing with the pandemic.Indeed, other factors also contributed to the low rate of confirmed cases and deaths throughout the country.
+ Denmark banned large public gatherings, closed down all unnecessary venues across its cities, heavily discouraged the use of public transportion and all manner of travel unless absolutely essential. Daycares, schools and universities were very quickly shut down and air travel was severely restricted – and while these restrictions have become the ‘new normal’ across the continent, Denmark was among the first countries to impose such restrictions.
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(coronavirus)
+library(magrittr)
+library(kableExtra)
+corona_country <- as_tibble(coronavirus)
+
+```
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE }
+
+denmark_confirmed <- coronavirus %>% 
+                     filter(country=="Denmark") %>% 
+                     filter(type=="confirmed")
+total_confirmed <- sum(denmark_confirmed$cases)
+mean_confirmed<- mean(denmark_confirmed$cases)
+
+
+
+denmark_death <- coronavirus %>% 
+                 filter(country=="Denmark") %>% 
+                 filter(type=="death")
+total_death <- sum(denmark_death$cases)
+mean_death <- mean(denmark_death$cases)
+
+
+denmark_recovery <- coronavirus %>% 
+  filter(country=="Denmark") %>% 
+  filter(type=="recovery") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+total_recovery <- sum(denmark_recovery$cases, na.rm=TRUE)
+mean_recovery<-mean(denmark_recovery$cases, na.rm=TRUE)
+
+table<- data.frame(type =c("confirmed","death","recovery") ,
+                       total=c(total_confirmed , total_death , total_recovery),
+                       mean=c(mean_confirmed, mean_death,mean_recovery))
+kable(table,"simple")
+
+```
+
+
+
+#  2.0 EXPLORATORY DATA ANALYSIS IN COVID-19
+## 2.1 Visualization of confirmed,death and recovered cases
+
+
+
+
+### confirmed cases
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+
+Denmark_corona_confirmed <- corona_country %>% 
+                             filter(country == "Denmark") %>% 
+                             filter(type == "confirmed") %>% 
+                             select(date,country,type,cases) %>% 
+                             mutate(cases = replace(cases, which(cases < 0), NA))
+   
+ 
+ ggplot(Denmark_corona_confirmed, aes(date,cases))+ geom_line(col="forestgreen")+ ggtitle("Figure 01: confirmed covid cases")
+
+```
+
+
+### death cases
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+ Denmark_corona_death <- corona_country %>% 
+                        filter(country == "Denmark") %>% 
+                        filter(type == "death") %>% 
+                        select(date,country,type,cases) %>% 
+                        mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+
+
+
+ggplot(Denmark_corona_death, aes(date,cases))+ geom_line(col="forestgreen")+ ggtitle("Figure 02: death covid cases")
+
+
+```
+
+### recovery cases
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+
+Denmark_corona_recovery <- corona_country %>% 
+                            filter(country == "Denmark") %>% 
+                            filter(type == "recovery") %>% 
+                            select(date,country,type,cases) %>% 
+                            mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ 
+ 
+ 
+ 
+ ggplot(Denmark_corona_recovery, aes(date,cases))+ geom_line(col="forestgreen")+ ggtitle("Figure 03: recovery covid cases")
+ 
+ 
+```
+
+### covid-19 cases by type
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+
+corona_Denmark <- coronavirus %>% 
+                  filter(country =="Denmark") %>% 
+                  mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+
+
+ggplot(corona_Denmark, aes(date,cases,col=type)) +geom_line()+ ggtitle("Figure 04: Denmark covid-19 cases by type")
+
+```
+
+## 2.2 Denmark covid-19 cases compair with sweden
+
+### confirmed cases
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+combine_country_confirmed <- coronavirus %>%
+                     filter(country =="Denmark"|country =="Sweden") %>%
+                     filter(type == "confirmed") %>% 
+                     mutate(cases = replace(cases, which(cases < 0), NA)) 
+ 
+ggplot(combine_country_confirmed, aes(date, cases,group = country, col=country))+geom_line() + ggtitle("Figure 05: comparison with sweden confirmed covid cases")
+
+```
+
+
+
+### death cases
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+combine_country_death <- coronavirus %>%
+                         filter(country =="Denmark"|country =="Sweden") %>%
+                         filter(type == "death") %>% 
+                         mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+ggplot(combine_country_death, aes(date, cases,group = country, col=country))+geom_line() + ggtitle("Figure 06:comparison with sweden death covid cases")
+```
+
+
+
+### recovery cases
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+combine_country_recovery <- coronavirus %>%
+                            filter(country =="Denmark"|country =="Sweden") %>%
+                            filter(type == "recovery") %>% 
+                            mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+ggplot(combine_country_recovery, aes(date, cases,group = country, col=country))+geom_line() + ggtitle("Figure 07: comparison with sweden recovery covid cases")
+
+```
+
+
+
+## 2.3 Denmark covid-19 cases compair with Japan and Canada
+
+### confirmed cases
+```{r, message=FALSE, warning=FALSE, echo=FALSE }
+combine_country_confirmed <- coronavirus %>%
+                            filter(country =="Denmark"|country =="Japan"|country ==   "Canada") %>%
+                            filter(type == "confirmed") %>% 
+                            mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+ggplot(combine_country_confirmed, aes(date, cases,group = country, col=country))+geom_point() + ggtitle("Figure 08: comparison with Japan and Canada confirmed covid cases")
+
+```
+
+
+### death cases
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+combine_country_death <- coronavirus %>%
+                      filter(country =="Denmark"|country =="Japan"|country =="Canada") %>%
+                         filter(type == "death") %>% 
+                         mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+ggplot(combine_country_death, aes(date, cases,group = country, col=country))+geom_point() + ggtitle("Figure 09: comparison with Japan and Canada death covid cases")
+
+```
+
+
+### recovery cases
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+combine_country_recovery <- coronavirus %>%
+                    filter(country =="Denmark"|country =="Japan"|country == "Canada") %>%
+                    filter(type == "recovery") %>% 
+                    mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+                    
+ggplot(combine_country_recovery, aes(date, cases,group = country, col=country))+geom_point() + ggtitle("Figure 10: comparison with Japan and Canada recovery covid cases")
+
+```
+
+
+# 3.0 CONCLUTION
+
++ Countries took the accurate decision like imposing   new rules to obtain social distancing were able to survive from the pandemic with relatively small loss.Denmark is a good example.Denmark took early decision to control covid-19.  according to mean values of covid-19 cases, death mean are very less compared with comfired mean and recovery mean.because of this we can't clearly see death case graph in Figure 04.
++ before 2022,According to Figure 05,Denmark  confirmed  cases are smaller than Sweaden confirmed cases when comparing with the neighboring country. but we can't say sweaden confirmed cases higher than Denmark. according Figure 06,we can say death cases less compaired with Sweaden.Furthermore, in Figure 07 the Denmark recovery cases are higher compaired with sweaden recovery cases.
++ according to figure 01,Denmark confirmed cases relatively high values in the first quarter 2022.but before 2022,Denmark covid cases are very low values.
++ But according Figure 08,we can't say Denmark covid-19 cases less compaired with Japan and Canada.
++ According Figure 03,in  2022 there is no recovery data in recovery cases.but it can not be.this is the reason not included data in our data set.
++ The government of Denmark was getting many actions to control the spread of COVID-19 in Denmark.
++ Canada-US border was closed and travel restriction was placed.Spread of COVID-19 was started in China. So, COVID-19 cases of china was choose to compare with Canada.
+
+
+
+# 4.0 DISCUSSON
+
+In 2022,Denmark covid-19 confirmed cases are relatively high values.genaral covid -19 restrictions not being apply in Denmark.this may the reason increase the covid-19 cases.therefore, maintaing some restrictions will help to reduce covid-19 cases.
+example for people can putting on face masks in crowed places.
+
+
+# 5.0 REFERENCES
+
++ https://en.wikipedia.org/wiki/Geography_of_Denmark
++ https://www.bbc.com/news/world-europe-60215200
++ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7217796/
+
+
+
+
+
+
+
+
+
+
+
+
+

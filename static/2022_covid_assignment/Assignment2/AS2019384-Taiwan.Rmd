@@ -1,0 +1,623 @@
+ ---
+title: "Covid 19 at Taiwan"
+author: "AS2019384"
+date: "10/2/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Covid 19 of Taiwan**
+
+
+# **1. Background**
+
+### **1.1 Introduction**
+
+  East Asia's Taiwan is an island in the Western Pacific Ocean and a part of the Republic of China. The Taiwan Strait, the Philippine Sea, and the East China Sea encircle it. The Philippines, the Japanese islands, and China's mainland are close together. Taiwan's landscape is characterized by rough mountains in there.
+
+  Taiwan is sometimes stereotyped as a small, crowded island home to manufacturing businesses. Taiwan is much more than that, though. Everyone will enjoy Taiwan's breathtaking natural environment, rich traditional and modern culture, lovely beaches, renowned hot springs, and delectable cuisine.
+  
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+library(maps)
+library(mapdata)
+map('worldHires','Taiwan')
+
+
+```
+  
+### **1.2 Geagraphical location of Taiwan**
+
+  Taiwan, roughly oval in shape, is approximate in area to the Netherlands or to the U.S. states of Massachusetts, Rhode Island, and Connecticut combined. It is part of a string of islands off the coast of East and Southeast Asia extending from Japan south through the Philippines to Indonesia. Taiwan is bounded to the north and northeast by the East China Sea, with the Ryukyu Islands (the southernmost part of Japan) to the northeast. To the east is found the great expanse of the Pacific Ocean, and to the south is the Bashi Channel, which separates Taiwan from the Philippines. To the west is the Taiwan (Formosa) Strait, which separates Taiwan from the Chinese mainland.
+  
+  
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+library(coronavirus)
+data(wrld_simpl)
+data(coronavirus)
+```
+
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+taiwan_corona <- coronavirus %>% filter((country == "Taiwan*"))
+```
+
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+a <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill="gray",colour="white"
+)+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+a +
+  geom_point(
+  data = taiwan_corona, aes(x = long, y = lat), color = "red", 
+  size=2)
+  
+```
+
+### **1.3 Weather and Climate in Taiwan**
+
+Most of Taiwan has beautiful warm climate all year round. You can leave your winter coat behind but are advised to bring an umbrella.
+
+The north part of Taiwan belongs to sub-tropical climate zone, while the south part belongs to the tropical climate zone. Winters are warm and summers are hot and wet, with typhoons and thunderstorms. Because Taiwan is a relatively small island, the ocean breezes have a cooling effect so it never feels too hot. Please note that the high alpine areas like Alishan do get cold.
+
+The annual average temperature is a comfortable 22 °C, with lowest temperatures ranging from 12 to 17 °C (54-63 °F).
+
+The average amount of rainfall is about 2,500 mm per year, most of which come in the form of typhoons. At least three to four typhoons hit Taiwan every year, providing much of the water supply, but also causing damage, flooding, and landslides. Generally, typhoons happen frequently from July to September.
+
+Because Taiwan is on the tropical zone, it is subject to more rain than most other areas, but showers are short lived and blue skies prevail on most days.
+
+The island lies on an earthquake fault line, and there have been big earthquakes in modern times.
+
+
+
+## **2. Exploratory Data Analysis**
+
+### **2.1 Visualization of death, confirmed, recovered, active cases**
+
+
+
+
+### Summary of covid 19 cases in Taiwan
+
+
+```{r}
+taiwan_corona <- taiwan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(taiwan_corona)
+```
+```{r}
+which(is.na(taiwan_corona$cases))
+```
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+taiwan_corona$cases[195] = mean(c(taiwan_corona$cases[194], taiwan_corona$cases[196]))
+taiwan_corona$cases[201] = mean(c(taiwan_corona$cases[200], taiwan_corona$cases[202]))
+taiwan_corona$cases[2291] = mean(c(taiwan_corona$cases[2290], taiwan_corona$cases[2292]))
+taiwan_corona$cases[2330] = mean(c(taiwan_corona$cases[2329], taiwan_corona$cases[2331]))
+```
+
+
+
+### Total number of corona cases repoted from Taiwan 
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+length(taiwan_corona$cases)
+```
+
+
+
+#### Total number of confirm cases reported in Taiwan
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+taiwan_corona_confirm <- taiwan_corona %>% filter((type == "confirmed"))
+sum(abs(taiwan_corona_confirm$cases))
+```
+
+
+
+
+#### Graphical representation of the confirmed corona cases under the time
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(taiwan_corona_confirm, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 01 : Daily Covid-19 Confirmed Cases in Taiwan")
+```
+
+
+
+#### Total number of death cases reported in Taiwan
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+taiwan_corona_Death <- taiwan_corona %>% filter((type == "death"))
+sum(abs(taiwan_corona_Death$cases))
+
+```
+
+
+
+
+
+#### Graphical representation of the Death corona cases under the time
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(taiwan_corona_Death, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 02 : Daily Covid-19 Death Cases in Taiwan")
+```
+
+
+
+
+
+#### Total number of recovered cases in reported from Taiwan
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+taiwan_corona_Recovery <- taiwan_corona %>% filter((type == "recovery"))
+sum(abs(taiwan_corona_Recovery$cases))
+
+```
+
+
+
+
+
+#### Graphical representation of the Recovered corona cases under the time
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(taiwan_corona_Recovery, aes(x=date, y=cases)) + geom_line() + ggtitle("Figure 03 : Daily Covid-19 Recovered Cases in Taiwan")
+
+```
+
+
+
+
+
+#### **2.2 Comparing Active Cases of Taiwan**
+
+```{r echo=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_active_cases <-  taiwan_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active_cases = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+ggplot(Taiwan_active_cases,aes(x =date,y =total_active_cases))+geom_line(color="red")+ggtitle("Figure 04 : Total Active Cases in Taiwan")
+```
+
+
+
+
+
+### **Daily Covid-19 cases by type in Taiwan**
+
+```{r, warning=FALSE, echo=FALSE, message = FALSE, fig.width = 10,fig.height = 5}
+ggplot(taiwan_corona , aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Figure 05 : Daily Covid-19 cases by type in Taiwan") + facet_grid(type~.) + ylim(0,6000)
+```
+
+
+
+
+
+#### **Daily Covid-19 cases by log(type) in Taiwan**
+
+```{r,warning=FALSE, echo=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+ggplot(taiwan_corona, aes(x=date, y=log(cases), col=type)) + geom_col() + ggtitle("Figure 06 : Daily Covid-19 cases by log(type) in Taiwan") + facet_grid(type~.) + ylim(0,20)
+```
+
+
+
+
+
+#### **3.0 Comparison with other countries**
+
+To compare with the other countries, by based on some factors. Mainly focused about geometrical location of the Taiwan, and there population and climate situation.
+Taiwan has no neighboring countries. There are no countries that are directly adjacent to Taiwan because Taiwan is completely surrounded by water and has no (natural) land connections to other countries. Therefore Taiwan is an Island. So, I choose Island to compare with same climate conditions. Those are as bellow,
+
+* Philippines
+* Malaysia
+* Indonesia
+* Japan
+
+
+#```{r}
+#library(coronavirus)
+#library(ggplot2)
+#```
+
+```{r, message=FALSE, warning=TRUE, echo=FALSE}
+Taiwan_Corona <- coronavirus %>% filter(country == "Taiwan*")
+Philipines_Corona <- coronavirus %>% filter(country == "Philippines")
+Malaysia_Corona <- coronavirus %>% filter(country == "Malaysia")
+Indonesia_Corona <- coronavirus %>% filter(country == "Indonesia")
+Japan_Corona <- coronavirus %>% filter(country == "Japan")
+```
+
+
+
+
+
+### **3.1 Comparison of Confirmed cases with neighbor countries**
+
+```{r echo=FALSE, warning=TRUE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Confirmed <- filter(Taiwan_Corona, type == "confirmed")
+Philipines_Corona_Confirmed <- filter(Philipines_Corona, type == "confirmed")
+Malaysia_Corona_Confirmed <- filter(Malaysia_Corona, type == "confirmed")
+Indonesia_Corona_Confirmed <- filter(Indonesia_Corona, type == "confirmed")
+Japan_Corona_Confirmed<- filter(Japan_Corona, type == "confirmed")
+
+Country_comparison_Confirmed <- rbind(Taiwan_Corona_Confirmed, Philipines_Corona_Confirmed, Malaysia_Corona_Confirmed, Indonesia_Corona_Confirmed, Japan_Corona_Confirmed)
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 07 : Graphical illustration of confirmed cases of coresponding countries") + ylim(0,10000)
+```
+
+
+
+
+
+#### Comparission of the Confirm cases between Taiwan and Philippine
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Confirmed <- filter(Taiwan_Corona, type == "confirmed")
+Philipines_Corona_Confirmed <- filter(Philipines_Corona, type == "confirmed")
+
+Country_comparison_Confirmed <- rbind(Taiwan_Corona_Confirmed, Philipines_Corona_Confirmed)
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 08 : Comparission of the Confirm cases between Taiwan and Philippine") + ylim(0,1000)
+
+```
+
+
+
+  This Figure shows that difference of death cases between Taiwan and Philippines. According to this graph from the beginning amount of confirmed covid 19 patients from Philippines are higher than Taiwan. But when icreasing amount of patients both countreis are increasing same time. But as a totaly Taiwan is lower than Philippine.  
+
+
+
+#### Comparission of the Confirm cases between Taiwan and Malaysia
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Confirmed <- filter(Taiwan_Corona, type == "confirmed")
+Malaysia_Corona_Confirmed <- filter(Malaysia_Corona, type == "confirmed")
+
+Country_comparison_Confirmed <- rbind(Taiwan_Corona_Confirmed, Malaysia_Corona_Confirmed)
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 09 : Comparission of the Confirm cases between Taiwan and Malaysia") + ylim(0,5000)
+
+```
+
+  This figure is also shows that camparision bet ween confirmed cases between Taiwan and Malysia. this one is shows that Taiwan's confirmed cases are lower that Malaysia.
+
+
+
+#### Comparission of the Confirm cases between Taiwan and Indonesia
+```{r echo=FALSE, warning = FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Confirmed <- filter(Taiwan_Corona, type == "confirmed")
+Indonesia_Corona_Confirmed <- filter(Indonesia_Corona, type == "confirmed")
+
+Country_comparison_Confirmed <- rbind(Taiwan_Corona_Confirmed, Indonesia_Corona_Confirmed)
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 10 : Comparission of the Confirm cases between Taiwan and Indonesia") + ylim(0,4500)
+
+```
+
+
+
+
+This is the plot of comparison amount of confirms cases between Taiwan and Indonesia. As this figure we can say that amount of confirmed Covid 19 patients are higher than Taiwan. There is a hige difference between two countries. But as above when increasing, both countries are increased their values at same time.
+
+#### Comparission of the Confirm cases between Taiwan and Japan
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Confirmed <- filter(Taiwan_Corona, type == "confirmed")
+Japan_Corona_Confirmed <- filter(Japan_Corona, type == "confirmed")
+
+Country_comparison_Confirmed <- rbind(Taiwan_Corona_Confirmed, Japan_Corona_Confirmed)
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 11 : Comparission of the Confirm cases between Taiwan and Japan") + ylim(0,2000)
+
+```
+
+ Ad the above figures, this figure shows that how is the different between confirmed cases between japan and Taiwan. As this figure amount of japan is higher than the Taiwan amount.
+
+
+### **3.2 Comparison of Death cases with neighbor countries**
+
+```{r echo=FALSE, warning=TRUE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Death <- filter(Taiwan_Corona, type == "death")
+Philipines_Corona_Death <- filter(Philipines_Corona, type == "death")
+Malaysia_Corona_Death <- filter(Malaysia_Corona, type == "death")
+Indonesia_Corona_Death <- filter(Indonesia_Corona, type == "death")
+Japan_Corona_Death<- filter(Japan_Corona, type == "death")
+
+Country_comparison_Death <- rbind(Taiwan_Corona_Death, Philipines_Corona_Death, Malaysia_Corona_Death, Indonesia_Corona_Death, Japan_Corona_Death )
+
+ggplot(Country_comparison_Confirmed , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 12 : Graphical illustration of death cases of coresponding countries") + ylim(0,10000)
+```
+
+### Comparison Death cases with Taiwan and Philippin
+
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Death <- filter(Taiwan_Corona, type == "death")
+Philipines_Corona_Death <- filter(Philipines_Corona, type == "death")
+
+Country_comparison_Death <- rbind(Taiwan_Corona_Death, Philipines_Corona_Death)
+
+ggplot(Country_comparison_Death , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 13 : Comparission of the Death cases between Taiwan and Philippine") + ylim(0,1000)
+
+```
+
+ This figure is shows that death cases of the Philippines were increasing over the time. But the Taiwan is recorded with same frequency.
+`
+
+ 
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Death <- filter(Taiwan_Corona, type == "death")
+Malaysia_Corona_Death <- filter(Malaysia_Corona, type == "death")
+
+
+Country_comparison_Death <- rbind(Taiwan_Corona_Death, Malaysia_Corona_Death)
+
+ggplot(Country_comparison_Death , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 14 : Comparisson of Death cases between Taiwan and Malaysia") + ylim(0,100)
+```
+ This Figure shows that comparisson between death cases of Taiwan and Malaysia. According to this plot amount of Taiwan is lowr than Malaysia.
+
+
+
+
+#### Comparission of death caese between Taiwan and Indonesia
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Death <- filter(Taiwan_Corona, type == "death")
+Indonesia_Corona_Death <- filter(Indonesia_Corona, type == "death")
+
+Country_comparison_Death <- rbind(Taiwan_Corona_Death, Indonesia_Corona_Death)
+
+ggplot(Country_comparison_Death , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 15: Comparission of death casese between Taiwan and Indonesia") + ylim(0,150)
+```
+
+ This figure is plotted according to the valuwa of death patient between Taiwan and Indonisia. This figure shows thath Death patients are lower than malysia.
+
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Death <- filter(Taiwan_Corona, type == "death")
+Japan_Corona_Death <- filter(Japan_Corona, type == "death")
+
+Country_comparison_Death <- rbind(Taiwan_Corona_Death, Japan_Corona_Death)
+
+ggplot(Country_comparison_Death , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 16 : Comparission of death cases between Taiwan and Japan") + ylim(0,100)
+```
+
+ This figure shows that amount of death patient in Taiwan is  lower than Japan.
+
+
+
+### **3.3 Recovery Cases of respective countries**
+
+### Comparison of Recovered cases with respect to countries
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Recovered <- filter(Taiwan_Corona, type == "recovery")
+Philippine_Corona_Recovered <- filter(Philipines_Corona, type == "recovery")
+Malaysia_Corona_Recovered <- filter(Malaysia_Corona, type == "recovery")
+Indonesia_Corona_Recovered <- filter(Indonesia_Corona, type == "recovery")
+Japan_Corona_Recovered <- filter(Japan_Corona, type == "recovery")
+
+Country_comparison_Recovered <- rbind(Taiwan_Corona_Recovered, Philippine_Corona_Recovered, Malaysia_Corona_Recovered, Indonesia_Corona_Recovered, Japan_Corona_Recovered)
+
+ggplot(Country_comparison_Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 17 : Comparison of Recovered cases with respect to countries") + ylim(0,10000)
+```
+
+
+
+
+
+```{r echo=FALSE, warning=TRUE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Recovered <- filter(Taiwan_Corona, type == "recovery")
+Philippine_Corona_Recovered <- filter(Philipines_Corona, type == "recovery")
+
+Country_comparison_Recovered <- rbind(Taiwan_Corona_Recovered, Philippine_Corona_Recovered)
+
+ggplot(Country_comparison_Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 18 : Comparison of Recovered cases with Taiwan and Phillipine") + ylim(0,200)
+```
+
+
+
+According to this figure we can say that the Recovery ammount of the Taiwan is lower than the Philippines. Since begening the recoverd same amount. But middle of the duration Phillipines are increasing than Taiwan. But after the middle both are in the same level.
+
+
+
+### Comparison of Recovered cases with respect to Taiwan and Malaysia
+
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Recovered <- filter(Taiwan_Corona, type == "recovery")
+Malaysia_Corona_Recovered <- filter(Malaysia_Corona, type == "recovery")
+
+Country_comparison_Recovered <- rbind(Taiwan_Corona_Recovered, Malaysia_Corona_Recovered)
+
+ggplot(Country_comparison_Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 19 : Comparison of Recovered cases with respect to Taiwan and Malaysia") + ylim(0,500)
+```
+
+
+
+ In this figure we can say the same story. recoverd amount is lower than the  Malaysia at the middle. But at the begining and after the middle both are at the same level. But at middile there is the hige difference between two countries.
+ 
+ 
+
+
+
+### Comparison of Recovered cases with Taiwan and Indonesia
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Recovered <- filter(Taiwan_Corona, type == "recovery")
+Indonesia_Corona_Recovered <- filter(Indonesia_Corona, type == "recovery")
+
+Country_comparison_Recovered <- rbind(Taiwan_Corona_Recovered, Indonesia_Corona_Recovered)
+
+ggplot(Country_comparison_Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 20 : Comparison of Recovered cases with Taiwan and Indonesia") + ylim(0,10000)
+```
+
+
+
+ According to this figure there is the huge difference between two countreis.But still Taiwan is lower level.
+ 
+ 
+
+
+#### Comparison of Recovered cases with Taiwan and Japan
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Taiwan_Corona_Recovered <- filter(Taiwan_Corona, type == "recovery")
+Japan_Corona_Recovered <- filter(Japan_Corona, type == "recovery")
+
+Country_comparison_Recovered <- rbind(Taiwan_Corona_Recovered, Japan_Corona_Recovered)
+
+ggplot(Country_comparison_Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 21 : Comparison of Recovered cases with Taiwan and Japan") + ylim(0,10000)
+
+```
+
+
+ According to this there is some variation of the Japan data set. But Taiwan have same frequent. But in this situation Taiwan is the lower level.
+
+
+```{r echo=FALSE, warning=FALSE, message = FALSE}
+Covid19 <- rbind(Taiwan_Corona, Philipines_Corona, Malaysia_Corona, Indonesia_Corona, Japan_Corona)
+```
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Covid19_Confirmed <- Covid19 %>% filter(type=="confirmed")
+ggplot(Covid19_Confirmed, aes(x=country, y=cases)) + geom_col() + ggtitle("Figure 22 : Total No.of Confirmed Cases") + ylim(0,10000000)
+```
+
+
+
+
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Covid19_Deaths <- Covid19 %>% filter(type=="death")
+ggplot(Covid19_Deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Figure 23 : Total No.of Deaths") + ylim(0,100000)
+```
+
+
+
+
+
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+Covid19_Recovered <- Covid19 %>% filter(type=="recovery") 
+ggplot(Covid19_Recovered, aes(x=country, y=cases)) + geom_col() + ggtitle("Figure 24 : Total No.of Recovered Cases") + ylim(0,1200000)
+```
+
+
+
+
+
+#### **Death Percentage in Taiwan due to COVID 19**
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Death_Percentage_Taiwan <- (sum(abs(taiwan_corona_Death$cases))/sum(abs(taiwan_corona_confirm$cases)))*100
+Death_Percentage_Taiwan
+```
+
+
+#### **Death Percentage in Phillipine due to COVID 19**
+
+```{r message=FALSE, warning=FALSE,echo=FALSE}
+Death_Percentage_Phillipine <- (sum(abs(Philipines_Corona_Death$cases))/sum(abs(Philipines_Corona_Confirmed$cases)))*100
+Death_Percentage_Phillipine
+```
+
+
+
+#### **Death Percentage in Malaysia due to COVID 19**
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Death_Percentage_Malaysia <- (sum(abs(Malaysia_Corona_Death$cases))/sum(abs(Malaysia_Corona_Confirmed$cases)))*100
+Death_Percentage_Malaysia
+```
+
+
+
+#### **Death Percentage in Indonesia due to COVID 19**
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Death_Percentage_Indonesia <- (sum(abs(Indonesia_Corona_Death$cases))/sum(abs(Indonesia_Corona_Confirmed$cases)))*100
+Death_Percentage_Indonesia
+```
+
+
+
+#### **Death Percentage in Japan due to COVID 19**
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+Death_Percentage_Japan <- (sum(abs(Japan_Corona_Death$cases))/sum(abs(Japan_Corona_Confirmed$cases)))*100
+Death_Percentage_Japan
+```
+
+
+
+## 3. Discission and Conclusion
+
+The Covid-19 pandemic is one of the deadliest diseases that has spread across the world. Like other countries affected by the epidemic, Taiwan also suffered greatly.
+ Figure 01 shows that daily covid 19 confirmed cases in Taiwan. According to this plot from 2020 to 2022 there is no reported cases significantly. But after the 2022, there are some cases reported. Those values are higher than 2020 number of values.
+ According to this figure from 2020 to after 2022 to it represent the approximately straight line. After that there is some variation of the straight line. It says that to 2020 to 2022, confirmed cases reported as same frequently.
+  There is no any patter and upward or downward moment. After the 2022 they reported more cases than before years. These cases are reported recently.
+  
+  Death cases which are reported from Taiwan were plotted under the Figure 02. According to this plot at first glance, there are some death cases significantly. Although few are reported.among 2021 and 2022 the reported death cases were increased and after that period reported cases became normally. Then after the in mid 2022s the reported death cases rapidly. total reported death cases are shows that 5817 as the value. As the percentage we can conclude that 0.1667% of Taiwan death cases due to Covid 19.
+  As the figure 03, recovered cases are reported same frequently to in mid 2021 s since early. But in mid 2021s the amount of recovered patients are increasing rapidly. but after that it becomes normal frequency.
+  
+  Figure 04, shows that present active cases in Taiwan. Active cases were reported same frequently since early. but after in mid of 2022s the amount of active cases are increasing rapidly.
+  
+  According to the Figure 05, there cases are compared with each of them as confirmed, death and recovered. According to this plot confirmed amount and recovery amount are increased than before in mid 2021s. But is become case as before after that period. after the 2022 the confirmed cases are increasing suddenly. Since beginning with comparing confirmed cases ans recovery case.
+  
+  After that session, we came to the comparison session. Taiwan is a Island located in Pacific ocean> therefore Taiwan has no any neighbor countries. Therefore I took the nearest countries of Taiwan. as nearest countries Philippine, Malaysia, Indonesia and Japan. These countries are located in pacific ocean and in the Asia Continent. those countries have same climate and geographical conditions. 
+  
+  Figure 07 is the summary plot of the Figure 08,09,10,and figure 11. According to those all plots we can get a conclusion as the amount of the confirmed patients is lower than the other countries. There is a huge difference between other countries. 
+  
+  Figure 12 is the summary plot of the Figure 13,14,15 and Figure 16. As those plots Death patient are lowest is the Taiwan.
+  
+  Figure 17 includes the idea of Figure 18,19,20 and 21. This plots tells that the same story. Lowest level is goes to Taiwan.
+  According to the above results, all the countries have same climate approximately. But Taiwan has the lowest level always. As the above countries there are same size of population as others. But they are surrounded with ocean. Taiwan is the island. So it has not connection between other countries by geographically. Therefore the risk of spreading throughout Taiwan is low.
+  
+  Figures of 22, 23 and 24 are confirmed thin conclusion by data also.
+  
+## 4. Conclusion
+
+whole world was faced Covid 19 very hardly.So, taiwan also victimized it. But Taiwan is an Island. Therefore they can protect than the other countries. When all the situations Taiwan is at the lower level. AS the death percentage of the Taiwan os 0.1667%. It is very lower amount by comparing the other countries. Seleceted countries are nearest countries of the Taiwan.All the countries have same climate situations. But considering the values of the selected countries as the percentage Philippines is 1.636%, Malaysia is 0.786%, Indonesia is 2.58% and the Japan is 0.338%. By comparing the other countries Taiwan is at the good situation. 
+
+
+
+# References
+
+https://www.britannica.com/place/Taiwan
+
+https://www.tripsavvy.com/weather-and-climate-in-taiwan-5079145
+
+http://www.neighbouring-countries.com/neighbouring-countries-of-taiwan.html#:~:text=Neighbouring%20countries%20of%20Taiwan%20Taiwan%20has%20no%20neighbouring,has%20no%20%28natural%29%20land%20connections%20to%20other%20countries.
+
+https://www.worldometers.info/coronavirus/countries-where-coronavirus-has-spread/?new=true
+
+https://worldpopulationreview.com/country-rankings/island-countries
+
+https://weather-and-climate.com/average-monthly-Rainfall-Temperature-Sunshine-in-Indonesia
+
+unique(coronavirus$country)
+
+https://epidemic-stats.com/coronavirus/taiwan
+
+https://ourworldindata.org/coronavirus/country/taiwan
+
+https://images.search.yahoo.com/search/images;_ylt=Awrg0I39IkFjiD0k6WqJzbkF;_ylu=c2VjA3NlYXJjaARzbGsDYnV0dG9u;_ylc=X1MDOTYwNjI4NTcEX3IDMgRmcgMEZnIyA3A6cyx2OmksbTpzYi10b3AEZ3ByaWQDTHhCeXg4THNTMHlSNFo0d1BtQ3dnQQRuX3JzbHQDMARuX3N1Z2cDMARvcmlnaW4DaW1hZ2VzLnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMwBHFzdHJsAzM4BHF1ZXJ5A25laWdoYm91ciUyMGNvdW50cmllcyUyMG9mJTIwdGFpd2FuJTIwbG9jYXRpb24EdF9zdG1wAzE2NjUyMTMxOTc-?p=neighbour+countries+of+taiwan+location&fr=&fr2=p%3As%2Cv%3Ai%2Cm%3Asb-top&ei=UTF-8&x=wrt
+

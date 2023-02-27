@@ -1,0 +1,365 @@
+---
+title: "Individual Project"
+author: "M.G.P.M. Dilhani"
+date: "2022-10-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+# STA 326 2.0 Programming and Data Analysis with R
+ 
+##### AS2019344
+
+##### M.G.P.M.Dilhani
+
+## Australia ##
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+Australia_corona <- coronavirus %>% filter(country == "Australia")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+```
+
+
+### 1.0 Introduction.
+The COVID-19 pandemic in Australia is part of the ongoing worldwide pandemic of the corona virus disease 2019(COVID-19) caused by severe acute respiratory syndrome corona virus 2 (SARS-CoV-2). The first confirmed case in Australia was identified on 25 January 2020, in Victoria, when a man who had returned from Wuhan, Hubei province, China, tested positive for the virus. As of 6 August 2022, Australia has reported over 9,588,977 cases, over 9,224,255 recoveries,and 12,200 deaths. Victoria's second wave having the highest fatality rate per case.
+
+##
+Australia was one of few countries to pursue a zero-COVID "suppression" strategy until late 2021, meaning it aimed to minimize domestic community transmission. implementation involved strict controls on international arrivals and responding to local outbreaks with lockdowns and exhaustive contact tracing of domestic COVID-19 clusters. 
+
+##
+In response to an outbreak of the SARS-CoV-2 Delta variant during June 2021 in New South Wales almost half of Australia's population and most major cities were in lockdown from early July 2021 with the out break continuing to worsen to new record daily cases later in 2021. The government phased out its zero-COVID strategy and lifted most generalized public health restrictions after vaccinating 90% of its population in December 2021, as the SARS-CoV-2 Omicron variant drove further records of infection. International travel resumed in early 2022.
+
+
+### 1.1 Visualization of the Country.
+Australia, the smallest continent and one of the largest countries on earth, lying between the Pacific and Indian oceans in the southern Hemisphere. Australia's capital is Canberra, located in the southeast between the larger and more important economic cultural centers of Sydney and Melbourne.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+data("wrld_simpl")
+
+p <- ggplot() + 
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p + 
+  geom_point(
+    data = Australia_corona , aes(x = long, y = lat), color = "red", size_sum
+    = 1
+  )
+  
+  
+
+
+
+```
+
+
+##
+the Australian maintain extends from west to east for nearly 2,500 miles(4,000 km) and from Cape York Peninsula in the northeast to Wilson Promontory in the southeast for nearly 2,000 miles (3,200 km). To the south, Australian jurisdiction extends a further 310 miles (500 km) to the southern extremity of the island of Tasmania, and in the north it extends to the southern shores of Papua New Guinea. Australia is separated from Indonesia to the northwest by the Timor and Arafura seas, from Papua New Guinea to the northeast by the Coral Sea and Torres Strait, from the Coral Sea Island Territory by the Greek Barrier Reef, from New Zealand to the southeast by the Tasman Sea, and frotica in the far south by the Indian Ocean.
+
+
+### 1.2 Climate Condition.
+Australia climate is governed mostly by its size and by the hot, sinking air of the subtropical high pressure belt (subtropical ridge or Australian High). This moves north-west and with the seasons. The climate is variable, with frequent droughts lasting several seasons, thought to be caused in part by the El Nino-Southern Oscillation. Australia has a wide variety of climates due to its large geographical size. The largest part of Australia is desert or semi-arid. Only the south-east and south-west corners have a temperate climate and moderately fertile soil. The northern part of the country has a tropical climate, varying between grasslands and desert. Australia holds many heat-related records: the continent has the hottest extended region year-round, the areas with the hottest summer climate, and the highest sunshine duration.
+
+
+### 1.3 Retrictions, lockdowns and Stay at Home Order.
+Restrictions, such as lockdowns, are managed by the states and territories. The situation changes frequently. You need to stay up to date with local information about isolation and quarantine. If you have been tested for COVID-19, you must follow the directions from public health authorities and whoever tested you. And also you need to isolate if you have COVID-19 or health authorities suspects you have COVID-19. This is to prevent the spread of the virus. You need to stay in isolation until your public health authority advises that you can leave. If you leave isolation without permission you may face criminal charges or a fine. You need to go into quarantine if you: test positive for COVID-19 or have been in close contact with someone who has tested positive for COVID-19 or is highly likely to or are entering a state or territory with required quarantine period. Your quarantine may be at home or at a medihotel. Your local public health authority will direct you where to quarantine and when you can leave. If you develop symptoms during your quarantine period you will be tested for COVID-19. In some areas you may be tested while in quarantine, even if you don't have symptom. If you test positive you will need to go into isolation. Anyone who has been in your household must go into quarantine.
+
+
+
+### 1.4 Economic Impact due to Corona-Virus.
+COVID-19 has had a profound profound impact on the Australian economy since arriving in Australia in January 2020. Measures to reduce the spread (e.g. social distancing, commercial trading restrictions, and stay-at-home orders) have had varying impacts on economic activity.
+The most noticeable impacts were driven by two COVID-19 variants: the L-strain of the virus which arrived in Australia in January 2020, and the Delta strain which was first detected in June 2021. The impact of these variants on macroeconomic aggregates are explored below and compared to the Omicron variant outbreak of COVID-19 in the March quarter 2022. To support household and businesses, Governments provided subsidies and other payments over the course of the pandemic.
+The lockdowns and trading restrictions following the L-strain outbreak led to record falls in hours worked and private compensation of employees. Workers were laid off or put onto reduced hours as businesses closed or reduced operations in compliance with health mandates.
+The Commonwealth Government subsequently introduced the Job Keeper and Boosting Cash Flow for Employers programs to support businesses and employees in their employment. Subsidy payments contributed to the 12.1% increase in operating surplus in June quarter 2020. Household gross income was further supported by social assistance benefits in cash, such as the Economic Support Payment and Coronavirus Supplement.
+
+
+
+
+### 2.0 Explotary Data Analysis.
+
+### 2.1 Visualization of Death, Confirmed, Recovered & Active Cases.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+death_cases <- filter(Australia_corona, type == "death")
+ggplot(death_cases,aes(date, cases)) + geom_path(size=1) + labs(title = "Death Cases in Australia")
+
+```
+
+Above graph shows the death cases in Australia. According to the above graph number of death is increasing after year 2022. And also some times number of deaths are increasing over 300 cases.
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+confirmed_cases <- filter(Australia_corona, type == "confirmed")
+ggplot(confirmed_cases,aes(x=date,y=cases)) +
+  geom_path(size=1) + labs(title = "Confirmed Cases in Australia")
+
+
+```
+
+Above graph shows the confirmed cases in Australia. According to the above graph number of confirmed cases is increasing after year 2022. And also some times number of confirmed cases are increasing over 50000 cases.
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+active_cases <- filter(Australia_corona, type == "active")
+ggplot(confirmed_cases,aes(x=date,y=cases)) +
+  geom_path(size=1) + labs(title = "Active Cases in Australia")
+
+
+```
+
+
+Above graph shows the active cases in Australia. According to the above graph number of active cases are increasing after year 2022. And also some times number of active cases are increasing over 75000 cases.
+
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+recovery_cases <- filter(Australia_corona, type == "recovery")
+ggplot(recovery_cases, aes(date, cases)) + geom_path(size=1) + 
+  labs(title = "Recovery Cases in Australia")
+
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(recovery_cases, aes(cases)) +
+  geom_freqpoly(bins = 9) +
+  labs(title = "Recovery Cases in Australia")
+
+
+```
+
+Above two graphs show the recovery cases in Australia. According to the above graph number of recovery cases are increasing before year 2022. And also some times number of recovery cases are increasing over 15000 cases.
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+Australia_corona <- Australia_corona%>%
+  group_by(type)%>%
+  mutate(cum_cases = cumsum(cases))
+
+ggplot(Australia_corona, aes(date, cum_cases, colour = type)) + geom_path(size=1) +
+  labs(title = "Total no. of Confirmed, death, recovery cases in Australia")
+
+
+```
+
+Above graph implies that the total number of confirmed cases has increased since march. There is a large gap between total number of confirmed patients with recovery patients. And also there is a large gap between the number of deaths and the confirmed patients. 
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(Australia_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) +
+  labs(title="Comfirmed, Death and Recovery cases in Australia")
+
+
+```
+
+This above graph shows the confirmed, death and recovery cases in Australia. These is a large gap between the confirmed cases and recovery cases. And also there is a huge gap between confirmed cases and death cases more than the confirmed cases and recovery cases. This incremental is showing after year 2022.
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(Australia_corona, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) + 
+  labs(title = "Confirmed, Death and Recovery Cases in Australia")
+
+
+```
+
+This above graph shows the confirmed, death and recovery cases in Australia. These is a large gap between the confirmed cases and recovery cases. And also there is a huge gap between confirmed cases and death cases more than the confirmed cases and recovery cases. This incremental is showing after year 2022. According to the above graph we can sea the death cases are very law with the confirmed cases and the recovery cases.
+
+
+
+### 2.2 Comparison with Other Countries.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+pivot_corona <- coronavirus %>%
+  pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+compare_corona <- coronavirus %>% filter(country == c("Australia", "India", "Japan", "France", "Gremany", "US"))
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+data("wrld_simpl")
+
+q <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p +
+  geom_point(
+    data = compare_corona, aes(x = long, y = lat, col = country), size
+    = 1
+  )
+  
+  
+  
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+pivot_compare_corona <- compare_corona %>% 
+  pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = confirmed, col = country)) +
+  geom_point() +
+  geom_smooth(method = lm, se = F, fullrange = T) +
+  labs(title = "Scatterplot of Confirmed Cases of Comparing Countries")
+
+```
+
+This scatter plot shows us the comparison of confirmed cases of France, India, Japan, US with Australia. According to the above graph more confirmed cases are in US. And also Japan and India confirmed cases are approximately same. The confirmed cases of Australia is neglect than other four countries.
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = death, col = country)) +
+  geom_point() +
+  geom_smooth(method = lm, se = F, fullrange = T) +
+  labs(title = "Scatterplot of Death due to Coronavirus of Comparing Countries")
+
+```
+
+This scatter plot shows the death cases of Australia, France, India, Japan and US. According to the figure more death cases are in US and India. The death cases of Japan and France are approximately same. The death cases of Australia is neglect than other four countries.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=TRUE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = recovery, col = country)) +
+  geom_point() +
+  geom_smooth(method = lm, se = F, fullrange = T) +
+  labs(title = "Scatterplot of Recovery Cases of Comparing Cases")
+
+```
+
+This scatter plot shows the recovery cases of Australia, France, India, Japan and US. According to the figure more recovery cases are in India. The recovery cases of other four countries are approximately same. 
+
+
+
+
+### 3.0 Conclussions & Discussion.
+
+According to the data number of death is increasing after year 2022. And also some times number of deaths are increasing over 300 cases. According to the data number of confirmed cases are increasing after year 2022. And also some times number of confirmed cases are increasing over 50000 cases. And also number of active cases are increasing after year 2022 and some times number of active cases are increasing over 75000 cases.According to the data number of recovery cases are increasing before year 2022. And also some times number of recovery cases are increasing over 15000 cases. According to the scatter plot more confirmed cases are in US. And also Japan and India confirmed cases are approximately same. The confirmed cases of Australia is neglect than other four countries. According to the figure more death cases are in US and India. The death cases of Japan and France are approximately same. The death cases of Australia is neglect than other four countries. And also more recovery cases are in India. The recovery cases of other four countries are approximately same.
+
+##
+Therefore from that number of death cases of Australia is very low with the confirmed cases. It can be conclude that country has taken a good action to face this situation. Hence the health sector of Australia is very rich since this lower death rate. When comparing with other countries US and India death rate is very high with the death rate of Australia. So they had a more difficult situation to face this pandemic situation than Australia. Since US and India have more recovery cases and confirmed cases, it can be conclude that more corona patients are in these two countries than Australia, France, Japan. Therefore it can be conclude that Australia has taken more relevant measures in their medical facilities to treat and face this COVID-19 pandemic situation.
+
+
+
+
+
+### 4.0 References.
+
+#### https://www.australia.gov.au/
+
+#### https://www.health.gov.au/health-alerts/covid-19/restrictions-and-lockdowns
+
+#### https://www.abs.gov.au/articles/effects-covid-19-strains-australian-economy#:~:text=The%20response%20to%20the%20L,and%20Insurance%20Services%20recording%20growth
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

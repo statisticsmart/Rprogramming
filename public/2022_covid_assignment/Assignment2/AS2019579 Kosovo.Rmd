@@ -1,0 +1,465 @@
+---
+title: COVID-19 Pandemic in the Republic of Kosovo.
+author: Ishara Wijayaratne
+date: "08/10/2022"
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+
+The COVID-19 pandemic has become a global health crisis that has affected countries across all continents in the world. Therefore, understanding the strategic responses related towards controlling the spread of COVID can be of much importance. This report is an exploratory analysis of the pandemic in Kosovo by studying data from 01 January 2020 to 30 June 2022 and comparing it with neighboring countries as well as countries identified as of key importance with respect to COVID-19.
+
+
+## 1.0 Background
+### 1.1 Location of Kosovo
+
+Republic of Kosovo is located in the southeastern part of Europe respectively lies in the center of the Balkan Peninsula. It borders Albania (south-west), Montenegro (northwest), Serbia (northeast), and Northern Macedonia (southeast) and has a total geographical area of 10905.25 km².
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(coronavirus)
+library(plotly)
+
+```
+
+```{r, echo=FALSE}
+data("coronavirus")
+Kosovo_corona<-coronavirus %>% filter(country=="Kosovo")
+
+Kosovo_corona <-Kosovo_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+
+#### *Visualization of Kosovo*
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(maptools)
+library(tibble)  
+library(ggrepel) 
+library(png) 
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "dark blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Kosovo_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+### 1.2 Actions taken by the Government 
+#### <u> Entrances and exits of foreign citizens from the Republic of Kosovo </u> 
+
+ Foreign nationals entering the Republic of Kosovo, including those with temporary or
+permanent residence permits in Kosovo, coming from high-risk countries according to the
+official list of the National Institute of Public Health of Kosovo (NIPHK), must have a
+negative RT-PCR test for COVID-19 done in the last 72 hours, based on the principle of
+reciprocity
+
+#### <u>Special provisions for areas with disturbing variants of the virus</u> 
+Citizens of the Republic of Kosovo, persons with temporary or permanent residence
+permits in Kosovo, foreign diplomats and medical personnel, who upon entering
+Kosovo must present a negative RT-PCR test for COVID-19, made in the last 72 hours
+and who must be quarantined in their homes (place of residence) for fourteen (14)
+days, being tested twice a week. Quarantine may be terminated upon presentation of
+the negative RT-PCR test for COVID-19 made no earlier than five days after entry.
+
+#### <u> General protection and hygiene measures </u>
+ Public and private institutions and other entities are obliged to keep hand sanitizers and
+face masks in accessible places at the entrance of the building and indoors.
+
+ Public and private institutions and other entities are obliged to place visible signs of the
+rules of conduct for protection from COVID-19 at the entrance of each facility including the
+sign prohibiting entry to the facility without masks, respecting the distance.
+
+
+## 2.0 Exploratory Data Analysis
+
+### 2.1. Structure of data 
+
+The data set used for this analysis is The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+    Date
+    Country
+    Province/state; if available
+    Latitude of center of geographic region defined by country/province
+    Longtitude of center of geographic region defined by country/province
+    Type of reported case – confirmed, death, recovered
+    Number of cases on given date
+
+All records are available for the time period from 01 January 2020 to 30 June 2022.
+The analysis has been done by R, a programming language for statistical computing and graphics for the Republic of Kosovo.
+
+
+Firstly the Kosovo dataset was Analysed to remove any outlyers and to identify any missing values in the variable cases.
+There is a missing in row 2330, which has been replaced by the mean of cases in the rows directly above and below it.
+
+```{r, comment=NA ,echo=FALSE}
+# Locate missing value
+msv1<-which(is.na(Kosovo_corona$cases))# Using base R
+cat("Missing values in Kosovo dataset = ", msv1)
+
+# I use the average of the 93rd and the 95th to calculate the missing value/negative value.
+Kosovo_corona$cases[2330] = mean(c(Kosovo_corona$cases[2329],Kosovo_corona$cases[2331]))
+length1<-length(Kosovo_corona$cases)
+```
+
+
+
+
+
+To get an idea about the variables in the dataset of Kosovo the summary statistics are useful. According to the summary it can be seen that, during the period from January 2020 to June 2022 a mean of 127 cases(confirmed/revovered/deaths) was recorded per day.
+
+```{r, comment=NA,echo=FALSE}
+#  I add a column col that indicates desired colour.
+Kosovo_corona$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 2652-2330)))
+summary(Kosovo_corona)
+
+```
+
+
+
+```{r, comment=NA,eval=FALSE,echo=FALSE}
+###Time series plot of recovered cases (imputed values are shown in red.) 
+ggplot(Kosovo_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity() 
+```
+
+
+```{r, comment=NA, echo=FALSE}
+
+recovered_Kosovo_corona <- Kosovo_corona %>% filter(type=="recovery")
+confirmed_Kosovo_corona <- Kosovo_corona %>% filter(type=="confirmed")
+death_Kosovo_corona <- Kosovo_corona %>% filter(type=="death")
+
+```
+
+
+*The graph of cases vs date grouped according to the type.*
+```{r, comment=NA, echo=FALSE ,message=FALSE, warning=FALSE}
+p1 <- ggplot(Kosovo_corona,aes(date, cases, color = type), is.na=FALSE) + facet_wrap(~type) +
+  geom_point() +
+  geom_line() +
+  ggtitle("Analysis of COVID cases in Kosovo")
+ 
+ggplotly(p1)
+
+```
+From the above graph it is evident that during the year 2021, COVID in Kosovo was prominent.
+During the first 6 months of 2021 many confirmed cases can be observed. 
+And at the mid of 2021 as a result of the COVID prevention actions taken by the government a considerable recovery can be observed.
+
+During early 2022 a sudden increase in the confirmed cases can be observed. But towards the mid of 2022 not many confirmed cases can be observed compared to that of year 2021. 
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+
+recovery_Kosovo_corona<- Kosovo_corona %>% filter(type=="recovery") 
+confirmed_Kosovo_corona <- Kosovo_corona %>% filter(type=="confirmed") 
+death_Kosovo_corona <- Kosovo_corona %>% filter(type=="death") 
+
+merged_list <- cbind(confirmed_Kosovo_corona, "recovery"=recovery_Kosovo_corona$cases, "death"=death_Kosovo_corona$cases)
+
+```
+`
+
+*The graph of death cases Vs date in Kosovo.* 
+```{r, comment=NA, echo=FALSE ,message=FALSE, warning=FALSE}
+deathk <- ggplot(death_Kosovo_corona,aes(date, cases), is.na=FALSE) +
+  geom_point(col="forestgreen") +
+  geom_line() +
+  ggtitle("Analysis of Death cases in Kosovo")
+ 
+ggplotly(deathk)
+
+```
+Starting from the last quarter of year 2020 towards the mid of 2021 many death cases have been recorded. 
+In comparisson to 2020/21, in year 2022 very few death cases can be observed. As COVID in year 2022 is in the receding stage. 
+
+
+
+
+
+Total cases  is the summation of confirmed, recovered and death cases in Kosovo. 
+This value is not important in analyzing the data set of Kosovo, as a confirmed case would lead to a death or recovery over time. Since the data set is collected over a considerably long period of time this happens. 
+```{r, echo=FALSE,comment=NA}
+total_cases <- sum(merged_list$cases) 
+cat("Total cases in Kosovo = ", total_cases)
+
+```
+
+Therefore the total values of confirmed, recovered and death cases in Kosovo have been found separately.
+```{r, echo=FALSE,comment=NA}
+total_recovery <- sum(merged_list$recovery)
+cat("Total recovery cases in Kosovo = ", total_recovery)
+
+```
+
+
+```{r, echo=FALSE,comment=NA}
+total_death <- sum(merged_list$death) 
+cat("Total death cases in Kosovo = ", total_death)
+
+```
+
+
+```{r, echo=FALSE,comment=NA}
+
+total_confirmed <- total_cases - (total_recovery + total_death)
+cat("Total confirmed cases in Kososvo = ", total_confirmed)
+```
+From the above values it is evident that, most of the individuals who contracted COVID were able to recover.
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+library(tidyverse)
+library(magrittr)
+
+recovery_rate_Kosovo <- (total_recovery/ total_confirmed)*100
+cat("Recovery rate in Kosovo = ", recovery_rate_Kosovo) 
+
+```
+
+A high recovery rate can be observed in Kosovo.
+
+### 2.2. Comparisson with Prominant World Leaders  
+
+There were only 3140 deaths in Kosovo over the period under consideration.
+The death rate of Kosovo is calculated as follows.
+
+Death Rate of Kosovo = (Total death cases/Total Confirmed Cases)*100
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+death_rate_Kosovo <- (total_death/ total_confirmed)*100
+cat("Death rate in Kosovo = ", death_rate_Kosovo)  
+
+```
+
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+us_corona <- coronavirus %>% filter(country == "US")
+us_corona <-us_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+# Locate missing value
+missing_value1<-which(is.na(us_corona$cases)) # Using base R
+
+us_corona$cases[1757] = mean(c(us_corona$cases[1756],us_corona$cases[1758]))
+us1<-length(us_corona$cases)
+
+us_corona$cases[1880] = mean(c(us_corona$cases[1879],us_corona$cases[1881]))
+us2<-length(us_corona$cases)
+
+us_corona$cases[2074] = mean(c(us_corona$cases[2073],us_corona$cases[2075]))
+us3<-length(us_corona$cases)
+
+us_corona$cases[2096] = mean(c(us_corona$cases[2095],us_corona$cases[2097]))
+us4<-length(us_corona$cases)
+
+ 
+```
+
+COVID-19 datasets for US,India and China have been analysed, and any outlyers and missing values have been removed and replaced.
+The death rates of US, India and China are calculated as follows,
+
+Death Rate  = (Total death cases/Total Confirmed Cases)*100
+
+```{r, echo=FALSE,comment=NA}
+
+
+confirmed_cases_us <- us_corona %>% filter(type == "confirmed")
+death_cases_us <- us_corona %>% filter(type == "death")
+total_cases_us <- sum(confirmed_cases_us$cases)
+total_death_us <- sum(death_cases_us$cases)
+death_rate_us <- (total_death_us/ total_cases_us)*100
+cat("Death rate in US = ", death_rate_us)
+
+```
+
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+india_corona <- coronavirus %>% filter(country == "India")
+india_corona <-india_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+# Locate missing value
+missing_value2<-which(is.na(india_corona$cases)) # Using base R
+
+india_corona$cases[944] = mean(c(india_corona$cases[943],india_corona$cases[945]))
+in1<-length(india_corona$cases)
+
+india_corona$cases[2115] = mean(c(india_corona$cases[2114],india_corona$cases[2116]))
+in2<-length(india_corona$cases)
+
+india_corona$cases[2330] = mean(c(india_corona$cases[2329],india_corona$cases[2331]))
+in3<-length(india_corona$cases)
+
+
+```
+
+
+
+```{r, echo=FALSE,comment=NA}
+confirmed_cases_india <- india_corona %>% filter(type == "confirmed")
+death_cases_india <- india_corona %>% filter(type == "death")
+total_cases_india <- sum(confirmed_cases_india$cases)
+total_death_india <- sum(death_cases_india$cases)
+death_rate_india <- (total_death_india/ total_cases_india)*100
+cat("Death rate in India = ", death_rate_india)
+
+```
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+china_corona <- coronavirus %>% filter(country == "China" & province == "Hubei")
+china_corona <-china_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+# Locate missing value
+missing_value3<-which(is.na(china_corona$cases)) # Using base R
+
+china_corona$cases[1855] = mean(c(india_corona$cases[1854],india_corona$cases[1856]))
+chi1<-length(india_corona$cases)
+
+china_corona$cases[2330] = mean(c(india_corona$cases[2329],india_corona$cases[2331]))
+chi2<-length(india_corona$cases)
+
+
+```
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+confirmed_cases_china <- china_corona %>% filter(type == "confirmed")
+death_cases_china <- china_corona %>% filter(type == "death")
+total_cases_china <- sum(confirmed_cases_china$cases)
+total_death_china <- sum(death_cases_china$cases)
+death_rate_china <- (total_death_china/ total_cases_china)*100
+cat("Death rate in China = ", death_rate_china) 
+
+```
+
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+death_rates_all <- c(death_rate_Kosovo, death_rate_us, death_rate_india, death_rate_china)
+
+barplot(death_rates_all, main="Death Rate Comparision", horiz=TRUE, names.arg = c("Kosovo", "US", "India", "China"), col = c("dark blue","dark red", "purple", " blue"))
+```
+
+It can be observed that China has the highest death rate due to COVID, over the time period Jan 2020 to June 2022. This maybe because COVID originated from China.
+
+The death rate in Kosovo is lower than that of China, but is Higher than those of the United States and India. 
+Kosovo is a small country in comparison to US and India. 
+The proper implication of COVID prevention rules,regulations and vaccination takes longer time in larger countries.
+Therefore, the death rate of Kosovo being higher than the United States and India proves that the government of Kosovo have not carried out the required COVID prevention actions efficiently.
+
+
+### 2.3. Coutries surrounding Kosovo
+
+The Republic of Kosovo is located in the South-Eastern part of Europe. It borders Albania from South-West, Montenegro from North-West and is in the close proximity of Italy.
+ 
+```{r,echo=FALSE,comment=NA}
+montenegro_corona <- coronavirus %>% filter(country == "Montenegro")
+montenegro_corona <-montenegro_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+italy_corona <- coronavirus %>% filter(country == "Italy")
+italy_corona <-italy_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+albania_corona <- coronavirus %>% filter(country == "Albania")
+albania_corona <-albania_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+ 
+ 
+```{r,message=FALSE, warning=FALSE, echo=FALSE,comment=NA}
+plot1 <- ggplot(Kosovo_corona,aes(date, cases, color = type), is.na=FALSE) + facet_wrap(~type)+
+  geom_line() +
+  ggtitle("Analysis of cases in Kosovo")
+library(patchwork)
+```
+ 
+ 
+According to the below plot, both Kosovo and Montenegro reached peaks in COVID confirmed cases in early 2022, and both countries towards the mid of 2022 had a drastic reduction in confirmed cases.It is evident that both Kosovo and Montenegro have correctly adopted to COVID-19 safety guidelines. 
+
+```{r,message=FALSE, warning=FALSE,echo=FALSE,comment=NA}
+plot2 <- ggplot(montenegro_corona,aes(date, cases, color = type)) + facet_wrap(~type)+
+  geom_line()+
+  ggtitle("Analysis of cases in Montenegro")
+
+plot1/plot2
+
+```
+ 
+ 
+According to the below plot, Italy reached its highest peak of confirmed cases in early 2022, similar to Kosovo. But unlike Kosovo the confirmed cases in Italy did not drastically drop towards the mid of 2022.Further in both countires there weren't any peaks in recovery for year 2022.
+It can be said that Kosovo has managed the COVID pandamic more efficiently than Italy in year 2022.  
+```{r,message=FALSE, warning=FALSE,echo=FALSE,comment=NA}
+plot3 <- ggplot(italy_corona,aes(date, cases, color = type)) + facet_wrap(~type) +
+  geom_line()+
+  ggtitle("Analysis of cases in Italy")
+
+plot1/plot3
+```
+ 
+ 
+ 
+According to the below plot, Kosovo and Albania have roughly similar confirmed and recovery cases in the year 2022.
+But in year 2021 it can be observed that Kosovo had much higher confirmed, death and recovery cases than Albania. Therfore it is safe to say that Kosovo has improved its COVID guidlines for the year 2022.
+ 
+```{r,message=FALSE, warning=FALSE ,echo=FALSE,comment=NA}
+plot4 <- ggplot(albania_corona,aes(date, cases, color = type)) + facet_wrap(~type) +
+  geom_line()+
+  ggtitle("Analysis of cases in Albania")
+
+plot1/plot4
+```
+ 
+## 3.0 Discussion and Conclusion
+
+COVID-19 had a seveier impact on Kosovo in the year 2021, as many confirmed and death cases can be observed.
+However, towards the mid of year 2022 there haven't been any sever breakouts of COVID and very less death cases, although an initial increase in confirmed cases can be observed (1st quarter of 2022).
+
+In comparison to US and India Kosovo performed poorly in controlling the deaths due to the COVID-19 pandemic.
+
+In year 2021 compared to its neighboring countries, Kosovo had higher confirmed COVID cases.But in year 2022 Kosovo continuously performed well in controlling the COVID spread more than its neighbouring countries Albania and Montenegro. 
+
+It can be concluded that in the current year, Kosovo is properly managing the adverse effects due to the pandemic.
+
+
+## 4.0 References
+
+Easing the COVID-19 restrictions on 18 May. 2021, Republic of Kosovo, viewed 7 October 2022, https://msh.rks-gov.net/wp-content/uploads/2021/06/New-measurement-anti-COVID-19-23.06.2021-1.pdf
+
+Geography of the Republic of Kosovo. 2020, Wikipedia, viewed 6 October 2022,https://en.wikipedia.org/wiki/Geography_of_Kosovo 
+
+
+
+
+
+
+
+
+

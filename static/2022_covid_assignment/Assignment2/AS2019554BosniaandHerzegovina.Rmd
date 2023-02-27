@@ -1,0 +1,317 @@
+---
+title: "Covid-19 Cases in Bosnia and Herzegovina"
+author: "A.G.J Thenura(AS2019554)"
+date: "10/7/2022"
+output: html_document
+---
+<style>
+body {
+text-align:justify}
+</style>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, command = NA, message = FALSE, warning = FALSE,fig.align = "center")
+```
+
+
+
+## **1. Introduction**
+The COVID-19 pandemic is an ongoing global pandemic of coronavirus disease 2019  caused by severe acute respiratory syndrome coronavirus.
+The World Health Organization (WHO) declared the outbreak a public health emergency of international concern on 30 January 2020 and a 
+pandemic on 11 March 2020. The pandemic had caused more than 618 million cases and 6.54 million confirmed deaths, making it one
+of the deadliest in history.
+
+#### **1.1 About Bosnia and Herzegovina**
+The COVID-19 pandemic and its economic consequences have had a relatively high impact on Bosnia and Herzegovina’s population and economy.
+The authorities acted quickly to contain the virus during the first wave of the pandemic and Bosnia has experienced several waves of the
+pandemic.The first case of COVID-19 was reported on 5 March 2020 and the first death on 21 March. In Bosnia and Herzegovina, from 
+3 January 2020 to, 6 October 2022, there have been 398,796 confirmed cases of COVID-19 with 16,138 deaths, reported to WHO. As of 
+28 January 2022, a total of 1,924,950 vaccine doses have been administered.
+
+```{r,echo=FALSE,out.width="80%", results=FALSE}
+library(coronavirus)
+library(zoo)
+library(tidyverse)
+library(magrittr)
+bosnia_corona <- coronavirus %>% filter(country == "Bosnia and Herzegovina")
+bosnia_corona <- transform(bosnia_corona, cases = na.locf(cases))
+bosnia_corona <- bosnia_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(bosnia_corona$cases))
+bosnia_corona$cases[1226]=mean(c(bosnia_corona$cases[1225],bosnia_corona$cases[1227]))
+bosnia_corona$cases[1420]=mean(c(bosnia_corona$cases[1419],bosnia_corona$cases[1421]))
+bosnia_corona$cases[2330]=mean(c(bosnia_corona$cases[2329],bosnia_corona$cases[2331]))
+bosnia_corona <- coronavirus %>% filter((country == "Bosnia and Herzegovina"),cases >= 0)
+#view(bosnia_corona)
+```
+```{r, echo=FALSE, out.width="75%",fig.cap="*Figure 01* : Bosnia and Herzegovina in World Map"}
+library(leaflet)
+library(dplyr)
+library(httpuv)
+
+m <- leaflet() %>%
+  # Now add tiles to it
+  addTiles() %>%
+  # Setting the middle of where the map should be and the zoom level 18.413029, 43.856430
+  setView(lng =18.413029, lat = 43.856430, zoom = 4) %>%
+  # Now, add a marker with a popup,
+  addMarkers(lng = 18.413029, lat = 43.856430, popup = "<b>Bosnia</b>")
+
+
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+
+#### **1.2 Location and population**
+Bosnia and Herzegovina is thus the 26th smallest country in Europe and ranked 129th in the world. Only slightly Less than half 
+of all residents (49%) live within cities. This country situated in the western Balkan Peninsula of Europe. The larger region of 
+Bosnia occupies the northern and central parts of the country, and Herzegovina occupies the south and southwest. Bosnia and Herzegovina 
+borders Serbia to the east, Montenegro to the southeast, and Croatia to the north and southwest.The capital of the country is Sarajevo. 
+The land has a total area of 51,210 km² (19,772 mi²) and a total coastline of 20 km.The country has 3 islands in the open sea. There are 
+direct national borders with the 3 neighbouring countries Croatia, Montenegro and Serbia. The distance between New York City and the 
+Capital Sarajevo is about 7,190 km. The current population of Bosnia and Herzegovina is 3,234,781 and it is density in Bosnia and
+Herzegovina is 64 per Km2. 
+
+#### **1.3 Climate**
+A moderate climatic zone determines the weather in Bosnia and Herzegovina.Depending on the season, the average daytime temperatures
+range between 6 and 30 degrees. Bosnia and Herzegovina has been hit by a number of devastating floods in recent years, including 
+the worst flooding in recorded history that swept through the country in May. On 22 June, heavy rainfalls have caused rivers and 
+creeks in North-eastern part of Bosnia and Herzegovina to swell and flood houses and roads along their banks, forcing many to fear 
+for their lives and properties.
+
+Authorities in Bosnia and Herzegovina acted quickly to contain the spread of the virus, yet future health resilience is not guaranteed.
+A state of emergency was declared in late March. A lockdown was implemented, and citizen movements were restricted. The borders, public 
+areas, parks and shopping malls were closed; grocery stores and pharmacies remained open. The restrictive measures were effective and 
+led to reduced movements throughout Bosnia and Herzegovina with respect to February.
+
+
+
+### **2. Exploratory Data Analysis**
+#### **2.1 Structure of Data**
+
+The data set used for this analysis is The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+- date: Date in YYYY-MM-DD format.
+- province: Name of province/state, for countries where data is provided split across multiple provinces/states.
+- country: Name of country/region.
+- lat: Latitude of center of geographic region, defined as either country or, if available, province.
+- long: Longitude of center of geographic region, defined as either country or, if available, province.
+- type: An indicator for the type of cases (confirmed, death, recovered).
+- cases: Number of cases on given date.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+#### **2.2 COVID-19 Statistics of Bosnia and Herzegovina**
+The data presented below are valid only up to the date of 23rd June 2022. The current situation might be quite different from what is depicted below.
+Summary measures of total Confirmed cases, Death cases and Recovery cases are as follows
+
+```{r,fig.cap=="*Table 01* : Summery measures of total number of Confiremed,death & recovery cases"}
+library(kableExtra)
+sumary<-bosnia_corona %>%
+  group_by(type) %>%
+  summarise(
+   
+    Minimum = min(cases),
+    First_Q = quantile(cases,0.25),
+    Median=median(cases),
+    Mean = mean(cases),
+    Third_Q=quantile(cases,0.75),
+    Maximum= max(cases),
+    Total = sum(cases)
+  )
+
+
+sumary %>%
+  kbl() %>%
+  kable_styling()
+
+```
+```{r }
+
+summary(bosnia_corona)
+#Filter by cases
+confirmed_cases <- bosnia_corona %>% filter(type == "confirmed")
+death_cases <- bosnia_corona %>% filter(type == "death")
+recovered_cases <- bosnia_corona %>% filter(type == "recovery")
+
+
+```
+
+#### **2.2 Graphical Visualization of COVID-19 cases in Bosnia and Herzegovina**
+
+
+* **Daily COVID-19 cases in Bosnia and Herzegovina**
+```{r,fig.cap="*Figure 02* : Multiple Time Series Plot",out.width="80%"}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(gganimate)
+library(gifski)
+library(av)
+library(gapminder)
+library(scales)
+
+p<-bosnia_corona %>%
+  filter(type == "confirmed" |
+    type == "death" |
+    type == "recovery") %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = type,
+    color = type
+  )) +
+  geom_line() +
+  labs(x="Date", y="Number Of Cases")+
+  geom_point()+
+  theme_bw()+
+  transition_reveal(date)
+animate(p,nframes = 144, fps =10) 
+
+
+```
+The above multiple time series plot shows that how cases have changed over time.According to the animated representation, confirmed cases are increasing compare to the death and recovery cases over the time.
+
+
+* **Total Number of each COVID-19 cases in Bosnia and Herzegovina**
+```{r,fig.cap="*Figure 03* : Histogram of total number of confirmed, death and recovered cases",out.width="80%"} 
+
+ggplot(data=bosnia_corona,aes(x=type,y=cases,fill=type))+geom_col(position ="dodge")
+```
+Overall Bosnia and Herzegovina has been performing well in keeping the fatality rate very low compare to the confirmed cases.And the number of recovery cases are also considerably high.   
+
+
+* **Daily Active COVID-19 cases in Bosnia and Herzegovina**
+```{r,fig.cap="*Figure 04* : Daily Active Cases",out.width="80%"}
+
+
+cumsum_confirmed_cases <- confirmed_cases %>% mutate(cumsum((cases)))
+cumsum_death_cases <- death_cases %>% mutate(cumsum((cases)))
+cumsum_recovered_cases <- recovered_cases %>% mutate(cumsum((cases)))
+bosnia_active <- left_join(cumsum_confirmed_cases, cumsum_death_cases, by = "date") %>% left_join(cumsum_recovered_cases, by = "date")
+active_cases <- bosnia_active %>% mutate(active = `cumsum((cases)).x` - `cumsum((cases)).y` - `cumsum((cases))`)
+
+
+active_cases %>%
+  mutate(cuml = cumsum(cases)) %>%
+  ggplot(aes(x = date, y = active)) +
+  geom_line(color = "red") +
+  geom_point(size =2 ) +
+  geom_area(fill = "red") +
+  theme_bw() +
+  ggtitle("") +
+  transition_reveal(date)
+```
+Above animated figure represents the daily active cases in Bosnia and Herzegovina. Daily active cases growth rate in Bosnia and Herzegovina appears a lower growth rate in 2020 when compared with 2021 & 2022.There is a considerable drop in middle of the year 2021 in daily active cases.But after that the figure clearly shows that the growth rate of daily cases were increased.
+
+#### **2.3 Comparison of COVID-19 cases of Bosnia and Herzegovina with other Countries**
+Its hard to come to an accurate image on the COVID-19 cases by only looking at the COVID-19 cases in Bosnia and Herzegovina alone.Therefore,here the COVID-19 cases of Bosnia and Herzegovina is compared with the countries Serbia,Hungary and Italy which are in the same geographical region.
+And also here we are comparing the effectiveness of Bosnia and Herzegovina 's virus prevention plan with regards to China & SriLanka.
+<center>
+```{r,out.width="75%",fig.cap="*Figure 05* : Location of Compaired Countries"}
+library(htmltools)
+df <- read.csv(textConnection(
+  "Name,Lat,Long
+Bosnia and Herzegovina,43.856430, 18.413029
+Serbia,45.267136,  19.833549
+Hungary,47.497913, 19.040236
+Italy,41.902782, 12.496366
+Sri Lanka,7.644901932409819, 80.7131748972552
+China,36.14975380447737, 103.65387695890672"
+))
+
+leaflet(df) %>%
+  addTiles() %>%
+  addMarkers(~Long, ~Lat, label = ~ htmlEscape(Name)) %>%
+  addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+</center>
+
+
+* **Comparison of Daily Confirmed Cases in Bosnia and Herzegovina with near by Countries**
+```{r,out.width="90%", fig.cap="*Figure 06* : Multiple Time Series plot- Comparison"}
+library(devtools)
+##view(bosniaCorona)
+serbiaCorona <- coronavirus %>% filter(country == "Serbia" & type == "confirmed")
+bosniaCorona <- coronavirus %>% filter(country == "Bosnia and Herzegovina"& type == "confirmed")
+hungaryCorona <- coronavirus %>% filter(country == "Hungary" & type == "confirmed")
+italyCorona <- coronavirus %>% filter(country == "Italy" & type == "confirmed")
+#sriLankaCorona <- coronavirus %>% filter(country == "Sri Lanka" & type == "confirmed")
+#chinaCorona <- coronavirus %>% filter(country == "China" & type == "confirmed")
+allData<- rbind(bosniaCorona,serbiaCorona,hungaryCorona,italyCorona)
+##view(allData)
+
+
+# Make a ggplot, but add frame=year: one image per year
+#ggplot(allData, aes(x=country, y=cases, fill=country)) + 
+  #geom_bar(stat='identity') +
+  #theme_bw() +
+  # gganimate specific bits:
+  #transition_states(
+    #date,
+    #transition_length = 3,
+    #state_length = 1
+ # ) +
+  #ease_aes('sine-in-out')
+
+# Save at gif:
+#anim_save("288-animated-barplot-transition.gif")
+p<-allData %>%
+  ggplot(aes(
+    x = date, y = cases,
+    group = country,
+    color = country
+  )) +
+  geom_line() +
+  labs(x="Date", y="Number Of Cases", title="")+
+  geom_point()+
+  theme_bw()+
+  transition_reveal(date)
+animate(p,nframes = 144, fps =10)
+
+```
+According to the above plot,it clearly shows that the all the other countries have high number of confirmed cases compare to the Bosnia and Herzegovina all the time, among them Italy has significantly large number of confirmed cases than others.
+
+
+* **Comparison of total number of death cases by country**
+```{r,out.width="80%", fig.cap="*Figure 07* : Total Number of death cases by country"}
+bosniaCorona_Death <- coronavirus %>% filter(country == "Bosnia and Herzegovina"& type == "death"& cases>=0)
+serbiaCorona_Death <- coronavirus %>% filter(country == "Serbia" & type == "death"& cases>=0)
+hungaryCorona_Death <- coronavirus %>% filter(country == "Hungary" & type == "death"& cases>=0)
+italyCorona_Death <- coronavirus %>% filter(country == "Italy" & type == "death"& cases>=0)
+sriLankaCorona_Death <- coronavirus %>% filter(country == "Sri Lanka" & type == "death"& cases>=0)
+chinaCorona_Death <- coronavirus %>% filter(country == "China" & type == "death" & cases>=0)
+allDeaths<- rbind(bosniaCorona_Death,serbiaCorona_Death,hungaryCorona_Death,italyCorona_Death,sriLankaCorona_Death,chinaCorona_Death)
+#ggplot(allDeaths,aes(x=date, y=cases, col=country)) + geom_line()+facet_wrap(~type)
+ggplot(data=allDeaths,aes(x=type,y=cases,fill=country))+geom_col(position ="dodge")
+
+
+
+
+```
+Highest number of deaths are recorded in front of China and Serbia has the lowest number or death cases.However the number of death cases in Bosnia and Herzegovina also considerably low when compared with other countries.Above figure shows that Italy has the highest number of death cases among the countries  which are in the same geographical region with Bosnia and Herzegovina.
+
+### **3. Discussion**
+
+The dataset is loaded by coronavirus dataset given in the package R. Bosnia and Herzegovina dataset is obtained by it. The dataset has null values and minus value for some cases.NA values were clean from the data set by using most recent value. When considering all cases in country in details, it is ensuring those recover cases are impossible because Bosnia and Herzegovina reported its first recovered case on 22nd January 2022. Bosnia and Herzegovina is compared with other countries also. Those countries are selected due to a specific unique reason. China is the first country which is founded corona virus in Hubei Province. Italy is victimized by the virus after China. Sri Lanka also victimized in early, and it’s had medium health facilities. Bosnia and Herzegovina are compared with the countries Serbia, Hungary which are in the same geographical region. Those date are obtained by coronavirus dataset, but it happened to see some negative cases and null values. The all-unusual observations are not considered. It is used manual method to obtain count of confirmed cases in each country in monthly so that country wise data clean method was ignored. All datasets are obtained in special way which is described previously.
+
+### **4. Limitations**
+When it comes to the comparison part,I have ignored NA cases and negative value cases.
+
+### **5. Conclusions**
+
+Coronavirus disease2019 is identified in December 2019 in Wuhan, Hubei but it is increased speedily in January to March. However, it is directly affected to the other countries. At that time, most of countries had high risk but all countries did not expect serious situations like this. China is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population, they acted to preventing virus. Also, Sri Lanka are taken immediate action while virus entering the virus into the country. Somehow, they could be able controlled confirmed cases in April 2020.
+At very first, US had several confirmed cases in early February and US is reported large number of confirmed cases day by day. Their death rate was very high than other countries at that time. In early April, US happened increase the confirmed case. In May, US reported their highest number of confirmed cases and death cases. Us is the country which has large number of populations in Europe. After US is victimized, most of other countries in Europe also in risk.
+The Bosnia and Herzegovina became a victim of virus in January 2020, and it happened to increase confirmed in end period of 2020. Bosnia and Herzegovina government had started to take actions against this situation after March 2021 but at that time virus is spread to the society but not as large way as US or Italy. However, Bosnia and Herzegovina could control the pandemic situation in their country nearly in July & August 2021. Bosnia and Herzegovina have middle health facilities when comparing to Italy, China but they could reduce their death using those facilities. It is pointed out, prevent spread virus is the best thing to control this situation. Comparing to Italy, Hungary & Serbia Bosnia and Herzegovina had low number of confirmed case than those countries. Total death cases also considerably low in the Bosnia and Herzegovina compared to the above-mentioned other countries, it is only second for Serbia.
+Overall, according to the above analysis, I can conclude that the Bosnia and Herzegovina is having the situation under control over the time. But the growth rate of active cases is increased after the middle of year 2021.
+From the Bosnia and Herzegovina coronavirus data analysis it is clearly observable that number of death cases are in low level.
+ 
+
+
+### **5. References**
+* https://www.oecd-ilibrary.org/sites/f0011603-en/index.html?itemId=/content/component/f0011603-en
+* https://reliefweb.int/disaster/ff-2020-000153-bih
+* https://www.worldometers.info/world-population/bosnia-and-herzegovina-population/
+* https://www.worldbank.org/en/results/2014/11/05/weathering-the-storm-disaster-recovery-in-bosnia-and-herzegovina
+* https://en.wikipedia.org/wiki/Bosnia_and_Herzegovina
+* https://medium.com/@ndleah/animation-plot-with-gganimate-e34f8ae5d837
+* http://www.gomapper.com/travel/list-of-countries-near/bosnia-and-herzegovina.html

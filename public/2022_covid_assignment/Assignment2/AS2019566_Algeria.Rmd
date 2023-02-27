@@ -1,0 +1,489 @@
+---
+title: "COVID-19 Pandemic in the Republic of Algeria"
+author: "N. Hirusha Wanigasingha - AS2019566"
+// date: "9/30/2022"
+theme: cerulean
+output: html_document
+---
+
+
+## **Introduction about Algeria**
+
+> Algeria is a country located in Northern Africa bordering the Mediterranean Sea. It is considered the gateway between Africa and Europe. Neighboring countries include Libya, Mali, Mauritania, Morocco, Niger, Tunisia, and Western Sahara. Algeria is mostly desert with a few mountains and a narrow coastal plain. The government system is a republic; the chief of state and head of government is the president. Algeria has a mixed economic system which includes a variety of private freedom, combined with centralized economic planning, and government regulation. Algeria is a member of the League of Arab States (Arab League).
+
+#### **The placement of the Algeria**
+<center>
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE , results=FALSE}
+## country map
+library(maptools)
+library(ggplot2)
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(plotly)
+library(RColorBrewer)
+library(rworldmap) 
+library(maps)
+
+algeria_corona <- coronavirus %>% filter(country == "Algeria")
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group),
+    fill = "slategray2",
+    colour = "black"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = algeria_corona,
+             aes(x = long, y = lat),
+             color = "red",
+             size = 1.5)
+
+```
+
+</center>
+
+
+##### Algeria, officially the People's Democratic Republic of Algeria, is a country in North Africa. Algeria is bordered to the northeast by Tunisia; to the east by Libya; to the southeast by Niger; to the southwest by Mali, Mauritania, and Western Sahara; to the west by Morocco; and to the north by the Mediterranean Sea. It is considered to be a part of the Maghreb region of North Africa. It has a semi-arid geography, with most of the population living in the fertile north and the Sahara dominating the geography of the south. 
+##### Algeria covers an area of 2,381,741 square kilometres (919,595 sq mi), making it the world's tenth largest nation by area, and the largest nation in Africa, being more than 200 times as large as the smallest country in the continent, The Gambia. With a population of 44 million, Algeria is the ninth-most populous country in Africa, and the 32nd-most populous country in the world. The capital and largest city is Algiers, located in the far north on the Mediterranean coast.
+
+##### **Demonym**
+- Noun: Algerian(s) 
+- Adjective: Algerian
+
+##### **Capital City**
+- Algiers (+1 GMT)
+
+##### **Currency**
+- Algerian dinar (DZD)
+
+##### **Languages**
+- Arabic (official), French (lingua franca), Berber or Tamazight (official); dialects include Kabyle Berber (Taqbaylit), Shawiya Berber (Tacawit), Mzab Berber, Tuareg Berber (Tamahaq)
+
+##### **Ethnic Groups**
+- Arab-Berber 99% 
+- European less than 1%
+
+##### **Calling Code**
+- 213
+
+##### **Voltage**
+- 230
+
+##### **Religions**
+- Muslim (official; predominantly Sunni) 99%
+- other (includes Christian and Jewish) <1% (2012 est.)
+
+#### **Civilization**
+>Algeria produced and is linked to many civilizations, empires and dynasties, including ancient Numidians, Phoenicians, Carthaginians, Romans, Vandals, Byzantines, Umayyads, Abbasids, Rustamids, Idrisids, Aghlabids, Fatimids, Zirids, Hammadids, Almoravids, Almohads, Zayyanids, Spaniards, Ottomans and the French colonial empire. The vast majority of Algeria's population is Arab-Berber, practicing Islam, and using the official languages of Arabic and Berber. However, French serves as an administrative and educational language in some contexts. The main spoken language is Algerian Arabic.
+
+#### **Government and Trading**
+>Algeria is a semi-presidential republic, with local constituencies consisting of 58 provinces and 1,541 communes. Algeria is a regional power in North Africa, and a middle power in global affairs. It has the highest Human Development Index of all non-island African countries and one of the largest economies on the continent, based largely on energy exports. Algeria has the world's sixteenth-largest oil reserves and the ninth-largest reserves of natural gas. Sonatrach, the national oil company, is the largest company in Africa, supplying large amounts of natural gas to Europe. Algeria's military is one of the largest in Africa, and has the largest defence budget on the continent. It is a member of the African Union, the Arab League, the OIC, OPEC, the United Nations, and the Arab Maghreb Union, of which it is a founding member.
+
+
+##### **National flag :** 
+<center>
+ ![](download.png) 
+</center>
+
+##### **From:** [globaledge.msu.edu](https://globaledge.msu.edu/countries/algeria#:~:text=Algeria%20is%20a%20country%20located,and%20a%20narrow%20coastal%20plain.) & [Wikipedia](https://en.wikipedia.org/wiki/Algeria)
+          
+## **COVID-19 pandemic in Algeria**
+>The COVID-19 pandemic in Algeria is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to Algeria in February 2020. In December it was announced that Algeria intended to launch COVID-19 vaccinations in January 2021
+
+![](p5.jpg)
+
+#### **Background** 
+>On 12 January, the World Health Organization (WHO) confirmed that a novel coronavirus was the cause of a respiratory illness in a cluster of people in Wuhan City, Hubei Province, China, who had initially come to the attention of the WHO on 31 December 2019.
+Unlike SARS of 2003, the case fatality ratio for COVID-19 has been much lower, but the transmission has been significantly greater, with a significant total death toll.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+## **Exploratory Data Analysis**
+
+### **Structure of Data**
+##### Daily summary of the Coronavirus (COVID-19) cases by state/province.
+
+#### **Format**
+A data frame with 7 variables.
+
+**date :**
+Date in YYYY-MM-DD format.
+
+**province :**
+Name of province/state, for countries where data is provided split across multiple provinces/states.
+
+**country :**
+Name of country/region.
+
+**lat :**
+Latitude of center of geographic region, defined as either country or, if available, province.
+
+**long :**
+Longitude of center of geographic region, defined as either country or, if available, province.
+
+**type :**
+An indicator for the type of cases (confirmed, death, recovered).
+
+**cases :**
+Number of cases on given date.
+
+**uid :**
+Country code
+
+**iso2 :**
+Officially assigned country code identifiers with two-letter
+
+**iso3 :**
+Officially assigned country code identifiers with three-letter
+
+**code3 :**
+UN country code
+
+**combined_key :**
+Country and province (if applicable)
+
+**population :**
+Country or province population
+
+**continent_name :**
+Continent name
+
+**continent_code :**
+Continent code
+
+##### **Details :**
+The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province.
+
+##### **Source :**
+Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus website.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+### **Distribution of Covid-19 in Algeria** 
+
+This figure shows that, confirmed, death and recovered cases in Algeria. At first, there were no cases but shortly, the number of confirmed cases increased speedily and it is much larger than death and confirmed cases. Especially, Algeria has a small number of death cases than confirmed cases. Overall Algeria has been performing well in keeping the fatality rate low and ensuring that nearly half the confirmed patients are recovered. 
+
+#### **Summary about the Filtered Algeria Corona Dataset**
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+summary(algeria_corona)
+
+```
+
+
+
+This is the summary about filtered data set Algeria from the coronavirus data set. 
+So can see in cases column there minus values here. Cases cannot be minus. That is error. So, we do some statistical things to avoid this error. 
+The data set has data from 2020-01-22 to 2022-06-23. According to the above summary we can see the mean number of cases are 102. The maximum number of cases are 2521.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+#### **Confirmed Corona Cases in Algeria**
+
+<center>
+```{r,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results=FALSE}
+
+## confirmed cases
+
+confirmed_algeria_corona <- algeria_corona %>% filter(type=="confirmed")
+summary(confirmed_algeria_corona)
+
+confirmed_algeria_corona <- confirmed_algeria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_algeria_corona)
+
+ggplot(confirmed_algeria_corona, aes(x=date, y=cases)) +
+ geom_line(colour="red") + geom_path(size=1, colour="maroon2")  + labs(x= "Dates ",
+                                                        y= "Confirmed cases",
+                                                        title = "Confirmed cases in Algeria based on Dates")
+
+which(is.na(confirmed_algeria_corona$cases))
+
+
+```
+</center>
+In the above plots, we can see that there is a maximum confirmed cases in 2022. Between 2021 and 2022 , we can see increasing and decreasing patterns.
+From the data set , there are no missing values or null values.
+
+----------------------------------------------------------------------------------------------------------------------
+
+#### **Death Corona Cases in Algeria**
+
+<center>
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results=FALSE}
+## Death cases  
+
+death_algeria_corona <- algeria_corona %>% filter(type=="death")
+summary(death_algeria_corona)
+
+ death_algeria_corona <- death_algeria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_algeria_corona)
+
+ggplot(death_algeria_corona, aes(x=date, y=cases)) + geom_path(size=1,  colour="cyan4") + labs(x= "Dates ",
+                                                        y= "Death cases",
+                                                        title = "Death cases in Algeria")
+
+which(is.na(death_algeria_corona$cases)) 
+
+```
+</center>
+In the above Figure, we can see that there is a maximum death cases in 2021. In 2022, there are decreasing pattern in the death corona cases. 
+From the data set , there are no missing values or null values.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+#### **Recovery Corona Cases in Algeria**
+
+<center>
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results=FALSE}
+##recovery corona cases
+
+recovery_algeria_corona1 <- algeria_corona %>% filter(type=="recovery")
+summary(recovery_algeria_corona1)
+
+
+recovery_algeria_corona1 <- recovery_algeria_corona1 %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(recovery_algeria_corona1)
+
+which(is.na (recovery_algeria_corona1$cases))
+
+recovery_algeria_corona1$cases[63]=mean(c(recovery_algeria_corona1$cases[62], recovery_algeria_corona1$cases[64]))
+recovery_algeria_corona1$cases[65]=mean(c(recovery_algeria_corona1$cases[64], recovery_algeria_corona1$cases[66]))
+recovery_algeria_corona1$cases[125]=mean(c(recovery_algeria_corona1$cases[124], recovery_algeria_corona1$cases[126]))
+recovery_algeria_corona1$cases[562]=mean(c(recovery_algeria_corona1$cases[561], recovery_algeria_corona1$cases[563]))
+
+length(recovery_algeria_corona1$cases)
+
+recovery_algeria_corona1$col <- as.factor(c(rep("black",61),rep("red",2),rep("green",2),rep("black",123-65),rep("red",2),rep("black",560-125),rep("red",2),rep("black",884-562)))
+
+summary(recovery_algeria_corona1)
+
+ggplot(recovery_algeria_corona1,aes(x=date,y=cases))+ geom_line(aes(colour=col, group=1))+  labs(x= "Dates ",
+                                                        y= "Recovery cases",
+                                                        title = "Recovery cases in Algeria")+
+  scale_colour_identity()
+  
+```
+</center>
+In the above Figure, we can see that there is a maximum recovery cases in 2021. After mid-2021, recovery cases are going to be zero. 
+From the data set , there are four negative values.First they are convert to the missing values. Red and green lines are defined the impute missing values.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+#### **All Confirmed, Recovery and Death cases**
+
+<center>
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, results=FALSE}
+##all cases 
+algeria_corona_new <- algeria_corona %>% mutate(cases= replace(cases,which(cases < 0), NA))
+summary
+
+which(is.na(algeria_corona_new$cases))
+algeria_corona_new$cases[1831]=mean(c(algeria_corona_new$cases[1830],algeria_corona_new$cases[1832]))
+algeria_corona_new$cases[1833]=mean(c(algeria_corona_new$cases[1832],algeria_corona_new$cases[1834]))
+algeria_corona_new$cases[1893]=mean(c(algeria_corona_new$cases[1892],algeria_corona_new$cases[1894]))
+algeria_corona_new$cases[2330]=mean(c(algeria_corona_new$cases[2329],algeria_corona_new$cases[2331]))
+
+ggplot(algeria_corona_new, aes(date, cases, col=cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in Algeria")
+
+```
+</center>
+<center>
+```{r,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+plot_ly(algeria_corona_new, x=~ date ,y= ~cases ,color = ~type, colors = "Dark2")
+
+```
+
+</center>
+<center>
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+ggplot(data = algeria_corona_new, mapping = aes(x=date, y=cases, fill=type)) +
+  geom_bar(stat="identity", position = "dodge", width = 4) + scale_fill_brewer(palette =  "Dark2")
+
+```
+</center>
+
+According to the this figure we can see the death are very lover than confirmed and recovery cases. That is good thing. In 25th of January,2022 have the maximum Confirmed cases.
+
+--------------------------------------------------------------------------------------------------------
+
+#### **Active Cases In Algeria**
+
+<center>
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+##active cases
+
+algeria_active_cases <-  algeria_corona %>%
+   group_by(type, date) %>%
+   summarise(total_cases= sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active_cases = cumsum(active),
+          total_recovered_cases = cumsum(recovery),
+          total_death_cases = cumsum(death))
+
+
+
+ggplotly(ggplot(algeria_active_cases,aes(x =date,y =total_active_cases))
+      +geom_line(color="chocolate1")
+      +ggtitle("Acive cases in Algeria"))
+
+
+
+
+```
+</center>
+<center>
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+ggplot(data = algeria_active_cases, mapping = aes(x=date, y=total_active_cases, color="greenyellow")) +
+  geom_col()
+```
+</center>
+
+According to the figure, we can conclude that 2022 has maximum Active cases.
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+#### **Comparison**
+
+#### **Comparison - Confirmed Corona cases with Tunisia, Libya and Niger**
+
+<center>
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+##comparison
+
+neighbour_country <- coronavirus %>% filter (continent_code=="AF")
+choosed_country <- neighbour_country %>% filter (country== c ("Tunisia", "Libya", "Niger","Algeria"))
+
+## neibhour country confirmed 
+confirmed_country <- choosed_country %>% filter (type=="confirmed")
+confirmed_country <- confirmed_country %>% mutate(cases = replace (cases, which (cases<0),NA))
+
+ggplot(confirmed_country, aes(x=date, y= cases, colour=country)) + geom_path(size=1) +
+  labs(title = "Comparison - Confirmed Corona cases with Tunisia, Libya,  Niger")
+
+```
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+#comparison - confirmed
+
+library(plotly)
+library(ggplot2)
+library(gapminder)
+
+p <- ggplot(confirmed_country, aes(date,cases,col=country))+ geom_point(aes(frame = country))
+
+ggplotly(p)
+
+```
+</center>
+
+According to the Figure, we can say that Tunisia has the highest confirmed corona cases. As well as Niger has the lowest confirmed corona cases. 
+
+------------------------------------------------------------------------------------------------
+
+#### **Comparison - Recovery Corona cases with Tunisia, Libya & Niger**
+
+<center>
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+## neibhour country recovery
+recovery_country <- choosed_country %>% filter (type=="recovery")
+recovery_country <- confirmed_country %>% mutate(cases = replace (cases, which (cases<0),NA))
+
+##ggplot(recovery_country, aes(x=date, y= cases, colour=country)) + geom_path(size=1) +
+##  labs(title = "Comparison - recovery Corona cases with Tunisia, Libya, Niger")
+
+ggplot(data = recovery_country, mapping = aes(x=date, y=cases, fill=country)) +
+  geom_bar(stat="identity", position = position_stack(reverse=TRUE)) + 
+  guides(fill = guide_legend(reverse=TRUE))
+
+
+```
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+#comparison - recovery
+
+p <- ggplot(recovery_country, aes(date,cases,col=country))+ geom_point(aes(frame = country))
+
+ggplotly(p)
+
+```
+</center>
+
+According to the Figure, we can say that Tunisia has the highest recovery corona cases. As well as Niger has the lowest recovery corona cases. 
+
+----------------------------------------------------------------------------------------------------
+
+#### **Comparison - Death Corona cases with Tunisia, Libya & Niger**
+<center>
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+## neibhour country death
+death_country <- choosed_country %>% filter (type=="death")
+death_country <- confirmed_country %>% mutate(cases = replace (cases, which (cases<0),NA))
+
+ggplot(death_country, aes(x=date, y= cases, colour=country)) + geom_path(size=1)  +
+  labs(title = "Comparison - Death Corona cases with Tunisia, Libya, Spain, Niger")
+
+```
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+#comparison - death
+
+p <- ggplot(death_country, aes(date,cases,col=country))+ geom_point(aes(frame = country))
+
+ggplotly(p)
+
+```
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+library(gganimate)
+p <- ggplot(death_country, aes(x = date, y = cases,col=country)) + 
+  geom_point()
+anim <- p + 
+  transition_states(country,
+                    transition_length = 2,
+                    state_length = 1)
+
+anim
+
+
+```
+</center>
+
+According to the Figure, we can say that Tunisia has the highest death corona cases. As well as Niger has the lowest death corona cases. 
+
+----------------------------------------------------------------------------------------------------
+
+#### **Conclusions and Discussion**
+
+In my data set, I found four NA values. province variable is already NA. So, I had some limitations in the data set. In the recovery_algeria_corona case, after the 6th of August,2021 all the data goes to zero. I don,t know the reason. The comparison with Tunisia, Libya & Niger, in all three cases Tunisia has the highest amount and Niger has the lowest amount. I  think there has a population reason. Approximately Tunisia has an 11 million population and Niger has a 2 million population. 
+
+-----------------------------------------------------------------------------------------------------
+
+#### **References**
+
+Algeria. (n.d.). In algeria.
+
+*Algeria | Flag, Capital, Population, Map, & Language.* (n.d.). Encyclopedia Britannica. Retrieved October 8, 2022, from https://www.britannica.com/place/Algeria
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+

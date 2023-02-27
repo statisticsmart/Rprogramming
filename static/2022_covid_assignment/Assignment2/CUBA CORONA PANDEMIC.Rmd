@@ -1,0 +1,254 @@
+---
+title: "THE CORONA PANDEMIC SITUATION IN CUBA"
+author: "J.A.D.Viraj Malinga"
+date: "2022-10-04"
+output: html_document
+---
+
+## 1.1 Introdution About Cuba
+
+The Caribbean island nation of Cuba is made up of the main island, Isla de la Juventud, plus several other archipelagos. The Dominican Republic, Jamaica, Haiti, the Bahamas, Mexico, and the Cayman Islands are its closest neighbors. With a surface size of 109,884 km2, the main island of Cuba is the largest island in both Cuba and the Caribbean (42,426 sq mi). With nearly 11 million people, Cuba has the second-highest population in the Caribbean behind Haiti.
+
+Salsa and other Cuban dance forms, Fidel Castro and Che Guevara, 1950s-era cars, Spanish-colonial architecture, the Cuban National Ballet, the Buena Vista Social Club, and Guantanamo Bay are just a few of Cuba's well-known exports.
+
+The majority of Cuba is flat and tropical, with mountains to the southeast. The president serves as both the chief of state and the head of government in the communist system of government. Cuba has a planned economy under state control, where the majority of the industrial equipment is owned and managed by the government.
+
+
+## 1.2 History of Cuba
+
+The Ciboney and Guanahatabey tribes were the first inhabitants of Cuba. The Taino tribe from Venezuela acquired control of the island about a thousand years ago. After defeating the Taino in 1511, Spanish armies annexed the island as their own.
+
+Many Taino people were forced into slave labor by the Spanish. The majority passed away through diseases brought by Europeans and from overwork. Then, for the purpose of planting and harvesting sugarcane, tens of thousands of African slaves were sent to Cuba.
+
+In 1898, American forces assisted in the expulsion of the Spanish from Cuba, and by 1902, Cuba had achieved independence. But the island was heavily influenced by the United States. Fidel Castro-led communist revolutionaries took over in 1959.
+
+
+## 1.3 Climate of Cuba
+
+The subtropical climate on the island of Cuba divides the year into two seasons: the wet season, which lasts from May to October and has an average high temperature of 86 degrees in July and August, and the dry season, which lasts from November to April and has an average low temperature of 68 degrees in February.
+
+The rainy season often begins in June and lasts through October or November. Showers of heavy but brief rain are common during this season, mainly in the late afternoon.
+The island experiences the warmest temperatures in the late summer, with the eastern section of the island experiencing the highest temperatures.
+
+During the warmer months, the water around here reaches 86 degrees F, and in the winter, it only drops to 75. Although there is a chance of hurricanes in September and October, the islanders view them as a natural occurrence with manageable hazards. Pinar del Rio, Isla de la Juventud, and Havana are the areas that are most frequently impacted.
+
+
+## 1.4 COVID-19 induced economic crisis in Cuba
+
+After the socialist camp fell apart, Cuba already had its biggest economic crisis since the 1990s before the covid-19 pandemic. Cuba has experienced severe cuts in its economic ties with Venezuela, as well as Trump's tough measures that increased the U.S. embargo, in addition to essentially preserving the central planning model (with some small adjustments) that was unable to enhance GDP growth and production. The presentation displays the domestic macroeconomic indicators and the effects of the two foreign variables while assessing the effects of these three elements.
+
+Reuters, HAVANA, July 21 - Although ordinary Cubans have not yet noticed much relief from food and energy shortages, the island nation's economy has started to rebound from the pandemic's effects and should increase 4% this year, according to its minister of the economy.
+
+The economy expanded 10.9% through March, according to Economy Minister Alejandro Gil, compared to the same period in 2021, when the COVID-19 pandemic "almost halted" the economy. Nevertheless, it is still 7.3% lower than it was in 2019. 
+
+
+## 1.5 Location of the Cuba
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(rworldmap)
+data(wrld_simpl)
+
+worldmap <- getMap(resolution = "coarse")
+
+plot(worldmap, col = "dark green", 
+     fill = T, border = "gray",
+     xlim = c(-180, 180), ylim = c(-90, 90),
+     bg = "light blue"
+     )
+data_frame <- data.frame(name = c("Cuba"),
+              latitude = c(21.52176),longitude = c(-77.78177))
+
+points(x = data_frame$longitude, y = data_frame$latitude)
+text(x = data_frame$longitude, y = data_frame$latitude, 
+     data_frame$name, pos = 3, col = "red")
+
+```
+
+## 2.0 Data Analysis
+
+Here we need to first clear the data sheet. And filtering the missing values. After that replacing values for that missing values.
+
+## 2.1 Data Clearing
+
+```{r setup,echo=TRUE,warning=FALSE,message=TRUE}
+
+library(coronavirus)
+data("coronavirus")
+
+cuba_cleared <- coronavirus %>%filter(country=="Cuba")
+north_america_cleared <- coronavirus %>% filter(continent_name == "North America")
+
+```
+
+## 2.2 Filtering Missing Values
+
+```{r include=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
+
+#Plot the missing values.
+cuba_cleared <- cuba_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(cuba_cleared)
+
+ggplot(cuba_cleared, aes(x=date, y=cases)) + geom_line() 
+
+
+```
+
+```{r include=TRUE,echo=TRUE,message=FALSE,warning=FALSE}
+
+# Locate the row numbers of the missing values.
+which(is.na(cuba_cleared$cases))
+
+#There are two missing val
+```
+
+```{r include=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
+
+#Get a average value for the 1090 row by using row 1089 and row 1091 
+cuba_cleared$cases[1090] = mean(c(cuba_cleared$cases[1089], cuba_cleared$cases[1091]))
+length(cuba_cleared$cases)
+
+#Get a average value for the 2330 row by using row 2329 and row 2331 
+cuba_cleared$cases[2330] = mean(c(cuba_cleared$cases[2329], cuba_cleared$cases[2331]))
+length(cuba_cleared$cases)
+
+```
+
+```{r include=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
+
+#Replacing missing values by calculated values
+cuba_cleared$col <- as.factor(c(rep("black", 1088),rep("red", 2), rep("black", 2652-1090)))
+summary(cuba_cleared)
+
+cuba_cleared$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 2652-2330)))
+summary(cuba_cleared)
+
+```
+
+```{r include=TRUE,echo=FALSE,message=FALSE,warning=FALSE}
+
+#Here represent that missing values clearly from a graph
+#fig.width = 10,fig.height = 6
+ggplot(cuba_cleared, aes(x=date, y=cases)) +
+geom_point(aes(colour=col, group=1)) + 
+scale_colour_identity()
+
+```
+
+## 3.0 Confirmed cases in Cuba
+
+```{r echo=FALSE,message = FALSE }
+
+#confirmed cases in Cuba
+confirmed.cuba <-cuba_cleared %>% filter(type =="confirmed")
+graph01 <- ggplot(confirmed.cuba, aes(date, cases,color=cases)) +ggtitle("Covid_19 confirmed cases vs Time :  Cuba") +geom_area() + labs(x="date",y="Number of cases")
+ggplotly(graph01)
+
+```
+
+
+## 3.1 Death case in Cuba
+
+```{r echo=FALSE,message = FALSE}
+
+#death cases in Cuba
+death.cuba <-cuba_cleared %>% filter(type=="death")
+graph02 <- ggplot(death.cuba, aes(date, cases,color=cases)) +ggtitle("Covid_19 death cases vs Time :  Cuba") +geom_area() + labs(x="date",y="Number of cases")
+ggplotly(graph02)
+
+```
+
+
+## 3.2 Recovery cases in Cuba
+
+```{r echo=FALSE, message = FALSE}
+
+#recovery cases in Cuba
+recovery.cuba <-cuba_cleared %>% filter(type=="recovery")
+graph03 <- ggplot(recovery.cuba, aes(date, cases,color=cases)) +ggtitle("Covid_19 recovery cases vs Time :  Cuba") +geom_area() + labs(x="date",y="Number of cases")
+ggplotly(graph03)
+
+```
+
+
+## 3.3 Daily cases in Cuba by Confirmed, Death & Recovery
+
+```{r echo=FALSE, message = FALSE, fig.width = 10,fig.height = 6 }
+
+ggplot(cuba_cleared, aes(x=date, y=cases, color=type)) + geom_col() + ggtitle("Daily Covid-19 cases by type : Cuba")  + facet_wrap(type~.) + ylim(0,20000)
+
+```
+
+
+## 3.4 Time series analysis-Cuba
+
+```{r echo=FALSE,message=FALSE}
+
+confirmed_cuba <-cuba_cleared %>% filter(type=="confirmed")
+death_cuba <-cuba_cleared %>% filter(type=="death")
+recovery_cuba <-cuba_cleared %>% filter(type=="recovery")
+
+p1 <- ggplot(cuba_cleared,aes(date, cases, color = type), is.na=FALSE) +
+   geom_line() +ggtitle("Time series analysis-Cuba")
+ggplotly(p1)
+
+```
+
+
+## 3.5 Covid-19 confirmed cases by type in country
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE,warning=FALSE}
+
+unique(north_america_cleared$country)
+
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+
+country_selection<-north_america_cleared %>%filter(country==c("Denmark","Bahamas","Dominica","Belize","Barbados","Grenada" ))
+
+confirmed_continent_name<-country_selection %>%filter(type=="confirmed")
+p3 <- ggplot(confirmed_continent_name,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Time series analysis-country with confirmed cases")
+  
+ggplotly(p3)
+
+```
+
+
+## 3.6 Covid-19 death cases by type in country
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+
+death_continent_name<-country_selection %>%filter(type=="death")
+p3 <- ggplot(death_continent_name,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Time series analysis-country with death cases")
+  
+ggplotly(p3)
+
+```
+
+
+## 3.7 Covid-19 recovery cases by type in country
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+
+recovery_continent_name<-country_selection %>%filter(type=="recovery")
+p3 <- ggplot(recovery_continent_name,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Time series analysis-country with recovery cases")
+  
+ggplotly(p3)
+
+```
+

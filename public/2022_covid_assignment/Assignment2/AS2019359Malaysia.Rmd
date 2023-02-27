@@ -1,0 +1,106 @@
+---
+title: ''
+author: "S.R.R.Gomes"
+date: "2022-10-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# __*COVID 19 Outbreak in Malaysia: Explanatory Data Analysis Report*__
+
+
+## __Introduction__
+
+Affecting human respiratory system, __COVID 19__ was found to be one of the severe pandemics ever challenged the humanity. This had emerged in December 2019 and was like other respiratory diseases. __SARS-Cov-2__, as later named, caused the novel respiratory illness that brought millions of deaths to the entire wold population of humans. This illness, apart from the reported deaths around the world, had resulted some health issues in those who survived. Began with further research scientists knew the reasons for the spread. Infectious droplets and virus particles from an infected person have been found as the factors affecting it to be widely spread. Like any other countries, Malaysia was also caught to this unfortunate situation, not to mention the post-outbreak effects on socioeconomic sphere.   
+
+## __About Malaysia__
+The country, Malaysia is located in Southeast Asia, consisting of 13 states and 3 federal territories. Although they are considered to be under the country, separation between the lands is marked by the South China Sea. There are parts of Malaysia sharing land and maritime borders with other neighboring countries such as Thailand, Singapore, Vietnam, and Indonesia.
+
+Capital: Putrajaya
+Offical Language: Malay
+Total Area: 330 803 km^2^
+
+#### Malaysia's Location on a Plloted Map
+
+###
+```{r, echo=FALSE}
+library(ggplot2)
+dt <- map_data("world", region = "Malaysia")
+map1 <- ggplot(dt, aes( x=long, y=lat, group=group))+geom_polygon(color="black")
+map1
+```
+
+## __Data Analysis__
+
+With the consideration of suitable variables and using RStudio the following descriptive figures were obtained.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(dplyr)
+
+#filter Malaysia data
+malaysia_data <- filter(coronavirus, country == "Malaysia")
+#Replacing minus valued cases with NA(if any) 
+mys_cleaned_data <- malaysia_data %>% mutate( cases = replace(cases, which(cases<0), NA) )
+
+#filter data according to type
+mys_confirmed_cases <- mys_cleaned_data %>% filter(type=="confirmed")
+
+mys_recovery_cases <- mys_cleaned_data %>% filter(type=="recovery")
+
+mys_death_cases <- mys_cleaned_data %>% filter(type=="death")
+```
+
+The following figure reflects the total number of COVID 19 cases reported during 2020-2022 time period. The cases has been collected daily. And, it is clear that highest number of cases reported after beginning of 2022.
+
+#### (i) Daily cases
+```{r, Figure_1 ,echo=FALSE, message=FALSE, warning=FALSE}
+#Plotting part 
+library(ggplot2)
+#Time series of the cases variable
+
+ggplot(mys_cleaned_data, aes(x=date, y=cases))+geom_line(col="#4c90d9")+labs(x="Date", y="Number of cases", title="Figure 1:- Time Series Plot of Daily Cases")
+```
+
+
+#### (ii) Summary Statistics of Daily cases
+```{r, Summary_daily_cases ,echo=FALSE, message=FALSE, warning=FALSE}
+summary(mys_cleaned_data$cases)
+
+```
+
+
+#### (iii) Speard of Deaths by Type
+```{r, boxplots ,echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(mys_cleaned_data, 
+       aes(x=cases, y=type, fill=type, col=type, alpha=0.2))+ 
+  geom_jitter(aes(col=type))+
+  labs(x="Number of Daily Cases", y="Type of reported Case", title="Figure 2:- Data Spread in each Case Type")
+
+```
+
+
+#### (iv) Comparison of Death Cases reported among nearby Countries
+```{r, bar_graphs ,echo=FALSE, message=FALSE, warning=FALSE}
+cmparison_data <- filter(coronavirus, country %in% c("Malaysia", "Indonesia", "Thailand", "Vietnam"))
+cmparison_cleaned_data <- cmparison_data %>% mutate( cases = replace(cases, which(cases<0), NA) )
+all_deaths <- cmparison_cleaned_data %>% filter(type=="death")
+all_deaths <- select(all_deaths, date, country, cases)
+
+cleared_naVal_data <- na.omit(all_deaths)
+ggplot(cleared_naVal_data, aes(x=country, y=cases, fill=country,col=country))+
+  geom_col()+
+  labs(x="Date", y="Number of Death Cases", title="Figure 3:- Comaprison of Daily Death Cases Among Neighboring Countries")
+
+
+```
+
+## __Discussion__
+
+The main source of data for this analysis is coronavirus data set from the R package __coronavirus__. Before the performing the analysis it was highly focused on the dataset. Thus, it was a key part to observe the missing values, null values and negative values that may drastically reduced the accuracy of the analysis.  
+As for that fact using suitable R functionality improved by already developed R packages and libraries were extensively used.
+The next part of the analysis after data wrangling task was to obtain suitable graphical plots to present the cleaned data more descriptively as well as meaningfully. This was accomplished by using __ggplot2__ package.   
+

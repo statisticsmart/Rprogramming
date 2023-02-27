@@ -1,0 +1,105 @@
+---
+title: "Coronavirus-Saudi Arabia-report -
+Samidu Shiran"
+output: html_document
+date: "2022-10-08"
+---
+
+
+## **1. Background**
+
+### **1.1 Introduction**
+Saudi Arabia,[d] officially the Kingdom of Saudi Arabia (KSA),[e] is a country on the Arabian Peninsula in Western Asia. It has a land area of about 2,150,000 km2 (830,000 sq mi), making it the fifth-largest country in Asia, the second-largest in the Arab world, and the largest in Western Asia. It is bordered by the Red Sea to the west; Jordan, Iraq, and Kuwait to the north; the Persian Gulf, Qatar and the United Arab Emirates to the east; Oman to the southeast; and Yemen to the south. Bahrain is an island country off the east coast. The Gulf of Aqaba in the northwest separates Saudi Arabia from Egypt. Saudi Arabia is the only country with a coastline along both the Red Sea and the Persian Gulf, and most of its terrain consists of arid desert, lowland, steppe, and mountains. Its capital and largest city is Riyadh. The country is home to Mecca and Medina, the two holiest cities in Islam.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+### **1.2 Geographical Location of Paraguay**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(maps)
+library(maptools)
+mapdata <- map_data("world")
+zam_map <- filter(mapdata,region=="Saudi Arabia")
+data("wrld_simpl")
+
+p0 <- ggplot() +
+  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="light blue", colour="black") +
+  ggtitle("Saudi Arabia on the World Map") 
+p0 + geom_point(data = zam_map,aes(x=long,y=lat), fill="Red", colour="Red")
+```
+### **1.3 Climate condition**
+Saudi Arabia is characterized by a desert climate, with the exception of the southwestern part of the country, which exhibits a semi-arid climate. Summers in the central region are extremely hot and dry, ranging from 27°C to 43°C in the inland areas and 27°C to 38°C in coastal areas.
+
+### **1.2 Data filtering**
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Saudi_Arabia_not_cleared <- coronavirus %>% filter(country == "Saudi Arabia")
+summary(Saudi_Arabia_not_cleared)
+Saudi_Arabia_cleared <- Saudi_Arabia_not_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Saudi_Arabia_cleared)
+which(is.na(Saudi_Arabia_cleared$cases))
+Saudi_Arabia_cleared$cases[2330] = mean(c(Saudi_Arabia_cleared$cases[2329], Saudi_Arabia_cleared$cases[2331]))
+length(Saudi_Arabia_cleared$cases)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+confirmed_Saudi_Arabia <-Saudi_Arabia_cleared %>% filter(type=="confirmed")
+p1 <- ggplot(confirmed_Saudi_Arabia,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 confirmed cases vs Time :  Saudi Arabia")+labs(x='date',y='Number of cases')
+ggplotly(p1)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+death_Saudi_Arabia <-Saudi_Arabia_cleared %>% filter(type=="death")
+p2 <- ggplot(death_Saudi_Arabia,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 death cases vs Time :Saudi Arabia")+labs(x='date',y='Number of cases')
+ggplotly(p2)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+recovery_Saudi_Arabia <-Saudi_Arabia_cleared %>% filter(type=="recovery")
+p3 <- ggplot(recovery_Saudi_Arabia,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 recovery cases vs Time :  Saudi Arabia")+labs(x='date',y='Number Saudi_Arabia of cases')
+ggplotly(p3)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Asia_data<-coronavirus %>% filter(continent_code=="AS")
+Asia_cleared <- coronavirus %>% filter(continent_code == "AS",cases>=0)
+countryselection<-Asia_cleared %>%filter(country==c("Sri Lanka","Afghanistan","Kuwait","Bahrain","Saudi Arabia"))
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+death_asia<-countryselection %>%filter(type=="death")
+p9 <- ggplot(death_asia,aes(x=country,y=cases,fill = country), is.na=FALSE)+geom_col()+ggtitle("Time series analysis-country with death cases")
+ggplotly(p9)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+recovery_AS<-countryselection %>%filter(type=="recovery")
+p10 <- ggplot(recovery_AS,aes(x=country,y=cases,fill = country), is.na=FALSE)+geom_col()+ggtitle("Time series analysis-country with recovery cases")
+ggplotly(p10)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+countryselection_confirmed<-countryselection %>%filter(type=="confirmed")
+ggplot(countryselection_confirmed, aes(country,cases,fill = country)) + geom_col() + ggtitle("Total No.of confirmed") + ylim(0,175000)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+countryselection_death<-countryselection %>%filter(type=="death")
+ggplot(countryselection_death, aes(x=country, y=cases, fill = country)) + geom_col() + ggtitle("Total No.of Deaths") + ylim(0,3500)
+```
+
+## Discussion 
+
+Saudi Arabia is characterized by a desert climate, with the exception of the southwestern part of the country, which exhibits a semi-arid climate. Summers in the central region are extremely hot and dry, ranging from 27°C to 43°C in the inland areas and 27°C to 38°C in coastal areas.
+
+## Conclusions 
+
+According to above covid 19 data.Most death cases reported in Sri Lanka but Saudi Arabia is a country of most confirmed and recovery cases reported country of comparing data

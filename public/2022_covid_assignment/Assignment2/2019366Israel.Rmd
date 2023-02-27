@@ -1,0 +1,388 @@
+---
+title: "COVID-19 PANDEMIC IN ISRAEL"
+author: "AS2019366"
+date: "2022-10-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(ggplot2)
+library(plotly)
+data("coronavirus")
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+
+```
+
+
+<p align="center">
+![](https://www.wwlp.com/wp-content/uploads/sites/26/2020/03/AP717309141425-2-3.jpg)
+
+</p>
+
+ <font size="10"> **1. INTRODUCTION**</font>
+ 
+## 1.1 Israel
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Flag_of_Israel.svg/2560px-Flag_of_Israel.svg.png){height=15%, width=15%}
+\
+**Country** &nbsp;- Israel\
+**Capital** &nbsp;- Jerusalem\
+**Continent** &nbsp;- Asian\
+**Population** &nbsp;- Approximately 8,660,000 people\
+**Offical Language** &nbsp;- Hebrew\
+
+Israel is a Middle Eastern country that is situated near the eastern tip of the Mediterranean Sea. It is bordered to the north by Lebanon, to the northeast by Syria, to the east and southeast by Jordan, to the southwest by Egypt, and to the west by the Mediterranean Sea. Jerusalem is the declared capital and seat of government, albeit this status has not achieved widespread international recognition.
+
+Israel is a small country with a rather varied landscape, including a long coastal plain, highlands in the north and center, and the Negev desert in the south. The northern terminal of the Great Rift Valley spans the entire nation from north to south along its eastern border.
+
+The only Jewish nation in modern times is the State of Israel, and the area that is now a part of that country has a long and rich history that goes back to pre-biblical times. Before coming under the rule of the budding Islamic caliphate in the seventh century CE, the region was a part of the Roman Empire, then the Byzantine Empire. The area, known at the time as Palestine, was the subject of controversy during the Crusades, but it remained under the control of succeeding Islamic dynasties until the fall of the Ottoman Empire at the conclusion of World War I, at which point the League of Nations gave Britain a mandate over the region.
+
+# 1.2 Location
+
+The country is 290 miles (470 km) long and 85 miles (135 km) wide at its widest point, giving it a long and narrow shape. In addition to having a wide range of distinguishing physical traits and microclimates, Israel is divided into four distinct geographic regions: the Mediterranean coastal plain, the hill regions of northern and central Israel, the Great Rift Valley, and the Negev.
+
+
+Despite its diminutive size, Israel contains the diverse physical features of an entire continent, from coastal plains to the semitropical Jordan Valley and the Dead Sea, the lowest place on Earth, and from forested highlands and fertile green valleys to rugged deserts. The semi-arid region makes up around half of the nation's land area.
+
+The geographical location of Israel can be further understood through the following figure.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE }
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+data(coronavirus)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) +
+  ggtitle("Figure 1 : Israel in World map")
+
+p +
+  geom_point(
+    data = Israel_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+</p>
+# 1.3 Climate Condition of Israel
+<p align="left">
+![](https://i.ytimg.com/vi/CqYPtcvcW-Q/maxresdefault.jpg){heigh=60%, width=60%}
+</P>
+
+Israel's climate is characterized by a lot of sunshine and a rainy season from November to April. The total annual precipitation varies from 20-30 inches (50-70 cm) in the north to approximately an inch (2.5 cm) in the far south. The regional climate varies greatly, with hot, humid summers and mild, wet winters on the coastal plain; dry, warm summers and moderately cold winters with rain and sporadic light snow in the hill regions; hot, dry summers and pleasant winters in the Jordan Valley; and semi-arid conditions with warm to hot days and cool nights in the south.
+
+# 1.4 Main Cities of Israel
+Since King David established Jerusalem as the capital of his kingdom around three thousand years ago, Jerusalem, the capital of Israel, has been at the center of the Jewish people's national and spiritual life. It is the country's largest city today. It is a flourishing, vibrant metropolis.
+
+The country's industrial, commercial, financial, and cultural activities are centered in Tel Aviv-Yafo, which was established in 1909 as the first Jewish city in modern times.
+
+Since ancient times, people have known Haifa as a coastal town. It is currently a significant port on the Mediterranean and the industrial and commercial hub of northern Israel.
+
+The greatest urban area in the south today is Be'er Sheva, which the Bible refers to as the patriarchs' encampment. For the entire southern region, it offers administrative, economic, health, educational, and cultural services.
+
+# 1.5 COVID-19 pandemic in Israel
+
+The COVID-19 pandemic in Israel is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2. Israel's first COVID-19 case was identified on February 21, 2020, when a female citizen tested positive for COVID-19 at the Sheba Medical Center after return from quarantine on the Diamond Princess ship in Japan. On 23 February, a second former Diamond Princess passenger tested positive, and was admitted to a hospital for isolation. The total number of confirmed cases increased to 1,000 within about 30 days, with a doubling time of less than 3 days.
+
+# 1.6 Lockdown status and actions taken by the government
+<p align="left">
+![](https://reason.org/wp-content/uploads/dreamstime_xl_177999317-scaled.jpg){heigh=60%, width=60%}
+</p>
+
+* Prime Minister Benjamin Netanyahu proclaimed a national state of emergency on March 19. Israeli citizens were prohibited from leaving their homes unless it was absolutely essential.
+
+* The government ordered a two-week self-isolation for all visitors, and non-residents and non-citizens who had spent 14 days in South Korea prior to arriving were prohibited. Also, the government ordered the closure of all schools and universities and the partial switch to distance learning.
+
+* All non-essential businesses were required to close. Additionally, employees were required to increase social distance between their coworkers and, if possible, allow them to work from home, while people's ability to move around outside of their homes was severely constrained.
+
+* On April 1, the government intended to impose stricter cautious measures on its inhabitants, including a ban on all public meetings, including prayer quorums of 10 men, a restriction on household outings to two individuals, and a requirement that they constantly wear face masks in public. Every Israeli citizen must now cover their lips and nose when leaving their houses as of April 12. Children under the age of six, persons with emotional, mental, or medical issues that would prevent them from wearing a mask, drivers in their automobiles, people by themselves in a building, and frequent coworkers as long as they keep social distance are the only exceptions.
+
+* On July 1, the Knesset reauthorized ISA mobile phone tracking of infected individuals by enacting the Law to Authorize the ISA to Assist in the National Effort to Contain the Spread of the Novel Coronavirus. On 6 July 2020, following over two weeks of continued increase in the number of new daily cases, Netanyahu announced new social distancing guidelines, approved by the government.
+
+* In December 2020, the number of cases had risen consistently to over 3,000 per day with a test positivity rate of over 5%. A number of nations reported the emergence of new, more contagious COVID-19 strains; around the end of December, Israel reported its first cases of the Alpha variety. In January 2021, the Beta variant's first instances were found. On 24 December 2020, the government declared a third nationwide lockdown, to begin on 27 December 2020.
+
+* Israel reached a vaccination rate of above 50% after the national immunization campaign from late December to April 2021, and 9% of the population recovered from COVID-19, leading to a decrease in new cases and fatalities. The first cases of the Delta variant were found in Israel in April 2021. The first case of the Gamma variant was also discovered in May 2021.
+
+* On 25 June 2021, the requirement for mask indoors was reinstituted due to the rise in cases. On 29 July 2021, the green pass requirement was reinstituted for indoor events with 100 or more participants.
+
+* On 29 July 2021, a third vaccination was approved for persons aged 60 or older due to observed waning efficacy of the Pfizer vaccine to the prevalent Delta variant. The vaccine booster was later approved for all those 12 and older.
+
+* On 8 August 2021, restrictions renewed by the government came into effect to slow the spread of the Delta variant and included expanding proof of vaccine and mask-wearing requirements for some gatherings, and a shift back to more work from home, quarantines, and travel restrictions.
+
+* Israel stopped allowing visitors on November 28, 2021. Israel also provided a list of "red" nations where Israelis were not permitted to travel and began offering a 4th dose of the Pfizer vaccine to those 60 or older on 2 January 2022.
+
+
+
+
+ <font size="10"> **2. EXPLORATARY DATA ANALYSIS**</font>
+
+
+# 2.1 COVID-19 Statistics of Israel
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), NA))
+
+Israel_corona <- as.data.frame(Israel_corona)
+summary(Israel_corona)
+
+
+```
+
+
+### **Israel Daily Confirmed Covid-19 Cases**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+confirmed_Israel_corona <- Israel_corona %>% filter(type=="confirmed")
+confirmed_Israel_corona <- confirmed_Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+
+confirmed_plot <- plot_ly(confirmed_Israel_corona, x= ~date, y=~cases, type = 'scatter', mode = 'lines')
+confirmed_plot <- confirmed_plot %>% layout(title = "Figure 2 - Israel: Daily Covid-19 Confirmed Cases",
+                                            xaxis = list(title = "Date"),
+                                            yaxis = list(title = "Number of cases")) 
+confirmed_plot
+
+```
+
+We can clearly see the rise caused by the second Covid wave by which Israel was hit mid of September 2020. There is drastic rise can be seen in 2021 in the month of January, and 2021 in the month of September. When the 2022 comes to begin, in January the highest confirmed covid case rate was measured.  
+
+
+### **Israel Daily Recovered Covid-19 Cases**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(ggplot2)
+library(plotly)
+data(coronavirus)
+
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+recover_Israel_corona <- Israel_corona %>% filter(type=="recovery")
+recover_Israel_corona <- recover_Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+
+recover_plot <- plot_ly(recover_Israel_corona, x= ~date, y=~cases, type = 'scatter', mode = 'lines', color=I("#21FC48"))
+recover_plot <- recover_plot %>% layout(title = "Figure 3 - Israel: Daily Covid-19 Recoveries",
+                                            xaxis = list(title = "Date"),
+                                            yaxis = list(title = "Number of cases")) 
+recover_plot
+
+```
+
+When the vaccination programs are being continuously executed, we can see the rise of recovered cases respectively. In 2020 in the month of October, there is a rise of recovered cases. It is approximately 7700 patients. Though the month of January in 2021 Israel managed to come with the highest number of recovered cases.
+
+
+### **Israel Daily Death Covid-19 Cases**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+death_Israel_corona <- Israel_corona %>% filter(type=="death")
+death_Israel_corona <- death_Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+
+death_plot <- plot_ly(death_Israel_corona, x= ~date, y=~cases, type = 'scatter', mode = 'lines', color=I("#FC3121"))
+death_plot <- death_plot %>% layout(title = "Figure 4 - Israel: Daily Covid-19 Death Cases",
+                                            xaxis = list(title = "Date"),
+                                            yaxis = list(title = "Number of cases")) 
+death_plot
+
+```
+
+The truth that is readily evident in this situation is that since the threat was new, it was difficult for the country to manage and find remedies. But as they moved forward, they were able to reduce the risk in a respectable way. Israel was able to keep the death toll relatively low despite the increase in the number of confirmed cases.
+
+
+### **Israel Total Active Covid-19 Cases**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+q1 <- coronavirus %>% filter(country =="Israel")
+q2 <- q1 %>% filter(type == "confirmed")
+q3 <- q1 %>% filter(type == "death")
+q4 <- q1 %>% filter(type == "recovery")
+dfff <- data.frame(v1 =cumsum(q2$cases - (q3$cases + q4$cases)),date =q1$date)
+    
+
+ggplot(dfff, aes(date, v1, color=I("#FC21DC")), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 5 - Israel: Total Active Cases")
+
+```
+
+According to figure 5, the number of active cases are rise. Again, the exponential increase is observed from the middle of year 2021 onwards. Clearly, we can see that beginning of year 2022, active cases are rapidly increasing.
+
+
+# 2.2 Local Comparison
+
+This section explores the statistics available for confirmed, recovered, and death covid-19 cases. Here, we have compared the cases between confirmed and death as well as the cases between death and recovered. Finally, we plotted all of the confirmed, recovered, and death cases on a single graph.
+
+
+### **Comparison between confirmed and deaths**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+s_Israel_corona <- Israel_corona %>% filter(type==c("death", "confirmed"))
+s_Israel_corona <- s_Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+
+ggplot(s_Israel_corona, aes(date, cases, color=type), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 6 - Comparison between confirmed and death cases")
+
+
+```
+
+Here, we can see that the number of deaths is significantly lower than the number of confirmed cases in Israel. It seems most of the Covid-19 patients have recovered. The reason for that seems to be vaccination programs and government actions.
+
+
+### **Comparison between death and recovered**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+s_Israel_corona <- Israel_corona %>% filter(type==c("death", "recovery"))
+s_Israel_corona <- s_Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+
+ggplot(s_Israel_corona, aes(date, cases, color=type), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 7 - Comparison between death and recovered cases")
+
+
+```
+
+According to figure 7, it shows that recovered cases are higher than the death cases. It must be because of the medical treatment, medical facilities and medical officers in Israel.
+
+
+### **Confirmed, Recovered and Death Cases in Israel**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+Israel_corona <- coronavirus %>% filter(country == "Israel")
+Israel_corona <- Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+s_Israel_corona <- Israel_corona %>% filter(type==c("death", "confirmed","recovery"))
+s_Israel_corona <- s_Israel_corona %>% mutate(cases = replace(cases, which(cases <0), 0))
+
+
+ggplot(s_Israel_corona, aes(date, cases, color=type), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 8 - Confirmed, Recovered and Death Cases in Israel")
+
+
+```
+
+All the confirmed, recovered and death cases can interpret using one single plot. Here, we can see that after beginning of the year 2022, the daily confirmed cases are highly getting increased. Even confirmed cases are high, their death cases remain at a low level. That is because, the recovered amount has increased slightly day by day.
+
+
+# 2.3 Comparison with other countries
+
+This section explores the statistics available for Israel with other countries. The countries used for the comparison procedure are Jordan, Iran, Syria. These countries are used for the comparison because, all those countries are within the middle Eastern region along with Israel and furthermore are considered to be neighboring countries of Israel as well.
+  
+  
+### **Confirmed Cases**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+countryselection <- coronavirus %>% filter(country == c("Israel", "Jordan", "Iran","Syria"))
+countryselection_confirm <- countryselection%>% filter(type == "confirmed")
+
+ggplot(countryselection_confirm, aes(date, cases, color=country), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 9 - Daily Confirmed Cases Comparison Among Four Selected Countries")
+
+```
+
+From figure 9 it is evident that the number of daily confirmed cases for Israel is less than Iran but is greater than Syria from beginning of 2020 to end of 2021. Thus, according to the graph, the number of confirmed cases seem to be on the rise for all these four countries in 2022.
+
+
+### **Recovered Cases**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+countryselection <- coronavirus %>% filter(country == c("Israel", "Jordan", "Iran","Syria"))
+countryselection_confirm <- countryselection%>% filter(type == "recovery")
+countryselection_confirm <- countryselection_confirm %>% mutate(cases = replace(cases, which(cases<0),NA))
+
+
+ggplot(countryselection_confirm, aes(date, cases, color=country), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 10 - Daily Recovered Cases Comparison Among Four Selected Countries")
+
+```
+
+The daily recoveries for Israel and Jordan seem to be quite similar while the number of daily recoveries for Iran shows a significant increase during the year of 2021. Again, when comparing with the Iran, the figure of Syria seem very insignificant. However, this does not mean that the figure of Syria should be ignored. Due to the large scale spread within the Iran the figure of Syria may seem insignificant.
+
+
+### **Death Cases**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+
+countryselection <- coronavirus %>% filter(country == c("Israel", "Jordan", "Iran","Syria"))
+countryselection_confirm <- countryselection%>% filter(type == "death")
+
+ggplot(countryselection_confirm, aes(date, cases, color=country), is.na=FALSE) + geom_line() + labs(x="date", y="cases", title = "Figure 11 - Daily Death Cases Comparison Among Four Selected Countries")
+
+```
+
+Figure 11 clearly displays an increase in the number of death cases for Iran. However, the number of death cases within Syria seems to reduce when compared to Israel and Jordan. 
+
+
+
+
+<font size="10"> **3. DISCUSSION AND CONCLUSIONS**</font>
+
+
+# 3.1 Conclusions
+
+The first human cases of COVID-19, the disease caused by the novel coronavirus causing COVID-19, subsequently named SARS-CoV-2 were first reported by officials in Wuhan City, China, in December 2019. Investigations by Chinese authorities have identified human cases with onset of symptoms in early December 2019. Later it began to spread all over the world affecting 213 countries and territories around the world and 2 international conveyances. 
+
+Israel’s first COVID-19 case was identified on February 21, 2020, when a female citizen tested positive for COVID-19 at the Sheba Medical Center after return from quarantine on the Diamond Princess ship in Japan. Later it began to spread all over the country and the total number of confirmed cases increased to 1,000 within about 30 days, with a doubling time of less than 3 days. Then Israel government took necessary actions to stop the spread of covid 19 virus.
+
+Looking over to the actions taken by the Israel government it is evident that they were taking all the necessary actions to mitigate the situation. But several collapses and wrong decisions taken during the time when corona virus was likely to settle down lead to a drastic increase of active cases. The vaccination program has been able to mitigate the risk by a massive amount. In order to handle the vaccination program efficiently all the health sector works were given prior to native citizens. Though the plotted statistics still indicates an increasing move of active cases, Government has been successfully able to reduce the amount of death cause by Covid-19. Comparing to the other countries selected in the analysis Israel has failed to manage its daily-confirmed Covid cases rate. It might be because of the lack of support given by the people.
+
+
+# 3.2 Discussion
+
+Based on information from the coronavirus package, this report has been written. For the comparison part Jordan, Iran, and Syria were selected. 
+
+During the analysis process it was found that there was a negative value for recovered cases of Israel. Normally negative cases can occur when there is a change in the counting methodology or data resource, updating new cases or due to errors in the raw data. So, when considering recovered cases it was replaced with zero, so it will satisfy positivity and discrete nature of the number of counts (>0)
+
+The active cases were calculated by taking the summation of each day with the previous one. Therefore, negative cases could occur when there is a drop in the cumulative number of cases with respect to the previous day. As the negative values replace with zero it avoids output of fraction values.
+
+
+
+
+<font size="10"> **4. REFERENCES**</font>
+
+* https://hellor.netlify.app/schedule/
+* https://www.britannica.com/place/Israel
+* https://www.who.int/emergencies/diseases/novel-coronavirus-2019?adgroupsurvey={adgroupsurvey}&gclid=Cj0KCQjw-fmZBhDtARIsAH6H8qgg_gLZ8V4ceWVHpnu-yjmTILx8kn5kYFvx8tb0vLmwDs7f_Jy3KoUaAh_NEALw_wcB
+* https://www.worldometers.info/coronavirus/country/israel/
+* https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7595440/
+* https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0240393#
+* https://r-graph-gallery.com/239-custom-layout-legend-ggplot2.html
+
+

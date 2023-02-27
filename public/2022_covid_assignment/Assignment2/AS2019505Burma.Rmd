@@ -1,0 +1,287 @@
+---
+title: "Report of Covid-19 Pandemic in Burma"
+author: "Sujani Priyangika"
+date: "10/7/2022"
+output: html_document
+---
+
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(coronavirus)
+data(coronavirus)
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE,paged.print=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Burma_corona <- coronavirus %>% filter((country == "Burma"),cases >= 0)
+
+```
+
+## **1) Background**
+
+### **1.1 Introduction of the country of Burma**
+
+Myanmar, also called Burma, country, located in the western portion of mainland Southeast Asia. In 1989 the country’s official English name, which it had held since 1885, was changed from the Union of Burma to the Union of Myanmar; in the Burmese language the country has been known as Myanma (or, more precisely, Mranma Prañ) since the 13th century. The English name of the city that served as the country’s capital from 1948 to 2006, Rangoon, also was dropped in 1989 in favour of the common Burmese name, Yangon.
+
+In 2005 the government began to shift its administrative canter, first to the city of Pyinmana (some 200 miles [320 km] north of Yangon) and then to Nay Pyi Taw (Naypyidaw), a newly constructed city near Pyinmana. Nay Pyi Taw was proclaimed the capital of Myanmar in 2006.
+
+
+### **1.2 Location of Burma**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(magrittr)
+library(maptools)
+library(ggplot2)
+library(ggrepel)
+library(plotly)
+library(tibble)
+library(grid)
+library(png)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x = long, y =lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p + geom_point(data = Burma_corona, aes(x = long, y = lat), color = "red", size = 2)
+
+```
+
+### **1.3 Geographical location of Burma**
+
+
+Myanmar lies along the Indian and Eurasian Plates, to the southeast of the Tibetan Plateau. To its west is the Bay of Bengal and to its south is the Andaman Sea. The country is nestled between several mountain ranges with the Arakan Mountains on the west and the Shan Plateau dominating the east. The central valley follows the Irrawaddy River, the most economically important river to the country with 39.5 million people, including the largest city Yangon, living within its basin. The country is home to many diverse ethnic groups, with 135 officially recognized groups. It is strategically located near major Indian Ocean shipping lanes and was historically home to overland trade routes into China from the Bay of Bengal. The neighboring countries are China, India, Bangladesh, Thailand and Laos.
+
+
+
+### **1.4 Climate Condition of Burma**
+
+The climate of Myanmar varies depending on location and in the highlands, on elevation. The climate is subtropical/tropical and has three seasons, a "cool winter from November to February, a hot summer season in March and April and a rainy season from May to October, dominated by the southwest monsoon. A large portion of the country lies between the Tropic of Cancer and the Equator and the entirety of the country lies in the monsoon region of Asia, with its coastal regions receiving over 5,000 mm (196.9 in) of rain annually. Annual rainfall in the delta region is approximately 2,500 mm (98.4 in), while average annual rainfall in the central dry zone is less than 1,000 mm (39.4 in). The higher elevations of the highlands are predisposed to heavy snowfall, especially in the North. The Northern regions of Myanmar are the coolest, with average temperatures of 21 °C (70 °F). Coastal and delta regions have an average maximum temperature of 32 °C (89.6 °F).
+
+### **1.5 Lockdown status of Burma**
+
+The COVID-19 pandemic in Myanmar is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Myanmar on 23 March 2020. On 31 March 2020, the Committee for Coronavirus Disease 19 (COVID-19), headed by First Vice President Myint Swe and made up of members from the various union ministries, was formed by President Win Myint to combat the spread of COVID-19 in the country.
+
+Although the government rapidly implemented containment measures and public health responses, the country had experienced one of the most severe COVID-19 outbreaks in Southeast Asia by late 2020. The UN raised concerns about Myanmar's vulnerability to the pandemic due to its weak healthcare infrastructure following poor investment over six decades of military rule, as well as ongoing internal conflict.
+
+The pandemic has greatly disrupted the country's economy and Myanmar's GDP shrank by 5% in 2020. The 2021 coup d'état and subsequent protests and civil disobedience movement, some of which were led by healthcare workers, caused severe disruptions to the country's public health response and deepened its recession. The country's COVID-19 testing system and vaccination deployment are thought to have collapsed in February 2021.
+
+
+### **1.6 Burma's Policy Response to COVID-19**
+
+#### **Number of cases**
+
+Myanmar reported its first two cases of COVID-19 on March 23, 2020. By early August, it had recorded a total of only 360 confirmed cases and six deaths. However, the number of locally transmitted cases increased significantly from 5 per day in mid-August to 1,137 per day in mid-October. As of October 21, there were 39,696 confirmed cases and 972 deaths. By that date, Myanmar had tested 506,842 people (about 0.9% of its population) with a positive test rate of 15.1%, suggesting that confirmed cases represent only a small proportion of the true number of infected people. 
+
+
+#### **Health system response to COVID-19**
+
+The country increased the number of COVID-19 testing laboratories from one in March to seven by August and more recently expanded its testing capacity to 27 district level hospitals nationwide. These laboratories can conduct over 8,000 tests per day. Myanmar has set up community quarantine sites, contact tracing procedures, COVID-19 screening and treatment guidelines for government hospitals, and fever clinics to check people for symptoms of COVID-19. In March, the country had only 0.71 intensive care unit beds and 0.46 ventilators per 100,000 people. Since then, Myanmar has taken efforts to increase surge capacity and hospital preparedness. 
+
+
+#### **Measures to control transmission**
+
+Since March, the country has closed all in-bound commercial flights, sealed all land borders, enforced strict quarantine regulations, implemented partial lockdowns, banned mass gatherings, closed schools, recreational areas, and tourist places, and mandated the use of face masks. Some of these public health measures were eased before the outbreak in mid-August; however, they were reinforced and are currently in place.
+
+
+#### **Barriers to epidemic control**
+
+Myanmar’s inadequate health emergency preparedness, limited testing sites, and dependence on other countries for testing kits are some of the critical barriers to containing the pandemic. These barriers are compounded by congestion and poor living conditions in the country’s many internally displaced persons (IDPs) camps (which are risk factors for transmission), and by the ongoing conflict with Ethnic Armed Organizations (which is disrupting transport routes and supply chains for key health care commodities).
+
+
+## **2) Exploratory Data Analysis**
+
+### Qualitative data
+
+* date - The date of the summary,
+* province - The province or state, when applicable,
+* country - The country or region name,
+* type - the type of case (i.e., confirmed, death)
+
+### Quantitative data
+* lat - Latitude point,
+* long - Longitude point,
+* cases - the number of daily cases (corresponding to the case type)
+
+
+```{r echo=FALSE,comment=NA, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+summary(Burma_corona)
+
+```
+### **2.1 Visualization of death, confirmed, recovered, active cases**
+
+
+#### **2.1.1 Total number of confirmed cases reported from Burma**
+
+```{r echo=FALSE,comment=NA,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+confirm_Burma_corona <- Burma_corona %>% filter(type == "confirmed")
+head(confirm_Burma_corona)
+
+```
+```{r echo=FALSE}
+ggplot(confirm_Burma_corona,aes(x=date, y=cases)) + geom_line(col= "Blue")+ ggtitle("Figure 01: Burma:Daily covid 19 confimed")
+
+```
+
+From this figure 01 we can see that the daily confirmed covid cases in Burma reach to a maximum value in the middle of the year 2021 than in the end of 2020 and in the beginning of 2022
+
+
+#### **2.1.2 Total number of death cases reported from Burma**
+
+
+```{r echo=FALSE,comment=NA,message=FALSE, warning=FALSE, paged.print=FALSE}
+death_Burma_corona <- Burma_corona %>% filter(type == "death")
+head(death_Burma_corona)
+```
+
+
+```{r echo=FALSE}
+ggplot(death_Burma_corona,aes(x=date, y=cases)) + geom_line(col="Red")+ ggtitle("Figure 02: Burma:Daily covid 19 deaths")
+
+```
+
+From this figure 02 we can see that the daily confirmed covid deaths have peaked to a maximum about 400  in July of 2021
+
+
+#### **2.1.3 Total number of recovered cases reported from Burma**
+
+```{r echo=FALSE,comment=NA,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+recovery_Burma_corona <- Burma_corona %>% filter(type == "recovery")
+head(recovery_Burma_corona)
+```
+
+```{r echo=FALSE}
+ggplot(recovery_Burma_corona,aes(x=date, y=cases)) + geom_line(col="Green")+ ggtitle("Figure 03: Burma:Daily covid 19 recovery")
+
+```
+
+According to the above diagram, at the end of the year 2020 and the beginning of 2021, the number of patients who recovered from the Covid virus is a considerable amount but lesser than the peak value shown in the middle of 2021
+
+#### **2.1.4 Graphically represent all three confirmed,recovered & death cases**
+
+
+```{r echo=FALSE}
+ggplot(Burma_corona, aes(x = date, y = cases, colour = type)) + geom_path(size=1) + 
+  labs(title="Figure 04: Confirmed, Death and Recovered cases in Burma")
+```
+
+Figure 4 shows the total number of confirmed cases, deaths and recoveries from 2020 to 2021. The number of confirmed covid-19 cases in Burma has risen rapidly in a short period of time (June 2021), surpassing 6000 confirmed cases. The number of people who recovered also began to increase around that time, but the rate of recovery was slower than the rate of new infections. More than 4000 people have recovered.
+
+#### **2.1.5 Total number of active cases reported from Burma**
+
+```{r echo=FALSE}
+corona_Burma_wider <-Burma_corona %>% pivot_wider(names_from=type, values_from=cases)
+
+corona_Burma_wider$active_Burma_corona <- corona_Burma_wider$confirmed - corona_Burma_wider$death - corona_Burma_wider$recovery
+
+ggplot(corona_Burma_wider, aes(x=date, y= active_Burma_corona)) + geom_line(col="Red") + ggtitle("Figure 05: Burma: Daily Covid-19 Active cases")
+
+```
+According to Figure 05, we can see that the Covid virus was active in Burma at the end of 2020 and in the middle of 2021.
+
+### **2.2 Comparison with other countries**
+
+#### **2.2.1 Confirmed cases**
+
+```{r echo=FALSE,comment=NA,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+confirm_Burma_corona <- Burma_corona %>% filter(type =="confirmed")
+confirm_China_corona <- coronavirus %>% 
+  filter(country=="China") %>%  filter(type =="confirmed")
+
+confirm_Thailand_corona <- coronavirus %>% 
+  filter(country=="Thailand") %>%  filter(type =="confirmed")
+
+neighbour_country<-rbind(confirm_Burma_corona,confirm_China_corona, confirm_Thailand_corona )
+
+ggplot(neighbour_country, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("Figure 06: Burma, China and Thailand  : Daily Covid-19 Confirmed Cases")
+
+```
+
+According to the diagram above, the daily number of Covid patients has been compared in the countries of Burma, China and Thailand. In China, the number of patients in 2020 showed a high value, but the number of patients in 2021 is at a minimum. But again after the year 2021, the daily number of Covid patients in China has grown tremendously. Burma and Thailand have seen an increase in the number of cases after 2021.
+
+#### **2.2.2 Recoveries cases**
+
+```{r echo=FALSE,comment=NA,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+recovery_Burma_corona <- Burma_corona %>% filter(type == "recovery")%>% mutate(cases=replace(cases,which(cases<0),NA))
+
+recovery_China_corona <- coronavirus %>% 
+  filter(country=="China") %>%  filter(type =="recovery")%>% mutate(cases=replace(cases,which(cases<0),NA))
+
+
+recovery_Thailand_corona <- coronavirus %>% 
+  filter(country=="Thailand") %>%  filter(type =="recovery")%>% mutate(cases=replace(cases,which(cases<0),NA))
+
+neighbour_country1<-rbind(recovery_Burma_corona,recovery_China_corona, recovery_Thailand_corona )
+
+ggplot(neighbour_country1, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("Figure 07: Burma, China and Thailand : Daily Covid-19 Recovery Cases")
+
+```
+According to the diagram above, the daily number of cured Covid patients has been considered. In 2020, the covid virus was not active in Burma and Thailand. A significant number of patients have recovered in China in 2020. But considering the years 2021 and 2022, a high number of Covid patients have recovered in Burma.
+
+#### **2.2.3 Deaths cases**
+
+```{r echo=FALSE,comment=NA,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+death_Burma_corona <- Burma_corona %>% filter(type == "death")
+
+death_China_corona <- coronavirus %>% 
+  filter(country=="China") %>%  filter(type =="death")
+
+death_Thailand_corona <- coronavirus %>% 
+  filter(country=="Thailand") %>%  filter(type =="death")
+
+neighbour_country2<-rbind(death_Burma_corona,death_China_corona, death_Thailand_corona )
+
+ggplot(neighbour_country2, aes(x=date, y=cases, col= country)) + geom_line() + ggtitle("Figure 08: Burma, China and Thailand : Daily Covid-19 Death Cases")
+
+```
+
+As per the diagram above, the daily number of Covid deaths has been considered. The number of deaths in Burma and Thailand in 2020 is very low. But the death toll in China is significant. Considering the years 2021 and 2022, the number of deaths in all the above three countries shows a high value.
+
+
+
+## **3) Conclusions and Discussion**
+
+
+At the beginning of 2020, the Covid virus started to spread around the world. It started to spread in Burma at the end of 2020. In mid-2021, one-time rapid growth is shown in Burma. It was the same in other countries of the world. Accordingly, it is clear that the Covid virus was active worldwide in the year 2021.
+
+Considering the number of patients infected with the virus when the Corona virus was active, the number of patients who died during that time is significantly higher than other times.
+
+Also, when the corona virus was active, the number of patients infected with the virus did not recover quickly.
+
+The three countries we have considered here are Burma, China and Thailand. In the beginning of 2022, the number of confirmed Covid patients in these three countries is high. Nearly 8,000 daily cases of Covid have been reported in China. But the number of deaths in China during that period is similar to that of Burma and Thailand.
+
+
+
+
+## **4) References**
+
+* https://hellor.netlify.app/slides/onlinehelpdesk
+
+* https://hellor.netlify.app/coronareports/
+
+* https://www.britannica.com/place/Myanmar
+
+* https://en.wikipedia.org/wiki/Myanmar
+
+* https://en.wikipedia.org/wiki/Climate_of_Myanmar
+
+* https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Myanmar
+
+* https://centerforpolicyimpact.org/wp-content/uploads/sites/18/2020/10/Myanmar-National-Response-to-COVID_19.pdf

@@ -1,0 +1,196 @@
+---
+title: "Corona viirus situation of Moldova"
+author: "AS2019517"
+date: "10/1/2022"
+output: html_document
+---
+
+
+## packages
+
+``` {r,message=FALSE,warning=FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+library(coronavirus)
+
+```
+
+# **1. Introduction**
+
+Located in Eastern Europe, Moldova is bordered on the west and southwest by Romania and on the north, south, and east by Ukraine. Most of its territory lies in Bessarabia region, between the area's two main rivers, the Nistru and the Prut. The Nistru forms a small part of Moldova's border with Ukraine in the northeast and southeast, but it mainly flows through the eastern part of the country, separating Bessarabia and Transnistria. The Prut River forms Moldova's entire western boundary with Romania. The Danube touches the Moldovan border at its southernmost tip, and forms the border for 200 metres (656 ft). 
+
+## **1.1 visualisation of the location on a world map**
+
+```{r,message=FALSE,warning=FALSE}
+
+moldova_corona <- coronavirus %>% filter(country == "Moldova")
+data(wrld_simpl)
+p <- ggplot()+ 
+  geom_polygon(data = wrld_simpl, 
+               aes(x = long, y = lat, group = group), fill = "grey", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+p + geom_point(
+  data = moldova_corona, aes(x = long, y = lat), color = "black" , size = 3
+)
+
+```
+
+-Figure 1: location of Moldova in a world map-
+
+
+
+
+## **1.2 Covid - 19 pandemic in the United States(US)**
+
+
+# **2. Exploratory data analysis**
+
+## **2.1 about data set
+ 
+ 
+ ``` {r,message=FALSE,warning=FALSE}
+ 
+ summary(moldova_corona)
+ head(moldova_corona)
+ tail(moldova_corona)
+ 
+ ```
+ 
+## **2.2 Analysis confirmed,deaths,recovered and active corona cases of Moldova**
+
+### **2.2.1 Analysis confirmed corona cases of Moldova**
+
+```{r,message=FALSE,warning=FALSE}
+
+confirmed_cases_moldova <- moldova_corona %>%  filter(type=="confirmed")
+total_cases_moldova<-sum(confirmed_cases_moldova$cases)
+ggplot(confirmed_cases_moldova, aes(x=date, y=cases)) + geom_line() + ggtitle(" confirmed case of Moldova")
+
+
+```
+
+
+
+### **2.2.2 Analysis death corona cases in Moldova**
+
+``` {r,message=FALSE,warning=FALSE}
+death_cases_moldova <- moldova_corona %>% filter(type=="deaths")
+total_death_moldova<-sum(death_cases_moldova$cases)
+ggplot(death_cases_moldova, aes(x=date, y=cases)) + geom_line() + ggtitle(" death cases")+ylim(0,2000)
+                                                                
+```
+
+-F
+
+### 2.2.3 Analysis recovered corona cases in Moldova
+
+``` {r,message=FALSE,warning=FALSE}
+recovered_cases_moldova <- moldova_corona %>% filter(type=="recovery")
+
+
+total_recovers_moldova<-sum(recovered_cases_moldova$cases)
+ggplot(recovered_cases_moldova, aes(x=date, y=cases)) + geom_line() + ggtitle(" Recoveries")+ylim(0,2000)
+
+
+```
+
+
+
+
+
+
+
+
+
+# **3. Comparison Moldova corona cases with other countries**
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+compare_corona_1 <- coronavirus %>% filter(country == c("Ukraine", "Romania", "China","Moldova"))
+
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+
+  
+    geom_point(
+    data = compare_corona_1, aes(x = long, y = lat, col = country), size
+    = 3
+  )
+
+```
+
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+
+ukraine_corona <- coronavirus  %>% filter(country == "Ukraine")
+ confirmed_ukraine_corona <- ukraine_corona %>% filter(type=="confirmed")
+
+ romania_corona <- coronavirus  %>% filter(country == "Romania")
+confirmed_romania_corona <- romania_corona %>% filter(type=="confirmed")
+
+china_corona <- coronavirus  %>% filter(country == "China")
+ confirmed_china_corona <- china_corona %>% filter(type=="confirmed")
+ 
+ moldova_corona <- coronavirus  %>% filter(country == "Moldova")
+ confirmed_moldova_corona <-  moldova_corona %>% filter(type=="confirmed")
+
+
+
+Neighbor_confirm <- rbind(confirmed_ukraine_corona, confirmed_romania_corona, confirmed_china_corona, confirmed_moldova_corona)
+
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in Moldova's compared countries") + ylim(0,10000)
+
+
+```
+
+
+``` {r,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,100000)
+
+```
+
+``` {r,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed corona cases in moldova's neighbour countries")+ylim(0,10000)
+
+```
+
+
+
+
+# 6. **Reference**
+
+https://www.nytimes.
+
+https://hellor.netlify.app/individualproject
+
+https://en.wikipedia.org/wiki/Moldova
+
+
+
+
+
+

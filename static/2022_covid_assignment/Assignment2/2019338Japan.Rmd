@@ -1,0 +1,255 @@
+---
+title: "Assignment2"
+author: "AS2019338_R.N.D. Dewanarayana"
+date: "06/10/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment 2 : Coronavirus Country Report - Japan
+
+## Introduction
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover without special treatment. However, some will become seriously ill and require medical attention.The virus can spread from an infected person’s mouth or nose in small liquid particles when they cough, sneeze, speak, sing or breathe. These particles range from larger respiratory droplets to smaller aerosols.
+You can be infected by breathing in the virus if you are near someone who has COVID-19, or by touching a contaminated surface and then your eyes, nose or mouth. The virus spreads more easily indoors and in crowded settings.
+
+Even now, two years after the confirmation of the first case of coronavirus disease (COVID-19) in Japan, COVID-19-related news has appeared every day, and there is still a sense of anxiety and tension. The aim of this report was to analysing data and helping to communicate it.
+
+## 1. Brief introduction about Japan
+
+Japan is an Asian nation comprising of almost 7000 islands. 80% of its population of 128 million is situated on the main island of Honshu. Japan has one of the oldest living populations on Earth and is rapidly ageing. It has one of the highest life expectancy in the world.Japan has four distinct seasons with a climate ranging from subarctic in the north to subtropical in the south. Japan is linguistically, ethnically and culturally homogeneous, composed of 98.5% ethnic Japanese. A very small number of foreigners call Japan home. It is considered a great world power, boasting the world’s third largest economy by nominal GDP. It has a highly skilled workforce and is one of the most educated countries in the world, with one of the highest percentages of citizens holding a tertiary degree. The country is well known for it’s science, technology, innovation, electronics and automotive industries.
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(knitr)
+library(tidyr)
+library(dplyr)
+data(wrld_simpl)
+
+japan_corona<-coronavirus %>% filter(country=="Japan")
+
+p<-ggplot()+
+  geom_polygon(data = wrld_simpl, 
+               aes(x=long, y=lat, group=group), fill="lightblue", colour="white")+
+  coord_cartesian(xlim=c(-180, 180), ylim=c(-90, 90))+
+  scale_x_continuous(breaks = seq(-180, 180, 120))+
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = japan_corona,
+    aes(x = long, y = lat), color = "red", size = 1)+
+  ggtitle("Figure01: Location of Japan in the World Map")
+```
+
+### Coronavirus Impact on Japan
+The outbreak of the infectious disease COVID-19 has caused global economic and societal disruptions. The first confirmed case in Japan was reported on January 16, 2020, since then the number of cases rose with five main periods of sharper increases around April 2020, August 2020, January 2021, May 2021, August 2021, and from January 2022 onwards. As of March 16, 2022, the total number of patients diagnosed positive with the virus (SARS-CoV-2) reached nearly 5.9 million with a total death toll of 14.3 thousand.
+The total number of patients examined with the polymerase chain reaction (PCR) test was approximately 41.7 million (government laboratory) and 57.9 million (National Institute of Infectious Diseases and local institutes for health), respectively.
+
+### Actions Taken by the Japan’s Government
+Since the outbreak of the disease, the Japanese government declared the state of emergency four times for respective prefectures from April to May 2020, January to March 2021, April to June 2021, and July to September 2021. After a period of a low infection rate between October and December 2021, Japan experienced a sharp increase in cases from January 2022 due to the spread of the Omikron variant. The government announced a quasi-emergency in January 2022 and requested 34 prefectures to, for example, restrict the opening hours and alcohol serving hours of restaurants. Large events with an audience of over 20 thousand people were also prohibited.
+Despite the steadily higher number of new infections per day compared to previous years, the government decided to lift all restrictions on March 21, 2022. Border measures are also gradually eased, and foreign nationals are allowed to enter the country for business purposes from the beginning of March 2020 onwards. The entry bans for tourists, however, continue as of March 2022.
+The distribution of COVID-19 vaccination in Japan began in February 2021, mainly for health professionals. In April 2021, the government initiated the vaccine administration for the general population, starting from people aged 65 and older. As of the middle of March 2022, close to 75 percent of the general population were fully vaccinated with the second dose, while the booster rate reached 33 percent.
+
+## 2. Exploratory Data Analysis
+
+## 2.1. Structure of Data
+
+The dataset contains the daily summary of Coronavirus (COVID-19) cases worldwide under the below variables.
+
+* **date**: Date in YYYY-MM-DD format
+* **province**: Name of province/state, for countries where data is provided split across multiple provinces/states if available
+* **country**: Name of country/region
+* **lat**: Latitude of center of geographic region defined by country/province
+* **long**: Longitude of center of geographic region defined by country/province
+* **type**: An indicator for the type of cases (confirmed, death, recovered)
+* **cases**: Number of cases on given date
+
+All records have been recorded for the time period from 22 January 2020 to 23 May 2022.
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+*Packages:* 
+Interface - "rmarkdown"
+Data manipulation - "dplyr" and "tidyr"
+Data visualization - "ggplot2"
+
+*Data:* The raw data is pulled from ‘The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Data set of Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE). The data and dashboard is refreshed on a daily bases.
+
+## 2.2. Analysis of Death, Confirmed and Recovered Cases of COVID-19 in Japan
+
+```{r, comment=NA, message=FALSE, results='hide', warning=FALSE, echo=FALSE}
+# load data
+data(coronavirus)
+
+# extracting data related to Japan
+japan_corona<-coronavirus %>% filter(country=="Japan")
+
+# code missing values to NA
+japan_corona<-japan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(japan_corona$cases))
+
+# replacing NA values with the mean value of  nearest two data values
+negative_values<-c(1974,2052,2063,2067,2083,2330)
+for(x in negative_values){
+japan_corona$cases[x] = mean(c(japan_corona$cases[x-1], japan_corona$cases[x+1]))
+}
+```
+
+### 2.2.1. Visualization of Daily Death, Confirmed and Recovered Cases of COVID_19 in Japan
+
+#### **Confirmed Cases**
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+confirmed_japan_corona<-japan_corona %>% filter(type == "confirmed")
+
+ggplot(confirmed_japan_corona, aes(x=date, y=cases)) +
+  geom_point()+ ggtitle("Figure02: Daily Confirmed COVID-19 Cases in Japan")
+```
+ The above Figure02 shows the number of daily COVID-19 confirmed cases reported in Japan from January 2020 to May 2022. According to the figure, we clearly see that Japan have not been reported by confirmed corona cases in large scale in 2020 as it shows in 2022.But it shows some instant slight increase of the confirmed cases the on the first few months of the second half of 2021.After that confirmed number of COVID-19 cases have increased massively on the first half of 2022 with a peak over 100000 cases per day. However the number of confirmed cases have gradually fallen as the other part of the 2022.
+ 
+#### **Recovery Cases**
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+
+recovery_japan_corona<-japan_corona %>% filter(type == "recovery")
+
+ggplot(recovery_japan_corona, aes(x=date, y=cases)) +
+  geom_point(size=1)+ ggtitle("Figure03: Daily Recovery COVID-19 Cases in Japan")
+```
+ Figure03 shows us the daily recovery data of COVID-19 cases in  Japan. As we can clearly see, from the second half of 2020 to the first half of 2021 has a considerable increase of recovery cases. Even though it is a quite good sign, the second half of 2021,the daily number of recovery cases have been dropped to the bottom which is mot a quite good situation for the country.
+
+#### **Death Cases**
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+death_japan_corona<-japan_corona %>% filter(type == "death")
+
+ggplot(death_japan_corona, aes(x=date, y=cases)) +
+  geom_point()+ ggtitle("Figure03: Daily Death COVID-19 Cases in Japan")
+```
+The daily count of deaths due to COVID-19 have been gradually increased in the year 2020. 2021 shows up and down patterns throughout the year.The first few months of 2022 shows a rapid increase in the daily count of death cases. But it has again have started to decrease gradually by the last few month of the first half of 2022.
+
+#### **Comparisions Between the Main Case Types**
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(japan_corona, aes(x=date, y=cases))+ 
+  geom_line(color="darkred", size=0.8) + facet_wrap(type ~.,ncol=1, scales="free")+ 
+  ggtitle("Figure04: Daily COVID-19 Cases by Type")
+```
+Figure04 shows how each type of cases have varied within the considered time period.
+AS we see all three count of recorded daily cases have been increased gradually from 2020 to the first half of 2021. The daily recovery counts of COVID-19 seems to have a quite good counts which emphasis some control in the treatment procedures. The second half of 2021 shows some decrease in the patterns of daily counts of death and recovery cases. On the first few months of 2022 till May, both recorded counts of confirmed and death cases have been increased rapidly. More surprisingly, even though the other two cases have reported to be vary that way in the rest of the months, the daily recovery count has been reportedly decreased to zero.
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(japan_corona, aes(x=date, y=cases, color=type))+ geom_point(size=1, alpha=0.45)+ 
+  ggtitle("Figure05: Daily COVID-19 Cases in Japan")
+```
+This figure enhance our discussion on last figure. Before the second half of 2021, the recovery cases have been comparatively equal to the confirmed cases wish is a quite good situation for Japan with low counts of deaths. But after the month of June in 2021, even though the count of daily recovery cases and death cases decreased remarkably, the count of daily confirmed cases have been increased comparatively on a massive scale. This emphasis a quite poor control over COVID-19 in Japan on this particular time period.
+But daily death counts are very low compared to the other two types of cases.
+
+#### **Active Cases**
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+japan_tibble<-tibble(date= c(confirmed_japan_corona$date), 
+                      confirmed_cases= c(confirmed_japan_corona$cases), 
+                      death_cases= c(death_japan_corona$cases), 
+                      recovery_cases=c(recovery_japan_corona$cases))
+
+japan_tibble<-japan_tibble %>%
+  mutate(active_cases=confirmed_cases-recovery_cases-death_cases)
+
+ggplot(japan_tibble, aes(x=date, y=(active_cases)))+ 
+  geom_line(color="red")+ ggtitle("Figure06: Daily Active COVID-19 Cases in Japan")
+```
+According to the Figure06 we can observe increases of daily count of active cases in first few months of the second half of 2021 and a rapid increased of it in first few months of 2022, which both have reportedly started to decreased gradually. From January 2022 to May 2022, the highest daily counts of active cases have reported on our time period of consideration.
+
+### 2.2.2. Comparison Of Daily COVID-19 Cases In Japan With Its Neighbour Countrys Russia And South Korea
+
+```{r, comment=NA, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
+# extracting and fixing data related to South Korea
+sk_corona<-coronavirus %>% filter(country=="Korea, South")
+
+sk_corona<-sk_corona %>% mutate(cases=replace(cases, which(cases < 0), NA))
+which(is.na(sk_corona$cases))
+
+negative_values<-c(1815, 2330)
+for(x in negative_values){
+  sk_corona$cases[x]=mean(c(sk_corona$cases[x-1], sk_corona$cases[x+1]))  
+}
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
+# extracting and fixing data related to Russia
+russia_corona<-coronavirus %>% filter(country=="Russia")
+
+russia_corona<-russia_corona %>% mutate(cases=replace(cases, which(cases < 0), NA))
+which(is.na(russia_corona$cases))
+
+russia_corona$cases[2330]=mean(c(russia_corona$cases[2329], russia_corona$cases[2331]))
+```
+
+```{r message = FALSE, warning=FALSE, echo=FALSE}
+countries_corona<-as.data.frame(rbind(japan_corona, russia_corona, sk_corona))
+```
+
+#### Comparison of Daily Confirmed Cases COVID-19 Cases in Japan with Russia and South Korea
+South Korea , North Korea and Russia are the neighbor countries of Japan. Since our data set does not contain COVID-19 cases related to North Korea, we are comparing  the related data only with South Korea and Russia.
+
+
+```{r, message = FALSE ,warning = FALSE , echo = FALSE}
+confirmed_cases<-countries_corona %>% filter(type=="confirmed")
+
+ggplot(confirmed_cases, aes(x=date,y=cases, color=country)) + 
+  geom_line(size=0.9)+
+  ggtitle("Figure07: Comparison of COVID-19 Confirmed Cases of Japan Between Russia and South Korea")
+```
+Figure07 shows how the distributions of daily confirmed cases vary from each other country we consider. As we can clearly see, from 2020 to the beginning of 2022 South Korea has had a good control over COVID-19 virus and Russia is the country which reports the highest daily counts on that time period. However approximately from January to March of 2022 we see that South Korea is having the highest daily confirmed cases even though Japan and Russia showing a low increase compared to South Korea. By May 2022, all three countries showing a control over the COVID-19 spread among their natives.
+
+#### Comparison of Daily Recovery Cases COVID-19 Cases in Japan with Russia and South Korea
+```{r, message = FALSE ,warning = FALSE , echo = FALSE}
+recovery_cases<-countries_corona %>% filter(type=="recovery")
+
+ggplot(recovery_cases, aes(x=date,y=cases, color=country))+ 
+  geom_line(size=1.01)+
+  ggtitle("Figure08: Comparison of COVID-19 Recovery Cases of Japan Between Russia and South Korea")
+```
+This figure shows us that from January 2020 to approximately July 2021, the highest daily recovery cases have been recorded from Russia and the lowest are from South Korea. This emphasize that the Russia has remarkably recovered their patients compared to Japan and South Korea, while South Korea shows the lowest number of recovery COVID-19 patient counts. But Figure07 showed us that South Korea had the lowest daily counts of confirmed cases which emphasize that South Korea cannot be having a lower control over COVID-19 in the discussed time period.
+However from July 2021 to May 2022 shows a poor counts of recovery cases in all three countries comparatively to the previous data. Since these countries had high counts of daily confirmed cases, this figure shows some what out-of-hand situation in COVID-19 pandemic from January to May of 2022.
+
+#### Comparison of Daily Death Cases COVID-19 Cases in Japan with Russia and South Korea
+```{r, message = FALSE ,warning = FALSE , echo = FALSE}
+death_cases<-countries_corona %>% filter(type=="death")
+
+ggplot(death_cases, aes(x=date,y=cases, color=country))+ 
+  geom_line(size=1.01)+
+  ggtitle("Figure09: Comparison of COVID-19 Death Cases of Japan Between Russia and South Korea")
+```
+Clearly, looking at the Figure09 we can observe that Russia reports the highest all time death cases of the overall time period of consideration. But Russia had a pretty high confirmed cases from 2020 until 2022. As expected from South Korea, it has the lowest death cases till 2022 since it had the lowest confirmed cases on this time period. Again as expected from South Korea, it has a high peak of death cases in 2022 since it had the high peak of confirmed cases on this time period. Even though Russia have not remarkably reported a comparative high confirmed cases of COVID-19 in 2022, it still has a high death counts than Japan and South Korea.
+
+## 2.3. Conclusions and Discussion
+
+Japan is one of the countries with at least a million COVID-19 cases, as well as the only country in East Asia with at least a million COVID-19 cases. At the beginning of the 2020 Summer Olympics, there were nearly 860,000 cases in the country.
+
+The COVID-19 pandemic in Japan can be divided into five waves based on the genome sequence of the country's COVID-19 virus.The National Institute of Infectious Diseases (NIID) of Japan has determined from its genetic research that the COVID-19 variant of the first wave is derived from the Wuhan type that is prevalent in patients from China and other countries in East Asia. After entering Japan in January 2020 through travelers and returnees from China, the virus caused numerous infection clusters across the country before beginning to subside in March. Japanese medical surveillance confirmed its first case of the virus on 16 January 2020 in a resident of Kanagawa Prefecture who had returned from Wuhan. On 14 February 2020, the country confirmed the first COVID-19 death.
+
+The first wave was followed by a second one that originated from a COVID-19 variant of the European type that is traced back to early patients from France, Italy, Sweden, and the United Kingdom. Japanese medical surveillance detected the second wave on 26 March 2020 when the government's expert panel concluded the likelihood of a new outbreak caused by travelers and returnees from Europe and the United States between 11 March 2020 and 23 March 2020. The NIID has established that the majority of viruses spreading in Japan since March is the European type. 
+
+Since Japan reportedly having a least a million COVID-19 cases, as well as the only country in East Asia with at least a million COVID-19 cases, Japan has had a good overall control on COVID-19. As we observed earlier, Japan has had a handy control over COVID-19 from January 2020 to July 2021 with a low death rate. From July 2021 to May 2022, the number of active cases have been increased remarkably that seems a quite bad situation. But the death cases are compatibly very low which indicates a good point on this situation. When comparing with neighbor countries(Russia and South Korea), Japan has a moderate control in spread and treatments over COVID-19. Russia remarkably had a high confirmed and death cases than Japan.
+
+This has led it to conclude that the data "strongly suggests" that the Japanese government has succeeded in containing the Wuhan variant and that it is the European variant that is spreading across the country.
+
+
+## 2.4. References
+
+1. https://en.wikipedia.org/wiki/Japan
+2. https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Japan
+3. https://hellor.netlify.app/coronareports/
+4. https://hellor.netlify.app/slides/onlinehelpdesk
+5. https://hellor.netlify.app/slides/coronavirus_assignment_help_file
+6. https://systems.jhu.edu/research/public-health/ncov/
+7. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9066458/

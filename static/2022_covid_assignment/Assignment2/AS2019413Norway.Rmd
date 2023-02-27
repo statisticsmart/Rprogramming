@@ -1,0 +1,313 @@
+---
+title: "COVID 19 Pandemic in the Norway"
+author: "AS2019413"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment=NA, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center')
+```
+
+## **1. Introduction about Norway**
+
+### **Norway** 
+
+Norway, country of northern Europe that occupies the western half of the  Scandinavian Peninsula. Nearly half of the inhabitants of the country live in the far south, in the region around Oslo, the capital. About two-thirds of Norway is mountainous, and off its much-indented coastline lie, carved by deep glacial fjords, some 50,000 islands.
+
+
+### **where is Norway located?** 
+
+Norway located with the Barents Sea to the north, the  Norwegian Sea and the North Sea to the west, and Skagerrak (Skager Strait) to the south, Norway has land borders only to the east—with Sweden,  Finland, and  Russia.
+
+
+```{r}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+```
+```{r} 
+Norway_corona <- coronavirus %>% filter(country == "Norway")
+```
+```{r location of Norway ,echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(grid)
+library(sp)
+library(magrittr)
+data(wrld_simpl)
+
+m <- ggplot() + 
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light pink", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+m +
+  geom_point(
+    data = Norway_corona, aes(x = long, y = lat), color = "blue", size
+    = 1
+  )
+```
+
+### **Climate Condition ** 
+
+The mean annual temperature on the west coast is 45 °F (7 °C), or 54 °F (30 °C) above average for the latitude. In the Lofoten Islands, north of the Arctic Circle, the January mean is 43 °F (24 °C) above the world average for this latitude and one of the world’s greatest thermal anomalies. Norway lies directly in the path of the North Atlantic cyclones, which bring frequent gales and changes in weather. Western Norway has a marine climate, with comparatively cool summers, mild winters, and nearly 90 inches (2,250 mm) of mean annual precipitation. Eastern Norway, sheltered by the mountains, has an inland climate with warm summers, cold winters, and less than 30 inches (760 mm) of mean annual precipitation.
+
+### **Corona Situation in Norway** 
+
+#### *Origin* 
+On 26 February 2020, the virus was confirmed to have spread to Norway. The number of cases increased rapidly during the month of March, thereby necessitating a number of safety measures aiming to achieve physical distancing to be introduced on 12 March. The first death attributed to COVID-19 was documented on the same day.
+
+#### *Vaccine* 
+As of 17 April 2021, 870,524 people in Norway have received the first dose of the COVID-19 vaccine and 296,458 are fully vaccinated, primarily the elderly, healthcare workers and younger people at risk. All of the cases with potential links to the vaccine reported as of 14 January occurred among severely frail elderly people with serious diseases. However, a causality to vaccination could not have been linked.As an average of 300 to 400 people die each week in nursing homes in Norway, the Norwegian Medicines Agency expected that deaths close to the time of injection may occur, and is carrying out in-depth analyses to find any link with the vaccine. It is possible that common side effects aggravated pre-existing conditions in some patients, but so far no statistical analyses have shown an increase in the death rate of vaccinated people.
+Norway is also closely monitoring side effects, with both reports from healthcare professionals and the public being registered in a common database. This should allow for a good overview of the situation once the vaccine is distributed in the general population, as well as an efficient collaboration with other countries.
+
+### **How government prevent Covid 19** 
+
+The Norwegian Directorate of Health introduced a number of measures from Thursday 12 March 2020
+
+* All educational institutions were closed and organized sports activities were to be discontinued.
+*	A number of events and businesses were closed, including cultural events, sports events, gyms and swimming pools. All establishments in the hospitality industry such as bars, pubs and clubs other than those serving food were to close, and any establishment serving food would have to ensure that visitors could stay at least one meter apart.
+*	Healthcare professionals working with patient care were prohibited from traveling abroad until 20 April 2020. The ban applied to both business travel and private travel.
+*	Everyone who had returned from trips outside Sweden and Finland since 27 February were to quarantine, regardless of whether they showed symptoms or not.
+*	Leisure travel was strongly discouraged. The Directorate discouraged traveling to work unless strictly necessary and encouraged avoiding public transport if possible, as well as avoiding crowded places.
+*	People were requested not to visit others in institutions with vulnerable groups (the elderly, psychiatry, prison, etc.) and generally encouraged to limiting close contact with others.
+*	The public transport schedule was to run as normal, to ensure that people with critical social functions could get to and from work and be able to distance themselves from each other.
+On 16 March, non-residents were banned from entering Norway.
+As of 19 March, residents were prohibited from staying in cabins outside their home municipalities, in order to avoid putting strain on rural medical infrastructure. People suspected or confirmed to be infected must follow stricter home isolation rules. The government established fines for people violating home quarantine and home isolation rules or organizing events.
+
+
+
+
+
+
+
+
+```{r echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+#extract Norway corona data set from coronavirus data set
+Norway_corona1 <- Norway_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+```{r echo=FALSE, message = FALSE,include=FALSE, fig.width = 7,fig.height = 5 }
+#locate missing values
+which(is.na(Norway_corona1$cases)) 
+
+#
+Norway_corona1$cases[1387] = mean(c(Norway_corona1$cases[1386], Norway_corona1$cases[1388]))
+
+Norway_corona1$cases[1541] = mean(c(Norway_corona1$cases[1540], Norway_corona1$cases[1542]))
+
+Norway_corona1$cases[2330] = mean(c(Norway_corona1$cases[2329], Norway_corona1$cases[2331]))
+```
+
+
+## **2. Exploratory Data Analysis**
+
+### **2.1 Visualization of death, confirmed, recovery, active cases**
+
+```{r echo=FALSE, message = FALSE, fig.width = 3,fig.height = 2 }
+summary(Norway_corona1)
+```
+
+```{r}
+#extract cases by type
+Norway_corona1_Death <- filter(Norway_corona1, type == "death")
+Norway_corona1_Confirmed <- filter(Norway_corona1, type == "confirmed")
+Norway_corona1_recovery <- filter(Norway_corona1, type == "recovery")
+
+
+Norway_corona1_active <- Norway_corona1  %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+
+```
+
+###**Daily Covid 19 cases in Norway** 
+
+```{r fig.cap="Figure 1" ,echo=FALSE, message = FALSE, fig.width = 6,fig.height = 4 }
+ggplot(Norway_corona1, aes(x=date, y=cases, col=type)) + geom_line() +geom_jitter(alpha=0.5)  + ggtitle(" Daily Covid-19 cases in Norway")
+```
+Figure No 01 shows how the daily corona 19 cases in Norway recorded by types with respect to time.According to above graph lot of number of daily corona cases are recorded in start of 2022 period. This graph helps to compare all types of corona cases in Norway. The death cases are appear as straight line beacuse of the the number of death cases are very low with comparing ather cases.
+
+
+
+
+```{r fig.cap="Figure 2" ,echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+ggplot( Norway_corona1, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle(" Daily Covid-19 cases by type in Norway") + facet_grid(type~.) + ylim(0,28000)
+```
+Figure No 02 shows that amoung all the types of corona cases in Norway high number of confirmed cases are recorded.And  comparing confirmed corona cases with death and recovery cases, these two are negligible.up to 2021 some number of recovery cases are recorded , but after 2021 there are least number of recovery cases are recorded.
+
+
+
+
+#### **Daily Covid-19 Active Cases in Norway**
+
+
+```{r fig.cap="Figure 3" ,echo=FALSE, message = FALSE, fig.width = 4,fig.height = 3 }
+ggplot(Norway_corona1_active,aes(x =date,y =total_active)) +geom_line(color="red") +ggtitle("Daily Covid-19 Active Cases in Norway") + ylim(0,100000)
+```
+Figure No 03 shows the active corona cases in Norway is increasing over the time. And also it shows some slightly deviation.
+
+
+
+### **2.2 Comparison Corona 19 cases with neighbour countries(Sweden,Finland, Russia)**
+Daily Corona 19 cases are compared with the countries Sweden, Finland and Russia since they are neighbour countries to Norway. So we can assume they all have same geographical location like Norway. But comparing with Sweden, Norway and Finland Russia has very large number of population.
+
+
+```{r}
+#extraxt Sweden,Finland,corona cases 
+Sweden_corona <- coronavirus %>% filter(country == "Sweden")
+Finland_corona <- coronavirus %>% filter(country == "Finland")
+Russia_corona <- coronavirus %>% filter(country == "Russia")
+```
+
+
+```{r ,echo=FALSE, message = FALSE,inclue = FALSE, fig.width = 5,fig.height = 3 }
+#find missing values of sweden
+Sweden_corona1 <- Sweden_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(Sweden_corona1$cases)) 
+```
+```{r}
+Sweden_corona1$cases[958] = mean(c(Sweden_corona1$cases[957], Sweden_corona1$cases[959]))
+Sweden_corona1$cases[1083] = mean(c(Sweden_corona1$cases[1082], Sweden_corona1$cases[1084]))
+Sweden_corona1$cases[1108] = mean(c(Sweden_corona1$cases[1107], Sweden_corona1$cases[1109]))
+Sweden_corona1$cases[1144] = mean(c(Sweden_corona1$cases[1143], Sweden_corona1$cases[1145]))
+Sweden_corona1$cases[1165] = mean(c(Sweden_corona1$cases[1164], Sweden_corona1$cases[1166]))
+Sweden_corona1$cases[1424] = mean(c(Sweden_corona1$cases[1423], Sweden_corona1$cases[1425]))
+Sweden_corona1$cases[1440] = mean(c(Sweden_corona1$cases[1439], Sweden_corona1$cases[1441]))
+
+```
+
+
+```{r echo=FALSE, message=FALSE, include=FALSE}
+Finland_corona1 <- Finland_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(Finland_corona1$cases)) 
+```
+```{r}
+Finland_corona1$cases[1888] = mean(c(Finland_corona1$cases[1887], Finland_corona1$cases[1889]))
+Finland_corona1$cases[2330] = mean(c(Finland_corona1$cases[2329], Finland_corona1$cases[2331]))
+
+```
+
+```{r echo=FALSE, message=FALSE, include=FALSE}
+Russia_corona1 <- Russia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(Russia_corona1$cases)) 
+```
+```{r}
+Russia_corona1$cases[2330]=mean(c(Russia_corona1$cases[2329],Russia_corona1$cases[2331]))
+
+```
+
+
+#### **Comparison of COVID-19 cases between the neighbouring countries**
+```{r,fig.cap= "Figure 4" ,echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+compare_cases<-rbind(Sweden_corona1,Norway_corona1,Finland_corona1,Russia_corona1)
+
+ggplot(data=compare_cases,aes(x=type,y=cases,fill=country))+geom_col(position ="dodge")+ggtitle("Comparison of daily Covid-19 cases by type") 
+```
+Figure No 04 illustrate the all the types of corona cases with respect countries. According to above figure all the countries has large number of confirmed cases. And among  confirmed corona cases the large number of cases are recorded in Russia and Sweden. the least number of confirmed cases are recorded in Norway. Death cases are really law amomg all countries. And in recovery cases, sweden shows least number of cases, it can be negligible with comparing death cases in other countries.
+
+
+
+
+#### **Comparison of COVID-19 deaths between the neighbouring countries**
+
+```{r}
+Sweden_corona_Death <- filter(Sweden_corona1, type == "death")
+Finland_corona_Death <- filter(Finland_corona1, type == "death")
+Russia_corona_Death <- filter(Russia_corona1, type == "death")
+
+Country_Comparision_Death <- rbind(Norway_corona1_Death,Sweden_corona_Death,Finland_corona_Death,Russia_corona_Death)
+```
+
+```{r,fig.cap= "Figure 5",echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+ggplot(Country_Comparision_Death, aes(x = date ,y = cases, col=country)) + geom_line(alpha=0.5) +geom_jitter(alpha=0.5) + ylim(0,1300) +  ggtitle("Daily Covid-19 death cases by country")
+
+```
+Figure 05 shows the covid 19 death cases with respect to ountries.According to above graph the large number of death cases are recorded by Russia.Aand Sweden , Norway , Finland countries has similar number of death cases. Among those 3 countries also Norway record least number of death cases with respect to Sweden and Finland.
+
+
+
+
+```{r,fig.cap="Figure 6" ,echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+ggplot(Country_Comparision_Death, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 death cases by country") + facet_grid(country~.) + ylim(0,1300)
+```
+According to figure 06, Finland and Norway has similar distribution of death cases.when considering about time by the end of 2021 Finland and Norway shows some significant distributon. But Sweden shows significant up and down  distribution of death cases all over the time.
+ 
+
+
+
+#### **Comparison of COVID-19 confirmed cases between the neighbouring countries**
+```{r}
+Sweden_corona_confirmed <- filter(Sweden_corona1, type == "confirmed")
+Finland_corona_confirmed <- filter(Finland_corona1, type == "confirmed")
+Russia_corona_confirmed <- filter(Russia_corona1,type == "confirmed" )
+
+Country_Comparision_confirmed <-  rbind(Norway_corona1_Confirmed,Sweden_corona_confirmed,Finland_corona_confirmed,Russia_corona_confirmed)
+```
+
+```{r,fig.cap="Figure 7",echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+ggplot(Country_Comparision_confirmed, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases by confirmed") + facet_grid(country~.) 
+```
+Figure 07 shows distribution of confirmed cases over the time. it also have same kind of death cases distribution. Russia shows high number of confirmed cases and Finland and Norway has similar number of confirmed cases.
+
+
+
+
+
+#### **Comparison of COVID-19 recovery cases between the neighbouring countries**
+```{r}
+Sweden_corona_recovery <- filter(Sweden_corona1, type == "recovery")
+Finland_corona_recovery <- filter(Finland_corona1, type == "recovery")
+Russia_corona_recovery <- filter(Russia_corona1,type == "recovery")
+```
+
+```{r}
+Country_Comparision_recovery <-  rbind(Norway_corona1_recovery,Sweden_corona_recovery,Finland_corona_recovery,Russia_corona_recovery)
+```
+
+```{r,fig.cap="Figure 8" ,echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3 }
+ggplot(Country_Comparision_recovery, aes(x = date ,y = cases, col=country)) + geom_line() + ggtitle("Daily Covid-19 confirmed cases by recovery")+ facet_grid(country~.)   + ylim(0,30000)
+
+```
+Figure 08 shows the recovery cases with respect to countries.Highest number of recovery cases are recorded by Russia.Swewden has very law number of recovery cases than other countries. Here also Finland and Norway shows same kind of distribution. After 2020 very low number of recover cases are recorded by Finland and Norway.
+
+
+#### **Total Covid-19 death cases by country**
+```{r ,fig.cap="Figure 9",echo=FALSE, message = FALSE, fig.width = 5,fig.height = 3}
+ggplot(Country_Comparision_Death, aes(x=country, y=cases, col=country)) + geom_jitter() + ggtitle("Total Covid-19 death cases by country") + ylim(0,1300)
+```
+Figure 09 shows the total number of death cases in each country.Russia shows highest number of total death cases.Finland and Norway shows the least number of total death cases.
+
+
+### **3.Conclusions and Discussion**
+COVID 19 is world panademic situation which is begin from Wuhan in 2019.Still we can not predict how long the panademic will continue.it is spread rapidly all over the world within small time period.Lot of countries faced very difficult time because of the covid 19.the most saddest thing is it lossmore than 2.4 million human life.
+When talk about Norway it also affect by Covid 19 panademic.According to above analysis we can conclude that the Norway is having the situation under control over the time.Norway faced such difficult situation at the end of 2021 and at the start of 2022.Because large number of corona cases recorded at the end of 2021. But wecan clearly determind that the less number of death cases were recorded all over the time.that mean Norway payed more attention about preventing covid 19.Comparing type of corona cases in Norway there are huge number of confirmed cases recorded after 2021.But less number of death cases noticed.So we can conclude  Death & recovery cases in Norway are negligible with compared to confirmed cases.Whwn comparing corona cases in Norway with its neighbour countries(Russia,Sweden,Finland), 
+Instead of case type, Russia shows huge number of cases with respect to other countries because of the huge population of Russia.So the countries can’t be compared easily because of the variations.Although these 4 countries located at same geographical location ,since the amount of population of that countries it shows large difference. But when considering Sweden, Norway,Finland these 3 countries shows same variation with all types of cases. Because these 3 countries has approximately same population. So after analysis we can conclude that it is more accurate to compare corona cases in Norway with Sweden and Finland except Russia.So when comparing those three countries, Finland and Norway has same situation about Covid 19.If there was so many confirmed corona cases in Norway they managed to control less number of deaths.So it conclude if there was challenging period due to COVID 19 Norway have controlled the situation by reducing death cases.
+
+
+### **Reference**
+https://www.britannica.com/place/Norway
+
+https://en.wikipedia.org/wiki/Norway
+
+https://www.regjeringen.no/en/topics/koronavirus-covid-19/id2692388/
+
+
+
+

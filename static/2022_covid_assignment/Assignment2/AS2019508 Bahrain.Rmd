@@ -1,0 +1,192 @@
+---
+title: "Covid-19 Status in Bahrain"
+author: "P.P.G.C.D Puwakpitiya"
+date: "10/6/2022"
+output: html_document
+---
+
+```{r setup, echo=TRUE, warnings=FALSE, message=FALSE}
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+data(coronavirus)
+```
+
+### **1. Introduction**
+The Middle Eastern country of Bahrain is an archipelago of 33 islands in the Persian Gulf. It is situated close to the Saudi and Qatari coasts. The majority of the petroleum produced in the Western world must travel through Bahrain in order to reach the open ocean due to its strategic location in the Persian Gulf. Low desert plains make up the majority of Bahrain's landscape. The king is the head of state and the prime minister is the head of government in this constitutional monarchy. Bahrain is a member of the Gulf Cooperation Council and the League of Arab States (Arab League).
+
+```{r}
+bahrain_Corona <- coronavirus %>% filter((country == "Bahrain"),cases >= 0)
+```
+
+
+### **2. Geographical Location of Bahrain**
+```{r location of Switzerland}
+library(maptools)
+library(maps)
+library(plotly)
+library(tibble)
+library(ggrepel)
+library(dplyr)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+visualize <- map_data("world")
+map <- filter( visualize,region=="Bahrain")
+
+map_plot <- ggplot()+ geom_polygon(data=wrld_simpl,aes(x=long,y=lat,group=group),fill="light blue",colour="white")+ggtitle("point on the bahrain")
+map_plot+geom_point(data=map,aes(x=long,y=lat),colour="dark blue")
+#+label(data)<-"Variable label for variable myvar"
+```
+The country of Bahrain is in the Asia continent and the latitude and longitude for the country are 26.0275° N, 50.5500° E. The neighboring countries of Bahrain are maritime boundaries Iran,Qatar  and Saudi Arabia.
+
+
+### **3. Climate conditions of Bahrain**
+Bahrain is a dry country with hot and muggy summers and warm, pleasant winters. Between April and the end of October, when temperatures are high, little rain falls. Although other months of the year only exhibit marginally lower levels, the winter months of December through February experience the highest relative humidity. Onshore wind speeds normally range from 3.8 to 5.5 meters per second all year round.
+
+### **4. Action taken by government of Bahrain**
+The Kingdom of Bahrain will always remain strong with its loyal people who brave challenges and set a model for cooperation and dedication for their society and country said His Royal Highness Prime Minister Prince Khalifa bin Salman Al-Khalifa.He paid tribute to the people of Bahrain, saying that every citizen is a soldier in the fight against the novel coronavirus (COVID-19), which is spreading all over the world.He expressed confidence in the ability of the patriotic people to overcome the current critical period and challenges and write another page in its annals of success stories.
+
+
+### Exploratory of Data Analysis
+
+### **Daily confirmed cases in Bahrain**
+
+```{r echo=FALSE,message=FALSE, warning=FALSE}
+bahrain.cleared <- coronavirus %>% filter(country == "Bahrain")
+asia.cleared <- coronavirus %>% filter(continent_name == "Asia")
+```
+
+
+```{r include=FALSE,echo=FALSE,message=FALSE}
+bahrain.cleared <- bahrain.cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(bahrain.cleared)
+
+ggplot(bahrain.cleared, aes(x=date, y=cases)) + geom_line() 
+
+#get the missing values
+```
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+# Locate missing value
+which(is.na(bahrain.cleared$cases)) # Using base R
+```
+
+```{r include=FALSE,echo=FALSE,message=FALSE,warning=FALSE}
+bahrain.cleared$cases[2330] = mean(c(bahrain.cleared$cases[2329], bahrain.cleared$cases[2331]))
+length(bahrain.cleared$cases)
+```
+
+```{r echo=FALSE,message = FALSE }
+#confirmed cases in bahrain
+confirmed.bahrain <-bahrain.cleared %>% filter(type =="confirmed")
+graph01 <- ggplot(confirmed.bahrain, aes(date, cases,color=cases)) +ggtitle("Covid_19 confirmed cases vs Time :  Bahrain") +geom_jitter() + labs(x="date",y="Number of cases")+ggtitle("Figure 1 : Daily Confirmed Cases in Bahrain")
+ggplotly(graph01)
+```
+The above figure shows the number of daily COVID-19 confirmed cases in Bahrain from 2020 to 2022. According to that there was least confirmed cases until mid of 2021 comparatively. After that it was increased mid of 2021 and again decreased until end of 2021.The maximum number of confirmed cases reported on first quater of 2022. It was near 8000.
+
+### **Daily Corona deaths within Bahrain**
+```{r echo=FALSE,message = FALSE}
+#death cases in bahrain
+death.bahrain <-bahrain.cleared %>% filter(type=="death")
+graph2 <- ggplot(death.bahrain, aes(date, cases,color=cases)) +ggtitle("Covid_19 death cases vs Time :  Bahrain") +geom_jitter() + labs(x="date",y="Number of cases")+ggtitle("Figure 2 : Daily Corona deaths in Bahrain")
+ggplotly(graph2)
+```
+The above figure implies the corona virus death cases of Bahrain from 2020 to 2022. It shows that there were no corona virus death cases until the start of 2020.The death cases increased after the mid of 2020 and the maximum number of death cases reported on mid of 2021. After that death cases decreased gradually.
+
+### **Daily Corona recovery cases within Bahrain**
+```{r echo=FALSE, message = FALSE}
+#recovery cases in bahrain
+recovery.bahrain <-bahrain.cleared %>% filter(type=="recovery")
+graph3 <- ggplot(recovery.bahrain, aes(date, cases,color=cases)) +ggtitle("Covid_19 recovery cases vs Time :  Bahrain") +geom_jitter() + labs(x="date",y="Number of cases")+ggtitle("Figure 3: Daily Corona recovery cases in Bahrain")
+ggplotly(graph3)
+```
+The above figure shows the number of recovered cases in Bahrain during the time period 2020 to 2022.It shows that the number of daily recovered cases increased with the time until mid of 2021. The maximum number of daily recovered cases reported on mid of 2021 and it was more than 3000. After the maximum daily recovered cases found, the cases rapidely went to zero.
+
+### **Daily active cases within Bahrain**
+
+```{r}
+active.bahrain <-  bahrain.cleared %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+ggplotly(ggplot(active.bahrain,aes(x =date,y =total_active))
+      +geom_line(color="red")
+      +ggtitle("Figure 4: Daily Corona active cases in Bahrain"))
+```
+The above figure shows the total active COVIDD-19 cases in Bahrain from 2020 to 2022. According to that the total number of active cases reported increased continuously.
+
+The confirmed, death and recovered COVID-19 cases in Bahrain can be shown in a one graph as below.
+```{r, message=FALSE, warning=TRUE, echo=FALSE}
+comparison.bahrain<- rbind(confirmed.bahrain, death.bahrain, recovery.bahrain)
+
+ggplot(comparison.bahrain, aes(x=date, y=cases, col=type)) + geom_path()+ ggtitle("Figure 5 : Comparison of daily corona cases in bahrain") + ylim(0,10000)
+```
+
+According to this plot there are less death cases comparatively confimed cases.
+
+### ** Neighbor Countries
+```{r, message=FALSE, warning=TRUE, echo=FALSE}
+
+iran.corona <- coronavirus %>% filter(country == "Iran")
+qatar.corona <- coronavirus %>% filter(country == "Qatar")
+saudiarabia.corona <- coronavirus %>% filter(country == "Saudi Arabia")
+```
+
+### **Comparison of daily corona cases in Bahrain with respect to neighbor countries**
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 8,fig.height =7}
+iran.confirmed <- filter(iran.corona, type == "confirmed")
+qatar.confirmed <- filter(qatar.corona, type == "confirmed")
+saudiarabia.confirmed <- filter(saudiarabia.corona, type == "confirmed")
+bahrain.confirmed <- filter(bahrain_Corona, type == "confirmed")
+
+Country.comparison.confirmed <- rbind(iran.confirmed, qatar.confirmed, saudiarabia.confirmed, bahrain.confirmed)
+
+ggplot(Country.comparison.confirmed , aes(x=date, y=cases, col=country)) + geom_line()+ ggtitle("Figure 6: Comparison of daily corona cases with respect to countries") + ylim(0,11000)
+```
+
+Figure shows that the confirmed cases of Bahrain was quite decreasing when compared to iran and soudi arabia. when comparing with Saudi Arabia the confirmed cases were high until the during 2021 Year. According to Qatar the number of cases were very low. It can be the population of country.
+
+### **Comparison of Recovered cases in Bahrain with respect to neighbor countries**
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+iran.Recovered <- filter(iran.corona, type == "recovery")
+qatar.Recovered <- filter(qatar.corona, type == "recovery")
+saudiarabia.Recovered <- filter(saudiarabia.corona, type == "recovery")
+bahrain.Recovered <- filter(bahrain_Corona, type == "recovery")
+
+Country.comparison.Recovered <- rbind(iran.Recovered, qatar.Recovered, saudiarabia.Recovered,bahrain.Recovered )
+
+ggplot(Country.comparison.Recovered , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 7 : Comparison of Recovered cases with respect to countries") + ylim(0,10000)
+```
+
+### **Comparison of Recovered cases in Bahrain with respect to neighbor countries**
+
+```{r echo=FALSE, warning=FALSE, message = FALSE, fig.width = 10,fig.height = 7}
+iran.death <- filter(iran.corona, type == "death")
+qatar.death <- filter(qatar.corona, type == "death")
+saudiarabia.death <- filter(saudiarabia.corona, type == "death")
+bahrain.death <-filter(bahrain_Corona, type == "death")
+
+Country.comparison.death <- rbind(iran.death, qatar.death, saudiarabia.death,bahrain.death )
+
+ggplot(Country.comparison.death , aes(x=date, y=cases, col=country)) + geom_jitter()+ ggtitle("Figure 8 : Comparison of death cases with respect to countries") + ylim(0,600)
+```
+
+
+### **Discussion and Conclusion**
+This report presented conclusions on COVID-19 outbreak of Bahrain using data from 2020 to 2021. According to figure 01 the number of daily COVID-19 cases were started to increase in the start of 2020. After that it was increased rapidly until the mid of 2021.Based on this data the maximum daily COVID-19 cases were reported in mid of 2021 and it was nearly 8000 cases. 
+Compared to other countries, the COVID-19 outbreak in Bahrain is not much worse than Saudi Arabia and Iran. It is quite similar to the outbreak in Qatar during the period. There are several limitations to keep in mind when interpreting the results of this study. Due to limited laboratory capacity, the actual epidemic may not be reflected by counts of laboratory confirmed cases reported. Sometimes, the government may be hide the actual counts of cases.Due to these reasons our findings can be change.There are different populations are in these countries.The most effected result can be taken by comaring the populations.
+
+### **Reference**
+https://en.wikipedia.org/wiki/Bahrain
+https://www.google.com/search?q=bahrain+climate&oq=baharain+%2B+clima&aqs=chrome.1.69i57j0i22i30l9.16516j0j4&sourceid=chrome&ie=UTF-8
+http://www.sthda.com/english/wiki/ggplot2-line-plot-quick-start-guide-r-software-and-data-visualization

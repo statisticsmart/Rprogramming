@@ -1,0 +1,325 @@
+---
+title: "Bangladesh"
+author: "AS2019395"
+date: "2022-10-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = NA, message = FALSE, warning = FALSE, paged.print=FALSE)
+```
+
+```{r,include=FALSE}
+
+library(dplyr)
+
+```
+```{r}
+```
+
+
+```{r,include=FALSE}
+library(coronavirus)
+```
+```{r,include=FALSE}
+Bangladesh_coronadata <- coronavirus %>% filter(country == "Bangladesh")
+```
+
+# **Abstract**
+The covid 19 pandemic, also known as the coronavirus pandemic, has become a global health crisis that has effected countries all over the world.COVID-19 affects different people in different ways. In this research, the pandemic in Bangladesh is examined and compared with neighboring nations and those considered to be of crucial importance in relation to COVID-19. According to the analysis's findings, Bangladesh has stabilized more quickly than the majority of other nations, having done so in such a short amount of time. The government's quick response to the beginning of the COVID 19 epidemic is the main cause of this.
+
+# **1. Introduction**
+The riverine country of Bangladesh (“Land of the Bengals”) is one of the most densely populated countries in the world, and its people are predominantly Muslim. As the eastern portion of the historical region of Bengal, the area once formed, along with what is now the Indian state of West Bengal, the province of Bengal in British India.
+
+It has been two and half years since that entire world started struggling with Covid 19. Even the powerful developed countries went through a pretty hectic time with their health and economy due to the rapid spread of the corona pandemic. Undoubtedly, it is clear that every regime of each country is doing their level best to mitigate the threat and move ahead. This analysis focuses on discussing the past and prevailing situation of pandemics and how the Bangladesh has managed to deal with it so far.
+
+\
+**Country** &nbsp;- Bangladesh\
+**Capital** &nbsp;- Dhaka\
+**Continent** &nbsp;- Asia\
+**Population** &nbsp;- 164.7 million people\
+**Offical Language** &nbsp;- Bengali\
+
+### **1.1 Location of Bangladesh**
+Bangladesh is bordered by the Indian states of West Bengal to the west and north, Assam to the north, Meghalaya to the north and northeast, and Tripura and Mizoram to the east. To the southeast, it shares a boundary with Myanmar (Burma). The southern part of Bangladesh opens into the Bay of Bengal.
+
+```{r,include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+data(wrld_simpl)
+
+```
+```{r}
+Bangladesh_coronadata <- coronavirus %>% filter(country == "Bangladesh")
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Bangladesh_coronadata, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+
+### **1.2 Climate Condition of Bangladesh**
+
+Bangladesh is located in the tropical Monsoon region and its climate is characterized by high temperature,heavy rainfall, often excessive humidty and fairly marked seasonal variations. In general, maximum temperatures in the summer months, from April to September, are in the low to mid-90s F (mid-30s C). April is the warmest month in most parts. January is the coolest month, with high temperatures averaging in the mid- to upper 70s F (mid-20s C).From the climate point of view, three distinct seasons can be recognized in Bangladesh. 
+   The cool dry season: from November through February
+   The pre monsoon hot season: from March through May
+   The rainy Monsoon season: from June through October
+ 
+
+
+### **1.3 Corona Virus Status of Bangladesh**
+ 
+  The first confirmed cases were recorded in Bangladesh on 8 March 2020 and the outbreak has since worsened with at least 283 people dead and nearly 19,000 infected, figures some experts say understate the true scale of the health crisis.
+The government enforced a nationwide lockdown since March 26 in an effort to check the spread of the disease.
+
+Despite the shutdown, the number of cases has risen sharply in recent days and the daily death toll and new infections hit a record.Bangladesh had successfully managed to tackle the first coronavirus infections in 2020.Bangladesh experienced critical time in the second wave of pandemic. Bangladesh being one of the most densely populated countries with huge working-age popuation. 
+
+
+### **1.4 Actions taken by the state regime**
+
+The spread of covid 19 has been an unprecedent challenge for Bangladesh as well as for the rest of the world and it has placed enormous strain on many health syatems, regardless of geography and income level. The goverment of Bangladesh has taken many significant measures to fight covid 19
+    1. The creation of national COVID-19 response committee
+    2. cancellation of all cerominies which gather people.
+    3. closure of all goverment and private offices
+    4. closure of all education institutions. and etc
+
+
+
+# 2. **Explotary Data Analysis**
+
+
+### **2.1 Analysis of Covid 19 Confirmed, Recovered and Death cases**
+
+
+### **2.1.1 Bangladesh Daily Confirmed Covid Cases**
+
+*According to the Plot 1 We can clearly see the rise caused by the first Covid wave by which Bangladesh was hit in the months of March 2020 to May 2020.Therefore, the confirmed cases had been increased. People have been asked to practice social distancing and stay at home.The period from December 2020 to the end of February 2021 shows the lowest rate of infections since the outbreak of the pandemic.
+
+*Then the next drastic rise can be seen in 2021 in the month of March. This was caused due to the second wave. According to the graph, Bangladesh reached its peak confirmed cases around July 2021.There is an alarming rise in cases confirmed community transmission of the Delta variant across several districts. 
+
+```{r,include=FALSE}
+confirmed_Bangladesh_coronadata <- Bangladesh_coronadata %>% filter(type=="confirmed")
+summary(confirmed_Bangladesh_coronadata)
+```
+```{r,include=FALSE}
+# code missing values to NA
+confirmed_Bangladesh_coronadata <- confirmed_Bangladesh_coronadata %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_Bangladesh_coronadata)
+which(is.na(confirmed_Bangladesh_coronadata$cases))
+```
+```{r}
+b<-ggplot(confirmed_Bangladesh_coronadata, aes(x=date, y=cases,color=date)) +
+  geom_jitter()+labs(x="year",y="confirmed cases",title="Plot of Confirmed COVID-19 Cases in Bangladesh-Plot 1")
+ggplotly(b)
+```
+
+### **2.1.2 Bangladesh Daily Recovered Covid Cases**
+
+Even When vaccination campaigns are continuously carried out, we can observe an increase in recovered cases. Bangladesh managed to record the highest number of recovered cases around the same month around July 2021 even though it reported a significant number of confirmed cases.it can be seen that there is a drastic increase in the recovered cases from may in year 2021.This can be the impact of coronavirus vaccines and the decrease in transmission rate of COVID-19 in the country. 
+
+
+```{r,include=FALSE}
+recovered_Bangladesh_coronadata <- Bangladesh_coronadata %>% filter(type=="recovery")
+summary(recovered_Bangladesh_coronadata)
+```
+
+```{r,include=FALSE}
+# code missing values to NA
+recovered_Bangladesh_coronadata <- recovered_Bangladesh_coronadata %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+which(is.na(recovered_Bangladesh_coronadata$cases))
+```
+```{r,include=FALSE}
+# I use the average of the 561th and the 562nd to calculate the missing value/negative value.
+recovered_Bangladesh_coronadata$cases[562] = mean(c(recovered_Bangladesh_coronadata$cases[561], recovered_Bangladesh_coronadata$cases[563]))
+length(recovered_Bangladesh_coronadata$cases)
+
+#  I add a column col that indicates desired colour.
+recovered_Bangladesh_coronadata$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+summary(recovered_Bangladesh_coronadata)
+```
+
+
+```{r}
+y<-ggplot(recovered_Bangladesh_coronadata, aes(x=date, y=cases,color=date)) +
+geom_jitter()+labs(x="year",y="recovered cases",title="Plot of Recovered COVID-19 Cases in Bangladesh-Plot 2")
+ggplotly(y)
+
+```
+
+
+### **2.1.3 Bangladesh Daily Covid Death Cases**
+
+It is obvious from this that when the country faced a new threat, it was difficult to manage it and find solutions because the problem was new. However, as they moved forward, they were able to effectively reduce the risk. Though the number of death cases rised,Bangladesh could manage to keep the death count pretty low.According to the  Plot 3, there is a rapid increase of death rate in the months of may 2020- june 2020, March 2021-April 2021 and the significant increase in the months of May 2021- August 2021.There is a remarkable increase around July 2021 due to the impact of Delta virus.
+
+```{r,include=FALSE}
+death_Bangladesh_coronadata <- Bangladesh_coronadata %>% filter(type=="death")
+summary(death_Bangladesh_coronadata)
+```
+
+```{r,include=FALSE}
+library(magrittr)
+death_Bangladesh_coronadata <- death_Bangladesh_coronadata %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_Bangladesh_coronadata)
+```
+
+
+```{r,include=FALSE}
+which(is.na(death_Bangladesh_coronadata$cases))
+```
+
+
+
+
+```{r}
+d<-ggplot(death_Bangladesh_coronadata, aes(x=date, y=cases ,color=date())) +
+  geom_line()+labs(x="year",y="death cases",title="Plot of COVID-19 Death Cases in Bangladesh- Plot 3 ")
+ggplotly(d)
+```
+
+## 2.2 Local Comparison
+
+When analyzing the coronavirus status of a country,One of the crusial point is the comparison between local cases.It is beneficial beacause the analysis shows how well the goverment was able to manage the situation and reduce the death rate.  
+
+### **2.2.1 Comparison between Confirmed, Recovery and Deaths**
+
+The graph (Plot 4) below shows the distribution of confirmed, recovery and death cases in Bangladesh.According to that recovery cases and confirmed cases are comparable. However, when compared to recovered and confirmed cases, the number of deaths is quite low.Which implies that Bangladesh goverment had been able to keep the lower death count throughout the period.
+
+```{r,include=FALSE}
+Bangladesh_coronadata <- coronavirus %>% filter(country == "Bangladesh")
+head(Bangladesh_coronadata)
+Bangladesh_coronadata <- Bangladesh_coronadata %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Bangladesh_coronadata)
+```
+```{r}
+t<-ggplot(Bangladesh_coronadata, aes(x=date, y=cases, col=type)) + geom_line()+labs(x="cases",y="date",title="Confirmed, Recovered and Death Cases-Plot 4")
+ggplotly(t)
+
+```
+
+## **2.3 Comparison with Neibouring countries**
+
+Bangladesh has several number of neibhouring contries. but out of these there are few main Asian countries. Therefore, this section elaborates the COVID-19 situation of Bangladesh when compared to its neighboring Asian countries; India, Pakistan and Nepal.
+
+### **2.3.1 Confirmed Cases**
+
+The figure below shows the total confirmed cases for each respective country. Bangladesh has a moderately low number of COVID cases when compared to India. In compared to Bangladesh, Nepal and Pakistan, India has a higher percentage of Confirmed cases.But when it is compared with other two countries (Nepal,Pakistan) it clearly shows that the confirmed cases are considerably similar.   
+
+```{r}
+countryselection<-coronavirus%>%filter(country==c("India","Nepal","Pakistan","Bangladesh"))
+countryselection_confirm<- countryselection%>%filter(type =="confirmed")
+which(is.na(countryselection_confirm$cases))
+x<-ggplot(countryselection_confirm,aes(date, cases ,color=country),is.na=FALSE)+geom_line()+labs(x="date",y="cases",title="Comparison of Confirmed cases-Plot 5")
+ggplotly(x)
+```
+
+
+
+
+### **2.3.2 Death Cases**
+
+A remarkable observation that can be obtained from this graph is that the number of deaths are much more higher in India when compared to other countries. whereas, Bangladesh, Nepal and Pakistan are considerabaly has a similar count of daeth cases. 
+
+
+```{r}
+countryselection<-coronavirus%>%filter(country==c("India","Nepal","Pakistan","Bangladesh"))
+countryselection_death<- countryselection%>%filter(type =="death")
+which(is.na(countryselection_death$cases))
+a<-ggplot(countryselection_death,aes(date, cases ,color=country),is.na=FALSE)+geom_line()+labs(x="date",y="cases",title="Comparison of Death Cases-Plot 6")
+ggplotly(a)
+```
+
+### **2.2.3 Recovery Cases**
+
+According to the Plot 7, it clearly shows that eventhough the india has the highest amount of death cases it also has the highest number of recovery cases as well. Bangladesh , Nepal and Pakistan has similar level of recovery cases. 
+
+
+```{r}
+countryselection<-coronavirus%>%filter(country==c("India","Nepal","Pakistan"))
+countryselection_recovery<- countryselection%>%filter(type =="recovery")
+```
+```{r}
+countryselection_recovery <- countryselection_recovery %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(countryselection_recovery$cases))
+```
+
+
+
+```{r}
+# I use the average of the 115th and the 117th to calculate the missing value/negative value.
+countryselection_recovery$cases[116] = mean(c(countryselection_recovery$cases[115], countryselection_recovery$cases[117]))
+length(countryselection_recovery$cases)
+```
+```{r}
+# I use the average of the 482nd and the 483nd to calculate the missing value/negative value.
+countryselection_recovery$cases[483] = mean(c(countryselection_recovery$cases[485], countryselection_recovery$cases[486]))
+length(countryselection_recovery$cases)
+```
+
+
+```{r}
+g<-ggplot(countryselection_recovery,aes(date, cases ,color=country),is.na=FALSE)+geom_line()+labs(x="date",y="cases",title="Comparison of Recovery Cases-Plot 7")
+ggplotly(g)
+```
+
+### **2.4 Active cases**
+
+Active cases are rapidly increasing over the time. therefore it is important for goverment to have a better control. 
+```{r}
+library(dplyr)
+library(coronavirus)
+library(ggplot2)
+
+Bangladesh <- coronavirus %>% filter(country =="Bangladesh")
+        Bangladesh_confirm <- Bangladesh %>% filter(type == "confirmed")
+        Bangladesh_death <- Bangladesh %>% filter(type == "death")
+      Bangladesh_recovery <- Bangladesh %>% filter(type == "recovery")
+      dfff <- data.frame(v1 =cumsum(Bangladesh_confirm$cases - (Bangladesh_death$cases + Bangladesh_recovery$cases)),date =Bangladesh$date)
+     
+      p <- ggplot(dfff, aes(x=date, y=v1)) +
+  geom_line() +
+  xlab("")
+p
+
+```
+
+
+# 3. **Discussion and Conclusions**
+
+It is clear from the actions taken by the Bangladeshi government that they were doing all possible to improve the situation. However, multiple disasters and poor choices made at a time when the corona virus was likely to stabilize caused an increase in the number of active cases. The risk has been drastically reduced because to the vaccination campaign. Looking through the statistics that are displayed after January 2021, it is obvious.
+
+In order to handle the vaccination program pretty efficiently all the health sector works were given prior to native citizens. Though the plotted statistics still indicates an increasing move of active cases, Government has been successfully able to reduce the amount of death cause by Covid 19. 
+Comparing to the other Asian countries selected in the analysis Bangladesh has  managed its daily-confirmed Covid cases rate. It might be because of the better actions taken by the goverment.Overall the Bangladesh government is having the situation under control.
+
+### **References**
+
+1. https://www.worldometers.info/coronavirus/country/bangladesh
+2. https://en.wikipedia.org/wiki/Bangladesh
+3. https://graphics.reuters.com/world-coronaviru-tracker-and-maps/countries-and-territories/bangladesh/
+4. https://www.aljazeera.com/news/2022/1/14/bangladesh-tightens-curbs-covid-cases-rise-dhaka-red-zone
+5. https://www.thedailystar.net/tags/coronavirus-bangladesh
+
+
+

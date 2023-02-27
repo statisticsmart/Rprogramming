@@ -1,0 +1,613 @@
+---
+title: "COVID-19 Pandemic in Indonesia"
+author: "Thimali Fernando AS2019352"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+# 1 Introduction
+
+## 1.1 Background
+
+Indonesia is the largest archipelago in the world. It consists of five major islands and about 30 smaller groups. The islands are located at a crossroads between two oceans, the Pacific and Indian Oceans, and straddles two continents, Asia and Australia/Oceania. Its strategic location in maritime Southeast Asia has always shaped the cultural, social, political and economic life of the country, which only gained independence from the Netherlands in 1949. The capital, Jakarta, is located near the northwestern coast of Java. In the early 21st century Indonesia was the most populous country in Southeast Asia and the fourth most populous in the world. Unity in Diversity, the national motto of Indonesia, is a term that strikes deep into the heart of this dynamic and attractive Southeast Asian nation. Few places offer such cultural variety and geographical complexity as Indonesia, and no two journeys there are ever alike.
+
+## 1.2 Location and Geography
+The country located off the coast of mainland Southeast Asia in the Indian and Pacific oceans. It is an archipelago that lies across the Equator and spans a distance equivalent to one-eighth of Earth’s circumference. Indonesia is composed of seventeen thousand islands that stretch over five thousand miles along the equator. The Malay peninsula and Indochina are situated to the north-west, and the continent of Australia lies due south. Northward lie the Philippines and Micronesia.
+The geographical location of Indonesia can be further understood through the following figure
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+data(coronavirus)
+indonesia_corona<-coronavirus%>%filter(country=="Indonesia")
+
+#country plot
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p<-ggplot()+geom_polygon(data = wrld_simpl,aes(x=long,y=lat,group=group),fill="grey",col="white")
+p+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))+
+  geom_point(
+    data = indonesia_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+
+
+```
+<br>
+The world's largest archipelago, Indonesia's constellation of islands straddles the divide between the Asian and Australian continental plates. As a result, the islands offer a stunning variety of topographies and ecologies Mist-shrouded volcanoes and mountains, unexplored rain forests, thousands of miles of beaches, and endless offshore reefs support a dazzling abundance of wildlife, making Indonesia an ideal destination for adventure and eco-travel. 
+The great majority of the country's constituent islands are of negligible size, but it does hold--wholly or in part--several islands that are enormous. These include Sumatra, Kalimantan (formerly Borneo, and shared with Malaysia), Sulawesi, and Java. The Indonesian state of Irian Jaya occupies the western half of New Guinea, which is the world's second largest island (behind Greenland). The most populous of the Indonesian islands by far is Java, home to the sprawling capital city of Jakarta. Other notable islands include the exotic, popular resort island of Bali, Lombok, Catholic Flores, and Komodo, home of dragons.
+
+
+
+
+
+## 1.3 Climate
+
+Indonesia's climate is largely hot and humid, with rainfall occurring mostly in low-lying areas and mountainous regions experiencing cooler temperatures. There are two discernible seasons in Indonesia: the dry season, which extends from June to October, and the rainy season, which lasts from November to March. Both are hot. The coastal regions, however, are often cool, and in the mountains the air is often chilly. 
+
+## 1.4 Economy
+
+Indonesia is the largest economy in Southeast Asia and one of the emerging market economies in the world. The country is in transition from an agricultural economy based on the export of raw materials and non-food crops to an economy based on industrial production and services. Indonesia is also a major exporter of crude petroleum, natural gas, and coal (coal briquettes and lignite). In 2019, Indonesia was the world's biggest exporter of Palm Oil.
+Tourism in Indonesia is an important part of the Indonesian economy (between 4-6% of the GDP) and a significant source of foreign exchange earnings for the country. Indonesia ranked 29th in the global tourism industry in 2019 (Before COVID-19 arrival) and ranked tenth in international tourist arrivals in the Asia-Pacific region.
+
+## 1.5 Spread of COVID-19 in Indonesia:
+From January until February 2020, Indonesia reported zero cases of COVID-19, despite being surrounded by infected countries such as Malaysia, Singapore, the Philippines, and Australia. Flights from countries with high infection rate, including South Korea and Thailand, also continued to operate. Health experts and researchers at Harvard University in the United States expressed their concerns, saying that Indonesia is ill-prepared for an outbreak and there could be undetected COVID-19 cases. 
+<br>
+
+ * **First confirmed case:**
+
+    On 2 March 2020, Indonesian president Joko Widodo announced the first cases in the country: a dance instructor and her     mother in Depok, West Java. Both of them had held a dance class at a restaurant in Kemang, South Jakarta on 14            February, which was attended by more than a dozen people. One of whom was a Japanese, who was later tested positive         for COVID-19 in Malaysia. As Malaysia reported the case, the government of Indonesia began to trace anyone who have         had close contact with the Japanese and the infected Indonesians.
+<br>
+
+ * **First Death case:**
+
+    The first confirmed death of COVID-19 in the country occurred on 11 March 2020 when a 53-year-old British citizen in Bali died. However, a Telkom employee who died on 3 March was found positive on 14 March
+
+By 9 April 2020, the pandemic had spread to all 34 provinces in the country at that time. Jakarta, West Java, and Central Java are the worst-hit provinces, together accounting more than half of the national total cases. On 13 July 2020, the recoveries exceeded active cases for the first time. 
+As of 5 October 2022, Indonesia has reported 6,439,292 cases, the second highest in Southeast Asia, behind Vietnam. With 158,165 deaths, Indonesia ranks second in Asia and ninth in the world. Review of data, however, indicated that the number of deaths may be much higher than what has been reported as those who died with acute COVID-19 symptoms but had not been confirmed or tested were not counted in the official death figure.
+
+Southeast Asia was among the first regions to be affected by the pandemic. Thailand, the Philippines, Singapore, Cambodia, Vietnam, and Malaysia reported the index cases in January 2020, while the rest were in March, including Indonesia.
+Southeast Asia faced its first wave in January 2021 by reporting more than 15,000 cases daily, mostly contributed by Indonesia. The second rise in infections began in early June amidst of the surge of the Delta variant, and peaked from July to August when the region averaged almost 100,000 cases and 3,000 deaths daily. All countries had its cases rising rapidly, leading to lockdowns and activities restrictions.The third wave hit Southeast Asia in February 2022 as it reported more than 200,000 cases daily due to the spread of the Omicron variant. However, the death number was four to six times lower than the previous peak. 
+From [Wikipidia](https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Southeast_Asia)
+
+As of 4 January 2022, and since the beginning of the pandemic, the Indonesian Government has announced
+4,263,732 confirmed cases of COVID-19 in all 34 provinces of Indonesia, with 4,658 active cases (including 254
+cases of the Omicron variant), 144,105 deaths, and 4,114,969 people that have recovered. The Government has
+also reported 4,257 suspected cases.
+From [Source](https://reliefweb.int/report/indonesia/situation-update-response-covid-19-indonesia-5-january-2022)
+
+## 1.6 Actions taken by the goventment
+
+* On 16th June 2020, Indonesia Government has increased the state budget for handling of COVID-19 and the National Economic Recovery (PEN in its Indonesia initial) Program through the announcement of the largest economic stimulus package of Rp695.20 trillion. At the same time, the Indonesia government has issued a government regulation and MoF regulations to regulate large-scale social restriction and the protocol for specific area/region isolation.
+* The Government of Indonesia has officially extended the emergency status due to the COVID-19 pandemic through Presidential Decree Number 24 of 2021, which was enacted on 31 December 2021. The Presidential Decree stipulates that the COVID-19 pandemic, which the WHO has declared a global pandemic, is still ongoing and has not ended in Indonesia. 
+* During the pandemic, the Government implements economic and financial policies, as well as special health and social measures and regulations. In order to manage, control, and/or prevent the COVID-19 pandemic and its impacts, particularly in the health, economic, and social sectors, the decree establishes that the Government may set up a policy through the establishment of a funding scheme between the Government and business entities that are engaged in financing health services and other schemes, in order to support citizens’ access to health services.
+
+* Indonesia has received more than 470 million doses of the COVID-19 vaccine both in bulk form and ready-to-use
+vaccines as of 2 January 2022.Indonesia has set out a target to vaccinate 208.3 million people, and has already administered the first dose to 68
+out of each of its 100 citizens (targeted population) as of 2 December 2021.
+
+* The National Commission for Post-Immunization Adverse Events (Komnas KIPI) has indicated that there were 363
+serious reports of Adverse Events Following Immunization (AEFI) in all provinces in Indonesia as of 30 November
+2021, but so far there have been no fatality cases due to COVID-19 vaccination
+<br>
+These are some of the measures that has been taken by the government on foreigners/Visitors
+
+* Suspended visa exemption policy for short-stay visit, visa-on-arrival and diplomatic/service visa-free for all countries for a period of 1 month
+* All foreigners who wish to visit Indonesia must obtain a visa from Indonesian missions in accordance with the purpose of their visit.
+* Upon submission, applicants must provide health certificate issued by relevant health authorities from their respective countries.
+* All visitors/travelers must complete and submit a Health Alert Card to the Port Health Authority upon arrival at Indonesian airports. 
+* The Government reserved the rights to refuse entry/transit to Indonesia for visitors/travelers who have travelled from countries of South Korea, China, Iran, Italy, Vatican, Spain, France, German, Switzerland and United Kingdom. 
+
+# 2 Explanatory Data Analysis
+
+## 2.1 Structure of the Data
+
+The analysis is done by using the The 2019 Novel Coronavirus COVID-19 (2019-nCoV) dataset which is availble in R studio as package.The source of this data set is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Corona virus)
+Following are the variables that are mainly used during the analysis and brief description of each variable is provided
+
+
+  *  date - Date in YYYY-MM-DD format
+  *  country - Name of country/region
+  *  province - Name of province/state, for countries where data is provided split across multiple provinces/states
+  *  lat - Latitude of center of geographic region defined by country/province
+  *  long - Longtitude of center of geographic region defined by country/province
+  *  type - Type of reported case – confirmed, death, recovered
+  *  cases - Number of cases on given date
+
+All records are available for the time period from 22 January 2020 to 23 June 2022
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+## 2.2 COVID-19 Statistics of Indonesia 
+
+
+The data presented in the summary table below are valid only up to the date June 23,2022. According to the below given data it can be seen that the year 2021 has been an awful year for Indonesia. The highest percentage of COVID-19 confirmed cases as well as death cases were reported in 2021. The disease has been under some control in year 2020 after confirmation of the first case(02 March,2021) until the high acceleration in 2021. Despite the fact that we are lack of data after Jun 23, 2022, a significantly small percentage of death cases can be identified in year 2022 compared to last two years. This can be due to the actions taken by the government to control the disease.Furthermore to illustrate more on the spread of COVID-19 in Indonesia over the years 2020,2021 and 2022 refer to section 2.2.5
+<br><br>
+*Table 2.2.1 :Summary table of Deaths,confirmed and recovered cases of  Indonesia in 2020,2021,2022* 
+
+|Year     |Confirmed     |Confirmed Percentage |Death     |Death Percentage|Recovered   |Recovered Percentage|
+|:--------| :------------|:------------------- |:---------|:---------------|:---------  |:-------------------|
+| 2020    | 743198       | 12.2                | 22138    | 14.13          | 611097     | 21.01              |
+| 2021    | 3519522      | 58.0                | 121956   | 77.82          | 2296823    | 78.99              |
+| 2022    | 1812105      | 29.82               | 12612    | 8.05           | 0          |  0.00               |
+| Total   | 6074825      | 100.0               | 156706   | 100.00         | 2907920    |100.00             |
+The percentages expressed in the above table are calculated with respect to the type of case (Confirmed/Deaths/Recovered)
+<br>To get a clearer idea on the behavior of daily cases, the analysis is done with reference to each type of case(Confirmed/Deaths/Recovered) over past three years.
+<br>
+
+### 2.2.1 Daily Confirmed cases
+
+The below figure illustrates how number of daily confirmed COVID-19 cases in Indonesia changed over the years. The regular fluctuations in the plot implies the instability of disease control in the country.Since the first confirmation of disease reported on March 6,2020, the number of confirmed cases slightly increase till November 3,2020. After that it shows a high upward trend and reach it's peak in mid of January 2021. Then again situation become better with a trend moving downward and bottomed on May 15,2020. Drastic fluctuations are appearing after this point.A steep rise can be seen from May 15,2020 to July 15,2020 marking it's highest number of confirmed cases so far and highest number of confirmed cases for year 2020. Subsequently a steep drop can be readily seen. From October 4,2021 to January 18,2022 number of confirmed cases remain roughly unchanged with around 1000 confirmed cases.Then again it indicates an upwards trend for following month and goes up once more in February 16 2022, more dramatically than previous increases. And this spike marks the highest confirmed cases(64.718k)within a day so far in Indonesia.(considering the data provided for this study)
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(plotly)
+data(coronavirus)
+indonesia_corona<-coronavirus%>%filter(country=="Indonesia")
+confirmed_indonesia_corona<-indonesia_corona%>%filter(type == "confirmed")
+fig_confirmed <- plot_ly(confirmed_indonesia_corona, x = ~date, y = ~cases, type = 'scatter', mode = 'lines',line=list(color="gold"))%>%
+                         layout(title = 'Indonesia: Daily Covid-19 confirmed cases', plot_bgcolor = "snow1")
+              
+fig_confirmed
+
+
+```
+### 2.2.2 Daily Recovered cases
+
+The below figure illustrates how number of daily recovered COVID-19 cases in Indonesia changed over the years. The plot shows a similar behavior to the plot with respect to confirmed cases.We have seen that confirmed cases increases from march 4,2020 to mid of January,2021 similarly we can observe an upward pattern in Recovered cases and it's important to note that decreases in recovery plot are influenced by the decreases of confirmed cases.
+
+
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+recovered_indonesia_corona<-indonesia_corona%>%filter(type == "recovery")
+recovered_indonesia_corona <- recovered_indonesia_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+fig_recovered <- plot_ly(recovered_indonesia_corona, x = ~date, y = ~cases,type = 'scatter', mode = 'lines',line = list(color ="green"))%>% 
+                   layout(title = 'Indonesia: Daily Covid-19 Recovered cases', plot_bgcolor = "snow1")
+fig_recovered
+
+```
+### 2.2.3 Daily Death cases
+
+The below figure illustrates how number of daily COVID-19 death cases in Indonesia changed over the years.The first death has been reported on March 11,2020.Since then there is a slight increase in death cases where as after July 4, 2021 it passes the margin of 500 deaths per day. A steep rise can be seen from June 2021 to July 2021 and reached its peak on July 27,2021. It marks the highest number of deaths(2096)within a day so far in Indonesia.(considering the data provided for this study)
+
+It's more important to compare these numbers along with all daily confirmed and recovered cases(section 2.2.4).
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+death_indonesia_corona<-indonesia_corona%>%filter(type=="death")
+fig_death <- plot_ly(death_indonesia_corona, x = ~date, y = ~cases, type = 'scatter', mode = 'lines',line = list(color ="red"))%>%
+                 layout(title = 'Indonesia: Daily Covid-19 Death cases', plot_bgcolor = "snow1")
+fig_death
+
+
+
+```
+
+
+
+### 2.2.4 Comparison of Daily Confirmed,Death and Recovered cases
+
+To visualize the spread of COVID-19 in Indonesia more explicitly, all three types of cases can be drawn in one plot as given below.It can be identified how the second peak of confirmed cases did not cost as much as it cost in first peak of confirmed cases with regards to deaths. The reason behind this can be actions taken by the government of Indonesia.
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+indonesia_corona <- indonesia_corona%>%group_by(type)%>%mutate(cum_cases = cumsum(cases))
+threeinone_indonesia <- rbind(death_indonesia_corona,confirmed_indonesia_corona,recovered_indonesia_corona) 
+
+#ggplot(threeinone_indonesia, aes(x = date, y = cases, fill = type)) + geom_area() +
+  #labs(title="Confirmed, Death and Recovered cases in Indonesia")
+table<-data.frame(confirmed_indonesia_corona$date,confirmed_indonesia_corona$cases,death_indonesia_corona$cases,recovered_indonesia_corona$cases)
+ggplot(table) +
+  geom_area(aes(x = confirmed_indonesia_corona.date, y = confirmed_indonesia_corona.cases),fill=7,alpha=0.85)+
+  geom_area(aes(x = confirmed_indonesia_corona.date, y = recovered_indonesia_corona.cases),fill=45,alpha=0.85)+
+  geom_area(aes(x = confirmed_indonesia_corona.date, y = death_indonesia_corona.cases),fill="red",alpha=0.85)+
+  labs(x="Date",y="Cases",title="Confirmed, Death and Recovered cases in Indonesia")
+
+```
+
+### 2.2.5 Breakdown of Daily Confirmed and Death cases through year 2020,2021,2022
+
+The following two figures illustrate that in year 2020 number of daily confirmed and death cases are significantly smaller than next two years. It can be readily apparent that the highest number of daily confirmed and daily death cases are from year 2021. And also it is visible the fact that the government has performed well in controlling the daily deaths in 2022 than it did in 2021 even though number of confirmed cases in 2022 February is higher than 2021 July.To elaborate this idea even better we can compare the shapes of each plot. If we compare shapes of area under each year it can be seen that in 2020 and 2021 shapes of daily death and confirmed plots look alike where as in 2022 shape of death is significantly different(small in size) from shape of confirmed cases.(note that scale in y axis is different in two figures. Hence it's a proportional comparison) This shows that some actions has been taken by the government to reduce the frequency of deaths in 2022 compared to previous years.
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Date<-indonesia_corona$date
+view(Date)
+Date <- as.POSIXct(Date, format = "%Y/%m/%d ")
+byYear<-format(Date, format="%Y")
+coronavirus<-cbind(coronavirus,byYear)
+indonesia_corona<-coronavirus%>%filter(country=="Indonesia")
+death_indonesia_corona<-indonesia_corona%>%filter(type=="death")
+confirmed_indonesia_corona<-indonesia_corona%>%filter(type == "confirmed")
+recovered_indonesia_corona<-indonesia_corona%>%filter(type == "recovery")
+recovered_indonesia_corona <- recovered_indonesia_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+#2020
+indonesia_corona_2020<-indonesia_corona%>%filter(byYear=="2020")
+ 
+#2021
+indonesia_corona_2021<-indonesia_corona%>%filter(byYear=="2021")
+ 
+#2022
+indonesia_corona_2022<-indonesia_corona%>%filter(byYear=="2022")
+
+library(ggplot2)
+
+#confirmed
+figYearConfirmed<-plot_ly(confirmed_indonesia_corona)
+ggplot(confirmed_indonesia_corona,
+       aes(
+         x=date,
+         y=cases,
+         
+       ))+
+  geom_area(fill="gold")+
+  facet_grid(byYear~.)+
+  labs(title="Confirmed cases in 2020,2021,2022")
+
+
+
+
+
+
+#deaths
+figYeardeath<-plot_ly(death_indonesia_corona)
+ggplot(death_indonesia_corona,
+       aes(
+         x=date,
+         y=cases,
+         
+       ))+
+  geom_area(fill="red")+
+  facet_grid(byYear~.)+
+  labs(title="Death cases in 2020,2021,2022")
+
+
+
+```
+
+## 2.3 COVID-19 Statistics of Indonesia with Neighboring Countries
+
+Indonesia is situated very close to Malaysia and Vietnam as it shares a land and maritime borders with Malaysia and  maritime borders with Vietnam. Therefore this section elaborates the COVID-19 situation of Indonesia when compared to its neighboring Asian countries; Malaysia and Vietnam.
+The geographical location of Indonesia(indicated in Purple) along with Malaysia(indicated in Orange) and Vietnam(indicated in Pink) can be further understood through the following figure.
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#wait
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+#malaysia
+malaysia_corona<-coronavirus%>%filter(country=="Malaysia")
+confirmed_malaysia_corona<-malaysia_corona%>%filter(type == "confirmed")
+confirmed_malaysia_corona <- confirmed_malaysia_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+death_malaysia_corona<-malaysia_corona%>%filter(type=="death")
+death_malaysia_corona <- death_malaysia_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+recovered_malaysia_corona<-malaysia_corona%>%filter(type == "recovery")
+recovered_malaysia_corona <- recovered_malaysia_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+
+
+#vietnam 
+
+vietnam_corona<-coronavirus%>%filter(country=="Vietnam")
+confirmed_vietnam_corona<-vietnam_corona%>%filter(type == "confirmed")
+confirmed_vietnam_corona <- confirmed_vietnam_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+death_vietnam_corona<-vietnam_corona%>%filter(type=="death")
+death_vietnam_corona <- death_vietnam_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+recovered_vietnam_corona<-vietnam_corona%>%filter(type == "recovery")
+recovered_vietnam_corona <- recovered_vietnam_corona %>% mutate(cases = replace(cases, which(cases < 0), 0))
+p<-ggplot()+geom_polygon(data = wrld_simpl,aes(x=long,y=lat,group=group),fill="grey",col="white")
+p+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))+
+  geom_point(
+    data = indonesia_corona, aes(x = long, y = lat), color = "purple", size
+    = 1
+  )+
+  geom_point(
+    data = malaysia_corona, aes(x = long, y = lat), color = "orange", size
+    = 1
+  )+
+  geom_point(
+    data = vietnam_corona, aes(x = long, y = lat), color = "#fa669d", size
+    = 1
+  )
+  
+
+```
+
+### 2.3.1 Comparison of total number deaths and confirmed cases in recent three years
+
+Southeast Asia was among the first regions to be affected by the pandemic. Thailand, the Philippines, Singapore, Cambodia, Vietnam, and Malaysia reported the index cases in January 2020, while the rest were in March, including Indonesia.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+
+confirmed_malaysia_corona_2020<-confirmed_malaysia_corona%>%filter(byYear=="2020")
+death_malaysia_corona_2020<-death_malaysia_corona%>%filter(byYear=="2020")
+
+confirmed_vietnam_corona_2020<-confirmed_vietnam_corona%>%filter(byYear=="2020")
+death_vietnam_corona_2020<-death_vietnam_corona%>%filter(byYear=="2020")
+
+confirmed_indonesia_corona_2020<-confirmed_indonesia_corona%>%filter(byYear=="2020")
+death_indonesia_corona_2020<-death_indonesia_corona%>%filter(byYear=="2020")
+
+
+data <- data.frame(deaths = c(sum(death_indonesia_corona_2020$cases),sum(death_malaysia_corona_2020$cases),sum(death_vietnam_corona_2020$cases)),
+                   confirmed = c(sum(confirmed_indonesia_corona_2020$cases),sum(confirmed_malaysia_corona_2020$cases),sum(confirmed_vietnam_corona_2020$cases)),
+                   country = c("Indonesia","Malaysia","vietnam"))
+figure <- plot_ly(data, x = ~country, y = ~deaths,type = 'bar', name = 'deaths')
+figure <- figure %>% add_trace(y = ~confirmed, name = 'confirmed')
+#figure <- figure %>% add_trace(y = ~recovered, name = 'recovered')
+figure <- figure %>% layout(yaxis = list(title = 'Total count'), barmode = 'stack')%>%
+  layout(title = 'comparison of deaths and confirmed cases with neighbors:2020')
+figure
+
+
+
+
+```
+<br><br>
+*Table 2.3.1.1 :2020 Summary table of Deaths and confirmed cases of  Indonesia, Malaysia, Vietnam* 
+
+
+|Country     |Confirmed     |Confirmed Percentage |Death     |Death Percentage|
+|:--------   | :------------|:------------------- |:---------|:---------------|
+| Indonesia  | 743198       | 86.65               | 22138    | 97.76          | 
+| Malaysia   | 113010       | 13.18               | 471      | 2.08           |            
+| Vietnam    | 1456         | 0.17                | 36       | 0.16           | 
+| Total      | 857664       | 100.0               | 22645    | 100.00         |
+The percentages expressed in the above table are calculated with respect to the type of case (Confirmed/Deaths)
+
+From the above graph and table it is evident that Indonesia reported the highest total number of confirmed cases in 2020, roughly 7 times that of reported in Malaysia. Total number of confirmed cases in Vietnam during 2020 is very small compared to other two countries.According to the above bar plot only Indonesia shows a significant total number of deaths in 2020, but from the given table it can be seen that Malaysia and Vietnam also has reported 471 and 36 deaths respectively in year 2020.
+<br><br>
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#confirmed and deaths of three countries in 2021
+confirmed_malaysia_corona_2021<-confirmed_malaysia_corona%>%filter(byYear=="2021")
+death_malaysia_corona_2021<-death_malaysia_corona%>%filter(byYear=="2021")
+
+confirmed_vietnam_corona_2021<-confirmed_vietnam_corona%>%filter(byYear=="2021")
+death_vietnam_corona_2021<-death_vietnam_corona%>%filter(byYear=="2021")
+
+confirmed_indonesia_corona_2021<-confirmed_indonesia_corona%>%filter(byYear=="2021")
+death_indonesia_corona_2021<-death_indonesia_corona%>%filter(byYear=="2021")
+
+
+data <- data.frame(deaths = c(sum(death_indonesia_corona_2021$cases),sum(death_malaysia_corona_2021$cases),sum(death_vietnam_corona_2021$cases)),
+                   confirmed = c(sum(confirmed_indonesia_corona_2021$cases),sum(confirmed_malaysia_corona_2021$cases),sum(confirmed_vietnam_corona_2021$cases)),
+                   type = c("Indonesia","Malaysia","vietnam"))
+figure <- plot_ly(data, x = ~type, y = ~deaths,type = 'bar', name = 'deaths')
+figure <- figure %>% add_trace(y = ~confirmed, name = 'confirmed')
+#figure <- figure %>% add_trace(y = ~recovered, name = 'recovered')
+figure <- figure %>% layout(yaxis = list(title = 'Total Count'), barmode = 'stack')%>%
+  layout(title = 'comparison of deaths and confirmed cases with neighbors:2021')
+figure
+
+```
+<br><br>
+*Table 2.3.1.2 :2021 Summary table of Deaths and confirmed cases of  Indonesia, Malaysia, Vietnam*
+
+
+|Country     |Confirmed     |Confirmed Percentage |Death     |Death Percentage|
+|:--------   | :------------|:------------------- |:---------|:---------------|
+| Indonesia  | 3519522      | 44.58               | 121956   | 65.80          | 
+| Malaysia   | 2645076      | 33.51               | 31016    | 16.74          |            
+| Vietnam    | 1729792      | 21.91               | 32359    | 17.46          | 
+| Total      | 7894390      | 100.0               | 185331   | 100.00         |
+The percentages expressed in the above table are calculated with respect to the type of case (Confirmed/Deaths)
+
+The above figures demonstrates the sudden increase in total number of confirmed cases and death cases in all three countries during the year 2021. Yet Indonesia leads with respect to both counts. Even though confirmed cases percentage in Indonesia is about 2 times that of in Vietnam, death percentage has been drastically increased in Indonesia compared to Vietnam (almost 4 times that of Vietnam). Apparently Malaysia has the least death percentage even though it has considerably large amount of confirmed cases.Therefore it is evident that Malaysia has some level of control in deaths compared to other two countries in year 2021.
+<br><br>
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#confirmed and deaths of three countries in 2022
+confirmed_malaysia_corona_2022<-confirmed_malaysia_corona%>%filter(byYear=="2022")
+death_malaysia_corona_2022<-death_malaysia_corona%>%filter(byYear=="2022")
+
+confirmed_vietnam_corona_2022<-confirmed_vietnam_corona%>%filter(byYear=="2022")
+death_vietnam_corona_2022<-death_vietnam_corona%>%filter(byYear=="2022")
+
+confirmed_indonesia_corona_2022<-confirmed_indonesia_corona%>%filter(byYear=="2022")
+death_indonesia_corona_2022<-death_indonesia_corona%>%filter(byYear=="2022")
+
+
+data <- data.frame(deaths = c(sum(death_indonesia_corona_2022$cases),sum(death_malaysia_corona_2022$cases),sum(death_vietnam_corona_2022$cases)),
+                   confirmed = c(sum(confirmed_indonesia_corona_2022$cases),sum(confirmed_malaysia_corona_2022$cases),sum(confirmed_vietnam_corona_2022$cases)),
+                   type = c("Indonesia","Malaysia","Vietnam"))
+figure <- plot_ly(data, x = ~type, y = ~deaths,type = 'bar', name = 'deaths')
+figure <- figure %>% add_trace(y = ~confirmed, name = 'confirmed')
+#figure <- figure %>% add_trace(y = ~recovered, name = 'recovered')
+figure <- figure %>% layout(yaxis = list(title = 'Total Count'), barmode = 'stack')%>%
+  layout(title = 'comparison of deaths and confirmed cases with neighbors:2022')
+figure
+
+```
+<br><br>
+*Table 2.3.1.3 :2022 Summary table of Deaths and confirmed cases of  Indonesia, Malaysia, Vietnam*
+
+
+|Country     |Confirmed     |Confirmed Percentage |Death     |Death Percentage|
+|:--------   | :------------|:------------------- |:---------|:---------------|
+| Indonesia  | 1812105      | 14.36               | 12612    | 45.46          | 
+| Malaysia   | 1791761      | 14.21               | 4255     | 15.34          |            
+| Vietnam    | 9009338      | 71.43               | 10874    | 39.20          | 
+| Total      | 12613204     | 100.0               | 27741    | 100.00         |
+The percentages expressed in the above table are calculated with respect to the type of case (Confirmed/Deaths)
+
+The above graph pictures a totally different story compared to earlier situations. Total number of confirmed cases in Indonesia and Malaysia looks approximately equal whereas the total number of confirmed cases in Vietnam has been drastically increased in 2022. It is roughly 6 times that of in 2021. It is also important to note that even with the largest amount of confirmed cases, Vietnam has managed to control it's death percentage than Indonesia. Also it can be seen that Indonesia and Malaysia has very similar number of confirmed cases in 2022, yet Indonesia's death percentage is about three times that of Malaysia. These figures elaborate that compared to other two neighboring countries that has been considered in this study Indonesia has got some drawbacks in controlling COVID-19 situation in country.
+
+
+<br>A better picture can be drawn about this situation by illustrating the behavior of deaths cases over the time. (section 2.3.2) 
+
+### 2.3.2 Comparison of Daily Death cases of Indonesia, Malaysia and Vietnam over recent three years
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+threeneighboursinone<-rbind(confirmed_indonesia_corona_2020,confirmed_malaysia_corona_2020,confirmed_vietnam_corona_2020)
+
+
+
+df<-data.frame(deathI2020=death_indonesia_corona_2020$cases,
+               deathM2020=death_malaysia_corona_2020$cases,
+               deathV2020=death_vietnam_corona_2020$cases,
+               time1=threeneighboursinone$date)
+figdeath<-plot_ly(data = df,x=~time1,y=~deathM2020,name = "Malaysia",type = "scatter",mode = "markers",marker=list(color ="orange",size=3.5))
+figdeath<-figdeath%>%add_trace(y=~deathI2020,name ="Indonesia",mode = 'markers',marker=list(color ="purple",size=3.5))
+figdeath<-figdeath%>%add_trace(y=~deathV2020,name ="Vietnam",mode = 'markers',marker=list(color ="#fa669d",size=3.5))%>%
+  layout(yaxis = list(title = 'Cases'),xaxis = list(title = 'Date'),title = 'Comparison of Indonesia, Malaysia and Vietnam Death cases in 2020')
+figdeath
+```
+
+By the comparison in deaths of the 3 countries, it can be seen that deaths were reported in Malaysia and Indonesia from mid of March,2020 and very few death cases were reported in Vietnam during 2020.The number of deaths of Indonesia accelerated very rapidly when compared to Malaysia and Vietnam which show relatively stable patterns.
+
+<br><br>
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+threeneighboursinone2021<-rbind(confirmed_indonesia_corona_2021,confirmed_malaysia_corona_2021,confirmed_vietnam_corona_2021)
+
+df<-data.frame(deathI2021=death_indonesia_corona_2021$cases,
+               deathM2021=death_malaysia_corona_2021$cases,
+               deathV2021=death_vietnam_corona_2021$cases,
+               time1=threeneighboursinone2021$date)
+figdeath<-plot_ly(data = df,x=~time1,y=~deathM2021,name = "Malaysia",type = "scatter",mode = "markers",marker=list(color ="orange",size=3.5))
+figdeath<-figdeath%>%add_trace(y=~deathI2021,name ="Indonesia",mode = 'markers',marker=list(color ="purple",size=3.5))
+figdeath<-figdeath%>%add_trace(y=~deathV2021,name ="Vietnam",mode = 'markers',marker=list(color ="#fa669d",size=3.5))%>%
+  layout(yaxis = list(title = 'Cases'),xaxis = list(title = 'Date'),title = 'Comparison of Indonesia, Malaysia and Vietnam Death cases in 2021')
+figdeath
+
+```
+From the above figure it is noticeable that Vietnam has not reported noticible number of death case up until mid-May 2021. Despite the fact that Indonesia has a drastic increase in mid of the year 2021, all three dotted lines shows the same shape in pattern which highlights the the third wave of COVID-19(15 April-30 June) in year 2021. It is clearly visible that this wave has affected Indonesia severely compared to other two countries. By the end of 2021 Vietnam has accelerated it's death cases with a sudden upward trend starting from end of October whereas Indonesia and Malaysia has become stable with less than 60 deaths per day during that time period.
+
+<br><br>
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+threeneighboursinone2022<-rbind(confirmed_indonesia_corona_2022,confirmed_malaysia_corona_2022,confirmed_vietnam_corona_2022)
+
+df<-data.frame(deathI2022=death_indonesia_corona_2022$cases,
+               deathM2022=death_malaysia_corona_2022$cases,
+               deathV2022=death_vietnam_corona_2022$cases,
+               time1=threeneighboursinone2022$date)
+figdeath<-plot_ly(data = df,x=~time1,y=~deathM2022,name = "Malaysia",type = "scatter",mode = "markers",marker=list(color ="orange",size=3.5))
+figdeath<-figdeath%>%add_trace(y=~deathI2022,name ="Indonesia",mode = 'markers',marker=list(color ="purple",size=3.5))
+figdeath<-figdeath%>%add_trace(y=~deathV2022,name ="Vietnam",mode = 'markers',marker=list(color ="#fa669d",size=3.5))%>%
+  layout(yaxis = list(title = 'Cases'),xaxis = list(title = 'Date'),title = 'Comparison of Indonesia, Malaysia and Vietnam Death cases in 2022')
+figdeath
+
+```
+
+
+It can be seen from the above figure that until first week of February 2022, Vietnam leads in number of death cases reported whilst the number of death cases in Malaysia and Indonesia began to stabilize from early 2022 to February 2022. After that the number of cases in Indonesia began to drastically increase while Vietnam shows a downward trend. Again by end of March all three countries stabilize their death cases up until June 23 2022.(data provided up to 23 July 2022)
+<br>
+
+# 3 Discussion
+
+Since December 2019 the corona virus has swept through all regions of  the world. COVID-19 has wreaked havoc everywhere and shows no signs of  entirely abating. This study focused on the dimensions of Indonesia against COVID-19.From January until February 2020, Indonesia reported zero cases of COVID-19, despite being surrounded by infected countries such as Malaysia, Singapore, the Philippines, and Australia. However first case was reported on 11th of march 2020 and since then there has been regular fluctuations in daily death and confirmed cases.The regular fluctuations over the time with regards to daily death cases and confirmed cases in Indonesia implies the instability of disease control in the country. Mainly there were two steep rises of theses cases in June 2021 and February 2022. And also it is visible the fact that the government has performed well in controlling the daily deaths in 2022 than it did in 2021 even though number of confirmed cases in 2022 February is higher than 2021 July.This implies that some actions has been taken by the government to reduce the frequency of deaths in 2022 compared to previous years. Even though currently Indonesia has been stabilized, it is not safe to say that sudden rises will never occur in future.
+<br>
+When comparing Indonesia with Malaysia and Vietnam it was found that Indonesia has got some drawbacks in controlling COVID-19 situation within the country compared to other two countries.One reason for this could be the population.The population of Indonesia(273.5 million) is considerably larger than Malaysia(32.37 million) and Vietnam(97.34 million).
+But  Compared to population density of Malaysia(102.74/km2) and Indonesia(143/km2) Vietnam has a huge population density(294.26/km2).However death controlling of Indonesia is in a poor state than that of other two countries.
+<br>
+Through the data analysis process it was recognized that there were negative values for cases of some countries. Therefore, the data was pre-processed before the actual analysis by coding the negative values as zero.Furthermore there is a lack of data on recovered cases for year 2022.This could be due to data have not yet been collected  or improper recording. This is the reason for some graphs to suddenly drops to zero by no time. (the line plot of recovered cases of Indonesia over time:section 2.2.2)
+
+
+
+# 4 Conclusions
+
+With regards to other countries as mentioned earlier, Indonesia has some drawbacks in controlling the daily number of deaths.The Indonesian government was not fully ready to face the COVID-19 pandemic in year 2020 and 2021.But it is safe to say that the government has learned from other countries in determining the correct strategy to deal with the surge in COVID-19 cases in  second wave
+spike which has been controlled quickly. However, the long-term effectiveness of the government’s public health strategies in completely mitigating the disease is yet to be seen.
+
+
+
+
+# 5 References
+* COVID-19 pandemic in Southeast Asia. 2022, Wikipedia, viewed on 3 October 2022,[https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Southeast_Asia]
+<br>
+* Indonesia. 2022,Wikipedia, viewed on 29 October 2022, [https://en.wikipedia.org/wiki/Indonesia]
+
+* Oliver W. Wolters,2022,Indonesia,Britannica,viewed on 1 October 2022,[https://www.britannica.com/place/Indonesia]
+
+* Indonesia government and Institution measures in response to covid,2020,KPMG International entities, viewed on 4 October 2022,[https://home.kpmg/xx/en/home/insights/2020/04/indonesia-government-and-institution-measures-in-response-to-covid.html]
+
+
+* Situation Update Response to COVID-19 in Indonesia as of 5 January 2022.2022,reliefweb, viewed on 4 October 2022,[https://reliefweb.int/report/indonesia/situation-update-response-covid-19-indonesia-5-january-2022]
+
+
+* The Government Of The Republic Of Indonesia’s Policy In Response To The Coronavirus (Covid-19).2020, Ministry of Foreign Affairs Republic of Indonesia.viewed on 4 october 2022,[https://kemlu.go.id/losangeles/en/news/5706/the-government-of-the-republic-of-indonesias-policy-in-response-to-the-coronavirus-covid-19]
+
+* The COVID-19 pandemic in the perspective of Indonesia's
+national security.2021,E3S Web of Conferences 331 viewed on October 5 2022,[https://www.e3s-conferences.org/articles/e3sconf/pdf/2021/107/e3sconf_icdmm2021_01006.pdf]
+
+* Indonesia: Coronavirus Pandemic Country Profile,2022,Our World in Data, viewed on October 6 2022, [https://ourworldindata.org/coronavirus/country/indonesia]
+
+* Number of coronavirus (COVID-19) cases worldwide as of October 5, 2022, by country or territory.2022, Statista, viewed on 6 october 2022 [https://www.statista.com/statistics/1043366/novel-coronavirus-2019ncov-cases-worldwide-by-country/]
+
+* Indonesia. 2020, World Health Organization, viewed 29 September 2022 [https://www.who.int/countries/idn] 
+
+* Southeast Asia Covid-19 Tracker.2022,Center for Strategic and International Studies, viewed on 30 September 2022,[https://www.csis.org/programs/southeast-asia-program/projects/past-projects/southeast-asia-covid-19-tracker]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

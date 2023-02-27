@@ -1,0 +1,160 @@
+---
+title: "COVID-19 Pandemic in Mauritius"
+author: "AS2019577"
+date: "10/7/2022"
+output: html_document
+---
+# 1. Introduction
+
+   Mauritius is a part of the Mascarene Islands in the Indian Ocean, located off the eastern coast of Africa. The capital of Mauritius is Port Louis.The population density in Mauritius is the highest of African countries and  the current population of Mauritius is 1,276,532 as of Friday, October 7, 2022, based on Worldometer elaboration of the latest United Nations data.Mauritius population is equivalent to 0.02% of the total world population.The birth rate remains well below the world average, while the death rate is similar to the world average. Life expectancy is about 70 years for men and more than 75 years for women is higher than the world average and it is well above the average for African countries. About two-fifths of the country’s population is younger than age 30.
+   
+   The climate is maritime subtropical, with fairly uniform temperature throughout the year. Mean temperatures vary from the mid-70s F (low to mid-20s C) at sea level to the upper 60s F (upper 10s C) on the high plateau. Two seasons are recognized: hot (December to April) and cool (June to September). Annual rainfall varies from around 35 inches (900 mm) on the west coast to 60 inches (1,525 mm) on the southeast coast and about 200 inches (5,080 mm) on the central plateau.
+
+
+# Location of Mauritius
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+data(coronavirus)
+mauritius_corona <- coronavirus %>% filter(country == "Mauritius")
+
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() + ggtitle("Mauritius: Location") +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = mauritius_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+  Mauritius lies about 500 miles (800 km) east of Madagascar in the Indian Ocean. Its outlying territories are Rodrigues Island, situated about 340 miles (550 km) eastward, the Cargados Carajos Shoals, 250 miles (400 km) northeastward, and the Agalega Islands, 580 miles (930 km) northward from the main island.
+
+  The State of Mauritius was hit by the COVID-19 pandemic in March 2020. Since the first three cases were confirmed, the Government of Mauritius took a series of bold measures to protect the population while formulating appropriate national development policies.
+  
+  A national confinement protocol was applied from 19 March to 15 June 2020 with the objective to protect citizens and slow the spread of the virus. The State of Mauritius has started its national vaccination campaign against COVID-19 since 26 January 2021 .
+
+
+
+
+# 2. Exploratory Data Analysis
+
+
+# Visualization of confirmed cases in Mauritius
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+confirmed_mauritius_corona <- mauritius_corona %>% filter(type=="confirmed")
+ggplot(confirmed_mauritius_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Mauritius: Daily Covid-19 Confirmed Cases ")
+
+```
+
+This graph shows the number of COVID-19 confirmed cases in Mauritius during  the year of 2020 to 2022.There were no a significant amount of confirmed cases in 2020 and early 2021.From the mid 2020, it is increasing.The maximum cases has been reported in early 2022. 
+
+# Visualization of death cases in Mauritius
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+death_mauritius_corona     <- mauritius_corona %>% filter(type=="death")
+ggplot(death_mauritius_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Mauritius: Daily Covid-19 Death Cases ")
+
+```
+
+The number of COVID-19 death by COVID-19 in Mauritius are shown by this figure.It is also increasing from 2021 to 2022.In the end of 2021, the maximum death cases has been reported.
+
+
+
+# Visualization of recovered cases in Mauritius
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+recovered_mauritius_corona <- mauritius_corona %>% filter(type=="recovery")
+ggplot(recovered_mauritius_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Mauritius: Daily Covid-19 Recovered Cases ")
+```
+
+This figure implies that number of recovered Cases form Corona Virus in Mauritius from 2020 to 2022.According to this figure the recovery cases has not been reported in 2022.But befor 2022, the recovery cases are increasing.
+
+
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+ggplot(mauritius_corona, aes(date, cases,color = type )) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Mauritius:Confirmed, Death and Recovered cases")
+
+```
+
+This shows that the confirmed cases is high ,the recovery cases is low.
+
+
+# The COVID-19 cases in Mauritius comparison with the neighbouring countries
+
+Mauritius is geographically close to Madagascar, Réunion, and the Seychelles. Mozambique and South Africa are the close counties to Mauritius.Therefore it can be compare the COVID-19 cases in Mauritius with those countries.
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+
+madagascar_corona<-coronavirus%>%filter(country=="Madagascar")
+southafrica_corona<-coronavirus%>%filter(country=="South Africa")
+mozambique_corona<-coronavirus%>%filter(country=="Mozambique")
+
+countries_corona<-as.data.frame(rbind(madagascar_corona,southafrica_corona,mozambique_corona,mauritius_corona))
+
+confirmed_countries_corona<-countries_corona%>%filter(type=="confirmed")
+ggplot(confirmed_countries_corona, aes(date, cases,col=country))+
+  geom_line()+ facet_wrap(~country,nrow = 4)+
+  ggtitle("Comparison  of covid-19 confirmed cases between the neighbooring countries")
+
+```
+
+This figure shows that the confirmed cases of South Africa, Mozambique, Madagascar and Miuritius from 2020 to 2022.When comparing with South Africa and Mozambique, confirmed corona cases is lower than in Mauritius.Lowest cases has been confirmed in Madagascar.
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+
+death_countries_corona<-countries_corona%>%filter(type=="death")
+ggplot(death_countries_corona, aes(date, cases,col=country))+
+  geom_line()+ facet_wrap(~country,nrow = 4)+
+  ggtitle("Comparison  of covid-19 death cases between the neighbooring countries")
+```
+
+This figure shows that the death cases of South Africa, Mozambique, Madagascar and Miuritius from 2020 to 2022.When comparing with South Africa, other three countries have lower amount of death cases. Lowest cases has been confirmed in Mozambique.
+
+```{r,echo=FALSE,message=FALSE ,warning=FALSE}
+recovery_countries_corona<-countries_corona%>%filter(type=="recovery")
+ggplot(recovery_countries_corona, aes(date, cases,col=country))+
+  geom_line()+ facet_wrap(~country,nrow = 4)+
+  ggtitle("Comparison  of covid-19 recovery cases between the neighbooring countries")
+```
+
+This figure shows that the recovery cases of South Africa, Mozambique, Madagascar and Miuritius from 2020 to 2022.There is no significant recovery cases in all these countries.
+
+# 3.Conclusion and Discussion
+
+The data about COVID-19 which has been used for the study was obtained by the Coronavirus data set in R.
+The filtered data set regarding COVID-19 pandemic in Mauritius has interprited using plots and figures.
+That date set has compared with neighboring countries of Mauritius.
+Unlike the other countries , the confirmed corona virus cases has been increased in 2022.
+But it has take a long time to begin spreading coronavirus in Mauritius.
+
+# 4.References
+
+* https://www.britannica.com/place/Mauritius
+* https://www.worldometers.info/world-population/mauritius-population
+* https://www.nationsonline.org/oneworld/map/google_map_mauritius

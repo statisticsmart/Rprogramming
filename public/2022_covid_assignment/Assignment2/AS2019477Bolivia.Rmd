@@ -1,0 +1,387 @@
+---
+title: "Covid 19 Pandemic in Bolivia"
+author: "Supun Peeligama"
+date: "2022-10-08"
+output: html_document
+---
+
+## **1 Introduction** 
+
+Bolivia officially the Plurinational state of Bolivia. Bolivia is the fifth largest country in South America and 27th largest in the world. The country’s population, estimated at 11 million, including Amerindians, Mestizos, Europeans, Asians and Africans. Spanish is the official language but Guarani, Aymara, and Quechua are also common among people in Bolivia. Bolivia is traditionally regarded as a highland country. Although only one-third of its territory lies in the Andes Mountains and most of the nation’s largest cities are located there. For the centuries the highlands have attracted the nation’s largest amount of mining, commercial, and business investments.  
+
+**1.1 Location** 
+
+Bolivia is a landlock country located in western-central South America. Extending some 1500 km north-south and 1300 km east-west. Bolivia is bordered to the north and east by Brazil, to the southeast by Paraguay, to the south by Argentina, to the southwest and west by Chile, and to the northwest by Peru.
+
+**1.2 Lockdown and Actions are taken by Government**
+
+Before the first case was detected in Bolivia, the government announced that an Emergency Operating Committee had been formed, including officials from the World Health Organization and different ministries and specialized health organizations. Measures implemented by the Pan American Health Organization included support for the implementation of detailed procedures in a guide to the surveillance of unusual respiratory incidents. The Ministry of Health set up free hotlines to inform people about symptoms and allow them to ask questions about the virus. On 10 March 2020, the Bolivian government identified two COVID-19 cases in Bolivians returning from Italy. On 12 March, Bolivia suspended all public school sessions until 31 March, as well as all commercial flights to and from Europe indefinitely.  On 17 March, President announced the following measures, to be in effect from March 19 to 31. The national government responded swiftly and sent the country into one of the world’s strictest lockdowns on 22 March 2020.
+
+1.	Closure of all borders.
+2.	Entry into Bolivia is allowed only for Bolivian nationals and residents, who must follow protocols stipulated by the Ministry of Health and the World Health Organization.
+3.	All international flights are suspended.
+4.	Interdepartmental and interprovincial land transport suspended. Only merchandise can be transported.
+
+However, low state capacity and low government legitimacy snarled up the national government’s response. Despite an initial centralized response to the pandemic, the national government devolved authority to the country’s decentralized subnational. 
+
+```{r , echo=FALSE,message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+
+bolivia<-data("coronavirus")
+bolivia <- filter(coronavirus, country %in% c("Bolivia"))
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = bolivia, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+## **2 Exploratory Data Analysis**
+
+The following graphs are given the summery of the Bolivian coronavirus data. The data are taken from 2020 January 22 to 2022 June 23. 
+
+
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(gganimate)
+
+#loading data frame and filter Bolivia data set
+
+data("coronavirus")
+boliviadata<- coronavirus %>% filter(country == "Bolivia")
+
+bolivia_cases <-select(boliviadata,date, cases,type)
+
+
+#adding vaalues to invalid case
+bolivia_cases <- bolivia_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+bolivia_cases$cases[2330] = mean(c(bolivia_cases$cases[2329], bolivia_cases$cases[2331]))
+new_bolivia_cases_filtered<-bolivia_cases %>%filter(type=="confirmed")
+sum(new_bolivia_cases_filtered[, 'cases'])
+
+new_bolivia_cases_filtered%>%
+  ggplot( aes(x=date, y=cases,colour="Red")) +
+  geom_line() +
+  geom_point() +
+  ggtitle("Monthly covid 19 Cases in Bolivia") +
+  ylab("Cases") +
+  transition_reveal(date)
+```
+Above figure shows that, confirmed covid 19 cases in Bolivia since 2020 to 2023. In the beginning there were small number of cases and by the time the number of confirmed cases are gradually increased until January 2022. In January 2022 number of confirmed cases were rapidly increased to more than 15,000 cases. After that rapid increasement those cases were rapidly decreases during the coming months. According to the above plot those number of increased cases in early 2022 were highly unexpected. It seems like new covid 19 variant that has highly infectious has been hit the Bolivia and that may cost a massive number of confirmed cases over a very short time.
+
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(lubridate)
+
+#loading data frame and filter Bolivia data set
+
+data("coronavirus")
+boliviadata<- coronavirus %>% filter(country == "Bolivia")
+boliviadata_type<-select(boliviadata,date,type,cases)
+
+#Adding values to invalid cases
+boliviadata_type <- boliviadata_type %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+boliviadata_type$cases[2330] = mean(c(boliviadata_type$cases[2329], boliviadata_type$cases[2331]))
+boliviadata_type_filter<-filter(boliviadata_type, type %in% c("recovery","death"))
+
+#converting data to month and year
+boliviadata_type_filter_mandy<-boliviadata_type_filter
+boliviadata_type_filter_mandy$Year<-floor_date(boliviadata_type_filter_mandy$date,"month")
+
+#total
+cvd1<-filter(boliviadata_type, type %in% c("recovery"))
+cvd2<-filter(boliviadata_type, type %in% c("death"))
+sum(cvd1[, 'cases'])
+sum(cvd2[, 'cases'])
+
+#Plotting
+ggplot(boliviadata_type_filter_mandy,aes(fill=type,x=Year,y=cases))+
+  geom_col(position='dodge')+ 
+  ggtitle("Monthly covid 19 Deaths and Recoveries in Bolivia")
+```
+
+Above figures shows that, death and recoveries in Bolivia since 2020 to 2023. As we can see there are more recovered cases than death cases. However there have been considerable death cases since middle of the 2020 early 2022. In the beginning of the 2022 there were massive increasement of the number of confirmed cases and it increases the number of death cases rather than during that time period. However, it seems like before the massive increasement of the confirmed cases there were more deaths rather than recoveries (end of the 2021 to early 2022). After September 2020 the highest deaths cases happened in the March 2022.    
+
+**2.1. Comparison with other countries**
+
+**2.1.1 Comparison in the Region**
+
+```{r, echo=FALSE, message=FALSE,error=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(dplyr)
+library(lubridate)
+library(gganimate)
+
+#loading data frame and filter Bolivia data set
+
+ccd<-filter(coronavirus, country %in% c("Bolivia","Colombia","Peru","Brazil","Chile","Argentina"))
+ccd<-filter(ccd, type %in% c("confirmed"))
+ccd<-select(ccd,date,type,cases,country)
+
+#Removing unvalid values
+ccd <- ccd %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+ccd$cases[1920] = mean(c(ccd$cases[1919], ccd$cases[1921]))
+ccd$cases[5269] = mean(c(ccd$cases[5268], ccd$cases[5270]))
+
+
+#converting data to month and year
+ccd$Month<-strftime(ccd$date,"%m")
+ccd$Year<-strftime(ccd$date,"%Y")
+
+
+#Plotting
+p<-ggplot(ccd,aes(cases, country)) +
+  geom_bar(stat="identity",fill="steelblue") +
+  ggtitle("Confirmed Covid 19 Cases in the Region")
+
+plot(p)
+```
+
+When comparing the results in the region, Brazil has the most confirmed while Argentina has the second most confirmed cases. However, Bolivia has the least number of confirmed cases in the region. In the south American region, Brazil is the most populated country, and Colombia and Argentina get second and third place respectively. Since Colombia has more population than Argentina, it had more confirmed cases than Colombia. However, Bolivia has the least number of confirmed cases compared to its neighbours.
+
+```{r, echo=FALSE, message=FALSE,error=FALSE,warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(dplyr)
+library(lubridate)
+library(gganimate)
+library(patchwork)
+
+#loading data frame and filter Bolivia data set
+
+ccd<-filter(coronavirus, country %in% c("Bolivia","Colombia","Peru","Brazil","Chile","Argentina"))
+ccd<-filter(ccd, type %in% c("death","recovery"))
+ccd<-select(ccd,date,type,cases,country)
+
+#Add valid values to unvalid values
+ccd <- ccd %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+ccd$cases[2619] = mean(c(ccd$cases[2618], ccd$cases[2620]))
+ccd$cases[2624] = mean(c(ccd$cases[2623], ccd$cases[2625]))
+ccd$cases[3278] = mean(c(ccd$cases[3277], ccd$cases[3279]))
+ccd$cases[4956] = mean(c(ccd$cases[4955], ccd$cases[4957]))
+ccd$cases[5028] = mean(c(ccd$cases[5027], ccd$cases[5026]))
+ccd$cases[5866] = mean(c(ccd$cases[5865], ccd$cases[5867]))
+ccd$cases[6750] = mean(c(ccd$cases[6749], ccd$cases[6751]))
+ccd$cases[7634] = mean(c(ccd$cases[7633], ccd$cases[7634]))
+ccd$cases[8518] = mean(c(ccd$cases[8517], ccd$cases[8519]))
+ccd$cases[9134] = mean(c(ccd$cases[9133], ccd$cases[9135]))
+ccd$cases[9402] = mean(c(ccd$cases[9401], ccd$cases[9403]))
+ccd$cases[9876] = mean(c(ccd$cases[9875], ccd$cases[9877]))
+ccd$cases[9880] = mean(c(ccd$cases[9879], ccd$cases[9881]))
+ccd$cases[10133] = mean(c(ccd$cases[10132], ccd$cases[10134]))
+ccd$cases[10286] = mean(c(ccd$cases[10285], ccd$cases[10287]))
+
+#converting data to month and year
+ccd$Month<-strftime(ccd$date,"%m")
+ccd$Year<-strftime(ccd$date,"%Y")
+
+ccd1<-filter(ccd, type %in% c("death"))
+ccd2<-filter(ccd, type %in% c("recovery"))
+
+
+#Plotting
+p1<-ggplot(ccd1, aes(x = cases, y = country, fill = "red")) +
+  geom_bar(stat="identity",fill="steelblue") +
+  ggtitle("Deaths")
+
+p2<-ggplot(ccd2, aes(x = cases, y = country)) +
+  geom_bar(stat="identity",fill="light blue") +
+  ggtitle("Recoveries")
+
+p1+p2
+```
+
+According to the above figures, Brazil had the greatest number of deaths and recoveries while Bolivia has the least number of deaths and recoveries compared to the regional countries. Peru has significant deaths compared to other populated countries, which are Colombia and Argentina.
+
+**2.1.2 Comparison with the US, Australia, Sri Lanka and Japan**
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(dplyr)
+library(lubridate)
+library(gganimate)
+
+#loading data frame and filter Bolivia data set
+
+ccd<-filter(coronavirus, country %in% c("Bolivia","US","Australia","Japan","Sri Lanka"))
+ccd<-filter(ccd, type %in% c("confirmed"))
+ccd<-select(ccd,date,type,cases,country)
+
+#Add valid values to unvalid values
+ccd <- ccd %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+x<-which(is.na(ccd$cases))
+
+for (i in x)
+{
+  ccd$cases[i] = mean(c(ccd$cases[i-1], ccd$cases[i+1]))
+  }
+
+#converting data to month and year
+ccd$Month<-strftime(ccd$date,"%m")
+ccd$Year<-strftime(ccd$date,"%Y")
+
+
+
+#Plotting
+ggplot(ccd, aes(x = date, y = cases, colour=country)) +
+  geom_line() +
+  geom_point()+
+  ggtitle("Covid 19 Confirmed Cases by country")+
+  transition_reveal(date)
+```
+
+Since 2020 USA had the greatest number of confirmed cases compared to the other countries. However, in early 2021 it increased by more than 250,000 cases per day. In early 2022 confirmed cases increased 2 times more than that increased in early 2021. However, all the other countries had the almost same cases until early 2022. In early 2022 Japan had more cases than the other 3 countries (Sri Lanka, Bolivia, and Australia). Also, other countries had more cases than in previous months. The reason for this sudden difference must be the Strick of the new covid 19 variant.
+
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+library(dplyr)
+library(lubridate)
+library(gganimate)
+
+#loading data frame and filter Bolivia data set
+
+ccd<-filter(coronavirus, country %in% c("Bolivia","US","Australia","Japan","Sri Lanka"))
+ccd<-filter(ccd, type %in% c("death"))
+ccd<-select(ccd,date,type,cases,country)
+
+#Add valid values to unvalid values
+ccd <- ccd %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+x<-which(is.na(ccd$cases))
+
+for (i in x)
+{
+  ccd$cases[i] = mean(c(ccd$cases[i-1], ccd$cases[i+1]))
+  }
+
+#converting data to month and year
+ccd$Month<-strftime(ccd$date,"%m")
+ccd$Year<-strftime(ccd$date,"%Y")
+
+#Plotting
+ggplot(ccd, aes(x = date, y = cases, colour=country)) +
+  geom_line() +
+  geom_point()+
+  ggtitle("Covid 19 Deaths by country")+
+  transition_reveal(date)
+```
+
+When comparing the number of Death cases in the 5 countries, it can be seen that most of the death cases were reported in the USA from early 2020 to 2022 compared to other countries. At the beginning of 2021 and the beginning of 2022 number of death cases per day has increased by over 4000 cases per day. However, compared to USA other countries didn’t pass the 1000 death cases per day during the time period.
+
+## **3 Discussion**
+
+Countries that use for this Analysis.
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(coronavirus)
+
+bolivia<-data("coronavirus")
+bolivia <- filter(coronavirus, country %in% c("Bolivia","Brazil","Peru","Colombia","Chlie","Argentina","US","Australia","Srilanka","Japan"))
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = bolivia, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+The dataset is loaded by the given dataset in the R package which is a coronavirus. The dataset is downloaded using R Studios. Then Bolivia dataset is obtained by using the coronavirus dataset. In the beginning, there were some invalid values that do not relate to this analysis. Then those values have been removed and entered values using the mean of the before and after values. Then for some plotting, some unwanted columns and unwanted types were removed using the R studios. When considering all cases in the country in detail, some countries had way more cases than some countries. Then it was a little difficult to visualize the data in the same plot. According to those analyses, USA has the more confirmed cases, recovered cases, and death cases than other compared countries. It was important to analyse data from neighbouring countries because it will give a really good idea about that region. Therefore, in this analysis Bolivian data is compared with the neighbouring countries and some countries around the world.   
+
+## **4 Conclusion**
+
+Coronavirus disease (COVID-19) is a contagious disease caused by a virus, the severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first known case was identified in Wuhan, China, in December 2019. The disease quickly spread worldwide, resulting in the COVID-19 pandemic. It has been a major threat to the world. A lot of countries have suffered a lot from the coronavirus. They lost a massive number of their people. Some countries had to face economical collapses. Considering Bolivia nearly has had 1million cases and it is 8.5% of the country’s population. Bolivia has 21,000 deaths during this time period Which is a 2.3% of active cases. Also, Bolivia is the only country that had the least number of confirmed cases and death considering its neighbouring countries. According to the analysis, the Bolivian government has controlled the coronavirus successfully rather to other countries in the region. However, the long-term effectiveness of the government’s public health strategies in completely mitigating the disease is yet to be seen.
+
+## **5 References**
+
+•	Bolivia - Britanica  - https://www.britannica.com/place/Bolivia - Estado Plurinacional de Bolivia, Plurinational State of Bolivia, República de Bolivia, Republic of Bolivia By Peter J. McFarren
+
+•	Bolivia - Wikipedia- https://en.wikipedia.org/wiki/Bolivia
+
+•	Wordometer - https://www.worldometers.info/population/countries-in-south-america-by-population/
+
+•	Reliefweb - https://reliefweb.int/report/bolivia-plurinational-state/governance-and-covid-19-bolivia
+
+•	Covid-19 Pandemic in Bolivia - https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Bolivia

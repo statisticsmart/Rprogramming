@@ -1,0 +1,208 @@
+---
+title: "Paraguay Coronavirus - K.L.B Piyathilaka"
+output: html_document
+date: "2022-10-08"
+---
+
+## **1. Background**
+
+### **1.1 Introduction**
+Paraguay, officially the Republic of Paraguay is a landlocked country in South America. It is bordered by Argentina to the south and southwest, Brazil to the east and northeast, and Bolivia to the northwest. It has a population of 7 million, nearly 3 million of whom live in the capital and largest city of Asunción, and its surrounding metro. Although one of only two landlocked countries in South America (Bolivia is the other), Paraguay has ports on the Paraguay and Paraná rivers that give exit to the Atlantic Ocean, through the Paraná-Paraguay Waterway.Spanish conquistadores arrived in 1524, and in 1537, they established the city of Asunción, the first capital of the Governorate of the Río de la Plata.During the 17th century, Paraguay was the center of Jesuit missions, where the native Guaraní people were converted to Christianity and introduced to European culture.After the expulsion of the Jesuits from Spanish territories in 1767,Paraguay is a developing country.It is a founding member of Mercosur, the United Nations, the Organization of American States, the Non-Aligned Movement and the Lima Group. Additionally, the city of Luque, in metropolitan Asuncion, is the seat of the South American Football Confederation.The majority of Paraguay's seven million people are mestizo, and Guarani culture remains widely influential; more than 90% of the population speak various dialects of the Guarani language alongside Spanish. Despite a history of poverty and political repression, in a 2017 Positive Experience Index based on global polling data, Paraguay ranked as the "world's happiest place"
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(lubridate)
+data(coronavirus)
+```
+
+### **1.2 Geographical Location of Paraguay**
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(maps)
+library(maptools)
+mapdata <- map_data("world")
+zam_map <- filter(mapdata,region=="Paraguay")
+data("wrld_simpl")
+
+p0 <- ggplot() +
+  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="forest green", colour="black") +
+  ggtitle("Paraguay on the World Map") 
+p0 + geom_point(data = zam_map,aes(x=long,y=lat), fill="black", colour="red")
+```
+
+### **1.3 Climate condition**
+
+The climate of Paraguay consists of a subtropical climate in the Paranaense region and a tropical climate in the Chaco. The Paranaense region has a humid climate, with abundant rainfall throughout the year and only moderate seasonal changes in temperature.The seasons in Paraguay are opposite to those in the northern hemisphere, meaning northern summer is Paraguayan winter, and vice versa.During summer, the dominant influence on the climate is the warm sirocco winds blowing out of the northeast.During the winter, the dominant wind is the cold pampero from the South Atlantic, which blows across Argentina and is deflected northeastward by the Andes in the southern part of that country. Because of the lack of topographic barriers within Paraguay, these opposite prevailing winds bring about abrupt and irregular changes in the usually moderate weather. Winds are generally brisk. Velocities of 160 kilometres per hour (99 mph) have been reported in southern locations, and the town of Encarnación was once leveled by a tornado
+
+### **1.3 Lock-down status of paraguay**
+
+The COVID-19 pandemic in Paraguay is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have reached Paraguay on March 7, 2020, in a 32-year-old man from Guayaquil, Ecuador, living in San Lorenzo, Central Department. Three days later, on March 10, 2020, a second case was confirmed in a 61-year-old man who traveled from Argentina; the same day three more cases were confirmed. Due to this spike, the government began imposing the first measures to stop the disease from spreading.
+
+On March 10, 2020, the Paraguayan government suspended classes and all activities that involved groups of people, as well as public and private events, with the goal of avoiding the spread of the virus, pursuant to Decree no. 3442/2020.[4] Other preventive measures were adopted, such as commerce and movement restrictions, suspension of flights, border closures, curfews, and strengthening controls to ensure compliance with the measure
+
+# 2. Exploratory Data Analysis
+
+In the data set that we used,there are four qualitative variable and three quantitative variables as follows and There were same errors in given data set so we have to filter these errors in order to use data set as I found some case values have been entered as minus value.case value must be positive using R coding and statistics knowledge data set have been filtered and considering not-error data set for all plots have been plot
+Qualitative data
+        date - The date of the summary
+        province - The province or state, when applicable
+        country - The country or region name
+        type - The type of case (confirmed, death, recovered)
+        
+Quantitative data
+        lat - Latitude point
+        long - Longitude point
+        cases - The number of daily cases (corresponding to the case type)
+        
+## Data filtering and error clearing
+
+```{r include=FALSE,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 0"}
+# Data filtering and error clearing 
+paraguay_cleared <- coronavirus %>% filter(country == "Paraguay")
+
+paraguay_confirmed_corona <- paraguay_cleared %>% filter(type == "confirmed")
+paraguay_confirmed_corona <- paraguay_confirmed_corona %>% filter(type == "confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(paraguay_confirmed_corona$cases))
+
+paraguay_death_corona <- paraguay_cleared %>% filter(type == "death")
+paraguay_death_corona <- paraguay_death_corona %>% filter(type == "death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(paraguay_death_corona$cases))
+
+paraguay_recovered_corona <- paraguay_cleared %>% filter(type =="recovery")
+paraguay_recovered_corona <- paraguay_recovered_corona %>% filter(type =="recovery")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(paraguay_recovered_corona$cases))
+which(is.na(paraguay_cleared$cases))
+
+paraguay_recovered_corona$cases[562] = mean(c(paraguay_recovered_corona$cases[561], paraguay_recovered_corona$cases[560]))
+length(paraguay_recovered_corona$cases)
+paraguay_recovered_corona$col <- as.factor(c(rep("black", 561),rep("red", 2), rep("black", 884-563)))
+ggplot(paraguay_recovered_corona, aes(x=date, y=cases)) + geom_line(aes(colour=col, group=1)) + scale_colour_identity()
+summary(paraguay_cleared)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Total No. of confirm cases
+paraguay_confirmed_corona1 <- select(paraguay_confirmed_corona, cases)
+total_confirmed_cases <- sum(paraguay_confirmed_corona1)
+# Total No. of death cases
+paraguay_death_corona1 <- select(paraguay_death_corona, cases)
+total_death_cases <- sum(paraguay_death_corona1)
+# Total No. of recovered cases
+paraguay_recovered_corona1 <- select(paraguay_recovered_corona, cases)
+total_recovered_cases <- sum(paraguay_recovered_corona1)
+ 
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 1"}
+confirmed_paraguay <-paraguay_cleared %>% filter(type=="confirmed")
+p1 <- ggplot(confirmed_paraguay,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 confirmed cases per day:paraguay")+labs(x='date',y='Number of cases')
+ggplotly(p1)
+```
+Illustrates the confirmed cases that was reported in paraguay per each day. According to that graph COVID-19 have been controlled nicely until the end of 2020 by paraguay. But during the first half of the year 2021 cases have been significant growth in confirmed cases and finally from the beginning of 2022 it goes very high have hit the peak from after that there is a significant growth in confirmed cases
+
+```{r  echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 2"}
+p2 <- ggplot(confirmed_paraguay,aes(x=date,y=cumsum(cases)), is.na=FALSE)+geom_line()+ggtitle("Covid19 cumulatative sum of confirmed cases per day:paraguay")
+ggplotly(p2)
+```
+Above graph is a cumulative cases graph and according to that we can say that the rate of confirm cases is increasing during the time from  second half of 2020 to first half of 2021 and the highest ratio have been recorded within first few month of 2022
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 3"}
+death_paraguay <-paraguay_cleared %>% filter(type=="death")
+p3 <- ggplot(death_paraguay,aes(date,cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 death cases per day:paraguay")+labs(x='date',y='Number of cases')
+ggplotly(p3)
+```
+The graph is showing that  the death cases in paraguay with the time according to that we can see that death cases have been increased significantly  during the 2020 last and 2021 first ,most death cases have happened during this time interval  few months after number of death is decreased but still even 2022 number of death cases have been recorded are pretty high.
+
+```{r  ,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 4"}
+p4 <- ggplot(death_paraguay,aes(x=date,y=cumsum(cases)), is.na=FALSE)+geom_line()+ggtitle("Covid19 cumulatative sum of death cases per day:paraguay")
+ggplotly(p4)
+```
+Above graph is a cumulative death cases graph and according to that we can say that the rate of death cases is increasing during the time from  second half of 2020 to first half of 2021 and the highest ratio have been recorded within middle of the 2021 year.
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 5"}
+paraguay_recovered_corona <-paraguay_recovered_corona %>% filter(type=="recovery")
+p5 <- ggplot(paraguay_recovered_corona,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 recovered cases per day:paraguay")+labs(x='date',y='Number of cases')
+ggplotly(p5)
+```
+The graph is showing that  the recovered  cases in paraguay with the time according to that we can see that recovery  cases have been increased significantly  during the 2020 and half of 2021 ,most recovery  cases have happened during middle of 2021 few months after number of recovery cases  is decreased and became to zero.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 6"}
+p6 <- ggplot(paraguay_recovered_corona,aes(x=date,y=cumsum(cases)), is.na=FALSE)+geom_line()+ggtitle("Covid19 cumulatative sum of recovered cases per day:paraguay")
+ggplotly(p6)
+```
+Above graph is a cumulative recovery  cases graph and according to that we can say that the rate of recovery  cases is increasing during the time from  second harf of 2020 to first half of 2021.
+
+```{r include=FALSE,echo=TRUE, message=FALSE, warning=FALSE}
+## Active Cases
+df <- data.frame(paraguay_confirmed_corona$date, cumsum(paraguay_confirmed_corona$cases),cumsum(paraguay_recovered_corona$cases),cumsum(paraguay_death_corona$cases))
+df$active <- (paraguay_confirmed_corona$cases)-(paraguay_recovered_corona$cases)-(paraguay_death_corona$cases)
+df$activecumulative <- cumsum(paraguay_confirmed_corona$cases)-cumsum(paraguay_recovered_corona$cases)-cumsum(paraguay_death_corona$cases)
+active_paraguay <- df
+sum((active_paraguay$active))
+```
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 8"}
+p7 <- ggplot(active_paraguay,aes(x=paraguay_confirmed_corona.date,y=activecumulative), is.na=FALSE)+geom_line()+ggtitle("Covid19 cumulatative sum of active cases per day:paraguay")
+ggplotly(p7)
+```
+The graph is showing that  the active  cases in paraguay with the time according to that we can see that active   cases have been increased but not that ratio. Active cases have been increased immediately  during 2022 first few months
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+South_America_cleared <- coronavirus %>% filter(continent_code == "SA",cases>=0)
+countryselection<-South_America_cleared %>%filter(country==c("Argentina","Bolivia","Chile","Colombia","Peru","Venezuela", "Paraguay","Uruguay"))
+```
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 9"}
+confirmed_countryselection <- countryselection %>% filter(type=="confirmed")
+p8 <-ggplot(confirmed_countryselection,aes(x=country,y=cases,fill=country), is.na=FALSE)+geom_col()+ggtitle(" counteis with confirmed cases")+facet_grid(type~.) + ylim(0,500000)
+ggplotly(p8)
+```
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,fig.cap="Figure 10"}
+death_countryselection <- countryselection %>% filter(type=="death")
+p9 <-ggplot(death_countryselection,aes(x=country,y=cases,fill=country), is.na=FALSE)+geom_col()+ggtitle(" counteis with death cases")+facet_grid(type~.) + ylim(0,30000)
+ggplotly(p9)
+```
+ 
+
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE}
+recovery_countryselection <- countryselection %>% filter(type=="recovery")
+p10 <-ggplot(recovery_countryselection,aes(x=country,y=cases,fill=country), is.na=FALSE)+geom_col()+ggtitle(" counteis with recover cases")+facet_grid(type~.) + ylim(0,30000)
+ggplotly(p10)
+```
+When we consider  covid 19 in paraguay with other countries around, paraguay confirmed cases are very low and aragentina,chile,colombia and peru have highest number of cases .for death cases peru has  highest number of cases paraguay cases are low with most country confirm result are pretty equal so we can say paraguay have faced very well to covid 19 and result are pretty good than most of other country.
+
+```{r ,echo=FALSE, message=FALSE, warning=FALSE,}
+monthly_paraguay_cleared<-paraguay_cleared
+monthly_paraguay_cleared$Year_Month<-floor_date(monthly_paraguay_cleared$date,"month")
+monthly_updated_paraguay_cleared<-monthly_paraguay_cleared %>%group_by(Year_Month) %>%
+dplyr::summarize(cases=sum(cases),type) %>% as.data.frame()
+summary(monthly_paraguay_cleared)
+```
+This kind of data set help to analysis further about data set
+
+
+## 4. Conclusions
+paraguay is currently in a difficult situation. Confirmed cases have been increased in last months. paraguay faced such difficult situation at the end of 2020 and at the start of 2021. Somehow they have controlled that situation and they have managed to decrease the confirmed cases. But once again confirmed cases are increasing. The government of paraguay has been able to apply many successful public health response strategies and stabilize the progress of the disease. Once again those strategies should be restablish in order to minimize the impact of COVID-19 virus. When comparing death percentage in paraguay it has the lowest among the selected countries. This implies that paraguay health sector have done a great job to minimize the number of deaths happened due to COVID-19 pandemic.
+
+## 5. References
+ 
+ https://en.wikipedia.org/wiki/Climate_of_Paraguay#text=The%20climate%20of%20Paraguay%20consists,moderate%20seasonal%20changes%20in%20temperature.
+ 
+
+https://www.britannica.com/place/Paraguay
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7414737/
+
+https://newbedev.com/how-to-right-align-and-justify-align-in-markdown
+
+https://www.bag.admin.ch/bag/en/home/krankheiten/ausbrueche-epidemien-pandemien/aktuelle-ausbrueche-epidemien/novel-cov/massnahmen-des-bundes.html
+
+https://newbedev.com/r-how-to-center-output-in-r-markdown
+
+#### ***THE END***

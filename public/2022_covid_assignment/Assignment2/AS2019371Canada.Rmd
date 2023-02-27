@@ -1,0 +1,345 @@
+---
+title: <center>Covid-19 Analysis in Canada</center>
+author: "Linasha Hettiarachchi - AS2019371"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, command = NA, message = FALSE, warning = FALSE, out.width = "50%")
+```
+# **1. Introduction**
+
+## **1.1 Introduction of Canada**
+
+Canada is a country in North America. It contents ten provinces and three territories extend from Atlantic Ocean to Pacific Ocean and northward into the Arctic Ocean. Canada covers 9.98 million square kilometers (3.85 million square miles), making it the world’s second largest country by total area. Its southern and western border with United States, stretching 8,891 Kilometers (5,525 mi), is the world’s longest binational land border. Canada’s capital is Ottawa, and its three largest metropolitan areas are Toronto, Montreal and Vancouver.  
+
+Despite the Canada’s great size, it is one of the world’s most sparsely populated countries. It's estimated population is 35 million. Canada is very famous because Niagara Falls, Moraine Lake, Banff National Parks, Mount Asgard, Waterton Lake Cruise, Ice caves and much more things. 
+
+Below figure 01 shows the location of Canada in the worls map.
+
+<center>
+
+```{r}
+library(coronavirus)
+library(zoo)
+library(tidyverse)
+library(magrittr)
+data("coronavirus")
+canada_corona <- coronavirus %>% filter(country == "Canada")
+canada_corona <- transform(canada_corona, cases = na.locf(cases))
+
+library(leaflet)
+library(dplyr)
+library(httpuv)
+
+m <- leaflet() %>%
+  # Now add tiles to it
+  addTiles() %>%
+  # Setting the middle of where the map should be and the zoom level 40.4076319308778, 48.13983086027659
+  setView(lng = -106.3468, lat = 56.1304 , zoom = 2) %>%
+  # Now, add a marker with a popup,
+  addMarkers(lng = -106.3468, lat = 56.1304, popup = "<b>Canada</b>")
+
+
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+
+
+```
+                            Figure 01
+</center>
+
+
+## **1.2 Climate condition of Canada**
+
+Average winter and summer high temperatures across Canada vary from region to region. Winters can be harsh in many parts of the country, particularly in the interior and Prairie provinces which experience a continental climate. In non-coastal regions, snow can cover the ground for almost six months of the year, while in parts of the north snow can persist year-around. Coastal British Columbia has a temperate climate, with a mild and rainy winter. On the east and west coasts, average high temperatures are generally in the low 20s °C. Much of Northern Canada is covered by ice and permafrost. Canada’s annual average temperature over land has warmed by 1.7 °C (3.1 °F). The rate of warming has been higher across the North and in the Prairies. In the southern regions of Canada, air pollution from both Canada and the United States- caused by metal smelting, burning coal to power utilities, and vehicle emissions-has resulted in acid rain, which has severely impacted waterways, forest growth and agricultural productivity in Canada
+
+
+## **1.3 Current Covid Status in Canada**
+
+The first human cases of COVID – 19 were identified in Wuhan, People’s Republic of China, in December 2019. The World health organization declared the COVID-19 outbreak a Public health emergency of international concern on 30th January 2020 and a pandemic on 11th march 2020. The virus was confirmed to have reached Canada on 27th of January 2020 after an individual who had returned to Toronto from Wuhan, Hubei, China, tested positive. Canada has implemented travel restrictions since 14th of March 2020, when it has advised against unnecessary international travels. Canadian provinces-imposed lockdowns in March 2020. 
+Since the Canada government start the vaccination campaign on December 14th 2020. According to the updated data in Canada 3,364,971 people with at least one dose administered of Pfizer, Moderna, AstraZeneca or Johnson & Johnson and it is 87.24% of the Canadian population. 31,580,827 of people in Canada were fully vaccinated which the first dose and second doses of vaccine and it is 82.57% of the Canadian population. 19,250,351 people in Canada vaccinated with booster dose also and it is 50.33% of the whole Canadian population.
+Canada became the first country to authorize a COVID – 19 vaccines for people younger than 16 after approving Pfizer’s vaccine for children aged 12 to 15 on May 5, 2021.
+On October 6, 2021 Canada was announced that all passengers of federally- regulated transportation over age of 12 would be required to be fully vaccinated beginning October 31, 2021, a recent negative test was also accepted. Beginning April 1, 2022, pre-entry PCR testing requirements were dropped by Canada government and permitted fully-vaccinated travelers to enter the country. On September 26, 2022, it was announced that all remaining COVID-19-related travel restrictions and mandates would be dropped effective October 1, 2022; this includes vaccine requirements, masking requirements, random tests, and the requirement to submit documentation via Arrive CAN.
+
+
+# **2.Exploratory Data Analysis**
+
+## **2.1 Structure of Data** 
+
+The data set used for this analysis is The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset which is easily available as an installable package in RStudio. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+The dataset contains the daily summary of Coronavirus cases worldwide. All cases are recorded according to the following variables;
+
+- date: Date in YYYY-MM-DD format.
+- province: Name of province/state, for countries where data is provided split across multiple provinces/states.
+- country: Name of country/region.
+- lat: Latitude of center of geographic region, defined as either country or, if available, province.
+- long: Longitude of center of geographic region, defined as either country or, if available, province.
+- type: An indicator for the type of cases (confirmed, death, recovered).
+- cases: Number of cases on given date.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+
+### **2.2.1 Daily Confirmed Cases in Canada**
+
+<center>
+```{r dpi=150,echo=FALSE,message=FALSE, warning=FALSE,out.width = "80%"}
+library(plotly)
+canada_corona <- coronavirus %>% filter(country == "Canada")
+confirmed_canada_corona <- canada_corona %>% filter(type == "confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplotly(ggplot(confirmed_canada_corona, aes(x = date, y= cases, color=province))+geom_line()+ggtitle("Figure 02: Daily COVID-19 confirmed cases in Canada"))
+```
+</center>
+
+Figure 02 shows daily confirmed COVID-19 cases in Canada. The 1st confirmed cases of the corona virus disease in Canada is reported in 05th of March. There are  significant increasement in confirmed cases after 20th of September 2021, 21st of February 2021, 20th of July 2021, 24th of November 2021 and 21st of March 2022. The highest number of daily confirmed cases have been reported on 13th of April in 2022 in Ontario province & the value is 39625. The second highest number of daily confirmed cases have been reported on 10th of January in 2022 in Alberta province and the value is 17577. 
+
+
+### **2.2.2 Daily Recovered Cases in Canada**
+
+<center>
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE,out.width = "80%"}
+library(ggplot2)
+recover_canada_corona <- canada_corona %>% filter(type=="recovery")
+recover_canada_corona <- recover_canada_corona%>% mutate(cases=replace(cases,which(cases < 0),NA))
+ggplot(recover_canada_corona,aes(x=date,y=cases,color="purple"))+geom_line()+scale_color_identity()+ggtitle("Figure 03: Daily COVID-19 recovered cases in Canada")
+
+```
+</center>
+
+Daily recovered COVID-19 cases are shown in the figure 03.End of the March, first COVID-19 recovered case is reported in Canada. Since July in 2020 to July in 2021 recovered cases per day is higher than 250. The highest number of daily recovered cases are reported in July and it is 23500. After the July of 2021, the no of daily recovered cases becomes 0. 
+
+### **2.2.3 Daily Death Cases in Canada**
+
+<center>
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE,out.width = "80%"}
+
+death_canada_corona <- canada_corona %>% filter(type =="death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplotly(ggplot(death_canada_corona, aes(x=date, y= cases,color=province)) + geom_line() +ggtitle("Figure 04:Daily COVID-19 death cases in Canada"))
+
+```
+</center>
+
+The first COVID-19 death in Canada is recorded in 09th of March in British Columbia province. The highest number of daily death is reported in Quebec and the count is 151. There is a massive increasement of daily deaths in March and September in 2020, March,August and December in 2021 and March in 2022. According to the plot the highest number of deaths reported in Quebec province and lowest no of deaths reported in Prince Edward Island.
+
+### **2.2.4 Daily Active Cases in Canada**
+
+<center>
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE,out.width = "80%"}
+ active_canada_corona <-coronavirus %>% filter(country=="Canada")%>%
+  group_by(type, date) %>%
+   summarise(total_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(active_total = cumsum(active),
+          recovered_total = cumsum(recovery),
+          death_total = cumsum(death))
+ ggplotly(ggplot(active_canada_corona,aes(x =date,y =active_total))+geom_line(color = "green")+ggtitle("Figure 05: Total acive COVID-19 cases in Canada"))
+
+```
+</center>
+
+Above figure 05 shows the total active COVID-19 cases in Canada. There are 3895465 active COVID-19 cases are reported when June 2022. It can be seen the active COVID-19 cases are increase with time. From August 2021, the daily active cases are rapidly increase. There is a massive increasement of daily active cases in  4th of August 2021.
+
+### **2.2.5 COVID-19 Statistics of Canada**
+
+<center>
+```{r}
+library(kableExtra)
+canada_corona <- coronavirus %>% filter(country == "Canada")
+sumary<-canada_corona %>%
+  group_by(type) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  summarise(
+    minimum = min(na.locf(cases)),
+    median=median(na.locf(cases)),
+    mean = mean(na.locf(cases)),
+    total=sum(na.locf(cases)),
+    maximum= max(na.locf(cases))
+  )
+
+
+sumary %>%
+  kbl(caption = "<b>Table 01: Summary Table for Covid 19 Cases in Canada</b>", align = "c") %>%
+  kable_styling()
+
+```
+</center>
+
+Table 01 shows the descriptive statistic for COVID-19 cases in Canada. This table also represented the summary of above figure 02, 03 and 04.There are minus data are also in the dataset and removed them befome analysis. Table shows that the total no of confirmed cases is 3957776 , total no of death cases is 42490 and the total no of recovered cases is 1420207. 
+
+### **2.2.6 Graphical representation of COVID-19 Statistics of Canada**
+
+<center>
+```{r,out.width="80%"} 
+canada_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~type,
+    y = ~cases,
+    color = ~type,
+    type = "bar",
+    mode = "markers",
+    name = ~type,
+    title = "Figure 07 : Confirmed, Death and Recovered cases in Canada"
+  )
+```
+</center>
+
+Figure 07 shows the graphical representation of table no 01. There are small no of deaths in Canada according to the no of confirmed cases. The no deaths is 1.07% out of total no of confirmed cases.
+
+## **2.3 Comparison with other countries**
+
+Canada is located in the top half of North America. Canada shares land borders with one single country – the United States of America. It, however, also shares maritime boundaries with Greenland (Denmark).So here I have compared the Canada with USA, Denmark. 
+
+### **2.3.1 Comparison of Daily no of confirmed cases with other countries**
+
+<center>
+```{r dpi=100,echo=FALSE, message=FALSE, warning=FALSE,out.width="80%"}
+
+confirmed_cases_compare <- coronavirus %>% filter(country %in% c("US","Canada","Denmark")) %>% 
+mutate(cases = replace(cases, which(cases < 0), NA))
+confirmed <- confirmed_cases_compare %>% filter(type=="confirmed")
+ggplotly(ggplot(confirmed, aes(x=date,y=cases, color=country))+geom_line()+ggtitle("Figure 08: Daily Comfirmed COVID-19 in Canada,USA and Denmark"))
+```
+
+</center>
+Figure 08 shows the daily confirmed COVID-19 cases in Canada, US and Denmark.According to the plot daily confirmed cases in USA is massively higher than the cases in Denmark and Canada.Canada has been reported confimed cases province wise. USA reported higher number of confirmed cases at the very first in February 2020 at that moment number of cases are 0 in Canada and Denmark. Daily confirmed cases in Denmark has been in very low level until (below 300) the December of 2021 to March 2022. It is the only period that number of daily confirmed cases in Denmark exceeds Canada. The highest number of daily confirmed cases reported in Denmark is 53655. USA reported highest number of daily confirmed cases as 1383897 in January 2022.However, the number of daily confirmed cases in Canada is lower than USA. 
+
+<center>
+```{r,out.width="80%"}
+confirmed %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~country,
+    y = ~cases,
+    color = ~country,
+    type = "bar",
+    mode = "markers",
+    name = ~country,
+    title = "Figure 09 : Histogram for Daily Comfirmed COVID-19 cases in Canada,USA and Denmark"
+  )
+```
+</center>
+
+Figure 9 shows the daily confirmed covid - 19 cases in Canada, US, and Denmark. Figure 9 clearly shows that the covid 19 confirmed cases in US is higher than Canada and Denmark. According to the figure no of confirmed cases in US is more than 8 times of the no of confirmed cases in Canada. But the no of confirmed cases in Canada is slightly higher than Denmark  
+
+
+
+### **2.3.2 Comparison of COVID 19 Daily death cases with other countries**
+
+<center>
+```{r dpi=100,echo=FALSE, message=FALSE, warning=FALSE,out.width="80%"}
+
+death_cases_compare <- coronavirus %>% filter(country %in% c("Canada", "Denmark","US")) %>% 
+mutate(cases = replace(cases, which(cases < 0), NA))
+death <- death_cases_compare %>% filter(type=="death")
+ggplotly(ggplot(death, aes(x=date,y=cases, color=country))+geom_line()+ggtitle("Figure 10: Daily COVID-19 Death cases in Canada, USA and Denmark"))
+```
+</center>
+
+Figure No 10 shows the number of daily deaths in Canada, US and Denmark. The highest number of daily death also reported in US. Since 29th of February USA started reporting daily death cases and highest no of daily death cases reported as 4415 in January 2021. Death cases in Denmark also smaller than the cases in Canada except in March 2022. However the count of daily death of Canada can be considered as very small compare with US.
+
+
+<center>
+```{r,out.width="80%"}
+death %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~country,
+    y = ~cases,
+    color = ~country,
+    type = "bar",
+    mode = "markers",
+    name = ~country,
+    title = "Figure 11 : Histogram for Daily Death COVID-19 cases in Canada,USA and Denmark"
+  )
+```
+</center>
+
+Figure 11 shows the daily death covid - 19 cases in Canada, US, and Denmark. Figure 11 clearly shows that the covid 19 confirmed cases in US is higher than Canada and Denmark. According to the figure no of confirmed cases in US is more than 5 times of the no of confirmed cases in Canada. But the no of confirmed cases in Canada is slightly higher than Denmark  
+
+
+
+### **2.3.2 Comparison of COVID 19 Daily recovery cases with other countries**
+
+<center>
+```{r dpi=100,echo=FALSE, message=FALSE, warning=FALSE,out.width="80%"}
+
+recovered_cases_compare<- coronavirus %>% filter(country %in% c("Canada", "USA", "Denmark")) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+recovered <- recovered_cases_compare %>% filter(type=="recovery")
+ggplotly(ggplot(recovered, aes(x=date,y=cases, color=country))+geom_line()+ggtitle("Figure 12: Daily COVID-19 Recovered Cases in Canada,USA and Denmark"))
+```
+</center>
+
+Figure No 12 shows the number of daily recovered in Canada, US and Denmark. The highest number of daily recovered cases reported in Canada. 17 of July 2020 Canada reported its highest number of daily recovered cases. According to the Canada, Denmark reported very small number of daily recovered cases. The highest number of daily recovered cases in Denmark reported on 31st December 2020 and the value is 4227. USA did not report any recovered cases according to the figure. 
+
+<center>
+```{r,out.width="80%"}
+recovered %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~country,
+    y = ~cases,
+    color = ~country,
+    type = "bar",
+    mode = "markers",
+    name = ~country,
+    title = "Figure 13 : Histogram for Daily Recovery COVID-19 cases in Canada,USA and Denmark"
+  )
+```
+</center>
+
+Figure No 13 clearly shows that there is no any recovery in US reported. Also highest number of daily recovered cases reported in Canada. The number of daily recovered cases in Canada is more than twice as the number f daily recovered cases in Denmark. 
+
+### **2.3.2 Summary table for COVID-19 cases in Canada, US and Denmark**
+
+<center>
+```{r dpi=100, echo=FALSE, warning=FALSE, results='asis'}
+summary_table <- tibble(Country=c("Canada","US","Denmark"),
+                        Confirmed=c(3957776	,86757621,3208581),
+                        Death=c(42490,1015445,6496),
+                        Recovery=c(1420207,6443526,308362),
+                        Active=c(33064,79298650,2893723))%>%
+  mutate(Death_percentage = round((Death/Confirmed)*100, 2), 
+Recovered_percentage = round((Recovery/Confirmed)*100, 2),
+Active_percentage=round((Active/Confirmed)*100, 2))        
+  
+                        
+knitr::kable(summary_table,caption ="<b> Table 02: Summary table for COVID-19 cases in Canada, US and Denmark</b>  ", color= 'black',align = "c")
+```
+</center>
+
+
+Table 02 shows the descriptive statistic for COVID-19 cases in Canada, USA and Denmark. This table also represented the summary of above figure 08, 09 and 10.Table 02 shows Summary of total covid 19 cases in Canada, Us and China. When 2022 June, total active cases in Canada, US and Denmark is 33064, 79298650 and 2893723 respectively. It is reported the total active cases in Canada is approximately 0.84% as a percentage of confirmed cases. That value for US and Denmark is approximately 91.40% and 90.18%. US has been reported the highest active, death and confirmed cases. As a percentage the Canada has reported the better values in both three cases (confirmed, active and death).
+ 
+
+# **3. Discussion**
+
+The dataset is loaded by coronavirus dataset given in the package R. Canada dataset is obtained by it. The dataset has null values and minus value for cases. NA values and minus values are clear when data are proceeded. Overall, it can be seen, before February 2020 there were no confirmed or death cases but after the February no of confirmed cases are gradually increased. But according to the data recovered percentage is higher than the death percentage. 
+China is the first country which is founded corona virus in Hubei Province. Italy is victimized by the virus after the China. Canada also exposed to the Covid in January but Canada controlled the spreading situation better than the neighboring country USA. Currently, US had large number of coronavirus cases than other countries in world wide. Those date are obtained by coronavirus dataset but it happened to see some negative cases and null values. The all-unusual observations are not considered. It is used manual method to obtain percentage counts of all the cases in each country so that country wise data clean method was ignored. Canada is compare with two neighboring countries Denmark and USA. 
+
+
+
+# **4 Conclusions**
+
+Corona virus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover without special treatment. However, some will become seriously ill and require medical attention.
+In Canada, the first confirmed case for COVID-19 was identified on January 25th of 2020 from Ontario province. According to the corona virus dataset, Canada has reported 3957776 total number of confirmed cases, 42490 total number of deaths, 1420207 total number of recovery cases and 33064 total number of active cases. Active cases are approximately 0.83% as a percentage of total confirmed cases. Majority of the daily confirmed cases were reported in Ontario province 13 of April 2022. (Figure 02 clearly show it). Majority of daily confirmed cases were reported in 10th January 2022. 
+When comparing Canada with neighboring country USA Canada got better values in recovered and death cases. But the death rate of Canada is higher than Denmark when comparing neighboring countries. But the recovered rate (36%) of Canada is better than Denmark (9.6%). Denmark situation is better than USA.  However according to the data, the situation of Canada is better than the situations in Denmark and US.
+
+# **5. References **
+
+    1. https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html
+    2. https://covid19.who.int/
+    3. https://www.worldometers.info/coronavirus/country/canada/
+    4. https://en.wikipedia.org/wiki/COVID-19_vaccination_in_Canada
+    5. https://en.wikipedia.org/wiki/COVID-19#:~:text=Coronavirus%20disease%202019%20(COVID%2D19,in%20the%20COVID%2D19%20pandemic.
+    6. https://en.wikipedia.org/wiki/Timeline_of_the_COVID-19_pandemic
+    7. https://spectrumlocalnews.com/nys/central-ny/news/2022/10/01/canada-removes-remaining-covid-restrictions-at-border
+    8. https://www.educanada.ca/study-plan-etudes/before-avant/about-canada-a-propos.aspx?lang=eng#:~:text=Canada%20is%20located%20in%20the,longest%20border%20in%20the%20world!
+    9. https://www.statista.com/statistics/1107079/covid19-deaths-by-province-territory-canada/
+    10.https://www.britannica.com/place/Canada
+ 

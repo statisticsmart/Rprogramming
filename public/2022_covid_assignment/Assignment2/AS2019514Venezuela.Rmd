@@ -1,0 +1,117 @@
+---
+title: "Coronavirus in Venezuela
+Yasas Rangana"
+output: html_document
+date: "2022-10-04"
+---
+
+
+## **1. Background**
+
+### **1.1 Introduction**
+Venezuela officially the Bolivarian Republic of Venezuela is a country on the northern coast of South America, consisting of a continental landmass and many islands and islets in the Caribbean Sea. It has a territorial extension of 916,445 km2 (353,841 sq mi), and its population was estimated at 29 million in 2022.[9] The capital and largest urban agglomeration is the city of Caracas. The continental territory is bordered on the north by the Caribbean Sea and the Atlantic Ocean, on the west by Colombia, Brazil on the south, Trinidad and Tobago to the north-east and on the east by Guyana. The Venezuelan government maintains a claim against Guyana to Guayana Esequiba. Venezuela is a federal presidential republic consisting of 23 states, the Capital District and federal dependencies covering Venezuela's offshore islands. Venezuela is among the most urbanized countries in Latin America. the vast majority of Venezuelans live in the cities of the north and in the capital
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+library(coronavirus)
+data(coronavirus)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+library(tidyverse)
+library(magrittr)
+```
+
+### **1.2 Geographical Location of Paraguay**
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+library(ggplot2)
+library(plotly)
+library(tibble)
+library(dplyr)
+library(maps)
+library(maptools)
+mapdata <- map_data("world")
+zam_map <- filter(mapdata,region=="Venezuela")
+data("wrld_simpl")
+
+p0 <- ggplot() +
+  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="light yellow", colour="black") +
+  ggtitle("Paraguay on the World Map") 
+p0 + geom_point(data = zam_map,aes(x=long,y=lat), fill="black", colour="blue")
+```
+### **1.3 Climate condition**
+The The Climate of Venezuela is characterized for being tropical and isothermal as a result of its geographical location near the Equator, but because of the topography and the dominant wind direction, several climatic types occur which can be the same as found in temperate latitudes, and even polar regions. Latitude exerts little influence on the Venezuelan While the coastal cities of Maracaibo, Barcelona, Porlamar and Maiquetia can get extremely hot, cities located at valleys such as Mérida, Caracas, Los Teques and San Cristobal have cooler climates, and the highest towns of Mucuchies and Apartaderos have cold (tundra) climates.
+
+The hottest part of Venezuela is the northwest (Paraguana Peninsula and Guajira Peninsula), where temperatures of more than 38 °C (100 °F) are frequently recorded. The coldest part in the country are located in the highest areas of the Cordillera de Mérida, where temperatures lower than −2 °C (28 °F) are recorded. The Venezuelan Coastal Range and Guiana Highlands have average temperatures from 25 °C (77 °F) to 11 °C (52 °F), while the Llanos average temperature is over 23 °C (73 °F).
+
+The highest temperature recorded was 42 °C (108 °F) in Machiques,[1] and the lowest temperature recorded was −11 °C (12 °F), it has been reported from an uninhabited high altitude at Páramo de Piedras Blancas (Mérida state),[2] even though no official reports exist, lower temperatures in the mountains of the Sierra Nevada de Mérida are known.
+
+### **1.2 Data filtering**
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+Venezuela_not_cleared <- coronavirus %>% filter(country == "Venezuela")
+summary(Venezuela_not_cleared)
+Venezuela_cleared <- Venezuela_not_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Venezuela_cleared)
+which(is.na(Venezuela_cleared$cases))
+Venezuela_cleared$cases[985] = mean(c(Venezuela_cleared$cases[984], Venezuela_cleared$cases[986]))
+Venezuela_cleared$cases[2330] = mean(c(Venezuela_cleared$cases[2329], Venezuela_cleared$cases[2331]))
+length(Venezuela_cleared$cases)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+sSouth_America_not_cleared <- coronavirus %>% filter(continent_code == "SA")
+summary(sSouth_America_not_cleared)
+sSouth_America_cleared <- sSouth_America_not_cleared %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(sSouth_America_cleared)
+which(is.na(sSouth_America_cleared$cases))
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+confirmed_cases<-Venezuela_cleared %>%filter(type=="confirmed")
+death_cases<-Venezuela_cleared %>%filter(type=="death")
+recovery_cases<-Venezuela_cleared %>%filter(type=="recovery")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+p1 <- ggplot(confirmed_cases,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 confirmed cases in each days:  Venezuela")+labs(x='date',y='Number of cases')
+ggplotly(p1)
+```
+  This graph shows confirmed covid 19 cases in each days in venezuela. At the beginning of 2020 there are no confirmed covid 19 cases in venezuela.There no confirmes covid 19 cases in the first 2 months in venezuela. By the middle of 2020, covid 19 confirmed cases has gradually increased and decreased again in end of 2020. By early 2022, covid 19 confirmed cases in venezuela has reached its peak.
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+p2 <- ggplot(death_cases,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 death cases in each days:  Venezuela")+labs(x='date',y='Number of cases')
+ggplotly(p2)
+```
+     This graph shows covid 19 death cases in each days in venezuela. There are no covid 19 deaths in beginning of 2020. By the middle of 2020, covid 19 confirmed death cases has gradually increased and decreased again in end of 2020. By early 2021, covid 19 death cases in venezuela has reached its peak.
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+p3 <- ggplot(recovery_cases,aes(date, cases), is.na=FALSE) +geom_line() +ggtitle("Covid19 recovery_cases in each days:  Venezuela")+labs(x='date',y='Number of cases')
+ggplotly(p3)
+
+```
+       This graph shows covid 19 recovery cases in each days in venezuela. After middle of 2020, covid 19 recovery cases has gradually increased and decreased again in end of 2020. And again increased and decreased middle of 2021.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+South_America_cleared <- coronavirus %>% filter(continent_code == "SA",cases>=0)
+countryselection<-South_America_cleared %>%filter(country==c("Argentina","Bolivia","Chile","Colombia","Venezuela"))
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+confirmed_SA<-countryselection %>%filter(type=="confirmed")
+p8 <- ggplot(confirmed_SA,aes(x=date,y=cases,color = country), is.na=FALSE)+geom_line()+ggtitle("Time series analysis-country with confirmed cases")
+ggplotly(p8)
+```
+    This graph shows confirmed covid 19 cases in argentina, bolivia, chile, colombia and venezuela. Usually by the middle of 2021, covid 19 confirmed cases has gradually increased and decreased again in every country. The highest number of covid 19 cases is reported in argentina.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+death_SA<-countryselection %>%filter(type=="death")
+p9 <- ggplot(death_SA,aes(x=country,y=cases,fill = country), is.na=FALSE)+geom_col()+ggtitle("Time series analysis-country with death cases")
+ggplotly(p9)
+```
+ This graph shows covid 19 death cases in argentina, bolivia, chile, colombia and venezuela. The highest number of covid 19 death cases is reported in colombia. The lowest number of covid 19 cases is reported in venezuela. In argentina the number of deaths is relatively low although number of cases are higher. In colombia the number of deaths relatively high althrough number of cases are lower.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE }
+recovery_SA<-countryselection %>%filter(type=="recovery")
+p10 <- ggplot(recovery_SA,aes(x=country,y=cases,color = country), is.na=FALSE)+geom_boxplot()+ggtitle("Time series analysis-country with recovery cases")
+ggplotly(p10)
+```
+    This graph shows covid 19 recovery cases in argentina, bolivia, chile, colombia and venezuela. The highest number of covid 19 recovery cases is reported in argentina. The lowest number of covid 19 recovery cases is reported in venezuela.
+
+
+ 

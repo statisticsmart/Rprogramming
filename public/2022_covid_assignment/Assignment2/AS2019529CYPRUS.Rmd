@@ -1,0 +1,378 @@
+---
+title: "Covid 19 Pandemic in Cyprus"
+author: "H.P.S.Sandeepanee - AS2019529"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+library(coronavirus)
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(tidyverse)
+library(magrittr)
+library(knitr)
+library(dplyr)
+library(plotly)
+library(TSstudio)
+library(zoo)
+library(ggpubr)
+library(gridExtra)
+data(wrld_simpl)
+```
+
+## **Introduction** 
+
+The novel human coronavirus disease 2019 (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus. It was first reported in Wuhan, China, in 2019, and subsequently spread to other areas of China and later worldwide by becoming a global pandemic. One of the small independent island, Republic of Cyprus was no exception and experienced a viral covid-19 spread among the population at early 2020. 
+
+
+### Geography
+Cyprus is an island country in the Middle East in the Eastern Mediterranean Sea. It is the third-largest and third-most populous island in the Mediterranean and located about 80 km (50 mi) south of the coast of Turkey, west of Syria and Lebanon, northwest of Israel, north of Egypt and east of Greece. The capital and largest city of the Republic of Cyprus is Nicosia.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+cyprus_corona <- coronavirus %>% filter(country == "Cyprus")
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "lightblue", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = cyprus_corona, aes(x = long, y = lat), color = "red", size
+    = 2)
+
+```
+
+### Demography
+
+Cyprus inhabitants are known as Cypriots. Based on estimates of the latest United Nations data,The population of Republic of Cyprus is 1,251,488 (Jul 1,2022), about 66.8 % of the population is urban. The life expectancy at birth in Cyprus is 81.51 years and the fertility rate is 1.3. Spoken languages of Cypriot community are Greek and Turkish.
+
+### Climate
+
+Cyprus has a Mediterranean climate: hot, dry summers from June to September and mild, wet winters from November to March, which are separated by short Autumn and Spring seasons. Sunshine is abundant during the whole year, particularly from April to September when the daily average exceeds eleven hours. Winds are on the whole light to moderate. Gales are very infrequent and heavy storms rare.Snow hardly falls in the lowlands and on the northern range, but is a frequent feature every winter on ground above 1.000 metres in the Troodos range. During the coldest months it lies in considerable depth for several weeks, attracting skiers.
+
+### Economy
+
+The Republic of Cyprus is a high-income country with a liberal market economy. Financial services and the tourism industry are the most important economic sectors. Cyprus' primary industries are tourism, food and beverage processing, cement and gypsum, ship repair and refurbishment, textiles, light chemicals, metal products, wood, paper, stone and clay products.
+
+
+### Covid-19 in Cyprus
+
+The first covd-19 patient of Cyprus was reported in early March 2020. On that day, Minister of Health announced the two cases, both Cypriots, a 25-year-old who had returned from Milan and a 64-year-old doctor who had returned from England and had failed to report his symptoms. However, the health authorities responded immediately to the COVID-19 pandemic by taking certain actions. Some of them were, increased testing and vaccination programs, prohibited social gatherings,implemented travel restrictions, closed down schools and other educational institutes, introduced new health habits and so on.
+
+
+This analysis focuses on the way Covid-19 affected Cyprus and how the crisis was managed compared to some selected regions.
+
+
+## **Exploratory Data Analysis**
+
+For this analysis we use "The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset" from the "coronavirus" package in R. The dataset contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province and the source of this data is "Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus".
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+
+cyprus_corona <- coronavirus %>% filter(country == "Cyprus")
+cyprus_corona <- cyprus_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) %>%  mutate(cases = na.approx(cases)) %>% mutate(cases = ceiling(cases)) %>% select_if(~ !any(is.na(.)))
+
+confirmed_cyprus_corona<- cyprus_corona %>% filter(type == "confirmed")
+death_cyprus_corona<- cyprus_corona %>% filter(type == "death")
+recovered_cyprus_corona<- cyprus_corona %>% filter(type == "recovery")
+
+cyprus_corona_new<-cyprus_corona %>% separate(date,into=c("year","month","day"),sep="-")
+
+cyprus_corona_2020<- cyprus_corona_new %>% filter(year==2020)
+cyprus_corona_2021<- cyprus_corona_new %>% filter(year==2021)
+cyprus_corona_2022<- cyprus_corona_new %>% filter(year==2022)
+
+summary_01<- cyprus_corona_new %>% group_by(type) %>% summarise(total_cases=sum(cases))
+
+summary_02<- cyprus_corona_new %>% group_by(year,type) %>% summarise(total=sum(cases))
+
+cyprus_corona_summary<- data.frame(year=c(2020,2021,2022),confirmed=c(22346,144481,330627),confirmed_rate=c(4.492074,29.044093,66.463834),death=c(120,518,432),death_rate=c(11.21495,48.41121,40.37383),recovered=c(2057,37004,0),recovered_rate=c(5.266122,94.733878,0.000000),active=c(20169,106959,330195))
+
+cyprus_corona_summary_tbl<- as_tibble(cyprus_corona_summary)
+
+cyprus_corona_summary_tbl_new<- cyprus_corona_summary_tbl %>% pivot_longer(c(2,4,6),names_to="type", values_to = "counts")
+
+```
+
+### Data Description for Cyprus
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+kable(head(cyprus_corona),caption = "Table 01: Covid-19 Data of Cyprus from 2020-01-22 to 2020-01-27")
+```
+
+
+### Summary of covid-19 in Cyprus
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+kable(summary_01,caption = "Table 02: Summary of Covid-19 Cases in Cyprus")
+
+kable(cyprus_corona_summary,caption = "Table 03: Year Wise Summary of Covid-19 Cases in Cyprus")
+
+
+p1<- ggplot(cyprus_corona_summary_tbl_new,aes(x=type,y=counts,fill=year)) + geom_bar(stat="identity") + coord_flip() + scale_y_continuous(trans='log10')  + ggtitle("Figure 1: Summary of Total Covid 19 Cases in Cyprus")
+ggplotly(p1)
+```
+
+The above tables and the figure shows the summary of covid-19 cases in Cyprus. According to them, 2022 shows the highest confirmed rate while 2021 shows the highest recovered and death rates. Furthermore, the recovered rate of corona patients is zero in 2022.
+
+
+
+### Visualization of Daily Confirmed Cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p2<- ggplot(confirmed_cyprus_corona, aes(x=date, y=cases)) + geom_line(col="darkred") + ggtitle("Figure 2:Daily Confirmed Cases")
+ggplotly(p2)
+```
+
+The above figures illustrates daily and cumulative incidences(confirmed cases)of Covid-19 for Cyprus. According to them the first corona patient in Cyprus was confirmed on 10th March 2020 and after that,the number of covid-19 positive patients were increased with year. 
+
+
+### Visualization of Daily Death Cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p3<- ggplot(death_cyprus_corona, aes(x=date, y=cases)) + geom_line(col="darkgreen") + ggtitle("Figure 3:Daily Death Cases") 
+ggplotly(p3)
+```
+
+As shown in figure 3, the first covid-19 death case was identified on 25th March 2020 and the maximum number of death cases were reported as 22, on 08th April 2022.  
+
+
+### Visualization of Daily Recovered Cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p4<- ggplot(recovered_cyprus_corona, aes(x=date, y=cases)) + geom_line(col="darkblue") + ggtitle("Figure 4:Daily Recovered Cases") 
+ggplotly(p4)
+```
+
+According to the figure 4,it can that on 22nd March 2020, the first corona patient got recovered and after that until late 2020, number of recovered cases were slowly increased. However in 2021, recoverd cases were reported only on two days and patients were not recovered in 2022. 
+
+
+### Visualization of Cumulative Covid-19 Cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p51<- ggplot(confirmed_cyprus_corona, aes(x=date, y=cumsum(cases))) + geom_step(col="darkred") + ggtitle("Figure 5.1:Cumulative Confirmed Cases") 
+p52<- ggplot(death_cyprus_corona, aes(x=date, y=cumsum(cases))) + geom_step(col="darkgreen") + ggtitle("Figure 5.2:Cumulative Death Cases")   
+p53<- ggplot(recovered_cyprus_corona, aes(x=date, y=cumsum(cases))) + geom_step(col="darkblue") + ggtitle("Figure 5.3:Cumulative Recovered Cases")   
+
+ggarrange(p51,p52,p53)
+```
+The figure 5.1 illustrates that the disctribution of cumulative confirmed cases shows slowly increasing pattern after the first cases were confirmed before growing rapidly. However according to the figure 5.2, distribution of cumulative death cases shows slowly increasing pattern in all the time. The distribution of cumulative recovered cases in figure 5.3, gradually increase after early 2021 and flattens. 
+
+
+The above facts can be further confirmed by the below time series plot of covid-19 cases in Cyprus.Here the number of each type of cases were recorded in log10 scale.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p6<- ggplot(cyprus_corona, aes(x=date, y=cases, col=type)) + geom_point() + geom_line() + scale_y_continuous(trans='log10') + ggtitle("Figure 6: Time Series Plot for Covid-19 in Cyprus")
+ggplotly(p6)
+
+```
+
+
+### Monthly Covd-19 in Cyprus
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p71<- ggplot(cyprus_corona_2020, aes(x=type, y=cases, col=type)) + geom_point() + geom_path() + facet_wrap(month~.) + ggtitle("Figure 7.1: 2020 Covid 19 Cases in Cyprus")
+ggplotly(p71)
+p72<- ggplot(cyprus_corona_2021, aes(x=type, y=cases, col=type)) + geom_point() + facet_wrap(month~.) + ggtitle("Figure 7.2: 2021 Covid 19 Cases in Cyprus")
+ggplotly(p72)
+p73<- ggplot(cyprus_corona_2022, aes(x=type, y=cases, col=type)) + geom_point() + facet_wrap(month~.) + ggtitle("Figure 7.3: 2022 Covid 19 Cases in Cyprus")
+ggplotly(p73)
+```
+
+By using the above figures we can compare how covid-19 had been spread monthly in Cyprus. In both 2020 and 2021, below 1000 cases were reported for the first three months.However in 2022, over 1000 cases were identified starting from the very first month. For all three years, higher number of cases can be seen during last couple of months. 
+
+
+### Visualization of Active Cases
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p8<- ggplot(cyprus_corona_summary,aes(x=year,y=active)) + geom_area(fill="lightyellow") + ggtitle("Figure 8: Distribution of Covid-19 Active Cases in Cyprus") 
+p8
+```
+
+Figure 8 depicts the active covid-19 cases from 2020 to 2022. According to the plot we can see that until late 2020, the number of active corona patients were increased slowly, but after that it was increased rapidly. 
+
+
+### Comparison with Other Countries
+
+### Covid-19 in Cyprus and US
+
+As the first part of the comparison let us consider how confirmed,death and recovered cases varies in Cyprus with US, as US is one of the countries with the highest covid cases.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+cyprus_us_corona<- coronavirus %>% filter(country %in% c("Cyprus", "US"))
+cyprus_us_corona <- cyprus_us_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) %>%  mutate(cases = na.approx(cases)) %>% mutate(cases = ceiling(cases)) %>% select_if(~!any(is.na(.)))
+
+cyprus_us_corona_new<- cyprus_us_corona %>% separate(date,into=c("year","month","day"),sep="-")
+
+confirmed_cyprus_us_corona<- cyprus_us_corona_new %>% filter(type=="confirmed")
+death_cyprus_us_corona<- cyprus_us_corona_new %>% filter(type=="death")
+recovered_cyprus_us_corona<- cyprus_us_corona_new %>% filter(type=="recovery")
+
+```
+
+
+### Visualization of Daily Covid-19 Cases in Cyprus and US
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p9<- ggplot(cyprus_us_corona, aes(x=date, y=cases, col=country)) + geom_point() + geom_path() + facet_wrap(type~.) + ggtitle("Figure 9: Daily Covid-19 Cases")
+ggplotly(p9)
+
+```
+
+According to the above figure it can be conclude that the very first corona patient was confirmed in US before the Cyprus. Furthermore, number of covid-19 cases are quite law in cyprus compared to the US.
+
+
+### Yearly Covid-19 in Cyprus and US
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p101<- ggplot(confirmed_cyprus_us_corona, aes(x=country, y=cases, col=country)) + geom_point() + geom_path() + facet_wrap(year~.) + ggtitle("Figure 10.1: Confirmed Cases")
+p102<- ggplot(death_cyprus_us_corona, aes(x=country, y=cases, col=country)) + geom_point() + geom_path() + facet_wrap(year~.) + ggtitle("Figure 10.1: Death Cases")
+p103<- ggplot(recovered_cyprus_us_corona, aes(x=country, y=cases, col=country)) + geom_point() + geom_path() + facet_wrap(year~.) + ggtitle("Figure 10.1: Recovered Cases")
+
+ggarrange(p101,p102,p103)
+```
+
+As shown in above three figures, in both Cyprus and US, the highest number of positive corona patients were reported in 2022. When concider the mortality counts, both countries show approximately similar pattern in all three years although the counts were quite lower in Cyprus than in US. Furthermore in US,higher number of corona patients got recovered in 2020 while in Cyprus, higher number of corona patients go recovered in 2021. Also as we can see, any recovered patients were not identified in 2022 in both countries.  
+
+
+#### Covid-19 in Europe
+
+Let us consider how covid-19 cases in Cyprus varies with selected neighbouring european countries, as the second part of the comparison.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+europe_corona<- coronavirus %>% filter(country %in% c("Italy", "Russia", "Sweden", "Germany", "Austria", "Cyprus"))
+europe_corona <- europe_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%  mutate(cases = na.approx(cases)) %>% mutate(cases = ceiling(cases)) %>% select_if(~ !any(is.na(.)))
+
+confirmed_europe_corona<- europe_corona %>% filter(type=="confirmed")
+death_europe_corona<- europe_corona %>% filter(type=="death")
+recovered_europe_corona<- europe_corona %>% filter(type=="recovery")
+
+summary_confirmed_europe_corona<- confirmed_europe_corona %>% group_by(country) %>% summarise(total_confirmed_cases=sum(cases))
+summary_death_europe_corona<- death_europe_corona %>% group_by(country) %>% summarise(total_death_cases=sum(cases))
+summary_recovered_europe_corona<- recovered_europe_corona %>% group_by(country) %>% summarise(total_recovered_cases=sum(cases))
+active_europe_corona<- data.frame(country=c("Austria","Cyprus","Germany","Italy","Russia","Sweden"),total_active_cases=c(3725443,457323,24233799,13756478,12148428,2496357))
+
+total_europe_corona <- merge(summary_confirmed_europe_corona,summary_death_europe_corona) %>% merge(summary_recovered_europe_corona) %>% merge(active_europe_corona)
+
+summary_europe_corona<- europe_corona %>% group_by(country,type) %>% summarise(Total_cases=sum(cases))
+
+```
+
+
+### Summary Of European Covid-19
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+kable(total_europe_corona,Caption="Table 4:Total Covid-19 Cases in Europe")
+
+```
+
+### Daily Covid-19 Cases in Europe
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p11<- ggplot(confirmed_europe_corona,aes(x=date,y=cases,col=country)) + geom_line() + ggtitle(" Figure 11.1: Time Series of Covid-19 Confirmed Cases in European Countries")
+ggplotly(p11)
+
+p12<-ggplot(death_europe_corona,aes(x=date,y=cases,col=country)) + geom_line() + ggtitle("igure 11.2: Time Series of Covid-19 Death Cases in European Countries")
+ggplotly(p12)
+
+p13<-ggplot(recovered_europe_corona,aes(x=date,y=cases,col=country)) + geom_line() + ggtitle("igure 11.3: Time Series of Covid-19 recovered Cases in European Countries")
+ggplotly(p13)
+
+```
+
+The above three figures depict the distributions of daily covid-19 cases in selected European countries. According to them, the number of daily confirmed, death and recovered cases in Cyprus are quite lower than the other countries.
+
+
+### Cumulative Covid-19 Cases in Europe
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p14<- ggplot(confirmed_europe_corona,aes(x=date,y=cumsum(cases),fill=country)) + geom_bar(stat="identity") +  ggtitle("Figure 12.1: Cumulative Confirmed")
+ggplotly(p14)
+
+p15<- ggplot(death_europe_corona,aes(x=date,y=cumsum(cases),col=country)) + geom_path() + geom_point() + ggtitle("Figure 12.2: Cumulative Death")
+ggplotly(p15)
+
+p16<- ggplot(recovered_europe_corona,aes(x=date,y=cumsum(cases),col=country)) + geom_path() + geom_point() +  ggtitle("Figure 12.3: Cumulative Recovered")
+ggplotly(p16)
+
+```
+By analyzing above cumulative distribution plots, it can be conclude that the Cyprus could be able to manage the damage due to covid-19 outbreak upto some extent than the other countries, except Sweden. 
+
+
+### Total Covid-19 Cases in Europe
+
+The following figures illustrates the total number of confirmed, death, recovered and active cases for considered European countries. The decisions made above can be verified using these plots.
+
+```{r,comment=NA,message=FALSE,warning=FALSE,echo=FALSE}
+p17<- ggplot(total_europe_corona,aes(x=country,y=total_confirmed_cases,fill=country)) + geom_col(color = "black") + geom_label(aes(label=total_confirmed_cases),position = position_stack(vjust = 0.5),show.legend = FALSE) +coord_polar(theta = "y") + ggtitle("Figure 13.1: Total Covid-19 Confirmed Cases in European Countries")
+p17
+
+p18<- ggplot(total_europe_corona,aes(x=country,y=total_death_cases,fill=country)) + geom_col(color = "black") + geom_label(aes(label=total_death_cases),position = position_stack(vjust = 0.5),show.legend = FALSE) +coord_polar(theta = "y") + ggtitle("Figure 13.2: Total Covid-19 Death Cases in European Countries")
+p18
+
+p19<- ggplot(total_europe_corona, aes(x =country,y=total_recovered_cases,fill=country)) +geom_col(color = "black") + geom_label(aes(label=total_recovered_cases),position = position_stack(vjust = 0.5),show.legend = FALSE) +coord_polar(theta = "y") + ggtitle("Figure 13.3: Total Covid-19 Recovered Cases in European Countries")
+p19
+
+p20<- ggplot(total_europe_corona,aes(x=country,y=total_active_cases,fill=country)) + geom_bar(stat="identity") + geom_label(aes(label=total_active_cases),position = position_stack(vjust = 0.5),show.legend = FALSE) + ggtitle("Figure 13.4: Total Covid-19 Active Cases in European Countries")
+p20
+```
+
+
+
+## **Discussion** 
+
+The data used for the study was obtained by loading "coronavirus" dataset from the "coronavirus" package in R and then extracted Cyprus dataset from it. There were some negative values in the dataset corresponding to the variable "cases". At first,they were replaced as "Na" values and after that those missing values were imputed using linear interpolation method. Furthermore, the columns with missing values were dropped from the data set since they were not our primary interest. Another thing is, for some figures in the analysis, the log10 scale was used because when the counts are too high, it is impossible to interpret them and derive the decisions.
+
+As the first part of the analysis, year wise and type wise covid-19 trends in Republic of Cyprus were evaluated.
+According to the results, it can be conclude that daily covid-19 confirmed and death cases in cyprus were rapidly increased after the late 2021. Apart from 2020, the large number recovered cases were occured only on month of April in 2021 and after that any recovered patients were not recorded. Therefore active cases were high during late 2021 and 2022. The important conclusion that we can make from this single analysis is that the government and health authorities of Republic of Cyprus were unable to successively control the pandemic as time passed. 
+
+As the latter part of the analysis, coronavirus situation in the Cyprus was compared with some selected countries. At first the comparison carried out with US since it was highly victimized by the virus and then selected European Countries(Austria,Germany,Italy,Russia and Sweden) were used for the study. 
+Although Russia has the highest population among selected European countries,the higher number of confirmed and active cases were shown in Germany. Both Gremany and Cyprus somehow could be able to control the virus until late 2021 but after that it became out of control. Sweden could be manage to control the disease from the start. However when compared to Austria, damage from covid-19 outbreak in Cyprus is low but when compare with Sweden, it is high.  
+
+
+
+## **Conclusions**
+
+The novel coronavirus (COVID-19), disease that was widely spread to have first been detected in Wuhan (Hebei province, China) in December 2019. From that time onwards it has impacted almost every aspect of life as we know. This study provides a simple analysis about covid-19 outbreak in Republic of Cyprus. As a conclusion derived from this study, it can be say that the Republic of Cyprus is currently at a much favourable and manageable stage in covid-19 pandemic, not only because of the lower counts of cases than other regions but also as it could be somehow manage to reduce the death rate despite the inability to control of spreading the virus. 
+
+Despite the main objective, it is believed that this analysis provides an interesting insight into the covid-19 spreading trend of some European countries. The results in the analysis are important for short term predictions of the covid-19 pandemic trend when no intervention measures have recently been implemented. In addition, the results could be useful in contributing to health policy decisions or government interventions, especially in the case of future waves of covid-19.
+
+
+
+## **References**
+
+[1] "Cyprus", Wikipedia.2022, Accessed:02 October 2022,[Online],
+https://en.wikipedia.org/wiki/Cyprus
+
+[2] "Cyprus |History, Flag, Map, & Facts|",Encyclopedia Britannica.2022, Accessed:02 October 2022,Online],
+https://www.britannica.com/place/Cyprus
+
+[3] "Short Introduction to Cyprus", Accessed:02 October 2022,[Online], 
+https://cyprus.com/short-introduction-to-cyprus/
+
+[4] "Cyprus: Coronavirus Pandemic Country Profile", Accessed:05 October 2022,[Online], 
+https://ourworldindata.org/coronavirus/country/cyprus
+
+[5] "Coronavirus Pandemic (COVID-19) - Our World in Data", Accessed:08 October 2022,[Online], 
+https://ourworldindata.org/coronavirus
+
+
+
+
+
+
+
+

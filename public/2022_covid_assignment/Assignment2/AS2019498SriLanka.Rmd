@@ -1,0 +1,224 @@
+---
+title: "Covid 19 Pandemic in Sri Lanka"
+author: "University of Sri Jayewardenepura"
+date: "P.S.S.Perera-AS2019498"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+data("coronavirus")
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data("wrld_simpl")
+
+```
+
+
+```{r include=FALSE,echo=FALSE,warning=FALSE,message=FALSE}
+#data sets for Confirm ,Recovery,Death and Active cases for Sri Lanka.
+
+Sri_Lanka_corona <- coronavirus %>% filter(country == "Sri Lanka")
+
+confirm_Sri_Lanka <- Sri_Lanka_corona%>%filter(type=="confirmed")
+
+recover_Sri_Lanka <- Sri_Lanka_corona%>%filter(type=="recovery")
+
+recover_Sri_Lanka <- recover_Sri_Lanka %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+which(is.na(recover_Sri_Lanka$cases))
+
+recover_Sri_Lanka$cases[60] = mean(c(recover_Sri_Lanka$cases[59],recover_Sri_Lanka$cases[61]))
+recover_Sri_Lanka$cases[63] = mean(c(recover_Sri_Lanka$cases[62], recover_Sri_Lanka$cases[64]))-0.5
+recover_Sri_Lanka$cases[562] = mean(c(recover_Sri_Lanka$cases[561], recover_Sri_Lanka$cases[563]))
+
+death_Sri_Lanka <- Sri_Lanka_corona%>%filter(type=="death")
+
+df <- data.frame(confirm_Sri_Lanka$date, cumsum(confirm_Sri_Lanka$cases),cumsum(recover_Sri_Lanka$cases),cumsum(death_Sri_Lanka$cases))
+
+df$active <- cumsum(confirm_Sri_Lanka$cases)-cumsum(recover_Sri_Lanka$cases)-cumsum(death_Sri_Lanka$cases)
+
+active_Sri_Lanka <- df
+
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#Geographical Location of Sri Lanka 
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p +
+  geom_point(
+    data = Sri_Lanka_corona, aes(x = long, y = lat), color = "red", size
+    = 2)
+
+
+```
+
+__Geographical Location of Sri Lanka__
+
+### __Brief introduction about Sri Lanka__
+
+|       Sri Lanka, formerly Ceylon, island country lying in the Indian Ocean.Sri Lanka has 22.2 million population.Tt is Ethnic, religious, and linguistic distinctions in Sri Lanka are essentially the same. Three ethnic groups—Sinhalese, Tamil, and Muslim—make up more than 99 percent of the country’s population.
+  
+|       Sri Lanka gdp per capita for 2021 was $3,815, a 3.27% increase from 2020.Sri Lanka gdp per capita for 2021 was $3,815, a 3.27% increase from 2020.The main economic sectors of the country are tourism, tea export, apparel, textile, rice production and other agricultural products.Also develop their economy with,
+
+  
+__Agriculture - products__
+
+|   Rice, sugarcane, grains, pulses, oilseed, spices, vegetables, fruit,  milk, eggs, hides, beef, fish, etc.
+
+__Industries__
+
+|   Tobacco and other agricultural commodities, telecommunications, insurance, banking, tourism, shipping; clothing, textiles, cement, petroleum refining, information technology services, construction.
+  
+Combination of these sectors help to grow Economy. 
+
+|       Sri Lanka has a universal health care system that extends free healthcare to all citizens, which has been a national priority. OPD facilities are readily available in public (general) hospitals situated in major towns and cities, with laboratory and radiology facilities common in most.Sri Lankans have a life expectancy of 77.9 years at birth, which is 10% higher than the world average. The infant mortality rate stands at 8.5 per 1,000 births and the maternal mortality rate at 0.39 per 1,000 births, which is on par with figures from the developed countries.
+
+|       When we are coming to education system it has a free education system from primary to tertiary stage. With a literacy rate of 92.5%, Sri Lanka has one of the most literate populations amongst developing nations. Its youth literacy rate stands at 98%, computer literacy rate at 35%, and primary school enrollment rate at over 99%. An education system which dictates 9 years of compulsory schooling for every child is in place.
+
+
+#### __Spreading of Corona Virus in Sri Lanka__ 
+
+
+|       The first case of the virus in Sri Lanka was confirmed on 27 January 2020.The first reported case involving a Sri Lankan outside the country was reported in Italy on 3 March 2020. As of 23 March 2020, forty-five quarantine centres had been built in the country by the Sri Lanka Army as a preventative measure in an attempt to stop the spread of the pandemic.Nearly 3,500 people were placed under quarantine in 45 quarantine centres, including 31 foreigners from 14 countries.As of 25 March 2020, Sri Lankan authorities tracked down over 14,000 people who had come into contact with identified patients, and ordered those people to self-quarantine.As of 16 April 2020, Sri Lanka was named the 16th highest-risk country for contracting the virus.In April 2020, Sri Lanka's response to the pandemic was ranked as the 9th best in the world.Here we have discusion about  corona virus spead in sri lanka in detail.
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#Sri Lanka Covid-19 confirm cases
+
+ggplot(confirm_Sri_Lanka,aes(x=date,y=cases)) + geom_line() + labs(title="Sri Lanka Covid-19 confirm cases ",x="date",y="cases",subtitle = "figure 01")
+
+
+```
+
+
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#Sri Lanka Covid-19 Recover cases
+
+ggplot(recover_Sri_Lanka,aes(x=date,y=cases)) + geom_line() + labs(title="Sri Lanka Covid-19 Recover cases ",x="date",y="cases",subtitle = "figure 02")
+
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#Sri Lanka Covid-19 Death cases
+
+ggplot(death_Sri_Lanka,aes(x=date,y=cases)) + geom_line() + labs(title="Sri Lanka Covid-19 Death cases ",x="date",y="cases",subtitle = "figure 03")
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#Sri Lanka Covid-19 Active cases
+
+ggplot(active_Sri_Lanka,aes(x=confirm_Sri_Lanka$date,y=active)) + geom_line() + labs(title = "Sri Lanka Covid-19 Active cases ",x="date",y="cases",subtitle = "figure 04")
+
+```
+$$Active Cases=CumalativeConfirmCases-CumalativeRecoveryCases-CumalativeDeathCases$$
+__formula 01__
+
+### Compare with Neighbour Countries of sri lanka
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+confirmed_other_countries_corona <- coronavirus%>%filter(country==c("India","Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka"))%>%filter(type=="confirmed")
+max_confirmed_other_countries_corona <- confirmed_other_countries_corona%>%group_by(country)%>%summarise(MAX=max(cases))
+df2 <- tibble(cnty=c("India","Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka"),mxcm=c(368060,2499,15807,7963,9502,2200,11366))
+df2$cnty <- factor(df2$cnty,levels = c("India","Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka"))
+
+#bar chart for represent maximum confirm cases
+
+ggplot(df2,aes(x=cnty,y=mxcm))+geom_col()+labs(title = "Comparison of Maximum Confirmed with neighbour countries of Sri Lanka",y="Maximum Confirmed case",x="country",subtitle = "figure 05")+ geom_text(aes(label=mxcm), vjust=-0.4, color="black", size=3.5)
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+total_death_other_countries_corona <- coronavirus%>%filter(country==c("India","Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka"))%>%filter(type=="death")%>%group_by(country)%>%summarise(total_death=sum(cases))
+total_comfirmed_other_countries_corona <- confirmed_other_countries_corona%>%group_by(country)%>%summarise(total_cases=sum(cases))
+df3 <- tibble(cnty2 =total_death_other_countries_corona$country,death_presentage=(total_death_other_countries_corona$total_death/total_comfirmed_other_countries_corona$total_cases)*100)
+df3$cnty2 <- factor(df3$cnty2,levels = c("India","Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka") )
+
+
+ggplot(df3,aes(x=cnty2,y=death_presentage))+geom_col()+ylim(0,4)+labs(title = "Death Precentage of neighbour countries",y="Death Precentage-%",x="country",subtitle = "figure 06")
+
+```
+
+$$DeathPrecentage=\frac{TotalDeathCases}{TotalConfirmCases}*100 $$
+__formula 02__
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+df3
+```
+
+__table 01__
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+confirmed_other_countries_corona <- coronavirus%>%filter(country==c("Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka"))%>%filter(type=="confirmed")
+df4 <- tibble(date=confirmed_other_countries_corona$date,cnty3=confirmed_other_countries_corona$country,confirmed_other=confirmed_other_countries_corona$cases)
+df4$cnty3 <- factor(df4$cnty3,levels = c("Maldives","Bangladesh","Pakistan","Nepal", "Bhutan","Sri Lanka") ) 
+#India removed because its data too large than other countries
+
+#confirmed cases over the time devide by countries
+
+ggplot(confirmed_other_countries_corona,aes(x=date,y=cases,col=df4$cnty3))+geom_line()+facet_grid(df4$cnty3~.)+labs(title = "Daily Confirmed cases of neighbour countries",y="Confirmed Cases",x="date",subtitle = "figure 07")
+```
+
+### Discussion
+|        In this Exploratory Data analysis I focused on confirm cases,recover cases,death cases and active cases of Sri Lanka.Initialy I have to tell that there was a data loose in recovery data set of Sri Lanka(given dataset has a data lose ).It represent in figure 02. As a result, Active cases was gone high(figure 04),but actually active cases should go to 0 when 2022 2nd quarta.Active cases calculated by formula 01.
+|       When we talking about confirmed cases there was large increse 3rd quarta of 2021(figure 01).It may be due to the therd wave of the covid-19. Also figure 01 represent 3 difference cycles till beginig of 2022, them was due to covid-19 waves. 
+|       Recover cases  can only interprite till 2021 3rd quarta(figure 02). There was increase after middle of 2021.
+|       death cases of Sri Lanka was represented a negatively skewed time series.Till first quarta of 2021 there was no  significant death rate. also after 2022 first quarta showed equal characteristics(figure 03).
+
+|     As mentioned above we can only interpret till 3rd quarta of 2021. Till 2021 no any significant active cases but when stat 2021 active cases was gone high(figure 04).It may due to increase of confirmed cases.
+
+|       When compare with neighbor countries i was selected  India, Maldives, Bangladesh, Pakistan, Nepal, Bhutan. They are the nearest countries for Sri Lanka.First, We should talk about indian corona situation, Irregular management of India was effected to the corona situation that days. It also represent in my analysis. in figure 05 I represented maximum comfirmed case saperatly for selected countries because of it give accurate how was spreaded covid-19. Among selected countries India showed highest confirmed case. it close to 4laks of people at a day.Others varies below 20000.Sri lanka have a maximum case as 11366(figure 05).
+|       Death Presentage of selected countries(figure 06) is also a powerful measurement it calculated by formula 02. when we compare with population total of death should not use as a variable for measure covid-19 status of countries.It was the reason for use presentage of death.Maximum confirmed case not significant  when compare with India, but Death presentage was too larger than India.Bhutan showed lowest presentage it was 0.0313%(table 01).Almost never exceed 3% all selected countries.
+
+|       In Daily confirm cases of neighbour countries(figure 07) I droped Indian data, because of it showed too high daily confirmations than other countries.From figure 07 we can identify that Maldives and Bhutan do not show any significant similarity on pattern,also they almost close to 0 all over the time. But  if we look carefully on Bangladesh,Pakistan,Nepal and Sri Lanka time serieses there are significant similarity on time serieses. They show same cyclical pattern.It may due to corona waves and connections between selected countries        
+  
+
+### Conclutions
+
+* Using this we cannot predict something about active cases after 3dr quarta of   2021.
+* covid-19 pendemic significantly increase in 2019 3rd quarta in Sri Lanka.
+* It represent 3 waves in 2021,and maximum showed that middle of 2021. 
+* Sri Lanka was taken actions for covid-19 in middle of 2021,then recoved cases   was gone high.
+* In 2021 middle death cases gone high therefore actions was taken on covid-19    not enough.Also it should be effected any social case.
+* After 2022 first quarta covid-19 gone down in Sri Lanka.
+* Among India, Maldives, Bangladesh, Pakistan, Nepal, Bhutan and Sri Lanka        India showed highest covid-19 spread.Maximum Daily case was 368060. It may be   Large population of India and Informal governance of that country.
+  Sri Lanka showed 11366 count on a day.
+* Among selected countries Sri Lanka Showed Largest death Precentage.Therefore    we can conclude that actions ageinst to covid-19 of Sri Lanka is lower than     Other neighbour countries.
+* Almost all selected countries is maintained death present age under 3%.
+* Relations between neighboring countries was effected to the spreading of         covid-19 in Sri Lanka.
+
+## Reference
+
+* [www.eatsandretreats.com](https://www.eatsandretreats.com/travel/sri-lanka/story/where-is-sri-lanka)
+* [www.sthda.com](http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization)
+* [https://hellor.netlify.app/slides/onlinehelpdesk](https://hellor.netlify.app/slides/onlinehelpdesk)
+* [ggrepel.slowkow.com](https://ggrepel.slowkow.com/articles/examples.html)
+* [https://www.youtube.com/channel/statistic mart](https://www.youtube.com/channel/UCA-gmE5LxrIZTTjSP3z2ZTg/videos)
+* [https://hellor.netlify.app/coronareports](https://hellor.netlify.app/coronareports/)
+
+
+
+
+

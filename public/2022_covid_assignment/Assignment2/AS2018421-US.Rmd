@@ -1,0 +1,362 @@
+---
+title: "An Overview of the current Coronavirus States in US"
+author: "AS2018421"
+date: "10/1/2022"
+output: html_document
+---
+
+
+## packages need to install
+
+``` {r,message=FALSE,warning=FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+library(coronavirus)
+
+```
+
+# 1. Introduction
+
+The United States of America (U.S.A. or USA), commonly known as the United States (U.S. or US) or America, is a transcontinental country located primarily in North America. It consists of 50 states, a federal district, five major unincorporated territories, nine minor outlying islands, and 326 Indian reservations. It is the third-largest country by total area.[d] The United States shares land borders with Canada to its north and with Mexico to its south. It has maritime borders with the Bahamas, Cuba, Russia, and other nations. With a population of over 331 million,it is the third most populous country in the world. The national capital is Washington, D.C., and the most populous city and financial center is New York City. 
+
+
+## 1.1 visualisation of the location on a world map
+
+```{r,message=FALSE,warning=FALSE}
+
+us_corona <- coronavirus %>% filter(country == "US")
+data(wrld_simpl)
+p <- ggplot()+ 
+  geom_polygon(data = wrld_simpl, 
+               aes(x = long, y = lat, group = group), fill = "blue", colour = "grey") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+p + geom_point(
+  data = us_corona, aes(x = long, y = lat), color = "black" , size = 3
+)
+
+```
+
+-Figure 1: location of US in a world map-
+
+
+
+
+## 1.2 Covid - 19 pandemic in the United States(US)
+
+The COVID-19 pandemic in the United States is a part of the worldwide pandemic of coronavirus disease 2019 caused by severe acute respiratory syndrome coronavirus 2. In the United States, it has resulted in 96,385,048 confirmed cases with 1,059,579 all time deaths, the most of the any country, and the nineteenth highest per capita worldwide. The COVID-19 pandemic ranks first on the list of disasters in the United States by death toll, it was the third leading cause of death in the US in 2020, behind heart disease and cancer. From 2019 to 2020, US life expectancy dropped by 3 years for Hispanic and Latino Americans, 2.9 years for white Americans. These effects have persisted as US deaths due to COVID-19 in 2021 exceeded those in 2020.
+
+
+# 2. Exploratory data analysis
+
+## 2.1 Description of US corona dataset 
+ 
+ 
+ ``` {r,message=FALSE,warning=FALSE}
+ 
+ summary(us_corona)
+ head(us_corona)
+ tail(us_corona)
+ 
+ ```
+ 
+## 2.2 Analysis confirmed,deaths,recovered and active corona cases of US
+
+### 2.2.1 Analysis confirmed corona cases of US
+
+```{r,message=FALSE,warning=FALSE}
+
+confirmed_cases_us <- us_corona %>%  filter(type=="confirmed")
+total_cases_us<-sum(confirmed_cases_us$cases)
+ggplot(confirmed_cases_us, aes(x=date, y=cases)) + geom_line() + ggtitle("US: Daily Covid-19 confirmed cases")
+cat("Total cases in US=",total_cases_us)
+
+```
+
+-Figure 2.1: Distribution of confirmed corona cases in US-
+
+The total number of confirmed corona virus cases in US is 86757621  . The first case of COVID-19 was founded in Washington state in US.According to the graph we can see that most of corona cases has founded in around 2022. Starting 2021 most corona cases start to spread in US.
+
+### 2.2.2 Analysis death corona cases in US
+
+``` {r,message=FALSE,warning=FALSE}
+death_cases_us <- us_corona %>% filter(type=="death")
+total_deaths_us<-sum(death_cases_us$cases)
+ggplot(death_cases_us, aes(x=date, y=cases,col="red")) + geom_line() + ggtitle("US: Daily Covid-19 death cases")
+cat("Total deaths in Us=",total_deaths_us)
+death_rate_us<-(total_deaths_us/total_cases_us)*100
+cat("Death rate in US=",death_rate_us)
+                                                                
+```
+
+-Figure 2.2: Distribution of corona death cases in US-
+
+Total number of corona deaths in us is 1015342.From 2020 to 2022 shows huge number of deaths in US. The death rate in US is 1.17032.It is significantly higher than comparing other countries.
+
+
+### 2.2.3 Analysis recovered corona cases in US
+
+``` {r,message=FALSE,warning=FALSE}
+recovered_cases_us <- us_corona %>% filter(type=="recovery")
+
+
+total_recovers_us<-sum(recovered_cases_us$cases)
+ggplot(recovered_cases_us, aes(x=date, y=cases)) + geom_line() + ggtitle("US: Daily Covid-19 Recoveries")+ylim(0,100000)
+
+
+```
+
+-Figure 2.3: Distribution of corona recovered cases in  US-
+
+From 2020 to 2021 corona recoveries of US are highly increasing. But from 2021 we cannot clearly see any recoveries according to the graph.
+
+
+### 2.2.4 Analysis Active corona cases in US
+
+
+``` {r,message=FALSE,warning=FALSE}
+
+us_corona2 <- us_corona %>% filter(cases >= 0)
+coronaus_wider <- us_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+coronaus_wider$active_us_corona <- coronaus_wider$confirmed - coronaus_wider$death - coronaus_wider$recovery
+ggplot(coronaus_wider, aes(x=date, y=active_us_corona)) + geom_line() + ggtitle("US: Daily Covid-19 Active cases")+ylim(0,1000000)
+
+```
+
+-Figure 2.4 : Distribution of Active corona cases in US-
+
+Active corona cases = confirmed corona cases-deaths-corona recovery cases
+
+According to Figure 2.4 graph shows that their are highly active corona cases reported in 2022 comparing 2020 and 2021.The number of reported active corona cases in 2022 is approximately 1000000.
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+ggplot(us_corona, aes(x=date, y=cases, col=type)) + geom_line()+ylim(0,100000)
+
+```
+
+-Figure 2.5  :  Multiple time series plot of corona cases in US-
+
+
+```{r,message=FALSE,warning=FALSE}
+us_corona2 <- us_corona %>% filter(cases >= 0)
+ggplot(us_corona2, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("US: Daily Covid-19 cases by type") + facet_grid(type~.)+ylim(0,10000)
+
+
+```
+
+
+-Figure 2.6 Distribution of corona cases in US-
+
+The death rate seems to be as high as the number of reported cases.But from 2020 to 2022 recovery rate is very low.There are high number of corona cases were recorded in all three years.When we get total corona confirmed cases, deaths and recovery cases in US recovery cases and deaths getting very low comparing the total cases.
+
+
+
+# 3. Comparison US corona cases with other countries
+
+## 3.1 Comparison with neighbouring countries
+
+The mainland of the United States(US) is bordered by the Atlantic Ocean in the west. The country boarders Canada in the north and Mexico in the south.Th United States share maritime boarders with the Bahamas,Cuba,and Russia. 
+Then we compare covid-19 cases of US with these countries.
+
+``` {r,message=FALSE,warning=FALSE}
+compare_corona_1 <- coronavirus %>% filter(country == c("canada", "Mexico", "US","Bahamas","Cuba","Russia" ))
+
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+
+  
+    geom_point(
+    data = compare_corona_1, aes(x = long, y = lat, col = country), size
+    = 3
+  )
+
+```
+
+-Figure 3.1: Location of US neighboring countries-
+
+
+### 3.1.1 comparison us corona confirmed cases with neighboring countries
+
+
+``` {r,message=FALSE,warning=FALSE}
+bahamas_corona <- coronavirus  %>% filter(country == "Bahamas")
+ confirmed_bahamas_corona <- bahamas_corona %>% filter(type=="confirmed")
+
+ cuba_corona <- coronavirus  %>% filter(country == "Cuba")
+confirmed_cuba_corona <- cuba_corona %>% filter(type=="confirmed")
+
+mexico_corona <- coronavirus  %>% filter(country == "Mexico")
+ confirmed_mexico_corona <- mexico_corona %>% filter(type=="confirmed")
+ 
+ russia_corona <- coronavirus  %>% filter(country == "Russia")
+ confirmed_russia_corona <- russia_corona %>% filter(type=="confirmed")
+
+us_corona <- coronavirus  %>% filter(country == "US")
+confirmed_us_corona <- us_corona %>% filter(type=="confirmed")
+
+Neighbor_confirm <- rbind(confirmed_bahamas_corona, confirmed_cuba_corona, confirmed_mexico_corona, confirmed_russia_corona, confirmed_us_corona)
+
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in US's neighbour countries") + ylim(0,10000)
+
+
+```
+
+
+-Figure 3.2: Distribution confirmed corona cases of US with neighboring countries-
+
+Bahamas shows low number of confirmed corona cases with comparing US and other neighboring countries.From 2020 to 2021 Cuba has no any confirmed cases of corona but from 2021 to 2022 cuba confirmed more number of corona cases according to plot.Mexico and Russia both show high confirmed corona cases staring from 2020.
+
+
+``` {r,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases,fill=country)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,100000)
+
+```
+
+-Figure 3.3: Distribution confirmed corona cases of US neighboring countries-
+
+
+According to Figure 3.3 Cuba,Mexico and Russia shows almost similar number of confirmed corona cases.Bahamas shows the lowest number of corona cases.Among Bahamas, Cuba, Mexico,Russia and US has the considerable cases.
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+ggplot(Neighbor_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed corona cases in US's neighbour countries")+ylim(0,10000)
+
+```
+
+Figure 3.4: Box plot of confirmed corona cases in US's with  neighboring countries-
+
+
+
+
+
+
+
+## 3.2 Comparing US corona cases with China
+
+
+Coronavirus disease 2019 (COVID-19) is a contagious disease caused by a virus,the severe acute respiratory syndrome coronavirus 2. The first known case was identified in Wuhan,China, in December 2019. The Disease quickly spread worldwide, resulting in the COVID-19 pandemic
+Therefore here we compare US corona cases with the mother country of corona.
+
+### 3.2.1 Comparing us corona confirmed cases with china
+
+``` {r,message=FALSE,warning=FALSE}
+china_corona<-coronavirus %>% filter(country=="China")
+ggplot(china_corona, aes(x=date ,y=cases,col=type)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Confirmed, Death and Recovered cases in China")+ylim(0,3000)
+
+
+```
+
+-Figure 3.5 : corona confirm, death and recovery cases in China-
+
+From 2020 to 2021 China has more confirmed corona cases but the number of deaths are very low.we can see around 2021 there is no deaths in China due to COVID-19.
+
+
+
+```{r,message=FALSE,warning=FALSE}
+
+compare_corona <- coronavirus %>% filter(country == c( "China", "US"))
+pivot_compare_corona <- compare_corona %>%
+pivot_wider(c(1:7), names_from = "type", values_from = "cases")
+
+```
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+ggplot(pivot_compare_corona,
+       aes(x = date, y = confirmed, col = country)) +
+  geom_point() + geom_smooth(method = lm, se = F, fullrange = T)
+  labs(title = "Scatterplot of confirmed cases of comparing US and China")+ylim(0,100000)
+
+```
+
+
+-Figure 3.6 : Distribution corona confirmed cases of US and China-
+
+
+Most of corona cases have confirmed in US more than China.According to Figure 3.6 From 2020 to 2021 corona cases increasing in US but when we consider in China it can be seen that China has continuosly reported most same number of corona cases during 2020-2022 time period. 
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+
+ggplot(pivot_compare_corona,
+       aes(x = date, y = death, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of deaths due to coronavirus of comparing US and China")+ylim(0,3000)
+
+```
+
+
+-Figure 3.7 : Distribution corona deaths of US and China-
+
+
+US has a linear high sloped confirmed cases when comparing to the China. China also shows a slight slope with a low gratitute.
+
+
+
+``` {r,message=FALSE,warning=FALSE}
+
+
+ggplot(pivot_compare_corona,
+       aes(x = date, y = recovery, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Scatterplot of recovered cases of comparing US and China")+ylim(0,3000)
+
+```
+
+
+-Figure 3.8 : Distribution of corona recovery cases of US and China-
+
+Corona recovery cases of Us linearly going down from 2020 to 2022 and get approximately zero.china corona recovery cases get same value from 2020 to 2022.
+
+# 4. Discussion
+
+2020 January 22 first corona confirmed case was recorded in US. Beginning from that day there were so many corona cases were recorded in US.Since then on February 29 first death was recorded. After that there were times when deaths were over 2500 per day.The percentage of patient who have positive from COVID-19 in the US currently is 9.1% . Hospitalization have begun to increase in some of north and west in US, but at the national level hospitalization numbers continue to decline.
+Confirmed cases and deaths, which are widely considered to be an undercount of the true toll, are counts of individuals whose coronavirus infection were confirmed by molecular laboratory test. Probable cases and deaths count individuals who meet criteria for other types of testing, symptoms and exposure, as developed by national and local government
+
+
+# 5. Conclusion
+
+The total number of confirmed corona cases of US is 86767521.Most of corona cases has recorded in year 2022. Total deaths of Us is 1015342 and death rate  in US is 1.17032.From 2020 to 2020 more corona recovery cases were recorded but after 2021 recovery cases almost going to 0. Because of that Us has been a red country of Coronavirus.Bahamas,Cuba,Mexico and Russia are neighbor countries of US.Among those countries only Bahamas shows that the lower number of confirmed corona cases. Other countries has high number of corona cases within US. Total number of corona virus cases in China is 251,347 and deaths are 5226.Recovered cases are 243,151 .US shows an increment in confirmed cases in corona and China shows approximately horizontal line on confirmed cases.When taking the death cases of the countries US and China  it shows a significant regression linear fitted line though China was lower than the United States.BUt when comes to recovery cases of coronavirus US has got linearly fitted line in downward. China also the same.
+
+
+# 6. Reference
+
+https://www.nytimes.com
+
+https://hellor.netlify.app/individualproject
+
+https://en.wikipedia.org/wiki/United_States
+
+https://www.brookings.edu/research/ten-facts-about-covid-19-and-the-u-s-economy/?amp
+
+
+
+

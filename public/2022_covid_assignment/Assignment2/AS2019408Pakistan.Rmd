@@ -1,0 +1,415 @@
+---
+title: "**THE COVID-19 PANDEMIC IN PAKISTAN**"
+author: "AS2019408 - Chamod Kandage"
+date: "2022-10-03"
+output: 
+  html_document :
+    theme : cerulean
+    toc: true
+    toc_float : true
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+# **1. Introduction**
+
+Pakistan, officially the 'Islamic Republic of Pakistan' is a country situated in South Asia. It is the world's fifth-most populous country, with a population of almost 242 million, and has the world's second-largest Muslim population. Pakistan is the 33rd-largest country by area, spanning 881,913 square kilometers (340,509 square miles). It has a 1,046-kilometer (650-mile) coastline along the Arabian Sea and Gulf of Oman in the south, and is bordered by India to the east, Afghanistan to the west, Iran to the southwest, and China to the northeast. It is separated narrowly from Tajikistan by Afghanistan's Wakhan Corridor in the north, and also shares a maritime border with Oman.
+
+Initially a Dominion of the British Commonwealth, Pakistan officially drafted its constitution in 1956, and emerged as a declared Islamic republic. In 1971, the exclave of East Pakistan seceded as the new country of Bangladesh after a nine-month-long civil war. In the following four decades, Pakistan has been ruled by governments whose descriptions, although complex, commonly alternated between civilian and military, democratic and authoritarian, relatively secular and Islamist. Pakistan elected a civilian government in 2008, and in 2010 adopted a parliamentary system with periodic elections. [wikipedia](https://en.wikipedia.org/wiki/Pakistan)
+
+| | |
+|   :----- | :----------                                    |
+|**Capital** | Islamabad
+|**Motto**   | "Faith, Unity, Discipline"   |
+|**Official languages** | Urdu , English |
+|**Area** |	881,913 $Km^2$ |
+|**Population**| 242,923,845 |
+|**Prime Minister** |	Shehbaz Sharif | 
+ 
+## _Pakistan and Covid 19_
+
+The border countries of Pakistan highly affected including China, where the COVID-19 outbreak experienced first time. In the west, Italy with highest number of COVID-19 mortalities while in the north, Iran a high number of mortalities after the Italy. In Pakistan, the first case of COVID-19 has been confirmed by the Ministry of Health, government of Pakistan on February 26, 2020 in Karachi, Sindh province. On the same day another case confirmed by the Pakistan Federal Ministry of Health in Islamabad. Within fifteen days, the number of total confirmed cases (COVID-19 Positive) reached to twenty (20) out of 471 suspected cases with highest numbers in the Sindh province followed by the Gilgit Baltistan. All of the confirmed cases had recent travel history from Iran, Syria and London. And currently these cases increase by high rate and the situation is worst.
+
+Yo overcome from panademic, The Quarantines being used to restrict the activities or separation of persons (in a non-health care facility) who were not ill yet, but who might have been exposed to an infectious agent or disease such as COVID 19 with the objective of monitoring symptoms and early detection of cases. The places use for Quarantine of COVID-19 people was widely disturbed in provinces.
+
+However, with the invention of vaccines it was spread all over the wold rapidly and it is the best solution right now to survive. Pakistan received their first vaccines on early February 2021 and, at the time of writing, has fully or partially-vaccinated 87% of the eligible population. According to data from the Ministry of National Health Services Regulations and Coordination (NHSR&C), the total eligible population is just over 143 million and federal and provincial health authorities have, partially or fully, vaccinated more than 125 million in 13 months.
+
+Here are the 7 Vaccines Approved for Use in Pakistan
+
+  + Moderna
+  + Pfizer/BioNTech
+  + CanSino
+  + Sputnik V
+  + Oxford/AstraZeneca
+  + Sinopharm (Beijing)
+  + Sinovac
+
+
+
+
+
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+#Loading libraries
+
+
+library(devtools)
+library(sta3262)
+get_individual_project_country("AS2019408") #its Pakistan
+
+library(coronavirus)
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(plotly)
+
+#defining variables
+
+pak_corona <- coronavirus %>% filter(country == "Pakistan")
+ind_corona <- coronavirus %>% filter(country == "India")
+sl_corona <- coronavirus %>% filter(country == "Sri Lanka")
+us_corona <- coronavirus %>% filter(country == "US")
+aus_corona <- coronavirus %>% filter(country == "Australia")
+rus_corona <- coronavirus %>% filter(country == "Russia")
+fra_corona <- coronavirus %>% filter(country == "France")
+
+
+```
+
+
+
+## _Location of the Pakistan_
+```{r echo=FALSE}
+
+#location plot
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "light green", colour = "black"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+
+p +
+  geom_point(
+    data = pak_corona, aes(x = long, y = lat), color = "red", size
+    = 2 
+   
+  )
+```
+
+
+# **2. Data Analysis**
+
+## _Overall Big Picture_
+
+Pakistan has a population around 242 million and among them below are the total Confirmed cases, Total Death cases and Total recovered cases up-to the reporting date.
+
+```{r message=FALSE, warning=FALSE, include=FALSE} 
+
+#finding missing values and estimate them 
+
+pak_corona_new <- pak_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+ summary(pak_corona_new)
+ 
+  which(is.na(pak_corona_new$cases))
+  pak_corona_new$cases[1828]= mean(c(pak_corona$cases[1827],pak_corona$cases[1829]))
+ length(pak_corona_new$cases)
+  pak_corona_new$cases[2330]= mean(c(pak_corona$cases[2329],pak_corona$cases[2331]))
+ length(pak_corona_new$cases)
+ pak_corona_new$col <- as.factor(c(rep("black",1826),rep("red",2),rep("black",2652-1828)))
+ 
+ summary(pak_corona_new)
+ pak_corona_new$col <- as.factor(c(rep("black",2328),rep("red",2),rep("black",2652-2330)))
+ summary(pak_corona_new)
+```
+
+
+
+
+**Overall Analysis**
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+#overall analysis - define
+
+z <- pak_corona_new %>% group_by(type) %>% summarise(total=sum(cases))
+z
+
+```
+
+
+```{r echo=FALSE}
+
+#overall analysis - plot
+
+ggplot(data=z, aes(x=type, y=total, fill=type)) +
+  geom_bar(stat="identity")+
+  geom_text(aes(label=total), vjust=-0.3, size=3.5)+
+  theme_minimal()
+
+```
+
+According to above graph we can see that nearly half of the confirmed cases were recovered and death cases are very low compared to confirmed cases.
+
+
+## _Confirmed Cases,Deaths,Recoverd Cases Day by Day_
+
+Here is the daily reported Confirmed cases, Death cases and Recovered cases.
+
+```{r echo=FALSE}
+
+#day by day analysis
+
+a1 <-plot_ly(data = pak_corona_new , x = ~date, y = ~cases , type = 'scatter', mode = 'lines', color = ~type)
+a1
+
+```
+
+According to this we can see that there is a decrease in daily confirmed cases,daily death cases and daily recovered cases over time. most importantly we can see clearly that with be beginning of covid vaccinations, (2021 Feb onwards) there is a clear downfall of all three types of cases which is a positive sign towards Pakistan community.
+
+
+
+## _Comparison Between Confirmed Cases vs Recovery_ 
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+#confirmed cases vs recovery - define
+
+pak_corona_new_confirmed <- pak_corona_new %>% filter(type == "confirmed")
+pak_recovery <- pak_corona_new %>% filter(type == "recovery")
+pak_death <- pak_corona_new %>% filter(type =="death")
+
+pak_cum_dea <- pak_death %>% summarise(date, cases, cumfreqdea=cumsum(cases) )
+
+pak_cum_conf <- pak_corona_new_confirmed  %>% summarise(date, cases, Total=cumsum(cases) )
+pak_cum_conf
+
+pak_cum_rec <- pak_recovery %>% summarise(date, cases, cumfreqrec=cumsum(cases) )
+pak_cum_rec
+
+pak_cum <- cbind(pak_cum_conf,pak_cum_rec)
+
+pak_cum_clean <- pak_cum[1:561, ]
+
+data <- data.frame(pak_cum_clean)
+
+
+pak_cum_cd <-  cbind(pak_cum_conf,pak_cum_dea)
+
+```
+
+
+
+```{r echo=FALSE}
+
+#confirmed cases vs recovery - plot
+
+
+fig <- plot_ly(pak_cum_clean, x = ~date, y = ~Total, name = 'Confirmed',type = 'scatter', mode = 'lines') 
+fig <- fig %>% add_trace(y = ~cumfreqrec, name = 'Recovered', mode = 'lines')
+fig
+```
+
+According to above graph we can see that Total Confirmed cases are always higher that Total recovered cases which is a very good sign. This indicates that the capacity of the Pakistan hospitals are not exceeded and they some how managed to facilitate their patients at least minimum requirements.
+
+## _Comparison Between Confirmed Cases vs Deaths_ 
+
+```{r echo=FALSE}
+#confirmed cases vs deaths - plot
+
+
+fig3 <- plot_ly(pak_cum_cd, x = ~date, y = ~Total, name = 'Confirmed',type = 'scatter', mode = 'bar') 
+fig3 <- fig3 %>% add_trace(y = ~cumfreqdea, name = 'Deaths', type = 'bar', mode = 'lines')
+fig3
+
+
+```
+
+According to this graph we can see that Total death cases are significantly lower than Total confirmed cases, which is always good sign for any country.
+
+
+# **3. Comparison With Other Countries**
+
+Selecting countries to compare with Pakistan (Covid 19 basis) is a interesting thins, because Pakistan is the world fifth populous country and it should be not compared with countries with lower populations. So here considered countries Australia, France (A European country), India (A neighbor south Asian country), Sri Lanka (A south Asian country), Russia and United States of America (US)
+
+## _Comparison of Pakistan With Other Countries Daily Confirmed Cases_
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+#other countries data cleaning process
+
+aus_corona_new <- aus_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(aus_corona_new)
+which(is.na(aus_corona_new$cases))
+
+fra_corona_new <- fra_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(fra_corona_new)
+which(is.na(fra_corona_new$cases))
+
+ind_corona_new <- ind_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(ind_corona_new)
+which(is.na(ind_corona_new$cases))
+
+rus_corona_new <- rus_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(rus_corona_new)
+which(is.na(rus_corona_new$cases))
+
+sl_corona_new <- sl_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(sl_corona_new)
+which(is.na(sl_corona_new$cases))
+
+us_corona_new <- us_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(us_corona_new)
+which(is.na(us_corona_new$cases))
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+#other countries overall analysis - define
+
+pak_corona_new_confirmed <- pak_corona_new %>% filter(type == "confirmed")
+aus_corona_new_confirmed <- aus_corona_new %>% filter(type == "confirmed")
+fra_corona_new_confirmed <- fra_corona_new %>% filter(type == "confirmed")
+ind_corona_new_confirmed <- ind_corona_new %>% filter(type == "confirmed")
+rus_corona_new_confirmed <- rus_corona_new %>% filter(type == "confirmed")
+sl_corona_new_confirmed <- sl_corona_new %>% filter(type == "confirmed")
+us_corona_new_confirmed <- us_corona_new %>% filter(type == "confirmed")
+
+a1 <- aus_corona_new_confirmed %>% select(date,cases,country)
+f1 <- fra_corona_new_confirmed %>% select(date,cases,country)
+i1 <- ind_corona_new_confirmed %>% select(date,cases,country)
+p1 <- pak_corona_new_confirmed %>% select(date,cases,country)
+r1 <- rus_corona_new_confirmed %>% select(date,cases,country)
+s1 <- sl_corona_new_confirmed %>% select(date,cases,country)
+u1 <- us_corona_new_confirmed %>% select(date,cases,country)
+
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+#other countries overall analysis - plot
+
+c <- rbind(a1,f1,i1,p1,r1,s1,u1)
+
+plot_ly(data = c , x = ~date, y = ~cases , type = 'scatter', mode = 'lines', color = ~country)
+```
+
+US and India are the Countries that Covid 19 was seriously affected and compared to these two countries Pakistan is in a much more comfortable position. And also compared to France, Australia and Russia also Pakistan is in a safer position. When ist come tp compare with Sri Lanka, both Pakistan and Sri Lanka is in same levels considering daily covid confirmations. 
+
+
+
+
+## _Comparison With Other Countries Deaths_
+
+```{r echo=FALSE}
+
+#other countries overall analysis with death rates - define
+
+pak_corona_new_death <- pak_corona_new %>% filter(type == "death")
+aus_corona_new_death <- aus_corona_new %>% filter(type == "death")
+fra_corona_new_death <- fra_corona_new %>% filter(type == "death")
+ind_corona_new_death <- ind_corona_new %>% filter(type == "death")
+rus_corona_new_death <- rus_corona_new %>% filter(type == "death")
+sl_corona_new_death  <- sl_corona_new  %>% filter(type == "death")
+us_corona_new_death  <- us_corona_new  %>% filter(type == "death")
+
+
+a2 <- aus_corona_new_death %>% select(date,cases,country)
+f2 <- fra_corona_new_death %>% select(date,cases,country)
+i2 <- ind_corona_new_death %>% select(date,cases,country)
+p2 <- pak_corona_new_death %>% select(date,cases,country)
+r2 <- rus_corona_new_death %>% select(date,cases,country)
+s2 <-  sl_corona_new_death %>% select(date,cases,country)
+u2 <-  us_corona_new_death %>% select(date,cases,country)
+
+d <- rbind(a2,f2,i2,p2,r2,s2,u2)
+
+```
+
+```{r echo=FALSE}
+
+#other countries overall analysis with death rates - plot
+
+plot_ly(data = d , x = ~date, y = ~cases , type = 'bar', mode = 'lines', color = ~country) 
+```
+When its come to daily  death comparison with Australia, France, India, Russia, Sri Lanka and US with pakistan;
+
++ Pakistan did better than India, US, Russia and France.
++ Australia, Pakistan and Sri Lanka managed to survive compared to other countries
+
+# **4. Conclusions and Recommendations**
+
++ Overall The Government of Pakistan is having the situation in under control. However they need to carry forward the health regulations and other safety procedures in order to completely over come from this pandemic. 
++ Its obvious that Covid Vaccinations are very effective and it had a major impact on daily confirmed cases, Daily death cases and daily recovered cases. So, the government implement the vaccination continuously and encourage people to take advantage from it.
++ So far Pakistan had experienced 4 different waves of covid 19 and overcame successfully, and now they should use prior experience to minimize the damage on upcomming covid 19 waves.
+
+## _Limitations_
+
++ This report only analyzed only death rates, confirmed rates and recovered data rates, Their might be several factors to be considered.
++ The recovered data set is limited up to 2021 august 4 due to lack of data.
+
+# **5. References**
+
++ Wikipedia Contributors (2019). Pakistan. [online] Wikipedia. Available at: https://en.wikipedia.org/wiki/Pakistan.
+
++ Waris, A., Atta, U.K., Ali, M., Asmat, A. and Baset, A. (2020). COVID-19 outbreak: current scenario of Pakistan. New Microbes and New Infections, [online] 35, p.100681. doi:10.1016/j.nmni.2020.100681.
+
++ www.gavi.org. (n.d.). Pakistan has vaccinated more than 80% of the adult population against COVID-19. [online] Available at: https://www.gavi.org/vaccineswork/pakistan-has-vaccinated-more-than-80-population-against-covid-19.
+
++ covid19.trackvaccines.org. (n.d.). Pakistan – COVID19 Vaccine Tracker. [online] Available at: https://covid19.trackvaccines.org/country/pakistan/ [Accessed 8 Oct. 2022].
+
++ Worldometer (2021). Australia Coronavirus: 1,072 Cases and 7 Deaths - Worldometer. [online] www.worldometers.info. Available at: https://www.worldometers.info/coronavirus/country/australia/.
+
++ www.worldometers.info. (n.d.). France Coronavirus: 59,105 Cases and 5,387 Deaths - Worldometer. [online] Available at: https://www.worldometers.info/coronavirus/country/france/.
+
++ Worldometer (2021). India Coronavirus: 887 Cases and 20 Deaths - Worldometer. [online] www.worldometers.info. Available at: https://www.worldometers.info/coronavirus/country/india/.
+
++ The New York Times (2021). Coronavirus in the U.S.: Latest Map and Case Count. The New York Times. [online] 21 Apr. Available at: https://www.nytimes.com/interactive/2021/us/covid-cases.html.
+
++ www.worldometers.info. (2021). Coronavirus Graphs: Worldwide Cases and Deaths - Worldometer. [online] Available at: https://www.worldometers.info/coronavirus/worldwide-graphs/.
+
++ www.hpb.health.gov.lk. (n.d.). HPB | Live updates on New Coronavirus (COVID-19) outbreak. [online] Available at: https://www.hpb.health.gov.lk/en.
+
++ Wikipedia. (2020). COVID-19 pandemic in Pakistan. [online] Available at: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Pakistan.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

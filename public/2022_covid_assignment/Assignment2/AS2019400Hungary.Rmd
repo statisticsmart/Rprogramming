@@ -1,0 +1,204 @@
+---
+title: "THE COVID-19 PANDEMIC IN HUNGARY"
+author: "K.M.N.Jayathilaka AS2019400"
+date: "10/5/2022"
+output: html_document
+---
+# 1. Introduction
+
+ * Hungary
+
+Hungary is a landlocked country in Central Europe. Spanning 93,030 square kilo meters (35,920 sq mi) of the Carpathian Basin, it is bordered by Slovakia to the north, Ukraine to the northeast, Romania to the east and southeast, Serbia to the south, Croatia and Slovenia to the southwest, and Austria to the west. Hungary has a population of nearly 10 million, mostly ethnic Hungarians and a significant Romani minority. Hungarian, the official language, is the world's most widely spoken Uralic language and among the few non-Indo-European languages widely spoken in Europe.
+
+ * Health Condition in Hungary
+
+Hungary maintains a universal health care system largely financed by government national health insurance. According to the OECD, 100% of the population is covered by universal health insurance, which is free for children, students, pensioners, people with low income, handicapped people, and church employees. Hungary spends 7.2% of GDP on healthcare, spending $2,045 per capita, of which $1,365 is provided by the government. here are considerable health disparities between the western and eastern parts of Hungary; heart disease, hypertension, stroke, and suicide is prevalent in the mostly agricultural and low-income Great Plain region in the east, but infrequent in the high-income, middle class areas of Western Transdanubia and Central Hungary. Smoking is a leading cause of death in the country
+
+ * Covid-19 pandemic situation in Hungary
+
+The COVID-19 pandemic in Hungary is part of the ongoing worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). On 4 March 2020, the first cases in Hungary were announced. On March 18, 2020, Surgeon general Cecília Müller announced that the virus had spread to every part of the country.As of June 2021, Hungary has the second-highest COVID-19 death rate in the world. 
+The first two known cases were students from Iran, who were studying in Hungary. One of them was enrolled at the Pharmacy Faculty of Semmelweis University. The student did not comply with the preventive measures required by the university as a precaution. He already visited his primary care physician and he was diagnosed with bacterial infection so that he didn't have to quarantine himself, and instead, he attended courses held in English with 16 other students. The other person studied at the Hungarian University of Agriculture and Life Sciences in Gödöllő, who after returning from Iran, went to a self-declared quarantine. He did not attend lectures at the university, but went to Saint Ladislaus Hospital, and declared that he had arrived from an infected territory. Both of them were transported to Saint Ladislaus Hospital. They had mild symptoms. They arrived back in Hungary on 26 and 28 February 2020.
+
+ * Location 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse) 
+library(magrittr)
+hungary_corona <- coronavirus %>% filter(country == "Hungary")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = hungary_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+# 2. Data Analysis
+
+### 2.1  Covid-19 Confirmed Cases in hungary
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+hungary_corona <- coronavirus %>% filter(country == "Hungary")
+confirmed_hungary_corona <- hungary_corona %>% filter(type=="confirmed")
+summary(confirmed_hungary_corona)
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+confirmed_hungary_corona <- hungary_corona %>% filter(type=="confirmed") 
+ggplot(confirmed_hungary_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Hungary: Daily Covid-19 Confirmed cases")
+```
+
+According to the summary statistics  and the plot we can say that there is few number of (almost zero) covid-19 confirmed cases in this country at the beginning of the covid-19 pandemic in 2020.By 2021 and at the end of the 2020 we can see that number of confirmed cases have slightly increased and then going to decrease .By 2022 there is a huge increase in number of confirmed cases in covid-19 in hungary compare to the 2020 and 2021.The the confirmed cases reported are increased 4 times than before.By now the number of confirmed cases are decreasing in this countery.
+
+
+### 2.2 Anaysis of Reported Deaths in hungary from Covid-19
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+deaths_hungary_corona <- hungary_corona %>% filter(type=="death") 
+ggplot(deaths_hungary_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Hungary: Daily Covid-19 deaths")
+```
+
+According to the plot we can say that there is few number of  covid-19 deaths reported in this country at the beginning of the covid-19 pandemic in 2020.By 2021 and at the end of the 2020 we can see that number of deaths have increased .By 2022 there is a huge increase in number of deaths in covid-19 in hungary compare to the 2020 and 2021.By now the number of deaths are decreasing in this countery.
+
+### 2.3 Anaysis of number of Recovered people  from Covid-19
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+recover_hungary_corona <- coronavirus %>% filter(type=="recovery") 
+ggplot(recover_hungary_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Hungary: Daily Covid-19 recoveries")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+recover_hungary_corona <- coronavirus %>% filter(type=="recovery")
+recover_hungary_corona2 <- recover_hungary_corona%>% filter(cases >= 0)
+ggplot(recover_hungary_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Hungary: Daily Covid-19 recoveries")
+```
+
+According to this plot we can see the recovered data have not entered after 2021.Also we can say that daily recoveries have increased when we going to 2020 to 2021.
+
+### 2.4 Analysis of Covid 19 Active cases in Hungary
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+hungary_corona2 <- hungary_corona%>% filter(cases >= 0)
+corona_hungary_wider <- hungary_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+corona_hungary_wider$active_hungary_corona <- corona_hungary_wider$confirmed - corona_hungary_wider$death - corona_hungary_wider$recovery
+ggplot(corona_hungary_wider, aes(x=date, y=active_hungary_corona)) + geom_line() + ggtitle("hungary: Daily Covid-19 Active cases")
+```
+
+When we analyze the Daily covid-19 active cases in hungary,we can see at middle of year 2022 there is a huge increase in active cases. In Last year,there are some days which have negative value of active cases that means in those days the amount of recoveries is higher than the amount of active cases found in  those days.Also we can see By now the active cases are decreasing.
+
+# 3. Comprison Covid-19 situation in Hugary with neighbour countries
+
+### 3.1 Comparing Covid-19 Confirmed Cases in hungary with three neighbour countries
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+confirmedcases_hungary_corona <- hungary_corona %>% filter(type=="confirmed")
+
+italy_corona <- coronavirus  %>% filter(country == "Italy")
+confirmed_italy_corona <- italy_corona %>% filter(type=="confirmed")
+
+germany_corona <- coronavirus  %>% filter(country == "Germany")
+confirmed_germany_corona <- germany_corona %>% filter(type=="confirmed")
+
+poland_corona <- coronavirus  %>% filter(country == "Poland")
+confirmed_poland_corona <- poland_corona %>% filter(type=="confirmed")
+
+near_country <- rbind(confirmedcases_hungary_corona, confirmed_italy_corona, confirmed_germany_corona,confirmed_poland_corona)
+
+ggplot(near_country, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed cases in hungary's neighbour countries")
+```
+
+Here I have compared Covid-19 Confirmed Cases in hungary with three neighbour countries.They are Germany,Italy and poland.Here we can clearly see that number of covid-19 cases in hungary are very low in throught this three years compare to the Germany,Italy and poland.we can say that there is few number of covid-19 confirmed cases in these countries also at the beginning of the covid-19 pandemic in 2020.By 2021 and at the end of the 2020 we can see that number of confirmed cases have slightly increased .By 2022 there is a huge increase in number of confirmed cases in covid-19 in these countries also compare to the 2020 and 2021.By now the number of confirmed cases are decreasing in these three countries.By comparing we can say that Hungary has low spread of Covid-19 .
+
+
+### 3.2 Comparing the number of Recovered people from Covid-19 in Hungary with three neighbour countries
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+recover_hungary_corona <- hungary_corona %>% filter(type=="recovery")
+
+italy_corona <- coronavirus  %>% filter(country == "Italy")
+recover_italy_corona <- italy_corona %>% filter(type=="recovery")
+
+germany_corona <- coronavirus  %>% filter(country == "Germany")
+recover_germany_corona <- germany_corona %>% filter(type=="recovery")
+
+poland_corona <- coronavirus  %>% filter(country == "Poland")
+recover_poland_corona <- poland_corona %>% filter(type=="recovery")
+
+near_country2 <- rbind(recover_hungary_corona,recover_italy_corona, recover_germany_corona, recover_poland_corona)
+
+ggplot(near_country2, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("recovered cases in Hungary's neighbour countries")
+```
+
+
+### 3.3  Comparing the Reported Deaths in hungary from Covid-19 with three neighbour countries
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+deaths_hungary_corona <- hungary_corona %>% filter(type=="death")
+
+italy_corona <- coronavirus  %>% filter(country == "Italy")
+deaths_italy_corona <- italy_corona %>% filter(type=="death")
+
+germany_corona <- coronavirus  %>% filter(country == "Germany")
+deaths_germany_corona <- germany_corona %>% filter(type=="death")
+
+poland_corona <- coronavirus  %>% filter(country == "Poland")
+deaths_poland_corona <- poland_corona %>% filter(type=="death")
+
+near_country3 <- rbind(deaths_hungary_corona, deaths_italy_corona, deaths_germany_corona, deaths_poland_corona)
+
+ggplot(near_country3, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("death cases in Hungary's neighbour countries")
+```
+
+When we compare the Reported Deaths in hungary from Covid-19 with Germany,Italy and poland, Reported Deaths in hungary from Covid-19 are also in very low compare to these contries.Also I want to say there are large number of deaths in italy at the beginnig of the pandemic in 2020.It has existed until 2021 aferthat there is some decrease in deaths by 2022.Poland and Gemany also have large number of deaths in 2021 and by 2022 it has reduced to some extent.
+
+
+# 4. Conclusion
+
+According to the results that we got we can clearly see that daily confirmed covid-19 cases ,daily reported amount of deaths from covid-19 and also daily recorded active cases have huge increase at the beginning of 2022 in hungary.Neighbour countries that I got to compare with the hungary also have the same situation as hungary.By now this situation is reducing in some extent .we can see it from the plots that I have created for the daily confirmed cases ,daily deaths and active cases.In addition to this we can say that the number of confirmed cases and number of deaths are very low compare to the Germany ,Italy and Poland .So we can conclude that the condition of covid-19 virus is good situation in hungary compare to the other countries. 
+
+# 5. Discussion
+
+According to the results that we got we can clearly see that daily confirmed covid-19 cases , daily reported amount of deaths from covid-19 and also daily recorded active cases have huge increase at the beginning of 2022 in hungary.This is happen due to the many reasons.The early days of the pandemic brought restrictions on public life that most of us had never experienced before, with people not allowed to leave their homes except for essential purposes. Schools, workplaces, restaurants and shops shut.But by 2022 government reduce the all the restrictions imposed for the public and all the private and public sector workplaces and institues open and start work as a whole like before the pandemic situatin.Government prevented the huge spread of covid-19  throught  the lockdowns in the whole country.Due to these opening of the country, again spreading of the covid-19 start to increase.IN addion to this we can see most of people do not wearing mask and do not follow any health instructions which gives by the government for the preventing covid 19.So we can say that this increase is happen due to these reason which i explained here.But by now this situation has reduced in some extend.we can explain that situation like this .we can think people have adapted to face this virus and from the vaccinations people have got more immunity.Since there is no recovery data after 6 August 2021,and the amount of recoveries -749773 in 5 august 2021 we are in some trouble in analysing the recovery data set.
+
+# 6. References
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Hungary
+
+https://en.wikipedia.org/wiki/Hungary
+
+https://www.gavi.org/vaccineswork/5-reasons-why-pandemics-like-covid-19-are-becoming-more-likely?gclid=Cj0KCQjw-fmZBhDtARIsAH6H8qg9NrYmJuIrrjQ_sbqO20LhNnjfLa-Vth_lOXepiYlnAw34erGM_DwaAvtpEALw_wcB
+
+
+
+
+

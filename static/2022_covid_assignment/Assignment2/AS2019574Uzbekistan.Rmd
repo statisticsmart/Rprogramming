@@ -1,0 +1,266 @@
+---
+title: "Covid-19 Pandemic In Uzbekistan"
+author: "W. A. P. T. Weragoda
+         - AS2019574"
+date: "2022-10-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+```{r message=FALSE , warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+
+library(maptools)
+library(plotly)
+library(gganimate)
+
+```
+
+# Introduction
+
+
+The corona virus pandemic is the world's most significant public health emergency right now.The World Health Organization declared the novel corona virus a worldwide pandemic on 11 March 2020. The covid-19 pandemic alert is still active. The virus was confirmed to have spread to Uzbekistan when its first case was confirmed on 15 March 2020, an Uzbek citizen returning from France.There have been 241,953 infections and 1,637 corona virus-related deaths reported in the country since the pandemic began. Uzbekistan is thus one of the largest countries in Asia and the 57th biggest in the world. It is located north of Turkmenistan and Afghanistan.Uzbekistan has four small exclaves in Turkmenistan. As the Caspian Sea is an inland sea with no direct link to the oceans, Uzbekistan is one of only two "doubly landlocked" countries completely surrounded by other landlocked countries. There current population is 35.60 million people, which is expected to increase over the next few decades.
+
+
+```{r, warning=FALSE, message=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+uzbekistan_corona <- coronavirus %>% filter(country == "Uzbekistan")
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group),
+    fill = "gray",
+    colour = "black"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = uzbekistan_corona,
+             aes(x = long, y = lat),
+             color = "red",
+             size = 1.3)
+```
+
+
+The land has a total area of 447,400 km² (172,742 mi²). This land area is approximately 111% of the area of California. There are direct national borders with the 5 neighboring countries Afghanistan, Kazakhstan, Kyrgyzstan, Tajikistan and Turkmenistan.
+
+Uzbekistan has road connections with all its neighbours. A friendship bridge links Afghanistan with Termiz in Uzbekistan, which while open to tourists, can sometimes close due to security concerns.As well as Uzbekistan is doubly landlocked. There is no sea ports. Uzbekistan's main river port is Termez on the Amu Darya river. This is not of interest to visitors as it serves as an important transfer point for humanitarian supplies entering from Afghanistan. Air port is in the south of the town, about 11km from the centre. 
+
+Uzbekistan has an arid and continental climate characterized by large variations in temperature within days and between seasons. Summers are long, hot and dry, with an average monthly temperature of 27.2°C in the hottest month (July), and with an average daily maximum of 35°C in many of the major cities. Winters are cold, with average monthly temperatures of -1°C to -3°C between December and February. The climate condition in Uzbekistan during the time of corona virus was quite good for travel. The climate in Tashkent in March the maximum temperature is 17°C and minimum temperature is 9°C (for an average temperature of 13°C).
+
+In 1st of may 2020 heavy rain and strong winds affected north Uzbekistan and south Kazakhstan causing the overflow of the Sardoba Reservoir Dam located near the border of the two countries. Further 13th July 2021 in border regions between Uzbekistan and Kyrgyzstan spurred mudslides causing the heavy rain.
+
+Uzbekistan used very strict lock down measures including quarantine of all suspected cases and contacts have helped reduce the 5-day moving average of daily new confirmed COVID-19 cases from over 100 mid-April to below 50 by end of April to mid-May 2020. Since then, and with the gradual lifting of a number of travel restrictions,4 it has gradually been increasing to over 300 by the first week of July 2020.The government of the Republic of Uzbekistan has demonstrated strong and timely leadership in the COVID-19 pandemic and the guidance of the SRC, a multilateral COVID-19 management team was established on 12 March 2020 to plan and coordinate multilateral support for COVID-19 socioeconomic response and recovery.
+
+
+# Exploratary Data Analysis
+
+```{r results='hide'}
+uzbekistan_corona <- coronavirus %>% filter(country == "Uzbekistan")
+uzbekistan_corona1 <- uzbekistan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(uzbekistan_corona1)
+which(is.na(uzbekistan_corona1$cases))
+
+uzbekistan_corona1$cases[2330] = mean(c(uzbekistan_corona1$cases[2329], uzbekistan_corona1$cases[2331]))
+length(uzbekistan_corona1$cases)
+```
+
+```{r}
+ggplotly(ggplot(uzbekistan_corona1, aes(x=date, y=cases)) +
+  geom_line() + ggtitle("Figure 01: Time series plot of all cases (discontinuity represents missing values)"))
+
+
+```
+
+```{r results='hide'}
+uzbekistan_corona1$col <- as.factor(c(rep("all cases", 2328),rep("missing cases", 2), rep("all cases", 2652-2330)))
+summary(uzbekistan_corona1)
+```
+
+```{r}
+
+ggplotly(ggplot(uzbekistan_corona1,aes(x =date,y =cases))
+      +geom_line(aes(colour=col, group=1))
+      +ggtitle("Figure 02: Time Series plot of all cases by removing missing values"))
+
+```
+
+Figure 1 and 2 shows that, how covid-19 spread between 2020 to 2022 in Uzbekistan. 12 th August 2020 recorded the highest number of patients from there. In 2021 January month gave less number of patients than the other months.
+
+
+
+#### Visualization for Confirmed Cases
+
+```{r results='hide'}
+confirmed_uzbekistan_corona <- uzbekistan_corona %>% filter(type=="confirmed")
+summary(confirmed_uzbekistan_corona)
+
+confirmed_uzbekistan_corona <- confirmed_uzbekistan_corona %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(confirmed_uzbekistan_corona)
+
+which(is.na (confirmed_uzbekistan_corona$cases))
+
+
+```
+
+```{r}
+ggplotly(ggplot(confirmed_uzbekistan_corona,aes(x =date,y =cases))
+     + geom_path(size = 1, color="Orange")
+      +ggtitle("Figure 03: Time series plot of Confirmed Cases"))
+
+```
+
+Above graph shows the confirmed number of corona patients in Uzbekistan between 2020 to 2022. On 23 March 2020, the Uzbekistan government announced that a lock down of Tashkent. This graph summarizes the trajectory of the confirmed cases as the it can be clearly seen that the total confirmed cases curve has flattened towards the lock down phase, but we can see the fast approaching of second wave. On 9 August 2020, 5 August 2021, and 23 January 2022 gave the highest number of confirmed cases.
+
+#### Visualization for Recovered Cases
+
+```{r results='hide'}
+recovery_uzbekistan_corona <- uzbekistan_corona %>% filter(type=="recovery")
+summary(recovery_uzbekistan_corona)
+
+recovery_uzbekistan_corona <- recovery_uzbekistan_corona %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(recovery_uzbekistan_corona)
+
+which(is.na (recovery_uzbekistan_corona$cases))
+recovery_uzbekistan_corona$cases[562]=mean(c(recovery_uzbekistan_corona$cases[561], recovery_uzbekistan_corona$cases[563]))
+
+length(recovery_uzbekistan_corona$cases)
+
+recovery_uzbekistan_corona$col <- as.factor(c(rep("recovered",560),rep("missing value",2),rep("recovered",884-562)))
+
+summary(recovery_uzbekistan_corona)
+
+```
+
+```{r}
+ggplotly(ggplot(recovery_uzbekistan_corona,aes(x =date,y =cases))
+      +geom_line(aes(colour=col, group=1))
+      +ggtitle("Figure 04: Time series plot of Recovered Cases"))
+
+```
+
+Above graph shows the number of patients recovered from corona in Uzbekistan in daily basis. No.of patients recovered in a day has also increased from June to August in 2020. From August 2020 to January 2021 to, recovered cases were decreased. 
+
+#### Visualization for Death Cases
+
+```{r results='hide'}
+death_uzbekistan_corona <- uzbekistan_corona %>% filter(type=="death")
+summary(death_uzbekistan_corona)
+
+death_uzbekistan_corona <- death_uzbekistan_corona %>% mutate(cases =replace ( cases, which( cases < 0 ),NA))
+summary(death_uzbekistan_corona)
+
+which(is.na (death_uzbekistan_corona$cases))
+
+```
+
+```{r}
+ggplotly(ggplot(death_uzbekistan_corona,aes(x =date,y =cases))
+      +geom_line(aes(color = "Death",group=1))
+      +ggtitle("Figure 05: Time series plot of Death Cases"))
+```
+
+Above graph shows the number of deaths from Corona in Uzbekistan in daily basis. This graph also shows that number of deaths are increasing from June 2020 to September 2020 and May 2021 to September 2021. Although fluctuations shows that in some days number of deaths are less than the previous day
+
+#### Visualization of Confirmed, Recovery and Death Cases
+
+```{r results='hide'}
+uzbekistan_corona_d1 <- uzbekistan_corona1 %>% mutate(cases= replace(cases,which(cases < 0), NA))
+summary(uzbekistan_corona_d1)
+
+which(is.na(uzbekistan_corona_d1$cases))
+uzbekistan_corona_d1$cases[2330] = mean(c(uzbekistan_corona1$cases[2329], uzbekistan_corona1$cases[2331]))
+
+```
+
+```{r}
+
+ggplot(uzbekistan_corona_d1, aes(date, cases, col=cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +
+  labs(title = "Figure 06: Confirmed, Death and Recovered cases in Uzbekistan")
+```
+
+This graph shows in Uzbekistan performed well through the corona pandemic. Because there number of deaths were less when comparing with the confirmed and recovered patients. 
+
+#### Visualization for Active Cases
+
+```{r results='hide', warning=FALSE, message=FALSE}
+uzbekistan_active_cases <-  uzbekistan_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+```
+
+```{r}
+
+ggplotly(ggplot(uzbekistan_active_cases,aes(x =date,y =total_active))
+      +geom_line(color="orange") + transition_reveal(date)
+      +ggtitle("Figure 07: COVID-19 total Acive cases in Uzbekistan"))
+```
+
+Above graph represents active cases in Uzbekistan. It shows flattered area from 2020 to middle of the 2021. But at the end figure shows that active cases were increased from 2021 to 2022.
+
+#### Comparison with neighbour countries
+```{r}
+neighbour_country_uzbekistan <- coronavirus %>% filter (continent_code=="AS")
+neighbour_country <- neighbour_country_uzbekistan %>% filter (country== c ("Kazakhstan", "Kyrgyzstan", "Tajikistan","Uzbekistan"))
+
+## neigbhour country confirmed 
+confirmed_neighbour_country <- neighbour_country %>% filter (type=="confirmed")
+confirmed_neighbour_country <- confirmed_neighbour_country %>% mutate(cases = replace (cases, which (cases<0),NA))
+
+ggplot(confirmed_neighbour_country, aes(x=date, y= cases, colour=country)) + geom_path(size=1) +
+  labs(title = "Comparison - confirmed")
+
+
+```
+
+Above figure compares  confirmed cases with Kazakhstan, Kyrgyzstan,and Tajikistan. Kazakhstan has more confirmed cases than the Uzbekistan and Tajikistan shows the less number of confirmed cases than the other countries.
+
+# Conclusions
+
+Uzbekistan response to COVID-19 provides interesting insights about governance of healthcare system. The government of the Republic of Uzbekistan has demonstrated strong and timely leadership in the COVID-19 pandemic. As a double land-locked country at the center of the Central Asia and the transcontinental
+cross-roads between Asia and Europe, Uzbekistan is particularly vulnerable to outbreaks of infectious diseases. They applied travel restrictions and controlled virus properly and timely. As well as we can see their vaccination coverage is high, and common infectious diseases have been brought under control.when we comparing with the Kazakhstan, which has confirmed almost 102,000 COVID-19 cases with 1,356 deaths. But in the Uzbekistan which has reported 33,323 cases and 216 deaths. So we can conclude that Uzbekistan controlled this pandemic smoothly from 2020 to 2022. However with regards to other countries as mentioned earlier, Uzbekistan is doing remarkably well, even with many obstacles in their way such as slides, floods. 
+
+# Limitations
+
+Data on testing and hospital facilities could be helpful in identifying the effectiveness of the decisions taken. There is also the case of readjustment of cases which has happened several times in the data, thereby resulting in negative cases. Further there were a missing values also. When pays attention to the whole country some situations only talks about the Tasken which is the capital of the Uzbekistan.
+
+# References
+
+* https://covid19.who.int/region/euro/country/uz
+
+* https://www.adb.org/sites/default/files/linked-documents/54282-001-sd-01.pdf
+
+* https://www.adb.org/sites/default/files/linked-documents/54282-001-sd-01.pdf
+
+* https://en.wikipedia.org/wiki/Uzbekistan
+
+* https://ourworldindata.org/coronavirus/country/uzbekistan
+
+* https://www.w3schools.com
+
+* https://www.reuters.com/article/us-health-coronavirus-uzbekistan-lockdow-idUSKBN2491HL
+
+* https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/uzbekistan/
+
+
+

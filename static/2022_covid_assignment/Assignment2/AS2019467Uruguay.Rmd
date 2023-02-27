@@ -1,0 +1,317 @@
+---
+title: "Covid-19 Pandemic in Uruguay"
+author: "Hansani Nawagamuwa AS2019467"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# INTRODUCTION
+
+### Location of the Uruguay in the world map
+
+<h4>Uruguay, country located on the southeastern coast of South America</h4>
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+library(coronavirus)
+library(dplyr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(sp)
+library(leaflet)
+
+
+wrld_s <- coronavirus %>% filter(country =="Uruguay")
+df <- data.frame(lat = wrld_s$lat , long = wrld_s$long)
+set.seed(12345)
+#df <- data.frame(lat= runif(30, min = 19.07, max = 28.70), long=runif(30, min = 72.87, max = 77.10))
+
+df %>%
+  leaflet( width = 900) %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions(), popup = "Hi")
+
+```
+### Climate Condition in Uruguay
+<h4>In Uruguay, a South American country bordering Brazil and Argentina, the climate is subtropical, with mild winters (from June to August) and hot summers (from December to March), and it is also quite rainy throughout the year.In most of the country, the average temperatures are similar to those of the coasts of the Mediterranean Sea, while in the far north, they are a little higher. However, in Uruguay, in comparison with the Mediterranean climate, even summer is rainy, although this happens because of thunderstorms, which do not reduce by much the sunshine hours. In addition, clashes between air masses and temperature variations in Uruguay are stronger than in the more sheltered Mediterranean Sea, so much so that sometimes it can get either very cool in summer or hot in winter.</h4>
+<h4>Annual precipitation hovers around 1,000/1,100 millimeters (40/43 inches) in the south (see Montevideo), while it's higher in the center and north, where it's around 1,200/1,400 mm (47/55 in), but in the far north, it reaches as high as 1,600 mm (63 in).Winter in Uruguay is mild, but it can be windy and unstable, especially in the south. In addition, outbreaks of cold air, brought by the wind called Pampero, can occur throughout the country, from May to September, with possible slight frosts at night. In the central-southern cities located at some distance from the coast , the cold records are around -7/-8 °C (17.5/19.5 °F).Snow in Uruguay is extremely rare, at least in the plains. Sometimes it can snow in the two hilly areas located in the south of the country, and where the altitude reaches 500 meters (1,650 feet), the Sierra Carapé (where the Cerro Catedral is located) and the Sierra de las Ánimas. On the plains, however, it practically never snows, although occasionally a bit of sleet can occur in the south of the country.Summer is hot and sunny, though thunderstorms can break out in the afternoon, more likely in the north. Heat waves are possible, with peaks of 38/40 °C (100/104 °F), from December to March in the center and south, and also in November in the north. The area most exposed to the heat is the western one, where the heat records are of 41/41.5 °C (106/106.5 °F).Spring and autumn are mild, but the weather is often unstable.</h4>
+       
+### Lockdown Status of a country & actions taken by the country
+
+<h4>Latin America continues to suffer some of the worst tolls of covid-19, with over seven million recorded infections accounting for nearly half of all daily deaths.But in the region's Southern Cone there is a clear outlier wedged between Brazil to the west, with over 3.5 million confirmed cases, and Argentina to the east, with half a million.Somehow, Uruguay has a lid on the pandemic.</h4>
+<h4>so,less than two weeks into his new job as Uruguay’s president, Luis Lacalle Pou acted promptly when Uruguay’s first case of covid-19 was confirmed in the capital of Montevideo on 13 March. Lacalle Pou announced that all public events and potential centres of crowding such as bars, churches, and shopping centres would be shut down. Schools were also closed, along with the country’s 1000 km porous border with Brazil, the epicentre of the pandemic in the region. Unlike most Latin American presidents, Lacalle Pou asked rather than ordered people to stay at home to protect the population, the oldest in Latin America.The swift action of the government slowed the spread of the virus and bought the country vital time to prepare its hospitals and testing system, says the team of scientists advising it. It also meant they could stop the virus’s spread before it became exponential as it did in the hardest hit nations.Epidemiologists traced the first outbreak to a wedding, where all attendees were tested and suspected infections isolated within 24 hours. The same approach was employed at the three subsequent outbreaks: a mental health care hospital, a care home for the elderly, and the city of Rivera, bordering Brazil. The result was that most local transmission chains have been controlled at the second or third ration of contacts, before their spread accelerated.The urgency and scientific grounding of the government’s early decision making characterised the country’s response ever since—and even before the first case was detected. All decisions passed through a cross-disciplinary committee of scientists who refocused their research to covid-19.</h4>
+    
+# EXPLANATORY DATA ANALYSIS  
+
+## Visualization of death ,confirmed ,recovered and active cases
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+corona_virus <- as_tibble(coronavirus)
+
+```
+
+
+#### Summary of the confirmed cases
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+corona_Uruguay_confirmed <- corona_virus %>% 
+  filter(country == "Uruguay") %>% 
+  filter(type == "confirmed") %>% 
+  select(date,country,type,cases) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+summary(corona_Uruguay_confirmed $cases)
+ggplot(corona_Uruguay_confirmed , aes(date,cases)) + geom_line() + ggtitle("Daily confirmed cases in Uruguay")
+
+
+```
+
+<h5> Figure 1:Daily confirmed cases</h5>
+
+<h4>Figure 1 shows that number of confirmed cases per day in Uruguay.At the begining of the 2021 year the covid-19 confirmed cases in Uruguay  fluctuated upward but at the middle of the 2021 the confirmed cases strated to decrease.In 2022 we can see the  approximately same pattern.But,the average number of daily confirmed cases reported in 2022 is higher than 2021.The maximum number of daily confirmed cases reported in 2022 which is 13612.</h4>
+
+
+#### Summary of the death cases
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+corona_Uruguay_death <- corona_virus %>% 
+  filter(country == "Uruguay") %>% 
+  filter(type == "death") %>% 
+  select(date,country,type,cases) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+summary(corona_Uruguay_death $cases)
+ggplot(corona_Uruguay_death , aes(date,cases)) + geom_line() + ggtitle("Daily death cases in Uruguay")
+
+```
+
+<h5>Figure 2:Daily death cases in the Uruguay</h5>
+
+<h4>Figure 2 shows that there is also upward and downward fluctuations  in the daily death cases in the Uruguay.The average death cases in the Uruguay per day is approximately equal to 8 from 2020-01-22 to 2022-06-23.Approximately by the middle of 2021 year death cases due to the covid-19 pandemic approached to the maximum which is 88 death cases in  the given time period.</h4>
+
+
+#### Summary of the recovery cases
+
+```{r,message=FALSE,echo=FALSE,warning=FALSE}
+
+corona_Uruguay_recovery <- coronavirus %>% 
+  filter(country == "Uruguay") %>% 
+  filter(type == "recovery") %>% 
+  select(date,country,type,cases) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+summary(corona_Uruguay_recovery $cases)
+ggplot(corona_Uruguay_recovery , aes(date,cases)) + geom_line() + ggtitle("Daily recovered cases in Uruguay")
+
+```
+
+<h5>Figure 3: Daily recovered cases in Uruguay</h5>
+
+<h4>Figure 3 shows that at the end of the 2020 we can see the increasement of the recovered cases in Uruguay daily basis.After the  very first few months of the 2021 there is a small decreacement of the recovered cases. At the mid of the 2021 year the recovered cases per day was arising to higher cases. However at the end of the 2021 the recovered cases due to the covid-19 pandemic approched to the  approximately zero. </h4>
+
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+corona_Uruguay <- coronavirus %>% 
+filter(country == "Uruguay") %>% 
+mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(corona_Uruguay ,aes(date,cases,col=type))+geom_line()+ggtitle("Daily corona cases with respect to types(confirmed,death,recovered)in Uruguay")
+```
+
+<h5>Figure 4:Daily confirmed cases,recovered cases & death cases in Uruguay </h5>
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+
+ggplot(corona_Uruguay, aes(date, cases)) + geom_path(size=1) + facet_grid(rows = vars(type)) +labs(title = "Confirmed, Death and Recovered cases in Uruguay")
+```
+
+<h5>Figure 5:Daily confirmed cases,recovered cases & death cases in Uruguay</h5>
+
+<h4>Both figure 4&5 shows the no.of confirmed, death and recovered corona patients in Uruguay in daily bais in the same graph.In both confirmed cases and recovered cases there can be seen upward and downward fluctuations.In the 2022 year eventhough there are a higher number of cases in confimed covid-19, there are approximately very less  daily recovery cases in 2022.By comparing the  daily death cases  in Uruguay with another two cases we can see approximately very less number of cases of that. </h4>
+
+# Comparison with other countries
+
+### comaparison with neighbourhood countries
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+combined_countries<-filter(coronavirus, country == "Argentina"|country =="Brazil"|country =="Uruguay")
+ combined_countries_confirmed <- filter(combined_countries, type == "confirmed") %>% 
+    select(date,country,type,cases) %>% 
+    mutate(cases = replace(cases,which(cases<0),NA)) 
+ggplot(combined_countries_confirmed, aes(x = date, y = cases, colour = country)) + geom_path(size=1)  + ggtitle("Daily Confirmed cases of the Uruguay & neighbourhood countries to Uruguay  ")
+
+```
+<h5> Figure 6:Daily confirmed cases of the Uruguay,Argentina & Brazil.</h5>
+
+<h4>Figure 6 shows that South America's second-smallest country, Uruguay is bordered by Brazil and Argentina and lies along the Atlantic Ocean.When considering the covid-19 confirmed cases per day Uruguay has less number of confirmed cases than Argentina & Brazil.</h4>
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+combined_countries<-filter(coronavirus, country == "Argentina"|country =="Brazil"|country =="Uruguay")
+combined_countries_death <- filter(combined_countries, type == "death") %>% 
+  select(date,country,type,cases) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA)) 
+ggplot(combined_countries_death, aes(x = date, y = cases, colour = country)) + geom_path(size=1)  + ggtitle("Daily death cases of the Uruguay & neighbourhood countries to Uruguay  ")
+
+```
+<h5>Figure 7:Daily death cases of the Uruguay,Argentina & Brazil.</h5>
+
+<h4>Figure 7 shows that likewise the confirmed cases in these three countries,Uruguay has the less number of corona death cases when comparing with another two countries which are Argentina & Brazil.Brazil has the approximatelty highest number of death cases than Uruguay and Argentina.And also Uruguay has not much  upward and downward fluctuations in the death cases similar as Argentina & Brazil.   </h4>
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+combined_countries<-filter(coronavirus, country == "Argentina"|country =="Brazil"|country =="Uruguay")
+combined_countries_recovery <- filter(combined_countries, type == "recovery") %>% 
+  select(date,country,type,cases) %>% 
+  mutate(cases = replace(cases,which(cases<0),NA)) 
+ggplot(combined_countries_recovery, aes(x = date, y = cases, colour = country)) + geom_path(size=1)  + ggtitle("Daily  recovered cases of the Uruguay & neighbourhood countries to Uruguay  ")
+
+```
+<h5>Figure 8:Daily  recovered cases of the Uruguay,Argentina & Brazil.</h5>
+
+<h4>Figure 8 shows that   the  recovered corona patients in Uruguay per day is less than the countries Brazil and Argentina.The daily recovery rate is high in Brazil and the recovery rate in Uruguay is negligle when compared to other two countries.And in  Argentina & Brazil there are considerable  flutuations of the recovered cases per day from the middle of the year 2020 to middle of the year 2021 whereas Uruguay has the neglible fluctuations.</h4> 
+
+
+### summary of total number of  confirmed,recovery & death cases in Uruguay ,Argentina & Brazil
+
+#### summary of total number of  confirmed,recovery & death cases in Uruguay
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+#Uruguay
+library(kableExtra)
+Uruguay_confirmed <- coronavirus %>%
+  filter(country=="Uruguay") %>%
+  filter(type=="confirmed") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_confirmed <- sum(Uruguay_confirmed$cases,na.rm = TRUE)
+
+Uruguay_recovered <- coronavirus %>%
+  filter(country=="Uruguay") %>%
+  filter(type=="recovery") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_recovered <-sum(Uruguay_recovered$cases,na.rm = TRUE)
+
+
+Uruguay_death <- coronavirus %>%
+  filter(country=="Uruguay") %>%
+  filter(type=="death") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_death <- sum(Uruguay_death$cases,na.rm = TRUE)
+
+## table
+l <- data.frame(type = "total",
+                Confirmed =total_confirmed,
+                Recovered =total_recovered,
+                death= total_death)
+l
+kable(l, "simple")
+```
+
+
+#### summary of total number of  confirmed,recovery & death cases in Argentina
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+
+library(kableExtra)
+ Argentina_confirmed <- coronavirus %>%
+  filter(country=="Argentina") %>%
+  filter(type=="confirmed") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_confirmed <- sum( Argentina_confirmed$cases,na.rm = TRUE)
+
+ Argentina_recovered <- coronavirus %>%
+  filter(country=="Argentina") %>%
+  filter(type=="recovery") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_recovered <-sum( Argentina_recovered$cases,na.rm = TRUE)
+
+
+ Argentina_death <- coronavirus %>%
+  filter(country=="Argentina") %>%
+  filter(type=="death") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_death <- sum( Argentina_death$cases,na.rm = TRUE)
+
+## table
+l <- data.frame(type = "total",
+                Confirmed =total_confirmed,
+                Recovered =total_recovered,
+                death= total_death)
+l
+kable(l, "simple")
+```
+
+#### summary of total number of  confirmed,recovery & death cases in Brazil
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+library(kableExtra)
+ Brazil_confirmed <- coronavirus %>%
+  filter(country=="Brazil") %>%
+  filter(type=="confirmed") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_confirmed <- sum( Brazil_confirmed$cases,na.rm = TRUE)
+
+ Brazil_recovered <- coronavirus %>%
+  filter(country=="Brazil") %>%
+  filter(type=="recovery") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_recovered <-sum( Brazil_recovered$cases,na.rm = TRUE)
+
+
+ Brazil_death <- coronavirus %>%
+  filter(country=="Brazil") %>%
+  filter(type=="death") %>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+total_death <- sum( Brazil_death$cases,na.rm = TRUE)
+
+## table
+l <- data.frame(type = "total",
+                Confirmed =total_confirmed,
+                Recovered =total_recovered,
+                death= total_death)
+l
+kable(l, "simple")
+
+
+
+
+```
+
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
+combined_countries<-filter(coronavirus, country == "Argentina"|country =="Brazil"|country =="Uruguay")
+combined_countries<-filter(coronavirus, country == "Argentina"|country =="Brazil"|country =="Uruguay")%>% 
+  mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(combined_countries, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) + ggtitle("Daily Confirmed, Death and Recovered cases of the Uruguay & neighbourhood countries to Uruguay")
+             
+```
+<h5>Figure 9:Daily Confirmed, Death and Recovered cases of the Uruguay,Argentina & Brazil"</h5>
+
+<h4>It seems that the death cases,recovered cases &confirmed cases of corona pandemic per day in Uruguay was negligible when comparing with  two neighbourhood countries which are Argentina & Brazil.For all three countries cannot see any considerable fluctuations in daily death cases in corona.Eventhough after the middle of the 2021 year the confirmed cases in Argentina & Brazil increased,the recovery cases of those two countries didnot increase considerably after the middle of the 2021. </h4>
+<h4>We can conclude that death precentage and recovered precentage of the Uruguay from 2020-01-22 to 2022-06-23 are 0.7681% and 39% respectively.We can conclude that death precentage and recovered precentage of the Argentina from 2020-01-22 to 2022-06-23 are 1.3811% and 49.4121% respectively.We can conclude that death precentage and recovered precentage of the Brazil from 2020-01-22 to 2022-06-23 are 2.0948% and 55.5653% respectively.</h4>
+
+# CONCLUSION & DISCUSSION
+
+<h4>We can conclude that in Uruguay due to increasement of confirmed cases in daily basis at the middle of the 2021 ,there is an incresement of death cases also in that given period.So,the confirmed cases and death cases were changing proportional wise.Eventhogh the death cases were increasing at the begining of the 2022 we cannot get the idea about the fluctuations of the recovered cases.so,we cannot  concluded that many of patients at the very first few months of 2022 was died without recovering or not.Because at the begining of the 2022 there is a discountinuity of the graph due to some missing values.Therefore we cannot get the much clear conclusion about the this cases.The conclusions are limitted.But before the 2022 the recovery cases had considerable fluctuations with corresponding with confirmed cases in Uruguay.So, we can conclude that the actions taken by the goverment in Uruguay for Covid-19 pandemic is good decisions by considering this limitted resources.</h4>
+<h4>By comparing the Uruguay with two neighbourhood countries Uruguay has the least daily death  cases precentage and the recovery cases precentage.Reason for that can be the restrictions that the goverment taken. For example,Uruguay is wedged between two of the region’s hotspots—Argentina and Brazil—where infections have been driven in part by a highly transmissible variant of SARS-CoV-2 called P.1, or Gamma. Some Uruguayan cities, such as Rivera, press against the border with Brazil, making travel restrictions between the countries ineffective there.</h4>
+<h4>The disease has reached different countries at different times, but comparing them all in this way can show whether the disease is progressing faster or slower in various places once it arrives. It is not possible to get an accurate decision based on the number of deaths. Because deaths depend on the underlying age and health of populations; the availability of various treatments; and the capacity of different health systems themselves. They are affected by several factors like climate, geography, genetic make-up, age-structure of the population</h4>
+
+# References
+https://ourworldindata.org/coronavirus/country/uruguay#cumulative-confirmed-deaths-how-do-they-compare-to-other-countries (accessed on 4th October 2023)
+
+https://www.britannica.com/place/Uruguay (accessed on 5th October 2023)
+
+https://www.scientificamerican.com/article/why-uruguay-lost-control-of-covid/ (accessed on 7th October 2023)
+
+https://www.who.int/emergencies/diseases/novel-coronavirus-2019?adgroupsurvey={adgroupsurvey}&gclid=CjwKCAjwv4SaBhBPEiwA9YzZvNHV7DhRZ23KhgiyzZjr0Js91aQjwdx_REfG4TglsWA9wF1GRGJbNxoCgBwQAvD_BwE (accessed on 7th October 2023)
+
+
+
+
+
+
+    
+
+
+

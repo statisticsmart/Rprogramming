@@ -1,0 +1,300 @@
+---
+title: "<u>**The Covid - 19 Pandemic in Egypt**</u>"
+author: "V.D.D.Roshani"
+date: "2022-10-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = FALSE , warning = FALSE)
+```
+```{r,echo=FALSE, include=FALSE , message=FALSE , warning=FALSE}
+install.packages("devtools")
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2019520") # index no : AS2019520
+install.packages("coronavirus")
+library(coronavirus)
+
+# Required libraries
+data(coronavirus)
+library(tidyverse)
+library(magrittr)
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+library(maps)  
+library(mapdata)
+library(dplyr)
+data(wrld_simpl)
+```
+# 1. Introduction
+
+### 1.1 Geography of Egypt
+
+Egypt has coastlines on the Mediterranean Sea, the River Nile, and the Red Sea. Egypt borders Libya to the west, the Gaza Strip to the northeast, Israel to the east and Sudan to the south. Egypt has an area of 1,002,450 km2 (387,050 sq mi) which makes it the 29th largest country in the world.
+
+The longest straight-line distance in Egypt from north to south is 1,420 km (880 mi), while that from east to west measures 1,275 km (792 mi). Egypt has more than 2,900 km (1,800 mi) of coastline on the Mediterranean Sea, the Gulf of Suez, and the Gulf of Aqaba. It has an Exclusive Economic Zone of 263,451 km2 (101,719 sq mi).
+
+```{r ,echo=FALSE}
+
+Egypt <- map("worldHires", regions="Egypt", plot=FALSE, fill=TRUE)
+
+map("worldHires", xlim=c(-180,+180), ylim=c(-90,90),col="black")
+map(Egypt, col="orange", fill=TRUE, add=TRUE)
+```
+
+### 1.2 Population of Egypt
+
+Egypt has a population of about 102 million people. According to current projections, Egypt’s population is expected to double by 2078. The population is currently growing at a rate of 1.94%, a rate that adds about 2 million people to the population every year.
+
+Egypt’s fertility rate is about 3.3 births per woman, well above the population replacement rate of 2.1 births per woman. Egypt has a relatively young population, where about 60% of the population is under 30 years old.
+
+The rapidly increasing population poses a threat to the Egyptian economy, where one-third of people live below the poverty line and the unemployment rate is around 10%.
+
+### 1.3 Impact of Covid-19  
+
+The first case of COVID-19 in Egypt was confirmed on February 14th, 2020 (IMF, 2021a). On March 24th, the government
+declared a public health emergency followed by a nationwide lock down aiming to contain the spread of the virus. Among the
+lock down measures, the government implemented a two-week curfew (Beschel, 2021), which was later extended to a month
+(Reuters, 2020).2
+ The curfew applied from 7 PM to 6 AM, during which time all public and private transport was suspended. All
+educational institutions were shut down until further notice. Shops and malls were closed on weekends and restaurants and
+coffee shops were only open for home delivery. Public events such as government meetings and sports events were restricted,
+a stay-at-home order was imposed with exceptions for essential trips, restrictions on internal movements were imposed, and
+a total border closure was instituted (Beschel, 2021). Most businesses remained open, but some of them may have reduced
+their hours to conform to the curfew. During the initial two weeks of lock down the government also suspended work on
+mega projects which led to a substantial decline in workforce on construction sites. 
+
+By the start of the holy month of Ramadan (April 23-May 23), the government started easing restrictions by reducing curfew
+hours, likely leading to the observed surge in cases in May and June 2020. The reported number of cases reached 187 per
+million (0.2 per thousand) in May followed by an all-time high of 416 cases per million (0.4 per thousand) in June 2020.
+Curfew hours were extended at the end of May and a mask mandate was imposed with an EGP 4,000 fine for violators (Beschel,
+2021). A month later, the government eased restrictions by limiting daily curfews to only four hours between 12 AM and 4 AM.
+Cafes, restaurants and hotels were allowed to operate at 25 per cent capacity and shops and places of worship could reopen.
+In mid-July, international flights to specific destinations were resumed (Hale, Angrist, Goldszmidt, et al., 2021). This loosening of restrictions resulted in a substantial drop in the stringency index in June and July; a loosening trend
+which was also prevalent in the rest of North Africa and around the world. Fortunately, the easing of restrictions coincided
+with a rapid decline in the number of reported cases, which remained low through October 2020.
+Although the officially-reported caseload figures are useful in reflecting the trends in COVID-19 cases across the different
+waves of the virus, they may not accurately reflect the total case count. In March 2021, the World Health Organization
+estimated that Egypt only had the capacity to conduct up to 200,000 tests, which meant that any cases beyond this number
+would go untested (Beschel, 2021). Moreover, the disparity in access to health services across regions means that some
+regions may have better access to testing than others. Low testing capacity probably explains the high case fatality rate in
+Egypt (5.7 per cent) compared to the world average (2.2 per cent), despite the relatively low rate of COVID-19 deaths per million
+(Beschel, 2021). This is either explained by incomplete testing coverage or a more targeted testing regime that prioritizes
+severe cases. The high case fatality rate could also reflect low treatment capacity or the prevalence of non-communicable
+diseases lowering the chance of survival among those who contract the virus (Beschel, 2021).
+    
+```{r , echo=FALSE ,include=FALSE}
+
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+
+```
+
+# 2.Explanatory Data Analysis about Covid- 19 Cases
+
+For this analysis I used the **coronavirus** data set and the data set has been filtered into **egypt_corona** - corona virus data of Egypt.Further there is a daily summary of corona virus(COVID - 19)cases by state/province of each country in **coronavirus** data set.There are 742,560 observations in this **coronavirus** data set with 15 variables.
+
+<u> Variables </u>
+
++ **date** - Date in YYYY-MM-DD format.
+
++ **province** - Name of province/state, for countries where data is provided split across multiple provinces/states.
+
++ **country** - Name of country/region.
+
++ **lat** - Latitude of center of geographic region, defined as either country or, if available, province.
+
++ **long** - Longitude of center of geographic region, defined as either country or, if available, province.
+
++ **type** - An indicator for the type of cases (confirmed, death, recovered).
+
++ **cases** - Number of cases on given date.
+
++ **uid** - Country code
+
++ **iso2** - Officially assigned country code identifiers with two-letter
+
++ **iso3** - Officially assigned country code identifiers with three-letter
+
++ **code3** - UN country code
+
++ **combined_key** - Country and province (if applicable)
+
++ **population** - Country or province population
+
++ **continent_name** - Continent name
+
++ **continent_code** - Continent code
+
+```{r}
+str(coronavirus) # internal data structure of the coronavirus data set 
+```
+
+From above data set we take 2652 observations with 15 variables related to Egypt for analysis.In below, there is a internal structure of *egypt_corona* data set and first few data.The data set contains the daily summary of Corona virus cases (confirmed, death, and recovered), by state/province of Egypt.
+
+
+```{r , echo=FALSE}
+str(egypt_corona) # internal structure of egypt_corona data set
+
+# Few obsevations of Confirmed, Recovered and Death corona cases 
+
+confirm_egypt_corona <- egypt_corona %>% filter(type == "confirmed") 
+row_idex <- c(1,2,3,4,5,6)
+confirm_egypt_corona[row_idex,]
+
+recover_egypt_corona <- egypt_corona %>% filter(type == "recovery")
+row_idex <- c(1,2,3,4,5,6)
+recover_egypt_corona[row_idex,]
+
+death_egypt_corona <- egypt_corona %>% filter(type == "death")
+row_idex <- c(1,2,3,4,5,6)
+death_egypt_corona[row_idex,]
+
+
+```
+
+```{r , echo=FALSE, message=FALSE}
+
+egypt_corona <- coronavirus %>% filter(country == "Egypt")
+
+egypt_confirmed_corona <- data.frame(egypt_corona %>% filter(type == "confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA)))
+egypt_death_corona <- data.frame(egypt_corona %>% filter(type == "death")%>% mutate(cases = replace(cases, which(cases < 0), NA)))
+egypt_recovered_corona <- data.frame(egypt_corona %>% filter(type == "recovery")%>% mutate(cases = replace(cases, which(cases < 0), NA)))
+ 
+# Total No. of confirm cases
+egypt_confirmed_cases <- select(egypt_confirmed_corona, cases)
+total_confirmed_cases <- sum(egypt_confirmed_cases)
+
+# Total No. of death cases
+egypt_death_cases <- select(egypt_death_corona, cases)
+total_death_cases <- sum(egypt_death_cases)
+
+# Total No. of recovered cases
+egypt_recovered_cases <- select(egypt_recovered_corona, cases)
+total_recovered_cases <- sum(egypt_recovered_cases, na.rm = TRUE) 
+
+egypt_active_cases <-  egypt_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+
+```
+
+In below table number of Corona cases are classified into confirmed, recovered and death.
+
+```{r ,echo=FALSE}
+tab <- data.frame(Case_type =c("Confirmed","Death","Recovered"),No_of_Cases = c(total_confirmed_cases,total_death_cases,total_recovered_cases))
+tab
+```
+<center>
+```{r , echo=FALSE}
+slices <- c(total_confirmed_cases ,total_death_cases,total_recovered_cases)
+lables <- c("Confirmed", "Death", "Recovered")
+percentage <- round(slices/sum(slices)*100)
+lables <- paste(lables, percentage) # add percents to labels
+lables <- paste(lables,"%",sep="") # add % to labels
+pie(slices,labels = lables, col=rainbow(length(lables)),
+   main="Pie Chart of Covid -19 Cases in Egypt")
+```
+</center>
+According to the above pie chart we can say that the number of recovered cases are much higher than the death cases.Further only 67% of covid cases are confirmed.
+
+```{r , echo=FALSE}
+# Confirmed Cases 
+confirm_egypt_corona1 <-data.frame(confirm_egypt_corona)
+confirm_egypt_corona1[confirm_egypt_corona1<0] <-NA
+(ggplot(confirm_egypt_corona1, aes(x = date, y= cases))
+     + geom_line(color = "brown", size = 0.5)
+      +ggtitle(" Daily COVID-19 confirmed cases in Egypt"))
+```
+
+This figure shows that the how the confirmed covid 19 cases fluctuated from beginning to the end.
+
+```{r , echo=FALSE}
+# Recovered Cases 
+recover_egypt_corona1 <-data.frame(recover_egypt_corona)
+recover_egypt_corona1[recover_egypt_corona1<0] <-NA
+(ggplot(recover_egypt_corona1, aes(x = date, y= cases))
+     + geom_line(color = " red ", size = 0.3)
+      +ggtitle(" Daily COVID-19 recovery cases in Egypt"))
+```
+
+Above graph shows that recovery cases fluctuation from beginning to end.
+
+```{r , echo=FALSE}
+# Death Cases 
+death_egypt_corona1 <-data.frame(death_egypt_corona)
+death_egypt_corona1[death_egypt_corona1<0] <-NA
+(ggplot(death_egypt_corona1, aes(x = date, y= cases))
+     + geom_line(color = " orange ", size = 0.5)
+      +ggtitle(" Daily COVID-19 death cases in Egypt"))
+```
+
+Above graph shows that death cases fluctuation from beginning to end.
+
+
+All the covid cases can be shown in one graph as below.
+
+```{r}
+egypt_corona1 <-data.frame(egypt_corona)
+egypt_corona1[egypt_corona1<0] <-NA
+(ggplot(egypt_corona1, aes(x = date, y= cases,col=type))
+     + geom_line(size = 0.3)
+      +ggtitle(" Daily COVID-19 cases in Egypt"))
+```
+
+##### Summary Covid data table of Egypt
+
+```{r , echo=FALSE}
+# egypt summary data table
+summary<-egypt_corona %>%
+  group_by(type) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  summarise(
+    minimum = min(cases),
+    maximum= max(cases),
+    median=median(cases),
+    mean = mean(cases)
+  )
+str(summary)
+```
+### 3. Neighbourhood Countries
+We can recognized Libya, Sudan, Israel as the neighborhood countries to the Egypt.
+```{r,echo=FALSE}
+libya_corona <- coronavirus %>% filter(country == "Libya")
+sudan_corona <- coronavirus %>% filter(country == "Sudan")
+israel_corona <- coronavirus %>% filter(country == "Israel")
+str(libya_corona)
+
+```
+
+```{r,echo=FALSE}
+str(sudan_corona)
+
+```
+
+```{r,echo=FALSE}
+str(israel_corona)
+```
+### References
+https://www.nationsonline.org/oneworld/map/egypt_map.htm#:~:text=Countries%20with%20international%20borders%20to,%2C%20Saudi%20Arabia%2C%20and%20Turkey.
+
+https://www.unwomen.org/en/digital-library/publications/2022/06/government-responses-to-covid-19-lessons-on-gender-equality-for-a-world-in-turmoil?gclid=CjwKCAjwv4SaBhBPEiwA9YzZvMD46YmTIq3I0HO-NdxaHHDBt9LJ0p6_eLImcGUR_RoDDqBCu5N0RBoCDOQQAvD_BwE
+
+https://statisticsglobe.com/graphics-in-r

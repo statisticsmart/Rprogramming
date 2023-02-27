@@ -1,0 +1,461 @@
+---
+title: "An Overview of Covid 19 Analysis in Panama"
+author: "G.I.N Pemarathna"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+library(coronavirus)
+library(plotly)
+```
+
+# 1. Introduction
+
+Panama is a country located in Central America on the isthmus connecting North and South America. It is bordered by Costa Rica, Colombia, the Caribbean Sea, and the Pacific Ocean. The geography of Panama is mountainous. The government system is a presidential republic; the chief of state and head of government is the president. Panama has a mixed economic system which includes a variety of private freedom, combined with centralized economic planning and government regulation.
+
+## 1.1 Visualization
+
+Panama is located in Central America between Costa Rica to the north and Colombia to the south. It is at the southern end of the Central American isthmus (a narrow piece of land that connects two larger land areas) and forms the land bridge between North and South America. The nation is S-shaped and runs from east to west with a length of 772 kilometers (480 miles) and a width that varies from 60 to 177 kilometers (37 to 110 miles). Panama has an area of 77,381 square kilometers (29,762 square miles) which makes it slightly smaller than South Carolina. This area consists of 75,990 square kilometers (29,340 square miles) of land and 2,210 square kilometers (853 square miles) of water. The nation borders the Caribbean Sea on one coast and the Pacific Ocean on the other. The 80-kilometer (50-mile) Panama Canal cuts the nation in half and joins the Atlantic and Pacific Oceans. The combined coastlines of Panama are 2,857 kilometers (1,786 miles) long. The nation's border with Costa Rica is 330 kilometers (205 miles), and its border with Colombia is 225 kilometers (140 miles) in length. Panama's capital and largest city, Panama City, with a population of 827,828, is located on the Pacific coastline of the country. The second largest city is Colón, located on the Atlantic coast. Colón has a population of 140,908.
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+data(wrld_simpl)
+panama_corona <- coronavirus %>% filter(country == "Panama")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = panama_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+## 1.2 Climate Conditions
+
+Panama has a hot and humid, tropical climate, with a long rainy season from May to January and a short dry season from January to May. The rainy season is between May and December and brings an estimated 250-700 millimeters (mm) of rainfall across the country. Average annual temperature for the country is 27°C and average total rainfall is 1900 mm annually. However, these vary by region and altitude. Maximum mean temperatures across the country oscillate between 31.1°C and 34.5°C. Minimum temperature ranges from 20.1°C and 22.4°C. Occasional severe storms and forest fires in the Darien Gap are common. Climate variability in Panama is driven mainly by the El Niño Southern Oscillation, tropical cyclones, and sea surface temperatures.
+
+## 1.3 Lockdown Status
+
+The COVID-19 pandemic in Panama is part of the worldwide pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The virus was confirmed to have spread to Panama on 9 March 2020.[3] One of the dead was a 64-year-old male, who also had diabetes and pneumonia. Of those infected, 83 were admitted to hospital.[3] The infected individuals belong to the 29-59 age group and had each recently travelled abroad. A 13-year-old girl died of COVID-19 on 23 March.
+
+The government declared a state of emergency on 13 March 2020. The move frees US\$50 million for a period of 180 days to purchase goods and services to combat COVID-19.
+
+A gender-based quarantine system was set up, where only women were allowed to leave their homes on some days and only men were allowed out on other days. The purpose of this was so police would be able to easily tell if someone was violating their quarantine. However, the plan led to harassment of transgender and non-binary people.
+
+## 1.4 Actions taken by the Government
+
+-   Quarantine has been implemented nationwide, effective from March 25, 2020.13 People who break health regulations and quarantines could be sanctioned. The movement restrictions provide windows of time for grocery shopping, medicines purchase and other essential activities based on gender and the last digit of their national ID cards for Panamanians and passports or diplomatic ID for foreign nationals.14 All persons must stay home on Sunday.
+-   Sporting events, festivals, and all gatherings larger than 50 people, as well as public spaces and venues, have been banned.16 Entertainment and recreational spaces and businesses, whether public or privately owned, have been closed
+-   Non-essential businesses are closed. Only markets, supermarkets, drug stores, gas stations, health facilities, among other exceptions, will be able to operate. There is also an exception for the manufacturing, supplying and maintenance of medical equipment, medications, vaccines and any other public health supplies. Health and sanitary requirements are imposed on businesses that remain open, such as restaurants, pharmacies, supermarkets, and banks.
+-   All construction projects, except for those required by the health authorities, have been suspended.
+-   There is a nationwide curfew from 5pm to 5am, with exception for public service personnel, essential businesses and humanitarian transport.
+-   Public service personnel exempted from the nationwide curfew appears to be broadly defined and includes public servants, representatives and other essential public service personnel to attend to emergencies.
+
+# 2. Exploratory Data
+
+## 2.1 Descriptive Analysis
+
+Considering the given data set we have to analysis major three types of cases. They are
+
+-   Confirmed Cases
+-   Death Cases
+-   Recovery Cases
+
+Following table shows the total count of each type confirmed, death and recovery in Country Panama.
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+library(knitr)
+
+panama_corona_confirmed <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "confirmed") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+total_confirmed_cases <- sum(panama_corona_confirmed$cases)
+
+
+panama_corona_death <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "death") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+total_death_cases <- sum(panama_corona_death$cases)
+
+
+panama_corona_recovery <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "recovery") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+total_recovery_cases <- sum(panama_corona_recovery$cases , na.rm = TRUE)
+
+
+
+x <- data.frame( Type = "Total Count" ,
+  Confirmed = total_confirmed_cases,
+                Death = total_death_cases,
+                Recovery = total_recovery_cases)
+knitr::kable(x, "simple")
+
+
+```
+
+And given below is the summary data set of Country Panama
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+panama_corona <- coronavirus %>% filter(country == "Panama")
+summary(panama_corona)
+
+```
+
+### 2.1.1 Confirmed Cases
+
+This is the summary data set for confirmed cases in Panama.
+
+```{r , echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+panama_corona_confirmed <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "confirmed") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+summary(panama_corona_confirmed)
+
+```
+
+```{r,echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+panama_corona_confirmed <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "confirmed") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+a <- ggplot(panama_corona_confirmed , aes(x=date , y= cases )) +geom_line( col ="maroon") + ggtitle("Figure 01 - Panama : Daily Covid 19 Confirmed Cases")
+ggplotly(a)
+
+```
+
+Using the above plot we can say that March in 2020 Panama confirmed the first covid case. From March 2020 confirmed covid cases are gradually increasing and the end of 2020 and the beginning of 2021 we can see a sudden increase of confirmed cases. Again we can see in January of 2022 Panama having the highest confirmed cases recorded as 19722.
+
+### 2.1.2 Death Cases
+
+This is the summary data set for death cases in Panama.
+
+```{r , echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+panama_corona_death <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "death") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+summary(panama_corona_death)
+
+```
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+panama_corona_death <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "death") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+b <- ggplot(panama_corona_death , aes(x=date , y= cases )) +geom_line( col ="blue") + ggtitle("Figure 02 - Panama : Daily Covid 19 Death Cases")
+ggplotly(b)
+
+```
+
+In Figure 02 also the first death case confirmed in March 2020. After March 2020 number of deaths are gradually increasing and they have 41 deaths in July 2020. Highest number of confirmed deaths are recorded in January 2021 and that is 61 cases. Also they have 42 death cases in February 2022.
+
+### 2.1.3 Recovery
+
+This is the summary data set for recovered cases in Panama.
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+panama_corona_recovery <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "recovery") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+summary(panama_corona_recovery)
+
+
+```
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+panama_corona_recovery <- coronavirus %>% filter( country == "Panama") %>% 
+  filter(type == "recovery") %>% 
+  select(date, type, country, cases) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+c <- ggplot(panama_corona_recovery , aes(x=date , y= cases )) +geom_line( col ="orange") + ggtitle("Figure 03 - Panama : Daily Covid 19 Recovery Cases")
+ggplotly(c)
+
+```
+
+According to the Figure 03 they confirmed 3615 recovered cases in May of 2020. Highest number of recovered cases are recorded in January of 2021 and that is 4036 cases. After January 2021 the recovered cases are gradually decreasing and after August of 2021 there are no recovery cases confirmed.
+
+### 2.1.4 Comparison between Confirmed, Death and Recovery Cases in Panama
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+panama_corona <- coronavirus %>% filter(country == "Panama") %>%
+  mutate(cases = replace (cases, which(cases < 0), NA))
+d <- ggplot(panama_corona, aes(x=date, y=cases, col=type)) + geom_line() +ggtitle("Figure 04 - Panama : Daily Covid 19 Confirmation , Death and Recovery Comparison")
+ggplotly(d)
+
+```
+
+According to the Figure 04 , from March 2020 to December 2020 number of confirmed cases and number of recovered cases are approximately equal. Then from August 2021 to December 2022 there is no recorded recovery or death cases. Compared to confirm and recovery cases , death cases are small enough to be ignorance.
+
+## 2.2 Comparison with Other Countries
+
+#### **2.2.1 Comparison of Confirmed cases between Countries**
+
+##### **Confirmed Cases Comparison Between Neighbor Countries**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+combine_country <- coronavirus %>% 
+  filter(type == "confirmed") %>% 
+  filter(country == "Colombia" | country == "Panama" | country == "Venezuela" | country == "Costa Rica" | country == "Guatemala" ) 
+
+f <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 05 - Panama : Daily Covid 19 Confirmed Cases Comparison With Neighbor Countries")
+ggplotly(f)
+
+
+```
+
+In Figure 05 , for all three years, Colombia have the highest confirmed cases than any other country. Also Panama and Costa Rica have High confirmed cases as well. From Figure 05 we can say Venezuela have the lowest confirmed cases between neighborhood countries.
+
+##### **Panama VS Colombia Confirmed Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+ filter(type == "confirmed") %>% 
+ filter(country == "Colombia" | country == "Panama"  ) 
+  
+g <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 06 - Daily Covid 19 Confirmed Cases: Panama VS Colombia ")
+ggplotly(g)    
+
+```
+
+Figure 06 shows that Colombia have very high number of confirmed cases than Panama.
+
+##### **Panama VS Costa Rica Confirmed Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+combine_country <- coronavirus %>% 
+  filter(type == "confirmed") %>% 
+  filter(country == "Costa Rica" | country == "Panama"  ) 
+
+h <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 07 - Daily Covid 19 Confirmed Cases: Panama VS Costa Rica ")
+ggplotly(h)
+
+```
+
+Figure 07 indicate that from March of 2021 to November of 2021 Costa Rica have more confirmed cases than Panama. From November 2021 to February 2022 Panama have more confirmed Cases.
+
+##### **Panama VS Ecuador Confirmed Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "confirmed") %>% 
+  filter(country == "Ecuador" | country == "Panama"  ) 
+
+i <- ggplot(combine_country, aes(date, cases, group = country, col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 08 - Daily Covid 19 Confirmed Cases: Panama VS Ecuador ")
+ggplotly(i)
+
+```
+
+From Figure 08 we can learn that most of times from 2020 to 2023 confirmed cases of both countries are approximately equal. But on 7th November 2020 we have negative values. That means non - Confirmed data of Country Ecuador on that day is larger than confirmed data. That means updated data are incorrect.
+
+#### **2.2.2 Comparison of Death Cases between Countries**
+
+##### **Death Cases Comparison Between Neighbor Countries**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "death") %>% 
+  filter(country == "Colombia" | country == "Panama" | country == "Venezuela" | country == "Costa Rica" | country == "Guatemala" ) 
+
+j <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 09 - Panama : Daily Covid 19 Death Cases Comparison With Neighbor Countries")
+ggplotly(j)
+
+
+```
+
+In Figure 09 also death cases in Colombia is higher than any other neighborhood country.Death cases in Panama is approximately higher than venezeula but lower than other countries.
+
+##### **Panama VS Colombia Death Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "death") %>% 
+  filter(country == "Colombia" | country == "Panama"  ) 
+
+k <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 10 - Daily Covid 19 Death Cases: Panama VS Colombia ")
+ggplotly(k)
+
+```
+
+Figure 10 indicates the interpretation of Figure 09. Colombia have very high count of deaths. Compares to that death count the highest death count is 720 cases on 22nd July 2021 and that value is 120 times bigger than the death count of Country Panama in same day.
+
+##### **Panama VS Costa Rica Death Cases**\*
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "death") %>% 
+  filter(country == "Costa Rica" | country == "Panama"  ) 
+
+l <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 11 - Daily Covid 19 Death Cases: Panama VS Costa Rica ")
+ggplotly(l)
+
+```
+
+According to Figure 11 from March 2020 to November 2020 Panama have the higher death count. From March 2021 to December 2021 Costa Rica have higher death count. But by looking at the graph we can state that death count of Costa Rica is higher.
+
+##### **Panama VS Ecuador Death Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "death") %>% 
+  filter(country == "Panama" | country == "Ecuador"  ) 
+
+m <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type)) + ggtitle("Figure 12 - Daily Covid 19 Death Cases: Panama VS Ecuador ")
+ggplotly(m)
+
+```
+
+From Figure 12 Ecuador and Panama have approximate number of death cases most of the time. But specifically in 07th November 2020 Ecuador have 3852 cases and 20th July 2021 have 8786 cases. That is the highest number of deaths in Ecuador.
+
+#### **2.2.3 Comparison of Recovered Cases between Countries**
+
+##### **Recovery Cases Comparison Between Neighbor Countries**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "recovery") %>% 
+  filter(country == "Colombia" | country == "Panama" | country == "Venezuela" | country == "Costa Rica" | country == "Guatemala" ) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+  
+n <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type))+ ggtitle("Figure 13 - Panama : Daily Covid 19 Recovered Cases Comparison With Neighbor Countries")
+ggplotly(n)
+
+```
+
+Figure 13 implies that like all other cases Colombia have the highest count of recovery cases in all three years. After August of 2021 there is no recorded recoveries in any country. Panama have very low recovery cases count.
+
+
+
+
+##### **Panama VS Colombia Recovered Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+combine_country <- coronavirus %>% 
+  filter(type == "recovery") %>% 
+  filter(country == "Colombia" | country == "Panama"  ) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+o <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type))+ ggtitle("Figure 14 - Daily Covid 19 Recovered Cases: Panama VS Colombia ")
+ggplotly(o)
+
+```
+
+As mentioned before in interpretation of Figure 13 , here we can state that in Figure 14 Colombia have very large count of recovery cases than Panama. But after August 2021, there is no recorded recovery cases. 
+
+
+
+##### **Panama VS Costa Rica Recovered Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+combine_country <- coronavirus %>% 
+  filter(type == "recovery") %>% 
+  filter(country == "Costa Rica" | country == "Panama"  ) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+p <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type))+ ggtitle("Figure 15 - Daily Covid 19 Recovered Cases: Panama VS Costa Rica ")
+ggplotly(p)
+
+```
+
+According to Figure 15 from April 2020 to July 2020 Panama have high recovery case count and after February 2021 Costa Rica have more recovery cases than Panama.
+
+
+##### **Panama VS Ecuador Recovered Cases**
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+combine_country <- coronavirus %>% 
+  filter(type == "recovery") %>% 
+  filter(country == "Ecuador" | country == "Panama"  ) %>% 
+  mutate(cases = replace (cases, which(cases < 0), NA))
+
+q <- ggplot(combine_country, aes(date, cases,  group = country,col = country)) + geom_line() + facet_grid(rows=vars(type))+ ggtitle("Figure 16 - Daily Covid 19 Recovered Cases: Panama VS Ecuador ")
+ggplotly(q)
+
+```
+
+
+From Figure 16 we can see that most of the time Ecuador have most recovered cases than Panama. We can state that time period as July 2020 to December 2022. After August 2021 there is no recorded data.
+
+
+
+
+
+```{r, echo=FALSE , message=FALSE , warning=FALSE , comment=NA}
+
+```
+
+# 3.0 Discussion and Conclusions
+
+This project was done to analyze the Covid-19 situation in Country Panama over three years which is from 2020 to 2020. I have used total of five neighbor countries to compare Confirmed , Death and recovery Cases. From those five countries selecting Colombia , Costa Rica and Ecuador which are most close neighbor countries to Panama I compared each of those three country's Confirmed , Death and Recovered cases with Cases of Panama. All these five countries have similar climate conditions as Panama.
+
+The first confirmed patient reported in 9th March 2020 and government implemented quarantine nationwide from 25th March 2020. Even though the confirmed cases are gradually increasing over the years we can see that the increasing in controlled some far and very minimum count of deaths were recorded.Also Recoveries are also gradually increasing as confirmed cases. We can say reason for this is the actions taken by the government and the quick nationwide quarantine after the confirmed first case.
+
+But after 13th August there is no recorded recovery cases. After that time period Confirmed cases are increasing but death counts are too small to ignore. We cannot conclude the state of Covid-19 bacause recovery counts are missing. SO Panama government should pay more attention to update all the needed information correctly.
+
+Comparing all the countries we can implement that in all three type of cases(confirmed , Death and recovery) Colombia have highest Confirmed, Recovery and Death case count. We can conclude that population of Colombia is higher than all other five countries.
+
+
+Above analysis can be only to identify whether the particular country took rapid decisions to control the pandemic and fight against it as the recovered cases can be used as a method to identify the effectiveness of the measurements taken by a particular country to fight against the pandemic. Panama have great recovery cases period compared to other countries but it is pointless to compare 
+Panama and Colombia because obviously Colombia have large population than Panama.
+
+Throughout this project it was able to identify the how Panama face the Covid-19 pandemic and what are the accurate decisions made by the officials of the Panama to fight against the Covid-19 pandemic and effectiveness of those decisions by analyzing the Coronavisrus dataset. Further bordering countries of Panama were compared with Panama to identify the impact from the Covid-19 pandemic to the region.By doing the analysis, it is identified that Panama has fight against the Covid-19 pandemic more accurately than the other countries in the region.
+
+
+
+
+
+# 4.0 References
+
+-   <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Panama>
+-   <https://disasterlaw.ifrc.org/sites/default/files/media/disaster_law/2021-03/COVID-19%20Emergency%20Decree%20Research%20-%20Panama.pdf>
+-   <https://ourworldindata.org/coronavirus/country/panama>
+-   <https://climateknowledgeportal.worldbank.org/country/panama/climate-data-historical>
+-   <https://www.nationsencyclopedia.com/economies/Americas/Panama.html#ixzz7gqU8cnEC>

@@ -1,0 +1,686 @@
+---
+title: "Covid-19 Pandemic in Botswana"
+author: "Ishani Upatharitha - AS2019558"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, force=TRUE,eval=FALSE}
+#install.packages("devtools")
+library(devtools)
+devtools::install_github("thiyangt/sta3262")
+library(sta3262)
+get_individual_project_country("AS2019558")
+#install.packages("coronavirus")
+library(coronavirus)
+
+```
+# **ABSTRACT**
+
+Corona virus disease (COVID-19) is an infectious disease caused by a newly discovered corona virus. The virus that causes COVID-19 is a novel corona virus that was first identified during an investigation into an outbreak in Wuhan, China in 2019. Since then, the virus has spread to more than 100 countries, including neighboring countries in the southern part of Africa.
+
+The COVID-19 pandemic is not over yet. As individuals we can do our part in keeping others safe by following
+the rules suggested by the government and WHO. As part of the data science community we can also provide
+our contribution, by analyzing the data and helping to communicate it. Such type of support is high demand
+among government and related institutions. The purpose of this report is to fulfill that role.
+
+# **BACKGROUND**
+
+## __1.INTRODUCTION__
+
+### 1.1 GEOGRAPHY
+
+Botswana is a landlocked country in southern Africa. It is bordered by South Africa to the south and east, by Namibia to the west, and by Zimbabwe to the east.The massive Kalahari Desert covers more than 70 percent of Botswana, spans about 360,000 square miles (900,000 square kilometers), and touches nine African countries. The Kalahari isn't a true desert because it gets more rainfall each year than most deserts receive.Because drought is a problem in Botswana, rain is precious. When rain comes, it's sporadic and often causes flooding.
+
+```{r,comment=NA, echo=FALSE, warning=FALSE, message=FALSE}
+#Location of the Botswana
+
+#install.packages("ggplot2")
+library(ggplot2)
+#install.packages("maptools")
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+botswana_corona<-coronavirus%>%filter(country=="Botswana")
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="gray",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = botswana_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+
+```
+
+  Figure01:Location of Botswana
+
+### 1.2 Nature
+
+Most of the country is covered by grassland called savanna. The most common tree is the baobab tree and some baobabs are 2,000 years old. The Okavango Delta and Chobe National Park in the north are areas of outstanding natural beauty and rich in animal life.Elephants at Chobe are the largest in body size of all living elephants; they number more than 50,000.Meerkats are also common in the country. Populations of cheetahs and lions continue to decrease due to factors including hunting and farmers protecting their livestock.About 17 percent of Botswana has been set aside for game preserves and national parks.Tourists from all over the globe visit Botswana for safaris and a chance to see amazing wildebeests, giraffes, jackals, hyenas, lions, cheetahs, and other animal species.Botswana is also a destination for birdwatchers because many bird species stop over as they migrate and many others live in the national parks and reserves year round. The greater and lesser flamingos are colorful residents of Botswana.
+
+### 1.3 People & Culture
+
+Most of the people in Botswana are Tswana and are said to be descended from King Mogale who lived during the 14th century. The Tswana now live primarily in large cities and towns, but many also still live in villages and take care of livestock and grow food.The next two largest ethnic groups in Botswana are the Bushmen and the Kalanga. Only about one percent of the population is white from Europe or the United States.Children go to primary school for seven years and then on to secondary school for five years. They learn English in the fifth year of primary school onward, but not many people become fluent. The native language Setswana is also one of South Africa’s official languages.AIDS is an epidemic in Botswana and one of every three people is infected with the virus.
+
+### 1.4 Actions taken by the Goverment to prevent from Covid-19
+
+The country is adopted the following as prevention and control strategies since February 2020;
+
+* Public education through the use of mass media and other forms of education
+
+* Screening at all points of entry for early detection, diagnosis and treatment.
+
+* Advised self-quarantine for suspected cases as well as rapid specimen collection for testing
+
+* Isolation for suspected cases or symptomatic individuals following screening at designated health facilities followed by contact tracing instituted to ensure that the virus is does not spread.
+
+* Social distancing where the public is advised to take measures to reduce contact in malls, shops, work, gyms, places of worship etc.
+
+* Community lock down where training institutions and other places that gather large number of people are closed or there is restricted movement. This includes restricting and preventing travel within or outside the country.
+
+### 1.5 The impacts of Covid-19 in Botswana
+
+COVID-19 has had significant impacts on industries and individuals globally. Apart from affecting people’s health, the impacts of COVID-19 also extend to people’s lives, behaviors, livelihoods, and economies. Due to restrictions put
+in place to reduce the spread of the disease, it has affected the travel,nature-based tourism industry and and the diamond industry.in Botswana. COVID-19 has also had an impact on community development through abrupt losses of  employment and income. However, several positive environmental impacts have also been experienced.
+
+
+## __2. EXPLORATORY DATA ANALYSIS__
+
+### 2.1 Visualization of death, confirmed, recovered, active cases
+
+Four types of cases were considered as follows:
+
+  1.Confirmed
+
+  2.Recovered
+
+  3.Death
+
+  4.Active
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+#Displaying whole data set
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ coronavirus
+ summary(coronavirus)
+
+```
+
+```{r, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+#summary of the Covid-19 cases in Botswana
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ botswana_corona<-coronavirus%>%filter(country=="Botswana")
+ summary(botswana_corona)
+
+ #Total number of confirmed cases in Botswana
+ 
+ confirmed_cases_botswana_corona <- botswana_corona %>% filter(type=="confirmed")
+ summary(confirmed_cases_botswana_corona)
+ sum(confirmed_cases_botswana_corona$cases)
+
+ 
+ 
+#Total number of death cases in Botswana
+ 
+ death_cases_botswana_corona <- botswana_corona %>% filter(type=="death")
+ summary(death_cases_botswana_corona)
+ sum(death_cases_botswana_corona$cases)
+
+
+```
+
+
+ 
+
+
+ ### _2.1.1 Confirmed cases in Botswana_
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#summary of the confirmed cases in Botswana
+
+ confirmed_cases_botswana_corona <- botswana_corona %>% filter(type=="confirmed")
+ summary(confirmed_cases_botswana_corona)
+
+```
+
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#geom_line + geom_jitter plot for the confirmed cases in Botswana
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ 
+ ggplot(confirmed_cases_botswana_corona, aes(x=date, y=cases)) +geom_line() + geom_jitter() + ggtitle("Botswana: Daily Covid-19 confirmed Cases")
+ 
+```
+ 
+ Figure02:Covid-19 confirmed cases in Botswana
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#geom_histogram + geom_freqploy plot for the confirmed cases in Botswana
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+ ggplot(confirmed_cases_botswana_corona, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="green") + ggtitle("Botswana: Daily Covid-19 confirmed Cases")
+``` 
+ 
+ Figure03:Covid-19 confirmed cases in Botswana
+ 
+ 
+
+ 
+### _2.1.2 Death cases in Botswana_
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#summary of the death cases in Botswana
+
+ death_cases_botswana_corona <- botswana_corona %>% filter(type=="death")
+ summary(death_cases_botswana_corona)
+
+```
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#geom_line + geom_jitter plot for the death cases in Botswana
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ 
+ ggplot(death_cases_botswana_corona, aes(x=date, y=cases)) +geom_line() + geom_jitter() + ggtitle("Botswana: Daily Covid-19 Death Cases")
+ 
+```
+ 
+ Figure04:Covid-19 death cases in Botswana
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#geom_histogram + geom_freqploy plot for the death cases in Botswana
+
+library(ggplot2)
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ 
+ ggplot(death_cases_botswana_corona, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="red") + ggtitle("Botswana: Daily Covid-19 Death Cases")
+ 
+```
+
+Figure05:Covid-19 death cases in Botswana
+
+   
+ 
+### _2.1.3 Recovery cases in Botswana_
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+#Summary of the recovery cases in Botswana
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ recovered_cases_botswana_corona <- botswana_corona %>% filter(type=="recovery")
+ summary(recovered_cases_botswana_corona)
+ 
+ #geom_line + geom_jitter plot with outliers
+  ggplot(recovered_cases_botswana_corona, aes(x=date, y=cases)) +geom_line() + geom_jitter() + ggtitle("Botswana: Daily Covid-19 Recovered Cases with outliers")
+ 
+```
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+recovered_cases_botswana_corona <- botswana_corona %>% filter(type=="recovery")
+ summary(recovered_cases_botswana_corona)
+ 
+ # code missing values to NA
+recovered_cases_botswana_corona_new <- recovered_cases_botswana_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovered_cases_botswana_corona_new)
+
+# Locate missing value
+which(is.na(recovered_cases_botswana_corona_new$cases))
+
+# I use the average of the 561st and the 563rd to calculate the missing value/negative value.
+recovered_cases_botswana_corona_new$cases[562] = mean(c(recovered_cases_botswana_corona_new$cases[561], recovered_cases_botswana_corona_new$cases[563]))
+length(recovered_cases_botswana_corona_new$cases)
+
+
+#  I add a column col that indicates desired colour.
+recovered_cases_botswana_corona_new$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+summary(recovered_cases_botswana_corona_new)
+
+#Total number of recovered cases in Botswana
+sum(recovered_cases_botswana_corona_new$cases) 
+```
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#geom_line + geom_jitter plot for the recovered cases in Botswana
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ 
+ #geom_line + geom_jitter plot without outliers
+ ggplot(recovered_cases_botswana_corona_new, aes(x=date, y=cases)) +geom_line() + geom_jitter() + ggtitle("Botswana: Daily Covid-19 Recovered Cases without outliers")
+ 
+```
+ 
+ Figure06:Covid-19 recovered cases in Botswana
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#geom_histogram + geom_freqploy plot for the recovered cases in Botswana
+
+library(ggplot2)
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ 
+ ggplot(recovered_cases_botswana_corona_new, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="blue") + ggtitle("Botswana: Daily Covid-19 Recovered Cases")
+ 
+```
+
+Figure07:Covid-19 recovered cases in Botswana
+
+
+ 
+ 
+### _2.1.4 Active cases in Botswana_
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#Summary of the active cases in Botswana
+
+
+ library(coronavirus)
+botswana_corona <- coronavirus %>% filter(country == "Botswana")
+botswana_corona_new <- botswana_corona %>% filter(cases >= 0)
+corona_botswana_wider <- botswana_corona_new %>% pivot_wider(names_from=type, values_from=cases)
+corona_botswana_wider$active_cases_botswana_corona <- corona_botswana_wider$confirmed - corona_botswana_wider$death - corona_botswana_wider$recovery
+
+#geom_line + geom_jitter plot with outliers
+ggplot(corona_botswana_wider, aes(x=date, y=active_cases_botswana_corona)) + geom_line() + ggtitle("Botswana: Daily Covid-19 Active cases with outliers")
+
+ 
+```
+
+Figure08:Covide-19 active cases in Botswana
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+active_cases_botswana_corona <- active_cases_botswana_corona <- botswana_corona %>% filter(type=="active")
+ summary(active_cases_botswana_corona)
+  
+ # code missing values to NA
+
+active_cases_botswana_corona_new <- active_cases_botswana_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(active_cases_botswana_corona_new)
+
+# Locate missing value
+which(is.na(active_cases_botswana_corona_new$cases))
+
+
+
+
+```
+
+```{r,comment=NA, echo=FALSE, warning=FALSE}
+#geom_col plot of the Covid-19 cases by type
+library(ggplot2)
+ggplot(botswana_corona_new, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Botswana: Daily Covid-19 cases by type") + facet_grid(type~.)
+
+```
+
+Figure09:Covid-19 Cases by type
+
+
+
+
+### 2.2 Comparison with other countries 
+only considering the neighbor countries 
+
+ 
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ unique(coronavirus$country)
+ 
+```
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+ #Displaying summary of all cases in neighboring countries
+
+library(ggplot2)
+
+ zambia_corona<-coronavirus%>%filter(country=="Zambia")
+ 
+ south_africa_corona<-coronavirus%>%filter(country=="South Africa")
+ 
+ namibia_corona<-coronavirus%>%filter(country=="Namibia")
+ 
+ zimbabwe_corona<-coronavirus%>%filter(country=="Zimbabwe")
+ 
+ botswana_corona<-coronavirus%>%filter(country=="Botswana")
+ 
+ countries_corona<-as.data.frame(rbind(botswana_corona,zambia_corona,south_africa_corona,namibia_corona,zimbabwe_corona))
+summary(countries_corona) 
+```
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE,eval=FALSE}
+ 
+library(ggplot2)
+ countries_corona_new <- countries_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(countries_corona)
+```
+```{r, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+ 
+which(is.na(countries_corona_new$cases))
+
+```
+```{r, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+ 
+countries_corona_new$cases[2330] = mean(c(countries_corona_new$cases[2329], countries_corona$cases[2331]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[4982] = mean(c(countries_corona_new$cases[4981], countries_corona$cases[4983]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[6923] = mean(c(countries_corona_new$cases[6922], countries_corona$cases[6924]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[7634] = mean(c(countries_corona_new$cases[7633], countries_corona$cases[7635]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[9501] = mean(c(countries_corona_new$cases[9500], countries_corona$cases[9502]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[10286] = mean(c(countries_corona_new$cases[10285], countries_corona$cases[10287]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[10710] = mean(c(countries_corona_new$cases[10709], countries_corona$cases[10711]))
+length(countries_corona$cases)
+
+countries_corona_new$cases[12938] = mean(c(countries_corona_new$cases[12937], countries_corona$cases[12939]))
+length(countries_corona$cases)
+
+```
+```{r, comment=NA, echo=FALSE, warning=FALSE, eval=FALSE}
+ 
+countries_corona_new$col <- as.factor(c(rep("black", 2328),rep("red", 2), rep("black", 13260-2330)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 4980),rep("red", 2), rep("black", 13260-4982)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 6921),rep("red", 2), rep("black", 13260-6923)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 7632),rep("red", 2), rep("black", 13260-7634)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 9499),rep("red", 2), rep("black", 13260-9501)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 10284),rep("red", 2), rep("black", 13260-10286)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 10708),rep("red", 2), rep("black", 13260-10710)))
+summary(countries_corona_new)
+
+countries_corona_new$col <- as.factor(c(rep("black", 12936),rep("red", 2), rep("black", 13260-12938)))
+summary(countries_corona_new)
+
+```
+
+
+### _2.2.1 Comparison of deaths due to corona virus between the neighboring countries of Botswana_
+
+
+```{r,comment=NA, echo=FALSE, warning=FALSE}
+#Summary of the death cases in Botswana & 4 neighboring countries
+countries_corona_new <- countries_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(countries_corona)
+
+death_cases_countries_corona <- countries_corona_new %>% filter(type=="death")
+summary(death_cases_countries_corona)
+
+```
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#comparison of death cases between Botswana and neighboring 4 countries
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+ggplot(death_cases_countries_corona,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 5)+coord_flip()+
+  ggtitle("Comparison  of death cases between botswana & 4 neighboring countries")
+
+```
+
+Figure10:Comparison  of death cases between Botswana & 4 neighboring countries
+
+
+
+When comparing the number of death cases of the 5 countries, it can be seen that death cases were reported in all 5 countries during first half of 2020 is equal to each other. In South Africa we can see the large increment than other 4 countries from last half of 2020 to first half of 2021. 
+
+
+
+### _2.2.2 Comparison of recovery cases of Covid-19 patients between the neighboring countries and Botswana_
+```{r,comment=NA, echo=FALSE, warning=FALSE}
+#Summary of the recovery cases in Botswana & 4 neighboring countries
+
+recovery_cases_countries_corona <- countries_corona_new %>% filter(type=="recovery")
+summary(recovery_cases_countries_corona)
+
+```
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#comparison of death cases between Botswana and neighboring 4 countries
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+ggplot(recovery_cases_countries_corona,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 5)+coord_flip()+
+  ggtitle("Comparison  of recovery cases between botswana & 4 neighboring countries")
+
+```
+
+Figure11:Comparison  of recovery cases between Botswana & 4 neighboring countries
+
+
+
+When comparing the number of recovery cases of the 5 countries, it can be seen that recovery cases were reported in Botswana, Zambia, Namibia and Zimbabwe are approximately equal apart from South Africa. In South Africa we can see the large increment than other 4 countries from last half of 2020 to first half of 2021. 
+
+
+
+### _2.2.3 Comparison of confirmed of Covid-19 patients between the neighboring countries of Botswana_
+
+```{r,comment=NA, echo=FALSE, warning=FALSE}
+#Summary of the confirmed cases in Botswana & 4 neighboring countries
+
+confirmed_cases_countries_corona <- countries_corona_new %>% filter(type=="confirmed")
+summary(confirmed_cases_countries_corona)
+
+```
+
+
+```{r, comment=NA, echo=FALSE, warning=FALSE}
+#comparison of death cases between Botswana and neighboring 4 countries
+
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+ggplot(confirmed_cases_countries_corona,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 5)+coord_flip()+
+  ggtitle("Comparison  of confirmed cases between botswana & 4 neighboring countries")
+
+```
+
+Figure12:Comparison  of death cases between Botswana & 4 neighboring countries
+
+
+
+When comparing the number of confirmed cases of the 5 countries, it can be seen that confirmed cases were reported in Botswana from last half of 2021 to present is larger count than other 3 countries, apart from South Africa.
+
+
+
+## __3. CONCLUSION & DISCUSSION__
+
+```{r,message=FALSE, echo=FALSE}
+df <- data.frame(Confirmed = c(318528),
+                 Deaths = c(2719),
+                 Recovered = c(96964),
+                 Active = c(218845))
+kable(df)
+
+```
+Table01:Total Number of Cases
+
+
+
+Since in this Botswana corona virus data set, there was negative values when the summary for all cases was displayed, the data pre-processing step was taken to impute missing values. The mean imputation interpolation method was used for imputing missing value, because of data entering errors or changing of the methodology may occurred those negative values. Due to the not availability of the province in the Botswana corona virus data set, the analysis was couldn't conduct province wise. The Botswana data set clearly observable that there is no any significant increasing or decreasing in both death cases and recovery cases. But in confirmed cases there is a significant increment than other two cases during year 2022. 
+
+When we are compared to the other neighboring countries Botswana has low level of deaths compared to South Africa and equal to Zambia, Namibia, Zimbabwe.The government and the National security council & the health sector has given the adequate rules to control the virus spread with in the country.
+
+Since the pandemic is not over yet,the prevention steps as social distances, clean hands often, wear a mask, maintain safe distance from others are some of steps that a person should be implemented in country.
+
+## __4. REFERENCES__
+
+1. Talagala, D., 2022. STA 326 2.0: Online Helpdesk - 2020. [online] Hellor.netlify.app. Available at: <https://hellor.netlify.app/slides/onlinehelpdesk> [Accessed 4 October 2022].
+
+2. En.wikipedia.org. 2022. Botswana - Wikipedia. [online] Available at: <https://en.wikipedia.org/wiki/Botswana> [Accessed 5 October 2022].
+
+3. Geography. 2022. Botswana Country Profile - National Geographic Kids. [online] Available at: <https://kids.nationalgeographic.com/geography/countries/article/botswana> [Accessed 6 October 2022].
+
+4. Covid19.who.int. 2022. Botswana: WHO Coronavirus Disease (COVID-19) Dashboard With Vaccination Data. [online] Available at: <https://covid19.who.int/region/afro/country/bw> [Accessed 7 October 2022].
+
+5. Ritchie, H., Mathieu, E., Rodés-Guirao, L., Appel, C., Giattino, C., Ortiz-Ospina, E., Hasell, J., Macdonald, B., Beltekian, D. and Roser, M., 2022. Coronavirus Pandemic (COVID-19). [online] Our World in Data. Available at: <https://ourworldindata.org/coronavirus/country/botswana> [Accessed 7 October 2022].

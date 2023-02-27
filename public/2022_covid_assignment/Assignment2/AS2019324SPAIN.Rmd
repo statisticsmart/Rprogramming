@@ -1,0 +1,393 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r,message=FALSE,warning=FALSE,comment=NA,echo=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(tibble)
+library(maptools)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(sta3262)
+library(coronavirus)
+library(magrittr)
+library(devtools)
+library(plotly)
+library(gganimate)
+```
+
+# **COVID - 19 Country Report For Spain**
+**_This report is about the country Spain on how they face the global crisis of the Covid-19 pandemic that is still there in the world._**
+
+#### K.T. Dahanayake - AS2019324
+
+
+# 1. Background
+### 1.1 What is COVID - 19
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+
+Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. 
+
+The best way to prevent and slow down transmission is to be well informed about the disease and how the virus spreads. Protect yourself and others from infection by staying at least 1 metre apart from others, wearing a properly fitted mask, and washing your hands or using an alcohol-based rub frequently. Get vaccinated when it’s your turn and follow local guidance.
+
+The virus can spread from an infected person’s mouth or nose in small liquid particles when they cough, sneeze, speak, sing or breathe. These particles range from larger respiratory droplets to smaller aerosols. It is important to practice respiratory etiquette, for example by coughing into a flexed elbow, and to stay home and self-isolate until you recover if you feel unwell.
+
+###  1.2 Location of Spain
+
+```{r,message=FALSE,warning=FALSE,comment=NA,echo=FALSE}
+spain_corona <- coronavirus %>% filter(country == "Spain")
+data("wrld_simpl")
+p <- ggplot()+ 
+  geom_polygon(data = wrld_simpl, 
+               aes(x = long, y = lat, group = group), fill = "#69b3a2", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+p + geom_point(
+  data = spain_corona, aes(x = long, y = lat), color = "red" , size = 2
+)
+
+```
+
+Spain is located in southwestern Europe. Spain is bordered by the Bay of Biscay, the Balearic Sea, the Mediterranean Sea, and the Alboran Sea; Portugal to the west and France and Andorra to the north. To the south, across the Strait of Gibraltar, the semi-enclaves of Ceuta and Melilla are bordered by Morocco. Additionally, the autonomous communities of the Canary Islands are located off the northwest coast of Africa.
+
+###  1.3 Climate conditions of Spain
+
+Spain is a sunny country with around 3,000 hours of sunshine every year. The temperatures are mild, but there are still differences depending on the seasons and areas of the country. The mildest temperatures are in spring and autumn, allowing you to enjoy the outdoors practically the whole day long. Maximum temperatures are reached during the months of July and August, which are hot and dry throughout the whole country. The coldest temperatures occur during the months of December, January and February, which are the months with the most rainfall, mainly in the north of Spain.
+
+###  1.4 Demographics of Spain
+
+Spain has an overall population of approximately 47.2 million;by age, 15.6% of the population is under 16, 42.6% is between 16 and 44, and 41.8% is 45 or over. An average person’s life expectancy at birth is estimated to be 82.55 years; 79.84 years and 85.4 years for male and female respectively when considered gender-wise.
+
+###  1.5 Health Care System of Spain
+
+Spain has a high quality healthcare system, guaranteeing universal coverage for all residents. Healthcare in Spain consists of both private and public healthcare, with some hospitals and healthcare centers offering both private and state healthcare services.
+
+Around 90% of Spaniards use the public healthcare system, which is called the National Health System. However, it is very decentralized with service delivery organized at regional level. The system is overseen by the Spanish Ministry of Health, which develops policy and oversees the national health budget.
+
+State healthcare is free of charge to anyone living and working in Spain. However, on some of the Spanish islands, you may have to travel to find a state healthcare provider.pain has bilateral agreements with some countries, such as Andorra, Brazil, Chile, Ecuador, and Peru, that allow citizens from these countries visiting Spain, for short periods of time, to obtain free emergency medical treatment. 
+
+Private healthcare provision in Spain runs alongside the public system, with some providers offering both public and private provision. Anyone not eligible for state healthcare will need to take out private health insurance or pay the full amount for any medical costs.
+
+###  1.6 COVID - 19  in  Spain
+
+The virus was first confirmed to have spread to Spain on 31 January 2020, when a German tourist tested positive for SARS-CoV-2 in  Canary Islands.By 13 March, cases had been confirmed in all 50 provinces of the country.A partially unconstitutional lock down was imposed on 14 March 2020. On 29 March, it was announced that, beginning the following day, all non-essential workers were ordered to remain at home for the next 14 days.By late March, the Community of Madrid has recorded the most cases and deaths in the country. Medical professionals and those who live in retirement homes have experienced especially high infection rates.On 25 March, the official death toll in Spain surpassed that of mainland China.On 2 April, 950 people died of the virus in a 24-hour period at the time, the most by any country in a single day. On 17 May, the daily death toll announced by the Spanish government fell below 100 for the first time,and 1 June was the first day without deaths by COVID-19.The state of alarm ended on 21 June.However, the number of cases increased again in July,which led to re imposition of some restrictions but no national lock down.
+
+Studies have suggested that the number of infections and deaths may have been underestimated due to lack of testing and reporting, and many people with only mild or no symptoms were not tested.There may also be as many as 15,815 more deaths according to the Spanish Ministry of Health monitoring system on daily excess mortality. On 6 July 2020, the results of a Government of Spain nationwide study showed that about two million people, or 5.2% of the population, could have been infected during the pandemic.Spain was the second country in Europe (behind Russia) to record half a million cases.On 21 October, Spain passed 1 million COVID-19 cases, with 1,005,295 infections and 34,366 deaths reported.
+
+
+###  1.7 Quarantines and lockdowns of Spain & Actions taken by government 
+
+On 7 March, Haro( which is a town in northern Spain) was put on lock down due to a concentration of cases. On 12 March, the Catalan regional government quarantined four Catalan municipalities,following a cluster of cases being reported at Igualada Hospital; the measure affected 70,000 people and was scheduled to last 14 days. The next day, the Government of Spain announced a state of alarm over all of the country would be decreed on the next day.The state of alarm is the lowest of the three degrees of state of emergency that allows the government to perform actions or impose policies that it would normally not be permitted to undertake.Under the state of alarm, the central government retains all powers and all police are under the control of the Interior Ministry. Many nonessential activities are forbidden, including large gatherings, restaurants, museums and the like. However, citizens are still permitted to travel to work and buy essential items, and religious services are allowed under certain conditions.
+
+On 25 March, the parliament with less than 50 members of 350 present approved the government's request to extend of the state of alarm until 11 April.On 28 March, the prime minister ordered all non-essential workers to stay home from 30 March to 9 April to bend the curve and contain the epidemic.n 1 April, the state of alarm was scheduled to expire on 12 April and the government planned to ease lock downs going forward, assuming new infections decrease.On 13 April, some nonessential workers who are unable to conduct remote work were allowed to return to the office, although other social distancing measures remained in place. Instead, the government distributed masks on public transport and attempted aggressive contact tracing to reduce the spread of the virus.
+
+As of September 2021, Spain is one of the countries with the highest percentage of its population vaccinated (76% fully vaccinated and 79% with the first dose),[30] while also being one of the countries more in favor of vaccines against COVID-19 (nearly 94% of its population is already vaccinated or wants to be).
+
+###  1.7 Present situation of COVID-19 
+
+On 4 October 2022, There were 2,027 new cases and 20 new deaths in Spain [source:https://www.worldometers.info/coronavirus/country/spain/]
+
+# 2. Exploratory Data Analysis 
+_The analysis has been done by R, a programming language for statistical computing and graphics._
+
+###  2.1 Structure of Data 
+
+The data set used for this analysis is **The 2019 Novel Coronavirus COVID-19 (2019-nCoV)** Dataset. The source of this data is Johns Hopkins University Center for Systems Science and Engineering (JHU CCSE) Coronavirus.
+
+This data set contains data from **22/01/2020** to **23/06/2022.**
+
+The dataset contains the daily summary of Coronavirus cases worldwide. 
+All cases are recorded according to the following variables;
+
+**date** : Date in YYYY-MM-DD format.
+
+**province** : Name of province/state, for countries where data is provided split across multiple provinces/states.
+
+**country** : Name of country/region.
+
+**lat** : Latitude of center of geographic region, defined as either country or, if available, province.
+
+**long** : Longitude of center of geographic region, defined as either country or, if available, province.
+
+**type** : An indicator for the type of cases (confirmed, death, recovered).
+
+**cases** : Number of cases on given date.
+
+**uid** :Country code
+
+**iso2** : Officially assigned country code identifiers with two-letter
+
+**iso3** : Officially assigned country code identifiers with three-letter
+
+**code3** : UN country code
+
+**combined_key** : Country and province (if applicable)
+
+**population** : Country or province population
+
+**continent_name** : Continent name
+
+**continent_code** : Continent code
+
+#### **first & last  few observations : **
+```{r,comment=NA,echo=FALSE}
+head(spain_corona,5)
+tail(spain_corona,5)
+```
+
+### 2.2 Data Cleaning Process 
+
+By looking at the summary of Spain corona virus data set , we can see there are negative values for  cases.That is not acceptable.As a solution for that Re-code missing values of  the data set by using mean of the adjacent observations.
+
+```{r,comment=NA,echo=FALSE}
+summary(spain_corona)
+```
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_clean <- spain_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+```
+
+```{r,comment=NA,echo=FALSE,eval=FALSE}
+which(is.na(spain_corona_clean$cases))
+spain_corona_clean$cases[94] = mean(c(spain_corona$cases[93], spain_corona$cases[95]))
+spain_corona_clean$cases[125] = mean(c(spain_corona$cases[124], spain_corona$cases[126]))
+spain_corona_clean$cases[406] = mean(c(spain_corona$cases[405], spain_corona$cases[407]))
+spain_corona_clean$cases[690] = mean(c(spain_corona$cases[689], spain_corona$cases[691]))
+spain_corona_clean$cases[1009] = mean(c(spain_corona$cases[1008], spain_corona$cases[1010]))
+spain_corona_clean$cases[1088] = mean(c(spain_corona$cases[1087], spain_corona$cases[1089]))
+spain_corona_clean$cases[1682] = mean(c(spain_corona$cases[1681], spain_corona$cases[1683]))
+spain_corona_clean$cases[1738] = mean(c(spain_corona$cases[1737], spain_corona$cases[1739]))
+spain_corona_clean$cases[2330] = mean(c(spain_corona$cases[2329], spain_corona$cases[2331]))
+
+```
+
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_clean$col <-as.factor(c(rep("black",92),rep("red",2),rep("black",123-94),rep("red",2),rep("black",404-125),rep("red",2),rep("black",688-406),rep("red",2),rep("black",1007-690),rep("red",2),rep("black",1086-1009),rep("red",2),rep("black",1680-1088),rep("red",2),rep("black",1736-1682),rep("red",2),rep("black",2328-1738),rep("red",2),rep("black",2652-2330)))
+```
+
+#### **Summary after cleaning data set** : 
+
+Following shows Spain corona virus data set after Re-coding.
+
+```{r,comment=NA,echo=FALSE}
+summary(spain_corona_clean)
+```
+
+### 2.3 Visualizations  
+
+```{r,comment=NA,echo=FALSE,eval=FALSE}
+spain_corona_confirmed<-spain_corona_clean%>% filter(type=="confirmed")
+summary(spain_corona_confirmed)
+spain_corona_recovered<-spain_corona_clean%>% filter(type=="recovery")
+summary(spain_corona_recovered)
+spain_corona_deaths<-spain_corona_clean%>% filter(type=="death")
+summary(spain_corona_deaths)
+```
+
+#### **Visualization of Daily Confirmed, Recovered & Deaths COVID-19 Cases Across Time**
+
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_clean <- spain_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+spain_corona_clean$cases[94] = mean(c(spain_corona$cases[93], spain_corona$cases[95]))
+spain_corona_clean$cases[125] = mean(c(spain_corona$cases[124], spain_corona$cases[126]))
+spain_corona_clean$cases[406] = mean(c(spain_corona$cases[405], spain_corona$cases[407]))
+spain_corona_clean$cases[690] = mean(c(spain_corona$cases[689], spain_corona$cases[691]))
+spain_corona_clean$cases[1009] = mean(c(spain_corona$cases[1008], spain_corona$cases[1010]))
+spain_corona_clean$cases[1088] = mean(c(spain_corona$cases[1087], spain_corona$cases[1089]))
+spain_corona_clean$cases[1682] = mean(c(spain_corona$cases[1681], spain_corona$cases[1683]))
+spain_corona_clean$cases[1738] = mean(c(spain_corona$cases[1737], spain_corona$cases[1739]))
+spain_corona_clean$cases[2330] = mean(c(spain_corona$cases[2329], spain_corona$cases[2331]))
+spain_corona_clean$col <-as.factor(c(rep("black",92),rep("red",2),rep("black",123-94),rep("red",2),rep("black",404-125),rep("red",2),rep("black",688-406),rep("red",2),rep("black",1007-690),rep("red",2),rep("black",1086-1009),rep("red",2),rep("black",1680-1088),rep("red",2),rep("black",1736-1682),rep("red",2),rep("black",2328-1738),rep("red",2),rep("black",2652-2330)))
+a<-ggplot(spain_corona_clean, aes(date, cases)) + geom_path(size=1,color = "#69b3a2") + facet_grid(rows = vars(type),scales = "free")+labs(x="Date",y="No. of cases",title = "Figure 1: Composotion of Daily Confirmed, Recovered & Death Cases")
+ggplotly(a)
+```
+
+
+#### **Visualization of Total Confirmed, Recovered & Deaths COVID-19 Cases Across Time**
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_clean_cum <-  spain_corona_clean%>%group_by(type)%>%mutate(cum_cases = cumsum(cases))
+
+b<-ggplot(spain_corona_clean_cum, aes(date, cum_cases, colour = type)) + geom_path(size = 1, color = "#69b3a2")+facet_grid(rows = vars(type),scales = "free")+ labs(x="Date",y="No. of total cases",title = "Figure 2 : Composition of Total Confirmed, Recovered & Deaths Cases")
+ggplotly(b)
+```
+
+#### **Visualization of  Daily COVID-19 Confirmed Cases in Spain with Saudi Arabia, Japan  and US**
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison<-filter(coronavirus,country %in% c( "US","Saudi Arabia","Japan","Spain"))
+
+```
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_confirmed<-spain_corona_comparison %>% filter(type=="confirmed")
+
+```
+
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_confirmed_clean <- spain_corona_comparison_confirmed %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+
+
+```{r,comment=NA,echo=FALSE,eval=FALSE}
+summary(spain_corona_comparison_confirmed_clean)
+which(is.na(spain_corona_comparison_confirmed_clean$cases))
+spain_corona_comparison_confirmed_clean$cases[1862] = mean(c(spain_corona_comparison_confirmed$cases[1861], spain_corona_comparison_confirmed$cases[1863]))
+spain_corona_comparison_confirmed_clean$cases[1893] = mean(c(spain_corona_comparison_confirmed$cases[1892], spain_corona_comparison_confirmed$cases[1894]))
+spain_corona_comparison_confirmed_clean$cases[2174] = mean(c(spain_corona_comparison_confirmed$cases[2173], spain_corona_comparison_confirmed$cases[2175]))
+spain_corona_comparison_confirmed_clean$cases[2458] = mean(c(spain_corona_comparison_confirmed$cases[2457], spain_corona_comparison_confirmed$cases[2459]))
+```
+
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_confirmed_clean$cases[1862] = mean(c(spain_corona_comparison_confirmed$cases[1861], spain_corona_comparison_confirmed$cases[1863]))
+spain_corona_comparison_confirmed_clean$cases[1893] = mean(c(spain_corona_comparison_confirmed$cases[1892], spain_corona_comparison_confirmed$cases[1894]))
+spain_corona_comparison_confirmed_clean$cases[2174] = mean(c(spain_corona_comparison_confirmed$cases[2173], spain_corona_comparison_confirmed$cases[2175]))
+spain_corona_comparison_confirmed_clean$cases[2458] = mean(c(spain_corona_comparison_confirmed$cases[2457], spain_corona_comparison_confirmed$cases[2459]))
+
+c<-ggplot(spain_corona_comparison_confirmed_clean, aes(date, cases)) + geom_path(size=1,color = "#69b3a2") + facet_grid(rows = vars(country),scales = "free") + labs( x ="Date", y= "No. of confiremed cases",title = "Figure 3 : Composition of No. of Confirmed Cases in Japan,Saudi Arabia,Spain & US")
+ggplotly(c)
+
+```
+
+#### **Visualization of Daily COVID-19 Recovered  Cases in Spain with Saudi Arabia, Japan  and US**
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_recovered<-spain_corona_comparison %>% filter(type=="recovery")
+spain_corona_comparison_recovered_clean <- spain_corona_comparison_recovered %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+
+
+```{r,comment=NA,echo=FALSE,eval=FALSE}
+which(is.na(spain_corona_comparison_recovered_clean$cases))
+spain_corona_comparison_recovered_clean$cases[206] = mean(c(spain_corona_comparison_recovered$cases[205], spain_corona_comparison_recovered$cases[207]))
+spain_corona_comparison_recovered_clean$cases[284] = mean(c(spain_corona_comparison_recovered$cases[283], spain_corona_comparison_recovered$cases[285]))
+spain_corona_comparison_recovered_clean$cases[295] = mean(c(spain_corona_comparison_recovered$cases[294], spain_corona_comparison_recovered$cases[296]))
+spain_corona_comparison_recovered_clean$cases[299] = mean(c(spain_corona_comparison_recovered$cases[298], spain_corona_comparison_recovered$cases[300]))
+spain_corona_comparison_recovered_clean$cases[315] = mean(c(spain_corona_comparison_recovered$cases[314], spain_corona_comparison_recovered$cases[316]))
+spain_corona_comparison_recovered_clean$cases[562] = mean(c(spain_corona_comparison_recovered$cases[561], spain_corona_comparison_recovered$cases[563]))
+spain_corona_comparison_recovered_clean$cases[1446] = mean(c(spain_corona_comparison_recovered$cases[1445], spain_corona_comparison_recovered$cases[1447]))
+spain_corona_comparison_recovered_clean$cases[2330] = mean(c(spain_corona_comparison_recovered$cases[2329], spain_corona_comparison_recovered$cases[2331]))
+spain_corona_comparison_recovered_clean$cases[2764] = mean(c(spain_corona_comparison_recovered$cases[2763], spain_corona_comparison_recovered$cases[2765]))
+spain_corona_comparison_recovered_clean$cases[2958] = mean(c(spain_corona_comparison_recovered$cases[2957], spain_corona_comparison_recovered$cases[2959]))
+spain_corona_comparison_recovered_clean$cases[2980] = mean(c(spain_corona_comparison_recovered$cases[2979], spain_corona_comparison_recovered$cases[2981]))
+```
+
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_recovered_clean$cases[206] = mean(c(spain_corona_comparison_recovered$cases[205], spain_corona_comparison_recovered$cases[207]))
+spain_corona_comparison_recovered_clean$cases[284] = mean(c(spain_corona_comparison_recovered$cases[283], spain_corona_comparison_recovered$cases[285]))
+spain_corona_comparison_recovered_clean$cases[295] = mean(c(spain_corona_comparison_recovered$cases[294], spain_corona_comparison_recovered$cases[296]))
+spain_corona_comparison_recovered_clean$cases[299] = mean(c(spain_corona_comparison_recovered$cases[298], spain_corona_comparison_recovered$cases[300]))
+spain_corona_comparison_recovered_clean$cases[315] = mean(c(spain_corona_comparison_recovered$cases[314], spain_corona_comparison_recovered$cases[316]))
+spain_corona_comparison_recovered_clean$cases[562] = mean(c(spain_corona_comparison_recovered$cases[561], spain_corona_comparison_recovered$cases[563]))
+spain_corona_comparison_recovered_clean$cases[1446] = mean(c(spain_corona_comparison_recovered$cases[1445], spain_corona_comparison_recovered$cases[1447]))
+spain_corona_comparison_recovered_clean$cases[2330] = mean(c(spain_corona_comparison_recovered$cases[2329], spain_corona_comparison_recovered$cases[2331]))
+spain_corona_comparison_recovered_clean$cases[2764] = mean(c(spain_corona_comparison_recovered$cases[2763], spain_corona_comparison_recovered$cases[2765]))
+spain_corona_comparison_recovered_clean$cases[2958] = mean(c(spain_corona_comparison_recovered$cases[2957], spain_corona_comparison_recovered$cases[2959]))
+spain_corona_comparison_recovered_clean$cases[2980] = mean(c(spain_corona_comparison_recovered$cases[2979], spain_corona_comparison_recovered$cases[2981]))
+d<-ggplot(spain_corona_comparison_recovered_clean, aes(date, cases)) + geom_path(size=1,color="#69b3a2") + facet_grid(rows = vars(country),scales = "free")+labs( x="Date",y="No. of recovered cases",title="Figure 4 : Composition of No. of Recovered  Cases in Japan,Saudi Arabia,Spain & US")
+ggplotly(d)
+
+```
+
+#### **Visualization of Daily COVID-19 Death Cases in Spain with Saudi Arabia, Japan  and US**
+
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_deaths<-spain_corona_comparison %>% filter(type=="death")
+spain_corona_comparison_deaths_clean <- spain_corona_comparison_deaths %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+
+
+```{r,comment=NA,echo=FALSE,eval=FALSE}
+which(is.na(spain_corona_comparison_deaths_clean$cases))
+spain_corona_comparison_deaths_clean$cases[1893] = mean(c(spain_corona_comparison_deaths$cases[1892], spain_corona_comparison_deaths$cases[1894]))
+spain_corona_comparison_deaths_clean$cases[1972] = mean(c(spain_corona_comparison_deaths$cases[1971], spain_corona_comparison_deaths$cases[1973]))
+spain_corona_comparison_deaths_clean$cases[2566] = mean(c(spain_corona_comparison_deaths$cases[2565], spain_corona_comparison_deaths$cases[1973]))
+spain_corona_comparison_deaths_clean$cases[2622] = mean(c(spain_corona_comparison_deaths$cases[2621], spain_corona_comparison_deaths$cases[2623]))
+spain_corona_comparison_deaths_clean$cases[3525] = mean(c(spain_corona_comparison_deaths$cases[3524], spain_corona_comparison_deaths$cases[3526]))
+```
+
+
+```{r,comment=NA,echo=FALSE}
+e<-ggplot(spain_corona_comparison_deaths_clean, aes(date, cases)) + geom_path(size=1,color="#69b3a2") + facet_grid(rows = vars(country),scales = "free")+labs(x="Dates",y="No. of death cases",title="Figure 5 : Composition of No. of Death Cases in Japan,Saudi Arabia,Spain & US")
+ggplotly(e)
+
+```
+
+#### **Visualization of Total COVID-19 Confirmed Cases in Spain with Saudi Arabia, Japan  and US**
+```{r,comment=NA,echo=FALSE}
+
+spain_corona_comparison_confirmed_clean_cum<-spain_corona_comparison_confirmed_clean%>%group_by(country)%>%mutate(cum_cases = cumsum(cases))
+
+f<-ggplot(spain_corona_comparison_confirmed_clean_cum, aes(date, cum_cases, colour=country)) + geom_path(size=1)+scale_color_manual(breaks = c("Japan", "Saudi Arabia", "Spain","US"), values=c("#69b3a2", "#32CD32", "#98FB98","#478778"))+labs(x="Date",y="Total No.of Confirmed cases",title = "Figure 6 : Composition of Total No. of Confirmed Cases in Spain, Saudi Arabia, Japan  and US ")
+ggplotly(f)
+
+```
+
+#### **Visualization of Total COVID-19 Recovered  Cases in Spain with Saudi Arabia, Japan  and US**
+
+
+```{r,comment=NA,echo=FALSE}
+
+spain_corona_comparison_recovered_clean_cum<-spain_corona_comparison_recovered_clean%>%group_by(country)%>%mutate(cum_cases = cumsum(cases))
+g<-ggplot(spain_corona_comparison_recovered_clean_cum, aes(date, cum_cases, colour=country)) +geom_path(size=1)+scale_color_manual(breaks = c("Japan", "Saudi Arabia", "Spain","US"), values=c("#69b3a2", "#32CD32", "#98FB98","#478778"))+labs(x="Date",y="Total No.of Recovered cases",title = "Figure 7 : Composition of Total No. of Recovered Cases in Spain, Saudi Arabia, Japan  and US ")
+ggplotly(g)
+
+```
+
+#### **Visualization of Total  COVID-19 Death Cases in Spain with Saudi Arabia, Japan  and US**
+```{r,comment=NA,echo=FALSE}
+spain_corona_comparison_deaths_clean_cum<-spain_corona_comparison_deaths_clean%>%group_by(country)%>%mutate(cum_cases =cumsum(cases))
+h<-ggplot(spain_corona_comparison_deaths_clean_cum, aes(date, cum_cases, colour=country)) + geom_path(size=1)+scale_color_manual(breaks = c("Japan", "Saudi Arabia", "Spain","US"), values=c("#69b3a2", "#32CD32", "#98FB98","#478778"))+labs(x="Date",y="Total No.of Death cases",title = "Figure 8 : Composition of Total No. of Death Cases in Spain, Saudi Arabia, Japan  and US ")
+ggplotly(h)
+
+```
+
+
+# 3. Discussion
+
+When studying the Spain corona virus data set, there are set of negative values for cases and after a given date, recorded cases was become zero. Throughout the cleaning process I removed negative values & outliers. then Spain corona virus data set become much accuracy than earlier.but there were some problems with this data set.when going to get daily active data there were also negative vales more than 50 & when plotting total COVID-19 death cases in Spain, Saudi Arabia,Japan and US;the code is correct it run in r console & visualize correctly but it doesn't  work in html file properly. because of this reasons, I don't have enough evidences to conclude that these visualizations provide accuracy conclusions about corona virus spread in Spain.If you want to conduct a study on COVID-19 spread in Spain, I suggest you to use WHO data set for that.
+
+# 4. Conclusion
+
+According to the figure 1, most of confirmed cases are found at the end of 2021 and first 6 months in 2022.The maximum number of confirmed cases were found on 3rd of January 2022. It was 372766 cases. Distribution of daily death cases are  smoothly distributed.Maximum number of death cases are appeared on 04th of November 2020.That is 1623 cases.After 16th of May 2020 recovered cases were recorded as zero.Because of that we can't conclude conclusions by looking at the distribution of recorded cases.
+
+According to the figure 2, Total number of confirmed cases are slowly increased from  22th of January 2020 to 26th December 2021 & vastly increased from 26th December to 04th February 2022. Distribution of total death cases are slightly increased over the time period.we can't get conclusions by looking at the distribution of recorded cases.
+
+According to figure 3, confirmed cases in Japan is vastly increased after 5th January 2022.Daily confirmed cases in Saudi Arabia is smoothly distributed over the time period.Daily confirmed cases in Spain vastly distributed at the time period of from 22nd November 2021 to 9th March 2022.Daily confirmed cases in US  vastly distributed from from 10th July 2021.
+
+According to the figure 4,After certain date recovered cases in each country became zero. then we can't get conclusions by looking at the distribution of these.
+
+According to the figure 5, No. of death cases in each country is smoothly distributed over the time.
+
+According to the figure 6, Total number of confirmed cases in Saudi Arabia, Spain & Japan is shows relatively equal distribution, but US performed upward increasing movement.
+
+According to the figure 7, After certain date recovered cases in each country became zero. then we can't get conclusions by looking at the distribution of these.
+
+According to the figure 8,  Total number of deaths  cases in Saudi Arabia, Spain & Japan is shows relatively equal distribution, but US performed upward increasing movement.
+
+
+# 5. References
+https://www.who.int/health-topics/coronavirus#tab=tab_1
+https://www.worldometers.info/coronavirus/country/spain/
+https://geology.com/world/spain-satellite-image.shtml
+https://www.spain.info/en/weather/
+https://en.wikipedia.org/wiki/Demographics_of_Spain
+https://www.expatica.com/es/healthcare/healthcare-basics/healthcare-in-spain-101467/#:~:text=Around%2090%25%20of%20Spaniards%20use,oversees%20the%20national%20health%20budget.
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Spain
+https://www.worldometers.info/coronavirus/country/spain/
+
+

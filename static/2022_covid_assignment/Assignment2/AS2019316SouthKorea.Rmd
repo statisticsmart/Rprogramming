@@ -1,0 +1,254 @@
+---
+title: "COVID-19 Pandemic in South Korea"
+author: "Hiruni Bhagya(AS2019316)"
+date: "30-09-2022"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1  Introduction of South Korea
+South Korea,Republic of Korea is a country in East Asia, constituting the southern part of the Korean Peninsula and sharing a land border with North Korea. Its western border is formed by the Yellow Sea, while its eastern border is defined by the Sea of Japan. South Korea claims to be the sole legitimate government of the entire peninsula and adjacent islands. It has a population of 51.75 million, of which about half live in the Seoul capital area, the fifth largest metropolis in the world. Other major cities include Incheon, Busan, and Daegu.
+
+
+### 1.1 Climate
+
+South Korea tends to have a humid continental climate and a humid subtropical climate, and is affected by the East Asian monsoon, with precipitation heavier in summer during a short rainy season called jangma, which begins end of June through the end of July. Winters can be extremely cold with the minimum temperature dropping below −20 °C in the inland region of the country: in Seoul, the average January temperature range is −7 to 1 °C , and the average August temperature range is 22 to 30 °C (72 to 86 °F). The minimum and the maximum temperatures of the country can be observed as -20 degrees and 30 degrees in celcius respectively. 
+
+South Korea has four distinct seasons;
+
+  * Spring
+  * Summer
+  * Autumn 
+  * Winter. 
+
+Spring usually lasts from late March to early May, summer from mid-May to early September, autumn from mid-September to early November, and winter from mid-November to mid-March.
+
+
+### 1.2 Health
+South Korea has a universal healthcare system.It has the world's second best healthcare system.South Korean hospitals have advanced medical equipment and facilities readily available, ranking 4th for MRI units per capita and 6th for CT scanners per capita in the OECD.It also had the OECD's second largest number of hospital beds per 1000 people at 9.56 beds.Life expectancy has been rising rapidly and South Korea ranked 11th in the world for life expectancy at 82.3 years by the WHO in 2015.It also has the third highest health adjusted life expectancy in the world.
+
+### 1.2.1 Background of COVID 19
+
+#### 2020
+First COVID-19 patient from the South Korea was confirmed on 20 January, 2020. Until the end of the month February, COVID-19 confirmed cases were announced below 5 confirms per day. From end of the February to early July period sudden increment of confirmed cases in couple of hundreds were observed. Reason for this incident was mostly attributed to “Patient 31”.
+
+South Korea never imposed a countrywide lockdowns, curfew or stopped its people from going to work. South Korean authorities reacted remarkably quickly when the reports about spread of coronavirus from china are released. Authorities have done below actions to control the virus.
+
+  + Government ordered factories to start producing coronavirus test kits together and within two weeks their daily test kit production was over 100,000.
+  + As the second key feature they have done lots of coronavirus testings effectively by making more than 600 testing centers. Authorities always monitor the spread of the virus and threat those with it successfully.
+  + Government became very transparent by sharing all public information about places that confirmed coronavirus victims traveled.
+  + They have used modern technological features like live tracking of each person to record their travels and behavior.
+
+#### 2022
+In early 2022, there was a major spike in cases related to Omicron, with 170 thousand cases reported on February 22.
+
+South Korea began relaxing social distancing rules on 4 March 2022 and announced a shift toward endemic living on 18 March. It lifted its vaccine mandate and quarantine requirement for fully vaccinated travelers on 1 April. The number of new daily reported cases peaked at 621,317 on 16 March 2022 and the number of daily deaths peaked at 432 on 29 March 2022
+
+### 1.3 Map
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+data(coronavirus)
+library(tidyverse) 
+library(magrittr)
+south_korea_corona <- coronavirus %>% filter(country == "Korea, South")
+```
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = south_korea_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+```
+
+## 2  Exploratory Data Analysis
+
+The spread of the COVID 19 disease worldwide began in year 2020. Since then, the disease has been spreading more or less until today. This survey examines the spread of the disease in South Korea. The spread of the disease will be discussed more with the easing of low to control the spread of COVID 19. Let us study the number of patients recorded here, the number of patients who have recovered, the number of patients who have not yet recovered and the number of patients who have died. 
+
+### 2.1  Confirmed
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+confirmedcases_south_korea_corona <- south_korea_corona %>% filter(type=="confirmed") 
+ggplot(confirmedcases_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South korea: Daily COVID-19 Confirmed cases")
+```
+
+
+The number of COVID 19 cases reported in South Korea shows a sharp increase in 2022 compared to 2020 and 2021. At the beginning of the year 2022, the number of patients showed a slight decrease, but by the months of February and March, it has increased rapidly. However, by the month of June, the number cases has gradually decreased.
+
+### 2.2 Death
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+deaths_south_korea_corona <- south_korea_corona %>% filter(type=="death") 
+ggplot(deaths_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Kora: Daily COVID-19 deaths")
+
+```
+
+The number of COVID 19 deaths in South Korea also shows a high growth in the year 2022 when comparing the year 2020 and 2021 but compared th the number of cases reported in the years 2020 and 2021, it may be a lower percentage because the number of cases in the year 2022 was higher.
+
+
+### 2.3  Recovered
+
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+recover_south_korea_corona <- south_korea_corona %>% filter(type == "recovery")
+ggplot(recover_south_korea_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("South Korea: Daily COVID-19 recoveries")
+```
+
+This data set has outliers.
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+recover_south_korea_corona2 <- recover_south_korea_corona %>% filter(cases>=0)
+
+ggplot(recover_south_korea_corona2, aes(x=date, y=cases)) +geom_line() + ggtitle("South Korea: Correct daily COVID-19 recoveries")
+
+```
+
+Recovery data have not entered after 2021-08-06.
+
+### 2.4 Active cases
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+south_korea_corona2 <- south_korea_corona %>% filter(cases >= 0)
+coronaSK <- south_korea_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+coronaSK$active_Sk_corona <- coronaSK$confirmed - coronaSK$death - coronaSK$recovery
+ggplot(coronaSK, aes(x=date, y=active_Sk_corona)) + geom_line() + ggtitle("South Korea: Daily COVID-19 Active cases")
+```
+
+Compared to 2020 and 2021, the number of active cases in the first two months of 2022 shows an unusual growth. The main reason for this is that after 2021-08-06 the recovered data has not been entered correctly.
+
+### 2.5 Compare 
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+south_korea_corona2 <- south_korea_corona %>% filter(cases >= 0)
+ggplot(south_korea_corona2, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("South Korea: Compare confirmed, death and active cases")
+```
+
+In comparison with confirmed cases, the number of patient deaths is minimal.
+
+## 3 Comparison with other countries
+
+South Korea has a land border with North Korea in north. The country also shares maritime borders with China and Japan.But we don't have North Korea data set. Therefore I will discuss China, Japan and Russia.
+
+### 3.1 Confirmed
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+confirmedcases_south_korea_corona <- south_korea_corona %>% filter(type=="confirmed")
+
+china_corona <- coronavirus  %>% filter(country == "China")
+confirmed_china_corona <- china_corona %>% filter(type=="confirmed")
+
+japan_corona <- coronavirus  %>% filter(country == "Japan")
+confirmed_japan_corona <- japan_corona %>% filter(type=="confirmed")
+
+russia_corona <- coronavirus  %>% filter(country == "Russia")
+confirmed_russia_corona <- russia_corona %>% filter(type=="confirmed")
+
+near_country <- rbind(confirmedcases_south_korea_corona, confirmed_china_corona, confirmed_japan_corona, confirmed_russia_corona)
+
+ggplot(near_country, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("Confirmed cases in South Korea's neighbour countries")
+```
+
+Considering these four countries, the number of COVID 19 cases reported from Russia in 2020 and 2021 is more compared to other countries. But considering the year 2022, South Korea has recorded the highest number of cases compared to the other three countries. It is followed by Russia, in third place by Japan and then by China, the country where the disease originated.
+
+### 3.2 Recovered
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+
+recover_south_korea_corona <- south_korea_corona %>% filter(type=="recovery")
+
+china_corona <- coronavirus  %>% filter(country == "China")
+recover_china_corona <- china_corona %>% filter(type=="recovery")
+
+japan_corona <- coronavirus  %>% filter(country == "Japan")
+recover_japan_corona <- japan_corona %>% filter(type=="recovery")
+
+russia_corona <- coronavirus  %>% filter(country == "Russia")
+recover_russia_corona <- russia_corona %>% filter(type=="recovery")
+
+near_country2 <- rbind(recover_south_korea_corona, recover_china_corona, recover_japan_corona, recover_russia_corona)
+
+near_country3 <- near_country2 %>% filter(cases >= 0)
+
+ggplot(near_country3, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("recovered cases in South Korea's neighbour countries")
+```
+
+In 2022 and 2021, the number of confirmed cases as well as the number of recovered cases in highest in Russia. I compared the recovered cases of all the countries after 2021-08-06 has not been enterd data.
+
+### 3.3 Death
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+deaths_south_korea_corona <- south_korea_corona %>% filter(type=="death")
+
+china_corona <- coronavirus  %>% filter(country == "China")
+deaths_china_corona <- china_corona %>% filter(type=="death")
+
+japan_corona <- coronavirus  %>% filter(country == "Japan")
+deaths_japan_corona <- japan_corona %>% filter(type=="death")
+
+russia_corona <- coronavirus  %>% filter(country == "Russia")
+deaths_russia_corona <- russia_corona %>% filter(type=="death")
+
+near_country4 <- rbind(deaths_south_korea_corona, deaths_china_corona, deaths_japan_corona, deaths_russia_corona)
+
+ggplot(near_country4, aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("death cases in South Korea's neighbour countries")
+```
+
+Considering these four countries, the death rate in China, where COVID 19 originated, was high in the first few months of 2020 but has since decreased. From mid-2020 to 2022, Russia's death rate remains high compared to other countries. in 2022, the death rate in Japan, China and South Korea has also increased compared to the other two years.
+
+
+## 4 Discussion
+
++ -180719 data has been included in the recovery of this data set on 2021-08-05. After that no data has been entered.
++ For this reason, it raised a problematic situation when analyzing the people who have recovered from this COVID disease.
++ Since the number of active cases is calculated by subtracting the number of recovered and death from the number of confirmed cases, it has become a problem to provide correct information.
++ All the problem discussed above exist in the other three countries that I analyzed, so a problematic situation has arisen there as well.
+
+
+## 5 Conclusions
+
+This project was done to analysis the corona virus effect of the country South Korea. Data 2020-01-22 of the branch to start entering this data. From then till 2022-06-23 data is included here.
+
++ Compared to 2020 and 2021, the number of COVID 19 cases in 2022 has increased significantly.
++ In 2020, the number of COVID 19 deaths has been less than 50 per day. In the last month of 2021, the number of deaths has started to exceed 100. In the first few months of 2022, the number of patient deaths has increased, it has reached close to 500 deaths.Thus, COVID 19 patient deaths have increased excessively in 2022.
+
+reason for above matter, South Korea began relaxing social distancing rules on 2022-03-04 and announced a shift toward endemic living on 18 March.It lifted its vaccine mandate and quarantine requirement for fully vaccinated travelers on 1 April.The number of new daily reported cases peaked at 621,317 on 16 March 2022 and the number of daily deaths peaked at 432 on 29 March 2022
+
+When comparing the COVID 19 disease in the countries of China, Japan, South Korea and Russia.Due to the fact that China, Japan, and Russia are located close to South Korea, the climatic conditions of those countries and South Korea are at the same level.We can think that the natural factors affecting the development of the disease are at the same level in all these countries. The disease has grown excessively in the year 2022 in all four countries. Among them, South Korea has taken the lead. 
+
+Even though the COVID 19 disease is currently being ignored, more cases have been reported in South Korea this year compared to other years. And the number of beaths has also increased. Therefore, this situation is still serious.
+
+## 6 References
+
+
++ https://en.wikipedia.org/wiki/South_Korea
++ https://en.wikipedia.org/wiki/COVID-19_pandemic_in_South_Korea
++ https://en.wikipedia.org/wiki/Russia
++ https://en.wikipedia.org/wiki/China
++ https://en.wikipedia.org/wiki/Japan
++ https://english.alarabiya.net/en/features/2020/04/03/South-Korea-conquered-coronavirus-without-a-lockdown-a-model-to-follow-

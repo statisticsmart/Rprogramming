@@ -1,0 +1,209 @@
+---
+title: "Covid-19 outbreak in Mexico"
+author: "AS2019354 W.S.Y.S Fonseka"
+date: "10/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library (sta3262)
+library (coronavirus)
+library (tidyverse)
+library (magrittr) 
+library(maptools)
+library(ggplot2)
+library(sp)
+library(ggrepel)
+library(tibble)
+library(png)
+library(grid)
+mexico_corona<-coronavirus %>% filter(country=="Mexico")
+```
+
+## **Mexico**
+``` {r pressure ,message=FALSE, echo=FALSE}
+library (ggplot2)
+library (maptools)
+library(tibble)
+library (tidyverse)
+library (ggrepel)
+library (png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+p<- ggplot()+geom_polygon(data=wrld_simpl,aes(x=long,y=lat,group=group), fill="gray",colour = "white")+coord_cartesian(xlim=c(-180,180),ylim= c(-90,90))+scale_x_continuous(breaks=seq(-180,180,120))+scale_y_continuous(breaks =seq(-90,90,100))
+p+geom_point(data=mexico_corona, aes(x=long,y=lat),color="red",size=1)
+``` 
+
+Mexico, country of southern North America and the third largest country in Latin America, after Brazil and Argentina. Mexican society is characterized by extremes of wealth and poverty, with a limited middle class wedged between an elite cadre of landowners and investors on the one hand and masses of rural and urban poor on the other. But in spite of the challenges it faces as a developing country, Mexico is one of the chief economic and political forces in Latin America. It has a dynamic industrial base, vast mineral resources, a wide-ranging service sector, and the world’s largest population of Spanish speakers—about two and a half times that of Spain or Colombia. As its official name suggests, the Estados Unidos Mexicanos (United Mexican States) incorporates 31 socially and physically diverse states and the Federal District.
+
+## Lockdown status in Mexico 
+
+As of October 2nd, 2022, Quintana Roo is currently averaging approximately 7 new Covid case a day in a state with a population of 1.85+ million.
+Each state in Mexico is assigned one of four colors (green, yellow, orange, red) based on current rates of infection and hospital occupancy.
+The status of Quintana Roo (Cancun, Tulum, Cozumel, etc.) is currently GREEN meaning lower risk.
+Case numbers in the islands of Cozumel, Isla Mujeres and Holbox are still low.
+As of October 2nd, hospital occupancy is currently 0% full in Cancun, 0% full in Isla Mujeres, 0% in Cozumel, 0% in Playa del Carmen and 0% in Tulum. Hospitalizations continue to stay low and the majority of locals are now vaccinated.
+
+## Government actions against Corona pandemic
+
+On March 19th, the EU Central Bank opened a 'swap' mechanism with its counterparty from Mexico for $60,000 million of US dollars to provide liquidity in dollars for at least 6 months.
+On March 30th, Mexican government published on the official gazette the agreement in which “Sanitary Emergency due to Act of God” is declared due to the pandemic derived from the virus known as SARS-CoV 2 (COVID-19).Mexican government has announced that it will be granted one million loans of MXN 25,000 each one. 500,000 for the informal economy and 500,000 for the formal economy.On May 14, 2020, the government of Mexico, issued a decree through the official Gazette which establishes that as part of the strategy for the reopening of activities, an epidemiological traffic light system would be used by regions.
+
+## Exploratory Data analysis
+
+### Death cases in Mexico 
+```{r test , echo=FALSE}
+library (coronavirus)
+library(tidyverse)
+library(magrittr)
+deaths_corona<-mexico_corona %>% filter (type=="death")
+head (deaths_corona)
+
+``` 
+
+```{r death,echo=FALSE}
+ggplot(deaths_corona, aes(x=date,y=cases))+geom_line()+ggtitle("Mexico:Daily COVID-19 deaths") 
+mean(deaths_corona$cases)
+```
+The mean of deaths in Mexico is 368 monthly and the deaths have shown a drastic increase during 2021.According to this chart,highest death toll was reported during mid 2021.
+
+### Confirmed cases in Mexico 
+```{r cars, echo=FALSE}
+library (coronavirus)
+library (tidyverse)
+library (magrittr)
+confirm_mexico_corona<- mexico_corona%>% filter (type=="confirmed")
+head (confirm_mexico_corona)
+
+```
+
+```{r confirm,echo=FALSE}
+cr<- confirm_mexico_corona %>% filter (cases>0)
+ggplot(cr,aes(x=date,y=cases))+geom_line()+ggtitle("Mexico:Daily Covid-19 confirmed")
+mean(cr$cases)
+
+``` 
+The number of recovered cases has drastically increased during the beginning of 2022. The mean number of recovered cases is 6682 per month. 
+
+## Recovered cases in Mexico
+```{r cas, echo=FALSE}
+library (coronavirus)
+library (tidyverse)
+library (magrittr)
+recover_mexico_corona<- mexico_corona%>% filter (type=="recovery")
+head (recover_mexico_corona)
+
+```
+
+
+```{r rec,echo=FALSE}
+rr <-recover_mexico_corona %>% filter(cases>0)
+ggplot(rr,aes(x=date,y=cases))+geom_line()+ggtitle("Mexico:Daily Covid-19 recoveries")
+mean(rr$cases)
+
+``` 
+The mean number of recoveries per month is 5162 and the highest recoveries was around January - February 2021
+
+## Active cases
+``` {r tib,echo=FALSE}
+as_tibble(mexico_corona)
+
+```
+
+```{r act,message=FALSE,echo=FALSE}
+ra <-mexico_corona %>% filter(cases>0)
+ggplot(ra,aes(x=date,y=cases))+geom_line()+ggtitle("Mexico:Daily Covid-19 active cases")
+mean(ra$cases)
+```
+The mean number of active cases is 4371 and most active cases were seen at the beginning of 2022
+
+## Comparison with other countries 
+
+```{r gua,echo=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
+guatemala_corona<- coronavirus %>% filter(country =="Guatemala")
+gd<-guatemala_corona %>% filter(type=="death")
+gdpos<-gd %>% filter(cases>0)
+gc<-guatemala_corona %>% filter (type=="confirmed")
+gcpos<-gc %>% filter(cases>0)
+gr<-guatemala_corona %>% filter(type=="recovery")
+grpos<-gr %>% filter (cases>0)
+ggplot()+ geom_line(gdpos,mapping=aes(x=date,y=cases,color="Guatemala"))+geom_line(deaths_corona,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(gcpos,mapping=aes(x=date,y=cases,color="Guatemala"))+geom_line(cr,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(grpos,mapping=aes(x=date,y=cases,color="Guatemala"))+geom_line(rr,mapping=aes(x=date,y=cases,color="Mexico"))+ facet_wrap(~type)+ ggtitle("Mexico vs Guatemala")
+```
+
+
+According to the charts , Mexico has shown high cases in every aspect.
+
+```{r bel,echo=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
+bs_corona<- coronavirus %>% filter(country =="Belize")
+bd<-bs_corona %>% filter(type=="death")
+bdpos<-bd %>% filter(cases>0)
+bc<-bs_corona %>% filter (type=="confirmed")
+bcpos<-bc %>% filter(cases>0)
+br<-bs_corona %>% filter(type=="recovery")
+brpos<-br %>% filter (cases>0)
+ggplot()+ geom_line(bdpos,mapping=aes(x=date,y=cases,color="Belize"))+geom_line(deaths_corona,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(bcpos,mapping=aes(x=date,y=cases,color="Belize"))+geom_line(cr,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(brpos,mapping=aes(x=date,y=cases,color="Belize"))+geom_line(rr,mapping=aes(x=date,y=cases,color="Mexico"))+ facet_wrap(~type)+ ggtitle("Mexico vs Belize")
+```
+
+
+According to the charts , Mexico has shown high cases in every aspect.
+
+```{r it,echo=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
+is_corona<- coronavirus %>% filter(country =="Italy")
+id<-is_corona %>% filter(type=="death")
+idpos<-id %>% filter(cases>0)
+ic<-is_corona %>% filter (type=="confirmed")
+icpos<-ic %>% filter(cases>0)
+ir<-is_corona %>% filter(type=="recovery")
+irpos<-ir %>% filter (cases>0)
+ggplot()+ geom_line(idpos,mapping=aes(x=date,y=cases,color="Italy"))+geom_line(deaths_corona,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(icpos,mapping=aes(x=date,y=cases,color="Italy"))+geom_line(cr,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(irpos,mapping=aes(x=date,y=cases,color="Italy"))+geom_line(rr,mapping=aes(x=date,y=cases,color="Mexico"))+ facet_wrap(~type)+ ggtitle("Mexico vs Italy")
+```
+
+
+According to the charts , Italy has shown high cases in every aspect.
+```{r ch,echo=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(tidyverse)
+library(magrittr)
+ch_corona<- coronavirus %>% filter(country =="China")
+chd<-ch_corona %>% filter(type=="death")
+chdpos<-chd %>% filter(cases>0)
+chc<-ch_corona %>% filter (type=="confirmed")
+chcpos<-chc %>% filter(cases>0)
+chr<-ch_corona %>% filter(type=="recovery")
+chrpos<-chr %>% filter (cases>0)
+ggplot()+ geom_line(chdpos,mapping=aes(x=date,y=cases,color="China"))+geom_line(deaths_corona,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(chcpos,mapping=aes(x=date,y=cases,color="China"))+geom_line(cr,mapping=aes(x=date,y=cases,color="Mexico"))+geom_line(chrpos,mapping=aes(x=date,y=cases,color="China"))+geom_line(rr,mapping=aes(x=date,y=cases,color="Mexico"))+ facet_wrap(~type)+ ggtitle("Mexico vs China")
+```
+
+
+According to the charts , Mexico has shown high cases in every aspect.
+
+
+## Conclusions and discussion 
+Italy showed most of the confirmed cases by a large increase. China also shows more confirmed cases but is less than Mexico. While Mexico has shown higher cases in every aspect they have also shown a steady increase in recovery cases. 
+
+China had shown confirmed cases even before Mexico and they have also had recovery cases prior to Mexico too.
+
+We cannot come to end conclusions since there are concerns that the Covid 19 death count is under reported in Mexico since only the deaths in hospitals.
+
+## References
+
+(1)Bernstein M.D,"Mexico", https://www.britannica.com/countries_of_the_world
+
+
+(2)Corona virus update for Mexico,https://www.islandlifemexico.com
+
+(3)Covid in Mexico, https://www.bbc.com

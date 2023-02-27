@@ -1,0 +1,288 @@
+---
+title: "**STA 326 2.0 Programming & Data Analysis with R**"
+author: "W.Heshani Devindi (AS2019337)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(devtools)
+library(tidyverse)
+library(ggplot2)
+library(magrittr)
+library(tibble) 
+library(dplyr)
+library(coronavirus)
+library(plotly)
+library(maptools)
+library(grid)
+library(sp)
+library(png)
+library(knitr)
+library(scales)
+library(viridis)
+```
+
+
+## Introduction
+Argentina, officially the Argentine Republic, is a country in the southern half of South America. Argentina covers an area of 2,780,400 km2, making it the second-largest country in South America after Brazil, the fourth-largest country in the Americas, and the eighth-largest country in the world. It shares the bulk of the Southern Cone with Chile to the west, and is also bordered by Bolivia and Paraguay to the north, Brazil to the northeast, Uruguay and the South Atlantic Ocean to the east, and the Drake Passage to the south. 
+
+
+### Location of Argentina in World Map
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+Argentina_corona <- coronavirus %>% filter(country == "Argentina")
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Argentina_corona, aes(x = long, y = lat), color = "red", size
+    = 3
+  )
+```
+
+
+### Argentina’s response to COVID-19
+Argentina’s newly elected government, acted swiftly and decisively when the first COVID-19 cases were imported with rapid detection, isolation and care for those infected, and contact tracing and quarantine of contacts, while working quickly to scale up the health system in anticipation of more cases. National authorities also took early, bold decisions regarding public health measures, including the closure of borders, schools, public spaces, and businesses as part of a comprehensive “lockdown” to slow the spread of COVID-19. Simultaneously, the government increased social protection measures to try to mitigate the severe socio-economic consequences resulting from a prolonged lockdown of more than 2 months, especially among populations in vulnerable situations.
+
+
+## Exploratory Data Analysis
+
+The **2019 Novel Coronavirus COVID-19 (2019-nCoV)** dataset provides a daily summary of the Coronavirus (COVID-19) cases(confirmed, death, and recovered) by state/province from 22nd of January 2020 to 23rd of June 2022. 
+
+It is a data frame with 7 variables.
+
+1. date: Date in YYYY-MM-DD format
+2. province: Name of province/state, for countries where data is provided split across multiple provinces/states
+3. country: Name of country/region
+4. lat: Latitude of center of geographic region, defined as either country or, if available, province
+5. long: Longitude of center of geographic region, defined as either country or, if available, province
+6. type: An indicator for the type of cases (confirmed, death, recovered)
+7. cases: Number of cases on given date
+
+
+```{r,comment = NA,results ='hide', echo = FALSE}
+Argentina_corona <- coronavirus %>% filter(country == "Argentina")
+summary(Argentina_corona)
+```
+
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+confirmed_Argentina_corona <- Argentina_corona %>% filter(type=="confirmed") 
+
+confirmed_Argentina_corona <- confirmed_Argentina_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # code missing values to NA
+
+summary(confirmed_Argentina_corona)
+
+which(is.na(confirmed_Argentina_corona$cases)) # Locate missing value
+```
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+recovered_Argentina_corona <- Argentina_corona %>% filter(type=="recovery")
+
+recovered_Argentina_corona <- recovered_Argentina_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # code missing values to NA
+
+summary(recovered_Argentina_corona)
+
+which(is.na(recovered_Argentina_corona$cases)) # Locate missing value
+```
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+recovered_Argentina_corona$cases[562] = mean(c(recovered_Argentina_corona$cases[561], recovered_Argentina_corona$cases[563])) # average of the 561st and the 563rd to calculate the missing value
+length(recovered_Argentina_corona$cases)
+
+summary(recovered_Argentina_corona)
+```
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+death_Argentina_corona <- Argentina_corona %>% filter(type=="death")
+
+death_Argentina_corona <- death_Argentina_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # code missing values to NA
+
+summary(death_Argentina_corona)
+
+which(is.na(death_Argentina_corona$cases)) # Locate missing value
+```
+
+
+### Confirmed cases in Argentina
+```{r,comment = NA,echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 01: Daily Covid-19 Confirmed cases"}
+a <- ggplot(confirmed_Argentina_corona, aes(x = date, y = cases)) + geom_line() + labs(x = "Date", y = "No. of cases") + scale_y_continuous(labels = comma)
+ggplotly(a)
+```
+Figure 01 shows that there is a cyclical variation over the time period. The first confirmed case of coronavirus was reported in March 2020. We can observe that there are four significant waves in the confirmed cases of coronavirus. There is a significant peak during the third covid wave. According to the figure, Argentina is entering fourth wave of the Covid-19 pandemic. 
+
+
+### Recovered cases in Argentina
+```{r,comment = NA,echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 02: Daily Covid-19 recovered cases"}
+b <- ggplot(recovered_Argentina_corona, aes(x = date, y = cases)) + geom_line() + labs(x = "Date", y = "No. of cases")
+ggplotly(b)
+```
+According to the dataset, there is no recovered data was reported after the 5th of Augest 2021. Figure 02 shows the cyclical variation of the recovered cases and we can observe a significant peak during the first wave.
+
+
+### Death cases in Argentina
+```{r,comment = NA,echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 03: Daily Covid-19 death cases"}
+c <- ggplot(death_Argentina_corona, aes(x = date, y = cases)) + geom_line() + labs(x = "Date", y = "No. of cases")
+ggplotly(c)
+```
+Figure 03 shows the cyclical variation of the death cases of coronavirus in Argentina. The first death case of coronavirus was reported in March 2020. We can observe a significant peak during the first wave.
+
+
+### Comparison between Recoverd and Death cases in Argentina
+```{r,comment = NA, results ='hide', echo = FALSE}
+comparison_Argentina_corona <- filter(Argentina_corona, type %in% c("death", "recovery"))
+
+comparison_Argentina_corona <- comparison_Argentina_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # code missing values to NA
+
+summary(comparison_Argentina_corona)
+
+which(is.na(comparison_Argentina_corona$cases)) # Locate missing value
+```
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+comparison_Argentina_corona$cases[1446] = mean(c(comparison_Argentina_corona$cases[1445], comparison_Argentina_corona$cases[1447])) # average of the 1445th and the 1447th to calculate the missing value
+length(comparison_Argentina_corona$cases)
+
+summary(comparison_Argentina_corona)
+```
+
+```{r,comment = NA,echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 04: Comparison between recoverd and death cases of Covid-19"}
+d <- ggplot(comparison_Argentina_corona, aes(x = date, y = cases)) + geom_line(aes(col = type)) + facet_grid(type ~ ., scales = "free") + labs(x = "Date", y = "No. of cases") + theme(legend.position = "none") 
+ggplotly(d)
+```
+Figure 04 shows that the recovered cases are very high compared to the death cases. Recovery of the patients had started earlier than the death cases were reported. This graph implies that the pandemic situation was controlled by the country. 
+
+
+### Covid-19 Situation of the Neighbouring Countries
+
+
+South America has been one of the most strongly affected regions by the COVID-19 pandemic, with countries like Argentina, Brazil, Chile, Colombia, Mexico, and Peru. Brazil is the most populated country in the region and it has become the country with the highest number of coronavirus infections in Latin America. It was also in Brazil that the first case of COVID-19 in Latin America was confirmed, on February 26, 2020. When it comes to the number of deaths caused by the disease, Brazil ranks second in the world. Mexico and Peru rank fifth and sixth. Moreover, the COVID-19 disease has proven highly fatal in Peru as well as in Brazil, both registering some of the highest death rates per one million inhabitants in the world.
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+Neighbourhood_countries_corona <- filter(coronavirus, country %in% c("Brazil", "Bolivia","Paraguay","Chile", "Uruguay"))
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Neighbourhood_countries_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+```
+
+
+### Comparison of the Confirmed, Death, Recoverd cases of the Neighbouring Countries
+```{r,comment = NA, results ='hide', echo = FALSE}
+Neighbourhood_countries_corona <- filter(coronavirus, country %in% c("Brazil", "Bolivia","Paraguay","Chile", "Uruguay"))
+
+Neighbourhood_countries_corona <- Neighbourhood_countries_corona %>% mutate(cases = replace(cases, which(cases < 0), NA)) # code missing values to NA
+
+summary(Neighbourhood_countries_corona)
+
+which(is.na(Neighbourhood_countries_corona$cases)) # Locate missing value
+```
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+Neighbourhood_countries_corona$cases[1036] = mean(c(Neighbourhood_countries_corona$cases[1035], Neighbourhood_countries_corona$cases[1037]))
+
+Neighbourhood_countries_corona$cases[3618] = mean(c(Neighbourhood_countries_corona$cases[3617], Neighbourhood_countries_corona$cases[3619]))
+
+Neighbourhood_countries_corona$cases[6155] = mean(c(Neighbourhood_countries_corona$cases[6154], Neighbourhood_countries_corona$cases[6156]))
+
+Neighbourhood_countries_corona$cases[6160] = mean(c(Neighbourhood_countries_corona$cases[6159], Neighbourhood_countries_corona$cases[6161]))
+
+Neighbourhood_countries_corona$cases[6814] = mean(c(Neighbourhood_countries_corona$cases[6813], Neighbourhood_countries_corona$cases[6815]))
+
+Neighbourhood_countries_corona$cases[9402] = mean(c(Neighbourhood_countries_corona$cases[9401], Neighbourhood_countries_corona$cases[9403]))
+
+Neighbourhood_countries_corona$cases[10286] = mean(c(Neighbourhood_countries_corona$cases[10285], Neighbourhood_countries_corona$cases[10287]))
+
+Neighbourhood_countries_corona$cases[11170] = mean(c(Neighbourhood_countries_corona$cases[11169], Neighbourhood_countries_corona$cases[11171]))
+
+Neighbourhood_countries_corona$cases[12054] = mean(c(Neighbourhood_countries_corona$cases[12053], Neighbourhood_countries_corona$cases[12055]))
+
+Neighbourhood_countries_corona$cases[12528] = mean(c(Neighbourhood_countries_corona$cases[12527], Neighbourhood_countries_corona$cases[12529]))
+
+Neighbourhood_countries_corona$cases[12938] = mean(c(Neighbourhood_countries_corona$cases[12937], Neighbourhood_countries_corona$cases[12939]))
+```
+
+
+```{r,comment = NA,echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 05: Comparison of the Confirmed, Death, Recoverd cases of the Neighbouring Countries"}
+e <- ggplot(Neighbourhood_countries_corona, aes(x = country, y = cases, fill = type)) + geom_bar(stat ="identity", position = position_dodge()) + labs(x = "Country", y = "No. of cases") + theme(legend.position = "bottom") + scale_y_continuous(labels = comma) + scale_fill_discrete(name = "Type", labels = c("Confirmed","Death","Recovered")) 
+ggplotly(e)
+```
+Figure 05 shows that Brazil has a higher proportion of confirmed and recovered cases compared to the other countries. Paraguay and Uruguay have the lowest proportion of confirmed and recovered cases. 
+
+
+### Comparison of the Confirmed cases between Brazil and Argentina 
+```{r,comment = NA, results ='hide', echo = FALSE}
+Brazil_Argentina <- filter(coronavirus, country %in% c("Brazil", "Argentina"))
+
+Brazil_Argentina <- Brazil_Argentina %>% mutate(cases = replace(cases, which(cases < 0), NA)) # code missing values to NA
+
+summary(Brazil_Argentina)
+
+which(is.na(Brazil_Argentina$cases)) # Locate missing value
+```
+
+```{r,comment = NA, results ='hide', echo = FALSE}
+Brazil_Argentina$cases[1036] = mean(c(Brazil_Argentina$cases[1035], Brazil_Argentina$cases[1037]))
+
+Brazil_Argentina$cases[3503] = mean(c(Brazil_Argentina$cases[3502], Brazil_Argentina$cases[3504]))
+
+Brazil_Argentina$cases[3508] = mean(c(Brazil_Argentina$cases[3507], Brazil_Argentina$cases[3509]))
+
+Brazil_Argentina$cases[4098] = mean(c(Brazil_Argentina$cases[4097], Brazil_Argentina$cases[4099]))
+
+Brazil_Argentina$cases[4982] = mean(c(Brazil_Argentina$cases[4981], Brazil_Argentina$cases[4983]))
+```
+
+```{r,comment = NA,echo = FALSE, message = FALSE, warning = FALSE, fig.cap = "Figure 06: Confirmed cases of Brazil and Argentina"}
+f <- ggplot(Brazil_Argentina, aes(x = date, y = cases, col = country)) + geom_point(size = 0.5) + labs(x = "Date", y = "No. of cases") + scale_y_continuous(labels = comma) + theme(legend.position = "bottom") 
+ggplotly(f)
+```
+Figure 06 shows that number of the confirmed cases in Brazil is higher than compared to Argentina over the time period.
+
+
+## Discussion and Conclusion
+
+Covid-19 is now a world pandemic where Argentina also had to go through. The first confirmed case of coronavirus in Argentina was reported in March 2020. We observed that there were four significant waves in the confirmed cases of coronavirus. But the Covid-19 pandemic situation was controlled by the country successfully by importing rapid detection, isolation and care for those infected, and contact tracing and quarantine of contacts. Argentina was entering fourth wave of the Covid-19 pandemic in May 2022. 
+
+Compared to the South American countries like Argentina, Bolivia, Chile, Colombia, Peru, Paraguay and Uruguay, Brazil was ranked first by considering the number of confirmed cases in South America. When it comes to the number of deaths caused by the disease, Brazil ranked second in the world. Paraguay and Uruguay have the lowest proportion of confirmed and recovered cases. Argentina has the lowest number of confirmed, recovered, death cases compared to the Brazil.
+
+## References
+https://en.wikipedia.org/wiki/Argentina
+
+Argentina-C19-case-study-20-May.pdf
+
+https://www.statista.com/topics/6120/coronavirus-covid-19-in-latin-america/#topicHeader__wrapper
+
+
+
+
+
+
+
+

@@ -1,0 +1,273 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+output: html_document
+author : "AS2019351"
+date: "2022-10-05"
+---
+```{r}
+
+
+```
+# Introduction
+
+The epidemic of novel coronavirus illness became as a global threat which was first identified Whuhan in china in December 2019 and it was spreded among more than 188 countries in the world.The symptoms of the disease being more or less similar to those of influenza (flu) or common cold makes it even more difficult to accurately diagnose it without further testing. The disease easily transmitted through direct contact with an infected person or through contaminated surfaces can be fatal in rare cases
+
+Colombia is a country which is affected very badly by this pandamic. The virus was confirmed to have reached Colombia on 6 March 2020 and it affected to the nearly 6,310,000 of colombians and coused 142,000 of deaths.
+
+
+
+
+```{r,include=FALSE}
+
+library(devtools)
+library(tidyverse)
+library(magrittr)
+library(sta3262)
+get_individual_project_country("AS2019351")
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+
+Colombia_corona<- coronavirus %>% filter(country == "Colombia")
+
+
+
+```
+## People and Religions 
+
+The majority of Colombians are 'mestizos', meaning they share a mixture of European and Amerindian heritage to some degree. According to the CIA World Factbook, at least 84% of the population are mestizos or European. Approximately 10% of the population possess African heritage – known as Afro-Colombian.
+
+Colombia does not have an official religion. However, Roman Catholicism is the dominant faith and deeply culturally pervasive. While the national department of statistics does not record the religious affiliations of the population, various studies and surveys suggest approximately 90% of Colombians are Christian.
+
+
+
+
+```{r}
+```
+
+## Location
+
+colombia is the country whoes North is South America, bordering the Caribbean Sea, between Panama and Venezuela, and bordering the North Pacific Ocean, between Ecuador and Panama.It consist a land area of 1.139 million km².The geographical location of Colombia can be further understood through the following figure
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+
+
+Colombia_corona<- coronavirus %>% filter(country == "Colombia")
+
+data(wrld_simpl)
+p <- ggplot()+ 
+  geom_polygon(data = wrld_simpl, 
+               aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+  p + geom_point(
+    data = Colombia_corona, aes(x = long, y = lat), color = "red" , size = 1
+  )
+
+
+```
+```{r pressure, echo=FALSE}
+```
+
+
+```{r pressure, echo=FALSE}
+```
+## Exploratory Data Analysis
+
+
+
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+ colombia_corona<-coronavirus%>%filter(country=="Colombia")
+ 
+ death_cases <- colombia_corona %>% filter(type=="death")
+ summary(death_cases)
+ 
+ ggplot(death_cases, aes(x=date, y=cases)) +geom_line() + geom_jitter() + ggtitle("Colombia: Daily Covid-19 Death Cases - graph-01")
+ 
+ 
+```
+                                      Visualization of death
+
+```{r, echo=FALSE}
+
+colombia_corona<-coronavirus%>%filter(country=="Colombia")
+
+colombia_prepaired <- colombia_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+which(is.na(colombia_prepaired$cases))
+summary(colombia_prepaired)
+
+colombia_prepaired$cases[884]=mean(c(colombia_prepaired$cases[883],colombia_prepaired$cases[885]))
+
+ recovered_cases <-colombia_prepaired %>% filter(type=="recovery")
+ summary(recovered_cases)
+ 
+ ggplot(recovered_cases, aes(x=date, y=cases)) +geom_line() + geom_jitter() + ggtitle("Colombia: Daily Covid-19 recovered Cases - graph-02")
+```
+                           Visualization of recovered cases
+
+```{r, echo=FALSE}
+
+colombia_corona<-coronavirus%>%filter(country=="Colombia")
+ 
+ confirmed_cases<- colombia_prepaired %>% filter(type=="confirmed")
+ summary(confirmed_cases)
+         
+ ggplot(confirmed_cases, aes(cases)) +
+  geom_histogram(bins = 9, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 9, col="blue") + ggtitle("Colombia: Daily Covid-19 confirmed Cases - graph-03")
+
+      
+ 
+```
+                           Visualization of confirmed cases
+
+```{r, echo=FALSE}
+ggplot(colombia_prepaired,aes(x=date, y=cases,col=type))+ geom_path(size=1.1)+ labs(title=" graph-04")
+
+
+
+
+
+
+
+
+
+```
+According to this graph can colclute that the controling of corona virus is good with considering the count of death.
+
+
+
+### Comparison with other countries
+
+In here Brazi, Lebanon and Colombia are compared according to the count ofconfirmed cases, recoverd cases and deaths.
+
+
+
+
+```{r, echo=FALSE}
+library(ggplot2)
+
+ Brazil_corona<-coronavirus%>%filter(country=="Brazil")
+ 
+ Lebanon_corona<-coronavirus%>%filter(country=="Lebanon")
+ 
+ 
+
+countries_corona<-as.data.frame(rbind(colombia_corona,Brazil_corona,Lebanon_corona))
+summary(countries_corona)
+```
+
+Summery of the data which includes the data of the country Brazil, Lebanon and Colombia
+```{r, echo=FALSE}
+countries_corona <- countries_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(countries_corona)
+
+
+which(is.na(countries_corona$cases))
+
+
+
+
+countries_corona$cases[2062]=mean(c(countries_corona$cases[2061],countries_corona$cases[2063]))
+
+countries_corona$cases[2330]=mean(c(countries_corona$cases[2331],countries_corona$cases[2332]))
+
+countries_corona$cases[2804]=mean(c(countries_corona$cases[2805],countries_corona$cases[2803]))
+ 
+countries_corona$cases[4387]=mean(c(countries_corona$cases[4388],countries_corona$cases[4386]))
+
+countries_corona$cases[4392]=mean(c(countries_corona$cases[4391],countries_corona$cases[4393]))
+
+countries_corona$cases[4982]=mean(c(countries_corona$cases[4981],countries_corona$cases[4983]))
+
+countries_corona$cases[7634]=mean(c(countries_corona$cases[7633],countries_corona$cases[763]))
+
+
+```
+
+
+```{r, echo=FALSE}
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+
+  facet_wrap(~country,ncol = 3)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the countries - graph-05")
+```
+
+```{r, echo=FALSE}
+countries_death<-countries_corona%>%filter(type=="recovery")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+
+  facet_wrap(~country,ncol = 3)+coord_flip()+
+  ggtitle("Comparison  of covid-19 recovery cases between the countries- - graph-06")
+```
+
+
+```{r, echo=FALSE}
+countries_death<-countries_corona%>%filter(type=="confirmed")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+
+  facet_wrap(~country,ncol = 3)+coord_flip()+
+  ggtitle("Comparison  of covid-19 confirmed cases between the countries - graph-07")
+
+```
+
+
+
+
+```{r, echo=FALSE}
+```
+## Conclusions and Discussion
+
+
+
+Through the data analysis process it was recognized that there were negative values for confirmed cases of some countries, the main causes may be the fact that at preliminary stages of testing some patients may have been diagnosed as COVID-19 positive and later on diagnosed as negative. Therefore, the data was pre-processed before the actual analysis by coding the negative values as missing values. This is the reason as to why there are discontinuities in some line plots.
+
+* According to the graph-01 most death cases are reported from the mid 2021to 2022. after that at the beging of 2022 there are considerable death cases
+
+* According to the graph-02 ther is no recoverd cases, that is not acceptable
+
+*Acoording to the graph-05 clearly it shows us that the Brazil had recorded the heighest count of deaths than Colombia and Lebanon
+
+*According to the graph-06 it shows us clearly that the Brazil had reported a heigher counts than Leabanon and Colombia till the mid of year 2021, after that its not showing a huge differendce between the countries
+
+*According to the graph-07 can clearly see that Brazil recorded a heigher count of confirmed cases from the beging to the end of the data set.In 2022 there is a rapid increasement the count of the confirmed cases in Brazil
+
+
+Overall the colombia government is having the situation under control
+
+
+
+```{r, echo=FALSE}
+```
+
+## References
+
+* https://www.google.com/search?q=corona+in++Colombia&sxsrf=ALiCzsY7p03edeX5yP9I8z7oSnJJj1RsHg%3A1665215867710&ei=ey1BY_L_Kt-cz7sP2cOyEA&ved=0ahUKEwiyqZPClND6AhVfznMBHdmhDAIQ4dUDCA4&uact=5&oq=corona+in++Colombia&gs_lcp=Cgdnd3Mtd2l6EAMyBggAEB4QBzIGCAAQHhAHMgcIABCABBAKMgQIABAeMgYIABAeEAUyBggAEB4QCDIGCAAQHhAIMgYIABAeEAgyBggAEB4QCDIGCAAQHhAIOgoIABBHENYEELADOggIABAeEAgQBzoKCAAQHhAPEAcQBToFCAAQhgM6BQgAEJECOgQIABBDOgkIABAeEAcQiwM6BwgAEEMQiwM6CAgAEB4QBxATOggIABAeEAcQCkoECE0YAUoECEEYAEoECEYYAFCmCVicNGCrO2gBcAF4AIAB1AGIAbUUkgEGMC4xMS40mAEAoAEByAEHuAECwAEB&sclient=gws-wiz
+
+* https://culturalatlas.sbs.com.au/colombian-culture/colombian-culture-religion
+
+
+
+```{r, echo=FALSE}

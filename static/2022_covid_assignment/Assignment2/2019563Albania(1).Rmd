@@ -1,0 +1,219 @@
+---
+title: "COVID-19 Pandemic in Albania"
+author: "Rusiru Vidanagamage"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction
+
+<div align="justify">Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+
+Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. 
+
+The best way to prevent and slow down transmission is to be well informed about the disease and how the virus spreads. Protect yourself and others from infection by staying at least 1 meter apart from others, wearing a properly fitted mask, and washing your hands or using an alcohol-based rub frequently. Get vaccinated when it’s your turn and follow local guidance.
+
+The virus can spread from an infected person’s mouth or nose in small liquid particles when they cough, sneeze, speak, sing or breathe. These particles range from larger respiratory droplets to smaller aerosols. It is important to practice respiratory etiquette, for example by coughing into a flexed elbow, and to stay home and self-isolate until you recover if you feel unwell.
+
+## Visualization of the Albania
+
+<div align="justify">Albania is located in the south eastern region of the European continent, in the western part of the Balkan Peninsula. It is positioned both in the Northern and Eastern hemispheres of the Earth.
+
+```{r, echo=FALSE, comment=NA, message=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+data("coronavirus")
+
+albania_corona <- coronavirus %>% filter(country == "Albania")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = albania_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+## Climate Condition
+
+<div align="justify">Albania has a variety of climate systems. With its coastline facing the Adriatic and Ionian seas in the Mediterranean sea, its highlands backed upon the elevated Balkan landmass, and the entire country lying at a latitude subject to a variety of weather patterns during the winter and summer seasons, however it has a high number of climatic regions for such a small area.The coastal lowlands have typically Mediterranean climate while the highlands have a continental climate. In both the lowlands and the interior, the weather varies markedly from north to south.
+
+Under the Köppen climate classification, the country has Hot Mediterranean climate, Warm Mediterranean climate, Subtropical climate, Oceanic climate, Continental climate and Subarctic climate.
+
+The lowlands have mild winters, averaging about 7 °C (45 °F). Summer temperatures average 32 °C (90 °F), humidity is low. In the southern lowlands, temperatures average about 5 °C (41 °F) in the winter and 30 °C (86 °F) during the summer.
+
+## Lockdown status
+
+<div align="justify">In Albania, from 3 January 2020 to 6:28pm CEST, 7 October 2022, there have been 331,264 confirmed cases of COVID-19 with 3,589 deaths, reported to WHO. As of 17 September 2022, a total of 2,974,247 vaccine doses have been administered.Bars and restaurants are open with no curfew. Delivery services remain available.
+
+As of 1 May 2022 nightclubs have re-opened. The restriction which limited outdoor gatherings to 50 people or fewer has been lifted.
+
+Sports championships, theatre, artistic and cultural performances, and conferences, are allowed, with full audiences.
+
+## Actions taken by the government
+
+<div align="justify">UN Country Team in Albania is following closely the situation of COVID-19 breakout and is working with health authorities through the World Health Organization (WHO) country office in Albania.
+
+The situation requires from all citizens to follow the guidance provided by the health authorities.  Particular attention must be placed on respecting hygiene advice and contact health emergency number 127 in case of concerns.
+
+The measures that have been taken by the government are necessary to contain the spread of the virus.
+
+In this situation, with the first COVID-19 cases confirmed in Albania it is normal for people to worry but as long as the advised measures are applied there is no reason to panic.
+
+Following the WHO guidance, UN Albania advises the following:
+
+Be informed: It is very important that people have all the necessary information about the disease and how the virus is transmitted and how it can be contained.
+
+Be careful: Be careful but do not panic. Protect yourself, your family and others from getting infected and if you have fever and cough contact the health authorities to get support.
+
+Be alert: Use the information that you have received to prevent taking unnecessary risks that can expose you to the virus.  
+
+Be kind: Be considerate and kind with other people. No one wishes to be infected but if this happens be supportive and empathic to another people’s situation. Everyone’s rights must be respected.  At the same time make sure that all protective measures are taken.
+
+# 2. Exploratory Data Analysis
+
+* confirmed , death, recovery cases in Albania
+```{r, echo=FALSE, comment=NA, message=FALSE}
+
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+data("coronavirus")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+alb_corona <- coronavirus %>% filter(country == "Albania")
+
+
+alb_corona_new <- alb_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+library(plotly)
+p <- ggplot(alb_corona_new,aes(x=date,y=cases,color=type)) +geom_line()
+ggplotly(p)
+
+```
+
+```{r, echo=FALSE, comment=NA, message=FALSE}
+
+chin_corona <- coronavirus %>% filter(country == "China")
+chin_corona_new <- chin_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+ind_corona <- coronavirus %>% filter(country == "India")
+ind_corona_new <- ind_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+bra_corona <- coronavirus %>% filter(country == "Brazil")
+bra_corona_new <- bra_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+pak_corona <- coronavirus %>% filter(country == "Pakistan")
+pak_corona_new <- pak_corona %>% mutate(cases=replace(cases,which(cases<0),NA))
+
+
+```
+
+
+### **Comparison with other countries**
+#### __*Comparison with China*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+alb_china <- coronavirus %>% filter(country %in% c("Albania", "China"))
+
+ggplot(alb_china, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,2000) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nAlbania and China")
+```
+
+#### __*Comparison with India*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+alb_india <- coronavirus %>% filter(country %in% c("Albania", "India"))
+
+ggplot(alb_india, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,6000) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nAlbania and India")
+```
+
+#### __*Comparison with Brazil*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+alb_brazil <- coronavirus %>% filter(country %in% c("Albania", "Brazil"))
+
+ggplot(alb_brazil, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,6000) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nAlbania and Brazil")
+```
+
+#### __*Comparison with Pakistan*__
+
+```{r, echo=FALSE, comment=NA, warning=FALSE, message=FALSE}
+alb_pakistan <- coronavirus %>% filter(country %in% c("Albania", "Pakistan"))
+
+ggplot(alb_pakistan, aes(x = date, y = cases, color = country)) + geom_smooth() + ylim(0,2000) + facet_grid(.~type) + labs(title = "Comparison of COVID 19 confirmed, recovered & death cases between \nAlbania and Pakistan")
+```
+
+# 3. Discussion
+
+<div align="justify">At the beginning of January it was clear what was going on: the Sars virus is back, as in 2010. In view of the outbreak in China, Albania should have reacted earlier in terms of entry controls, closing the border with Iran, China etc. pp., setting up emergency hospitals, emergency clinics, procuring materials, blood reserves or tests for the corona virus.
+
+There is also an absolute imbalance in Albania. Greater Tirana/Dures, where half of the population lives, is much better equipped than the north and south of Albania and what happened, the government did not even try to level the differences in pandemic preparedness in January and February, because there was no pandemic preparation.
+
+By failing to take these measures, the Rama organisation risked that one person whose illness was not recognised could infect 3000 people eight weeks later. 
+
+That is how exponential the chain is. The infection that we are now seeing step by step in Albania could have been prevented in February. Now it is too late, who is responsible? Rama, Balla, Veliaj.
+
+With a mortality rate of 0.5 percent in Germany, in Korea 0,3 percent, in Albania it is certainly over 1 due to the catastrophic equipment and the dilapidated infrastructure, 200 to 300 people would go to hospital and 15 would die - for one infected person. 
+
+In my estimation, we in Albania are in one of the last stages, Albania has not taken a complete overview of the infection rate at the beginning of the epidemic, has not organised sufficient testing resources: Hospitals must now be prepared and equipped. 
+
+
+# 4. Conclusions
+
+<div align="justify">Lockdown and social distancing from the risk groups, as in South Korea, seems to be the right way.
+
+Lockdown for the entire population is therefore doubtful, and we do not do it in Germany either.
+
+Another problem we see in Albania is the lack of logisticians, psychologists, social workers and epidemiologists. 
+
+This corona crisis should no longer be seen as a phenomenon of intensive care, but as a crisis of public health and humanitarian aid in Albania too.
+
+We have a very gloomy picture of the Albanian Government's trade: there is a lack of everything: protective equipment, respiratory equipment. There will probably not be enough beds in Albania either. 
+
+One of the primary problems will be that hospitals could be the "main carriers" of the virus in Albania, as the clinics and doctors are quickly colonised by infected patients and facilitate transmission to non-infected people. Ambulances, police officers and army personnel can also spread the disease.
+
+
+# 5. References
+
+<div align="justify">https://www.bing.com/ck/a?!&&p=26a48999123b2884JmltdHM9MTY2NTEwMDgwMCZpZ3VpZD0yOGM2YzQzMy0wYzZjLTZjNDUtM2QxYS1kNWVhMGQwNzZkMTMmaW5zaWQ9NTE2MA&ptn=3&hsh=3&fclid=28c6c433-0c6c-6c45-3d1a-d5ea0d076d13&psq=albania+corona&u=a1aHR0cHM6Ly93d3cud29ybGRvbWV0ZXJzLmluZm8vY29yb25hdmlydXMvY291bnRyeS9hbGJhbmlhLw&ntb=1
+
+https://www.bing.com/ck/a?!&&p=99874a40547d6e3eJmltdHM9MTY2NTEwMDgwMCZpZ3VpZD0yOGM2YzQzMy0wYzZjLTZjNDUtM2QxYS1kNWVhMGQwNzZkMTMmaW5zaWQ9NTE4MQ&ptn=3&hsh=3&fclid=28c6c433-0c6c-6c45-3d1a-d5ea0d076d13&psq=albania+corona&u=a1aHR0cHM6Ly9jb3ZpZDE5Lndoby5pbnQvcmVnaW9uL2V1cm8vY291bnRyeS9hbC8&ntb=1
+
+https://www.bing.com/ck/a?!&&p=54817c62a8b8d0fbJmltdHM9MTY2NTEwMDgwMCZpZ3VpZD0yOGM2YzQzMy0wYzZjLTZjNDUtM2QxYS1kNWVhMGQwNzZkMTMmaW5zaWQ9NTIwMA&ptn=3&hsh=3&fclid=28c6c433-0c6c-6c45-3d1a-d5ea0d076d13&psq=albania+corona&u=a1aHR0cHM6Ly93d3duYy5jZGMuZ292L3RyYXZlbC9ub3RpY2VzL3dhcm5pbmcvY29yb25hdmlydXMtYWxiYW5pYQ&ntb=1
+
+https://www.bing.com/ck/a?!&&p=a3b49c92915f35d2JmltdHM9MTY2NTEwMDgwMCZpZ3VpZD0yOGM2YzQzMy0wYzZjLTZjNDUtM2QxYS1kNWVhMGQwNzZkMTMmaW5zaWQ9NTI1MQ&ptn=3&hsh=3&fclid=28c6c433-0c6c-6c45-3d1a-d5ea0d076d13&psq=albania+corona&u=a1aHR0cHM6Ly93d3cud29ybGRvbWV0ZXJzLmluZm8vY29yb25hdmlydXMvL2NvdW50cnkvYWxiYW5pYS8&ntb=1
+
+https://www.bing.com/ck/a?!&&p=23e599cf27bee2b8JmltdHM9MTY2NTEwMDgwMCZpZ3VpZD0yOGM2YzQzMy0wYzZjLTZjNDUtM2QxYS1kNWVhMGQwNzZkMTMmaW5zaWQ9NTMzOQ&ptn=3&hsh=3&fclid=28c6c433-0c6c-6c45-3d1a-d5ea0d076d13&psq=albania+corona&u=a1aHR0cHM6Ly93d3cuZ292LnVrL2ZvcmVpZ24tdHJhdmVsLWFkdmljZS9hbGJhbmlhL2Nvcm9uYXZpcnVz&ntb=1

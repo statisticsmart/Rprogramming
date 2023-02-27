@@ -1,0 +1,147 @@
+---
+title: "Jordan covid -19 pandemic overview"
+author: "GVDN Jayathialke - AS2019402"
+date: "2022-10-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1.Brief Introduction to country Jordan
+
+small Arab country located in the Middle East. The desert rocky plateau, which occupies most of its territory, rises 700-1000 meters above sea level, it is cut by gorges and rivers. The southern part of Jordan is occupied by the Syrian Desert, wooded uplands are located in the north, and flat basalt deserts are in the east. The state borders on Israel, Saudi Arabia, Syria and Iraq. In recent centuries, strong earthquakes have not been observed in the country, but in general this is a zone of increased seismic activity.
+A short section of Jordan's border runs along the Red Sea, and there are year-round resorts - the water temperature does not drop below 24 degrees.
+
+### 1.1 Visualization of the location on world map
+
+```{r , warning=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+jordan_corona<-coronavirus%>%filter(country=="Jordan")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="gray",color="white"
+    )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+ p+
+   geom_point(
+   data = jordan_corona, aes(x=long, y=lat), color="red", size
+   =1
+   )
+
+```
+
+
+### Lockdown Status
+
+Jordan's National Epidemics Committee and Health Ministry designated certain hospitals to treat infections and established several protocols to deal with the arrival of the coronavirus. The country recorded its first case on 2 March, but only had one confirmed case on 14 March. On 15 March, the government implemented a plan to quarantine arrivals before the borders and the airport were closed.A coronavirus infected patient had attended a wedding with 400 guests in Irbid. The government announced a lockdown on 17 March, which was later turned into a strictly-enforced curfew. Civil defense sirens were used to announce the end of when people can go out.
+
+
+## 2.Exploratory Data Analysis
+
+### 2.1 Visualization of confirmed cases,recoverd cases & deaths
+
+```{r , warning=FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+
+jordan_corona<-coronavirus%>%filter(country=="Jordan")
+
+```
+
+
+### Imputing the negative values 
+```{r , warning=FALSE}
+
+ #imputing the negative values
+ jordan_corona_new<-jordan_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+ summary(jordan_corona_new)
+ 
+ which(is.na(jordan_corona_new$cases))
+
+ggplot(jordan_corona_new,
+       aes(x=date,y=cases,fill=type,col=type))+
+  geom_line()+geom_jitter(aes(col=type))+
+  facet_wrap(~type,ncol = 3)+coord_flip()
+ 
+```
+In Jordan, from 3 January 2020 to 6:28pm CEST, 7 October 2022, there have been 1,746,997 confirmed cases of COVID-19 with 14,122 deaths, reported to WHO. As of 20 August 2022, a total of 10,057,975 vaccine doses have been administered.A graphical comparison shows that a large number of confirmed corona patients have recovered and the death rate is very low.
+
+### 2.2 Comparison with other countries
+In this study, we considered following four countries for comparison. US, Brazil, China(only Hubei province), India We selected these countries because these are the most effected from COVID-19 virus.
+
+```{r , warning=FALSE}
+jordan_corona<-coronavirus%>%filter(country=="jordan")
+
+us_corona<-coronavirus%>%filter(country=="US")
+
+brazil_corona<-coronavirus%>%filter(country=="Brazil")
+
+india_corona<-coronavirus%>%filter(country=="India")
+
+china_corona<-coronavirus%>%filter(country=="China")
+
+```
+### Creating a data frame of the most effected countires from covid 19 virus & jordan
+```{r , warning=FALSE}
+countries_corona<-as.data.frame(rbind(jordan_corona,us_corona,brazil_corona,india_corona,china_corona))
+```
+
+### Comparison of covid-19 deaths between the most effected countires from covid 19 virus & jordan
+```{r , warning=FALSE}
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the most effected countries")
+
+```
+By comparing the graph of deaths of jordan and these 4 graphes, we can see,the least damage was done to China and the maximum damage was done to America.The first confirmed case of local transmission in US was recorded in January. While the first knwon deaths happened in February. By the end of March, cases had occurred in all states in US.Accoording to the above graph,as of 12 May,2020 the US had the most deaths in the selected countries. The 4th most effected country is Jordan during by considering these  countries
+
+
+### Comparison between the confirmed covid-19 patients between the most effected countires from covid 19 virus & jordan
+```{r , warning=FALSE}
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+```
+
+```{r , warning=FALSE}
+ggplot(countries_cases,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison between the confirmed covid-19 
+          patients between the most effected countires from covid 19 virus & jordan ")
+```
+
+## 3.Conclusion and Discussion 
+
+During the COVID-19 pandemic, countries have responded in diverse ways to combat its spread. In the first 4 months of the epidemic, Jordan implemented strict measures to fight the disease, which proved to be effective in decreasing infection rates in the country. However, easing these measures has its price. Jordan now has an immense number of cases per capita, and these numbers are projected to increase in the coming weeks. Jordan's experience in dealing with the COVID-19 pandemic is an example that can be of great benefit to other countries that have achieved control of the virus, so that they can avoid any serious mistakes.
+
+Alleviating lockdown measures, especially at the Syrian borders, as stated by the Minister of Health, has led to this unfortunate situation, which has been aggravated by having a high prevalence of chronic non-communicable diseases among the Jordanian population, which places these vulnerable groups at higher risk for catching the COVID-19 virus.
+
+## 4.References
+https://www.frontiersin.org/articles/10.3389/fpubh.2020.634022/full
+
+https://hellor.netlify.app/coronareports/

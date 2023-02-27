@@ -1,0 +1,601 @@
+---
+title: COVID-19 Pandamic in the French Republic
+output: html_document
+date: "2022-10-03"
+---
+##### AS2019312 H.M.T.D.Bandara
+```{r setup, include=FALSE, echo = FALSE, message=FALSE, warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(png) 
+library(gridBase) 
+library(sp) 
+
+```
+
+
+# 1. Background
+## 1.1 Introduction
+France, officially French Republic, French France or République Française, country of northwestern Europe.France is one of the oldest nations on Earth and the most ethnically diverse country in Europe. These deep and broad influences have made France a world leader throughout history in nearly all aspects of culture, including cuisine, wine-making, politics, philosophy, music, art, film, fashion, literature, and sports. France, the largest country in Western Europe, has long been a gateway between the continent's northern and southern regions. Its lengthy borders touch Germany and Belgium in the north;the Atlantic Ocean in the west; the Pyrenees Mountains and Spain in the south. France is spanning overseas regions and territories in the Americas and the Atlantic, Pacific and Indian Oceans. Overseas territories include French Guiana in South America, Saint Pierre and Miquelon in the North Atlantic, the French West Indies, and many islands in Oceania and the Indian Ocean. Due to its several coastal territories, France has the largest exclusive economic zone in the world. Its eighteen integral regions (five of which are overseas) span a combined area of 643,801 km2 (248,573 sq mi) and close to 68 million people (as of July 2022). France is a unitary semi-presidential republic with its capital in Paris, the country's largest city and main cultural and commercial centre. Other major urban areas include Marseille, Lyon, Toulouse, Lille, Bordeaux, and Nice. France has long provided a geographic, economic, and linguistic bridge joining northern and southern Europe. It is Europe’s most important agricultural producer and one of the world’s leading industrial powers.
+
+The official language is French and Euro is used as the currency. Euro is used as the currency. The capital of France is Paris. Alps, Pyrenees, Massif Central are major mountain ranges and Seine, Rhine and Rhone are major rivers in France.
+
+```{r, comment=NA ,echo=FALSE , message=FALSE, warning=FALSE, fig.cap="Figure 01: Geograpical location of France", out.width="200%", out.height="200%"}
+France_corona <- coronavirus %>% filter(country == "France")
+data(wrld_simpl)
+
+France_location <- tibble(lat=46.2276   , long=2.2137) 
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "light green", colour = "white") +
+  
+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = France_location, aes(x = long, y = lat), color = "red", size = 2)
+
+```
+
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+
+Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. 
+
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+
+Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. 
+
+## 1.2 Climate change
+
+The climate of France is generally favourable to cultivation. Overall, mainland France enjoys a temperate climate. However, regions experience climates that vary according to their latitude, altitude and their proximity to the sea and to the three major mountain ranges (Pyrenees, Massif Central, Alps). There are five main types of climates in mainland France. They atre oceanic, altered oceanic, semi-continental, mountainous, and Mediterranean.. The mean annual temperature is 11.64 °C. Annual precipitation is more than 50 inches (1,270 mm) at higher elevations in western and northwestern France, in the western Pyrenees, in the Massif Central, and in the Alps and the Jura.
+
+## 1.3 Action taken by government and Lockdown
+
+In France, the first three cases of Covid-19, directly connected to the Wuhan region of China, were reported on 24 January 2020 and the first fatality on February 15. As of mid-November 2020. As many other countries in the world, France was unprepared when the pandemic hit: there were not enough masks nor tests, and in addition many public hospitals were on strike. The policy response that was adapted as the situation unfolded has been to build a national consensus around strong measures.
+
+The news regarding the fact that an unknown coronavirus had appeared in China, even when it arrived in Italy, did not have much effect in France, where political attention was on the strikes against a planned pension reform and on forthcoming local elections. The early communications of the government were to assure the population that the probability of the virus spreading in France was low. However, following the rapid spread of the virus in France towards the end of February, the government, totally unprepared for a pandemic, decided to give a strong policy response by treating this new virus as a national enemy. The policy was largely defined by the number of cases on the national territory and its spreading rate (French Public Health Agency, 2020b). The measures against the pandemic were integrated into a national plan with four stages driving the stringency of actions as a function of its spread. The first stage consisted of ‘stopping’ the introduction of the virus on the national territory (from 23 February 2020). In practice, this meant that, towards the end of February, people were advised to limit international travel. Travel restrictions initially concerned mainly China and the countries where the virus was already highly prevalent, but the management of international travel and quarantine measures was incoherent. Initially, in February, people coming from the Wuhan region in China were put into quarantine for 14 days in the south of France in holiday facilities. But when the virus arrived in Italy, the policy was to recommend that people who had arrived from Italy or been in contact with people from Northern Italy self-quarantine at home for 14 days, without any coercive measures. The second stage (reached on 29 February 2020 with the identification of several clusters in France) consisted of limiting the spread of the virus on the national territory. The first national restrictions were the ban of large public meetings (8 March 2020), and of all visits to residential nursing homes (11 March). The third stage (reached on 14 March) consisted of reducing the effects of the pandemic on the hospital system, and led to a national lock-down for nearly two months.
+
+On 12 March 2020, President Macron announced in a solemn speech that the Nation was ‘at war’, using a war terminology close to that of President Hollande after the terrorist attacks in Paris in November 2015. Macron set two priorities: saving lives ‘at all costs’ by stopping the spread of the virus; and saving the Nation's economy.
+
+
+The government imposed a set of social restriction measures, including, from 14 March 2020, closures of all schools and universities and all other public places, except essential shops. But, backed up by the scientific committee, the first round of the municipal elections on 15 March was maintained. Between 13 and 15 March, the declared incidence of Covid-19 has doubled. Consequently, the President announced a restrictive total lock-down policy from 18 March onwards. All employers were asked to put in place teleworking for their employees. Only people providing essential services (including health, medical research, production of essential goods, etc.) were allowed to go to work. Otherwise, a written justification was required for going out (only for getting food, medical reasons or short recreation activities of a maximum of one hour and in the residential area). Those who did not respect the rules were fined up to €450 (minimum of €135) and, after four fines, six months of prison. The conditions of the lock-down became progressively stricter with the closure of open food markets, parks, forests, beaches, and an intensification of police controls to enforce the stay-at-home policy. The lock-down, which was lifted in a progressive manner between 11 May and early June 2020, was considered as ‘successful’ in limiting the number of Covid-19 cases, but it had a very high economic and social cost, only partly measured up until now, as we will discuss later.
+
+France was slow in implementing the first preventive measures such as official advice on hand hygiene and respiratory etiquette. It is only after the detection of the first transmission cluster on the French territory on 17–24 February 2020 (a religious gathering in Mulhouse) that regular communication on hand hygiene, social distancing and, later on, the importance of self-isolation was started. However, announcements about if and when to use masks were incoherent during the first months of the pandemic. Without openly admitting a scarcity of masks, the government initially declared that masks were not useful for everyone (and could be even dangerous if not used properly) and must be reserved for health care workers and other professionals at high risk of contamination as well as for infected patients. Finally, following a declaration from the Academy of Medicine, in early April, suggesting that a widespread use of masks in the general population was necessary (French Academy of Medicine, 2020), the government's communication started to shift. By July 2020, when masks became easily available, the use of face masks became compulsory at a national scale in all closed public spaces; this was later extended to outdoor places on most of the French territory by September 2020.
+
+
+
+
+
+# 2. Exploratory Data Analysis
+
+## 2.1 Structure of data
+
+
+French ruling, spreads over in following continents(according to this data set). 
+          1.Africa
+          2.Europe
+          3.North America
+          4.Oceania
+          5.South America
+
+
+## Africa
+
+There are 2 provinces in African continent that belongs to France. They are Mayotte and Reunion.
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,   message=FALSE, warning=FALSE}
+
+Africa_corona <- France_corona %>% filter(continent_name == "Africa")
+
+Africa_corona <- Africa_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(Africa_corona$cases))
+
+Africa_corona$cases[496] = mean(c(Africa_corona$cases[495], Africa_corona$cases[497]))
+Africa_corona$cases[992] = mean(c(Africa_corona$cases[991], Africa_corona$cases[993]))
+Africa_corona$cases[1031] = mean(c(Africa_corona$cases[1030], Africa_corona$cases[1032]))
+Africa_corona$cases[1934] = mean(c(Africa_corona$cases[1933], Africa_corona$cases[1935]))
+Africa_corona$cases[2899] = mean(c(Africa_corona$cases[2898], Africa_corona$cases[2900]))
+Africa_corona$cases[4098] = mean(c(Africa_corona$cases[4097], Africa_corona$cases[4099]))
+Africa_corona$cases[4982] = mean(c(Africa_corona$cases[4981], Africa_corona$cases[4983]))
+which(is.na(Africa_corona$cases))
+
+summary(Africa_corona)
+length(Africa_corona$cases)
+
+Africa_corona$col <- as.factor(c(rep("black", 494),rep("red", 2), rep("black", 5304-496)))
+Africa_corona$col <- as.factor(c(rep("black", 990),rep("red", 2), rep("black", 5304-992)))
+Africa_corona$col <- as.factor(c(rep("black", 1029),rep("red", 2), rep("black", 5304-1031)))
+Africa_corona$col <- as.factor(c(rep("black", 1932),rep("red", 2), rep("black", 5304-1934)))
+Africa_corona$col <- as.factor(c(rep("black", 2897),rep("red", 2), rep("black", 5304-2899)))
+Africa_corona$col <- as.factor(c(rep("black", 4096),rep("red", 2), rep("black", 5304-4098)))
+Africa_corona$col <- as.factor(c(rep("black", 4980),rep("red", 2), rep("black", 5304-4982)))
+
+
+```
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+Africa_corona_confirmed <- Africa_corona %>% filter(type == "confirmed")
+
+ggplot(Africa_corona_confirmed, aes(x=date, y=cases)) + geom_line(col="blue") + facet_grid(~province) + ggtitle("Figure 02: Daily confirmed cases in Mayotte and Reunion provinces") 
+
+
+
+```
+
+Figure 02 clearly shows that the Reunion province has the highest number of cases and it was reported at the beginning of 2022. The number of confirmed cases in Reunion province is 100 times bigger than the Mayotte. There are three visible peaks while in Mayotte there are only two peaks.
+
+
+
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+Africa_corona_death <- Africa_corona %>% filter(type == "death")
+ggplot(Africa_corona_death, aes(x=date, y=cases)) + geom_line(col="red") + facet_grid(~province) + ggtitle("Figure 03: Daily death cases in Mayotte and Reunion provinces")
+
+
+```
+The death cases in Reunion province shows a cyclic variation over the time. Comparing Figure 02 and 03, the highest number of death occurred in Reunion province at the time period where highest number of confirmed also occurred. In Mayotte number of death cases was decreased across the time period. 
+
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+Africa_corona_recovery <- Africa_corona %>% filter(type == "recovery")
+ggplot(Africa_corona_recovery, aes(x=date, y=cases)) + geom_line(col="dark green")+ facet_grid(~province) + ggtitle("Figure 04: Daily recovery cases in Mayotte and Reunion provinces")
+
+```
+The number of recovered cases also high in Reunion province.Over the time the number of recovery cases was come to zero. 
+
+
+
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+
+sum(Africa_corona_confirmed$cases)
+sum(Africa_corona_death$cases)
+sum(Africa_corona_recovery$cases)
+
+
+Africa_corona_new <- Africa_corona %>% filter(cases >= 0)
+
+Africacorona_wider <- Africa_corona_new %>% pivot_wider(names_from=type, values_from=cases)
+Africacorona_wider$Africa_corona_active <- Africacorona_wider$confirmed - Africacorona_wider$death - Africacorona_wider$recovery
+
+
+```
+
+## Europe
+Province wise data was not given for France in Europe continent. Therefore overall France is considered here.
+
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+
+Europe_corona <- France_corona %>% filter(continent_name == "Europe")
+
+Europe_corona <- Europe_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+Europe_corona$cases[74] = mean(c(Europe_corona$cases[73], Europe_corona$cases[75]))
+Europe_corona$cases[77] = mean(c(Europe_corona$cases[76], Europe_corona$cases[78]))
+Europe_corona$cases[93] = mean(c(Europe_corona$cases[92], Europe_corona$cases[94]))
+Europe_corona$cases[99] = mean(c(Europe_corona$cases[98], Europe_corona$cases[100]))
+Europe_corona$cases[124] = mean(c(Europe_corona$cases[123], Europe_corona$cases[125]))
+Europe_corona$cases[133] = mean(c(Europe_corona$cases[132], Europe_corona$cases[135]))
+Europe_corona$cases[134] = mean(c(Europe_corona$cases[132], Europe_corona$cases[135]))
+Europe_corona$cases[159] = mean(c(Europe_corona$cases[158], Europe_corona$cases[160]))
+Europe_corona$cases[288] = mean(c(Europe_corona$cases[287], Europe_corona$cases[289]))
+Europe_corona$cases[380] = mean(c(Europe_corona$cases[379], Europe_corona$cases[381]))
+Europe_corona$cases[438] = mean(c(Europe_corona$cases[437], Europe_corona$cases[439]))
+Europe_corona$cases[485] = mean(c(Europe_corona$cases[484], Europe_corona$cases[486]))
+Europe_corona$cases[517] = mean(c(Europe_corona$cases[516], Europe_corona$cases[518]))
+Europe_corona$cases[750] = mean(c(Europe_corona$cases[749], Europe_corona$cases[751]))
+Europe_corona$cases[853] = mean(c(Europe_corona$cases[852], Europe_corona$cases[854]))
+Europe_corona$cases[872] = mean(c(Europe_corona$cases[871], Europe_corona$cases[873]))
+Europe_corona$cases[1003] = mean(c(Europe_corona$cases[1002], Europe_corona$cases[1004]))
+Europe_corona$cases[1008] = mean(c(Europe_corona$cases[1007], Europe_corona$cases[1009]))
+Europe_corona$cases[1066] = mean(c(Europe_corona$cases[1065], Europe_corona$cases[1067]))
+Europe_corona$cases[1111] = mean(c(Europe_corona$cases[1110], Europe_corona$cases[1112]))
+Europe_corona$cases[1162] = mean(c(Europe_corona$cases[1161], Europe_corona$cases[1163]))
+Europe_corona$cases[1172] = mean(c(Europe_corona$cases[1171], Europe_corona$cases[1173]))
+Europe_corona$cases[1264] = mean(c(Europe_corona$cases[1263], Europe_corona$cases[1265]))
+Europe_corona$cases[1424] = mean(c(Europe_corona$cases[1423], Europe_corona$cases[142]))
+Europe_corona$cases[1469] = mean(c(Europe_corona$cases[1468], Europe_corona$cases[1470]))
+Europe_corona$cases[1634] = mean(c(Europe_corona$cases[1633], Europe_corona$cases[1635]))
+Europe_corona$cases[1884] = mean(c(Europe_corona$cases[1883], Europe_corona$cases[1885]))
+Europe_corona$cases[1900] = mean(c(Europe_corona$cases[1899], Europe_corona$cases[1901]))
+Europe_corona$cases[1914] = mean(c(Europe_corona$cases[1913], Europe_corona$cases[1915]))
+Europe_corona$cases[1926] = mean(c(Europe_corona$cases[1925], Europe_corona$cases[1927]))
+Europe_corona$cases[1933] = mean(c(Europe_corona$cases[1932], Europe_corona$cases[1934]))
+Europe_corona$cases[1937] = mean(c(Europe_corona$cases[1936], Europe_corona$cases[1938]))
+Europe_corona$cases[1939] = mean(c(Europe_corona$cases[1938], Europe_corona$cases[1941]))
+Europe_corona$cases[1940] = mean(c(Europe_corona$cases[1938], Europe_corona$cases[1941]))
+Europe_corona$cases[1942] = mean(c(Europe_corona$cases[1941], Europe_corona$cases[1945]))
+Europe_corona$cases[1943] = mean(c(Europe_corona$cases[1941], Europe_corona$cases[1945]))
+Europe_corona$cases[1944] = mean(c(Europe_corona$cases[1941], Europe_corona$cases[1945]))
+Europe_corona$cases[1947] = mean(c(Europe_corona$cases[1946], Europe_corona$cases[1948]))
+Europe_corona$cases[1949] = mean(c(Europe_corona$cases[1948], Europe_corona$cases[1952]))
+Europe_corona$cases[1950] = mean(c(Europe_corona$cases[1948], Europe_corona$cases[1952]))
+Europe_corona$cases[1951] = mean(c(Europe_corona$cases[1948], Europe_corona$cases[1952]))
+Europe_corona$cases[1954] = mean(c(Europe_corona$cases[1953], Europe_corona$cases[1955]))
+Europe_corona$cases[1956] = mean(c(Europe_corona$cases[1955], Europe_corona$cases[1957]))
+Europe_corona$cases[1958] = mean(c(Europe_corona$cases[1957], Europe_corona$cases[1959]))
+Europe_corona$cases[1961] = mean(c(Europe_corona$cases[1960], Europe_corona$cases[1962]))
+Europe_corona$cases[1963] = mean(c(Europe_corona$cases[1962], Europe_corona$cases[1965]))
+Europe_corona$cases[1962] = mean(c(Europe_corona$cases[1962], Europe_corona$cases[1965]))
+Europe_corona$cases[1968] = mean(c(Europe_corona$cases[1967], Europe_corona$cases[1969]))
+Europe_corona$cases[1970] = mean(c(Europe_corona$cases[1969], Europe_corona$cases[1972]))
+Europe_corona$cases[1971] = mean(c(Europe_corona$cases[1969], Europe_corona$cases[1972]))
+Europe_corona$cases[1973] = mean(c(Europe_corona$cases[1972], Europe_corona$cases[1974]))
+Europe_corona$cases[1975] = mean(c(Europe_corona$cases[1974], Europe_corona$cases[1976]))
+Europe_corona$cases[1978] = mean(c(Europe_corona$cases[1977], Europe_corona$cases[1981]))
+Europe_corona$cases[1979] = mean(c(Europe_corona$cases[1977], Europe_corona$cases[1981]))
+Europe_corona$cases[1980] = mean(c(Europe_corona$cases[1977], Europe_corona$cases[1981]))
+Europe_corona$cases[1986] = mean(c(Europe_corona$cases[1985], Europe_corona$cases[1987]))
+Europe_corona$cases[1989] = mean(c(Europe_corona$cases[1988], Europe_corona$cases[1990]))
+Europe_corona$cases[1996] = mean(c(Europe_corona$cases[1995], Europe_corona$cases[1997]))
+Europe_corona$cases[2005] = mean(c(Europe_corona$cases[2004], Europe_corona$cases[2006]))
+Europe_corona$cases[2008] = mean(c(Europe_corona$cases[2007], Europe_corona$cases[2009]))
+Europe_corona$cases[2015] = mean(c(Europe_corona$cases[2014], Europe_corona$cases[2016]))
+Europe_corona$cases[2030] = mean(c(Europe_corona$cases[2029], Europe_corona$cases[2032]))
+Europe_corona$cases[2031] = mean(c(Europe_corona$cases[2029], Europe_corona$cases[2032]))
+Europe_corona$cases[2038] = mean(c(Europe_corona$cases[2037], Europe_corona$cases[2039]))
+Europe_corona$cases[2244] = mean(c(Europe_corona$cases[2243], Europe_corona$cases[2245]))
+Europe_corona$cases[2258] = mean(c(Europe_corona$cases[2257], Europe_corona$cases[2259]))
+Europe_corona$cases[2272] = mean(c(Europe_corona$cases[2271], Europe_corona$cases[2273]))
+Europe_corona$cases[2279] = mean(c(Europe_corona$cases[2278], Europe_corona$cases[2280]))
+Europe_corona$cases[2286] = mean(c(Europe_corona$cases[2285], Europe_corona$cases[2287]))
+Europe_corona$cases[2294] = mean(c(Europe_corona$cases[2293], Europe_corona$cases[2295]))
+Europe_corona$cases[2300] = mean(c(Europe_corona$cases[2299], Europe_corona$cases[2301]))
+Europe_corona$cases[2307] = mean(c(Europe_corona$cases[2306], Europe_corona$cases[2308]))
+Europe_corona$cases[2314] = mean(c(Europe_corona$cases[2313], Europe_corona$cases[2315]))
+Europe_corona$cases[2322] = mean(c(Europe_corona$cases[2321], Europe_corona$cases[2323]))
+Europe_corona$cases[2328] = mean(c(Europe_corona$cases[2327], Europe_corona$cases[2329]))
+Europe_corona$cases[2330] = mean(c(Europe_corona$cases[2329], Europe_corona$cases[2331]))
+Europe_corona$cases[1964] = mean(c(Europe_corona$cases[1963], Europe_corona$cases[1965]))
+
+
+which(is.na(Europe_corona$cases))
+summary(Europe_corona)
+length(Europe_corona$cases)
+
+
+
+```
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+options(scipen=999)
+Europe_corona_confirmed <- Europe_corona %>% filter(type == "confirmed")
+Europe_corona_death <- Europe_corona %>% filter(type == "death")
+Europe_corona_recovery <- Europe_corona %>% filter(type == "recovery")
+
+ggplot(Europe_corona, aes(x=date, y=cases, col=type )) + geom_line() + facet_grid(type~., scales = "free")  + ggtitle("Figure 05: Daily confirmed cases in Europe") 
+
+```
+
+The highest number of deaths in France was happened at the start(2020, fist quater) of the COVID-19 spread. This is due to delaying to take appropriate actions. And then  number of deaths slightly decreased over the time.This shows a cyclic variation across the time.
+In Europe also, highest number of confirmed cases were reported at the beginning of the 2022 and it is the highest number of confirmed cases among overseas region(continents).But the  number of deaths in that time period is low when compared with 2020 daily deaths.
+The time series of recovery cases shows irregular variation over the time.
+
+
+
+
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+
+sum(Europe_corona_confirmed$cases)
+sum(Europe_corona_death$cases)
+sum(Europe_corona_recovery$cases)
+
+
+Europe_corona_new <- Europe_corona %>% filter(cases >= 0)
+
+Europecorona_wider <- Europe_corona_new %>% pivot_wider(names_from=type, values_from=cases)
+Europecorona_wider$Europe_corona_active <- Europecorona_wider$confirmed - Europecorona_wider$death - Europecorona_wider$recovery
+```
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+ggplot(Europecorona_wider, aes(x=date, y=Europe_corona_active)) + geom_line(col="orange") + ggtitle("Figure 06 : Daily Covid-19 Active cases in Europe" )
+
+
+```
+
+Even though deaths at the beginning of 2022 low, number of active cases are high. This is due to the number of recovered cases is zero.
+
+
+
+
+
+## North America
+In North America, there are 5 provinces that belongs to France. They are Guadeloupe, Martinique, Saint Barthelemy, Saint Pierre and Miquelon, and St Martin provinces.
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+
+North_America_corona <- France_corona %>% filter(continent_name == "North America")
+North_America_corona <- North_America_corona %>% filter(country == "France")
+
+
+North_America_corona <- North_America_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(North_America_corona$cases))
+
+North_America_corona$cases[617] = mean(c(North_America_corona$cases[616], North_America_corona$cases[618]))
+North_America_corona$cases[1321] = mean(c(North_America_corona$cases[1320], North_America_corona$cases[1322]))
+North_America_corona$cases[1664] = mean(c(North_America_corona$cases[1663], North_America_corona$cases[1665]))
+North_America_corona$cases[1816] = mean(c(North_America_corona$cases[1815], North_America_corona$cases[1817]))
+North_America_corona$cases[2976] = mean(c(North_America_corona$cases[2975], North_America_corona$cases[2977]))
+North_America_corona$cases[3598] = mean(c(North_America_corona$cases[3597], North_America_corona$cases[3599]))
+North_America_corona$cases[4858] = mean(c(North_America_corona$cases[4857], North_America_corona$cases[4859]))
+North_America_corona$cases[5014] = mean(c(North_America_corona$cases[5013], North_America_corona$cases[5015]))
+North_America_corona$cases[5037] = mean(c(North_America_corona$cases[5036], North_America_corona$cases[5038]))
+North_America_corona$cases[5127] = mean(c(North_America_corona$cases[5126], North_America_corona$cases[5128]))
+North_America_corona$cases[5829] = mean(c(North_America_corona$cases[5828], North_America_corona$cases[5830]))
+North_America_corona$cases[8534] = mean(c(North_America_corona$cases[8533], North_America_corona$cases[8535]))
+North_America_corona$cases[9402] = mean(c(North_America_corona$cases[9401], North_America_corona$cases[9403]))
+North_America_corona$cases[10286] = mean(c(North_America_corona$cases[10285], North_America_corona$cases[10287]))
+North_America_corona$cases[11170] = mean(c(North_America_corona$cases[11169], North_America_corona$cases[11171]))
+North_America_corona$cases[12054] = mean(c(North_America_corona$cases[12053], North_America_corona$cases[12055]))
+North_America_corona$cases[12938] = mean(c(North_America_corona$cases[12937], North_America_corona$cases[12939]))
+
+which(is.na(North_America_corona$cases))
+
+summary(North_America_corona)
+length(North_America_corona$cases)
+
+
+```
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+North_America_corona_confirmed <- North_America_corona %>% filter(type == "confirmed")
+
+ggplot(North_America_corona_confirmed, aes(x=date, y=cases)) + geom_line(col="blue") + facet_grid(~province) + ggtitle("Figure 07: Daily confirmed cases in Guadeloupe, Martinique, Saint Barthelemy, Saint Pierre and Miquelon, and St Martin provincses") 
+
+
+
+```
+In every province number of confirmed cases increased over the time and the peak is in 2022. The highest number of cases were recorded in Guadeloupe province. It is approximately two times bigger than the highest confirmed case in Martinique province. The number of confirmed cases in Saint Barthelemy, Saint Pierre and Miquelon, and St Martin provinces are very low compared to other two provinces.
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+North_America_corona_death <- North_America_corona %>% filter(type == "death")
+ggplot(North_America_corona_death, aes(x=date, y=cases)) + geom_line(col="red") + facet_grid(~province) + ggtitle("Figure 08: Daily death cases in Guadeloupe, Martinique, Saint Barthelemy, Saint Pierre and Miquelon, and St Martin provinces")
+
+
+```
+
+The highest number of deaths was occurred in Martinique. But overall Guadeloupe province has the most death cases as the difference between the highest number of deaths in provinces is not very large and the cases happened in other days in Guadeloupe are larger than the Martinique province.
+Deaths in St Martin province is bit higher than the that in Saint Barthelemy and Saint Pierre and Miquelon. 
+There is a cyclic variation in Guadeloupe province and Martinique province has a irregular variation.
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+North_America_corona_recovery <- North_America_corona %>% filter(type == "recovery")
+ggplot(North_America_corona_recovery, aes(x=date, y=cases)) + geom_line(col="dark green")+ facet_grid(~province) + ggtitle("Figure 09: Daily recovery cases in Guadeloupe, Martinique, Saint Barthelemy, Saint Pierre and Miquelon, and St Martin provinces")
+
+```
+
+Highest number of recovery cases was happened in Guadeloupe province. Before 2021  in Guadeloupe, the situation was handled  well as the number of deaths is considerably less than the number of recovered.
+
+
+
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+sum(North_America_corona_confirmed$cases)
+sum(North_America_corona_death$cases)
+sum(North_America_corona_recovery$cases)
+
+
+
+
+```
+
+## Oceania
+
+French Polynesia, New Caledonia and Wallis and Futuna are the three provinces in Oceania which belongs to France.
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+
+Oceania_corona <- France_corona %>% filter(continent_name == "Oceania")
+
+Oceania_corona <- Oceania_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(Oceania_corona$cases))
+
+Oceania_corona$cases[643] = mean(c(Oceania_corona$cases[642], Oceania_corona$cases[644]))
+Oceania_corona$cases[958] = mean(c(Oceania_corona$cases[957], Oceania_corona$cases[959]))
+Oceania_corona$cases[5866] = mean(c(Oceania_corona$cases[5865], Oceania_corona$cases[5867]))
+Oceania_corona$cases[6750] = mean(c(Oceania_corona$cases[6749], Oceania_corona$cases[6751]))
+Oceania_corona$cases[7634] = mean(c(Oceania_corona$cases[7633], Oceania_corona$cases[7635]))
+
+which(is.na(Oceania_corona$cases))
+summary(Oceania_corona)
+length(Oceania_corona$cases)
+
+
+```
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+Oceania_corona_confirmed <- Oceania_corona %>% filter(type == "confirmed")
+
+ggplot(Oceania_corona_confirmed, aes(x=date, y=cases)) + geom_line(col="blue") + facet_grid(~province) + ggtitle("Figure 10: Daily confirmed cases in French Polynesia, New Caledonia, and Wallis and Futuna provincses") 
+
+
+
+```
+The number of confirmed cases in Wallis and Futuna province are significantly lower than other two province. The reason for this can be less populatin in province or they manged to control COVID-19 spread.
+The highest number of confirmed cases was occurred in New Caledonia. But overall French Polynesia province has the most confirmed cases as the difference between the highest number of confirmed cases in provinces is approximately 1000 and the cases happened in other days in French Polynesia are larger than the New Caledonia province.
+In New Caledonia first case was reported in the beginning of 2020 and they managed to continue until third quater of 2021. After that there is sudden increase in confirmed cases. 
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+Oceania_corona_death <- Oceania_corona %>% filter(type == "death")
+ggplot(Oceania_corona_death, aes(x=date, y=cases)) + geom_line(col="red") + facet_grid(~province) + ggtitle("Figure 11: Daily death cases in French Polynesia, New Caledonia, and Wallis and Futuna provinces") 
+
+
+```
+
+The highest number of deaths happened in French Polynesia but that count is low compared to the highest number of confirmed cases.
+
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+Oceania_corona_recovery <- Oceania_corona %>% filter(type == "recovery")
+ggplot(Oceania_corona_recovery, aes(x=date, y=cases)) + geom_line(col="dark green")+ facet_grid(~province) + ggtitle("Figure 11: Daily recovery cases in French Polynesia, New Caledonia, and Wallis and Futuna provincses")
+
+```
+
+The highest number of recovered cases reported in French Polynesia province and that count is significantly greater than the highest number of confirmed cases.
+Therefore we can implies that French Polynesia province controlled the COVID-19.
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+sum(Oceania_corona_confirmed$cases)
+sum(Oceania_corona_death$cases)
+sum(Oceania_corona_recovery$cases)
+
+
+
+
+```
+
+
+
+## South America
+
+
+French Guiana
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+
+South_America_corona <- France_corona %>% filter(continent_name == "South America")
+
+South_America_corona <- South_America_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+which(is.na(South_America_corona$cases))
+
+South_America_corona$cases[440] = mean(c(South_America_corona$cases[439], South_America_corona$cases[441]))
+South_America_corona$cases[1325] = mean(c(South_America_corona$cases[1324], South_America_corona$cases[1326]))
+South_America_corona$cases[2330] = mean(c(South_America_corona$cases[2329], South_America_corona$cases[2331]))
+which(is.na(South_America_corona$cases))
+
+summary(South_America_corona)
+length(South_America_corona$cases)
+
+```
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+South_America_corona_confirmed <- South_America_corona %>% filter(type == "confirmed")
+South_America_corona_death <- South_America_corona %>% filter(type == "death")
+South_America_corona_recovery <- South_America_corona %>% filter(type == "recovery")
+
+
+
+ggplot(South_America_corona, aes(x=date, y=cases, col=type )) + geom_line() + facet_grid(type~., scales = "free")  + ggtitle("Figure 12: Daily  cases in French Guiana province") 
+
+
+
+
+
+```
+Daily  cases in French Guiana province was increased over the time except recovery cases. It became closer to zero.
+The number of death cases was first increased and then decreased over the time.
+
+
+
+
+
+
+
+```{r, comment=NA ,echo=FALSE,include = FALSE,  message=FALSE, warning=FALSE}
+sum(South_America_corona_confirmed$cases)
+sum(South_America_corona_death$cases)
+sum(South_America_corona_recovery$cases)
+
+
+
+```
+
+## 2.2 Comparison between France and its' neighbouring countries
+
+Here five neighbourhood countries have selected for the comparison. They are Belgium, Spain, Italy, Ireland, and  Portugal
+
+
+
+```{r, comment=NA ,echo=FALSE, message=FALSE, warning=FALSE, out.height="1000%", out.width="1000%"}
+
+France_corona <- coronavirus %>% filter(country =="France")
+France_corona_death <- France_corona %>% filter(type=="death")
+
+Belgium_corona <- coronavirus %>% filter(country =="Belgium")
+Belgium_corona_death <- Belgium_corona %>% filter(type=="death")
+
+Spain_corona <- coronavirus %>% filter(country =="Spain")
+Spain_corona_death <- Spain_corona %>% filter(type=="death")
+
+Italy_corona <- coronavirus %>% filter(country =="Italy")
+Italy_corona_death <- Italy_corona %>% filter(type=="death")
+
+Ireland_corona <- coronavirus %>% filter(country =="Ireland")
+Ireland_corona_death <- Ireland_corona %>% filter(type=="death")
+
+Portugal_corona <- coronavirus %>% filter(country =="Portugal")
+Portugal_corona_death <- Portugal_corona %>% filter(type=="death")
+
+
+
+
+
+Comparisoncounties_death <- rbind(France_corona_death, Belgium_corona_death, Spain_corona_death, Italy_corona_death, Ireland_corona_death, Portugal_corona_death)
+
+
+ggplot(Comparisoncounties_death, aes(x=country, y=cases, col= country, scale="free"))  + geom_point(aes(col=country))+ ggtitle("Figure 13: Compairison of Death cases between France and neighbouring countries")+ ylim(0,1750) + geom_jitter()
+```
+
+France has the highest death cases between neighbouring countries.finland has the least death cases compare to them. 
+
+
+
+
+
+
+
+## Conclusion
+
+Reunion province was affected more than Mayotte province by Covid -19 in African continent. Guadeloupe province was affected more than Martinique province by Covid -19 in North American continent. French Polynesia province was affected more than New Caledonia province by Covid -19 in Oceania continent.The highest number of confirmed cases and deaths were occurred in Europe continent. This was happened as there were not enough masks nor tests, and in addition many public hospitals were on strike.
+When the number of cases increased, number of deaths was increased. Recovery cases becomes zero over the time.
+In some graphs we can see number of cases were low in 2021-2022 due to vaccination.
+
+## Discussion
+
+
+When the number of cases increased, number of deaths was increased in here.as the recovered cases became zero at one point. This can be due to error of the data set.There were 3 consecutive negatives values. For that I have taken the mean value of non-negative values and apply it to the three negative values.
+France has the highest death cases between neighbouring countries.finland has the least death cases compare to them.
+
+
+
+
+
+
+## Reference
+*“France,” Wikipedia. Accessed: October 03, 2022. [Online]. Available:
+https://en.wikipedia.org/wiki/France
+
+*Accessed: October 03, 2022. [Online]. Available: https://hellor.netlify.app/schedule/
+
+
+*Accessed: October 03, 2022. [Online]. Available: https://www.who.int/health-topics/coronavirus#tab=tab_1
+
+*Accessed: October 03, 2022. [Online]. Available: https://www.britannica.com/place/France
+
+*Accessed: October 03, 2022. [Online]. Available: https://kids.nationalgeographic.com/geography/countries/article/france
+
+*Accessed: October 03, 2022. [Online]. Available: https://worldpopulationreview.com/countries/france/location#:~:text=The%20GPS%20coordinates%20of%20France,France%20in%20the%20eastern%20hemisphere

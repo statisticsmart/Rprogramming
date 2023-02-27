@@ -1,0 +1,532 @@
+---
+title: <center><u>**THE COVID-19 PANDEMIC IN OMAN**</u></center>
+author: "B.D.Ishan Tharaka AS2019550"
+date: "2022-09-30"
+output: html_document
+---
+
+<style>
+body {
+text-align:justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, command = NA, message = FALSE, warning = FALSE,  fig.align="center")
+```
+
+```{r , echo=FALSE , include=FALSE}
+library(devtools)
+# devtools::install_github("thiyangt/sta3262")
+
+library(sta3262)
+get_individual_project_country("AS2019550")
+
+library(coronavirus)
+
+#  Load data
+data(coronavirus)
+
+# Data description
+head(coronavirus)
+tail(coronavirus)
+
+# All R libraries required for this report
+library(ggplot2)
+library(maptools)
+gpclibPermit()  # to enable gpclib
+library(tibble)
+library(tidyverse)
+library(magrittr)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(mapview)
+library(plotly)
+library(zoo)
+library(kableExtra)
+
+```
+
+***
+
+# 1. Introduction
+
+Coronavirus disease 2019 (COVID-19) is a contagious disease caused by a virus, the severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first known case was identified in Wuhan, China, in December 2019.The disease quickly spread worldwide, resulting in the COVID-19 pandemic.
+
+Most people infected with the virus will experience mild to moderate respiratory illness and recover without requiring special treatment. However, some will become seriously ill and require medical attention. Older people and those with underlying medical conditions like cardiovascular disease, diabetes, chronic respiratory disease, or cancer are more likely to develop serious illness. Anyone can get sick with COVID-19 and become seriously ill or die at any age. COVID-19 affects different people in different ways. Most infected people will develop mild to moderate illness and recover without hospitalization.The virus can spread from an infected person’s mouth or nose in small liquid particles when they cough, sneeze, speak, sing or breathe.
+
+**Most common symptoms:**
+
+* fever
+* cough
+* tiredness
+* loss of taste or smell
+* sore throat
+* headache
+* aches and pains
+* red or irritated eyes.
+* difficulty breathing or shortness of breath
+* loss of speech or mobility, or confusion
+* chest pain.
+
+On average it takes 5–6 days from when someone is infected with the virus for symptoms to show, however it can take up to 14 days. People with mild symptoms who are otherwise healthy should manage their symptoms at home. The best way to prevent and slow down transmission is to be well informed about the disease and how the virus spreads.Protect yourself and others from infection by staying at least 1 meter apart from others, wearing a properly fitted mask, and washing your hands or using an alcohol-based rub frequently. Get vaccinated when it’s your turn and follow local guidance.
+
+
+### 1.1. Oman
+
+Oman(Sultanate of Oman) is an Arabian country located in southwestern Asia. Oman is one of most water-stressed countries in the world. It is situated on the southeastern coast of the Arabian Peninsula, and spans the mouth of the Persian Gulf. Oman shares land borders with Saudi Arabia, the United Arab Emirates, and Yemen, while sharing maritime borders with Iran and Pakistan. The coast is formed by the Arabian Sea on the southeast, and the Gulf of Oman on the northeast. The Madha and Musandam exclaves are surrounded by the United Arab Emirates on their land borders, with the Strait of Hormuz (which it shares with Iran) and the Gulf of Oman forming Musandam's coastal boundaries. Muscat is the nation's capital and largest city. 
+
+
+### 1.2. Location of Oman
+
+```{r , echo=FALSE , message=FALSE}
+
+# Filter OMAN
+oman_corona <- coronavirus %>% filter(country == "Oman")
+
+#plot country in the map
+
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group),
+    fill = "gray",
+    colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(data = oman_corona,
+             aes(x = long, y = lat),
+             color = "red",
+             size = 1.3)
+```
+
+<div align="center">**Figure 01** : Location of Oman on the world map </div>
+
+### 1.3. Climate condition of Oman   
+
+Oman has a subtropical, dry climate with summer monsoons and hot, dusty winds. Average annual temperature ranges from 10°C to 12°C in the north while ranging from 16°C to 18°C in the south. Oman receives little rainfall. Annual average rainfall ranges from 150 mm to 300 mm in the north while ranging from 50 mm to 150 mm in the south. There have been destructive tropical depressions, tropical cyclonic storms and severe cyclonic storms that have tracked toward Oman over the past decades from the north Indian Ocean and the Arabian Sea. Such storms typically occur during the pre-monsoonal period (May – June) and the post-monsoonal period (October – November).
+
+The mountain areas receive more rainfall, and annual rainfall on the higher parts of the Jabal Akhdar probably exceeds 400 mm (15.7 in). Low temperatures in the mountainous areas leads to snow cover once every few years. Some parts of the coast, particularly near the island of Masirah, sometimes receive no rain at all within the course of a year. The climate is generally very hot, with temperatures reaching around 54 °C (129.2 °F) (peak) in the hot season, from May to September. Drought and limited rainfall contribute to shortages in the nation's water supply. Maintaining an adequate supply of water for agricultural and domestic use is one of Oman's most pressing environmental problems, with limited renewable water resources. On 26 June 2018 the city of Qurayyat set the record for highest minimum temperature in a 24-hour period, 42.6 °C (108.7 °F).
+
+### 1.4. Demographics of Oman
+
+Oman has one of the highest birth rates among the Persian Gulf states; this birth rate—combined with a relatively low death rate—has given the country a rate of natural increase that well exceeds the world average. Life expectancy averages about 75 years. The infant mortality rate is decreasing, and about half of the population is under age 30.
+
+Since 1970, increasing numbers of foreigners have come to reside in the country, particularly in the capital. These include Western businessmen, as well as government advisers, army officers, and labourers from the Indian subcontinent, the Philippines, and other Asian countries. Since the 1980s the government has followed a policy termed “Omanization,” to reduce the country’s dependence on foreign labour and increase employment opportunities for Omani citizens.
+
+
+### 1.5. The COVID-19 pandemic in Oman
+
+The virus was confirmed to have reached Oman on 24 February 2020 when two citizens tested positive for COVID-19 after returning from Iran. On 27 February, the number of cases in Oman increased to 6. The cases were also linked to recent travel to Iran. As of 21 August 2021, the total number of cases registered in the sultanate is 300,914, of which 289,450 have recovered and 4,020 have died. Initially, the majority of the cases and deaths occurred in the expatriate community. By July 2020, as the pandemic entered its fourth month in the country, the majority of the cases and deaths had occurred among the citizens. Muscat continues to be the most affected governorate with the highest number of confirmed cases at over 149,383 and 1,354 deaths, and accounted for 76% of the total cases in the country by early June 2020, with the majority of the cases being in the expatriate community. 
+
+COVID-19 tests and treatment were initially made free for all communities of the sultanate, including expatriates.As of August 2021, Oman has vaccinated a total of 66% of its populations in terms of both first and second doses administered
+
+### 1.6. The COVID-19 pandemic lockdown status and actions taken by the government
+
+The Omani government took early on in the pandemic were similar to efforts elsewhere in the world. Early on, it closed all non-essential shops. Sultan Haitham instituted a Supreme Committee which implemented travel restrictions of increasing severity so that by 29 March all commercial flights to and within Oman (except Musandam Governorate) were shut down. From mid-March government offices operated on 30 percent staffing, all schools were shut and only food stores and pharmacies were allowed to remain open. Restaurants could only offer food as a takeaway service, tourists were asked to leave the country and tourist sites closed. Mosques (except for the call to prayer) and non-Muslim places of worship were closed. From March full lockdowns were implemented in Muscat, Dhofar and Duqm, though since April the lockdown restrictions in Muscat have been eased.
+
+On 10 April 2020, the entire governorate was put under lockdown until 22 April, this was extended twice, with the lockdown being lifted on 29 May. Starting 13 June 2020, lockdowns were imposed in the governorate of Dhofar, the wilayat of Masirah, the wilayat of Duqm and the areas of Jebel Akhdar and Jebel Shams until 3 July 2020. Various national level lockdowns and movement bans have since been imposed over the course of the pandemic so far.
+
+***
+
+# 2. Exploratory Data Analysis
+
+
+The 2019 Novel Coronavirus COVID-19 (2019-nCoV) Dataset is used for this analysis.The dataset contains the daily summary of the Coronavirus (COVID-19) cases by state/province.All cases are recorded a data frame with 7 variables.
+
+* Date
+* Name of Country
+* Name of Province/state; if available
+* Latitude of center of geographic region defined by country/province
+* Longitude of center of geographic region defined by country/province
+* Type of reported case – confirmed, death, recovered
+* Number of cases on given date
+
+### 2.1 COVID-19 summary data in Oman. 
+
+<center>
+```{r}
+# Oman summary data table
+sumary<-oman_corona %>%
+  group_by(type) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  summarise(
+    minimum = min(na.locf(cases)),
+    maximum= max(na.locf(cases)),
+    median=median(na.locf(cases)),
+    mean = mean(na.locf(cases)),
+    total=sum(na.locf(cases))
+  )
+
+
+sumary %>% kbl() %>% kable_styling()
+```
+
+<div align="center">**Table 01** : COVID-19 summary data in Oman</div>
+</center>
+
+Table 1 contains the daily summary of Coronavirus cases (confirmed, death, and recovered) from 22nd of January 2020 to 23th of June 2022. This table shows that, confirmed, death and recovered cases with minimum, maximum, median, mean and total number of COVID cases in Oman. The total number of confirmed cases are 390244 and the total number of recovery cases are 282521. Overall, there have been 4628 COVID-related deaths in Oman.The above summary table can be further understood through the graphical presentation of the distribution of COVID-19 cases shown below.
+
+
+### 2.2 Graphic representation of all cases of COVID-19 in Oman.
+
+<center>
+```{r}
+# all confirmed, death and recovered cases           
+oman_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~type,
+    y = ~cases,
+    color = ~type,
+    type = "bar",
+    mode = "diamond",
+    name = ~type
+  )
+```
+<div align="center">**Figure 02** : COVID-19 all confirmed, death and recovered cases in Oman</div>
+</center>
+
+Figure 02 shows the confirmed, death and recovered cases in Oman. According to this figure we can easily conclude that the total number of deaths is much less than the total number of confirmed cases in Oman.
+
+
+<center>
+```{r}
+# Filter OMAN
+oman_corona <- coronavirus %>% filter(country == "Oman")
+
+oman_confirmed_corona <- oman_corona %>% filter(type == "confirmed")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+oman_death_corona <- oman_corona %>% filter(type == "death")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+oman_recovered_corona <- oman_corona %>% filter(type == "recovery")%>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+# Total No. of confirm cases
+oman_confirmed_cases <- select(oman_confirmed_corona, cases)
+total_confirmed_cases <- sum(oman_confirmed_cases)
+
+# Total No. of death cases
+oman_death_cases <- select(oman_death_corona, cases)
+total_death_cases <- sum(oman_death_cases)
+
+# Total No. of recovered cases
+oman_recovered_cases <- select(oman_recovered_corona, cases)
+total_recovered_cases <- sum(oman_recovered_cases, na.rm = TRUE) 
+
+oman_active_cases <-  oman_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death)) 
+
+```
+</center>
+
+### 2.3 Daily COVID-19 confirmed cases in Oman.
+
+<center>
+```{r}
+# Confirmed Cases 
+ggplotly(ggplot(oman_confirmed_corona, aes(x = date, y= cases))
+      +geom_line(color = "blue") 
+      +geom_point(color = "blue",size = 1.0) 
+      +geom_area(fill = "blue") 
+      +ggtitle("Figure 03: Daily COVID-19 confirmed cases in Oman"))
+```
+</center>
+
+Figure 3 shows that daily confirmed cases in Oman. We can get more clear idea about how the daily confirmed cases varies using this figure. From March 2020 to June 2022, we can see confirmed cases increasing and decreasing several times. More confirmed cases have been reported after 2021.
+
+### 2.4 Daily COVID-19 death cases in Oman.
+
+<center>
+```{r}
+# Death Cases 
+ggplotly(ggplot(oman_death_corona, aes(x = date, y= cases))
+      +geom_line(color = "red") 
+      +geom_point(color = "red",size = 1.0) 
+      +geom_area(fill = "red") 
+      +ggtitle("Figure 04: Daily COVID-19 death cases in Oman"))
+```
+</center>
+
+Figure 4 shows how the daily death cases varies. As we can see in this figure the number of death cases in Oman is rapidly increased in month June of 2020 and it came to a peak value in October of 2020. Then it has decreased. And also again, the number of death cases is increases in month March of 2021 and it came to peak value in month July of 2021.The highest number of deaths has been reported in the middle of 2021. 
+
+### 2.5 Daily COVID-19 recovered cases in Oman.
+
+<center>
+```{r}
+# Recovered Cases 
+ggplotly(ggplot(oman_recovered_corona, aes(x = date, y= cases))
+      +geom_line(color = "purple") 
+      +geom_point(color = "purple",size = 1.0) 
+      +geom_area(fill = "purple") 
+      +ggtitle("Figure 05: Daily COVID-19 recovered cases in Oman"))
+```
+</center>
+
+Figure 5 shows how the daily recovered cases varies. Approximately we can see that there is some increasing pattern in this figure. The highest number of recovered has been reported in the month July of 2021. 
+
+### 2.6 Daily COVID-19 total acive cases in Oman.
+
+<center>
+```{r}
+# Active Cases
+ ggplotly(ggplot(oman_active_cases,aes(x =date,y =total_active))
+      +geom_line(color="green")
+      +ggtitle("Figure 06: Daily COVID-19 total acive cases in Oman"))
+```
+</center>
+
+Figure 6 shows how the daily total active cases varies. It can be seen the daily total active COVID-19 cases are increase with time. From August 2021, the daily total active cases are increase. There is a massive increment of daily total active cases in 5th of August 2021. There are 385616 total active COVID-19 cases are reported when June 2022. 
+
+### 2.7 Comparison with other countries
+
+Oman is located in the Middle East. Oman is bordered by the Gulf of Oman to the north, the Arabian Sea to the southeast, and Saudi Arabia, United Arab Emirates, and Yemen to the west. Neighboring countries include Saudi Arabia, United Arab Emirates, and Yemen. These are the countries that compared in this report.
+
+<center>
+```{r}
+neighbouring_countries <- coronavirus %>% filter(country %in% c("Saudi Arabia", "United Arab Emirates","Yemen")) %>% mutate(cases = replace(cases, which(cases < 0),NA))
+
+```
+</center>
+
+### 2.7.1 COVID-19 Daily and Total Confirmed cases in Saudi Arabia, United Arab Emirates, and Yemen.
+
+<center>
+```{r}
+# Compare Comfirmed cases with other countries 
+Compare_with_other_countries <- coronavirus %>% filter(country %in% c("Oman","Saudi Arabia", "United Arab Emirates","Yemen")) %>% mutate(cases = replace(cases, which(cases < 0),NA))
+
+confirmed_cases <- Compare_with_other_countries %>% filter(type=="confirmed")
+ggplotly(ggplot(confirmed_cases, aes(x=date,y=cases,color=country))
+         +geom_line())
+
+```
+
+<div align="center">**Figure 07** : COVID-19 Daily Confirmed cases in Saudi Arabia, United Arab Emirates, and Yemen</div>
+</center>
+
+Figure 7 shows How daily confirmed cases differ in Saudi Arabia, the United Arab Emirates and Yemen. Initially Saudi Arabia has been reported more confirmed cases than other neighboring countries. Yemen displays a much lower increase than the other countries. 
+ 
+<center>
+```{r}          
+confirmed_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~country,
+    y = ~cases,
+    color = ~country,
+    type = "bar",
+    mode = "diamond",
+    name = ~country)
+```
+<div align="center">**Figure 08** : COVID-19 total confirmed cases in Saudi Arabia, United Arab Emirates, and Yemen</div>
+</center>
+
+Figure 08 shows the total confirmed cases in Saudi Arabia, United Arab Emirates, and Yemen. According to this figure we can easily conclude that United Arab Emirates has the highest total number of confirmed cases and Yemen has the lowest total number of confirmed cases. The total number of confirmed cases in Oman is lower than in Saudi Arabia.
+
+### 2.7.2 COVID-19 Daily and Total  Death cases in Saudi Arabia, United Arab Emirates, and Yemen.
+
+<center>
+```{r}
+# Compare death cases with other countries 
+death_cases <- Compare_with_other_countries %>% filter(type=="death")
+ggplotly(ggplot(death_cases, aes(x=date,y=cases,color=country))
+         +geom_line())
+```
+
+<div align="center">**Figure 09** : COVID-19 Daily Death cases in Saudi Arabia, United Arab Emirates, and Yemen</div>
+</center>
+
+Figure 9 shows How daily death cases differ in Saudi Arabia, the United Arab Emirates and Yemen. Oman has been reported more death cases than other neighboring countries in the month July of 2021. Yemen and United Arab Emirates display a much lower increase than the other countries. But there are some increases during the time period.
+
+<center>
+```{r}          
+death_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~country,
+    y = ~cases,
+    color = ~country,
+    type = "bar",
+    mode = "diamond",
+    name = ~country)
+```
+<div align="center">**Figure 10** : COVID-19 total Death cases in Saudi Arabia, United Arab Emirates, and Yemen</div>
+</center>
+
+Figure 10 shows the total death cases in Saudi Arabia, United Arab Emirates, and Yemen. According to this figure we can easily conclude that Saudi Arabia has the highest total number of death cases and Yemen has the lowest total number of death cases. But Yemen and United Arab Emirates total death cases are approximately equal. The total number of death cases in Oman is less than Saudi Arabia.
+
+### 2.7.3 COVID-19 Daily and Total Recovery cases in Saudi Arabia, United Arab Emirates, and Yemen.
+
+<center>
+```{r}
+# Compare recovery cases with other countries 
+recovery_cases <- Compare_with_other_countries %>% filter(type=="recovery")
+ggplotly(ggplot(recovery_cases, aes(x=date,y=cases,color=country))
+         +geom_line())
+```
+
+<div align="center">**Figure 11** : COVID-19 Daily Recovery cases in Saudi Arabia, United Arab Emirates, and Yemen</div>
+
+</center>
+
+Figure 11 shows How daily recovery cases differ in Saudi Arabia, the United Arab Emirates and Yemen.Initially Saudi Arabia has been reported more recovery cases than other neighboring countries. United Arab Emirates has been reported more recovery cases than other neighboring countries in the months January and February of 2021. Yemen displays a much lower increase than the other countries.
+
+<center>
+```{r}          
+recovery_cases %>% mutate(cases = replace(cases, which(cases < 0), NA))%>%
+  plotly::plot_ly() %>%
+  plotly::add_trace(
+    x = ~country,
+    y = ~cases,
+    color = ~country,
+    type = "bar",
+    mode = "diamond",
+    name = ~country)
+```
+<div align="center">**Figure 12** : COVID-19 total recovery cases in Saudi Arabia, United Arab Emirates, and Yemen</div>
+</center>
+
+
+Figure 12 shows the total recovery cases in Saudi Arabia, United Arab Emirates, and Yemen. According to this figure we can easily conclude that United Arab Emirates has the highest total number of recovery cases and Yemen has the lowest total number of death cases. The total number of death cases in Oman is less than Saudi Arabia.
+
+<center>
+```{r}
+# Filter Saudi Arabia
+saudi_arabia_corona <- coronavirus %>% filter(country == "Saudi Arabia")
+# Filter United Arab Emirates
+uae_corona <- coronavirus %>% filter(country == "United Arab Emirates")
+# Filter Yemen
+yemen_corona <- coronavirus %>% filter(country == "Yemen")
+
+# Function to calculate total confirmed cases for each country
+x_country_total_confirmed_cases <- function(x_country_corona){
+  x_country_confirmed_corona <- x_country_corona %>% filter(type == "confirmed")%>% mutate(cases =   replace(cases, which(cases < 0), NA))
+  
+  x_country_confirmed_cases <- select(x_country_confirmed_corona, cases)
+  total_confirmed_cases <- sum(x_country_confirmed_cases, na.rm = TRUE)
+  
+  return(total_confirmed_cases)
+}
+
+# Function to calculate total death cases for each country
+x_country_total_death_cases <- function(x_country_corona){
+  x_country_death_corona <- x_country_corona %>% filter(type == "death")%>% mutate(cases =   replace(cases, which(cases < 0), NA))
+  
+  x_country_death_cases <- select(x_country_death_corona, cases)
+  total_death_cases <- sum(x_country_death_cases, na.rm = TRUE)
+  
+  return(total_death_cases)
+}
+
+# Function to calculate total recovery cases for each country
+x_country_total_recoveryd_cases <- function(x_country_corona){
+  x_country_recovery_corona <- x_country_corona %>% filter(type == "recovery")%>% mutate(cases =   replace(cases, which(cases < 0), NA))
+  
+  x_country_recovery_cases <- select(x_country_recovery_corona, cases)
+  total_recovery_cases <- sum(x_country_recovery_cases, na.rm = TRUE)
+  
+  return(total_recovery_cases)
+}
+
+# x_country_total_confirmed_cases(oman_corona)
+# x_country_total_death_cases(oman_corona)
+# x_country_total_recoveryd_cases(oman_corona)
+
+```
+</center>
+
+### 2.7.4 COVID-19 summary data in Saudi Arabia, United Arab Emirates and Yemen.
+
+<center>
+```{r}
+summary_table_other_countries <- tibble(Country=c("Oman","Saudi Arabia", "United Arab Emirates","Yemen"),
+                        Confirmed=c(x_country_total_confirmed_cases(oman_corona),x_country_total_confirmed_cases(saudi_arabia_corona)	,x_country_total_confirmed_cases(uae_corona),x_country_total_confirmed_cases(yemen_corona)),
+                        Death=c(x_country_total_death_cases(oman_corona),x_country_total_death_cases(saudi_arabia_corona),x_country_total_death_cases(uae_corona),x_country_total_death_cases(yemen_corona)),
+                        Recovery=c(x_country_total_recoveryd_cases(oman_corona),x_country_total_recoveryd_cases(saudi_arabia_corona),x_country_total_recoveryd_cases(uae_corona),x_country_total_recoveryd_cases(yemen_corona)),
+                        Active=c(103892,271726,267249,5425))%>%
+  mutate(Death_Percentage = round((Death/Confirmed)*100, 2), Recovered_Percentage = round((Recovery/Confirmed)*100, 2),
+Active_Percentage=round((Active/Confirmed)*100, 2)) 
+
+summary_table_other_countries %>% kbl() %>% kable_styling()
+  
+```
+<div align="center">**Table 02** : COVID-19 summary data in Saudi Arabia, United Arab Emirates and Yemen</div>
+</center>
+
+Table 2 contains the summary of Coronavirus cases (confirmed, death, recovered and active) and percentages related to death, recovery, active cases in Saudi Arabia, United Arab Emirates and Yemen. According to this table we can easily conclude that The highest number of confirmed cases has been reported in United Arab Emirates. It is 933688 and the lowest number of confirmed cases has been reported in Yemen. It is 11825. The highest number of death cases has been reported in Saudi Arabia. It is 9194 and the lowest number of death cases has been reported in Yemen. It is 2149. The highest number of recovery cases has been reported in United Arab Emirates. It is 664130 and the lowest number of recovery cases has been reported in Yemen. It is 4251. The highest number of active cases has been reported in Saudi Arabia. It is 271726 and the lowest number of active cases has been reported in Yemen. It is 5425. The above summary table can be further understood through the graphical presentation of percentages of COVID-19 cases below.
+
+<center>
+```{r}
+# Active pie chart
+active_piechart <- plot_ly(summary_table_other_countries, labels = ~Country, values=~Active_Percentage, type = 'pie')
+active_piechart
+```
+
+<div align="center">**Figure 13** : COVID-19 Active percentages in neighboring countries</div>
+</center>
+
+Figure 13 shows the percentages of active cases in Saudi Arabia, the United Arab Emirates, and Yemen separately. We can easily see that Yemen has the highest percentage of active cases. It is 33.8% and The percentages of active cases in Saudi Arabia, United Arab Emirates, and Oman are 25.4%, 21.1%, and 19.6% respectively.
+
+<center>
+```{r}
+# Recovery pie chart
+recovery_piechart <- plot_ly(summary_table_other_countries, labels = ~Country, values=~Recovered_Percentage, type = 'pie')
+recovery_piechart
+```
+
+<div align="center">**Figure 14** : COVID-19 Recovery percentages in neighboring countries</div>
+</center>
+
+Figure 14 shows the percentages of recovery cases in Saudi Arabia, the United Arab Emirates, and Yemen separately. We can easily see that Yemen has the highest percentage of recovery cases. It is 33.8% and The percentages of recovery cases in Saudi Arabia, United Arab Emirates, and Oman are 25.4%, 21.1%, and 19.6% respectively.
+
+<center>
+```{r}
+# death pie chart
+death_piechart <- plot_ly(summary_table_other_countries, labels = ~Country, values=~Death_Percentage, type = 'pie')
+death_piechart
+```
+
+<div align="center">**Figure 15** : COVID-19 Death percentages in neighboring countries</div>
+</center>
+
+Figure 15 shows the percentages of death cases in Saudi Arabia, the United Arab Emirates, and Yemen separately. We can easily see that Yemen has the highest percentage of death cases. It is 87.4% and The percentages of death cases in Saudi Arabia, United Arab Emirates, and Oman are 5.63%, 1.2%, and 5.73% respectively.
+
+***
+
+# 3. Discussion
+
+The recovery rate is higher than the recovery rate in Oman. However, the confirmed cases have increased by 2022 compared to 2020. With time, daily confirmed cases have grown in Oman and reached the same as neighboring countries Saudi Arabia, and the United Arab Emirates.  More death cases were reported in Oman in the month of July 2021 than in other neighboring countries. Regarding total death cases, Oman is second to Saudi Arabia. The daily recovery rate increased in Oman after 2021 compared to other neighboring countries while.
+
+***
+
+# 4. Conclusions
+
+The COVID-19 virus was first identified from an outbreak in Wuhan, China, in December 2019. Nearly after three months,  the first confirmed case of COVID-19 was identified in Oman.  By July 2020, the majority of the cases and deaths had occurred among the citizens concluding the virus spread quickly. According to the coronavirus dataset, Oman has reported 390244 total confirmed cases,  4628  total deaths,  281724 total recovery cases, and  103892 total active cases. Active cases are approximately 26.62% as a percentage of total confirmed cases. When comparing Oman with neighboring countries, Oman got better values in recovered percentage. But the death rate in Oman is higher than in Saudi Arabia and the United Arab Emirates when comparing neighboring countries. But the recovery rate (72.19%) of Oman is better than all other neighboring countries. However, according to the data, the situation in Oman is better than the situation in Saudi Arabia, United Arab Emirates, and Yemen.
+
+***
+
+# 5. References
+
+* <https://en.wikipedia.org/wiki/COVID-19>
+* <https://www.who.int/health-topics/coronavirus#tab=tab_1>
+* <https://globaledge.msu.edu/countries/oman>
+* <https://en.wikipedia.org/wiki/Oman>
+* <https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Oman>
+* <https://en.wikipedia.org/wiki/Oman#Climate>
+* <https://blogs.lse.ac.uk/mec/2020/07/23/oman-in-the-covid-19-pandemic-people-policy-and-economic-impact/>
+* <https://www.worldatlas.com/articles/which-countries-border-oman.html>
+* <https://plotly.com/r/pie-charts/>
+* <https://climateknowledgeportal.worldbank.org/country/oman/climate-data-historical#:~:text=Oman%20has%20a%20subtropical%2C%20dry,150%20mm%20in%20the%20south.>
+

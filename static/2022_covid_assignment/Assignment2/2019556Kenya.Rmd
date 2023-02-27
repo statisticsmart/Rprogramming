@@ -1,0 +1,539 @@
+---
+title: "Kenya_AS2019556"
+author: "KVH Thrimanna"
+date: "2022-10-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Introduction**
+
+## Covid 19 outbreak
+
+The COVID-19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID-19) caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The novel virus was first identified from an outbreak in Wuhan, China, in December 2019. Attempts to contain it there failed, allowing the virus to spread to other areas of China and later worldwide. The World Health Organization (WHO) declared the outbreak a public health emergency of international concern on 30 January 2020 and a pandemic on 11 March 2020. As of 7 October 2022, the pandemic had caused more than 620 million cases and 6.55 million confirmed deaths, making it one of the deadliest in history.
+
+The pandemic has triggered severe social and economic disruption around the world, including the largest global recession since the Great Depression.Widespread supply shortages, including food shortages, were caused by supply chain disruption. Reduced human activity saw an unprecedented pollution decrease. Educational institutions and public areas were partially or fully closed in many jurisdictions, and many events were cancelled or postponed. Misinformation circulated through social media and mass media, and political tensions intensified. The pandemic raised issues of racial and geographic discrimination, health equity, and the balance between public health imperatives and individual rights.
+
+This report gives gives a brief idea about Covid 19 outbreak in Kenyan Republic.
+
+
+## Republic of Kenya
+
+Kenya is the world's 48th largest country by area. With a population of more than 47.6 million in the 2019 census, Kenya is the 29th most populous country in the world. Kenya's capital and largest city is Nairobi, while its oldest, currently second largest city, and first capital is the coastal city of Mombasa. Kisumu City is the third-largest city and also an inland port on Lake Victoria.
+
+Inland are populous highlands famed for both their tea plantations, an economic staple during the British colonial era, and their variety of animal species, including lions, elephants, cheetahs, rhinoceroses, and hippopotamuses. Kenya’s western provinces, marked by lakes and rivers, are forested, while a small portion of the north is desert and semi desert. The country’s diverse wildlife and panoramic geography draw large numbers of European and North American visitors, and tourism is an important contributor to Kenya’s economy.
+
+So as the outbreak of the new virus to the world Kenya had to face many hardships with their economy as their economy depends on tourism. The tourism industry has been massively affected by the spread of corona virus, as many countries have introduced travel restrictions in an attempt to contain its spread.The United Nations World Tourism Organization estimated that global international tourist arrivals might decrease by 58% to 78% in 2020, leading to a potential loss of US $0.9–1.2 trillion in international tourism receipts.
+
+### Climatic condition of Kenya
+
+Kenya's climate varies from tropical along the coast to temperate inland to arid in the north and northeast parts of the country. The area receives a great deal of sunshine every month. It is usually cool at night and early in the morning inland at higher elevations.
+
+Climate change in Kenya is increasingly impacting the lives of Kenya's citizens and the environment.Climate Change has led to more frequent extreme weather events like droughts which last longer than usual, irregular and unpredictable rainfall, flooding and increasing temperatures. The effects of these climatic changes have made already existing challenges with water security, food security and economic growth even more difficult. Harvests and agricultural production which account for about 33% of total Gross Domestic Product (GDP) are also at risk. The increased temperatures, rainfall variability in arid and semi-arid areas, and strong winds associated with tropical cyclones have combined to create favorable conditions for the breeding and migration of pests.An increase in temperature of up to 2.5 °C by 2050 is predicted to increase the frequency of extreme events such as floods and droughts.
+
+Kenya lies on the equator and has a pleasant, tropical climate.It is stated that both absolute humidity (AH) and temperature have been linked to influenza outbreaks and facilitated epidemic progression. In tropical regions, SARS-CoV-2 appears to have a higher airborne survival and transmission rate than the influenza virus.
+
+
+### Location of Kenya
+
+*Figure 01: Location of Kenya in the world map*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}  
+library(ggplot2)      
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+library(maps)
+library(knitr)
+
+
+kenya_corona<-coronavirus %>% filter(country=="Kenya")
+
+data("wrld_simpl")
+p <-ggplot()+
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x=long ,y=lat ,group=group) ,fill="light blue",color="white"
+  )+
+  coord_cartesian(xlim = c(-180,180),ylim = c(-90,90))+
+  scale_x_continuous(breaks = seq(-180,180,120))+ 
+  scale_y_continuous(breaks = seq(-90,90,100))
+p+
+  geom_point(
+    data = kenya_corona, aes(x=long, y=lat), color="black", size
+    =2, caption = "location of kenya"
+  )
+```
+
+Kenya is bordered by South Sudan to the northwest, Ethiopia to the north, Somalia to the east, Uganda to the west, Tanzania to the south, and the Indian Ocean to the southeast.
+
+
+
+
+*Figure 02: Plot of Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+world <- map_data("world")
+KEN <- world %>% filter(region == "Kenya")
+ggplot(KEN) +
+geom_polygon(aes(x = long, y = lat, group = group),fill="light blue")
+
+```
+
+
+### Kenya & Covid 19
+
+On 13 March 2020, the first case in Kenya, a 27-year-old Kenyan woman who traveled from the US via London, was confirmed.The Kenyan government identified and isolated a number of people who had come into contact with the first case in order to prevent further spread of the virus.
+
+There were 12,840 new cases by December 2020, taking the total number of confirmed cases to 96,458. The death toll rose to 1,670. The number of recovered patients increased to 78,737, leaving 16,051 active cases at the end of the year.
+
+By the end of 2021 there were 39,940 new cases in December, raising the total number of confirmed cases to 295,028. The death toll rose to 5,378. The number of recovered patients increased to 252,281, leaving 37,369 active cases at the end of the month.
+
+There were 539 new cases in August 2022, bringing the total number of confirmed cases to 338,161. The death toll rose to 5,674. The number of recovered patients increased to 332,337, leaving 150 active cases at the end of the month.
+
+**In Kenya, from 3 January 2020 to 6:28pm CEST, 7 October 2022, there have been 338,463 confirmed cases of COVID-19 with 5,678 deaths, reported to WHO. As of 24 September 2022, a total of 21,522,783 vaccine doses have been administered**
+
+
+
+### Actions taken by the government
+
+In response to the rise of COVID-19 cases in Kenya to three, on 15 March the government of Kenya closed all schools and directed that all public and private sector workers remote work wherever possible.
+
+Travel restrictions were later imposed to prevent non-residents from entry. Kenyan nationals and residents were required to self-quarantine for a minimum of fourteen days.
+
+On 22 March, following the confirmation of an additional eight cases, bringing the total to 16 nationally, the Kenyan government introduced additional measures and directives to reduce the spread of corona virus in the country.
+
+These measures included a suspension of all international flights effective at midnight on 25 March 2020, with the exception of cargo flights (all persons entering the country will be compelled to undergo quarantine at a government facility).
+
+The government further stipulated that any persons, including senior government officials, found to be in violation of quarantine measures would be forcefully quarantined at their own expense. All bars were to remain closed from 22 March, with restaurants allowed to remain open for takeaway services only. All public service vehicles had to adhere to passenger-distancing guidelines previously stipulated on 20 March.
+
+Further, all public gatherings at churches, mosques, funerals and elsewhere were restricted to no more than 15 people, and weddings were banned.
+
+In May 2020, Kenyan authorities dislodged 8000 people from 2 informal settlements, compelling them to live on streets for weeks. This increased the possible risk of spreading COVID-19 among them. The people were also vulnerable of being arrested for breaking curfews.
+
+Since August, 2021 the United States has shared 12,091,180 safe and effective COVID-19 vaccine doses with the people of Kenya – free of cost. This includes 9,152,910 Pfizer, 1,760,920 Moderna and 1,177,350 J&J doses. Of the 12,091,180 vaccine doses, 100% were donated in partnership with COVAX.
+
+
+
+
+
+
+# **Exploratory Data Analysis**
+
+
+*Table 01: Structure of the data set*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+str(kenya_corona)
+
+```
+
+
+
+*Table 02: Summary of the data set*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+kable(summary(kenya_corona))
+
+```
+
+
+
+## Visualization of corona cases in kenya
+
+
+*Table 03: Summary on confirmed cases*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+confirmed_kenya_corona <- kenya_corona %>% filter(type=="confirmed")
+summary(confirmed_kenya_corona[1:7])
+```
+
+
+
+*Table 04: Summary table adjusting negative values to NA's if there any*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+confirmed_kenya_corona <- confirmed_kenya_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_kenya_corona[1:7])
+```
+
+As NA values = 0, there are no negative values in the confirmed data set.
+ 
+ 
+*Table 05: Summary on death cases* 
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+death_kenya_corona <- kenya_corona %>% filter(type=="death")
+summary(death_kenya_corona[1:7])
+```
+
+
+
+*Table 06: Summary table adjusting negative values to NA's if there any*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+death_kenya_corona <- death_kenya_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_kenya_corona[1:7])
+```
+
+As NA values = 0, there are no negative values in the death data set
+
+
+*Table 07: Summary on recovered cases*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+recovery_kenya_corona <- kenya_corona %>% filter(type=="recovery")
+summary(recovery_kenya_corona[1:7])
+```
+
+
+
+*Table 08: Summary table adjusting negative values to NA's if there any*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+recovery_kenya_corona <- recovery_kenya_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovery_kenya_corona[1:7])
+```
+
+
+This table shows summary of daily recoveries without negative values or missing values.
+
+From all above summary tables we can see that only data on recovered has missing or negative values, we have used NA's instead of those values.There are 3 such places as NA = 3 in recoveries.
+
+
+*Figure 03: Confirmed corona cases in Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(confirmed_kenya_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+
+From above figure it is clear that the number of confirmed cases reported increase gradually. And it has reached its current maximum at the begining of 2022 with the highest peak.
+Maximum number of cases reported reached the count of 4000 per day.
+
+*Figure 04: Death cases in Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(death_kenya_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+
+Death cases reported daily in Kenya from the beginning of the pandemic is shown in the above plot.The count has reached its maximum near the end-of 2020 and it has again risen up by the end of 2022.
+Maximum deaths that has occuered with in a day is slightly more than 40.
+
+
+
+*Figure 05: Recovery cases in Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(recovery_kenya_corona, aes(x=date, y=cases)) +
+  geom_line()
+```
+
+
+As there we have 3 NA values , we can find the location of those 3 cases
+
+So, the locations of missing values are ; 
+ 
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+which(is.na(recovery_kenya_corona$cases))
+```
+
+Due to those we can see a little discontinuity in Figure 05
+
+Here I have used the average of places in front and back of the relevant missing value location  to get an estimated value for missing values.Those calculated values for the 3 missing values are as follows;
+
+
+
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+recovery_kenya_corona$cases[266] = mean(c(recovery_kenya_corona$cases[265], recovery_kenya_corona$cases[267]))
+length(recovery_kenya_corona$cases)
+
+recovery_kenya_corona$cases[363] = mean(c(recovery_kenya_corona$cases[362], recovery_kenya_corona$cases[364]))
+length(recovery_kenya_corona$cases)
+
+recovery_kenya_corona$cases[562] = mean(c(recovery_kenya_corona$cases[561], recovery_kenya_corona$cases[563]))
+length(recovery_kenya_corona$cases)
+
+
+recovery_kenya_corona$col <- as.factor(c(rep("black", 264),rep("red", 2), rep("black", 884-266)))
+
+
+recovery_kenya_corona$col <- as.factor(c(rep("black", 361),rep("red", 2), rep("black", 884-363)))
+
+
+
+recovery_kenya_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+
+```
+
+*Figure 06: Adjusted Recovery cases in Kenya*
+
+```{r , comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(recovery_kenya_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity()
+```
+
+
+
+
+And then those missing values are plotted with a different color in the plot shown in red colour.Maximum number of daily recoveries are reported in the end of 2021 and at the begining of 2022 which is about 5000 cases per day.
+
+
+If we consider all confirmed,deaths and recoveries together and imput the negative values,we'll get a graph as follows
+Locations of NA values and calculated estimated values for those values are mentioned above the graph.
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+kenya_corona_new<-kenya_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+which(is.na(kenya_corona_new$cases))
+
+kenya_corona_new$cases[2034]= mean(c(kenya_corona$cases[2033],kenya_corona$cases[2035]))
+ length(kenya_corona_new$cases)
+
+kenya_corona_new$cases[2131]= mean(c(kenya_corona$cases[2130],kenya_corona$cases[2132]))
+ length(kenya_corona_new$cases) 
+
+kenya_corona_new$cases[2330]= mean(c(kenya_corona$cases[2329],kenya_corona$cases[2331]))
+ length(kenya_corona_new$cases) 
+ 
+kenya_corona_new$col <-as.factor(c(rep("black",2032),rep("red",2),rep("black",2652-2034))) 
+ 
+kenya_corona_new$col <-as.factor(c(rep("black",2129),rep("red",2),rep("black",2652-2131)))
+
+kenya_corona_new$col <-as.factor(c(rep("black",2328),rep("red",2),rep("black",2652-2330)))
+```
+
+
+
+*Figure 07: All adjusted confirmed, deaths, recovery cases in Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(kenya_corona_new,
+       aes(x=date,y=cases,fill=type,col=type))+
+  geom_line()+geom_jitter(aes(col=type))+
+  facet_wrap(~type,ncol = 3)+coord_flip()
+ 
+```
+
+
+
+
+Number of total cases, recoveries and deaths reported in kenya
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+
+merged_list <- cbind(confirmed_kenya_corona, "recovered"= recovery_kenya_corona$cases, "death" = death_kenya_corona$cases)
+
+total_cases <- sum(merged_list$cases)
+cat("Total cases in kenya = ", total_cases)
+
+total_recovery <- sum(merged_list$recovered)
+cat("Total recovery cases in kenya = ", total_recovery)
+
+total_death <- sum(merged_list$death)
+cat("Total death cases in kenya = ", total_death)
+
+total_active <- total_cases - (total_recovery + total_death)
+cat("Total active cases in kenya = ", total_active)
+```
+
+
+
+## Comparisons with neighbouring countries
+
+
+Neighboring countries of Kenya can be identified as Somalia,  Ethiopia, Tanzania and Uganda
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+
+somalia_corona<-coronavirus%>%filter(country=="Somalia")
+
+ethiopia_corona<-coronavirus%>%filter(country=="Ethiopia")
+
+tanzania_corona<-coronavirus%>%filter(country=="Tanzania")
+
+uganda_corona<-coronavirus%>%filter(country=="Uganda")
+
+kenya_corona<-coronavirus%>%filter(country=="Kenya")
+
+```
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+countries_corona<-as.data.frame(rbind(somalia_corona,ethiopia_corona,tanzania_corona,uganda_corona,kenya_corona))
+```
+
+
+*Figure 08: Comparing death counts the between neighboring countries of Kenya with respect to time*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+countries_death<-countries_corona%>%filter(type =="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 5)+coord_flip()
+```
+
+Among the neighboring countries we considered, Uganda and Tanzania shows significantly highest daily death counts than Kenya
+
+
+
+*Figure 09: Comparing Total death counts of neighboring countries with Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(countries_death,
+       aes(x=country ,y=cases,color=country))+
+  geom_bar(stat = "identity") + coord_flip() 
+```
+
+This plot shows the comparisons of total death counts of countries Uganda, Kenya, Tanzania, Somalia, Ethiopia. It is visible that Ethiopia has the highest total death count that is approximately about 7000. While Kenya has the second most highest death count which is closer to 6000 
+
+
+
+*Figure 10: Comparing confirmed cases among the neighboring countries of Kenya with respect to time *
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+
+ggplot(countries_cases,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()
+  
+```
+
+Among the neighboring countries again Tanzania and Uganda shows the highest recorded confirmed cases per day in yr 2021.
+
+
+*Figure 11: Comparing total confirmed cases of neighboring countries with Kenya*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+ggplot(countries_cases,
+       aes(x=country ,y=cases,color=country))+
+  geom_bar(stat = "identity") + coord_flip() 
+```
+
+When comparing total confirmed cases that are reported with in the neighboring countries up to today Ethiopia again has the highest cases reported while Kenya has the second highest among them.
+
+
+
+*Figure 12: Comparison of daily confirmed covid-19 patients between the neighboring countries in one plot*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+corona_co <-filter(coronavirus,country %in% c( "Somalia","Ethiopia","Tanzania","Uganda","Kenya"))
+conm_corona_co<-corona_co %>% filter(type=="confirmed")
+
+
+
+
+ggplot(conm_corona_co, aes(x=date,y=cases,fill=type,col=country)) +
+  geom_line()+geom_point() 
+```
+
+
+*Figure 13: Comparison of death cases reported daily due to covid-19 between the neighboring countries in one plot*
+
+
+```{r , comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+death_corona_co<-corona_co %>% filter(type=="death")
+ggplot(death_corona_co, aes(x=date,y=cases,fill=type,col=country)) +
+  geom_line()+geom_point() 
+```
+
+
+
+
+## Comparisons with  countries with majority of covid cases
+
+Here for the comparison  other countries selected are the countries which are mostly affected from COVID-19 virus.Those countries are US, Brazil, China(only Hubei province) and India. 
+
+
+*Figure 14 : Cumulative line plot for death cases of Kenya with other mostly effected countries*
+
+```{r, comment=NA, message=FALSE, warning=FALSE , echo=FALSE}
+us_corona <- coronavirus %>% filter(country == "US")
+death_cases_us <- us_corona %>% filter(type == "death")
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+death_cases_brazil <- brazil_corona %>% filter(type == "death")
+india_corona <- coronavirus %>% filter(country == "India")
+death_cases_india <- india_corona %>% filter(type == "death")
+china_corona <- coronavirus %>% filter(country == "China" & province == "Hubei")
+death_cases_china <- china_corona %>% filter(type == "death")
+kenya_corona <- coronavirus %>% filter(country == "Kenya")
+death_cases_kenya <- kenya_corona %>% filter(type == "death")
+
+df_death_5_countries<- data.frame("date" = death_cases_kenya$date, "death_cases_kenya" = death_cases_kenya$cases,  "death_cases_us" = death_cases_us$cases, "death_cases_brazil" = death_cases_brazil$cases,  "death_cases_india" = death_cases_india$cases,  "death_cases_china" = death_cases_china$cases)
+
+ggplot(df_death_5_countries, aes(x=date)) + 
+  geom_line(aes(y = cumsum(death_cases_kenya)), color = "black") +
+  geom_line(aes(y = cumsum(death_cases_us)), color="steelblue") +
+  geom_line(aes(y = cumsum(death_cases_brazil)), color="red") +
+  geom_line(aes(y = cumsum(death_cases_india)), color="green") +
+  geom_line(aes(y = cumsum(death_cases_china)), color="orange") +
+  
+  ylab("death cases")
+```
+
+ * kenya = black
+ * us = steelblue
+ * brazil = red
+ * india = dark green
+ * china = pink
+
+Compared to countries US, Brazil, India and China which are largely affected by covid 19 Kenya seems to control and face the pandemic successfully. 
+
+
+
+
+
+# **Conclusions and Discussions**
+
+In some graphs we got negative values for daily active cases. That may cause due to errors occur when entering data to the data set.
+When it comes to the time series analysis on number of confirmed cases and death cases, it changes largely over the time showing large spikes. 
+Kenya recorded its first case on 13th March 2020 and they move to travel restrictions from 15th of march to prevent nonresidents from entering the country. The number of positive cases has averaged between 250 and 300 infections per day since then. This low number of daily cases can be attributed to the early response measures taken by the government to close down airports and banning all types of social gatherings. Or even they may be due to the cases that are not reported officially. As it is observed that the majority of Kenyans access health care through- out-of-pocket payment, it means that many of them will avoid going to the hospital unless they are in advance stages of the disease. So, it is doubtful to have such smaller number of confirmed cases and deaths.
+
+Amid the rush to find the ideal response to the pandemic, other globally trending strategies such as imposing curfews, lockdowns, and encouraging social distancing are being adopted by many countries including Kenya. Perhaps such reluctance could be attributed to the low number of cases reported in most countries in Africa including Kenya compared to the countries with more health facilities. Even the Governments try to hide the accurate data as it will be disadvantageous for their political carrier.
+
+As observed in countries such as the United States, minorities, and marginalized communities that did not have adequate health insurance were disproportionately affected by the pandemic. In Kenya where the majority of the population lacks access to health insurance, a large proportion of the citizens, therefore, remain vulnerable to the impact of a possible high prevalence of COVID-19.
+
+There are 6 Vaccines Approved for Use in Kenya and as of 24 September 2022, a total of 21,522,783 vaccine doses have been administered.
+
+# **References**
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic
+
+https://en.wikipedia.org/wiki/Kenya
+
+https://www.britannica.com/place/Kenya
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Kenya
+
+https://www.state.gov/countries-areas/kenya/
+
+https://covid19.who.int/region/afro/country/ke
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8290155/
+
+https://hellor.netlify.app/coronareports/
+
+https://hellor.netlify.app/slides/onlinehelpdesk
+
+https://en.wikipedia.org/wiki/Impact_of_the_COVID-19_pandemic_on_tourism
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7565744/
+
+https://covid19.trackvaccines.org/country/kenya/

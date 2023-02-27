@@ -1,0 +1,295 @@
+---
+title: "Data Analysis of Corona Pandemic in Libya"
+author: "S.A.A.S.N.SANDAPPERUMA-AS2019526"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA }
+library(plotly)
+```
+
+
+## 1.Introduction
+World Health Organization declared COVID-19 as a pandemic, and like any global
+health crisis at its beginning, need a commitment to take the necessary precautions due to its
+spread among people before and during the presence of vaccine or drug.Minister of Health of Libyan Government announced on March 24, 2020, that the first infection case with the isolated
+new-corona virus was registered in Libya.The National Center for Disease Control and Prevention (NCDPCR) in Libya is working according to its limited capabilities with the utmost precision, transparency and scientifically. NCDC has announced that the necessary measures had been taken in terms of preparations in accordance with the instructions of the WHO, indicating that Libya was classified as one of the least dangerous countries for an outbreak of disease.The socio-economic structure and healthcare system of the country is already severely weakened by the war which together put Libya at an incredibly vulnerable situation
+during the COVID-19 pandemic. Most of the Libyan people are susceptible to COVID-19 as others elsewhere, and it is extremely challenging to prevent and control the spread of this infectious disease. Many published articles have indicated that attitude, opinion and practice with respect to the disease are significantly correlated with protective behavior. 
+
+### 1.1 location 
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(coronavirus)
+library(dplyr)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(sp)
+library(leaflet)
+
+
+wrld_s <- coronavirus %>% filter(country =="Libya")
+df <- data.frame(lat = wrld_s$lat , long = wrld_s$long)
+set.seed(12345)
+#df <- data.frame(lat= runif(30, min = 19.07, max = 28.70), long=runif(30, min = 72.87, max = 77.10))
+
+df %>%
+  leaflet( width = 900) %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions(), popup = "Hi")
+
+```
+
+Libya is situated in the center of the coast of North Africa on the Mediterranean, bordered to the east of Egypt, on the south by Sudan, Chad and Niger, on the west by Algeria and Tunisia. The geography of Libya extends between longitudes 9 ° and 25 ° east, and latitudes 25 18 ° and 33 ° north Based on its geographical location Libya is an important bridge linking Africa and Europe, and has its featured on the southern coast of the Mediterranean to be affected since ancient times and directly influenced by historical events which have defined the Mediterranean region. Libya’s ports are suitable for the reception of vessels throughout the year, such as the ports of Benghazi and Tripoli. The proximity of Libya from the major tourism markets of Western Europe and its links to neighboring countries by a network of paved roads makes access easy, whether by sea, land or air and place it as a prime tourist destination.
+
+### 1.2 Climate
+Libya’s agriculture relies heavily on irrigation, but limited renewable water resources, coupled with harsh climatic conditions and poor soil, severely limit production. Low agricultural yields force the country to import about 75% of the food required to meet local needs. Libya is 95% desert, mostly barren with flat to undulating plains. This, combined with the Mediterranean climate, renders many parts of the country susceptible to floods, sandstorms, dust storms, and desertification. Climate change poses a significant threat to Libya’s economic development and sustainability, and climate variability is likely to increase the impacts of natural hazards on agriculture production.
+
+### 1.3 People and Culture
+The Berber and Arab ethnic groups make up about 97 percent of the country’s population. The Berbers are considered the earliest inhabitants of the country and are thought to have arrived in Libya around 1200 B.C. Arabs began to settle in the country around 700 A.D., following the rise in popularity of the religion of Islam. Small populations of Greeks, Egyptians, and Italians live in the country as well.
+Today, most Libyans speak the Arabic language, and nearly 97 percent of the country is Muslim, or followers of Islam. A small percentage of the population are Roman Catholics or Orthodox Christians.
+Almost 25 percent of Libyans live in Tripoli or Benghazi. Outside of these urban centers, rural Libyans farm near desert oases, where they can access water. Deeper into the desert, animal herders follow the weather and tend to sheep, goats, and camels.
+Weaving, embroidery, and metal engraving are popular arts in Libya. Other common activities include horse racing, folk dancing, and soccer, the most popular sport in Libya. Both Tripoli and Benghazi have many teams that locals enjoy watching.
+
+### 1.4 Covid 19 pandemic in Libya 
+The first case of COVID-19 was identified in Libya on 24.3.2020, and about 2 months later, the number of reported COVID-19 cases started to increase notably. The outbreak was first prominent in the southern region (Sabha) and then spread to the western and eastern parts of Libya.the risk of spread of COVID-19 infections during the coming months is high, and a considerable number of Libyans, particularly the elderly and people with chronic diseases, should be protected against COVID-19 infection. This is particularly urgent in the light of unofficial reports that the relevant healthcare facilities are under extreme stress.
+
+### 1.5 Lockdown status and Action taken by the government 
+As COVID-19 infections began to be reported around the world, many countries responded by shutting down places like schools, workplaces and international borders in order to contain the spread of the virus. The National Center for Disease Control (NCDC) has announced a decrease in the weekly average of COVID-19 infections, as it totaled an average of 56 cases per day. The percentage of positive cases went down to 20% by the end of last week.In a related matter, NCDC confirmed that the current wave of Corona virus has receded, as the geographical areas recording cases have shrunk to only 9 regions.
+Since the start of the pandemic, the country of some seven million people, where the health infrastructure has been weakened by a decade of conflict, has officially recorded 262,948 cases of infection, including 3,663 deaths.Libya has only vaccinated a few hundred thousand people against the virus. The north African country recently receive9d 2 million doses of the vaccine from China and is expecting another 1.5 million doses in the coming weeks.
+Libya has announced a number of measures and restrictions to limit the spread of the virus. Implementation of these measures has been relaxed but they may be tightened again at short notice.
+Due to the deteriorating pandemic situation in Tunisia amid the rise in infections with the Delta variant, as well as the announcement of the collapse of Tunisia's health system, the Libyan government decided to close the air and land borders with Tunisia.
+
+
+## 2.Exploratory Data Analysis
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+Libya_corona <- coronavirus %>% filter(country == "Libya")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Libya_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+Libya_corona <- coronavirus %>% filter(country == "Libya")
+summary(Libya_corona)
+
+```
+The above tables is consist of the no.of confirmed, death and recovered corona patients from 22nd of january,2020 to 23rd of june,2022 and the location of the country in the world map with its latitude and longitude.
+
+### 2.1 Confirmed Cases
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+Libya_corona <- coronavirus %>% filter(country == "Libya")
+Libya_corona_confirmed <- coronavirus %>%
+  filter(country == "Libya") %>% 
+  filter(type == "confirmed") %>% 
+  select( date, country, type, cases) %>%  
+mutate(cases = replace(cases,which(cases<0),NA))
+
+a <- ggplot(Libya_corona_confirmed, aes(date,cases)) + geom_line() + ggtitle("Figure 01 - Daily Confiremd cases in Libya")
+ggplotly(a)
+```
+Figure 02 shows daily confirmed covid-19 cases in Libya.At the beginning of corona pandemic there is no significant increase in confirmed cases.The higest number of daily confirmed cases have been recorded on 30th of january in 2022 and reported 5694 cases.According to the graph by the august of 2021, it can be seen that the number of cases has increased significantly.   
+
+
+
+### 2.2 Death Cases
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+Libya_corona <- coronavirus %>% filter(country == "Libya")
+Libya_corona_death <- coronavirus %>%
+  filter(country == "Libya") %>% 
+  filter(type == "death") %>% 
+  select( date, country, type, cases) %>%  
+mutate(cases = replace(cases,which(cases<0),NA))
+
+b <- ggplot(Libya_corona_death, aes(date,cases)) + geom_line() + ggtitle("Figure 02 -  Daily Death cases in Libya")
+ggplotly(b)
+```
+
+The above figure shows the daily COVID-19 death cases in libya from January of 2020 to June of 2022. The first death case was found on 2nd of january in 2020. As shown in the graph, the death cases have incresed from june of 2020 to april of 2021 and decrease again from july of 2021 to april of 2022.The maximum number of death cases reported on april of 2021.
+
+### 2.3 Recovery Cases
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+Libya_corona <- coronavirus %>% filter(country == "Libya")
+Libya_corona_recovery <- coronavirus %>%
+  filter(country == "Libya") %>% 
+  filter(type == "recovery") %>% 
+  select(date, country, type, cases) %>% 
+mutate(cases = replace(cases,which(cases<0),NA))
+
+c <- ggplot(Libya_corona_recovery, aes(date,cases)) + geom_line() + ggtitle("Figure 03 - Daily Recovered cases in Libya")
+ggplotly(c)
+```
+
+Daily recovered COVID-19 cases are shown in the figure 03. Since the beginning, the number of recovery cases has been increased significanlty in the month of september of 2022, and from the until august of 2021 the number of daily recovery cases has remained approximately between 500-1000. aftr that it appears that cases are not recovering until today.
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+Libya_corona <- coronavirus %>% 
+  filter(country =="Libya") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+d <- ggplot(Libya_corona, aes(date,cases,col=type)) +geom_line()+ ggtitle("Figyre 04 - Libya covid-19 cases by type")
+ggplotly(d)
+```
+
+This graph shows that the number of death cases is very low since the beginning compared to recovery and confirmed cases. But by 2022, it is seen that the number of confirmed cases has increased more than the number of recovered cases.The above figure shows that the highest number of confirmed cases in libya during the covid 19 pandemic was after the 6th month of 2021.Accordingly,after the middle of 2021, a sever period of covid 19 has been seen in libya. 
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+Libya_corona_confirmed <- coronavirus %>% filter(country == "Libya") %>% 
+  filter(type == "confirmed") %>%
+  select( date, country, type, cases) %>%  
+  mutate(cases = replace (cases,which(cases<0),NA))
+
+total_confirmed_cases <- sum(Libya_corona_confirmed$cases)
+
+Libya_corona_death <- coronavirus %>% filter(country == "Libya") %>% 
+  filter(type == "death") %>%
+  select( date, country, type, cases) %>%  
+  mutate(cases = replace (cases,which(cases<0),NA))
+
+total_death_cases <- sum(Libya_corona_death$cases , na.rm = TRUE)
+
+Libya_corona_recovery <- coronavirus %>% filter(country == "Libya") %>% 
+  filter(type == "recovery") %>%
+  select( date, country, type, cases) %>%  
+  mutate(cases = replace (cases,which(cases<0),NA))
+
+total_recovery_cases <- sum(Libya_corona_recovery$cases, na.rm = TRUE)
+
+x <- data.frame( Type = "Total Count" , confirmed = total_confirmed_cases,
+                 death = total_death_cases, recovery = total_recovery_cases)
+knitr::kable(x,"simple")
+```
+
+
+### 2.4 Comparing the Covid-19 cases with border countries 
+
+Libya is situated in the center of the coast of North Africa on the Mediterranean, bordered to the east of Egypt, on the south by Sudan, Chad and Niger, on the west by Algeria and Tunisia.The proximity of Libya from the major tourism markets of Western Europe and its links to neighboring countries by a network of paved roads makes access easy, whether by sea, land or air and place it as a prime tourist destination.
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+combine_country <- coronavirus %>%
+  filter(type == "confirmed") %>% 
+  filter(country == "Libya" | country == "Tunisia" | country == "Chad" | country == "Algeria" | country == "Niger" | country == "Sudan" | country == "Egypt")
+  
+e <- ggplot(combine_country, aes(date,cases,group = country, col = country)) + geom_line() + ggtitle("Figure 05 - Comparison with border countries by confirmed type")
+ggplotly(e)
+```
+
+
+With reference to the above graph,When compared to the border countries it shows that Algeria is highly affected by corona virus.
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+combine_country <- coronavirus %>%
+  filter(type == "death") %>% 
+  filter(country == "Libya" | country == "Tunisia" | country == "Chad" | country == "Algeria" | country == "Niger" | country == "Sudan" | country == "Egypt")
+
+f <- ggplot(combine_country, aes(date,cases,group = country, col = country)) + geom_line() + ggtitle("Figure 06 - Comparison with border countries by death type") + facet_grid(country~.)
+ggplotly(f)
+
+```
+
+According to above graphs daily highest death cases are recorded from tunisia as well as other countries recorded much less death cases.but highest death cases per day recorded by sudan. sudan recorded 953 death cases on 07th of march 2022. algeria,chad, libya, niger has simillar death cases from the beginning. 
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+combine_country <- coronavirus %>%
+  filter(type == "recovery") %>% 
+  filter(country == "Libya" | country == "Tunisia" | country == "Chad" | country == "Algeria" | country == "Niger" | country == "Sudan" | country == "Egypt") %>% 
+mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+g <- ggplot(combine_country, aes(date,cases,group = country, col = country)) + geom_line() + ggtitle("Figure 07 - Comparison with border countries by recovery type")
+ggplotly(g) 
+```
+
+According to above graph, Per day recoveries of tunisia are significantly higher than other countires.
+
+#### Comparison Covid-19 cases Libya with Algeria 
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+combine_country <- coronavirus %>%
+  filter(type == "confirmed") %>% 
+  filter(country == "Libya" | country == "Algeria")
+
+h <- ggplot(combine_country, aes(date,cases,group = country, col = country)) + geom_line() + ggtitle("Figure 08 - Comparison covod-19 confirmed cases Libya with Algeria")
+ggplotly(h)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+combine_country <- coronavirus %>%
+  filter(type == "death") %>% 
+  filter(country == "Libya" | country == "Algeria")
+
+i <- ggplot(combine_country, aes(date,cases,group = country, col = country)) + geom_line() + ggtitle("Figure 09 - Comparison covod-19 death cases Libya with Algeria")
+ggplotly(i)
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+combine_country <- coronavirus %>%
+  filter(type == "recovery") %>% 
+  filter(country == "Libya" | country == "Algeria") %>% 
+mutate(cases = replace(cases, which(cases < 0), NA)) 
+
+j <- ggplot(combine_country, aes(date,cases,group = country, col = country)) + geom_line() + ggtitle("Figure 10 - comparison covod-19 recovery cases Libya with Algeria")
+ggplotly(j)
+```
+
+
+
+
+## 3.Conclusion and Discussion
+
+The first case of COVID-19 was identified in Libya on 3rd of march in 2020 and 2nd of april in 2020, the first death as a result of coronavirus was recorded in the Libya. The number of deaths in the Libya has increased significantly since then.The highest total death in per day were recorded on 04th of april in 2021. Compared to before, the number of recovery cases after august 2021 is low compared to the number of confirmed cases. 
+The highest number of confirmed cases in libya during the covid 19 pandemic was after the 6th month of 2021.After the middle of 2021, a sever period of covid 19 has been seen in libya.
+Among the countries surronding Libya, Tunisia has been most affected by the covid-19 out break. Compared to Algeria withing this time interval Libya got less number of confirmed cases and deaths. But from up-to date records we can find libya is also same as high as algeria in death cases and per day recovery cases are higher than Algeria.The government took necessary actions from the very beginning these confirmed cases and death counts could be reduced.
+The general public in Libya is aware of and supportive of taking the required precautions in the event of a COVID-19 outbreak. Education level, place of residence, age, and gender all have an impact on prevention strategies.
+Without targeted efforts and initiatives such as community engagements, good governance and international bodies that address all aspects of these crises, COVID-19 will continue to cause more harm to the country and the world at large.
+
+
+## 4.References 
+
+* https://embassyoflibya.ca/pages/about-libya-en
+* Public opinion and practice towards COVID-19 pandemic in Libya Sara A. Almeraash a, Abdussalam A. M. Amara a,a Department of Pharmaceutics, Faculty of Pharmacy, University of Tripoli, Tripoli, Libya
+* https://climateknowledgeportal.worldbank.org/country/libya
+
+     

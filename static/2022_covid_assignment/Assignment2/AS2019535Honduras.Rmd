@@ -1,0 +1,172 @@
+---
+title: "**Honduras-Coronavirus Pandemic Country Profile**"
+author: "**P.C.Senanayaka**"
+date: "**10/7/2022**"
+output: html_document
+---
+
+```{r setup, include=FALSE, comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,comment=NA, echo=FALSE}
+getwd
+```
+```{r ,comment=NA,echo=FALSE,out.width="100%"}
+knitr::include_graphics("injection-g4a97be5d0_1920_1.jpeg",err=FALSE)
+
+```
+
+## **1.Introduction** ##
+
+In terms of its structure and equipment, the Honduran health system is not designed to meet the sudden needs of such a devastating pandemic. In total, only 150 people can be given intensive medical treatment in hospitals - a negligible number for a population of over nine million people. By the end of June, the numbers were comparatively moderate, with just over 18,000 infected, 479 dead and 1875 corona patients recovered, which the government attributes to the effectiveness of common treatment methods and medical preparations, among other things.
+
+The backbone of the Honduran economy is formed by micro, small and medium-sized enterprises, which provide around 70% of jobs. Over 900,000 people depend on just under 750,000 businesses to earn a living. The prospects that about one in three of them will close due to the pandemic do not bode well. At present, one in four companies has suspended its employees. In many cases, products and services continued to be sold, at least via the Internet, and thus business could at least be maintained. Gradually, openings were also introduced in various sectors of the economy in Honduras in order to secure as many jobs as possible and also not to endanger the supply chains for production companies. Ultimately, the aim was to supply and feed the population, which had to be secured in a sustainable manner.
+
+The consequences of the pandemic and unemployment are already being felt on the streets of the country's major cities. Whole families are standing at traffic lights asking for food. More than 60% of the Honduran population lives in poverty and is dependent on daily income. According to estimates by the Central Bank of Honduras, this figure could rise to as much as 75%, a flagrant worsening compared to the times before the pandemic. In order to help families affected by the food crisis, the Economic Commission for Latin America and the Caribbean (ECLAC) has proposed that food vouchers, baskets or food stamps be distributed over a period of six months to people at risk of falling into extreme poverty due to falling incomes. But beyond the vouchers, it is important to ensure that overall productivity is maintained in the country, for example through retraining and employment measures. Consideration is therefore being given to linking vouchers, in appropriate cases, to the provision of services in return or work assignments, so that people can return to an orderly working life in due course to ensure the support of their families.
+
+In addition to the pandemic, the Honduran government must also respond to other crises that are looming in the near future. Year after year, climate change brings new diseases, displacement, drought and, as a result, increasing poverty among already impoverished sections of the population. The climatic extremes are well known: drought, floods, landslides. One third of the population lives in the so-called "Dry Corridor", where a large part of the country's production is concentrated. Whole families live from agriculture and suffer from the drought, so they emigrate in order not to starve. And all this is not only here, but also in the centre and north of the country. Temporary shelters are being set up in schools for families who lose their homes. As one of the most vulnerable countries to climate change, Honduras is in a permanent crisis and must now also adapt to the pandemic. This requires effective and transparent government action - policies and measures that promote sustainable development and have a positive impact on the social situation. But all this also requires solidarity among the population.
+
+
+### **Location of Honduras in World Map** ###
+
+
+```{r, comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+coronavirus$cases <- abs(coronavirus$cases)
+coronavirus <- as.data.frame(coronavirus, stringAsFactors = TRUE)
+honduras_corona <- coronavirus %>% filter(country == "Honduras")
+
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = honduras_corona , aes(x = long, y = lat), color = "blue", size
+    = 1
+  )
+```
+
+
+### **Weather and Climatic Condition in Honduras** ###
+
+Honduras weather is considered tropical on both its Pacific and Caribbean coasts, though the climate tends to be more temperate inland, especially in the mountains. The Bay Islands are still another story, with a subtropical climate. 
+
+The Caribbean is on the north side of Honduras, with the Pacific Ocean touching just a small bit of coastline on the south. It has 416 miles of shoreline on the Caribbean coast, with lowlands running along the Pacific. Mountains run through the center of the country, with the highest peak, Cerro Las Minas, topping out at 9,416 feet. The Bay Islands in the Caribbean are part of the Mesoamerican Barrier Reef, a famous diver's paradise that stretches 600 miles from Mexico to Honduras. 
+
+The weather in Honduras is strikingly different depending on location. The north coast is hot and wets most of the year, rainy season or not. The rainy season is from May to October in this region, and it is seriously wet. Rock slides, mudslides, and flooding are all possible, and those don't make for a fun vacation. Smart travelers avoid being there during this time and make plans to visit during the dry season, from November to April.
+
+The Bay Islands' rainy season is from July through January, with it getting progressively wetter from October through January. The southern Pacific coast is dry a lot of time, but also hot. 
+
+The entire country is hot most of the time. Average high temperatures range from about 82 degrees Fahrenheit in December and January to nearly 87 degrees in August. And it never gets very cold at night: Average lows in January and February hover around 71 degrees, with that temperature around 76 from May through August. In the mountains, you can expect the temperatures to be slightly lower, as well as on the Bay Islands. All this dependable warmth is what makes Honduras a prime wintertime destination for those in colder climates; wintertime is also the dry season, so it's the right time to travel to Honduras.
+
+
+### **Lockdown Status of Honduras** ###
+
+Honduras has the highest number of cases in Central America so we are preparing for the worst. For a country of 9 million people, there are only 20 ventilators in the country. This is the stark reality for poor and vulnerable communities throughout Honduras facing into the COVID-19 pandemic.
+
+The lockdown in Honduras is very strict and legally enforced. At first even the shops were closed and we had no way of getting food. Things have loosened up a little now because tensions were high and sparks of violence were appearing because people were hungry. Now people can get supplies on certain days.
+
+But the government has clamped down even further on civil liberties like freedom of speech and on the media to avoid any criticism. This will make it difficult to get information about the national response to COVID and how it is being handled. It really reduces the public’s ability to question politicians or officials who are in charge. This is very worrying and makes it a difficult environment to work in.
+
+
+
+## **2. Explotary Data Analysis** ##
+
+```{r,comment=NA, echo=FALSE,message=FALSE,warning=FALSE}
+library(tidyverse) 
+library(magrittr)
+honduras_corona <- coronavirus %>% filter(country == "Honduras")
+summary(honduras_corona)
+
+
+honduras_corona <- coronavirus %>% filter(country == "Honduras")
+confirmedcases_honduras_corona <- honduras_corona %>% filter(type=="confirmed") 
+head(confirmedcases_honduras_corona)
+
+sum(confirmedcases_honduras_corona$cases)
+
+
+ggplot(confirmedcases_honduras_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Honduras: Daily Covid-19 Confirmed cases")
+
+honduras_corona <- coronavirus %>% filter(country == "Honduras")
+deaths_honduras_corona <- honduras_corona %>% filter(type=="death") 
+head(deaths_honduras_corona)
+
+sum(deaths_honduras_corona$cases)
+
+ggplot(deaths_honduras_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Honduras: Daily Covid-19 deaths")
+
+
+getwd
+```
+```{r ,comment=NA,echo=FALSE,out.width="100%"}
+knitr::include_graphics("2VXLEDBT7VHCRPFW3N2AKAIMY4.jpg",err=FALSE)
+```
+
+
+
+## **3. Comparing with the Neibour Countries in the same continent** ##
+
+```{r,comment=NA,echo=FALSE,message=FALSE,warning=FALSE}
+Honduras_corona <- coronavirus %>% filter(country == "Honduras")
+confirmedcases_honduras_corona <- Honduras_corona %>% filter(type=="confirmed") 
+
+Guatemala_corona <- coronavirus  %>% filter(country == "Guatemala")
+confirmed_guatemala_corona <- Guatemala_corona %>% filter(type=="confirmed")
+
+Cuba_corona <- coronavirus  %>% filter(country == "Cuba")
+confirmed_cuba_corona <- Cuba_corona %>% filter(type=="confirmed")
+
+Mexico_corona <- coronavirus  %>% filter(country == "Mexico")
+confirmed_mexico_corona <- Mexico_corona %>% filter(type=="confirmed")
+
+Costarica_corona <- coronavirus  %>% filter(country == "Costarica")
+confirmed_costarica_corona <- Costarica_corona %>% filter(type=="confirmed")
+
+Neighbor_confirm <- rbind(confirmedcases_honduras_corona, confirmed_guatemala_corona, confirmed_cuba_corona, confirmed_mexico_corona, confirmed_costarica_corona)
+
+ggplot(Neighbor_confirm, aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in Honduras's neighbour countries") + ylim(0,10000)
+
+ggplot(Neighbor_confirm, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,30000)
+
+ggplot(Neighbor_confirm, aes(x=country, y=cases, col= country)) + geom_boxplot(outlier.shape = NA, alpha = 0.2) + geom_jitter(aes(col=country)) + ggtitle("A boxplot of Confirmed cases in Honduras's neighbour countries")
+
+
+```
+
+
+## **4. Discussion and Conclusions** ##
+
+
+The country’s socioeconomic situation has been aggravated by the pandemic;the continuous rise in the number of cases, hospitalizations and deaths has collapsed the public health system leaving the majority of Hondurans in continuous vulnerability. Primary care clinics and mobile medical brigades have been implemented as a new way to contain the spread and impact of transmission. Several European countries and cities in the Americas have had to reverse the process of economic reopening when faced with successive waves of outbreaks. Honduras has demonstrated limited capacity to dealwith catastrophic situations. The national epidemiological surveillance system and access to timely and quality diagnostic tests remain weak and fragmented. There is an urgent need to improve the health and surveillance system to guide strategic evidence-based decision making and to prevent future pandemics.
+
+
+## **5. References** ##
+
+
+1. https://pesquisa.bvsalud.org/global-literature-on-novel-coronavirus-2019-ncov/resource/pt/covidwho-1016602
+2. https://www.who.int/emergencies/diseases/novel-coronavirus-2019?adgroupsurvey={adgroupsurvey}&gclid=EAIaIQobChMI3tmeq-rP-gIVmXwrCh1lWw02EAAYASAAEgIhvfD_BwE
+3. https://tradingeconomics.com/honduras/coronavirus-cases
+
+
+
+

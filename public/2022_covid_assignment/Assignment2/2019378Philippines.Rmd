@@ -1,0 +1,317 @@
+---
+title: "Coronavirus Analysis of Philippines"
+author: "W.A.S.Ishara"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1 Introduction
+
+### Location
+
+The Philippines is located in Southeast Asia, on the eastern rim of the Asiatic Mediterranean. It is bounded in the west by the South China Sea; in the east by the Pacific Ocean; in the south by the Sulu and Celebes Seas; and in the north by the Bashi Channel. Its capital and main port of entry is Manila.The following is a plot of UK and the location of Philippines in the world map
+ 
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+Philippine_corona <-  coronavirus %>% filter(country == "Philippines")
+
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Philippine_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+### Climate
+
+In the Philippines, an archipelago of Southeast Asia, consisting of thousands of islands and extending from 5 to 20 degrees north latitude, the climate is generally tropical maritime, with a relatively cool season from December to February, when the north-east trade winds prevail, and a hot, humid and rainy season from May to November, when the south-west monsoon prevails.
+Between March and May, before the arrival of the summer monsoon, the temperature increases and reaches the highest levels of the year, especially in the center-north and in the interior of the larger islands: hence, in general the coolest month (or the least hot) is January, while the warmest is May.
+
+### Population
+
+According to the 2020 census, the population of the Philippines is 109,035,343.[5] The first census in the Philippines was held in the year 1591 which counted 667,612 people.[6]
+
+The majority of Filipinos are lowland Austronesians,[7] while the Aetas (Negritos), as well as other highland groups form a minority. The indigenous population is related to the indigenous populations of the Malay Archipelago. Some ethnic groups that have been in the Philippines for centuries before Spanish and American colonial rule have assimilated or intermixed. 600,000 people from the United States live in the Philippines.[8] They represent 0.56% of the total population. The ethnic groups include Arabs, Japanese, Han Chinese and Indians which form parts of the population.
+
+### Health Sector
+
+Health facilities in the Philippines include government hospitals, private hospitals and primary health care facilities. Hospitals are classified based on ownership as public or private hospitals. In the Philippines, around 40 percent of hospitals are public (Department of Health, 2009). Out of 721 public hospitals, 70 are managed by the DOH while the remaining hospitals are managed by LGUs and other national government agencies (Department of Health, 2009). Both public and private hospitals can also be classified by the service capability (see DOH AO 2005-0029)
+
+### Begining of Covid in Philippines
+
+The first suspected case in the Philippines was investigated on January 22, 2020, and 633 suspected cases were reported as of March 1.the first two confirmed COVID-19 cases in the Philippines, both admitted to the national infectious disease referral hospital in Manila.
+  Both patients were previously healthy Chinese nationals on vacation in the Philippines travelling as a couple during January 2020. Patient 1, a 39-year-old female, had symptoms of cough and sore throat and was admitted to San Lazaro Hospital in Manila on January 25. Physical examination was unremarkable. Influenza B, human coronavirus 229E, Staphylococcus aureus and Klebsiella pneumoniae were detected by PCR on initial nasopharyngeal/oropharyngeal (NPS/OPS) swabs. On January 30, SARS-CoV-2 viral RNA was reported to be detected by PCR on the initial swabs and she was identified as the first confirmed COVID-19 case in the Philippines.
+  
+### Actions taken by Government for Covid
+
+Following the World Health Organisation’s declaration of a COVID-19 pandemic on March 11, the Government of the Philippines issued a tentative six month State of Calamity throughout the country.The global spread of COVID-19 has called for an evaluation of the most critical and acute needs in the face of the pandemic, reassessing what is required in the short term to ensure that communities can work effectively to mitigate the risks posed by the virus.
+     Besides protecting members of the public in the communities of the Calamianes, the CRN are also committed to providing support to front liners in their response to COVID-19. These are the key workers at the forefront of the COVID-19 response, such as doctors, nurses, and other healthcare staff. For their safety, adequate PPE like gloves, gowns, shoe covers, and goggles are vital.The Philippine government has been negotiating with various foreign vaccine manufacturers to secure the country's COVID-19 vaccine supply. These manufacturers include Sinovac Biotech (China), Gamaleya Research Institute of Epidemiology and Microbiology (Russia), Moderna (United States), and Pfizer (United States).
+    
+
+# 2.Exploratory Data Analysis
+
+Here we used corona virus dataset and it contains the daily summary of Coronavirus cases (confirmed, death, and recovered), by state/province from 22nd of January to 12th of May 2020.
+
+## Visualization of death, confirmed, recovered and active cases
+
+### summary of all types
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+library(kableExtra)
+
+Philippine_corona_confirmed <- coronavirus %>% 
+   filter(country == "Philippines") %>%
+   filter(type == "confirmed") %>%
+   select(date,type,country,cases) 
+  
+ 
+ total_con <- sum(Philippine_corona_confirmed$cases)
+ 
+##
+ Philippine_corona_death <- coronavirus %>% 
+   filter(country == "Philippines") %>%
+   filter(type == "death") %>%
+   select(date,type,country,cases)
+ 
+ total_det <- sum(Philippine_corona_death$cases)
+ 
+##
+ Philippine_corona_recovery <- coronavirus %>% filter(country == "Philippines") %>%
+   filter(type == "recovery") %>%
+   select(date,type,country,cases)
+ 
+ total_rec <- sum(Philippine_corona_recovery$cases)
+ 
+ table_summary <- data.frame(type = c("confirmed", "death", "recovery"),
+                             total = c(total_con, total_det, total_rec))
+ 
+ kable(table_summary, "pipe")
+ 
+```
+
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+Philippine_corona <-  coronavirus %>% filter(country == "Philippines")
+
+Philippine_corona_confirmed <- coronavirus %>% filter(country == "Philippines") %>%
+  filter(type == "confirmed") %>%
+  select(date,type,country,cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+ggplot(Philippine_corona_confirmed , aes(x=date,y=cases)) + geom_line(col = "blue") + ggtitle("Philippines : Daily Covid 19 Confirmed Cases")
+```
+
+### 
+As we can see in this graph the number of confirmed cases in Philippines has increased several times and rapidly increased in the begining of 2022 and it came to a peak value.In that time period the nearly 4000 daily cases were recorded. 
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+
+Philippine_corona_death <- coronavirus %>% filter(country == "Philippines") %>%
+  filter(type == "death") %>%
+  select(date,type,country,cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(Philippine_corona_death , aes(x=date,y=cases)) + geom_line(col = "brown") + ggtitle("Philippines : Daily Covid 19 Death Cases")
+```
+
+###
+As we can see in this graph, the Deaths were very low in the begining of 2020 and become high between 2021 and 2022. Again the deaths shows a decreasing pattern from 2022.
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+
+Philippine_corona_recovery <- coronavirus %>% filter(country == "Philippines") %>%
+  filter(type == "recovery") %>%
+  select(date,type,country,cases) %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(Philippine_corona_death , aes(x=date,y=cases)) + geom_line(col = "purple") + ggtitle("Philippines : Daily Covid 19 Recovery Cases")
+```
+
+###
+In this graph we can see that recovered cases high in between 2021 and 2022, thats because in that time period confirmed cases were in a high level.Recovered caeses are low in 2020 and 2022. 
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+
+Philippine_corona <- coronavirus %>% filter(country == "Philippines") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(Philippine_corona, aes(x=date, y=cases, col=type)) + geom_col()+ ggtitle("Philippine: Daily Covid-19 cases by type")+ facet_grid(type~.)
+
+```
+###
+As we can see in this graph The death cases are very low compared to confirmed cases and recovery cases.From the later of 2021 there are many confirmed cases, but few deaths.
+
+## comparing with other countries
+
+#### comparing confirmed/death/recovery cases of philippines and malaysia
+
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+combined_country_malaysia_c <- coronavirus %>% 
+  filter(country == "Philippines"   | country == "Malaysia"  ) %>% 
+  filter(type == "confirmed") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+  
+ combined_country_malaysia_d <- coronavirus %>% 
+ filter(country == "Philippines"   | country == "Malaysia"  ) %>% 
+  filter(type == "death") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+combined_country_malaysia_r <- coronavirus %>% 
+  filter(country == "Philippines"   | country == "Malaysia"  ) %>% 
+  filter(type == "recovery") %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+ plot_confirmed_malaysia <- ggplot(combined_country_malaysia_c,
+                                  aes(date, cases, group = country, col = country)) +
+                                  geom_point() + ggtitle("comparing confirmed")
+ plot_death_malaysia <- ggplot(combined_country_malaysia_d,
+                                  aes(date, cases, group = country, col = country)) +
+                                  geom_point() + ggtitle("comparing death")
+ 
+ plot_recovery_malaysia <- ggplot(combined_country_malaysia_r,
+                        aes(date, cases, group = country, col = country)) +
+                        geom_point() + ggtitle("comparing recovery")
+ 
+ plot_confirmed_malaysia
+ plot_death_malaysia
+ plot_recovery_malaysia
+
+```
+
+#### comparing confirmed/death/recovery cases of philippines and vietnam
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+combined_country_vietnam_c <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Vietnam"  ) %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ combined_country_vietnam_d <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Vietnam"  ) %>% 
+   filter(type == "death") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ combined_country_vietnam_r <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Vietnam"  ) %>% 
+   filter(type == "recovery") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ plot_confirmed_vietnam <- ggplot(combined_country_vietnam_c,
+                                   aes(date, cases, group = country, col = country)) +
+   geom_point() +ggtitle("comparing confirmed")
+ plot_death_vietnam <- ggplot(combined_country_vietnam_d,
+                               aes(date, cases, group = country, col = country)) +
+   geom_point() + ggtitle("comparing death")
+ 
+ plot_recovery_vietnam <- ggplot(combined_country_vietnam_r,
+                                  aes(date, cases, group = country, col = country)) +
+   geom_point() + ggtitle("comparing recovery")
+ 
+ plot_confirmed_vietnam 
+ plot_death_vietnam 
+ plot_recovery_vietnam 
+
+```
+
+#### comparing confirmed/death/recovery cases of philippines and indonesia
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+combined_country_Indonesia_c <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Indonesia"  ) %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ combined_country_Indonesia_d <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Indonesia"  ) %>% 
+   filter(type == "death") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ combined_country_Indonesia_r <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Indonesia"  ) %>% 
+   filter(type == "recovery") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ plot_confirmed_Indonesia <- ggplot(combined_country_Indonesia_c,
+                                  aes(date, cases, group = country, col = country)) +
+   geom_point() + ggtitle("comapring confirmed")
+ plot_death_Indonesia <- ggplot(combined_country_Indonesia_d,
+                              aes(date, cases, group = country, col = country)) +
+   geom_point()  + ggtitle("comparing death")
+ 
+ plot_recovery_Indonesia <- ggplot(combined_country_Indonesia_r,
+                                 aes(date, cases, group = country, col = country)) +
+   geom_point() + ggtitle("comparing recovery")
+ 
+ plot_confirmed_Indonesia
+ plot_death_Indonesia
+ plot_recovery_Indonesia
+ 
+```
+
+## comparing confirmed cases by near by countries
+
+```{r, message=FALSE, warning= FALSE, echo=FALSE}
+combined_country_all_c <- coronavirus %>% 
+   filter(country == "Philippines"   | country == "Indonesia" | country == "Malaysia" | country == "Vietnam" ) %>% 
+   filter(type == "confirmed") %>% 
+   mutate(cases = replace(cases, which(cases < 0), NA))
+ 
+ combined_allcountry_con <-  ggplot(combined_country_all_c,
+                                    aes(date, cases, group = country, col = country)) +
+   geom_point() + ggtitle("confirmed cases of near by countries")
+ 
+combined_allcountry_con
+```
+
+
+From these graphs we can see that Philippines and Malaysia has low coronavirus cases compared to neighbor countries.It is mainly because of the low population in these contries compared to neighbor countries.There have occured a large number of cases in Vietnam in 2022 campared to other countries.
+
+## Discussion
+
+The Philippines has the most COVID-19 infections in Southeast Asia as of Tuesday, according to the coronavirus tally of John Hopkins University in the United States. The country was followed by Malaysia with 4,987 cases and Indonesia with 4,839 infections.
+
+A total of 39,947 individuals have been tested in the Philippines, the DOH said.
+The national government is weighing whether to lift or extend the enhanced community quarantine of Luzon. Experts from the University of the Philippines found that while the Luzon-wide lockdown—along with other interventions—appeared successful in containing the virus, it may not be sustainable over the long run.
+
+The coronavirus pandemic has infected nearly two million people and killed over 126,000 across the globe.
+
+
+
+
+
+## Conclusions
+
+From the Philippine coronavirus data set it is clearly observable that Philippine’s number of confirmed Cases have increadsed from 2020 to 2022 and now it has settled a little bit.Number of deaths had icreased nearly 2022. Recovery cases are also high nearly 2022. When compared with other countries also Philippine has low deaths and confirmed cases. Therefore, Philippine government has given a good attention to recover more patients, But health care facilities provided by the hospitals should be increased as there are some confirmed cases imn 2022.
+
+
+## References
+
+https://www.philstar.com/headlines/2020/04/15/2007503/record-high-58-new-recoveries-covid-19-infections-philippines-reach-5453
+
+https://doh.gov.ph/sites/default/files/basic-page/chapter-one.pdf#
+
+https://en.wikipedia.org/wiki/Philippine_government_response_to_the_COVID-19_pandemic
+
+https://en.wikipedia.org/wiki/Philippines
+ 
+

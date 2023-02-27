@@ -1,0 +1,301 @@
+---
+title: "Covid-19 in Netherlands"
+author: "AS2019340"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r, comment=NA, warning=FALSE, echo=FALSE, eval=FALSE}
+#install.packages("devtools")
+library(devtools)
+devtools::install_github("thiyangt/sta3262") 
+library(sta3262) 
+get_individual_project_country("AS2019340")
+install.packages("coronavirus")
+library(coronavirus) 
+```
+
+# __Abstract__
+
+Corona virus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.A novel corona virus (CoV) named ‘2019-nCoV’ or ‘2019 novel corona virus’ or ‘COVID-19’ by the World Health Organization (WHO) is in charge of the current outbreak of pneumonia that began at the beginning of December 2019 near in Wuhan City, Hubei Province, China [1–4]. COVID-19 is a pathogenic virus. The COVID-19 pandemic is not over yet. As individuals we can do our part in keeping others safe by following the rules suggested by the government and WHO.
+
+In Netherlands, from 3 January 2020 to 3:45pm CEST, 6 October 2022, there have been 8,441,351 confirmed cases of COVID-19 with 22,663 deaths, reported to WHO. As of 10 September 2022, a total of 36,105,753 vaccine doses have been administered.
+
+# __1) Introduction about Netherlands__
+
+The Netherlands is a constituent country located in Western Europe.With a population of 17.7 million people, all living within a total area of roughly 41,800 km2 (16,100 sq mi)—of which the land area is 33,500 km2 (12,900 sq mi)—the Netherlands is the 16th most densely populated country in the world and the second-most densely populated country in the European Union. Nevertheless, it is the world's second-largest exporter of food and agricultural products by value, owing to its fertile soil, mild climate, intensive agriculture, and inventiveness.The Netherlands ranks among the highest in international indices of press freedom,[35] economic freedom,[36] human development and quality of life, as well as happiness.
+
+## _Health Service in Netherlands_
+
+In 2016, the Netherlands maintained its number one position at the top of the annual Euro health consumer index (EHCI), which compares healthcare systems in Europe, scoring 916 of a maximum 1,000 points.The Netherlands was ranked first in a study in 2009 comparing the health care systems of the United States, Australia, Canada, Germany and New Zealand.
+Patients have a great degree of freedom from where to buy their health insurance, to where they get their healthcare service.Healthcare decisions are being made in a dialogue between the patients and healthcare professionals.
+
+## _Covid-19 in Netherlands_ 
+
+The virus reached the Netherlands on 27 February 2020, when its first COVID-19 case was confirmed in Tilburg.[5] It involved a 56-year-old Dutchman who had arrived in the Netherlands from Italy, where the COVID-19 pandemic seemed to enter Europe. As of 31 January 2021, there are 978,475 confirmed cases of infections and 13,998 confirmed deaths.[6] The first death occurred on 6 March, when an 86-year-old patient died in Rotterdam.[7]
+
+## _Actions Taken by Dutch Government_
+
+On 23 January 2021, as the government imposed a nationwide 9:00 p.m. curfew in a context of emergence of the British variant, the worst riots in 40 years broke out across the country.Since the end of November 2021, the SARS-CoV-2 Omicron variant is spreading in parts of Europe (i.e. UK, Denmark and France). The number of registered new infections has risen strongly. There is a lockdown in the Netherlands from 19 December 2021 to (at least) 14 January 2022.
+
+```{r, comment=NA, warning=FALSE, echo=FALSE,message=FALSE}
+#install.packages("ggplot2")
+library(ggplot2)
+#install.packages("maptools")
+library(maptools)
+library(tibble)
+#install.packages("tidyverse")
+library(tidyverse)
+#install.packages("ggrepel")
+library(ggrepel)
+#install.packages("png")
+library(png)
+#install.packages("grid")
+library(grid)
+#install.packages("sp")
+library(sp)
+library(coronavirus)
+#install.packages("magrittr")
+library(magrittr)
+netherlands_corona<-coronavirus%>%filter(country=="Netherlands")
+
+
+```
+
+## _Location of Netherlands_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE,message=FALSE}
+data(wrld_simpl)
+
+netherlands_location <- tibble(lat=55.3781   , long=3.436) 
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "gray", colour = "white") +
+  
+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = netherlands_location, aes(x = long, y = lat), color = "red", size = 1)
+```
+
+
+
+
+# __2) Exploratory Data Analysis__
+
+## _A summery of the Netherlands Covid-19 data set._
+
+
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+netherlands_corona_new<-netherlands_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+ summary(netherlands_corona_new)
+```
+
+
+
+## _Confirmed Covid-19 Cases in Netherlands_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+confirmedcases_netherlands_corona <- netherlands_corona %>% filter(type=="confirmed") 
+head(confirmedcases_netherlands_corona) 
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+sum(confirmedcases_netherlands_corona$cases) 
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+ggplot(confirmedcases_netherlands_corona, aes(x=date, y=cases)) + geom_line() + ggtitle("Netherlands: Daily Covid-19 Confirmed cases") 
+```
+
+
+According to the above graph in the beginning of the corona virus spreading over the world the number of corona confirmed cases are in minor value but  the number of confirm cases is rapidly increased since 2022 January.It shows that the most of Covid-19 confirm cases are in 2022 year.The virus is rapidly spread in this year first half.But it is decreased in the middle of the year to very low value of confirmed cases.  
+
+
+## _Covid-19 Deaths in Netherlands_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(coronavirus)
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+deaths_netherlands_corona <- netherlands_corona %>% filter(type=="death") 
+head(deaths_netherlands_corona)
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+sum(deaths_netherlands_corona$cases)
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+deaths_netherlands_corona <- netherlands_corona %>% filter(type=="death") 
+deaths_netherlands_corona2 <- deaths_netherlands_corona %>% filter(cases >= 0)
+ggplot(deaths_netherlands_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Netherlands: Daily Covid-19 deaths")
+```
+
+Deaths variation shows highest increased and decreased in every year.Most number of deaths shows in 2021 but the highest daily value of death is in 2020.According to the graph it shows that the covid-19 deaths are decreased in the 2022 year.The total value of deaths is 22972.
+
+## _Covid-19 Recoveries in Netherlands_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+recovery_netherlands_corona <- netherlands_corona %>% filter(type=="recovery") 
+head(recovery_netherlands_corona)
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+recovery_netherlands_corona <- netherlands_corona %>% filter(type=="recovery") 
+recovery_netherlands_corona2 <- recovery_netherlands_corona %>% filter(cases >= 0)
+ggplot(recovery_netherlands_corona2, aes(x=date, y=cases)) + geom_line() + ggtitle("Netherlands: Daily Covid-19 recoveries without Outliers")
+```
+Most of recoveries shows in 2021 first half. It is more than 1500 in a day.Recoveries of 2022 which reported the most of covid-19 cases in very low value.
+
+## _Covid-19 Active Cases in Netherlands_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+library(coronavirus)
+netherlands_corona <- coronavirus %>% filter(country == "Netherlands")
+netherlands_corona2 <- netherlands_corona %>% filter(cases >= 0)
+coronaNetherlands_wider <- netherlands_corona2 %>% pivot_wider(names_from=type, values_from=cases)
+coronaNetherlands_wider$active_netherlands_corona <- coronaNetherlands_wider$confirmed - coronaNetherlands_wider$death
+ggplot(coronaNetherlands_wider, aes(x=date, y=active_netherlands_corona)) + geom_line() + ggtitle("Netherlands: Daily Covid-19 Active cases")
+```
+We can see large number of Covid-19 active cases in 2022 firs 6 months. The active cases shows a increasing nearly 2021 september and it shows  decreasing nearly after 2022 april. 
+
+## _Covid-19 Confirmed,Death & Recovery Cases in Netherlands_
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+library(ggplot2)
+ggplot(netherlands_corona,
+       aes(x=date,y=cases,fill=type,col=type))+
+  geom_line()+geom_jitter(aes(col=type))+
+  facet_wrap(~type,ncol = 3)+coord_flip()
+```
+# __2) Comparison between the neighborhood countries__ 
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+unique(coronavirus$country)
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+netherlands_corona<-coronavirus%>%filter(country=="Netherlands")
+
+germany_corona<-coronavirus%>%filter(country=="Germany")
+
+belgium_corona<-coronavirus%>%filter(country=="Belgium")
+
+france_corona<-coronavirus%>%filter(country=="France")
+```
+
+## _Summary of comparison between neighborhood countries_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+countries_corona<-as.data.frame(rbind(netherlands_corona,germany_corona,belgium_corona,france_corona))
+summary(countries_corona)
+```
+
+## _Input missing values_
+
+```{r,comment=NA, warning=FALSE, echo=FALSE}
+countries_corona_new<- countries_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(countries_corona_new) 
+```
+```{r,comment=NA, warning=FALSE, echo=FALSE}
+which(is.na(countries_corona_new$cases)) 
+```
+
+
+
+## _Comparison of death cases between Neighborhood Countries & Netherlands_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+
+
+countries_death<-countries_corona%>%filter(type=="death")
+ggplot(countries_death,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison  of covid-19 deaths between the neighbooring countries")
+```
+
+We can see most of deaths in France and Germany. Netherlands Covid-19 deaths are lower than neighborhood countries according to this figure.
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+countries_corona<-as.data.frame(rbind(netherlands_corona,germany_corona,belgium_corona,france_corona))
+countries_recovery<-countries_corona%>%filter(type=="recovery")
+countries_recovery <- countries_recovery %>% mutate(cases = replace(cases,which(cases<0),NA))
+```
+
+## _Comparison of Recoveries between Netherlands and Neighborhood countries_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+
+
+ggplot(countries_recovery,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison between the recovery of covid-19 patients 
+          between the neighbooring countries")
+```
+According to the figure more recovery cases are in Germany. When compare recoveries in Netherlands are lower than neighbor countries, France and Germany.
+
+
+## _Comparison of confirmed cases between Netherlands & neighborhood countries_
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+
+```
+
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+countries_corona<-as.data.frame(rbind(netherlands_corona,germany_corona,belgium_corona,france_corona))
+countries_cases<-countries_corona%>%filter(type=="confirmed")
+countries_cases <- countries_cases %>% mutate(cases = replace(cases,which(cases<0),NA))
+```
+
+```{r, comment=NA, warning=FALSE, echo=FALSE}
+ggplot(countries_cases,
+       aes(x=date,y=cases,fill=type,col=country))+
+  geom_line()+geom_point()+ 
+  facet_wrap(~country,ncol = 4)+coord_flip()+
+  ggtitle("Comparison between the confirmed covid-19 
+          patients between the neighbooring countries")
+```
+We can clearly see that the Belgium has the lowest confim Covid-19 cases.But all countries show rapid increasing of corona virus confirmed cases in 2022 year.Netherland and Germany shows higher outlier cases in 2022 as the graphs.  
+
+
+# __3) Conclusion__
+
+Looking over to the all data sets we can say that the Dutch government have been possible to control the spreading of the corona virus in the early of the pandemic.By taking all the necessary actions to mitigate the situation. But several collapses and wrong decisions taken during the time when corona virus was likely to settle down lead to a drastic increase of active cases in 2022 and rapidly increases the virus than 2021. The vaccination program has been able to mitigate the risk by a massive amount and help to control the deaths. When looking over to figures,though the plotted statistics still indicates an increasing move of active cases, the amount of death cause by Covid 19 can be control comparing to last years. Comparing to the other Europe countries selected in the analysis Netherlands has failed to manage its daily-confirmed Covid cases rate. It might be because of the lack of support given by the people ,it was reported that anti covid restrictions protests are being conduced on streets against the state regime.
+
+## __4) References__
+
+wikipedia- https://en.wikipedia.org/wiki/Netherlands
+
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Netherlands#Economic
+
+https://www.theguardian.com/world/2021/sep/25/dutch-protesters-march-through-the-hague-against-corona-pass
+
+

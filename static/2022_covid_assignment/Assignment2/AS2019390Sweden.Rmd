@@ -1,0 +1,436 @@
+---
+title: "Coronavirus report - Sweden"
+author: "Mahima Jayasingha"
+date: "2022-10-06"
+output: html_document
+---
+
+
+# 1.0 Introduction
+
+
+
+## 1.1 Visualization of the Location
+
+<h4> Sweden, country located on the Scandinavian Peninsula in northern Europe.Sweden occupies the greater part of the Scandinavian Peninsula, which it shares with Norway.Sweden lies to the southwest of Finland. A long coastline forms the country’s eastern border, extending along the Gulf of Bothnia and the Baltic Sea; a narrow strait, known as The Sound (Öresund), separates Sweden from Denmark in the south. A shorter coastline along the Skagerrak and Kattegat straits forms Sweden’s border to the southwest, and Norway lies to the west. Sweden extends some 1,000 miles (1,600 km) to the north and south and 310 miles (500 km) to the east and west.The country is traditionally divided into three regions: to the north is Norrland, the vast mountain and forest region; in central Sweden is Svealand,an expanse of lowland in the east and highland in the west; and in the south is Götaland, which includes the Småland highlands and, at the southern extremity,the small but rich plains of Skåne. In the far north the region of Lappland overlaps Norrland and northern Finland. </h4>
+
+
+
+```{r echo=FALSE ,message=FALSE}
+
+library(coronavirus)
+library(dplyr)
+library(ggplot2)
+ library(maptools)
+ library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(sp)
+library(leaflet)
+
+
+wrld_s <- coronavirus %>% filter(country =="Sweden")
+df <- data.frame(lat = wrld_s$lat , long = wrld_s$long)
+  set.seed(12345)
+#df <- data.frame(lat= runif(30, min = 19.07, max = 28.70), long=runif(30, min = 72.87, max = 77.10))
+ 
+df %>%
+  leaflet( width = 900) %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions(), popup = "Hi")
+
+
+
+```
+                     
+
+
+## 1.2 Climate of Sweden
+
+<h4>Winter and summer temperature differences in Sweden are extreme, but generally the country enjoys a temperate climate, thanks to the Gulf Stream.Sweden’s proximity to the North Atlantic and prevailing south-westerly to westerly winds result in a climate that is mild in the winter months, but the northernmost part of the country has a sub-Arctic climate with long, cold and snowy winters. In the period 1961-90 the mean temperature in January was 0°C in southernmost Sweden, while the coldest northern valleys had 17°C.The maximum daily mean July temperature was approximately +17°C in south-eastern Sweden and just over 10°C in the north. Passing low-pressure systems bring precipitation that is fairly copious all year round, but heaviest in the summer and autumn. Annual precipitation is some 1,000 mm. Since most low-pressure systems move in across the country from the west or south-west,the western parts of Sweden receive the most precipitation.</h4>
+
+
+## 1.3 Coronavirus disease in Sweden
+
+
+<h4>Sweden has faced severe issues as a result of the COVID-19 pandemic.The pandemic has affected many aspects of daily life in Sweden and has led to a dramatic loss of human life, especially among older and poorer residents. It has also caused unprecedented disruption to family life, work, schooling, the care continuum and society, and no one has escaped its impact.</h4>
+
+###  Actions taken by the goverment,
+<h4>Swedish authorities initially followed a disease control path that differed from many other countries, extensive restrictions were implemented at a later date.In late June 2020, the Swedish Government established a national COVID-19 Commission to examine how Sweden handled the pandemic. Interim reports were published in 2020 and 2021,and the final report was published on 25 February 2022. By the time all three reports had been published, 15 800 people in Sweden had died after being diagnosed with COVID-19,which was 1.5 per 1000 inhabitants,4 according to the National Board for Health and Welfare (NBHW). The Commission stated in its report that it preferred the organisation' 's definition of COVID-19 deaths to the definition of the Swedish Public Health Agency (PHA). The NBHW only included deaths if a physician had indicated that COVID-19 was the underlying cause of death The PHA, which also included deaths ≤30 days after someone had tested positive for COVID-19, had reported 17 497 deaths during the same period. This was 1.7 per 1000 inhabitants.
+             Swedish Covid-19 vaccinations started in December 2020. At the end of March 2022, 87 per cent of the population aged 12 or older had been vaccinated with at least two doses.Of the population aged 18 or older, 62 per cent had been vaccinated with three doses.</h4>
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+# 2.0 Exploratory Data Analysis.
+
+
+
+## 2.1 Confirmed cases in the Sweden
+
+
+
+```{r, message=FALSE, warning=FALSE,echo=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+library(kableExtra)
+
+Sweden_confirmed <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="confirmed") %>% 
+  select(date, country, type, cases)
+
+
+kable(summary(Sweden_confirmed), "simple", caption="Table 01: summary for COVID-19 confirmed cases in Sweden")
+
+```
+
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+
+corona_country <- as_tibble(coronavirus)
+
+Sweden_confirmed <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="confirmed") %>% 
+  select(date, country, type, cases) 
+
+  
+  ggplot(Sweden_confirmed, aes(date, cases)) + geom_line() +ggtitle("Figure 01: Daily COVID-19 confirmed cases in Sweden"
+)
+
+
+
+```
+
+
+## 2.2 Recovered cases in the Sweden
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+
+Sweden_recovered <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="recovery") %>% 
+  select(date, country, type, cases)
+  
+ggplot(Sweden_recovered, aes(date, cases)) + geom_line() +ggtitle("Figure 02: Daily COVID-19 recovered cases in Sweden"
+)
+
+```
+
+
+## 2.3 Death cases in the Sweden
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+
+Sweden_Death <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="death") %>% 
+  select(date, country, type, cases) %>% 
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+
+ggplot(Sweden_Death, aes(date, cases)) + geom_line() +ggtitle("Figure 03: Daily COVID-19 death cases in Sweden"
+)
+
+```
+
+
+## 2.4 Summary cases in the Sweden
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE}
+
+corona_Sweden <- coronavirus %>% 
+  filter(country=="Sweden") %>%
+  mutate(cases = replace(cases, which(cases < 0), NA))
+
+ggplot(corona_Sweden,aes(date,cases,col = type))+ geom_line() + geom_point() +ggtitle("Figure 04: Daily Covid-19 confirmed,recovered and death cases in Sweden
+")
+```
+
+
+```{r, r,message=FALSE, warning=FALSE, echo=FALSE}
+library(kableExtra)
+
+Sweden_confirmed <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="confirmed")
+mean_confirmed <- mean(Sweden_confirmed$cases)
+
+Sweden_recovered <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="recovery")
+
+mean_recovered <- mean(Sweden_recovered$cases)
+
+Sweden_Death <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="death")
+mean_death <- mean(Sweden_Death$cases, na.rm = TRUE)
+v <- data.frame(type = c( "Confirmed",
+                "Recovered", "Death"),
+                Mean =c(mean_confirmed,mean_recovered,mean_death))
+
+kable(v, "simple", caption = "Table 02: mean of COVID-19 cases for each type")
+
+```
+
+
+
+## 2.5 Comparision of COVID-19 in Sweden with Denmark
+
+
+### Confiremed cases comparison:
+
+
+```{r,message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(magrittr)
+library(coronavirus)
+        
+  combine_country <- coronavirus %>% 
+  filter(country == "Sweden" | country== "Denmark") %>% 
+  filter(type == "confirmed") %>% 
+  select(date, country, type, cases)
+
+ggplot(combine_country, aes(date, cases,group=country,col=country)) + geom_line() +ggtitle("Figure 05: Comparison of Confirmed cases in Sweden with Denmark"
+)
+
+```
+
+
+### Recovered cases comparison:
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+combined_countries<-filter(coronavirus, country == "Sweden"|country =="Denmark")
+combined_countries_recovered <- filter(combined_countries, type == "recovery") %>%
+  select(date,country,type,cases) %>%
+  mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(combined_countries_recovered, aes(x = date, y = cases, colour = country)) + geom_path(size=1)  + ggtitle("Figure 06: Comparison of recovered cases in Sweden with Denmark")
+
+
+```
+
+
+### Death cases comparison:
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+combined_countries<-filter(coronavirus, country == "Sweden"|country =="Denmark")
+combined_countries_death <- filter(combined_countries, type == "death") %>%
+  select(date,country,type,cases) %>%
+  mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(combined_countries_death, aes(x = date, y = cases, colour = country)) +geom_line()+ ggtitle("Figure 07: Comparison of death cases in Sweden with Denmark")
+
+
+```
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(kableExtra)
+
+Sweden_confirmed <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="confirmed")
+total_confirmed_sweden <- sum(Sweden_confirmed$cases)
+
+
+Sweden_recovered <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="recovery")
+
+total_recovered_sweden <- sum(Sweden_recovered$cases)
+
+
+Sweden_Death <- coronavirus %>% 
+  filter(country=="Sweden") %>% 
+  filter(type=="death")
+
+
+total_death_sweden <- sum(Sweden_Death$cases, na.rm = TRUE)
+
+
+
+Denmark_confirmed <- coronavirus %>% 
+  filter(country=="Denmark") %>% 
+  filter(type=="confirmed")
+total_confirmed_Denmark <- sum(Denmark_confirmed$cases)
+
+
+Denmark_recovered <- coronavirus %>% 
+  filter(country=="Denmark") %>% 
+  filter(type=="recovery")
+
+total_recovered_Denmark <- sum(Denmark_recovered$cases)
+
+
+Denmark_Death <- coronavirus %>% 
+  filter(country=="Denmark") %>% 
+  filter(type=="death")
+
+
+total_death_Denmark <- sum(Denmark_Death$cases, na.rm = TRUE)
+
+n <- data.frame(country = c( "Sweden",
+                "Denmark"),
+                Confirmed =c(total_confirmed_sweden,total_confirmed_Denmark),
+                Recovered = c(total_recovered_sweden,total_recovered_Denmark),
+                Death = c(total_death_sweden,total_death_Denmark))
+
+kable(n, "simple", caption = "Table 03: Total of COVID-19 cases for each type")
+
+```
+
+
+
+## 2.6 Comparision of COVID-19 in Sweden with Norway and Poland
+
+
+## confirmed cases comparison:
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+compare_countries<-filter(coronavirus, country == "Sweden"|country =="Norway"|country =="Poland")
+compare_countries_confirmed <- filter(compare_countries, type == "confirmed") %>%
+  select(date,country,type,cases) %>%
+  mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(compare_countries_confirmed, aes(x = date, y = cases, colour = country)) + geom_point() + theme(legend.position = "bottom") + geom_hline(yintercept = 1e+05) + ggtitle("Figure 08: Comparison of confirmed cases in Sweden with Norway and Poland")
+
+```
+
+
+## recovered cases comparison:
+
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+compare_countries<-filter(coronavirus, country == "Sweden"|country =="Norway"|country =="Poland")
+compare_countries_recovered <- filter(compare_countries, type == "recovery") %>%
+  select(date,country,type,cases) %>%
+  mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(compare_countries_recovered, aes(x = date, y = cases, colour = country)) + geom_point() + facet_grid(country~.) + ggtitle("Figure 09: Comparison of recovered cases in Sweden with Norway and Poland")
+
+```
+
+
+## Death cases comparison:
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+compare_countries<-filter(coronavirus, country == "Sweden"|country =="Norway"|country =="Poland")
+compare_countries_death <- filter(compare_countries, type == "recovery") %>%
+  select(date,country,type,cases) %>%
+  mutate(cases = replace(cases,which(cases<0),NA))
+ggplot(compare_countries_recovered, aes(x = date, y = cases, colour = country)) + geom_line() + ggtitle("Figure 10: Comparison of death cases in Sweden with Norway and Poland")
+
+```
+
+
+
+# 03. Conclusions and Discussion
+
+
+## Conclusions
+<h4>
+
+ *  According to the table o1, the minimum of COVID-19 confirmed cases in Sweden is equal to zero. Therefore no need to clean the data set of COVID-19 confirmed cases.
+ 
+ *  According to the Figure 01, there is a significant increase in daily COVID-19 confirmed cases after the year of 2021.
+ 
+ *  Daily COVID-19 recovered cases in Sweden shown in the figure 02. The all recovered cases are reported as zero.
+ 
+ *  The Figure 03 shows,the highest number of daily COVID-19 death is reported in year of 2021. The value of that is about 475.
+ 
+ *  When we compared daily COVID-19 confirmed cases with recovered cases and death cases,the large  number of cases found in the type of confirmed cases . we can also illustrate this from table 02.
+    The mean of confirmed cases is greater than death cases and the recovered cases.
+    
+ *  The Figure 06 represents, Denmark has the highest daily COVID-19 recovered cases.The number of highest recovered cases per day is around 4400 and it is reported in Denmark.
+ 
+ *  BY looking at the figure 07,we can conclude that the counts of daily COVID-19 death cases of Denmark is  small compared with Sweden.
+ 
+ *  Table 03 shows summary of total COVID-19 cases in Sweden and Denmark. According to the table 03 Denmark has the highest total of daily COVID-19 confirmed cases.
+ 
+ *  According to the figure 08, there are some higher values of confirmed cases after year of 2021 and these higher counts belong to Sweden.(some data points can be found above the horizontal       l     line,which data points belong to Sweden)
+ 
+ *  According to the figure 09, Poland  has the highest daily COVID-19 recovered cases compared with Sweden and Norway. Compared with Poland and Norway ,the number of daily COVID-19 recovered cases in     Sweden  has the least value which is zero.
+ 
+ *  Figure 10 shows, the highest number of daily death also reported in Poland.
+ </h4>
+ 
+ 
+ 
+## Discussion
+
+<h4>
+ From 1st April onwards, Covid-19 will no longer be classified as a generally dangerous illness or a danger to society, the Swedish Public Health Agency has stated. However, infection tracing will still take place in in-patient care where there are people at high risk of becoming seriously ill.This report was focused on Daily  COVID-19 cases in Sweden. According to the our report the daily Covid-19 recovered cases in Sweden equal to Zero. And also daily confirmed cases also increased after the year 2021. so I think it' s better to take actions further for COVID-19 pandemic. According to the Public Health Agency of Sweden (Folkhälsomyndigheten), a high level of vaccine coverage has been the most important condition for restrictions to be removed.
+                               It’s been almost a year since Denmark, Norway locked down for the first time to curb the spread of COVID-19. Sweden chose a wholly different approach, opting out of shutting down schools and offices, mandatory uses of face-masks and closing down restaurants and bars. According to the our report more than 19 000 people have died from the virus in Sweden, compared to Denmark’s 6485.Sweden’s (in)famous strategy has made the headlines of most major global news publications and the world has been scratching their heads trying to understand why Sweden opted for such a different path than its neighbors. Looking at the way Sweden is governed in comparison to the other Nordic countries, this dissimilarity starts to make more sense.
+                                According to the our report, when we compared Sweden with POland and Norway the highest number of daily death is reported in Poland. Poland  has the highest daily COVID-19 recovered cases compared with Sweden and Norway. Compared with Poland and Norway ,the number of daily COVID-19 recovered cases in Sweden  has the least value. In this report we compared recovered cases in Sweden with other countries but sometimes it is useless.Because all the recovered cases in Sweden equal to Zero.
+                               The conditions for the elderly population in Sweden has attracted global attention in particular. More than 12,500 people have died from COVID-19 in Sweden, and at one point in time, Sweden’s per capita death rate was the highest in Europe.
+</h4>                               
+                               
+                               
+ 
+
+
+
+
+
+
+
+
+
+
+
+# 4.0 References.
+
+ <h4>https://www.britannica.com/place/Sweden#ref30520</h4>
+ 
+ 
+ <h4>https://onlinelibrary.wiley.com/doi/10.1111/apa.16535</h4>
+ 
+ 
+ <h4>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8242624/</h4>
+ 
+ 
+ <h4>https://www.scandinaviastandard.com/how-sweden-and-denmark-handled-the-covid-19-pandemic-differently/</h4>
+
+   
+
+
+
+
+
+
+

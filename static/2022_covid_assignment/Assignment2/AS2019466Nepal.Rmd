@@ -1,0 +1,304 @@
+---
+title: "AS2019466"
+author: "P.D. Navodya"
+date: "2022-10-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Covid-19 Pandemic in Nepal.**
+
+## **1. Introduction.**
+
+Corona Virus which is commonly known as COVID-19 is an infectious disease that causes illness in the respiratory system in humans. The term Covid 19 is sort of an acronym, derived from “Novel Corona Virus Disease 2019”. 
+
+Coronavirus (or COVID-19) was first identified in December 2019 in Wuhan city of China. In March 2020, the World Health Organisation (WHO) declared the Corona Virus outbreak a pandemic.
+
+This pandemic has affected millions of peoples, who are either sick or are being killed due to the spread of this disease. This report gives us summary about confirmed cases, deaths and recovered cases of corona virus in Nepal from 2020.
+
+
+
+### **1.1 Brief Introduction of Nepal**
+
+Nepal is a landlocked country in South Asia and is bordered by China and India. It is located in the Himalayas and contains eight of the world's ten highest peaks. It has a diverse geography, including fertile plains, subalpine forested hills, and eight of the world's ten tallest mountains, including Mount Everest, the highest point on Earth. Nepal is a multi-ethnic, multi-lingual, multi-religious and multi-cultural state, with Nepali as the official language. Kathmandu is the nation's capital angivd the largest city.
+
+### **1.2 Location of Nepal**
+
+Nepal is mainly situated in the Himalayas, but also includes parts of the Indo-Gangetic Plain, bordering Tibet of China to the north, and India in the south, east, and west, while it is narrowly separated from Bangladesh by the Siliguri Corridor, and from Bhutan by the Indian state of Sikkim.
+
+**figure 01 : Location of Nepal in world map**
+```{r, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+
+# to get location of Nepal in world map
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(magrittr)
+library(coronavirus)
+data(wrld_simpl)
+data(coronavirus)
+nepal_corona <- coronavirus %>% filter(country == "Nepal")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = nepal_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+```
+
+
+```{r, echo=FALSE, comment=NA, results='hide'}
+# replacing NA's with mean in nepal_corona
+nepal_corona <-nepal_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(nepal_corona)
+which(is.na(nepal_corona$cases))
+nepal_corona$cases[114] = mean(c(nepal_corona$cases[113], nepal_corona$cases[115]))
+nepal_corona$cases[2330] = mean(c(nepal_corona$cases[2329], nepal_corona$cases[2331]))
+
+```
+
+## **2. Exploratory Data Analysis.**
+
+
+```{r, echo=FALSE, comment=NA, results='hide', message=FALSE}
+# extracting confirmed cases, deaths and recovered cases separately
+confirmed_nepal_corona <- nepal_corona %>% filter(type == "confirmed")
+death_nepal_corona <- nepal_corona %>% filter(type == "death")
+recovered_nepal_corona <- nepal_corona %>% filter(type == "recovery")
+
+# replacing NA's with mean
+confirmed_nepal_corona <-confirmed_nepal_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+death_nepal_corona <- death_nepal_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+recovered_nepal_corona <- recovered_nepal_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+which(is.na(confirmed_nepal_corona$cases))
+confirmed_nepal_corona$cases[114] = mean(c(confirmed_nepal_corona$cases[113], confirmed_nepal_corona$cases[115]))
+
+which(is.na(death_nepal_corona$cases))
+
+which(is.na(recovered_nepal_corona$cases))
+recovered_nepal_corona$cases[562] = mean(c(recovered_nepal_corona$cases[561], recovered_nepal_corona$cases[563]))
+
+length(confirmed_nepal_corona$cases) 
+confirmed_nepal_corona$col <- as.factor(c(rep("black", 112),rep("red", 2), rep("black", 884-114)))
+
+length(recovered_nepal_corona$cases)
+recovered_nepal_corona$col <- as.factor(c(rep("black", 560),rep("red", 2), rep("black", 884-562)))
+summary(recovered_nepal_corona)
+
+# to calculate the cumulative sum of active cases
+active_nepal_corona <-  nepal_corona %>%
+   group_by(type, date) %>%
+   summarise(total_all_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_all_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(total_active = cumsum(active),
+          total_recovered = cumsum(recovery),
+          total_death = cumsum(death))
+
+```
+
+
+#### **2.1 Visualization of Confirmed cases, Deaths and Recoveries due to Covid-19 in Nepal.**
+
+```{r, echo=FALSE}
+# to get the plot of Covid-19 confirmed cases over the time
+ggplot(confirmed_nepal_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity() + ggtitle("figure 02: Daily Covid-19 Confirmed Cases in Nepal")
+```
+
+Figure 02 shows the number of confirmed cases of Covid-19 in Nepal over the time. At the beginning of the year 2020 there were no cases but from middle of the year 2020 it has began to increase rapidly. But from the end of the year 2020 it has began to decrease rapidly and then by the beginning of the year 2021 it has come closer to zero. But at the middle of the year 2021 it shows a sudden increase in the confirmed cases of Covid-19 and at the same time it shows a  sudden decrease. And then it shows a small increase of confirmed cases after a few time, but it has began to decrease gradually and it has come closer to zero at the beginning of the year 2022. Then it again shows a sudden increase but at the same time it has decreased and has come closer to zero.
+
+```{r, echo=FALSE}
+# to get the plot of deaths due to Covid-19 over the time
+ggplot(death_nepal_corona, aes(x=date, y=cases)) +geom_line() + ggtitle("Figure 03: Daily Covid-19 Deaths in Nepal")
+```
+
+Figure 03 shows the number of deaths of Covid-19 in Nepal over the time.From the year 2020 to 2021 number of deaths are closer to zero. At the beginning of the year 2021 number of deaths shows a rapid increase, but at the same time it has decreased. Then by the middle of the year 2021  it shows a small increase and then it has began to decrease gradually and by the year 2022 it has come closer to zero.
+
+```{r, echo=FALSE}
+# to get the plot of Covid-19 recovered cases over the time
+ggplot(recovered_nepal_corona, aes(x=date, y=cases)) +
+  geom_line(aes(colour=col, group=1)) + 
+  scale_colour_identity() + ggtitle("Figure 04: Daily Covid-19 Rcoveries in Nepal")
+```
+
+Figure 04 shows the number of recovered cases of Covid-19 in Nepal over the time. From the middle of the year 2020 number of recoveries has started to increase, but when it closer to the year 2021 number of recoveries has become started to decrease. And then again by the middle of the year 2021 number of recoveries shows a sudden increase and then it has started to decrease rapidly.
+
+```{r, echo=FALSE}
+# to get the plot of cumulative sum of Covid-19 active cases over the time
+options(scipen = 999)
+ggplot(active_nepal_corona,aes(x =date,y =total_active))+geom_line(color="red")+ggtitle("Figure 05: Daily Covid-19 acive cases in Nepal")
+```
+
+```{r, echo=FALSE}
+# to get the number of confirmed cases, deaths and recoveries in Nepal in same plot
+ggplot(nepal_corona, aes(x=date, y=cases, col=type)) + geom_line() + ggtitle("Figure 06: Daily confirmed cases, deaths and recoveries of Covid-19 in Nepal")
+
+```
+
+Figure 06 shows the number of confirmed cases, deaths and recoveries of Covid-19 in Nepal from year 2020 to 2022. Number of deaths shows a value closer to zero over this time period and it is lower than both of the number of confirmed cases and number of recoveries. From year 2020 to middle of the year 2021 number of confirmed cases and number of recoveries shows a same variation, and after that number of recoveries has become closer to zero while number of confirmed cases shows a sudden increase at the beginning of the year 2022.
+
+### **2.2 Comparison of Covid-19 Status in Nepal with Neighbouring Countries.**
+
+**Figure 07**
+```{r, echo=FALSE, comment=NA, message=FALSE}
+# to get the location of neighbouring countries in World map
+compare_corona <- coronavirus %>% filter(country == c( "Nepal", "India", "Bhutan", "Bangladesh"))
+
+data("wrld_simpl")
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "grey", colour = "lightblue3"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = compare_corona, aes(x = long, y = lat, col = country), size
+    = 2
+  )
+```
+
+```{r, echo=FALSE, results='hide'}
+# obtain corona virus details related to India from coronavirus dataset
+data(coronavirus)
+india_corona <- coronavirus %>% filter(country == "India")
+india_corona <-india_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(india_corona$cases))
+
+# replacing NA's with mean
+india_corona$cases[944] = mean(c(india_corona$cases[943], india_corona$cases[945]))
+india_corona$cases[2115] = mean(c(india_corona$cases[2114], india_corona$cases[2116]))
+india_corona$cases[2330] = mean(c(india_corona$cases[2329], india_corona$cases[2331]))
+summary(india_corona)
+
+
+```
+
+```{r, echo=FALSE, results='hide'}
+# obtain corona virus details related to Bhutan from coronavirus dataset
+data(coronavirus)
+bhutan_corona <- coronavirus %>% filter(country == "Bhutan")
+bhutan_corona <-bhutan_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(bhutan_corona$cases))
+
+# replacing NA's with mean
+bhutan_corona$cases[2330] = mean(c(bhutan_corona$cases[2329], bhutan_corona$cases[2331]))
+summary(bhutan_corona)
+```
+
+```{r, echo=FALSE, results='hide'}
+# obtain corona virus details related to Bangladesh from coronavirus dataset
+data(coronavirus)
+bangladesh_corona <- coronavirus %>% filter(country == "Bangladesh")
+bangladesh_corona <-bangladesh_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(bangladesh_corona$cases))
+
+# replacing NA's with mean
+bangladesh_corona$cases[2330] = mean(c(bangladesh_corona$cases[2329], bangladesh_corona$cases[2331]))
+summary(bangladesh_corona)
+
+```
+
+
+```{r, echo=FALSE, results='hide', comment=NA, warning=FALSE, message=FALSE}
+# getting data related to Nepal and its neighbouring countries into one data frame
+countries_corona<-as.data.frame(rbind(nepal_corona,india_corona,bhutan_corona,bangladesh_corona))
+
+# extracting confirmed cases related to Nepal and its neighbouring countries
+other_countries_confirmed_corona<-countries_corona%>%filter(type=="confirmed")
+
+pivot_other_countries_confirmed_corona<- other_countries_confirmed_corona %>%
+pivot_wider(c(1:5), names_from = "type", values_from = "cases")
+
+options(scipen=999)
+ggplot(pivot_other_countries_confirmed_corona,
+       aes(x = date, y = confirmed, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Figure 08: Scatterplot of confirmed cases of neighbouring countries")
+
+```
+
+Figure 08 shows the variation of Covid-19 confirmed cases of Nepal with its neighbouring countries. Variation of the confirmed cases of the countries Bangladesh and Bhutan are very similar to the variation of the confirmed cases of Nepal while variation of confirmed case of India shows a different variation than Nepal,Bhutan And Bangladesh. And also confirmed cases of India is very higher than Nepal,Bangladesh and Bhutan over the whole time period.
+
+```{r, echo=FALSE, results='hide', comment=NA, warning=FALSE, message=FALSE}
+# extracting number of deaths related to Nepal and its neighbouring countries
+other_countries_death_corona<-countries_corona%>%filter(type=="death")
+
+pivot_other_countries_death_corona<- other_countries_death_corona %>%
+pivot_wider(c(1:5), names_from = "type", values_from = "cases")
+
+ggplot(pivot_other_countries_death_corona,
+       aes(x = date, y = death, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Figure 09: Scatterplot of deaths of neighbouring countries")
+
+```
+
+Figure 09 shows the variation of Covid-19 deaths of Nepal with its neighbouring countries. Variation of the deaths of the countries Bangladesh and Bhutan shows a very similar variation to the variation of deaths of Nepal while variation of deaths of India is differ than Nepal,Bhutan And Bangladesh. And also deaths of India is higher than Nepal,Bangladesh and Bhutan over the whole time period.
+
+```{r, echo=FALSE, results='hide', comment=NA, warning=FALSE, message=FALSE}
+# extracting recovered cases related to Nepal and its neighbouring countries
+other_countries_recovered_corona<-countries_corona%>%filter(type=="recovery")
+
+pivot_other_countries_recovered_corona<- other_countries_recovered_corona %>%
+pivot_wider(c(1:5), names_from = "type", values_from = "cases")
+
+ggplot(pivot_other_countries_recovered_corona,
+       aes(x = date, y = recovery, col = country)) +
+  geom_point() + 
+  geom_smooth(method = lm, se = F, fullrange = T) + 
+  labs(title = "Figure 10: Scatterplot of recoveries of neighbouring countries")
+
+
+```
+
+Figure 10 shows the variation of Covid-19 recoveries of Nepal with its neighbouring countries. Variation of recoveries of Nepal are very similar to the countries Bhutan and Bangladesh while it is differ from India. Variation of recovries of India is higher than Nepal, Bhutan and Bangladesh over the whole time period.
+
+## **3. Conclusions and Discussion.**
+
++ We can see that in Nepal more Covid-19 confirmed cases are detected from middle of the year 2020 to middle of the year 2021.Though at the beginning of the year 2022 it shows a higher number of Covid-19 confirmed cases it has not last for a long period of time.
+
++ Deaths due to Covid-19 in Nepal are high at the middle of the year 2021 and at the rest of the time period number of deaths are closer to the zero.
+
++ At the middle of the year 2021 number of recoveries in Nepal have increased suddenly but it has started to decrease rapidly at the same time.
+
++ We can see that in Nepal most of the Covid-19 infected patients have recovered and only small number of patients have died due to Covid-19.
+
++ Covid-19 status in Bhutan and Bangladesh which are the neighbouring countries of Nepal is same as the Covid-19 status in Nepal. But the Covid-19 status of neighbouring country India is differ from Nepal. Confirmed cases of India is very higher than Nepal and number of deaths due to Covid-19 is also higher than Nepal.
+
+
+## **4. References.**
+
+https://en.wikipedia.org/wiki/Nepal
+
+https://hellor.netlify.app
+

@@ -1,0 +1,404 @@
+---
+title: "Assignment-Czechia"
+author: "Diyana Hewage-AS2019372"
+date: "2022-10-07"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+
+```
+
+# **COVID-19 Pandemic in Czechia**
+
+# 1.Introduction
+
+COVID-19 pandemic is well known global health crisis that was happening in past 3 years. it is also ongoing pandemic in all those years .According to the WHO,it caused more than 620 millions cases and 6.55 million confirmed deaths.COVID-19 caused by the SARS-CoV-2 virus,which means Severe acute respiratory syndrome Coronavirus 2. 
+
+
+First COVID-19 case was found in Wuhan city in China in December 2019.Most common symptoms are fever,cough,tiredness and loss of taste or smell. less common symptoms are sore throat,headache,aches and pains,diarrhoea,a rash on skin or discoloration and red or irritated eyes.
+
+
+This report shows how the COVID-19 affect to the Czechia by using exploratory analysis.
+
+
+
+## 1.1.Location of the Czechia 
+
+Czechia is locates bordered by Germany to the west, Poland to the northeast, Slovakia to the southeast and Austria to the south.
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+library(tidyverse) 
+library(magrittr)
+library(coronavirus)
+library(ggplot2) 
+library(maptools) 
+library(tibble) 
+library(ggrepel) 
+library(png) 
+library(gridBase) 
+library(sp) 
+data(wrld_simpl)
+
+czechia_location <- tibble(lat= 49.8175 , long= 15.4730) 
+p <- ggplot() + geom_polygon(data = wrld_simpl, aes(x = long, y = lat, group = group), fill = "light blue", colour = "light green") +
+  
+coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +   
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +   
+  scale_y_continuous(breaks = seq(-90, 90, 100)) 
+ 
+p +   
+  geom_point(data = czechia_location, aes(x = long, y = lat), color = "red", size = 1)+ ggtitle("Location of the Czechia in World Map")
+```
+
+
+
+## 1.2.Climate Condition in Czechia
+
+Czechia is lie in the temperate climate zone, it is characterized by mild and humid summer with occasional hot spells,cold,cloudy and humid winters.In the month of July , weather and climate is maximum, and in the month of February it is at its lowest.
+
+## 1.3.Lockdown status of the Czechia and actions that were taken by the Government
+
+First confirmed corona cases in Czechia were reported on 1st of  March 2020. The government declared a state of emergency on 12th of March. The country closed its borders,baned the entry of foreigners without residence permit, on 16th of March and also issued a curfew all over the country.
+It has to be end on 24th of March but the curfew was extended until 30th of April and then again until 17th of May.
+Czechia is the first European country which make wearing the face mask mandatory from 19th of March onward.
+
+On 1st of May 2022 , 257 covid deaths cases were confirmed. It was bit lower than to other countries. 
+however on 17th of November 2020 , total of 6416 deaths were confirmed .
+In month of August 2021, Czechia has recorded the fourth highest confirmed death rate in the world.
+
+# 2.Exploratory Data Analysis
+
+## 2.1.All the COVID-19 Cases around the world
+
+
+```{r,include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+library(knitr)
+kable(coronavirus %>% group_by(type) %>% summarise(sum(cases)), caption="Table 01 : Summarised COVID cases around the world")
+
+```
+
+Table 01 shows world wide  COVID-19 cases.
+
+
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE, comment=NA}
+library(coronavirus)
+data(coronavirus)
+head(coronavirus)
+
+tail(coronavirus)
+
+unique(coronavirus$country)
+```
+Here 187 countries are available.
+
+## 2.2.COVID-19 Data of Czechia
+
+
+```{r, include=TRUE, warning=FALSE, echo=FALSE, message=FALSE,comment=NA}
+
+library(tidyverse)
+library(magrittr)
+library(knitr)
+
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+
+summary(czechia_corona)
+
+```
+
+
+
+## 2.3.Confirmed COVID-19 cases in Czechia
+
+Table 02 shows the confirmed COVID-19 cases in Czechia.
+
+```{r,include=TRUE,comment=NA,warning=FALSE, message=FALSE, echo=FALSE}
+
+library(knitr)
+czechia_corona<- coronavirus %>% filter(country == "Czechia")
+confirmedcases_czechia_corona <- czechia_corona %>% filter(type == "confirmed")
+
+kable(head(confirmedcases_czechia_corona), caption = "Table 02:confirmed cases of COVID-19 in Czechia")
+
+
+```
+ 
+
+##### Total confirmed covid cases in Czechia
+
+```{r, include=TRUE, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+
+sum(confirmedcases_czechia_corona$cases)
+```
+ 
+Total of 3928025 cases were confirmed in Czechia.
+
+#### Plot of Confirmed COVID-19 cases in Czechia 
+
+```{r, include=TRUE, warning=FALSE, message=FALSE, echo=FALSE}
+
+ggplot(confirmedcases_czechia_corona, aes(x = date, y = cases))+
+  geom_line(col = "#00BFC4") +
+  ggtitle(" Plot of COVID-19 Confirmed cases ")
+
+
+```
+ 
+ 
+Above graph shows the covid-19 confirmed cases in Czechia.
+
+
+According to the graph, number of confirmed cases were increased in year 2022.In the year of 2022, number of confirmed cases came to its peak and that is more than 50000. then again number of confirmed cases were decreasing gradually.
+ 
+
+## 2.4.Death cases because of COVID-19 in Czechia
+
+```{r, include=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+library(knitr)
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+death_czechia_corona <- czechia_corona %>% filter(type == "death")
+
+kable(head(death_czechia_corona),caption = "Table 03:Death cases due to COVID-19")
+
+```
+
+#### Total Death cases in Czechia
+
+```{r,include=TRUE, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+
+sum(death_czechia_corona$cases)
+
+
+```
+
+#### Plot of Death cases in Czechia
+
+
+```{r, include=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(death_czechia_corona, aes(x = date, y = cases)) +
+  geom_line(col = "#FF6C90")+ ggtitle("COVID-19 death cases in Czechia")
+
+```
+
+
+As we can see in the graph,deaths due to the COVID-19 is gradually increased in the year 2021 and  again decreased.but again in year 2022 number of deaths were increased and peak value of deaths were reported in December 2021.peak value of the death cases were more than 400. according to the graph we can see that number of death cases were decreasing gradually and it is near to the zero in the year 2022.
+
+
+
+## 2.5.Recovered COVID-19 cases in Czechia
+
+
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE,comment=NA}
+
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+recover_czechia_corona <- czechia_corona %>% filter(type == "recovery")
+
+
+head(recover_czechia_corona)
+
+```
+
+
+#### Plot of COVID-19 Recoveries in Czechia
+
+
+```{r, include=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+recover_czechia_corona1.1 <- recover_czechia_corona %>% filter(cases >=0)
+
+ggplot(recover_czechia_corona1.1, aes(x = date, y = cases)) +
+  geom_line(col = "#ED8141")+
+  ggtitle("COVID-19 recoveries in Czechia")
+```
+
+
+According to the plot of COVID-19 Recoveries  we can see that recoveries in year 2020 is higher than to other years,and it was more than 30000. then the number of recoveries were gradually increased in year 2020. 
+
+
+
+## 2.6. Active COVID-19 cases in Czechia
+
+
+```{r, include=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+czechia_corona2.2 <- czechia_corona %>% filter(cases >= 0)
+czcorona_wider <- czechia_corona2.2 %>% pivot_wider(names_from = type, values_from = cases)
+czcorona_wider$active_cz_corona <- czcorona_wider$confirmed - czcorona_wider$death - czcorona_wider$recovery
+ggplot(czcorona_wider, aes(x = date , y = active_cz_corona )) +
+  geom_line(col= "#39B600") +
+  ggtitle("Active COVID-19 cases in Czechia")
+
+```
+
+
+As we can see in the graph ,highest number of active cases were recorded in year 2022. that is more than 50000.
+
+#### Plot of Active COVID-19 cases in Czechia
+
+```{r, include=TRUE, message=FALSE, warning=FALSE, echo=FALSE, comment=NA}
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+
+head(czechia_corona)
+
+ggplot(czechia_corona, aes(x = date, y= cases, col=type)) +geom_line()+ ggtitle("Active COVID-19 cases in Czechia")
+         
+
+```
+
+
+
+#### COVID-19 cases by Type
+
+```{r, include=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(czechia_corona2.2, aes(x = date, y =cases, col= type)) + geom_col() +
+  
+  ggtitle("COVID cases by type") + 
+  facet_grid(type~.)
+```
+
+
+This plot shows all the distribution of recoveries, confirmed and death cases of Czechia in a one frame.
+According to the graph we can see that confirmed cases are higher than recovered cases.death cases are very lower than to confirmed and recovered cases.
+
+
+
+## 2.7.Comparing with other countries
+
+
+Here Czechia is comparing with nearest countries, which is Poland, Germany, Austria and Slovakia.
+
+#### Comparision of Confirmed COVID-19 cases 
+
+
+```{r,include=TRUE,message=FALSE, warning=FALSE, echo=FALSE}
+
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+confirmedcases_czechia_corona <- czechia_corona %>% filter(type == "confirmed")
+
+poland_corona <- coronavirus %>% filter(country == "Poland")
+confirmedcases_poland_corona <- poland_corona %>% filter(type=="confirmed")
+
+
+austria_corona <- coronavirus %>% filter(country == "Austria")
+confirmedcases_austria_corona <- austria_corona %>% filter(type=="confirmed")
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+confirmedcases_germany_corona <- germany_corona %>% filter(type=="confirmed")
+
+slovakia_corona <- coronavirus %>% filter(country == "Slovakia")
+confirmedcases_slovakia_corona <- slovakia_corona %>% filter(type=="confirmed")
+
+nearest_corona <- rbind(confirmedcases_czechia_corona,confirmedcases_poland_corona,confirmedcases_poland_corona,confirmedcases_germany_corona,confirmedcases_slovakia_corona)
+
+ggplot(nearest_corona, aes(x=date,y= cases, col=country))+geom_jitter()+ylim(0,10000)
+
+ggplot(nearest_corona, aes(x= country, y= cases,col= country)) +geom_col()+
+  ylim(0,40000)
+
+ggplot(nearest_corona, aes(x=country, y = cases,col=country)) +geom_boxplot(outlier.shape = NA) 
+```
+
+
+
+According to above graphs we can see that confirmed cases in Poland is higher than to other countries.Germany has the lowest confirmed cases. but comparing  with other countries all of these countries shows approximately same confirmed cases.
+
+
+
+#### Comparision of Death cases 
+
+
+```{r,include=TRUE,message=FALSE, warning=FALSE, echo=FALSE}
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+death_czechia <- czechia_corona %>% filter(type == "death")
+
+poland_corona <- coronavirus %>% filter(country == "Poland")
+death_poland <- poland_corona %>% filter(type=="death")
+
+
+austria_corona <- coronavirus %>% filter(country == "Austria")
+death_austria<- austria_corona %>% filter(type=="death")
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+death_germany <- germany_corona %>% filter(type=="death")
+
+slovakia_corona <- coronavirus %>% filter(country == "Slovakia")
+death_slovakia <- slovakia_corona %>% filter(type=="death")
+
+nearest_corona_death <- rbind(death_czechia,death_poland,death_austria,death_germany,death_slovakia)
+
+ggplot(nearest_corona_death, aes(x=date,y= cases, col=country))+geom_jitter()+ylim(0,10000)
+
+ggplot(nearest_corona_death, aes(x= country, y= cases,col= country)) +geom_col()+
+  ylim(0,40000)
+
+ggplot(nearest_corona_death, aes(x=country, y = cases,col=country)) +geom_boxplot(outlier.shape = NA) 
+  
+```
+
+By looking at these graph we can clearly see that , Austria recorded the lowest death cases, also the Slovakia shows approximately same death cases as Austria. 
+but other three countries shows higher death cases than Austria and Slovakia. Germany, Czechia and Poland shows approximately same death cases. 
+
+#### Comparision of COVID-19 Recoveries
+
+
+```{r,include=TRUE,message=FALSE, warning=FALSE, echo=FALSE}
+czechia_corona <- coronavirus %>% filter(country == "Czechia")
+recover_czechia <- czechia_corona %>% filter(type == "recovery")
+
+poland_corona <- coronavirus %>% filter(country == "Poland")
+recover_poland <- poland_corona %>% filter(type=="recovery")
+
+
+austria_corona <- coronavirus %>% filter(country == "Austria")
+recover_austria<- austria_corona %>% filter(type=="recovery")
+
+germany_corona <- coronavirus %>% filter(country == "Germany")
+recover_germany <- germany_corona %>% filter(type=="recovery")
+
+slovakia_corona <- coronavirus %>% filter(country == "Slovakia")
+recover_slovakia <- slovakia_corona %>% filter(type=="recovery")
+
+nearest_corona_recover <- rbind(recover_czechia,recover_poland,recover_austria,recover_germany,recover_slovakia)
+
+ggplot(nearest_corona_recover, aes(x=date,y= cases, col=country))+geom_jitter()+ylim(0,10000)
+
+ggplot(nearest_corona_recover, aes(x= country, y= cases,col= country)) +geom_col()+
+  ylim(0,40000)
+
+
+```
+
+By looking at above graphs we can see that germany has recorded the lowest recoveries compared to the other countries.Czechia, Poland, Austria and Slovakia shows some kind of approximate recoveries.
+
+# Discusssion and Conclusion
+
+First COVID-19 case were found in the Wuhan city in China by the time December of 2022. On 1st of March 2020, Czechia reported 3 coronavirus cases.1011 people were already in home quarantine on 6th of march.on March 11 schools were closed due to finding out number of covid cases.15th of March nationalwide quarantine period was started.In week 12, Czechia became the first country which is in EU,that was closed its borders.On march 22 first death was reported. likewise death cases were gradually increased.
+
+
+In the analysis of covid 19 in czechia, firstly dataset for the Czechia were filter from the main coronavirus dataset.Some of negative vales were there on the original dataset and then those values were taken as missing values. There was error on mapping the country on world map, that was fixed by adding the logitude and latitude value of the country. There were 187 countries available in the data set. by using proper code , data set of Czechia was filtered from coronavirus dataset.
+Total of 3928025 confirmed cases were recorded for the country Czechia, total of death cases was 40312. that was 1.026% from total of confirmed cases.
+
+
+Different kind of plots were used to visualize the data.number of confirmed cases were increased in 2022. peak of the confirmed cases were recorded in year 2022.
+also the death rates due to covid 19 was came to its peak on year 2022. 
+Poland, Germany, Austria and Slovakia were taken to compare with Czechia.
+
+When comparing the confirmed cases Poland has the highest confirmed cases. and the Germany shows the lowest confirmed cases.but Austria, Slovakia and Czechia shows approximately same confirmed cases.Germany has mean highest mean confirmed cases than to other countries.but for the Czechia and Poland mean confirmed cases are approximately same.
+For the death comparison Austria recorded the lowest death cases than other countries.also the Slovakia shows some kind of approximation to the Austria.Poland, Germany and Czechia shows larger values of death case. from those 3 countries, Germany and Poland shows the highest death cases. but for the Germany , mean death cases is higher than for the Poland.When it comes to recoveries Germany has recorded the lowest recoveries than to other countries. 
+ 
+# References 
+
+*https://en.wikipedia.org/wiki/Czech_Republic 
+
+*https://ggplot2.tidyverse.org/reference/
+
+*https://statisticsglobe.com/identify-default-color-palette-names-of-ggplot2-in-r
+
+*https://en.wikipedia.org/wiki/COVID-19_pandemic_in_the_Czech_Republic
+

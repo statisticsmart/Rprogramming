@@ -1,0 +1,193 @@
+---
+title: "COVID 19 in China"
+author: "T.M.C.L.Jayasooriya AS2019393"
+date: "2022-10-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+China, officially the People's Republic of China, is a country in East Asia. It is the world's most populous country with a population exceeding 1.4 billion people . China has the worlds number one economy also China consist of 9,671,018 km^2 land. China is bordered by Russia ,India,Pakistan ,Nepal,Mongolia and 10 other countries.this shows how large China is. 
+
+In 2020 corona virus spreaded all around the world became a pandemic . According to the findings corona virus began from china as there was the first affected person in Woohan ,China. Corona virus caused large number of deaths all around the world and it affected day to day life in harmful manner. It made economical crisis in many  developing countries
+
+So here iam presenting a short report about corona virus and how it affected China.
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(maptools)
+library(maps)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(gridBase)
+data(wrld_simpl)
+china_corona <- coronavirus %>% filter(country == "China")
+ind_corona <- coronavirus %>% filter(country == "India")
+uk_corona <- coronavirus %>% filter(country == "United Kingdom")
+sl_corona <- coronavirus %>% filter(country == "Sri Lanka")
+
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+```
+# Location Of The China
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "red", colour = "black"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = china_corona, aes(x = long, y = lat), color = "yellow", size
+    = 2
+  )
+```
+
+# Data Visualization
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+china_corona_conf <- china_corona %>% filter(type=="confirmed")
+
+
+china_corona_rec <- china_corona %>% filter(type=="recovery")
+
+
+china_corona_death <- china_corona %>% filter(type=="death")
+
+
+china_corona_new <- china_corona %>% mutate(cases=replace(cases,which(cases<0)
+                                                    ,NA))
+ind_corona_new <- ind_corona %>% mutate(cases=replace(cases,which(cases<0)
+                                                    ,NA))
+sl_corona_new <- sl_corona %>% mutate(cases=replace(cases,which(cases<0)
+                                                    ,NA))
+uk_corona_new <- uk_corona %>% mutate(cases=replace(cases,which(cases<0)
+                                                    ,NA))
+
+```
+Death,Recovery, Confirmed
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(plotly)
+
+plot_ly(data= china_corona_new,
+        x=~date, 
+        y=~cases, 
+        type = 'scatter',
+        mode = 'lines',
+        color = ~type)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(china_corona_conf, aes(x=date, y=cases, color="red")) + geom_line() + ggtitle("China: Daily Covid-19 Confirmed Cases")
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(china_corona_death, aes(x=date, y=cases, color="red")) + geom_line() + ggtitle("China: Daily Covid-19 Death Cases")
+
+```
+
+
+## Comparison with Other Countries Cases
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(ggplot2)
+library(coronavirus)
+library(magrittr)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(knitr)
+library(plotly)
+china_corona_new <- china_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(china_corona_new)
+which(is.na(china_corona_new$cases))
+
+sl_corona_new <- sl_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(sl_corona_new)
+which(is.na(sl_corona_new$cases))
+
+ind_corona_new <- ind_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(ind_corona_new)
+which(is.na(ind_corona_new$cases))
+
+uk_corona_new <- uk_corona%>%mutate(cases=replace(cases,which(cases<0),NA))
+summary(uk_corona_new)
+which(is.na(uk_corona_new$cases))
+
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+china_corona_new_confirmed <- china_corona_new %>% filter(type == "confirmed")
+sl_corona_new_confirmed <- sl_corona_new %>% filter(type == "confirmed")
+ind_corona_new_confirmed <- ind_corona_new %>% filter(type == "confirmed")
+uk_corona_new_confirmed <- uk_corona_new %>% filter(type == "confirmed")
+
+c1 <- china_corona_new_confirmed %>% select(date,cases,country)
+i1 <- ind_corona_new_confirmed %>% select(date,cases,country)
+u1 <- uk_corona_new_confirmed %>% select(date,cases,country)
+s1 <- sl_corona_new_confirmed %>% select(date,cases,country)
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+c <- rbind(c1,i1,u1,s1)
+
+plot_ly(data = c , x = ~date, y = ~cases , type = 'scatter', mode = 'lines', color = ~country)
+```
+
+# Comparison with Other Countries Deaths
+
+```{r echo=FALSE}
+
+
+library(coronavirus)
+china_corona_new_death <- china_corona_new %>% filter(type == "death")
+ind_corona_new_death <- ind_corona_new %>% filter(type == "death")
+sl_corona_new_death  <- sl_corona_new  %>% filter(type == "death")
+uk_corona_new_death  <- uk_corona_new  %>% filter(type == "death")
+
+
+c2 <- china_corona_new_death %>% select(date,cases,country)
+i2 <- ind_corona_new_death %>% select(date,cases,country)
+s2 <-  sl_corona_new_death %>% select(date,cases,country)
+u2 <-  uk_corona_new_death %>% select(date,cases,country)
+
+d <- rbind(c2,i2,s2,u2)
+
+```
+
+```{r echo=FALSE, warning=FALSE}
+
+plot_ly(data = d , x = ~date, y = ~cases , type = 'bar', mode = 'lines', color = ~country) 
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+china_recovery <- china_corona_new %>% filter(type == "recovery")
+```
+
+# Conclusions & Discussion
+Confirmed Cases are increasing,So Government should look about that.
+There is a Significant rise of confirmed cases in 2022.
+Covid deaths are also high in the 2022 compared to 2021.
+compared to other countries China has the lower cases (here other countries means India,Sri Lanka and United Kingdom ).
+China has a lower death rates compared to other countries.
+
+# References
+1.wikipedia - https://en.m.wikipedia.org/wiki/China
+

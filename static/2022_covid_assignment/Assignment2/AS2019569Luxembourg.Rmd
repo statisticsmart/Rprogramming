@@ -1,0 +1,350 @@
+---
+title: "**The Covid-19 Pandemic in Luxembourg**"
+author: "Ishini Weerakkody"
+date: "2022-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,echo = FALSE,comment =NA,message = FALSE,fig.align = "center")
+```
+
+## **1. Introduction**
+
+### 1.1 Location of Luxembourg
+
+![alt text](https://www.worldatlas.com/upload/23/f0/42/lu-02.jpg)
+Luxembourg officially the Grand Duchy of Luxembourg,is a landlocked country in Western Europe.It borders Belgium to the west and north, Germany to the east, and France to the south. Its capital and most populous city, Luxembourg,is one of the four institutional seats of the European Union (together with Brussels, Frankfurt, and Strasbourg) and the seat of several EU agencies, notably the Court of Justice of the European Union, the highest judicial authority.
+With an area of 2,586 square kilometers (998 sq mi), Luxembourg is one of the smallest countries in Europe.In 2022, it had a population of 645,397, which makes it one of the least-populated countries in Europe,albeit with the highest population growth rate;foreigners account for nearly half the population.Luxembourg is a representative democracy headed by a constitutional monarch, Grand Duke Henri, making it the world's only remaining sovereign grand duchy.
+Luxembourg is a founding member of the European Union,OECD, the United Nations, NATO, and the Benelux.It served on the United Nations Security Council for the first time in 2013 and 2014. As of 2022, Luxembourg citizens had visa-free or visa-on-arrival access to 189 countries and territories, ranking the Luxembourgish passport fourth in the world, tied with Finland and Italy.
+
+
+### 1.2 Economy of Luxembourg
+
+Luxembourg's stable and high-income market economy features moderate growth, low inflation, and a high level of innovation.Unemployment is traditionally low, though it reached 6.1% by May 2012, due largely to the 2008 global financial crisis.[116] In 2011, according to the IMF, Luxembourg was the world's second-richest country, with a per capita GDP on a purchasing-power parity (PPP) basis of $80,119. Its GDP per capita in purchasing power standards was 261% of the EU average (100%) in 2019.Luxembourg ranks 13th in The Heritage Foundation's Index of Economic Freedom, 26th in the United Nations Human Development Index, and 4th in the Economist Intelligence Unit's quality of life index.[120] It ranked 18th in the Global Innovation Index in 2019 and 2020 and 23rd in 2021.
+The Luxembourg labor market represents 445,000 jobs occupied by 120,000 Luxembourgers, 120,000 foreign residents and 205,000 cross-border commuters. The latter pay their taxes in Luxembourg, but their education and social rights are the responsibility of their country of residence. The same applies to pensioners. Luxembourg's government has never shared its tax revenues with the local authorities on the French border. This system is seen as one of the keys to Luxembourg's economic growth, but at the expense of the border countries.
+
+### 1.3 Health of Luxembourg
+
+According to data from the World Health Organization, healthcare spending on behalf of the government of Luxembourg topped 4.1 Billion, amounting to about $8,182 for each citizen in the nation.The nation of Luxembourg collectively spent nearly 7% of its Gross Domestic Product on health, placing it among the highest spending countries on health services and related programs in 2010 among other well-off nations in Europe with high average income among its population.
+
+
+### 1.4 Environment of Luxembourg
+
+According to the 2012 Environmental Performance Index, Luxembourg is one of the world's best performers in environmental protection, ranking 4th out of 132 assessed countries.In 2020, it ranked second out of 180 countries.Luxembourg also ranks 6th among the top ten most livable cities in the world by Mercer's. The country wants to cut GHG emissions by 55% in 10 years and reach zero emissions by 2050. Luxembourg wants to increase its organic farming fivefold.It had a 2019 Forest Landscape Integrity Index mean score of 1.12/10, ranking it 164th globally out of 172 countries.
+Luxembourg has an oceanic climate, marked by high precipitation, particularly in late summer. The summers are warm and winters cool.
+
+### 1.5 Pandemics before coronavirus
+
+#### *The Spanish Flu of 1918*
+World War I ended in 1918 but the horrors would not come to an end: the 1918/1919 influenza pandemic infected around 500 million people around the world. No place was shielded from the disease: even unfortunate souls living on remote Pacific islands and in the Arctic did not escape the pandemic's deadly reach. Depending on the source, between 50 and 100 million people paid with their lives - making the Spanish flu one of the deadliest epidemics in human history. The exact mortality rate is not known but it is estimated that between 10% and 20% of those who were infected passed away. A common theory is that the disease was imported into Europe from the US.
+
+Many people also fell prey to the disease in Luxembourg but the total number of victims remains unclear. The country was still weakened by war and food was scarce, which facilitated the spreading of the virus.
+
+On 23 October 1918, the Escher Tageblatt for example appologised for delays in delivering the newspapers to their clients because two thirds of their staff were infected. Protestant churches and the synagogue in Luxembourg City were closed, countless school children were affected, and the economy suffered as well: a fifth of Dudelange's steel workers called in sick. 18 of them succumbed to their injuries, including two young men aged 16 and 19.
+
+![alt text](https://stock.rtl.lu/rtl/1260/rtl2008.lu/nt/p/2020/01/04/21/1206aae4fb305d039b70184bc7034811.jpeg)
+
+
+#### *The Black Death*
+
+The Black Death (also know as the Plague) haunted Eurasia and brought death to an estimated 75 to 200 million people. It peaked in Europe (including Luxembourg) between 1347 and 1351. Many historians believe that it originated in Central Asia and then travelled along the Silk Road to Crimea.
+From there, it the disease was likely brought into central Europe by fleas living on rats that were omnipresent on merchant ships. Between 30% to 60% of Europe's population died - it took humanity 200 years to regain its former population levels.
+
+![alt text](https://stock.rtl.lu/rtl/800/rtl2008.lu/nt/p/2020/01/04/21/ca385e5fdeec74a022d03a5300b15021.jpeg)
+#### *Cholera *
+
+According to WebMD, "Cholera is an infectious disease that causes severe watery diarrhea, which can lead to dehydration and even death if untreated. It is caused by eating food or drinking water contaminated with a bacterium called Vibrio cholerae." 7 Cholera pandemics have occurred in the last 200 years, with the last one originating in Indonesia in 1961.
+Luxembourg was plagued by a Cholera pandemic in 1865. More than 3,546 people died in less than 2 years.
+![alt text](https://stock.rtl.lu/rtl/800/rtl2008.lu/nt/p/2020/01/04/20/8943e8886376b5f347edb0ff1d33480b.jpeg)
+
+
+#### *The potato blight*
+
+It is no secret that the potato played (and continues to play) an enormous cultural and even sociopolitical role in Luxembourg. To oversimplify: historically, healthy potatoes equal healthy Luxembourg. Unhealthy potatoes equal starvation and famine.
+Much like Ireland, Luxembourg felt the terrible sting of potato blight (a kind of water mold that causes disease) in 1845. Infected potatoes came to Flanders from Northern America and eventually also arrived in Luxembourg. The following years were marked by crop failures and acute food shortages. It is unclear how many people died from starvation.
+
+![alt text](https://stock.rtl.lu/rtl/800/rtl2008.lu/nt/p/2020/01/04/22/becc4716ebca7e89cfdd24c28e0f3286.jpeg)
+
+### 1.6 What happened during the pandemic?
+
+* **On 29 February 2020**: The Ministry of Health of Luxembourg confirmed the first case of the coronavirus  in the country.
+ *The patient was a man in his forties who had returned from Italy via Charleroi,   Belgium. He   reported himself to the Sanitary Inspection Unit and was placed in quarantine at the  Centre     Hospitalier de Luxembourg in Luxembourg City.*
+* **On 6 March**   : A woman was confirmed with the virus after staying in the Alsace region in France, bringing the total number of confirmed cases to 3.
+* **On 6 March**   : The ministry announced that schools would close from 16 to 27 March following the recent number of cases in Luxembourg.
+* **On 13 March**  : Minister for Health Paulette Lenert, Minister for Mobility François Bausch, and Minister for Family Affairs Corinne Cahen held a press conference to confirm another 8 cases and Luxembourg's first death.
+* **On 19 March**  : Bettel declared a state of emergency
+* **On 20 March**  : Public transport services were significantly reduced.
+* **On  May **     : First lockdown
+* **On  October**  : Second wave
+* **On  November** :partial lockdown was announced on 23 November affecting leisure facilities including gyms, pools and cinemas as well as restaurants and bars and home visits limited to 2 people.
+* **On Decemberr2020** : Curfew was extended
+
+
+## **2.Exploratory Data Analysis**
+
+The data set contains the daily summary of Corona virus cases in Luxembourg. All cases are recorded according to the following variables;
+
+- date    : Date in YYYY-MM-DD format.
+- province: Name of province/state, for countries where data is provided split across multiple provinces/states.
+- country : Name of country/region.
+- lat     : Latitude of center of geographic region, defined as either country or, if available, province.
+- long    : Longitude of center of geographic region, defined as either country or, if available, province.
+- type    : An indicator for the type of cases (confirmed, death, recovered).
+- cases   : Number of cases on given date.
+
+The analysis has been done by R, a programming language for statistical computing and graphics.
+
+### 2.1 Summary measures of confirmed, recovery and death cases in Luxembourg
+
+The data presented below are valid only up to the date of June 2022. The current situation might be quite different from what is depicted below.
+
+```{r}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(plotly)
+library(zoo)
+library(leaflet)
+library(dplyr)
+```
+```{r}
+library(coronavirus)
+library(magrittr)
+library(dplyr)
+coronavirus<-coronavirus
+
+Luxembourg_corona <- coronavirus %>% filter(country == "Luxembourg")
+summary(Luxembourg_corona)
+```
+
+```{r}
+head(Luxembourg_corona)
+Luxembourg_corona<-Luxembourg_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+```
+
+* **Confirmed cases of Luxembourg** 
+
+```{r,fig.cap ="Summary meassures of confirmed cases in Luxembourg"}
+confirmed_Luxembourg_corona<-filter(Luxembourg_corona,type=="confirmed")
+confirmed_Luxembourg_corona <- confirmed_Luxembourg_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_Luxembourg_corona$cases)
+
+```
+*Misssing values of Confirmed cases*
+```{r}
+# Missing values of Confirmed cases
+which(is.na(confirmed_Luxembourg_corona$cases))
+```
+*Length of Confirmed cases*
+```{r}
+confirmed_Luxembourg_corona$cases[220] = mean(c(confirmed_Luxembourg_corona$cases[221], confirmed_Luxembourg_corona$cases[222]))
+length(confirmed_Luxembourg_corona$cases)
+```
+
+```{r,fig.cap="*Figure 1* : Confirmed cases of covid-19 in Luxembourg"}
+confirmed_Luxembourg_corona<-filter(Luxembourg_corona,type=="confirmed")%>%mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(confirmed_Luxembourg_corona,aes(x=date,y=cases))+geom_line()
+  
+```
+According to the *Figure 1*,
+The first confirmed case was deducted on 29 th of February2020.After that confirmed cases are increased.Compared to 2020 and 2021, 2022 can see a rapid increase in confirmed cases.
+
+
+* **recovery cases of Luxembourg**
+
+```{r,fig.cap ="Summary meassures of recovery cases in Luxembourg"}
+recovery_Luxembourg_corona <- Luxembourg_corona %>% filter(type=="recovery")
+recovery_Luxembourg_corona <- recovery_Luxembourg_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovery_Luxembourg_corona$cases)
+c("Total confirmed cases =",sum(recovery_Luxembourg_corona$cases))
+
+```
+*Misssing values of recovery cases*
+```{r}
+which(is.na(recovery_Luxembourg_corona$cases))
+```
+*Length of recovery cases*
+
+```{r}
+recovery_Luxembourg_corona$cases[219] = mean(c(recovery_Luxembourg_corona$cases[218], recovery_Luxembourg_corona$cases[220]))
+recovery_Luxembourg_corona$cases[280] = mean(c(recovery_Luxembourg_corona$cases[281], recovery_Luxembourg_corona$cases[279]))
+recovery_Luxembourg_corona$cases[385] = mean(c(recovery_Luxembourg_corona$cases[384], recovery_Luxembourg_corona$cases[386]))
+recovery_Luxembourg_corona$cases[532] = mean(c(recovery_Luxembourg_corona$cases[531], recovery_Luxembourg_corona$cases[533]))
+recovery_Luxembourg_corona$cases[562] = mean(c(recovery_Luxembourg_corona$cases[561], recovery_Luxembourg_corona$cases[563]))
+length(recovery_Luxembourg_corona$cases)
+```
+
+
+```{r,fig.cap="*Figure 2* : Recovery cases of covid-19 in Luxembourg"}
+recovery_Luxembourg_corona<-filter(Luxembourg_corona,type=="recovery")%>%mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(recovery_Luxembourg_corona,aes(x=date,y=cases))+geom_line()
+```
+According to the *Figure 2*,
+Recovery cases are higher in 2021.But in 2022 we can see there's low recovery cases.
+
+* **Death cases of Luxembourg**
+
+```{r,fig.cap ="Summary meassures of death cases in Luxembourg"}
+death_Luxembourg_corona <- Luxembourg_corona %>% filter(type=="death")
+death_Luxembourg_corona <- death_Luxembourg_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+which(is.na(death_Luxembourg_corona$cases))
+summary(death_Luxembourg_corona$cases)
+```
+*Misssing values of death cases*
+```{r}
+which(is.na(death_Luxembourg_corona$cases))
+```
+
+*Length 0f death cases*
+```{r}
+death_Luxembourg_corona$cases[84] = mean(c(death_Luxembourg_corona$cases[83], confirmed_Luxembourg_corona$cases[84]))
+length(death_Luxembourg_corona$cases)
+```
+
+```{r,fig.cap="*Figure 3* : Death  cases covid-19 in Luxembourg"}
+death_Luxembourg_corona<-filter(Luxembourg_corona,type=="death")%>%mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(death_Luxembourg_corona,aes(x=date,y=cases))+geom_line()
+  
+```
+According to the *Figure 3*,
+Death cases are higher in 2021 than 2020 and 2022.Highest death cases are reported in middle of 2021. 
+
+### 2.2 Graphical Visualization of COVID-19 cases in Luxembourg
+
+```{r,message=FALSE,fig.cap="*Figure 4* : Daily COVID-19 in Luxembourg cases change over time"}
+ggplot(Luxembourg_corona, aes(x=date, y=cases, col=type)) + geom_col()+  facet_grid(type~.)
+```
+*Figure 4* shows that,
+* In 2021,Recovery rate is higher compared to the death rate.
+* But in 2022, recovery rate is lower compared to the confirmed rate.And also death rate is low.Therefore it might be   
+  active cases.
+  
+### **2.3 Daily Active Cases in Luxembourg**
+
+```{r dpi=100, echo=FALSE, message=FALSE, warning=FALSE,out.width = "80%"}
+ active_Luxembourg_corona <-coronavirus %>% filter(country=="Luxembourg")%>%
+  group_by(type, date) %>%
+   summarise(total_cases = sum(cases)) %>%
+   pivot_wider(names_from = type, values_from = total_cases) %>%
+   arrange(date) %>%
+   mutate(active = confirmed - death - recovery) %>%
+   mutate(active_total = cumsum(active),
+          recovered_total = cumsum(recovery),
+          death_total = cumsum(death))
+ ggplotly(ggplot(active_Luxembourg_corona,aes(x =date,y =active_total))+geom_line(color = "green")+ggtitle("Figure 05: Total acive COVID-19 cases in Luxembourg"))
+
+```
+
+
+### 2.4 Comparison with other countries
+
+Here we are comparing the effectiveness of Luxembourg’s virus prevention plan with regards to several other countries.
+They are Australia, China and Canada, which are among the world's leading countries.
+
+```{r,out.width="100%"}
+Australia_corona<-filter(coronavirus,(country=="Australia"))%>%mutate(cases = replace(cases, which(cases < 0), NA))
+
+confirmed_Australia_corona<-filter(Australia_corona,type=="confirmed")
+death_Australia_corona<-filter(Australia_corona,type=="death")
+recovery_Australia_corona<-filter(Australia_corona,type=="recovery") 
+
+
+China_corona<-filter(coronavirus,(country=="China"))%>%mutate(cases = replace(cases, which(cases < 0), NA))
+
+death_China_corona<-filter(China_corona,type=="death")
+recovery_China_corona<-filter(China_corona,type=="recovery")
+confirmed_China_corona<-filter(China_corona,type=="confirmed")
+
+
+Canada_corona<-filter(coronavirus,(country=="Canada"))%>%mutate(cases = replace(cases, which(cases < 0), NA))
+death_Canada_corona<-filter(Canada_corona,type=="death")
+recovery_Canada_corona<-filter(Canada_corona,type=="recovery")
+confirmed_Canada_corona<-filter(Canada_corona,type=="confirmed")
+```
+
+
+* **COVID-19 cases in Australia**
+
+```{r,fig.cap="*Figure 5 : covid-19 cases in Australia*"}
+ggplot(Australia_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+According to the *Figure 5*, 
+confirmed cases are really high in 2022 compared to 2020 and 2021.Death cases are low than the recovery cases.Australian government controlled well.
+
+
+* **COVID-19 cases in China**
+
+```{r,fig.cap="*Figure 6 : covid-19 cases in China*"}
+ggplot(China_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+According to the *Figure 6*, 
+confirmed cases are really high in 2022 compared to 2020 and 2021.Death cases are higher than the recovery cases in 2022.Recovery cases are high compared to the death cases in 2020.In 2021 there is low cases China.China Government was controlled the covid-19 in 2021 than 2020 and 2022.
+
+* **COVID-19 cases in Canada**
+
+```{r,fig.cap="*Figure 7 : covid-19 cases in Canada*"}
+ggplot(Canada_corona, aes(x=date, y=cases, col=type)) + geom_line()
+```
+According to the *Figure 7*,
+The highest confirmed cases are reported in 2022.And recovery rate is higher than death rate 2020 to middle of 2021. 
+
+#### Comparison COVID-19 cases in Luxembourg with other countries
+
+```{r,fig.cap="*Figure 8 : Daily COVID-19 cases of all 3 counties over Time* "}
+compare_cases<-rbind(Luxembourg_corona,Australia_corona,China_corona,Canada_corona)
+ggplot(compare_cases,aes(x=date, y=cases, col=country)) + geom_line()+facet_wrap(~type)
+```
+According to the *Figure 8*,
+
+ * Covid -19 has spread more in Australia,Canada,China and Luxembourg  in 2022.
+ * Recovery rate is higher in Canada.
+ * Death rate is low in all countries.
+
+```{r,fig.cap="*Figure 9: Total COVID-19 cases of countries by Case Type*"}
+
+compare_cases_death<-rbind(death_Luxembourg_corona,death_Australia_corona,death_China_corona,death_Canada_corona)
+ggplot(data=compare_cases,aes(x=type,y=cases,fill=country))+geom_col(position ="dodge")
+
+```
+According to the *Figure 9*,
+
+* There's more confirmed cases reported in Australia compared to the other countries.
+* China has high death cases than the other countries.
+* Canada has high recover rate compared to the other countries.
+* But Luxembourg government is prevent the virus more effectively than other countries.Because recovery cases are high    relative to   the Confirmed cases.  
+
+```{r,fig.cap="*Figure 10 : Total COVID-19 death cases of all 4 countries*"}
+ggplot(data=compare_cases_death,aes(x=type,y=cases,fill=country))+geom_col(position ="dodge")
+
+```
+According to the *Figure 10*,
+
+* Death cases are higher in China compared to the other countries.
+* Luxembourg has lower death cases.
+
+
+### **3. Discussion**
+
+The data set is loaded by corona virus data set given in the package R. Luxembourg data set is obtained by it. It has null values and minus value for cases.NA values were clean from the data set by using most recent value. The first confirmed case was deducted on 29 th of February2020.After that confirmed cases are increased.Compared to 2020 and 2021, 2022 can see a rapid increase in confirmed cases.But in middle of 2020 to middle of 2021 government of Luxembourg controlled the covid-19 virus well.Now its become dangerous situation because no. of confirmed cases are increasing but recovered cases are not much increased with compared to other cases. The all unusual observations are not considered. It is used manual method to obtain count of confirmed cases in each country in monthly so that country wise data clean method were ignored. Luxembourg is comparisoned with 3 countries. All data sets are obtained in special way which is described previously.
+
+
+### **4.  Conclusion**
+
+Corona virus disease  is identified in December 2019 in Wuhan, Hubei but it is increased speedily in January to March. However, it is directly affected to the other countries. At that time, most of countries had high risk but all countries did not expect serious situations like this. China is the country which has largest population plus they have strong health facilities and modern technologies. After the virus entered to the population they taken action to preventing virus.The Luxembourg became a victim of virus in February in 2020 and it happened to increase confirmed cases  and after that 2nd  wave happened.Luxembourg government had started to take actions against this situation after March but at that time virus is spread to the society.
+
+
+### **5. References**
+
+* https://covid19.public.lu/en.html
+* https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/luxembourg/
+* https://www.worldometers.info/coronavirus/country/luxembourg/
+* https://covid19.who.int/region/euro/country/lu
+
+
+

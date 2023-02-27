@@ -1,0 +1,389 @@
+
+---
+title: " **Impact of Covid-19 Pandamic in Ecuador**    "
+
+
+output: html_document
+---
+######                                          H.J.N.B.PERERA -- AS2019485
+ 
+<center>
+![EcuadorMap(Physical)](C:/Users/User/Downloads/WhatsApp Image 2022-10-03 at 12.25.27 PM.jpeg){width=30%}
+</center>
+ 
+ 
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+--------------------------
+
+##  **1.0** **About Ecuador**
+
+> ##### Ecuador is a country in northwestern South America, bordered by Colombia on the north, Peru on the east and south, and the Pacific Ocean on the west. Ecuador also includes the Galápagos Islands in the Pacific, about 1,000 kilometers (621 mi) west of the mainland.The country's capital and largest city is Quito..Economically, Ecuador became known for exporting Panama hats century and agricultural products, notably cacao, bananas, and flowers. It is a major exporter of petroleum and an increasingly important tourist destination.
+
+
+ from [britannica]("https://www.britannica.com/place/Ecuador")
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+
+ library(plotly)
+ library(devtools)
+ library(coronavirus) 
+  data(coronavirus)
+  library(tidyverse)
+  library(magrittr)
+  library(ggplot2)
+  library(dplyr)
+  library(ggplot2)
+library(ggmap)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+library(ggmap)
+```
+
+
+ 
+#### **1.1** **The Placement of Ecuador**
+
+```{r  echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+mapdata <- map_data("world")
+zam_map <- filter(mapdata,region=="Ecuador")
+data("wrld_simpl")
+
+p0 <- ggplot() +
+  geom_polygon(data = wrld_simpl,aes(x=long, y=lat, group=group), fill="light blue", colour="black") 
+
+p0 + geom_point(data = zam_map,aes(x=long,y=lat), fill="black", colour="red")
+
+
+
+ 
+```
+
+
+
+
+ 
+*  Ecuador has a total area of 283,561 km2 (109,484 sq mi), including the Galápagos Islands. Of this, 276,841 km2 (106,889 sq mi) is land and 6,720 km2 (2,595 sq mi) water. Ecuador is bigger than Uruguay, Suriname, Guyana and French Guiana in South America.
+
+#### **1.2** **Climate Condition in Ecudor**
+* There is great variety in the climate, largely determined by altitude. It is mild year-round in the mountain valleys, with a humid subtropical climate in coastal areas and rainforest in lowlands. The Pacific coastal area has a tropical climate with a severe rainy season. The climate in the Andean highlands is temperate and relatively dry, and the Amazon basin  	on the eastern side of the mountains shares the climate of other rainforest zones.
+
+#### **1.3** **Demographics of Ecudor**
+ 
+#### 17,888,474  (persons) 
+
+* In 2021, population for Ecuador was 17.9 million persons. Population of Ecuador increased from 6.43 million persons in 1972 to 17.9 million persons in 2021 growing at an average annual rate of 2.11%.
+
+#### **1.4** **Health Care System in Ecudor **
+
+* Ecuador has a comprehensive publicly funded health system and national health insurance. Free medical care  is available to all residents regardless of income, and without buying any type of medical insurance. An extensive and proactive program for public health includes actions such as teams of nurses going door-to-door offering influenza vaccines to residents. . In Ecuador, this one year of service is mandatory for professional licensing.
+
+* The Human Rights Measurement Initiative found that Ecuador fulfilled 92.6% of what it should have for the right to health based on its level of income. When looking at the right to health concerning children, Ecuador achieved 97.1% of what was expected based on its current income.  
+
+##  **2.0** **Covid 19 Pandamic in Ecudor**
+
+ * So far, the National Institute for Public Health Research (INSPI) has taken 2,470,170 samples for RT-PCR COVID-19, of which 732,038 are confirmed cases with PCR tests.
+
+* This indicator, updated daily, reports the accumulated number of samples taken to carry out the RT-PCR test in authorized laboratories in Ecuador. It should be noted that there may be more than one sample per person during the diagnostic process.
+
+	
+ * 34,533 deaths (confirmed COVID-19)
+On February 29, 2020, the first case of coronavirus was confirmed. On 03/13/2020 the National COE was activated to coordinate the emergency.
+
+from [Through Ministerial Agreement No. 00126-2020 issued on March 11, 2020 by the Minister of Health, a State of Health Emergency is declared in the National Health System.](https://www.salud.gob.ec/actualizacion-de-casos-de-coronavirus-en-ecuador/)
+
+
+####  **2.1** **Exploratory Data Analysis**
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,include=FALSE}
+
+ecuador_corona <- coronavirus %>% filter(country == "Ecuador")
+confirmed_ecuador_corona <- ecuador_corona %>% filter(type=="confirmed")
+
+confirmed_ecuador_corona <- confirmed_ecuador_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_ecuador_corona)
+
+```
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,include=FALSE}
+
+which(is.na(confirmed_ecuador_corona$cases))
+
+#i use missing values 107, 108, 111 as a one point (109)
+confirmed_ecuador_corona$cases[107] = mean(c(confirmed_ecuador_corona$cases[106], confirmed_ecuador_corona$cases[108]))
+
+
+confirmed_ecuador_corona$cases[108] = mean(c(confirmed_ecuador_corona$cases[107], confirmed_ecuador_corona$cases[109]))
+
+
+confirmed_ecuador_corona$cases[111] = mean(c(confirmed_ecuador_corona$cases[110], confirmed_ecuador_corona$cases[112]))
+
+
+confirmed_ecuador_corona$cases[230] = mean(c(confirmed_ecuador_corona$cases[229], confirmed_ecuador_corona$cases[231]))
+
+
+confirmed_ecuador_corona$cases[660] = mean(c(confirmed_ecuador_corona$cases[659], confirmed_ecuador_corona$cases[661]))
+
+length(confirmed_ecuador_corona$cases)
+
+#i use missing values 107, 108, 111 as a one point (109)
+
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
+
+#i use missing values 107, 108, 111 as a one point (109)
+#confirmed_ecuador_corona$col <- as.factor(c(rep("blue",107 ),rep("red", 2), rep("blue",228-109),rep("red",2),(rep("blue",258-230),rep("red",2),rep("blue",884-660)))  
+
+a<-ggplot(confirmed_ecuador_corona, aes(x=date, y=cases,color="red")) +
+      geom_line() +
+      labs(x = "Date",
+           y = "Confirmed cases",
+           title = "Figure 1 : Distribution of Confirmed Cases across time" )+scale_colour_identity()
+ggplotly(a)
+  
+
+
+```
+Above graph showas the confirmed no.of corona patients in Ecuador in daily basis. It shows that no.of confirmed Corona patients has been increasing since mid of 2020 upto mid of 2022 of February, and also  first three months of 2022  having more confirmations comparing to other months in the time period  with highest 17676 cases. This shows the lack of control of the situation in the end of the 2021 .
+
+
+
+
+--------------------------
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,include=FALSE}
+
+death_ecuador_corona <- ecuador_corona %>% filter(type=="death")
+summary(death_ecuador_corona)
+death_ecuador_corona <- death_ecuador_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(death_ecuador_corona)
+which(is.na(death_ecuador_corona$cases))
+# no missing values
+
+
+```
+
+
+
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+b<-ggplot(death_ecuador_corona, aes(x=date, y=cases)) +
+      geom_line() +
+      labs(x = "Date",
+           y = "Death  cases",
+           title = "Figure 2 : Distribution of Death cases across time" )+scale_colour_identity() 
+ggplotly(b)
+```
+
+Above graph shows the no.of deadth from Corona in Ecuador in daily basis. 
+
+------------------
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE,include=FALSE}
+
+recovery_ecuador_corona <- ecuador_corona %>% filter(type=="recovery")
+summary(recovery_ecuador_corona)
+recovery_ecuador_corona <- recovery_ecuador_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(recovery_ecuador_corona)
+which(is.na(recovery_ecuador_corona$cases))
+# missing values found
+recovery_ecuador_corona$cases[230] = mean(c(recovery_ecuador_corona$cases[229], recovery_ecuador_corona$cases[231]))
+
+recovery_ecuador_corona$cases[562] = mean(c(recovery_ecuador_corona$cases[561], recovery_ecuador_corona$cases[563]))
+
+length(recovery_ecuador_corona$cases)
+
+
+```
+
+```{r,   echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+recovery_ecuador_corona$col <- as.factor(c(rep("black", 228),rep("red", 2), rep("black", 560-230),rep("red", 2),rep("black",884- 562)))
+
+c<-ggplot(recovery_ecuador_corona, aes(x=date, y=cases,color="blue")) +
+      geom_line() +
+      labs(x = "Date",
+           y = "recovery  cases",
+           title = "Figure 3 : Distribution of Recovery Cases across time" )+scale_colour_identity()
+ggplotly(c)
+
+```
+
+Covid 19 data is presented as a daily count of new confirmed infections for the preceding 24 hours.  It shows that no.of confirmed Corona patients has been increasing since mid of 2020 upto mid of 2022 of February, and also first three months of 2022 having more confirmations comparing to other months in the time period with highest 17676 cases. This shows the lack of control of the situation in the end of the 2021 .
+
+-------------------------------------
+
+```{r  echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#cumaltiv e graph of active
+act1 <- coronavirus %>% filter(country =="Ecuador")
+        act2 <- act1 %>% filter(type == "confirmed")
+      act3 <- act1 %>% filter(type == "death")
+      act4 <- act1 %>% filter(type == "recovery")
+    
+      dfff <- data.frame(active1 =cumsum(act2$cases - (act3$cases + act4$cases)),date =act1$date)
+
+l <- ggplot(dfff, aes(x=date, y=active1)) +
+  geom_line() +
+  labs(x = "Date",
+           y = "Active  cases",
+           title = "Figure 4 :  Cumlative Distribution of Active Cases" )
+ggplotly(l)
+```
+
+ By removing deaths and recoveries from total cases, we get “currently infected cases” or “active cases”.The number of active cases are on the rise in beginning of 2021, also it was showed a significant decrease from the end of 2021 onwards.
+ 
+ 
+ 
+ 
+ 
+```{r}
+
+```
+ 
+
+--------------------------------------------
+```{r warning=FALSE,echo=FALSE,message=FALSE,paged.print=FALSE}
+library(ggplot2)
+clear_ecuador_corona<-ecuador_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+
+d<-ggplot(clear_ecuador_corona,aes(x=date,y=cases,color=type))+geom_path(size=1) + facet_grid(rows = vars(type)) +
+  
+  labs(x = "Time",
+       y = "Cases",
+       title = "Figure 5 : Distribution of Confiremed cases,Recoveries and Deaths ")
+ggplotly(d)
+
+```
+
+According to figure 5 the number of recovery  cases are high compare to no of death and confirmed cases from the middle of 2020 to 2021 . 
+It was identified that the number of confirmed cases showed a significant increase in 2022.The no death counts are with the average range  0-50 acroos the time period. The total summery of confirmed, death and recovery numbers are given below. 
+
+
+```{r,warning=FALSE,echo=FALSE,message=FALSE,paged.print=FALSE}
+
+total_confirmed_value<-sum(confirmed_ecuador_corona$cases,na.rm = TRUE)
+
+
+total_ddeath_value<-sum(death_ecuador_corona$cases)
+
+total_recovery_value<-sum(recovery_ecuador_corona$cases)
+
+
+
+tot_df<-data_frame(Type= "Total Summery",
+                   Confirmed=total_confirmed_value,
+                   Death=total_ddeath_value,
+                   Recovery=total_recovery_value)
+knitr::kable(tot_df,"simple")
+
+
+```
+
+------------------------
+
+### **Comparison the Covid 19 cases of Ecuador with neighbouring countries**
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+location<-get_stamenmap(bbox=c(left=-85.649,bottom=-11.711,right=-59.5906,top=6.905 ),maptype="terrain",zoom=5)
+
+ggmap(location)
+
+
+
+```
+
+Ecuador shared it’s Land Borders with Brazil, Panama, Peru, Colombia, Venezuela, Chile. Brazil, Venezuela, Peru and Colombia have very high population than Ecuador.
+
+```{r,warning=FALSE,echo=FALSE,message=FALSE}
+
+neighbour_country <- coronavirus%>% filter(continent_code == "SA")
+select_neighbour_country<-neighbour_country %>%filter(country==c("Ecuador","Brazil","Panama","Peru","Colombia","Venezuela", "Chile"))
+
+```
+
+  
+----------------------------------
+```{r,warning=FALSE,echo=FALSE,message=FALSE}
+select_neighbour_country_confirmed<-select_neighbour_country%>%filter(type=="confirmed")
+select_neighbour_country_confirmed<-select_neighbour_country_confirmed%>% mutate(cases = replace(cases, which(cases < 0), NA))
+f<-ggplot(select_neighbour_country_confirmed,aes(x=date,y=cases,colour=country))+geom_path() + labs(x = "Time",
+       y = "Cases",
+       title = "Figure 6 : Distribution of Confirmed Cases of neighbour countries" )
+ggplotly(f)
+
+
+```
+--------------------------------
+
+```{r,warning=FALSE,echo=FALSE,message=FALSE}
+select_neighbour_country_death<-select_neighbour_country%>%filter(type=="death")
+select_neighbour_country_death<-select_neighbour_country_death%>% mutate(cases = replace(cases, which(cases < 0), NA))
+t<-ggplot(select_neighbour_country_death,aes(x=date,y=cases,colour=country))+geom_line() + labs(x = "Time",
+       y = "Cases",
+       title = "Figure 7 : Distribution of Death Cases of neighbour countries")
+ggplotly(t)
+
+```
+
+Significantly Raising of death cases in first 10 month in 2021
+  
+  
+--------------------------------
+```{r,warning=FALSE,echo=FALSE,message=FALSE}
+select_neighbour_country<-select_neighbour_country%>% mutate(cases = replace(cases, which(cases < 0), NA),cases != "death")
+
+
+z<-ggplot(select_neighbour_country, aes(date, cases,colour = country)) + geom_path(size=1) + facet_grid(rows= vars(type)) +
+  labs(title="Figure 8 : Daily Confirmed, Death and Recovered cases in Neighbour Countries")
+ggplotly(z)
+
+```
+Comparing with the neighbor countries Venezuela & Colombia have more confirmed and recovery counts. There is a significant increase of confirmation counts in every neighbour country in early 2021
+
+
+### **Conclusions** :-
+* Ecuador couldn’t control the spread of the virus in end of the 2021 due to virus grown unexpectedly, but recovering of the patients is bit satisfactory.
+Active cases graph and Confirmed cases graph almost exactly same by shape but differ from values
+Comparing to other continents , Ecuador and other neighbour countries have low no of death counts
+By mid of May Ecuador’s total active cases are way less than Peru’s total active cases
+
+
+### **Discussion** :-
+* The Main Target  of this report is get a brief idea about the COVID-19 effect on Ecuador. All the  data visualizations and interpretations are done from the given coronavirus data set . In this report we mainly examined about the confirmed,deaths and recovered cases in Ecuador.On confirmed cases there is a negative cases reported. Next we analyzied the data with the effect on neighboring countries such as Peru, Colombia, Brazil ,etc. Finally we can say Ecuador is still a victim of COVID-19 outbreak.
+
+
+###  **References**:-
+
+*https://www.britannica.com/place/Ecuador
+
+*https://en.wikipedia.org/wiki/Health_in_Ecuador
+
+*https://ec.usembassy.gov/security-alert-u-s-consulate-general-guayaquil-april-21-2022-location-alban-borja-in-urdesa-guayaquil/
+
+*https://stackoverflow.com/questions/11225343/how-to-create-a-world-map-in-r-with-specific-countries-filled-in
+
+*https://www.worldometers.info/coronavirus
+
+*https://www.wvi.org/stories/coronavirus-health-crisis/covid-19-preparing-children-ecuador-prevent-spread
+
+*https://www.openstreetmap.org/export#map=6/-3.987/-73.916
+
+*https://knoema.com/atlas/Ecuador/Population
+
+*https://www.salud.gob.ec/actualizacion-de-casos-de-coronavirus-en-ecuador/

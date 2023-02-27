@@ -1,0 +1,384 @@
+---
+title: <span style="color:red">"Covid 19 Pandemic in Brazil"</span>
+author:  <span style="color:red">"Iresha Alwis"</span>
+date: <span style="color:red">"03/10/2022"</span>
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(coronavirus)
+data(coronavirus)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(magrittr)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+Brazil_corona <- coronavirus %>% filter((country == "Brazil"),cases >= 0)
+```
+
+## <span style="color:blue">**1. Background**</span>
+
+### **Introduction** 
+   
+  The COVID-19 pandemic has led to a dramatic loss of human life worldwide and presents an unprecedented challenge to public health, food systems and the world of work.This corona virus is an unexpected situation for the whole world, and nobody was ready for that. Therefore, powerful world countries also flatted because of this pandemic. The Emergency Committee convened by the Director-General of the World Health Organization (WHO) under the International Health Regulations declared the COVID-19 outbreak a Public Health Emergency of International Concern. Also when we consider the Brazil, it is also effect the covide 19. The COVID-19 pandemic is exposing Brazil to an unprecedented challenge.Brazil is one of the most affected countries by Covid-19, with the US the only country with more deaths.
+  
+ Brazil is the largest country in South America bounded by the Atlantic Ocean and the fifth largest nation in the world. It is most well known for its dense forests, including the Amazon, the world's largest jungle, in the north. But there are also dry grasslands (called pampas), rugged hills, pine forests, sprawling wetlands, immense plateaus, and a long coastal plain.Brazil is the fifth most-populous country on Earth and accounts for one-third of Latin America’s population.
+
+### **Location of Brazil**
+```{r location of Brazil, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "gray", colour = "white"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = Brazil_corona, aes(x = long, y = lat), color = "red", size
+    = 2
+  )
+```
+
+
+  Brazil has one of the strongest health care systems in Latin America, capacity is highly uneven across the country. As of June 25, 2020, Brazil had recorded 34.7M confirmed cases of COVID-19, and 687K deaths, according to the Brazilian Ministry of Health data. Brazil is the second most exposed country globally, only behind the United States in number of cases and deaths. The spread of the virus has not slowed down so far, with the number of cases doubling every ten days, on average. 
+   
+### **Climate condition of Brazil**
+  
+  Visual inspection of world maps shows that corona virus disease 2019 (COVID-19) is less prevalent in countries closer to the equator, where heat and humidity tend to be higher.The scientist found out the corona virus is destroying at 40 °Cs. Moreover, there was a rumor about the spreading cast of corona viruses low in high-temperature countries. Therefore, when investigating the corona situation in Brazil, we must consider the climate situation. The central parts of the Brazilian Highlands receive most of their precipitation during the summer months (November to April) Storms and floods may strike the Northeast at that time.
+  
+The central parts of the Brazilian Highlands receive most of their precipitation during the summer months (November to April), often in the form of torrential downpours. Storms and floods may strike the Northeast at that time, depending on weather patterns, but the region may also experience prolonged drought. These shifting conditions make life difficult in the sertão, the backlands of the Northeast, and are a major cause for migration out of the region. Summer temperatures are largely uniform. In January most of the lowlands average roughly 79 °F (26 °C), and the highlands are a few degrees cooler, depending on elevation. The coast of Rio Grande do Sul is also somewhat cooler, averaging around 73 °F (23 °C), whereas the Northeast backland’s drought quadrilateral, the hottest region of the country, averages some 84 °F (29 °C), with daytime temperatures exceeding 100 °F (38 °C). However, the Northeast’s low humidity makes the heat less oppressive than in Rio de Janeiro.
+In the winter (May to October) the Brazilian Highlands are generally dry, and snow falls in only a few of the southernmost states. Regular frosts accompany winter air patterns from the south, and near-freezing temperatures can reach as far north as São Paulo. Cool, rainy weather may extend along the coast as far north as Recife and, in the west, to the Pantanal. Cool air occasionally spills over from the Paraguay lowlands into the western Amazon basin and may travel as far north as the Guyana border. Winter temperatures in the Amazon lowlands remain virtually unchanged from those of the summer months, but temperatures in the drought quadrilateral drop to about 79 °F (26 °C). Temperatures in the Brazilian Highlands average about 68 °F (20 °C) in the central and northern regions and are cooler toward the south: Curitiba, at an elevation of some 3,000 feet (900 metres), averages 57 °F (14 °C) in June and July. During those months the mean temperature at Porto Alegre is the same, but Rio de Janeiro is much hotter, averaging 73 °F (23 °C), partly because of the warm currents that bathe the entire Brazilian coast.
+
+
+### **Lockdown states of Brazil and Actions taken by the government**
+
+However, it was not long before the virus spread to major cities like Rio de Janeiro and São Paulo.Cases then began to rise sharply. With this situation there are so many actions are taken by the Brazil government for control the pandemic of COVID-19 in Brazil.
+
+Brazilian government has dedicated special attention to the protection of
+indigenous peoples in this pandemic.
+• Actions regarding the fight against COVID-19 go back to February, with more
+than R$ 70 million (USD 13 million) invested.
+• Almost 2 million items were sent, including medicines, personal protective
+equipment and rapid tests.
+• Improving access through the development of a telemedicine program and
+providing river transport to the population.
+• Creation of 156 hospital beds in indigenous areas.
+• Delivery of food baskets ensuring indigenous peoples food security.
+
+### **Vacccination Program**
+
+On 20th June, Brazil became only the second country to pass one million cases, and that number has continued to rise steadily. Experts say it is likely much higher due to a lack of testing.
+According to the Brazilian Ministry of Health (MoH), around 180,000 vaccine doses have been administered, considering first, second and single dose, which represents around 27% of full immunisation rate to date.Brazil’s vaccination campaign has international prestige and recognition for historically making all WHO-recommended vaccines available free of charge to the entire population, under a universal healthcare access system. The MoH is in charge of the vaccination programme, and is known to provide fast distribution of vaccines throughout the states and municipalities in Brazilian annual vaccination campaigns. Nonetheless, MoH’s lack of planning and organisation failed the expectations for Covid-19 vaccination, putting significant hurdles for an effective response to the pandemic.
+
+
+## <span style="color:blue">**2. Exploratory Data Analysis**</span>
+
+
+```
+### Qualitative data
+date - The date of the summary
+province - The province or state, when applicable
+country - The country or region name
+type - the type of case (i.e., confirmed, death)
+
+
+### Quantitative data
+lat - Latitude point
+long - Longitude point
+cases - the number of daily cases (corresponding to the case type)
+```
+
+### **Visualization of death, confirmed, recovered, active cases**
+
+
+```{r,comment=NA,eval=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+```
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+summary(Brazil_corona)
+```
+
+
+### **Total number of confirmed cases reported from Brazil**
+```{r}
+Brazil_corona_confirmed <- filter(Brazil_corona, type == "confirmed")
+sum(Brazil_corona_confirmed$cases)
+```
+
+According to figure 1 this is the graphical interpret daily confirmed cases have been changed over the time.
+
+
+```{r echo=FALSE}
+ggplot(Brazil_corona_confirmed , aes(x=date, y=cases)) + geom_line() + ggtitle( "Figure 1: Covid-19 confirmed cases in Brazil") 
+
+```
+
+
+### **Total number of death cases reported from Brazil**
+```{r}
+Brazil_corona_death <- filter(Brazil_corona, type == "death")
+sum(Brazil_corona_death$cases)
+```
+
+According to the figure 2 this is the graphical interpret daily death cases have been changed over the time and The highest number of deaths occurred in 2021.However, According to the graph we can see that there is an increasing and decreasing deaths with time.
+
+
+*Figure 2 :- death cases reported from Brazil*
+
+```{r echo=FALSE}
+ggplot(Brazil_corona_death, aes(x=date, y=cases)) + geom_line() + ggtitle( "Brazil: Covid-19 death cases ")
+
+```
+ 
+
+### **Total number of recovered cases reported from Brazil**
+
+```{r}
+Brazil_corona_recovery <- filter(Brazil_corona, type == "recovery")
+sum(Brazil_corona_recovery$cases)
+```
+
+*Figure 3:-Total number of recovered cases reported from Brazil*
+
+```{r echo=FALSE}
+ggplot(Brazil_corona_recovery, aes(x=date, y=cases)) + geom_line() + ggtitle("Brazil: Daily Covid-19 recovery cases") 
+
+```
+
+According to the graph we can see there is an increasing and decreasing trends of recovered cases with time.
+
+
+```{r}
+library(knitr)
+Brazil_corona %>% group_by(type)  %>% summarise(total=sum(cases,na.rm = TRUE)) %>% kable(caption= "Table 1:Total death, confirmed, recovered cases")
+
+```
+
+According to the table 1 we can see total number of death,confirmed and recovery cases.
+
+*Figure 4:- corona-virus cases in Brazil*
+
+```{r,echo = TRUE}
+Brazil_corona %>% group_by(type)  %>% summarise(total=sum(cases,na.rm = TRUE)) %>%  ggplot(aes(x=type,y=total,fill=type))+ geom_bar(stat="identity") + labs(title = "Figure : Bar graph of corona-virus cases in Brazil")
+                                                                                
+```
+
+We can show it in a bar graph as follows
+
+### **Graphically represent all three confirmed,recovered & death cases**
+```{r,message=FALSE,warning=FALSE}
+ggplot(Brazil_corona, aes(x=date, y=cases, col=type)) + geom_col() + ggtitle("Figure 5: Daily Covid-19 cases by type") + facet_grid(type~.) + ylim(0,25000)
+```
+
+
+```{r,message=FALSE,warning=FALSE}
+library(plotly)
+q1 <-Brazil_corona %>% group_by(type)  %>%  ggplot(aes(x=date,y=cases,col=type))+ geom_line(size=1) +facet_grid(type ~.,scales = "free") + labs(title = "Figure 6 : Daily COVID-19 cases in Brazil")
+
+ggplotly(q1)
+                                                                              
+```
+
+Figure 5 and figure 6 we can see it more clearly.
+
+### **percentage of deaths due to covid 19 in Brazil**
+```{r}
+death_rate <- (sum(Brazil_corona_death$cases)/sum(Brazil_corona_confirmed$cases))* 100
+death_rate
+
+```
+
+As a death rate we can gain 2.094822 due to covid 19 in Brazil. 
+
+```{r,message=FALSE,warning=FALSE}
+Brazil_corona <- coronavirus %>% filter(country == "Brazil")
+head(Brazil_corona)
+```
+
+#finding missing values
+```{r}
+Brazil_corona <-Brazil_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary
+```
+
+*Figure 7:- Time series plot of Brazil corona
+
+```{r}
+ggplot(Brazil_corona, aes(x=date, y=cases, col=type)) + geom_line()+ggtitle("Time series plot of Brazil corona")
+```
+
+This graph shows from 2020 to 2022 Brazil covid-19 situation.
+
+### **Comparison with another countries**
+
+*Figure 8:-Comparison with US and Chaina*
+
+```{r,message=FALSE,warning=FALSE}
+library(coronavirus)
+library(ggplot2)
+library(ggpubr)
+
+Brazil_corona <- coronavirus %>% filter(country == "Brazil")
+usa_corona <- coronavirus %>% filter(country == "US")
+china_corona <- coronavirus %>% filter(country == "China")
+
+corona <- rbind(Brazil_corona, usa_corona, china_corona)
+corona_confirmed <- corona %>% filter(type=="confirmed")
+gg9 <- ggplot(corona_confirmed, aes(x=country, y=cases)) + geom_col() + ggtitle("Confirmed cases") + ylim(0,25000)
+
+corona_deaths <- corona %>% filter(type=="death")
+gg10 <- ggplot(corona_deaths, aes(x=country, y=cases)) + geom_col() + ggtitle("Deaths") + ylim(0,25000)
+
+corona_recovery <- corona %>% filter(type=="recovery") 
+gg11 <- ggplot(corona_recovery, aes(x=country, y=cases)) + geom_col() + ggtitle("Recovery") + ylim(0,25000)
+
+theme_set(theme_pubr())
+figureB <- ggarrange(gg9, gg10, gg11)
+figureB
+
+```
+
+According to figure 8 We can see that compared to other countries, the confirmed cases and recovery in BRAZIL are low, but the death rate is very high.
+
+*Figure 9:-Comparison with Confirmed cases in  leading countries*
+```{r}
+Brazil_corona <- coronavirus %>% filter(country == "Brazil")
+confirmedcases_Brazil_corona <- Brazil_corona %>% filter(type=="confirmed") 
+
+France_corona <- coronavirus  %>% filter(country == "France")
+confirmed_france_corona <- France_corona %>% filter(type=="confirmed")
+
+Germany_corona <- coronavirus  %>% filter(country == "Germany")
+confirmed_germany_corona <- Germany_corona %>% filter(type=="confirmed")
+
+Italy_corona <- coronavirus  %>% filter(country == "Italy")
+confirmed_Italy_corona <- Italy_corona %>% filter(type=="confirmed")
+
+comparison_confirm <- rbind(confirmedcases_Brazil_corona,confirmed_france_corona, confirmed_germany_corona, confirmed_Italy_corona)
+
+ggplot(comparison_confirm , aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Confirmed cases in  leading countries") + ylim(0,10000)
+```
+
+Figure 9 shows a comparison with other countries where the percentage of corona is higher
+
+### **Comparison with neighbouring countries**
+
+
+```{r}
+near_countries <- coronavirus %>% filter(( -10< lat & lat < 10) & (90 < long & long < 130) ) 
+  unique(near_countries$country)  %>% kable(caption = "Table 2:Countries near Brazil")
+
+```
+
+```{r, out.width="100%"}
+q2 <- near_countries %>%
+  
+ggplot(aes(x=date, y= cases,col=country)) + geom_line()  +facet_grid(rows=vars(type), scales = "free") + ggtitle("Figure 10: Daily confirmed,death and recovered cases comparison") +theme(axis.line = element_line(colour = "black",size = 0.5))
+  
+ ggplotly(q2) 
+
+```
+
+
+```{r}
+near_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovery_sum= sum(recovery,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovery_sum, mortality_rate=death_sum/confirmed_sum*100, recovery_rate= recovery_sum/confirmed_sum*100  ) %>% kable(caption = "Table 3:Total corona-virus cases in neighboring countries of Brazil")
+
+
+near_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovery_sum= sum(recovery,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovery_sum ) %>% pivot_longer(2:5,"sum_type","value") %>%       ggplot(aes(x=sum_type, y= value,fill=sum_type)) + geom_bar(stat="identity") + facet_grid( ~ country)+ labs(title = "Figure 11:Bar chart of corona-virus cases in neighboring countries of Brazil") +
+  theme(axis.text.x = element_blank())
+```
+
+
+```{r}
+Brazil_corona <- coronavirus %>% filter(country == "Brazil")
+confirmedcases_Brazil_corona <- Brazil_corona %>% filter(type=="confirmed") 
+
+Brunei_corona <- coronavirus  %>% filter(country == "Brunei")
+confirmed_Brunei_corona <- Brunei_corona %>% filter(type=="confirmed")
+
+Indonesia_corona <- coronavirus  %>% filter(country == "Indonesia")
+confirmed_Indonesia_corona <- Indonesia_corona %>% filter(type=="confirmed")
+
+Malaysia_corona <- coronavirus  %>% filter(country == "Malaysia")
+confirmed_Malaysia_corona <- Malaysia_corona %>% filter(type=="confirmed")
+
+Singapore_corona <- coronavirus  %>% filter(country == "Singapore")
+confirmed_Singapore_corona <- Singapore_corona %>% filter(type=="confirmed")
+
+comparison_confirm <- rbind(confirmedcases_Brazil_corona,confirmed_Brunei_corona, confirmed_Indonesia_corona,confirmed_Malaysia_corona,confirmed_Singapore_corona)
+
+ggplot(comparison_confirm , aes(x=date, y=cases, col=country)) + geom_point() + ggtitle("Figure 12 - Confirmed cases in  neighboring countries") + ylim(0,10000)
+```
+
+According to Figure 12, we can see that compared to other countries, there were more corona cases in 2020, but by 2022, the amount of corona cases in Brazil has decreased.
+
+### **Comparison with equal populated countries**
+
+Indonesia and Pakistan are the nearly equal populated countries to Brazil. Let’s compare those countries with Brazil.
+
+There are some negative values in data set which corona-virus cases in Brazil, Pakistan and Indonesia.It might be due to some people were tested positive and then negative by the particular country.I removed the negative values in order to do the analysis.
+
+
+```{r, out.width="100%"}
+equal_populated_countries <- coronavirus %>% filter(country %in% c("Brazil", "Pakistan", "Indonesia"))
+
+q5 <- equal_populated_countries %>%
+  
+ggplot(aes(x=date, y= cases,col=country)) + geom_line()  +facet_grid(rows=vars(type), scales = "free") + ggtitle("Figure 13: Daily confirmed,death and recovered cases comparison") +theme(axis.line = element_line(colour = "black",size = 0.5))
+  
+ ggplotly(q5) 
+  
+```
+
+```{r}
+equal_populated_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovery_sum= sum(recovery,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovery_sum, mortality_rate=death_sum/confirmed_sum*100, recovery_rate= recovery_sum/confirmed_sum*100  ) %>% kable(caption = "Table 4: Total corona-virus cases in equal populated countries")
+
+
+equal_populated_countries %>% pivot_wider(names_from = type,values_from = cases) %>% group_by(country) %>% summarise(confirmed_sum= sum(confirmed,na.rm = TRUE),death_sum= sum(death,na.rm = TRUE) , recovery_sum= sum(recovery,na.rm = TRUE),active_sum= confirmed_sum - death_sum - recovery_sum ) %>% pivot_longer(2:5,"sum_type","value") %>%       ggplot(aes(x=sum_type, y= value,fill=sum_type)) + geom_bar(stat="identity") + facet_grid( ~ country)+ labs(title = "Figure 14:Bar chart of corona-virus cases in equal populated countries") +
+  theme(axis.text.x = element_blank())
+
+```                                   
+
+According to Figure 13 and 14, Brazil has a higher number of cases compared to other countries. We can see it from table 4.
+
+
+## <span style="color:blue">**3. Disscution**</span>   
+
+The Covid-19 pandemic has taken the world by storm. Every country on earth has joined in the fight against this vicious virus, and every little contribution matters. As being the fifth largest nation in the world, Brazil had to face heavy loss of deaths due to the crisis of Covid-19. On 20th June, Brazil became only the second country to pass one million cases, and that number has continued to rise drastically. Also, millions of people died after infecting the virus in Brazil. So, the country tried several methods to control this devastating pandemic. Diagnostic tests can be considered one of the best methods to control this epidemic by diagnosing the infected population. Also, vaccinating, lockdown, travel restrictions helped the country to control the infected rate. This study was done to capture the true state of the covid pandemic by a preliminary analysis. 
+The daily confirmed cases tend to increase from March 2020. Again, we could see a high upward trend in the confirmed cases in the beginning of 2022.  The daily death cases too show a similar pattern with daily confirmed cases. But in March 2021, there is a clear high upward trend in the daily death cases. After 2022, the daily deaths are decreasing slowly with the actions taken by the Brazil government. 
+When comparing Brazil with the equal populated countries, Brazil showed more confirmed cases and deaths other than Indonesia and Pakistan. So, we can say that the spread of the Covide-19 virus is powerful than other equal populated countries. 
+
+## <span style="color:blue">**4. conclution**</span>
+
+Covid_19 is the most challenging situation since 2020 and now it is became as world wide pandemic.By looking at this analyze I can conclude that, Brazil confirmed cases and death cases rising rappidly until vacciation process.However Brazil Authorities have controlled the COVID-19 pandemic in Brazil imposing the nation wide loakdown in several times, starting vaccination program and publishing the new traveling restrictions. As a results we can conclude that COVID-19 pandemic actually can control keeping social distancing and being vaccinated.
+
+## <span style="color:blue">**4. References**</span>
+https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Brazil
+https://www.britannica.com/place/Brazil/Climate
+https://reliefweb.int/report/brazil/covid-19-brazil-impacts-and-policy-responses?gclid=Cj0KCQjwnP-ZBhDiARIsAH3FSRe-WF2TP0P0vL66sIFJzr4oCzyBiC4KfhIYCyVM3vluHAlcdFJD4VMaAholEALw_wcB
+https://graphics.reuters.com/world-coronavirus-tracker-and-maps/countries-and-territories/brazil/

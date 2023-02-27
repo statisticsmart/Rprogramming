@@ -1,0 +1,664 @@
+---
+title: "COVID-19 PANDEMIC IN PERU" 
+author: "K.M.G.N.Ishara"
+output: html_document
+date: "2022-10-07"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Introduction**
+
+Here,a study is conducted on the spread of the Corona virus and the impact caused by the virus in Peru
+
+Peru, country in western South America. Except for the Lake Titicaca basin in the southeast, its borders lie in sparsely populated zones. The boundaries with Colombia to the northeast and Brazil to the east traverse lower ranges or tropical forests, whereas the borders with Bolivia to the southeast, Chile to the south, and Ecuador to the northwest run across the high Andes. To the west, territorial waters, reaching 200 miles (320 km) into the Pacific Ocean, are claimed by Peru.
+
+Peru is essentially a tropical country, with its northern tip nearly touching the Equator. Despite its tropical location, a great diversity of climates, ways of life, and economic activities is brought about by the extremes of elevation and by the southwest winds that sweep in across the cold Peru Current (or Humboldt Current), which flows along its Pacific shoreline. The immense difficulties of travel posed by the Andes have long impeded national unity. Iquitos, on the upper Amazon, lies only about 600 miles (965 km) northeast of Lima, the capital, but, before the airplane, travelers between the cities often chose a 7,000-mile (11,250-km) trip via the Amazon, the Atlantic and Caribbean, the Isthmus of Panama, and the Pacific, rather than the shorter mountain route.
+
+The first confirmed COVID-19 case was reported on March 6, 2020, and a week later, a strict lockdown was imposed by the government. Although Peru was the first country in Latin America to implement such a severe measure, further spread throughout the country was inevitable. A rapid increase of reported deaths reached a temporary plateau by June; however, a slow, albeit progressive ease of restrictions has been associated with a rise in mortality in the midst of a second wave, reaching a milestone of more than 1,200 deaths per one million inhabitants.
+
+The healthcare system had been working at its limit for decades and was not prepared to handle any additional burden. Peru has one of the lowest investment rates in healthcare compared with other countries in the region; expressed as a percentage of the GDP, it was 4% during 1995 and has increased to 5.5% in 2017.As a result, only some hospitals and primary care facilities were built to compensate for the population growth. Peru also has a low number of intensive care unit (ICU) beds (5/100,000 inhabitants) compared with Colombia (7/100,000) and Argentina (26/100,000), of which 80% of these beds are clustered in Lima.Moreover, the healthcare system is fragmented into a public system that covers approximately 60% of the population, whereas the rest are cared with the social security (health insurance for workers), the armed forces, and the private sector, with all of them operating independently. Lack of oxygen, hospitalization, and ICU beds continue to be shortcomings; more importantly, there is a scarcity of trained health professionals to work in ICUs
+
+The very limited molecular testing capacity was handled with the use of rapid antibody tests. This may have confirmed cases presenting late after symptom onset or past infection but were not useful to cut transmission by facilitating the isolation of cases when they are infectious. The use of serological tests for screening, even among asymptomatic persons, persists up until today. Few laboratories in Peru were prepared to conduct molecular tests, for which expansion of testing at the national level should be replaced by a robust symptom-based case detection method with a strategic use of molecular tests and contact tracing. In addition, disassociated health information systems with inconsistencies between regional and central counts often provide incomplete and, untimely, description of the pandemic. One of the most reliable sources of information has been provided by the national mortality system, which has sadly reported an excess mortality of 94,000 compared with 2019.5 Nonetheless, some of the excess can be attributed to the indirect effects of the pandemic and the limited attention to non–COVID-19 conditions in the healthcare setting
+
+
+As of the 3rd of October 2022, the data are as follows
+
+Coronavirus Cases:4,145,301
+
+Deaths:216,596
+
+Recovered:3,881,548
+
+## Peru, the most affected country in the world
+
+Peru has been the country most affected in the world by the COVID-19 pandemic in terms of number of deaths as a percentage of the population. This is due in particular to the poor state of the Peruvian health system, with a lack of oxygen capacities and intensive care beds
+
+
+## Why has Peru been so badly hit?
+
+Peru imposed one of the earliest and strictest lockdowns in Latin America back in March 2020 - before the UK and some other European countries.
+
+The county's borders were shut, curfews were imposed, and people could only leave their homes for essential goods - but infections and deaths continued to rise.
+
+A second lockdown was introduced in January this year in the capital Lima and nine other regions following a wave of infections which brought hospitals close to collapse.
+
+Experts say Peru's healthcare system was underprepared, and lacks sufficient funding.
+
+There's also been shortage of oxygen needed to treat Covid patients, and the entire country has around 1,600 intensive care unit beds - far less than some neighbouring countries.
+
+### Slow vaccine rollout
+
+Peru's vaccination drive has been slow, with less than 4% of the country fully vaccinated.
+
+This is behind many other countries in Latin America.
+
+Brazil and Mexico have fully vaccinated around 10%, and Chile has done the most, with more than 40% fully vaccinated.
+
+### Informal economy and overcrowded housing
+
+There are also several social and economic factors that can help explain why Peru has struggled to contain Covid cases.
+
+About 70% of the employed population in Peru work in the informal sector, which is one of the highest rates in Latin America.
+
+These jobs are by their nature unpredictable, and mean many workers have to chose between going out to work or not having enough money to survive.
+
+The government has passed significant support measures to help people who lost their jobs and companies that lost income due to the pandemic - but only about 38% of Peruvian adults have a bank account, making quick digital payments largely impossible.
+
+The latest National Household Survey suggests 11.8% of poor households in Peru live in overcrowded homes.
+
+Cramped housing makes social distancing harder and allows the virus to spread more easily.
+
+## Climate condition
+The Coast experiences a semi-arid, subtropical desert climate with average annual rainfall of 150 mm. Along the southern and central coast, temperatures vary from 13˚–26˚C, with colder months in May and October. The north has a more semi-tropical climate and temperatures average 24˚C
+
+
+```{r,include=FALSE,warning=FALSE,message=FALSE}
+library(coronavirus)
+library(tidyverse)
+library(magrittr)
+library(ggplot2)
+library(plotly)
+```
+
+## **Figure 1 : Visualization of COVID cases**
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+data("coronavirus")
+peru_corona <- coronavirus %>% filter(country == "Peru")
+
+library(maptools)
+library(tibble)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x = long, y = lat, group = group), fill = "light blue", colour = "white"
+  ) + coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+
+p +
+  geom_point(
+    data = peru_corona, aes(x = long, y = lat), color = "red", size
+    = 1
+  )
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+peru_corona <- coronavirus %>% filter(country == "Peru")
+confirmed_peru_corona <- peru_corona %>% filter(type=="confirmed")
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+
+confirmed_peru_corona <- confirmed_peru_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+```
+
+### Total number of confirmed cases reported from Peru
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+peru_corona_data <- peru_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+confirmed_peru_corona <- peru_corona %>% filter(type=="confirmed")
+sum(confirmed_peru_corona$cases)
+
+```
+### Total number of death cases reported from Peru
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+peru_corona_data <- peru_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+death_peru_corona <- peru_corona %>% filter(type=="death")
+
+sum(death_peru_corona$cases)
+
+```
+### Total number of recoveries reported from Peru
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+recoveries_peru_Corona<- peru_corona %>% filter(type=="recovery")
+sum(abs(recoveries_peru_Corona$cases))
+
+
+```
+
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+peru_corona_a <-peru_corona %>% pivot_wider(values_from=cases, names_from=type)
+```
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+peru_corona_a$peru_corona_active <- cumsum(peru_corona_a$confirmed - peru_corona_a$death - peru_corona_a$recovery)
+
+ggplot(peru_corona_a, aes(x=date, y= peru_corona_active)) + geom_line(col="dark blue") + ggtitle("Figure 2 : Daily Covid-19 Active cases in Peru")
+```
+
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+brazil_corona <- coronavirus %>% filter(country == "Brazil")
+bolivia_corona <- coronavirus %>% filter(country == "Bolivia")
+colombia_corona <- coronavirus %>% filter(country == "Colombia")
+chile_corona <- coronavirus %>% filter(country == "Chile")
+argentina_corona <- coronavirus %>% filter(country == "Argentina")
+germany_corona <- coronavirus %>% filter(country == "Germany")
+us_corona <- coronavirus %>% filter(country == "US")
+italy_corona <- coronavirus %>% filter(country == "Italy")
+india_corona <- coronavirus %>% filter(country == "India")
+
+
+south_america_corona <- coronavirus %>% filter(continent_code == "SA")
+
+confirmed_brazil_corona <- brazil_corona %>% filter(type=="confirmed")
+confirmed_bolivia_corona <- bolivia_corona %>% filter(type=="confirmed")
+confirmed_colombia_corona <- colombia_corona %>% filter(type=="confirmed")
+confirmed_chile_corona <- chile_corona %>% filter(type=="confirmed")
+confirmed_argentina_corona <- argentina_corona %>% filter(type=="confirmed")
+
+
+```
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+confirmed_brazil_corona <- confirmed_brazil_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+confirmed_bolivia_corona <- confirmed_bolivia_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+confirmed_colombia_corona <- confirmed_colombia_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+confirmed_chile_corona <- confirmed_chile_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+confirmed_argentina_corona <- confirmed_argentina_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+
+
+
+```
+
+
+
+
+### Figure 3 : Comparison of corona confirmed cases in Peru and corona confirmed cases in countries in South America continent
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+ggplot(confirmed_peru_corona, aes(x=date, y=cases)) +
+ geom_line() + ggtitle("Peru")
+
+ggplot(confirmed_brazil_corona, aes(x=date, y=cases)) +
+ geom_line()+ ggtitle("Brazil")
+
+ggplot(confirmed_bolivia_corona, aes(x=date, y=cases)) +
+ geom_line()+ ggtitle("Bolivia")
+
+ggplot(confirmed_colombia_corona, aes(x=date, y=cases )) +
+ geom_line()+ ggtitle("Colombia")
+
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+peru_corona <- coronavirus %>% filter(country == "Peru")
+peru_corona_data <- peru_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+ggplot(peru_corona_data, aes(x=date, y=cases, col=type)) + geom_line()+
+ggtitle("Figure 4: Daily covid 19 Deaths,Recoveries and confirmed cases in South America ")
+
+
+```
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+peru_corona_filter<-filter(peru_corona_data, type %in% c("recovery","death"))
+ggplot(peru_corona_filter,aes(x=date, y=cases,colour=type))+
+  geom_line()+ 
+  ggtitle("Figure 5 : Daily covid 19 Deaths and Recoveries in Peru")
+
+
+south_america_corona_data <- south_america_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+south_america_corona_filter<-filter(south_america_corona_data, type %in% c("recovery","death"))
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+peru_corona_filter_n<-filter(peru_corona_data, type %in% c("death"))
+ggplot(peru_corona_filter_n,aes(x=date, y=cases,colour=type))+
+  geom_line()+ 
+  ggtitle("Figure 6 : Daily covid 19 Deaths in Peru")
+
+peru_corona_filter_nn<-filter(peru_corona_data, type %in% c("recovery"))
+ggplot(peru_corona_filter_nn,aes(x=date, y=cases,colour=type))+
+  geom_line(col="green")+ 
+  ggtitle("Figure 7 : Daily covid 19 recoveries in Peru")
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+
+brazil_corona_data <- brazil_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+bolivia_corona_data <- bolivia_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+colombia_corona_data <- colombia_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+argentina_corona_data <- argentina_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+chile_corona_data <- chile_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+germany_corona_data <- germany_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+us_corona_data <- us_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+italy_corona_data <- italy_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+india_corona_data <- india_corona %>% mutate(cases = replace(cases, which(cases <
+0), NA))
+
+
+
+
+```
+
+
+### Figure 8 : Comparison of corona deaths,recoveries and confirmed cases in Peru and corona corona deaths,recoveries and confirmed cases in other countries in South America continent
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+library(ggpubr)
+
+
+corona <- rbind(brazil_corona_data,argentina_corona_data, colombia_corona_data,chile_corona_data,peru_corona_data)
+
+corona_confirmed_new <- corona %>% filter(type=="confirmed")
+gg1 <- ggplot(corona_confirmed_new, aes(x=country, y=cases)) + geom_col(col="blue") + ggtitle("Confirmed cases") + ylim(0,10000000)
+theme_set(theme_pubr())
+figure1 <- ggarrange(gg1)
+figure1
+
+
+
+corona_deaths <- corona %>% filter(type=="death")
+gg2 <- ggplot(corona_deaths, aes(x=country, y=cases)) + geom_col(col="red") + ggtitle("Deaths") + ylim(0,750000)
+theme_set(theme_pubr())
+figure2 <- ggarrange(gg2)
+figure2
+
+
+
+corona_deaths <- corona %>% filter(type=="recovery")
+gg3 <- ggplot(corona_deaths, aes(x=country, y=cases)) + geom_col(col="green") + ggtitle("recoveries") + ylim(0,12000000)
+theme_set(theme_pubr())
+figure3 <- ggarrange(gg3)
+figure3
+
+```
+
+### Figure 9 : Comparison of corona death in Peru and corona death in countries in outside the South America continent
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+library(ggpubr)
+
+
+corona2 <- rbind(germany_corona_data,us_corona_data, italy_corona_data,india_corona_data,peru_corona_data)
+
+corona2_death_new <- corona2 %>% filter(type=="death")
+gg4 <- ggplot(corona2_death_new, aes(x=country, y=cases)) + geom_col(col="light green") + ggtitle("deaths") + ylim(0,1000000)
+theme_set(theme_pubr())
+figure4 <- ggarrange(gg4)
+figure4
+
+```
+
+### Figure 10 : Comparison of corona death in Peru and corona death in countries in outside the South America continent and the South America continent
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+
+
+peru_corona_death <- filter(peru_corona_data, type == "death")
+
+
+colombia_corona_death <- filter(colombia_corona_data, type == "death")
+
+
+chile_corona_death <- filter(chile_corona_data, type == "death")
+
+
+argentina_corona_death <- filter(argentina_corona_data, type == "death")
+
+
+germany_corona_death <- filter(germany_corona_data, type == "death")
+
+
+us_corona_death <- filter(us_corona_data, type == "death")
+
+
+italy_corona_death <- filter(italy_corona_data, type == "death")
+
+
+
+india_corona_death <- filter(india_corona_data, type == "death")
+
+
+comparison_death <- rbind(peru_corona_death,india_corona_death, italy_corona_death, us_corona_death)
+
+
+ggplot(comparison_death , aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("death cases in countries") + ylim(0,8000)
+
+
+comparison_death <- rbind(peru_corona_death,argentina_corona_death, argentina_corona_death, chile_corona_death,colombia_corona_death)
+
+
+ggplot(comparison_death , aes(x=date, y=cases, col=country)) + geom_line() + ggtitle("death cases in countries") + ylim(0,3500)
+
+```
+
+
+Death Percentage in Peru
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+death_peru<- peru_corona %>% filter(type=="death")
+confirmed_peru<- peru_corona %>% filter(type=="confirmed")
+
+
+death_percentage <- (sum(death_peru$cases)/sum(confirmed_peru$cases))*100
+death_percentage
+```
+
+
+Death Percentage in Brazil
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+death_brazil<- brazil_corona %>% filter(type=="death")
+confirmed_brazil<- brazil_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_brazil$cases)/sum(confirmed_brazil$cases))*100
+death_percentage
+
+```
+
+Death Percentage in India
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+death_india<- india_corona %>% filter(type=="death")
+confirmed_india<- india_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_india$cases)/sum(confirmed_india$cases))*100
+death_percentage
+
+
+
+
+```
+
+Death Percentage in US
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+death_us<- us_corona %>% filter(type=="death")
+confirmed_us<- us_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_us$cases)/sum(confirmed_us$cases))*100
+death_percentage
+
+
+
+```
+Death Percentage in Germany
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+death_germany<- germany_corona %>% filter(type=="death")
+confirmed_germany<- germany_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_germany$cases)/sum(confirmed_germany$cases))*100
+death_percentage
+
+
+
+```
+
+
+Death Percentage in Colombia
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+death_colombia<- colombia_corona %>% filter(type=="death")
+confirmed_colombia<- colombia_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_colombia$cases)/sum(confirmed_colombia$cases))*100
+death_percentage
+
+
+
+
+```
+
+
+
+Death Percentage in Bolivia
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+death_bolivia<- bolivia_corona %>% filter(type=="death")
+confirmed_bolivia<- bolivia_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_bolivia$cases)/sum(confirmed_bolivia$cases))*100
+death_percentage
+
+
+
+
+```
+
+
+Death Percentage in Argentina
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+death_argentina<- argentina_corona %>% filter(type=="death")
+confirmed_argentina<- argentina_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_argentina$cases)/sum(confirmed_argentina$cases))*100
+death_percentage
+
+
+
+
+```
+
+
+Death Percentage in Chile
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+death_chile<- chile_corona %>% filter(type=="death")
+confirmed_chile<- chile_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_chile$cases)/sum(confirmed_chile$cases))*100
+death_percentage
+
+
+
+```
+
+Death Percentage in Italy
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+death_italy<- italy_corona %>% filter(type=="death")
+confirmed_italy<- italy_corona %>% filter(type=="confirmed")
+
+death_percentage <- (sum(death_italy$cases)/sum(confirmed_italy$cases))*100
+death_percentage
+
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+
+new_data <- coronavirus %>% filter(country ==c("Peru","India","Germany","Italy","Japan") )
+
+
+
+
+confirmed_new_data<-new_data %>%filter(type=="confirmed")
+
+
+pa <- ggplot(confirmed_new_data,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Figure 11 : Time series analysis-country with confirmed cases")
+  
+ggplotly(pa)
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+
+new_data1 <- coronavirus %>% filter(country ==c("Peru","Brazil","Bolivia","Colombia","Chile") )
+
+
+
+
+confirmed_new_data1<-new_data1 %>%filter(type=="confirmed")
+
+
+pb <- ggplot(confirmed_new_data1,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Figure 12 : Time series analysis-country with confirmed cases")
+  
+ggplotly(pb)
+
+
+
+```
+
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+
+new_data <- coronavirus %>% filter(country ==c("Peru","India","Germany","Italy","Japan") )
+
+death_new_data<-new_data %>%filter(type=="death")
+
+
+pc <- ggplot(death_new_data,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Figure 13 : Time series analysis-country with deaths")
+  
+ggplotly(pc)
+
+```
+
+```{r,include=TRUE,echo=FALSE, warning=FALSE,message=FALSE}
+new_data1 <- coronavirus %>% filter(country ==c("Peru","Brazil","Bolivia","Colombia","Chile") )
+
+
+
+
+death_new_data1<-new_data1 %>%filter(type=="death")
+
+
+pd <- ggplot(death_new_data1,aes(x=date,y=cumsum(cases),color = country), is.na=FALSE)+
+geom_line()+ggtitle("Figure 14 : Time series analysis-country with deaths")
+  
+ggplotly(pd)
+
+
+```
+
+
+## **Discussion**
+
+Here we are using a secondary data set.The coronavirus data set contains missing values and negative values,so here we have to use the discontinuity point method or use the input missing value method.
+Figure 2 shows how the number of active cases changed with the date.In the middle of the year 2021,there was an immediate increase in the number of active cases
+
+Figure 3 shows how the number of corona confirmed cases in several countries in South America varies with the date.The pattern of corona confirmed cases in Peru,Brazil and Bolivia are somewhat similar to each other,but the pattern of corona confirmed cases in Colombia shows a difference from the patterns of other cases.Compared to other years,corona confirmed cases have increased greatly in the year 2022.The number of corona confirmed cases in Brazil is higher than the number of corona confirmed cases in other counties.It appears that Peru has to face two waves of covid
+
+According to figure 4,before 2022,the distribution pattern of recoveries and the distribution pattern of confirmed cases have become somewhat similar.In the first few months of 2022,confirmed corona cases increased greatly and then decreased again.The number of corona patients reported at the end of 2021 has decreased significantly.After the middle 2021,the number of recoveries has decreased significantly
+
+Figure 6 shows the distribution of daily corona deaths.Corona deaths have increased greatly in the first 6 months of 2021.However,except for some days,the number of daily corona deaths is less than 1200
+
+According to figure 8,the highest number of confirmed cases has been reported from Brazil,and second highest number of confirmed cases has been reported from Argentina.Also,the highest number of deaths has been reported from Brazil.Although less confirmed cases been reported from Peru,the second highest number of deaths has been reported from Peru.This shows that the death rate in Peru is higher than the death rates in other countries mentioned here
+
+
+In figure 9,the number of deaths in countries in outside the South America continent has been compared with the number of deaths in Peru.Here,the number of deaths in Peru is higher than the number of deaths in Germany and Italy.The population of Peru is smaller than the population of Germany and Italy,so Peru's death rate relative to the total population is higher than that of Germany and Italy
+
+According to figure 10,India's daily death toll has increased significantly by mid 2021.Compared to other countries,America has recorded a large number of daily deaths.Considering the spread of deaths in several countries in South America continent,the spread of death in Peru has spread to high values
+
+When the death percentages of several countries are considered,it appears that the death percentage of Peru is at a very high of 5.91924.The death percentages of other countries are reported to be less than 2.5.The lowest death percentage is recorded in Germany
+
+## **Conclusions**
+
+It seems mainly Peruvians have faced two waves of covid - 19 from the year 2020 to the year 2022. Overall the reported cases of covid 19 are slightly low when compared with the other countries in South America and the countries beyond the South American continent. But unfortunately, that small amuont of covid cases was not managed successfully by the government of Peru. As a result number of death cases increased meanwhile the number of recovery cases decreased. 
+As a consequence of the World Health Organization's declaration of COVID-19 as a pandemic, the Peruvian Government has addressed COVID-19 as a “Sanitary Emergency” that will conclude on December 07, 2020, according to the extension established by Supreme Decree No. 027-2020-SA (published on August 28, 2020). Later involved that Peru enters into a State of National Emergency on March 16, 2020, as approved by Supreme Decree No. 044-2020-PCM (published on March 15, 2020). According to Supreme Decree No. 174-2020-PCM (published on Oct 29, 2020) the State of National Emergency will end on November 30, 2020.
+But this environment can prevent people from receiving government payments meant to offset economic losses caused by COVID-19 lockdowns. Therefore it was much hard for Peruvians to overcome the death cases of this pandemic. 
+This implies that Peru's health sector has done a great job to minimize the number of reported cases by taking the above rule and regulations.
+
+
+## **References**
+
+
+https://www.britannica.com/place/Peru
+
+
+https://www.worldometers.info/coronavirus/country/peru/
+
+
+https://www.ajtmh.org/configurable/content/journals$002ftpmd$002f104$002f4$002farticle-p1176.xml?t:ac=journals%24002ftpmd%24002f104%24002f4%24002farticle-p1176.xml
+
+
+https://covid19.who.int/region/amro/country/pe
+
+https://www.eeas.europa.eu/eeas/huge-post-pandemic-challenges-peru-has-face_en
+
+https://home.kpmg/xx/en/home/insights/2020/04/peru-government-and-institution-measures-in-response-to-covid.html
+

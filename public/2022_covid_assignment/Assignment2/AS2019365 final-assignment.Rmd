@@ -1,0 +1,381 @@
+---
+title: "STA 326 2.0 Programming and Data Analysis with R"
+author: "H.A.G.Amali Harshika  AS2019365"
+date: "2022-10-04"
+output: html_document
+---
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+# __COVID 19 & AUSTRIA__
+
+# __1.Introduction__
+
+  Austria,  largely mountainous landlocked country of south-central Europe. Together with Switzerland, it forms what has been characterized as the neutral core of Europe, notwithstanding Austria’s full membership since 1995 in the supranational European Union (EU).
+
+Austria is bordered to the north by the Czech Republic, to the northeast by Slovakia, to the east by Hungary, to the south by Slovenia, to the southwest by Italy, to the west by Switzerland and Liechtenstein, and to the northwest by Germany. It extends roughly 360 miles (580 km) from east to west.
+
+## __1.1 visualization of location on world map__
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+library(coronavirus)
+library(magrittr)
+library(dplyr)
+Austria_corona<- coronavirus %>% filter(country== "Austria")
+
+data(wrld_simpl)
+p <- ggplot() +
+  geom_polygon(
+    data = wrld_simpl,
+    aes(x = long, y = lat, group = group), fill = "white", colour = "gray"
+  ) +
+  coord_cartesian(xlim = c(-180, 180), ylim = c(-90, 90)) +
+  scale_x_continuous(breaks = seq(-180, 180, 120)) +
+  scale_y_continuous(breaks = seq(-90, 90, 100))
+p +
+  geom_point(
+    data = Austria_corona, aes(x = long, y = lat), color = "brown", size
+    = 1
+  )+ ggtitle("Figure 01 : Location in World Map")
+```
+
+
+## __1.2 Climate__
+
+The wooded slopes of the Alps and the small portion of the plains of southeastern Europe are characterized by differing climatic zones. The prevailing wind is from the west, and, therefore, humidity is highest in the west, diminishing toward the east. The wetter western regions of Austria have an Atlantic climate with a yearly rainfall of about 40 inches (1,000 mm); the drier eastern regions, under the influence of the more continental type of climate, have less precipitation.
+
+In the lowlands and the hilly eastern regions, the median temperature ranges from about 30 °F (−1 °C) in January to about 68 °F (20 °C) in July. In those regions above 10,000 feet (3,000 metres), by contrast, the temperature range is between about 12 °F (−11 °C) in January, with a snow cover of approximately 10 feet (3 metres), and about 36 °F (2 °C) in July, with roughly 5 feet (1.5 metres) of snow cover.
+
+`
+
+## __1.3 Corona OutBreak and Lockdown Status of Austria__
+
+Austria initially reacted quickly to the Covid-19 pandemic and was praised for the policies it implemented to contain the virus [16]. The first lockdown was introduced in March and the second one in November. Both required all non-essential business and schools to close and reduce social contacts. According to the Oxford Covid-19 government response stringency index, at the time of the first and the second lockdown, the score for Austria on a scale from 0 to 100 (100 = strictest) was 81.48 and 82.41, respectively [17].
+
+ * The first case of Covid-19 in Austria was diagnosed on 25 February 2020 [18]. The first lockdown was imposed 20 days later on 16 March when the cases grew to 1192 [19].
+ 
+ * On 26 March a peak of new daily cases (1050 cases) was reported and a peak of daily deaths from Covid-19 followed on 6 April with 31 deaths reported.
+ 
+ * The number of active cases started to decrease after reaching its peak (8981 active cases) in the beginning of April 2020, which led to an easing of restrictions beginning 14 April.
+ 
+ * After a summer with fairly low case numbers, a steeper growth curve was observed from September onwards with a dramatic increase in new daily cases in October [16, 19]. While at the end of September 8602 active Covid-19 cases were reported in Austria, this number grew to 43,187 by 31 October [19], an increase of 400%. On 11 November 2020 a peak of new daily infections was reported at 9216 confirmed cases.
+ 
+ * Based on the success of the first lockdown in reducing the spread of the virus, the Austrian government implemented a second lockdown to hinder the rapidly growing pandemic curve. On 3 November a “light” lockdown was imposed which quickly turned into another “hard” national lockdown that began on 17 November.
+
+
+## __1.4 Actions taken by Government__
+
+* Stores selling non-essential goods as well as bars, restaurants, federal parks, sports facilities and public baths were forced to close. Supermarkets, chemist’s shops and pharmacies remained open. Air traffic was largely suspended.
+
+* The restrictions included closure of cafes, restaurants, hairdressers and beauty salons, and all shops except those providing essential services and selling essential goods (e.g. grocery stores, pharmacies, post offices, gas stations, etc.) with an obligatory closing time of 7:00 pm. Primary schools joined secondary schools and universities in moving to distance learning
+
+A 24-h curfew was introduced and people were allowed to leave their homes only for essential purposes such as: caring for other people or animals, family duties, outdoor exercise, and visiting religious institutions.
+
+In order to react to the current circumstances regarding shut-downs of businesses, with retroactive effect from 1.3.2020, a new short-time-work model came into force which provides for significant improvements:
+
+Shortened application periods,
+Higher funding
+Eased application process.
+
+Austrian traffic light system
+
+The Austrian traffic light system (Corona-Ampel) was introduced as a weekly epidemic risk assessment on a regional level.
+
+According to the assessment criteria (see table on the right) each region is allocated a (traffic light) color. The color then is the basis for decisions on behavioral measures for both the regional government and individuals.
+
+
+#  __2.Exploratary Data Analysis__
+
+## __2.1 Analysis of Death,Confirmed,Recovered & Active cases__
+
+```{r,results='hide'}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE )
+library(ggplot2)
+library(scales)
+head(Austria_corona)
+Austria_corona <- Austria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(Austria_corona,aes(y=cases,x=type,fill= type)) + geom_bar(stat = "identity" ,position = "dodge" )+ ylim(0,10000) +
+ggtitle("Figure 02: Comparison of total cases in Austria by type")+ theme_classic()
+```
+
+
+Here we considered about three types of Covid cases which are confirmed,deaths and recoveries.During pandemic season confirmed covid cases aew the highest among those two types.And also recoveries are higher than deaths.Overall this could be a good sign and actions taken by goverment are effective.
+
+### __2.1.1 Visualization of confirmed cases__ 
+
+
+```{r,results ='hide'}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+library(coronavirus)
+library(tidyverse)
+library(sp)
+library()
+Austria_corona <- coronavirus %>% filter (country == "Austria")
+confirmed_Austria_corona <- Austria_corona %>% filter(type=="confirmed")
+summary(confirmed_Austria_corona)
+confirmed_Austria_corona <- confirmed_Austria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(confirmed_Austria_corona) 
+library(ggplot2)
+ggplot(confirmed_Austria_corona, aes(x=date, y=cases)) +geom_path(size=0.5 , color = "brown")+facet_grid(rows = vars(type))+
+   ggtitle("Figure 03 : Confirmed Daily Covid 19 Cases ")
+```
+ 
+This data was collected till month june of 2022. According to this figure we can say that most confirmed cases were reported in year 2022.
+ 
+ 
+### __2.1.2 Visualization of Deaths__ 
+
+```{r,results='hide'}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+Austria_corona <- coronavirus %>% filter (country == "Austria")
+Death_Austria_corona <- Austria_corona %>% filter(type=="death")
+summary(Death_Austria_corona)
+Death_Austria_corona <- Death_Austria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Death_Austria_corona) 
+ggplot(Death_Austria_corona, aes(x=date, y=cases)) +geom_path(size=0.5 , color = "orange")+ facet_grid(rows = vars(type))+
+   ggtitle("Figure 04: Distribution of  Daily Death Cases ")
+```
+
+Death cases were reported throughout whole 2020-2022 years. In 2021 the peak amount of death cases are reported and also deaths are decreasing over time till 2022.
+
+
+###  __2.1.3 Visualization of Recoveries in covid pandemic__
+
+
+```{r,results='hide'}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+Austria_corona <- coronavirus %>% filter (country == "Austria")
+Recovered_Austria_corona <- Austria_corona %>% filter(type=="recovery")
+summary(Recovered_Austria_corona)
+Recovered_Austria_corona <- Recovered_Austria_corona %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(Recovered_Austria_corona) 
+which(is.na(Recovered_Austria_corona$cases))
+Recovered_Austria_corona$cases[56] = mean(c(Recovered_Austria_corona$cases[55], Recovered_Austria_corona$cases[57]))
+Recovered_Austria_corona$cases[501] = mean(c(Recovered_Austria_corona$cases[500], Recovered_Austria_corona$cases[502]))
+Recovered_Austria_corona$cases[562] = mean(c(Recovered_Austria_corona$cases[561], Recovered_Austria_corona$cases[563]))
+length(Recovered_Austria_corona$cases)
+Recovered_Austria_corona$col <- as.factor(c(rep("blue", 54),rep("red", 2), rep("blue", 884-56)))
+summary(Recovered_Austria_corona)
+ggplot(Recovered_Austria_corona, aes(x=date, y=cases)) +geom_line(aes(color=col, group=1))+
+   ggtitle("Figure 05: Distribution of  Daily Recovery Cases ")+
+scale_colour_identity()
+
+```
+
+
+With the imposition of curfew , people stayed at home and led a healthy lifestyle.So recovery cases are increased among lockdown period.(late 2020-2021 year)
+
+
+## __2.2 Distributions of covid case types__
+
+### __2.2.1 Distribution of number of confirmed cases__
+
+```{r, results='hide'}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+
+ggplot(confirmed_Austria_corona,aes(cases))+geom_freqpoly(bins=10, col="brown")+
+  ggtitle("Figure 06:Distribution of covid confirmed cases")
+```
+
+### __2.2.2 Distribution of number of Death cases__
+
+```{r,results='hide'}
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+ggplot(Death_Austria_corona, aes(cases)) +
+  geom_histogram(bins = 10, col="white", alpha=0.5) + 
+  geom_freqpoly(bins = 10, col="red")+
+ ggtitle("Figure 06:Distribution of covid Death cases")
+```
+
+### __2.2.3 Distribution of number of Recovered cases__
+
+```{r,results='hide'}
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+ggplot(Recovered_Austria_corona, aes(cases)) +
+  geom_histogram(bins = 5, col="black", alpha=0.5) + 
+  geom_freqpoly(bins = 5, col="brown")+
+ ggtitle("Figure 07:Distribution of covid Recovered cases")
+```
+
+In this analysis we perform distribution of all three types of covid cases.
+
+##  __2.3 Comparisons of cases with other countries__
+
+### __2.3.1 Comparisons with neighboring countries__
+
+Austria is a large country located in South Central Europe. In this section we comparing effectiveness of Austria government' virus prevention plan with regards to countries which are located near by Austria. We picked 4 countries.There are Germany,Switzerland,Italy and Slovakia.
+
+
+```{r,results='hide'}
+library(ggplot2)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE , warning = FALSE)
+```
+
+
+```{r,results='hide'}
+near_countries <- coronavirus %>% filter(country=="Austria"| country=="Germany"| country=="Switzerland"| country=="Italy"| country=="Slovakia")
+summary(near_countries)
+near_countries <- near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(near_countries)
+ggplot(near_countries,aes(y=cases,x= country,fill= type)) +
+geom_bar(stat = "identity", position = "fill")+ theme_classic()+  labs(title="Figure 08: Comparison of total cases in Austria with near countries")
+```
+
+According to graph Germany and Italy has the most confirmed covid cases than Austria.
+
+
+### __2.3.2 Comparison of Daily Confirmed , Death & Recovered cases of Austria with neighbouring countries__
+
+```{r, results='hide'}
+near_countries <- coronavirus %>% filter(country=="Austria"| country=="Germany"| country=="Switzerland"| country=="Italy"|country=="Slovakia")
+confirmed_near_countries <- near_countries %>% filter(type=="confirmed")
+confirmed_near_countries <- confirmed_near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(confirmed_near_countries,aes(x=date,y= cases,fill=country))+theme_light()+
+ geom_line(aes(x=date,y=cases,color=country)) +labs(title = "Figure 09: comparison of confirmed cases in Austria with neighbour countries")
+```
+
+Per day confirmed cases in Austria is significantly less than Germany and Italy.There is an upward trend from late 2021 in Germany and Italy.
+
+
+
+
+```{r, results='hide'}
+near_countries <- coronavirus %>% filter(country== "Austria" | country== "Germany" | country== "Switzerland" | country== "Italy" |country== "Slovakia")
+Death_near_countries <- near_countries %>% filter(type=="death")
+Death_near_countries <- Death_near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(Death_near_countries,aes(x=date,y=cases,fill=country)) +theme_classic()+geom_line(aes(x=date,y=cases,color=country))+
+labs(title = "Figure 10: comparison of Death cases in Austria with neighbour countries")
+```
+
+Highest number of deaths per day has been reported in Germany in 2021.However Austria has maintained deaths rate lower in good manner compared to other countries.
+
+```{r, results='hide'}
+near_countries <- coronavirus %>% filter(country== "Austria" | country== "Germany" | country== "Switzerland" | country== "Italy" | country== "Slovakia")
+recovered_near_countries <- near_countries %>% filter(type== "recovery")
+recovered_near_countries <- recovered_near_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(recovered_near_countries,aes(x=date,y= cases,fill=country))+theme_classic()+geom_point(aes(colour=country))+
+  labs(title = "Figure 11: comparison of Recovered cases in Austria with neighbour countries")
+```
+
+Recoveries of Austria has a lower rate compared to other countries.Both Italy and Germany have good recovery rate.Per day recoveries of Italy are significantly higher than Austria.
+
+
+## __2.3.3 Comparisons of Total cases with other countries__
+
+```{r,results='hide'}
+other_countries <- coronavirus %>% filter(country=="Austria"| country=="Australia"| country=="China"| country=="Russia")
+summary(other_countries)
+other_countries <- other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+summary(other_countries)
+ggplot(other_countries,aes(y=cases,x= country,fill= type)) +
+geom_bar(stat = "identity", position = "dodge")+ theme_classic()+  labs(title="Figure 12: Comparison of total cases in Austria with other countries")
+```
+
+Here we compare Austria with other largest countries that covid has affected most. we picked 3 largest countries which are Russia,Australia and China.
+As we can see Russia has the most confirmed and recoery cases compared to other countries.
+
+
+## __2.3.4 Comparisons of Confirmed,Recovered & Death cases in Austria with other countries__
+
+```{r}
+other_countries <- coronavirus %>% filter(country== "Austria" | country== "Australia" | country== "China" | country== "Russia")
+confirmed_other_countries <- other_countries %>% filter(type== "confirmed")
+confirmed_other_countries <- confirmed_other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(confirmed_other_countries,aes(x=date,y= cases,fill=country))+theme_classic()+geom_line(aes(x=date,y=cases,color=country))+
+  labs(title = "Figure 13: comparison of daily Confirmed cases in Austria with other countries")
+```
+
+
+Confirmed cases of Austria is higher than China and Australia.
+
+
+
+
+```{r, results='hide'}
+other_countries <- coronavirus %>% filter(country== "Austria" | country== "Australia" | country== "China" | country== "Russia")
+recovered_other_countries <- other_countries %>% filter(type== "recovery")
+recovered_other_countries <- recovered_other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(recovered_other_countries,aes(x=date,y= cases,fill=country))+ theme_classic()+ geom_point(aes(colour=country))+
+  labs(title = "Figure 14: comparison of daily Recovered cases in Austria with other countries")
+```
+
+Most recovered cases are reported in Russia significantly higher than the other countries. Austria also has large number of recovery cases compared to China and Australia but its lower than Russia.
+
+
+
+
+
+```{r, results='hide'}
+other_countries <- coronavirus %>% filter(country== "Austria" | country== "Australia" | country== "China" | country== "Russia")
+death_other_countries <- other_countries %>% filter(type== "death")
+death_other_countries <- death_other_countries %>% mutate(cases = replace(cases, which(cases < 0), NA))
+ggplot(death_other_countries,aes(x=date,y= cases,fill=country))+theme_classic()+geom_line(aes(x=date,y=cases,color=country))+
+  labs(title = "Figure 15: comparison of daily Death cases in Austria with neighbour countries")
+```
+
+AS we discussed in 2020 China was reported highest number of deaths and gradually its decreasing throughout the year and in middle of 2022 it has increased again.
+Austria government has possible to maintain lower rate of death cases in 2020-2022.
+
+
+
+# __3.Conclusions__
+
+1.On late 2021 peak of new daily cases and peak of daily deaths was reported
+
+2.Daily confirmed covid cases doesn't show any upward or downward trend, seasonal or cyclical component.We only see that there is irregular component.
+
+3.According to these data we cannot forecast any of these covid types.
+
+4.When compare with other countries Gremany and Italy have most confirmed cases and death cases.
+
+5.After second wave of corona outbreak Austria's death ratio was decreasing.Then we can see after government regulations loosen in 2021 death cases are increasing again due to carelessness of people.
+
+6.When comparing with neighbouring countries Austria has lowest death cases and confirmed cases. So covid prevention of Austria was successfull to some extent.
+
+
+# __4.Discussion__
+COVID 19 is a highly contagious viral illness caused by severe acute respiratory syndrome.It has had devastating effect on the world's demographics resulting in more than 5.3 million deaths worldwide.It has emerged as the most consequential global health crisis since the era of the Influenza pandemic of 1918.
+
+ In this study we look into country Austria how covid 19 affected people lifestyle and what causes for that.    The first case of Covid-19 in Austria was diagnosed on 25 February 2020 and the  first Covid-19-related lockdown was introduced on 16 March 2020 with most restrictions being lifted 1 month later. Seven months after that, in November 2020, the second full lockdown was implemented.Here we take 4 other countries to compare the satus of Austria.There are Germany,Russia, China and Italy.
+ 
+ Italy and Germany are the most affected in covid than Austria.Both these countries variation fo confirmed cases, deaths and recoveries significantly higher than Austria.
+
+# __5.References__
+[1] https://en.wikipedia.org/wiki/Austria
+
+[2] https://ec.europa.eu/info/business-economy-euro/recovery-coronavirus/recovery-and-resilience-facility/austrias-recovery-and-resilience-plan_en#further-information
+
+[3] https://ec.europa.eu/info/files/presentation-council-austrias-recovery-and-resilience-plan_en
+
+[4] https://home.kpmg/governance
+
+[5] https://at.usembassy.gov/covid-19-information/
+
+[6] Douglas M, Katikireddi SV, Taulbut M, McKee M, McCartney G. Mitigating the wider health effects of covid-19 pandemic response. BMJ. 2020;369:m1557. https://doi.org/10.1136/bmj.m1557.
+
+[7] imon J. COVID-19 in Austria. November 2020 ASPHER newsletter. The Association of Schools of Public Health in the European Region (ASPHER). 2020. https://www.aspher.org/download/527/aspher-newsletter-november-2020.pdf. Accessed 3 Mar 2021.
+
+[8] Kreidl P, Schmid D, Maritschnik S, Richter L, Borena W, Genger JW, et al. Emergence of coronavirus disease 2019 (COVID-19) in Austria. Wien Klin Wochenschr. 2020;132(21):645–52. https://doi.org/10.1007/s00508-020-01723-9.
+
+[9] https://www.britannica.com/place/Austria
+
+
+

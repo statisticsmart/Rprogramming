@@ -1,0 +1,770 @@
+---
+title: "geoms"
+output: html_document
+date: "2022-11-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+devtools::install_github("EvaMaeRey/ggxmean")
+
+devtools::install_github("davidsjoberg/ggsankey")
+```
+
+
+##'geom_function'
+
+The “geom_function” can be used to draw functions in ggplot2. Computes and draws a function as a continuous curve. This makes it easy to superimpose a function on top of an existing plot. The function is called with a grid of evenly spaced values along the x axis,and the results are drawn (by default) with a line.
+
+### Illustration
+
+```{r}
+
+ggplot() + xlim(c(0,5))+geom_function(fun=cos,colour="red",lwd=1,linetype=1)
+
+set.seed(1492)
+ggplot(data.frame(x = rnorm(100)),aes(x))+ geom_density() + geom_function(fun = dnorm, colour = "red")
+
+base<- ggplot()+ xlim(-5,5)
+
+base + geom_function(fun = dnorm)
+base +
+geom_function(aes(colour = "normal"), fun = dnorm) + geom_function(aes(colour = "t, df=1"), fun = dt, args = list(df=1))
+
+```
+
+
+##'geom_dl'
+
+### Illustration
+```{r}
+library(directlabels)
+
+giris <- ggplot(iris,aes(Petal.Length,Sepal.Length))+
+  geom_point(aes(shape=Species))
+giris.labeled <- giris+
+  geom_dl(aes(label=Species),method="smart.grid")+
+  scale_shape_manual(values=c(setosa=1,virginica=6,versicolor=3),
+                     guide="none")
+print(giris.labeled)
+```
+
+##'geom_encircle()'
+
+we can automatically enclose data points in a polygon.
+
+### Illustration
+
+```{r}
+library(ggalt)
+PL <- iris$Petal.Length
+PW <- iris$Petal.Width
+ggplot(iris,aes(x=PL,y=PW)) + geom_point(col="green") + geom_encircle(s_shape=0.2, expand=0.01,fill="Red",alpha=0.4) +labs(title = "Enclosed Scatter Plot of Sepal-width vs Sepal-Length",x="Sepal Length",y="Sepal Width")
+
+```
+
+
+##'geom_mark_circle()'
+
+Geom Mark Circle lets you annotate sets of points via circles.
+The enclosing circles are calculated at draw time and the most optimal enclosure at the given aspect ratio is thus guaranteed
+
+### Illustration
+
+```{r}
+library(ggforce)
+ggplot(iris, aes(Petal.Length, Petal.Width)) +
+  geom_mark_circle(aes(fill = Species, label = Species),
+                   con.cap = 0) +
+  geom_point()
+```
+
+##'geom_delaunay_tile'
+
+geom_delaunay_tile allows us to display polygons and as line segments
+
+### Illustration
+
+```{r}
+library(ggforce)
+ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
+  geom_delaunay_tile(alpha = 0.5, colour = 'green')
+```
+
+##'geom_label_repel'
+
+### Illustration
+
+```{r}
+library(ggrepel)
+set.seed(45)
+ggplot(mtcars) +
+  geom_point(aes(wt, mpg), size = 4, color = 'blue') +
+  geom_label_repel(aes(wt, mpg, fill = factor(cyl), label = rownames(mtcars)),
+                   fontface = 'bold', color = 'grey',
+                   box.padding = unit(0.40, "lines"),
+                   point.padding = unit(0.6, "lines"),
+                   segment.color = 'grey50'
+  ) +
+  theme_classic(base_size = 20)
+
+
+```
+
+##'geom_map'
+
+geom_map is pure annotation, So does not affect position scales.It can be used to draw the map for different regions in the world.
+
+### Illustration
+
+```{r}
+library(maps)
+world<-map_data("world")
+ggplot()+geom_map(data=world,map=world,aes(x=long,y2=lat,map_id=region),col="white",fill="grey")
+
+```
+
+
+##'geom_sina'
+
+The sina plot is a data visualization chart suitable for plotting any single variable in a multiclass dataset. It is an enhanced jitter strip chart, where the width of the jitter is controlled by the density distribution of the data within each class.
+
+### Illustration
+
+```{r}
+# pacman::p_load(
+#   tidyverse,      
+#   rio,            
+#   here,          
+#   stringr            
+# )
+# 
+# linelist <- rio::import("linelist_cleaned.rds")
+# library(tidyr)
+# 
+# ggplot(
+#   data = linelist %>% drop_na(outcome),
+#   aes(y = age,          
+#       x = outcome)) +    
+#   geom_violin(
+#     aes(fill = outcome),
+#     color = "white",    
+#     alpha = 0.2)+        
+#   geom_sina(
+#     size=1,                
+#     aes(color = outcome))+
+#   scale_fill_manual(       # Define fill for violin background by death/recover
+#     values = c("Death" = "#bf5300",
+#                "Recover" = "#11118c")) +
+#   scale_color_manual(      # Define colours for points by death/recover
+#     values = c("Death" = "#bf5300",
+#                "Recover" = "#11118c")) +
+#   theme_minimal() +                                
+#   theme(legend.position = "none") +                
+#   labs(title = "B) violin and sina plot by gender, with extra formatting")      
+
+```
+
+##'geom_lm'
+
+geom_lm() use for draw a regression line. In this case it draws the most suitable fitted regression line.
+
+### Illustration
+
+```{r}
+library(ggformula)
+
+ggplot(iris,aes(x=iris$Petal.Width,y=iris$Petal.Length)) + geom_point(col="green") +labs(title = "Scatter Plot of Sepal-Length vs Sepal-width",x="Sepal width",y="Sepal length") + geom_lm()
+```
+
+
+##'geom_circle'
+
+geom_circle possible to draw circles based on a center point and a radius.
+
+### Illustration
+```{r}
+library(ggforce)
+sample = data.frame(shot_x = c(10, 20), shot_y = c(30, 40))
+ggplot(sample, aes(shot_x, shot_y)) +
+  coord_fixed(ratio = 1) +
+  geom_circle(aes(x0 = 47, y0 = 25, r = 6), inherit.aes = FALSE)
+```
+
+##'geom_errorbarh'
+
+geom_errorbarh is used to illustrate horizontal error bars on a plot (representing variability of the plotted data in the horizontal direction).
+
+### Illustration
+
+```{r}
+sample_data <- head(iris)
+spl_len <- sample_data[1:6,1]
+se <- sd(spl_len)/sqrt(length(spl_len))
+
+# plot codes
+
+p <- ggplot(sample_data, aes(Sepal.Length, Sepal.Width))
+p +
+  geom_point(colour = "darkorange2", size = 3) +
+  geom_errorbarh(aes(xmax = Sepal.Length + se, xmin = Sepal.Length - se),colour = "blue4")
+```
+
+##'geom_lm_intercept'
+
+geom_lm_intercept is can be used to identified the intercept of given two variables.
+
+### Illustration
+
+```{r}
+library(ggxmean)
+
+ggplot(iris,aes(Petal.Length,Petal.Width))+geom_point()+geom_lm_intercept()
+```
+
+
+##'geom_voronoi_tile'
+
+geom_voronoi_tile allows us to display voronoi tesselation and delaunay triangulation, both as polygons and as line segments.
+
+### Illustration
+
+```{r}
+library(ggforce)
+
+ggplot(iris, aes(Sepal.Length, Sepal.Width, group = -2L)) +
+  geom_voronoi_tile(aes(fill = Species), colour = 'orange',
+                    expand = unit(-.8, 'mm'), radius = unit(3, 'mm'))
+```
+
+##'geom_x_line'
+
+geom_x_line is used to annotate the plot with vertical lines.
+
+### Illustration
+
+```{r}
+library(ggxmean)
+ggplot(iris,aes(Petal.Length,Petal.Width))+geom_point(col="red")+geom_x_line()
+
+```
+
+##'geom_dumbbell'
+
+The dumbbell plot shows the change between two points in a data set. it helps us to understand the span of data categorically.
+
+### Illustration
+
+```{r}
+library(ggalt)
+
+ylabel <- c("first","second","third")
+x1 <- c(1,2,3)
+x2 <- c(4,3,5)
+datamain <- data.frame(ylabel,x1,x2)
+
+ggplot() + geom_dumbbell(data = datamain,
+                         aes(y = ylabel,
+                             x = x1,
+                             xend = x2),
+                         size = 1.5)
+```
+
+##'geom_path'
+
+geom_path() connects the observations in the order in which they appear in the data.
+
+### Illustration
+
+```{r}
+ggplot(data=mpg,aes(x=displ,y=hwy,col=drv))+geom_path()
+```
+
+##'geom_alluvium'
+
+The geom_alluvium is a ggplot2 extension for producing alluvial plots in tidyverse framework.The design and functionality were originally inspired by the alluvial package.
+It can be used to visualize frequency distributions over time or frequency tables involving several categorical variables.
+
+### Illustration
+
+```{r}
+library(ggalluvial)
+
+ggplot(as.data.frame(Titanic),
+       aes(y=Freq,
+           axis1=Class, axis2= Sex, axis3= Age, fill=Survived))+
+geom_alluvium()+ scale_x_discrete(limits= c("Class", "Sex", "Age"))
+```
+
+
+##'geom_qq_line'
+
+geom_qq() produce quantile-quantile plots. geom_qq_line() compute the slope and intercept of the line connecting the points at specified quartiles of the theoretical and sample distributions.geom_qq_line() and stat_qq_line() do the same thing.
+
+### Illustration
+
+```{r}
+norms <- rnorm(150)
+fx <- data.frame(norms)
+fx$parts <- factor(sample(1:3, 150, replace = T))
+ggplot(fx,aes(sample = norms, col = parts)) + 
+  geom_qq() +
+  geom_qq_line()
+```
+
+## 'geom_xy_means'
+
+geom_xy_means can be used to place poit at mean of x and mean of y.
+
+### Illustration
+
+```{r}
+library(ggxmean)
+ggplot(iris, aes(Sepal.Length,Sepal.Width )) + geom_point(col="blue" , alpha=0.5) + geom_xy_means(col="red" ,shape= 8 , alpha=10)
+
+```
+
+
+## 'geom_heat_tri'
+
+The above heattriangle geom is used to create the two triangles split by a diagonal line of a rectangle that use luminance to show the values from two sources on the same plot.
+
+### Illustration
+
+```{r}
+library(ggDoubleHeat)
+
+data <- data.frame(x = rep(c("a", "b", "c"), 3),
+                   y = rep(c("d", "e", "f"), 3),
+                   lower_values = rep(c(1,5,7),3),
+                   upper_values = rep(c(2,3,4),3))
+
+ggplot(data, aes(x,y)) +
+geom_heat_tri(lower = lower_values, upper = upper_values)
+
+```
+
+## 'geom_col'
+
+ geom_col can be used to mapped values for positional parameters x and y directly to variables from the selected data set.
+
+### Illustration
+```{r}
+data(diamonds)
+
+ggplot(data=diamonds,aes(x=color,y=price,fill=color))+geom_col()+coord_flip()
+```
+
+## 'geom_sankey'
+
+A sankey diagram is a visualization used to depict a flow from one set of values to another.
+
+### Illustration
+
+```{r}
+library(ggsankey)
+
+df <- mtcars %>%
+  make_long(mpg, disp, cyl, vs, am)
+
+ggplot(df, aes(x = x,
+               next_x = next_x,
+               node = node,
+               next_node = next_node,
+               fill = factor(node))) +
+  geom_sankey()
+```
+
+##'geom_bar_interactive'
+
+This geom is based on geom_bar(). In this way they can be set to a scalar value.
+
+### Illustration
+
+```{r}
+library(ggiraph)
+ggplot(diamonds) +
+  geom_bar_interactive(aes(x = cut, fill = clarity), position = "dodge")
+
+```
+
+##'geom_line_interactive'
+
+The geometry is based on geom_line(). It is used to create interactive lines on the graph.
+
+### Illustration
+
+```{r}
+ library(ggiraph)
+
+df2 <- data.frame(supp=rep(c("VC", "OJ"), each=3),
+                dose=rep(c("D0.5", "D1", "D2"),2),
+                len=c(6.8, 15, 33, 4.2, 10, 29.5))
+
+# Change line types by groups (supp)
+ggplot(df2, aes(x=dose, y=len, group=supp)) +
+  geom_line(aes(linetype=supp))+
+  geom_point()
+
+ggplot(df2, aes(x=dose, y=len, group=supp)) +
+  geom_line(aes(linetype=supp))+
+  geom_point()+ geom_line_interactive(size = 3,
+                        alpha = 0.2) 
+```
+
+## 'geom_label'
+
+geom_label() draws a rectangle behind the text, making it easier to read.
+
+### Illustration
+
+```{r}
+ggplot(mtcars, aes(wt, mpg, label = rownames(mtcars))) +
+  geom_label(aes(fill = factor(cyl)), colour = "white", fontface = "bold")
+```
+
+## 'geom_quantile'
+
+geom_quantile is capable of showing more than just the conditional median. Given the small sample size for data set it’s wise not to draw too many conclusions, this is meant to illustrate the purpose of quantile regression. We can also adjust the line’s appearance.
+
+### Illustration
+
+```{r}
+# library(readxl)
+# mtcars <- read_excel("mtcars.xlsx")
+# View(mtcars)
+# 
+# m <-
+#   ggplot(mpg, aes(displ, 1/hwy))
+# m + geom_quantile()
+```
+
+## 'geom_y_line'
+
+geom_y_line is used to annotate the plot with horizontal lines.
+
+### Illustration
+```{r}
+library(ggxmean)
+
+ggplot(iris,aes(Sepal.Length,Sepal.Width))+geom_point()+geom_y_line(col="forestgreen")
+```
+
+##'geom__heat_circle'
+The heatcircle geom is used to create the two concentric circles that use luminance to show the values from two sources on the same plot
+
+### Illustration
+```{r}
+library(ggDoubleHeat)
+data <- data.frame(x = rep(c("a", "b", "c"), 3),
+                   y = rep(c("d", "e", "f"), 3),
+                   outside_values = rep(c(1,5,7),3),
+                   inside_values = rep(c(2,3,4),3))
+
+ggplot(data, aes(x,y)) +
+geom_heat_circle(outside = outside_values,
+                 inside = inside_values)
+```
+
+##'geom_quasirandom'
+The quasirandom geom is a convenient means to offset points within categories to reduce overplotting. Overplotting is when the data in a data visualization overlap, making it difficult to see individual data points in a data visualization. Overplotting typically occurs when there are either a large number of data points and/or a small number of unique values in the dataset. So to reduce this overplotting within categories, we can use geom_quasirandom() function.
+### Illustration
+```{r}
+library(ggbeeswarm)
+#generate data
+variables<-rep(c('runif','rnorm'),each=400)
+values<-c(runif(400, min=-3, max=3), rnorm(400))
+distro <- data.frame(variables,values)
+
+ggplot(data = distro)+
+  geom_quasirandom(aes(x=variables,y=values,color=variables))
+
+
+library(mosaicData)
+data(Births)
+
+ggplot(data = Births,mapping = aes(x = wday, y = births)) +
+       geom_quasirandom(color="darkblue",size=0.001)  # defined size to make data points super tiny
+```
+
+##'geom_ridgeline'
+The geom_ridgeline can be used to draw lines with a filled area underneath.
+
+### Illustration
+```{r}
+library(ggridges)
+data<-data.frame(x=1:5, y=rep(1,5), height = c(0,1,3,4,2))
+ggplot(data,aes(x,y, height = height)) + geom_ridgeline()
+```
+
+##'geom_contour'
+ggplot2 can not draw true 3D surfaces, but you can use geom_contour(), geom_contour_filled(), and geom_tile() to visualise 3D surfaces in 2D.
+### Illustration
+```{r}
+v <- ggplot(faithfuld, aes(waiting, eruptions, z = density)) 
+v + geom_contour()
+```
+
+##'geom__sf_lable()'
+geom_sf_lable() can be used to add labels on the each region
+
+### Illustration
+```{r}
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+
+nc3 <- nc[1:3, ]      
+
+p <- ggplot(nc3) + geom_sf(aes(fill = AREA))
+
+p + geom_sf_label(aes(label = NAME))
+
+```
+
+##'geom_arc & geom_arc_bar'
+
+geom_arc function makes it possible to draw circle segments based on a center point, a radius and a start and end angle (in radians).These functions are intended for cartesian coordinate systems and makes it possible to create circular plot types.An arc is a segment of a line describing a circle. It is the fundamental visual element in donut charts where the length of the segment (and conversely the angular span of the segment) describes the proportion of an entity.
+
+geom_arc_bar function makes it possible to draw arcs and wedges as known from pie and donut charts as well as more specialized plot types such as sunburst plots.An arc bar is the thick version of an arc; that is, a circle segment drawn as a polygon in the same way as a rectangle is a thick version of a line. A wedge is a special case of an arc where the inner radius is 0.Most notable of these are the option to explode arcs and wedgets away from their center point, thus detaching it from the main pie/donut.
+
+
+### Illustration
+```{r}
+
+library(ggforce)
+
+
+ # knowing the angle span makes plotting it is easy
+arcs <- data.frame(
+  start = seq(0, 2 * pi, length.out = 11)[-11],
+  end = seq(0, 2 * pi, length.out = 11)[-1],
+  r = rep(1:2, 5)
+)
+
+# Behold the arcs
+ggplot(arcs) +
+  geom_arc(aes(x0 = 0, y0 = 0, r = r, start = start, end = end,
+               linetype = factor(r)))
+
+# Behold the arcs
+ggplot(arcs) +
+  geom_arc_bar(aes(x0 = 0, y0 = 0, r0 = r - 1, r = r, start = start,
+                   end = end, fill = r))
+
+```
+
+##'geom_area'
+One of the main uses of geom_area() is to plot area charts with suitable variables for x-axis and y-axis. It is a special case of geom_ribbon()
+
+### Illustration
+```{r}
+data_set <- mpg
+ggplot(data_set) + geom_area(aes(x=seq_along(cty), y=cty), fill=4, alpha=0.5)
+
+```
+
+##'geom_abline'
+The geom_abline adds a line with specified slope and intercept to the plot. These values can be defined as numeric values, can be defined by a function or can be mapped from an important data set.
+
+### Illustration
+```{r}
+ggplot(iris, aes(x=Sepal.Length,y=Sepal.Width))+geom_point() +xlab("Sepal length (cm)") +
+  ylab("Sepal width (cm)") +
+  ggtitle("Correlation between Sepal length and width") + geom_abline(intercept = 0 , slope = 1 )
+
+```
+
+##'geom_bump'
+
+### Illustration
+```{r}
+library(ggbump)
+parks <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-22/parks.csv')
+
+parks_df <- parks %>%
+  mutate(park_pct_city_data = parse_number(park_pct_city_data),
+         pct_near_park_data = parse_number(pct_near_park_data),
+         spend_per_resident_data = parse_number(spend_per_resident_data)) %>%
+  mutate(across(where(is.character), factor)) %>%
+  select(-city_dup)
+
+texas_cities <- c("Dallas", "Austin", "Arlington, Texas", "Fort Worth",
+                  "El Paso", "Houston", "San Antonio")
+
+# create a dataset that is filtered by Texas cities
+texas_parks <- parks_df %>%
+  filter(city %in% texas_cities)
+
+texas_parks %>%
+  ggplot(aes(year, rank, color = city)) +
+  geom_point(size = 5) +
+  geom_bump() +
+  theme_minimal() +
+  scale_y_reverse()
+
+```
+
+
+##'geom_mark_rect'
+
+geom_mark_rect() allows you to annotate sets of points via rectangles.
+
+### Illustration
+```{r}
+library(ggforce)
+
+ggplot(iris,
+       aes(x=Sepal.Length,y=Sepal.Width,col=Species))+
+      geom_point()+
+  geom_mark_rect()
+```
+
+##'geom_mark_hull '
+
+Geom_mark_hull annotates sets of points via hulls.Also geom_mark_hull uses concaveman which adjusts concavity of the resulting hull. The hull is calculated at draw time, and can thus change as you resize the plot. In order to clearly contain all points, and for aesthetic purpose the resulting hull is expanded 5mm and rounded on the corners. This can be adjusted with the expand and radius parameters.
+
+### Illustration
+```{r}
+library(concaveman)
+library(ggforce)
+
+ggplot(iris,
+       aes(x=Sepal.Length,y=Sepal.Width,col=Species))+
+  geom_point()+
+  geom_mark_hull()
+
+```
+
+##'geom_stream'
+The geom_stream allows creating streamplots in ggplot2.
+ggstream is creating a simple implementation of streamplots/graph in ggplot2.
+### Illustration
+```{r}
+library(ggstream)
+ggplot(blockbusters, aes(year,box_office,fill=genre))+geom_stream()
+```
+
+##'geom__qq'
+Quantile-quantile plots known as qq plots. qq plots are used to visually estimate whether a sample distribution is normal,in which case the quantiles are nicely aligned in the plot.
+
+### Illustration
+```{r}
+library(MASS)
+ggplot(anorexia,aes(sample=Prewt,colour=factor(Treat)))+geom_qq()+labs(title="QQ plot of weight of patient before study period by treatments",x="theoreticles",y="Norm samples")+geom_qq_line()
+```
+##'geom_lm_conf_int'
+geom_lm_conf_int() can be use to see the confidence interval
+### Illustration
+```{r}
+library(ggxmean)
+library(colmozzie)
+
+ggplot(colmozzie, aes( x=Week ,y=TMAX))+geom_point() +geom_lm_conf_int()+geom_lm()
+
+```
+##'geom_sf'
+
+The geom_sf is used to visualize simple feature (sf) objects in ggplot2 . geom_sf() is an unusual geom because it will draw different geometric objects depending on what simple features are present in the data. This works reasonably well when you need to draw polygons, like our state boundaries. Syntax of geom_sf, geom_sf(mapping = aes(), data = NULL, stat = “sf”, position = “identity”, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, …)
+
+
+### Illustration
+```{r}
+library(maps)
+library(sf)
+library(rnaturalearth)
+world <- ne_countries(returnclass= "sf")
+ggplot(data = world)+geom_sf(aes() , colour = "black" , fill = "yellow")
+```
+
+##'geom_lm_pred_int_segments'
+geom_lm_pred_int_segments is used to identify for OLS linear model as segments
+### Illustration
+```{r}
+library(ggxmean)
+
+ggplot(iris,aes(Sepal.Length,Petal.Width))+geom_lm_pred_int_segments()
+```
+
+##'geom_textdensity'
+geom_textdensity() produces the density plots and simply labels each density curve.
+
+### Illustration
+```{r}
+library("geomtextpath")
+ggplot(data=mpg, aes(displ, label = drv, col = drv)) + geom_textdensity()
+```
+##'geom_density_ridges'
+
+geom_density_ridges arranges density plot in a straggered fashion. The geom_density_ridges calculates density estimates from the provided data and then plot those using the ridgeline visualization.
+
+### Illustration
+```{r}
+library(ggridges)
+library(ggstream)
+
+ggplot(blockbusters,aes(x=box_office,y=genre,fill=genre))+geom_density_ridges(scale=2)
+```
+##'geom_lm_intercept_label'
+geom_lm_intercept_label is can be used to label OLS linear model intercept.
+
+### Illustration
+```{r}
+library(ggxmean)
+ggplot(iris,aes(Petal.Length,Petal.Width))+geom_point()+geom_lm_intercept_label()
+```
+##'geom_contour_filled'
+we can not use ggplot2 to draw true 3D surfaces,but we can use geom_contour_filled() to visualize 3D surfaces in 2D.Data must contain X,Y,Z coordinates to specify a valid surface and each unique combination of x and y can appearat once.
+### Illustration
+```{r}
+ggplot(iris, aes(x=Sepal.Length,y=Sepal.Width,z =Petal.Length ))+
+  geom_contour_filled()
+```
+##'geom_textline'
+We can use geom_textline as a drop in for geom_line if we want it directly labelled.We can specify the line’s appearence and the text’s appearance separately.
+### Illustration
+```{r}
+library(geomtextpath)
+ggplot(economics, aes(date, unemploy)) +
+  geom_textline(linecolour= "grey", size = 4, vjust = -1, hjust = 0.35,
+                label = "1990s Decline", text_smoothing = 30)
+```
+##'geom_lm_residuals'
+geom_lm_residuals is the difference between the observed value and the fitted value that the model predicts for that observation.
+
+### Illustration
+```{r}
+library(ggxmean)
+
+ggplot(mtcars, aes(mpg, qsec))+geom_point()+geom_lm_residuals()
+
+```
+##'geom_bin2d'
+Displays a 1d distribution by dividing variable mapped to x axis into rectangles and counting the number of observations in each rectangle.
+         
+### Illustration
+```{r}
+library(gapminder)
+ggplot(gapminder,
+aes(x=lifeExp, y=gdpPercap, col=year))+
+geom_bin2d( col = "forestgreen") +
+theme(legend.position = "bottom")+
+labs(title = "Relationship between life expectency and gdp per capita",
+     x = "Life expentency at birth in years",
+     y = "GDP per Capita")
+```
+##'geom_shape'
+This geom is a cousin of ggplot2::geom_polygon() with the added possibility of expanding or contracting the polygon by an absolute amount (e.g. 1cm). Furthermore, it is possible to round the corners of the polygon, again by an absolute amount. The resulting geom reacts to resizing of the plot, so the expansion/contraction and corner radius will not get distorted.
+
+
+### Illustration
+```{r}
+shape <- data.frame(
+  x = c(-0.5, 1, 0.75, 0.25, 0),
+  y = c(0, -0.5, 1, 0.75, 0.25)
+)
+# Expand and round
+ggplot(shape, aes(x = x, y = y)) +
+  geom_shape(expand = unit(1, 'cm'), radius = unit(0.5, 'cm')) +
+  geom_polygon(fill = 'blue')
+```
+

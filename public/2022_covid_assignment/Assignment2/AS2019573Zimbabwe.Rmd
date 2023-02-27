@@ -1,0 +1,164 @@
+---
+title: "Coronavirus Analysis of Zimbabwe"
+author: "K.D.welagamage"
+date: "10/2/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Corona viruses are a large family of viruses that are known to cause illness ranging from the common cold to more serve diseases.Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.A novel coronavirus(COVID-19) was identified in 2019 in Wuhan,China.In March 2020,the World Health Organization(WHO) declared the corona virus outbreak a pandemic.This pandemic has affected millions of people,who are either sick or are being killed due to the spread of this disease.COVID-19 is a new virus that is impacting the whole world badly as i is spreading primarily through contact with the person.It is spread from person to person among those in close contact within 6 feet.
+
+## COVID-19 in Zimbabwe
+Zimbabwe,officially Republic of Zimbabwe is a landlocked country in South-Central Africa bordering the countries of Botswana,Mozambique,South Africa and Zambia covering a total of 390,580 square kilometers.It lies between the latitudes of 15.37 and 22.24 degrees south and longitudes of 25.14 and 33.04 degrees east.The capital and largest city is Harare.A country of roughly 15 million people.It was once referred to as the "Jewel of Africa" for its great prosperity during the early years.Zimbabwe lies almost entirely over 1000 feet(300 meters) above sea level.The geography of Zimbabwe is mostly high plateau and mountains in the east.
+   Zimbabwe's estimated population in 2020 was 14,862,924 with a population density of 38 people per square kilometer.The country's median age is approximately 18.7 years.According to the 2017 ZimStat report,40% of the population is under 15 years and about 6% are over the age of 65,while less than 1% is above 70 years.Zimbabwe,like most countries worldwide,adopted tough measures to limit widespread importation and local transmission of SARS-CoV-19.Zimbabwe reported its first case of coronavirus disease on 20 march 2020.The first wave of outbreak in the country which started with the first reported case saw over 8000 cases by the end of October 2020,with 243 Covid-19 related deaths.The government of Zimbabwe launched the Covid-19 National Preparedness and Response Plan in March 2020 and subsequently declared a state of disaster.
+   
+
+## Location of Zimbabwe
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(coronavirus)
+data("coronavirus")
+library(tidyverse)
+library(magrittr)
+zimbabwe_corona <- coronavirus %>% filter(country == "Zimbabwe")
+library(ggplot2)
+library(maptools)
+library(tibble)
+library(tidyverse)
+library(ggrepel)
+library(png)
+library(grid)
+library(sp)
+data(wrld_simpl)
+data(wrld_simpl)
+p <- ggplot() + geom_polygon(data = wrld_simpl,aes(x = long, y = lat,group = group),fill = "gray",color = "white") + coord_cartesian(xlim = c(-180,180),ylim = c(-90,90)) + scale_x_continuous(breaks =  seq(-180,180,120)) + scale_y_continuous(breaks =  seq(-90,90,10))
+p + geom_point(data = zimbabwe_corona, aes(x = long,y = lat),color = "red",size = 1)
+```
+
+
+## Exploratory data analysis
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+zimbabwe_corona_new <- zimbabwe_corona %>% mutate(cases = replace(cases,which(cases<0),NA)) ## remove negative values
+zimbabwe_corona_new %>% filter(is.na(type) == FALSE) %>% ggplot(aes(y = cases,x = type,fill = type))+geom_boxplot()+ggtitle("Figure 1: Boxplot of Zimbabwe Covid-19")
+```
+
+## Summary of Coronavirus in Zimbabwe
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+summary(zimbabwe_corona_new)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+confirmed_zimbabwe_corona <- zimbabwe_corona_new %>% filter(type == "confirmed")
+ggplot(confirmed_zimbabwe_corona,aes(x=date, y=cases))+geom_line()+ggtitle("Figure 2: Zimbabwe Covid-19 confirmed cases according to date")
+```
+
+According to the figure 2,Covid-19 cases have been reported more and more in the early days of 2022.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+death_zimbabwe_corona <- zimbabwe_corona_new %>% filter(type=="death")
+ggplot(death_zimbabwe_corona,aes(x=date, y=cases))+geom_line()+ggtitle("Figure 3:Zimbabwe Covid-19 death cases according to date")
+```
+
+According to the figure 3,the highest number of death cases were reported in the middle months of 2021,while early 2021 and early 2022 showed a relative increase.  
+
+```{r message=FALSE, warning=FALSE, echo=FALSE }
+recovered_zimbabwe_corona <- zimbabwe_corona_new %>% filter(type=="recovery")
+ggplot(recovered_zimbabwe_corona,aes(x=date, y=cases))+geom_line()+ggtitle("Figure 4:Zimbabwe Covid-19 recovered cases according to date")
+```
+
+```{r message=FALSE ,warning=FALSE, echo=FALSE}
+## Finding missing value
+which(is.na(recovered_zimbabwe_corona$cases))
+recovered_zimbabwe_corona$cases[562] = mean(c(recovered_zimbabwe_corona$cases[561],recovered_zimbabwe_corona$cases[563]))
+length(recovered_zimbabwe_corona$cases)
+recovered_zimbabwe_corona$col <- as.factor(c(rep("black",560),rep("red",2),rep("black",884-562)))
+ggplot(recovered_zimbabwe_corona,aes(x=date, y=cases))+geom_line()+scale_colour_identity()+ggtitle("Figure 5:Zimbabwe Covid-19 recovered cases according to date with missing value")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+ggplot(zimbabwe_corona_new,aes(x=date, y=cases,col=type))+geom_point()+ggtitle("Figure 6:Scatterplot of Zimbabwe Covid-19")
+```
+
+```{r message=FALSE ,warning=FALSE,echo=FALSE}
+ggplot(zimbabwe_corona_new,aes(x=date,y=cases,fill=type,col=type))+geom_line()+geom_jitter(aes(col=type))+facet_wrap(~type,ncol=3)+coord_flip()+ggtitle("Figure 7:Jitter plot of Covid-19 in Zimbabwe")
+```
+
+According to the figure 6 and 7,shows that the number of death cases is low compared to the confirmed cases. 
+
+```{r message=FALSE ,warning=FALSE,echo=FALSE}
+## Table 2
+zimbabwe_corona_cases <- coronavirus %>% filter(country=="Zimbabwe")
+subset(zimbabwe_corona_cases,cases==max(cases))
+subset(death_zimbabwe_corona,cases==max(cases))
+```
+
+According to table,the highest number of corona patients have been reported on 11-12-2021 and the highest number of deaths have been reported on 27-07-2021.
+
+## Comparison with other countries
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+near_countries <- filter(coronavirus,country=="Zimbabwe"|country=="Mozambic"|country=="Nigeria"|country=="Kenya"|country=="Ghana"|country=="Zambia"|country=="Namibia"|country=="Togo"|country=="Libya"|country=="Morocco")
+near_countries_confirmed <- filter(near_countries,type=="confirmed")
+ggplot(near_countries_confirmed,aes(x=date,y=cases,colour=country))+geom_line(size=1)+ggtitle("Figure 7:Plot of confirmed Covid-19 cases in Africa continent")
+ggplot(near_countries_confirmed,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 8:Bar plot of confirmed Covid-19 cases in Africa continent")
+```
+
+According to the figure 8,Morocco has reported the highest number of Covid-19 cases ,while Togo has reported the lowest.Zimbabwe has reported less number of Covid-19 cases compared to morocco.Almost the same number of Covid-19 cases have been reported from Zimbabwe and Nigeria.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+near_countries <- filter(coronavirus,country=="Zimbabwe"|country=="Mozambic"|country=="Nigeria"|country=="Kenya"|country=="Ghana"|country=="Zambia"|country=="Namibia"|country=="Togo"|country=="Libya"|country=="Morocco")
+near_countries_death <- filter(near_countries,type=="death")
+ggplot(near_countries_death,aes(x=date,y=cases,colour=country))+geom_path(size=1)+ggtitle("Figure 9:Plot of Covid-19 death cases in Africa continent")
+ggplot(near_countries_death,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 10:Covid-19 death cases in Africa continent")
+```
+
+According to the figure 10,Morocco has reported the highest number of Covid-19 death cases ,while Togo has reported the lowest.Morocco has recorded almost three times as many deaths as Zimbabwe.
+
+```{r message=FALSE ,warning=FALSE,echo=FALSE}
+count(near_countries,type)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+near_countries <- filter(coronavirus,country=="zimbabwe"|country=="Mozambic"|country=="Nigeria"|country=="Kenya"|country=="Ghana"|country=="Zambia"|country=="Namibia"|country=="Togo"|country=="Libya"|country=="Morocco")
+near_countries_new <- near_countries %>% mutate(cases=replace(cases,which(cases<0),NA))
+near_countries_new_recovered <- filter(near_countries_new,type=="recovery")
+ggplot(near_countries_new_recovered,aes(x=date,y=cases,colour=country))+geom_path(size=1)+ggtitle("Figure 11:Line plot of recovered Covid-19 cases in Africa continent")
+ggplot(near_countries_new_recovered,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 12:Bar plot of recovered Covid-19 cases in Africa continent")
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+near_countries_2 <- filter(coronavirus,country=="Zimbabwe"|country=="China"|country=="United Kingdom"|country=="Japan"|country=="Canada"|country=="Australia"|country=="India"|country=="New Zealand"|country=="France"|country=="USA")
+near_countries_2_new <- near_countries_2 %>% mutate(cases=replace(cases,which(cases<0),NA))
+near_countries_2_new_confirmed <- filter(near_countries_2_new,type=="confirmed")
+ggplot(near_countries_2_new_confirmed,aes(x=date,y=cases,colour=country))+geom_path(size=1)+ggtitle("Figure 13:Scatter plot of confirmed Covid-19 cases in Zimbabwe and outside of the africa continent")
+ggplot(near_countries_2_new_confirmed,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 14:Bar plot of confirmed Covid-19 cases in Zimbabwe and outside of the africa continent")
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+near_countries_2 <- filter(coronavirus,country=="Zimbabwe"|country=="China"|country=="United Kingdom"|country=="Japan"|country=="Canada"|country=="Australia"|country=="India"|country=="New Zealand"|country=="France"|country=="USA")
+near_countries_2_death <- filter(near_countries_2,type=="death")
+ggplot(near_countries_2_death,aes(x=date,y=cases,colour=country))+geom_path(size=1)+ggtitle("Figure 15:Plot of Covid-19 death cases in Zimbabwe and outside of the africa continent")
+ggplot(near_countries_2_death,aes(x=country,y=cases))+geom_col()+ggtitle("Figure 16:Bar plot of Covid-19 death cases in Zimbabwe and outside of the africa continent")
+```
+
+## Discussion and Conclusion
+Coronavirus(Covid-19) is a world pandemic situation.Zimbabwe also fell victim to this pandemic situation and still facing it.Zimbabwe reported its first case on March 2020,and the number has been increasing steadily.
+Through the data analysis process it was recognized that there were negative values for some countries.The main reason for this is that the data storage was not done properly in the early stages of pandemic and the patients diagnosed as corona were identified as non-patients after the tests.
+The continent of Africa has large number of countries which has poor health facilities and suffering from so than other countries.Zimbabwe was among the first African countries to implement Covid-19 vaccination.The Zimbabwe government to date has approved five Covid-19 vaccines.however,the country's response was hampered by limited funding and poor healthcare system.
+
+## References
+Chitungo,I.;Dzinamarira,T.;Tunguwarara,N.;Chimene,Mukwenha,s.;Kunongu,E.;Musuku,G.;Murewanhema,G.COVID-19 Response in zimbabwe:The need for a paradigm shift? COVID 2022,2(7),895-906.
+https://doi.org/10.3390/covid2070065
+
+Mutanda D,cogent Soc. Sci.,2022,Challenges and oppurtunities for Zimbabwe's response to COVID-19.
+http://www.tandfonline.com/doi/full/
+
+Msu-Ibc A,Us C,Zimbabwe:Introduction
+https://globaledge.msu.edu/countries/zimbabwe
+
