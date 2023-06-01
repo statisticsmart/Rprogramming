@@ -3,7 +3,7 @@ title: Schedule - BSc
 ---
 
 
-## 2023
+## 2022
 
 
 ![](https://github.com/statisticsmart/Rprogramming/blob/master/static/hexsticker/sta3262_hexSticker.png)
