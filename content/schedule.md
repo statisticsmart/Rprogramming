@@ -21,7 +21,7 @@ Course outline: [click here](/courseoutline/2023_STA326_2_Programming_and_Data_A
 
 Welcome you all to STA 326 2.0 Programming and Data Analysis with R :clap:
 
-[About the course and course rules](/2021/week0.html)
+[About the course and course rules](/2021/week0onsite.html)
 
 |[Slides](/2021/week1/l12021.html)    	|  [Reading](https://rstudio-education.github.io/hopr/basics.html) [2.1, 2.2, 5.1]  	|  [Cheat sheet](/cheatsheets/baser.pdf) 	| [R-script](/rscript/rscript1.R) | Problems [Exercise 1](https://thiyangt.github.io/rworkbook/index.html) [Exercise 2](https://thiyangt.github.io/rworkbook/intro.html)	| Answers: Tutorial discussion |
 |:-:	|:-:	|:-:	|:-:	|:-:	| :-:	|
