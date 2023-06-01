@@ -15,7 +15,7 @@ Here's your roadmap for the semester!
 - <i class="fas fa-laptop-code"></i> Assignments are due by 3:00 PM on the day they are due
 - <i class="fas fa-university"></i></a> Class materials (slides, in-class activities, etc.) will be added on the day of class
 
-
+Course outline: [click here](/courseoutline/2023_STA326_2_Programming_and_Data_Analysis_with_R.pdf)
 
 #### Week 1: Introduction to R, RStudio and R Programming Basics
 
